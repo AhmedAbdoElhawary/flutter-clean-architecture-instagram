@@ -1,15 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+import '../pages/home_screen.dart';
+
+class MainScreen extends StatefulWidget {
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   static const TextStyle optionStyle =
@@ -59,11 +60,8 @@ class _HomeScreenState extends State<HomeScreen> {
     AppBar(backgroundColor: Colors.amber),
     AppBar(backgroundColor: Colors.blue),
   ];
-  static final List<Widget> _widgetOptions = [
-    const Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
+  static final List<Widget> _screenOptions = [
+    const HomeScreen(),
     const Text(
       'Index 1: Business',
       style: optionStyle,
@@ -92,40 +90,24 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBarOptions[_selectedIndex],
-      body: Center(child: Container(child: _widgetOptions[_selectedIndex])),
+      body: Center(child: Container(child: _screenOptions[_selectedIndex])),
       bottomNavigationBar: BottomNavigationBar(
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
         unselectedItemColor: Colors.black,
         items: [
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/icons/house_white.svg",
-              height: 25,
-            ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/icons/search.svg",
-              height: 25,
-            ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/icons/video.svg",
-              height: 25,
-            ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/icons/shop_white.svg",
-              height: 25,
-            ),
-            label: '',
-          ),
+          navigationBarItem("house_white.svg"),
+          navigationBarItem("search.svg"),
+          navigationBarItem("video.svg"),
+          navigationBarItem("shop_white.svg"),
           const BottomNavigationBarItem(
-            icon: CircleAvatar(radius: 13, backgroundColor: Colors.black12),
+            icon: CircleAvatar(
+                radius: 13,
+                backgroundColor: Colors.black12,
+                // ignore: todo
+                //TODO : here put the personal picture of the user
+                child: Icon(Icons.person, color: Colors.white)),
             label: '',
           ),
         ],
@@ -133,6 +115,16 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.black,
         onTap: _onItemTapped,
       ),
+    );
+  }
+
+  BottomNavigationBarItem navigationBarItem(String fileName) {
+    return BottomNavigationBarItem(
+      icon: SvgPicture.asset(
+        "assets/icons/$fileName",
+        height: 25,
+      ),
+      label: '',
     );
   }
 }

@@ -17,3 +17,4 @@ class ResponsiveLayout extends StatelessWidget {
         : webScreenLayout;
   }
 }
+
