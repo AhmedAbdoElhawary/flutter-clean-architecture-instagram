@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instegram/presentation/screens/profile_page.dart';
 
-import '../pages/home_screen.dart';
+import '../pages/home_page.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -14,52 +15,7 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  final List<AppBar> _appBarOptions = [
-    AppBar(
-      backgroundColor: Colors.white,
-      elevation: 0.3,
-      centerTitle: false,
-      title: SvgPicture.asset(
-        "assets/icons/ic_instagram.svg",
-        color: Colors.black,
-        height: 32,
-      ),
-      actions: [
-        IconButton(
-          icon: SvgPicture.asset(
-            "assets/icons/add.svg",
-            color: Colors.black,
-            height: 22.5,
-          ),
-          color: Colors.black,
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: SvgPicture.asset(
-            "assets/icons/heart.svg",
-            color: Colors.black,
-            height: 25,
-          ),
-          color: Colors.black,
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: SvgPicture.asset(
-            "assets/icons/send.svg",
-            color: Colors.black,
-            height: 23,
-          ),
-          color: Colors.black,
-          onPressed: () {},
-        )
-      ],
-    ),
-    AppBar(backgroundColor: Colors.blue),
-    AppBar(backgroundColor: Colors.deepOrangeAccent),
-    AppBar(backgroundColor: Colors.amber),
-    AppBar(backgroundColor: Colors.blue),
-  ];
+  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _screenOptions = [
     const HomeScreen(),
     const Text(
@@ -74,10 +30,7 @@ class _MainScreenState extends State<MainScreen> {
       'Index 3: School',
       style: optionStyle,
     ),
-    const Text(
-      'Index 4: School',
-      style: optionStyle,
-    ),
+    ProfilePage()
   ];
 
   void _onItemTapped(int index) {
@@ -89,7 +42,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBarOptions[_selectedIndex],
       body: Center(child: Container(child: _screenOptions[_selectedIndex])),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
