@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'instagram',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.grey,
       ),
       home: const MainScreen(),
     );
