@@ -1,4 +1,4 @@
-part of 'firebase_auth_cubit.dart';
+part of '../firebaseAuthCubit/firebase_auth_cubit.dart';
 abstract class FirebaseAuthCubitState {}
 
 class CubitInitial extends FirebaseAuthCubitState {}
