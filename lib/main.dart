@@ -1,7 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:instegram/presentation/screens/main_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
+import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/firestore_add_new_user_cubit.dart';
+import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/firestore_get_user_info_cubit.dart';
+import 'package:instegram/presentation/pages/login_page.dart';
+import 'injector.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +21,18 @@ Future<void> main() async {
   } else {
     await Firebase.initializeApp();
   }
-  runApp(const MyApp());
+  await initializeDependencies();
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider<FirebaseAuthCubit>(
+      create: (context) => injector<FirebaseAuthCubit>(),
+    ),
+    BlocProvider<FirestoreGetUserInfoCubit>(
+      create: (context) => injector<FirestoreGetUserInfoCubit>(),
+    ),
+    BlocProvider<FirestoreAddNewUserCubit>(
+      create: (context) => injector<FirestoreAddNewUserCubit>(),
+    )
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -29,8 +45,10 @@ class MyApp extends StatelessWidget {
       title: 'instagram',
       theme: ThemeData(
         primarySwatch: Colors.grey,
+        scaffoldBackgroundColor: Colors.white,
+        canvasColor: Colors.transparent,
       ),
-      home: const MainScreen(),
+      home: LoginPage(),
     );
   }
 }
