@@ -7,6 +7,7 @@ part 'firestore_get_user_info_state.dart';
 
 class FirestoreGetUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
   GetUserInfoUseCase getUserInfoUseCase;
+
   UserPersonalInfo? personalInfo;
   FirestoreGetUserInfoCubit(this.getUserInfoUseCase) : super(CubitInitial());
 
