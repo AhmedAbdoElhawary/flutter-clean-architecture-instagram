@@ -1,11 +1,12 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/firestore_add_new_user_cubit.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/firestore_get_user_info_cubit.dart';
 import 'package:instegram/presentation/pages/login_page.dart';
+import 'package:instegram/presentation/widgets/multi_bloc_provider.dart';
+import 'package:lottie/lottie.dart';
+import 'config/routes/app_routes.dart';
+import 'config/themes/app_theme.dart';
 import 'injector.dart';
 
 Future<void> main() async {
@@ -22,17 +23,7 @@ Future<void> main() async {
     await Firebase.initializeApp();
   }
   await initializeDependencies();
-  runApp(MultiBlocProvider(providers: [
-    BlocProvider<FirebaseAuthCubit>(
-      create: (context) => injector<FirebaseAuthCubit>(),
-    ),
-    BlocProvider<FirestoreGetUserInfoCubit>(
-      create: (context) => injector<FirestoreGetUserInfoCubit>(),
-    ),
-    BlocProvider<FirestoreAddNewUserCubit>(
-      create: (context) => injector<FirestoreAddNewUserCubit>(),
-    )
-  ], child: const MyApp()));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -40,15 +31,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return MultiBloc(materialApp());
+  }
+
+  static Widget materialApp() {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'instagram',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-        scaffoldBackgroundColor: Colors.white,
-        canvasColor: Colors.transparent,
+      theme: AppTheme.light,
+      home: AnimatedSplashScreen(
+        centered: true,
+        splash: Lottie.asset('assets/splash_gif/instagram.json'),
+        nextScreen: LoginPage(),
       ),
-      home: LoginPage(),
+      onGenerateRoute: AppRoutes.onGenerateRoutes,
     );
   }
 }
