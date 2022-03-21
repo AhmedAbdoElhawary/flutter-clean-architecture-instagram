@@ -55,21 +55,6 @@ class FirestoreUsers {
     });
   }
   static Future<String> uploadImage(File photo) async {
-    // Reference reference = FirebaseStorage.instance.ref().child("SupportChatImages").child(fileName);
-    //
-    // UploadTask uploadTask =  reference.putFile(imageFile);
-    //
-    // uploadTask.whenComplete(() async{
-    //
-    //   try{
-    //     imageUrl = await reference.getDownloadURL();
-    //   }catch(onError){
-    //     print("Error");
-    //   }
-    //
-    //   print(imageUrl);
-    //
-    // });
     final fileName = basename(photo.path);
     final destination = 'files/personalImage/$fileName';
     final ref = firebase_storage.FirebaseStorage.instance.ref(destination);
@@ -83,54 +68,4 @@ class FirestoreUsers {
       "profileImageUrl": imageUrl,
     });
   }
-
-  // Future uploadImageToFirebase(BuildContext context, String _imageFile) async {
-  //   String fileName = Path.basename(_imageFile);
-  //   Reference firebaseStorageRef =
-  //       FirebaseStorage.instance.ref().child('uploads/$fileName');
-  //   UploadTask uploadTask = firebaseStorageRef.putString(_imageFile);
-  //   TaskSnapshot taskSnapshot = uploadTask.snapshot;
-  //   taskSnapshot.ref.getDownloadURL().then(
-  //         (value) => print("Done: $value"),
-  //       );
-  // }
-
-
-
-//
-//   updateImageUrl({required String studentDocId, required String imageUrl}) {
-//     _firestoreCollectionStudents
-//         .doc(studentDocId)
-//         .update({"imageUrl": imageUrl})
-//         .then((value) {})
-//         .catchError((error) =>
-//             ToastShow().whiteToast("Failed to update user image: $error"));
-//   }
-//
-//   addMembership({required String seasonDocId, required String studentDocId}) {
-//     _firestoreCollectionStudents
-//         .doc(studentDocId)
-//         .update({
-//           'memberships': FieldValue.arrayUnion([seasonDocId]),
-//         })
-//         .then((value) {})
-//         .catchError((error) =>
-//             ToastShow().redToast("Failed to add membership in user -> $error"));
-//   }
-//
-//   deleteMembership(
-//       {required String seasonDocId, required String studentDocId}) {
-//     _firestoreCollectionStudents
-//         .doc(studentDocId)
-//         .update({
-//           'memberships': FieldValue.arrayRemove([seasonDocId]),
-//         })
-//         .then((value) {})
-//         .catchError((error) =>
-//             ToastShow().redToast("Failed to delete membership -> $error"));
-//   }
-//
-//   deleteStudent(String studentDocId) =>
-//       _firestoreCollectionStudents.doc(studentDocId).delete();
-
 }
