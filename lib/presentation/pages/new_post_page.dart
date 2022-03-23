@@ -1,19 +1,26 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/data/models/comment.dart';
+import 'package:instegram/data/models/post.dart';
+import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
+import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
+import 'package:intl/intl.dart';
 
-class NewPostPage extends StatefulWidget {
-  XFile selectedImage;
+class CreatePostPage extends StatefulWidget {
+ final File selectedImage;
 
-  NewPostPage(this.selectedImage, {Key? key}) : super(key: key);
+  const CreatePostPage(this.selectedImage, {Key? key}) : super(key: key);
 
   @override
-  State<NewPostPage> createState() => _NewPostPageState();
+  State<CreatePostPage> createState() => _CreatePostPageState();
 }
 
-class _NewPostPageState extends State<NewPostPage> {
+class _CreatePostPageState extends State<CreatePostPage> {
   bool isSwitched = false;
+  bool isItDone = true;
 
   TextEditingController captionController = TextEditingController(text: "");
 
@@ -32,7 +39,7 @@ class _NewPostPageState extends State<NewPostPage> {
                 SizedBox(
                   height: 70,
                   width: 70,
-                  child: Image.file(File(widget.selectedImage.path)),
+                  child: Image.file(widget.selectedImage),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -62,9 +69,9 @@ class _NewPostPageState extends State<NewPostPage> {
               Switch(
                 value: isSwitched,
                 onChanged: (value) {
-                  setState(() {
-                    isSwitched = value;
-                  });
+                  // setState(() {
+                  isSwitched = value;
+                  // });
                 },
                 activeTrackColor: Colors.blue,
                 activeColor: Colors.white,
@@ -78,8 +85,7 @@ class _NewPostPageState extends State<NewPostPage> {
 
   Padding buildText(String text) {
     return Padding(
-        padding:
-            const EdgeInsets.only(left: 10.0, right: 10, top: 7, bottom: 7),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 7),
         child: Text(text, style: const TextStyle(fontSize: 16.5)));
   }
 
@@ -93,15 +99,78 @@ class _NewPostPageState extends State<NewPostPage> {
 
   List<Widget> actionsWidgets(BuildContext context) {
     return [
-      IconButton(
-          onPressed: () {
-            Navigator.pop(context);
+      Builder(builder: (builderContext) {
+        FirestoreUserInfoCubit userCubit =
+            BlocProvider.of<FirestoreUserInfoCubit>(builderContext,
+                listen: false);
+        UserPersonalInfo? personalInfo = userCubit.personalInfo;
+
+        return Builder(
+          builder: (builder2context) {
+            return !isItDone
+                ? const CustomCircularProgress(Colors.blue)
+                : IconButton(
+                    onPressed: () =>
+                        createPost(personalInfo!, userCubit, builder2context),
+                    icon: const Icon(
+                      Icons.check,
+                      size: 30,
+                      color: Colors.blue,
+                    ));
           },
-          icon: const Icon(
-            Icons.check,
-            size: 30,
-            color: Colors.blue,
-          ))
+        );
+      })
     ];
+  }
+
+  createPost(UserPersonalInfo personalInfo, FirestoreUserInfoCubit userCubit,
+      BuildContext builder2context) {
+    Post postInfo = addPostInfo(personalInfo);
+    Comment captionInfo = addCommentInfo(personalInfo);
+    setState(() {
+      isItDone = false;
+    });
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      PostCubit postCubit =
+          BlocProvider.of<PostCubit>(builder2context, listen: false);
+
+      String? postId = await postCubit.createPost(
+          postInfo, captionInfo, widget.selectedImage);
+
+      if (postId != null) {
+        personalInfo.posts += [postId];
+        await userCubit.updateUserInfo(personalInfo);
+        await postCubit.getPostInfo(personalInfo.posts);
+        setState(() {
+          isItDone = true;
+        });
+      }
+      Navigator.pop(context);
+    });
+  }
+
+  Post addPostInfo(UserPersonalInfo personalInfo) {
+    return Post(
+        publisherId: personalInfo.userId,
+        datePublished: timeOfNow(),
+        publisherName: personalInfo.name,
+        caption: captionController.text,
+        publisherProfileImageUrl: personalInfo.profileImageUrl,
+        likes: [],);
+  }
+
+  Comment addCommentInfo(UserPersonalInfo personalInfo) {
+    return Comment(
+        datePublished: timeOfNow(),
+        name: personalInfo.name,
+        profileImageUrl: personalInfo.profileImageUrl,
+        theComment: captionController.text,
+        commentatorId: personalInfo.userId);
+  }
+
+  String timeOfNow() {
+    DateTime now = DateTime.now();
+    DateFormat formatter = DateFormat('MM/dd/yyyy');
+    return formatter.format(now);
   }
 }
