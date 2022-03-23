@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instegram/data/models/post.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/widgets/read_more_text.dart';
+import 'package:instegram/presentation/widgets/toast_show.dart';
 
+import '../../data/models/user_personal_info.dart';
+import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../widgets/circle_avatar_name.dart';
 import '../widgets/circle_avatar_of_profile_image.dart';
 
@@ -15,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isLiked = false;
   bool isSaved = false;
+  bool isItDone = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             SizedBox(
               width: double.infinity,
-              height: bodyHeight * 0.14,
+              height: bodyHeight * 0.155,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: 10,
@@ -37,20 +44,57 @@ class _HomeScreenState extends State<HomeScreen> {
                     const Divider(),
                 itemBuilder: (BuildContext context, int index) {
                   String circleAvatarName = "Ahmed";
-                  return CircleAvatarOfProfileImage(
-                      circleAvatarName, bodyHeight, true);
+                  return Builder(builder: (context) {
+                    UserPersonalInfo? userInfo =
+                        context.watch<FirestoreUserInfoCubit>().personalInfo;
+                    return CircleAvatarOfProfileImage(
+                      circleAvatarName:
+                          userInfo != null ? userInfo.name : circleAvatarName,
+                      bodyHeight: bodyHeight,
+                      thisForStoriesLine: true,
+                      imageUrl:
+                          userInfo != null ? userInfo.profileImageUrl : '',
+                    );
+                  });
                 },
               ),
             ),
             const Divider(thickness: 0.5),
-            ListView.separated(
-              itemCount: 1,
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
-              itemBuilder: (BuildContext context, int index) {
-                return thePostsOfHomePage("Ahmed", bodyHeight);
+
+            //TODO for now (it's not for all user, it'll make errors)
+
+            BlocBuilder<PostCubit, PostState>(
+              builder: (context, state) {
+                List<Post>? postsInfo;
+                if (state is CubitPostsInfoLoaded) {
+                  postsInfo = state.postsInfo;
+                  //TODO it's so slow
+                  // WidgetsBinding.instance!.addPostFrameCallback((_) async {
+                  //   setState(() {
+                      isItDone = true;
+                  //   });
+                  // });
+                } else if (state is CubitPostFailed) {
+                  ToastShow.toastStateError(state);
+                }
+
+                return
+                  isItDone
+                    ?
+                  ListView.separated(
+                        itemCount: postsInfo!.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Divider(),
+                        itemBuilder: (BuildContext context, int index) {
+                          return thePostsOfHomePage(
+                              postsInfo![index], bodyHeight);
+                        },
+                      )
+                    :
+                const CircularProgressIndicator(
+                    strokeWidth: 1.5, color: Colors.black54);
               },
             ),
           ],
@@ -62,7 +106,6 @@ class _HomeScreenState extends State<HomeScreen> {
   AppBar appBar() {
     return AppBar(
       backgroundColor: Colors.white,
-      elevation: 0.3,
       centerTitle: false,
       title: SvgPicture.asset(
         "assets/icons/ic_instagram.svg",
@@ -97,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget thePostsOfHomePage(String circleAvatarName, double bodyHeight) {
+  Widget thePostsOfHomePage(Post postInfo, double bodyHeight) {
     return SizedBox(
       width: double.infinity,
       // height: 200,
@@ -105,13 +148,21 @@ class _HomeScreenState extends State<HomeScreen> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleAvatarOfProfileImage(circleAvatarName, bodyHeight / 2, false),
+            Padding(
+              padding: const EdgeInsets.only(left: 6.0),
+              child: CircleAvatarOfProfileImage(
+                circleAvatarName: postInfo.publisherName,
+                bodyHeight: bodyHeight / 2,
+                thisForStoriesLine: false,
+                imageUrl: postInfo.publisherProfileImageUrl,
+              ),
+            ),
             const SizedBox(width: 5),
-            Expanded(child: NameOfCircleAvatar(circleAvatarName, false)),
+            Expanded(child: NameOfCircleAvatar(postInfo.publisherName, false)),
             menuButton()
           ],
         ),
-        imageOfPost(),
+        imageOfPost(postInfo.postImageUrl),
         Row(children: [
           Expanded(
               child: Row(
@@ -162,16 +213,14 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              numbersOfLikes(),
+              numbersOfLikes(postInfo),
               const SizedBox(height: 5),
-              ReadMore(
-                "$circleAvatarName Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase.",
-              2),
+              ReadMore("${postInfo.publisherName} ${postInfo.caption}", 2),
               const SizedBox(height: 5),
               const Text("View all 171 comment...",
                   style: TextStyle(color: Colors.grey)),
               const SizedBox(height: 8),
-              addCommentRow()
+              addCommentRow(postInfo)
             ],
           ),
         )
@@ -179,17 +228,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Row addCommentRow() {
+  Row addCommentRow(Post postInfo) {
     return Row(
-      children: const [
+      children: [
         CircleAvatar(
-            radius: 14,
+            radius: 16,
             backgroundColor: Colors.black12,
-            // ignore: todo
-            //TODO : here put the personal picture of the user
-            child: Icon(Icons.person, color: Colors.white)),
-        SizedBox(width: 10),
-        Text(
+            child: postInfo.publisherProfileImageUrl.isEmpty
+                ? const Icon(Icons.person, color: Colors.white)
+                : ClipOval(child: Image.network(postInfo.publisherProfileImageUrl))),
+        const SizedBox(width: 10),
+        const Text(
           "Add a comment...",
           style: TextStyle(color: Colors.grey),
         )
@@ -197,10 +246,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget numbersOfLikes() {
-    return const Text("20,435 likes",
-        textAlign: TextAlign.left,
-        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold));
+  Widget numbersOfLikes(Post postInfo) {
+    return InkWell(
+      onTap: () {},
+      child: Text('${postInfo.likes.length} Likes',
+          textAlign: TextAlign.left,
+          style: const TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold)),
+    );
   }
 
   SvgPicture iconsOfImagePost(String path) {
@@ -211,18 +264,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget imageOfPost() {
+  Widget imageOfPost(String imageUrl) {
     return InkWell(
       onDoubleTap: () {
         setState(() {
           isLiked = isLiked ? false : true;
         });
       },
-      child: const Image(
+      child: Image(
         width: double.infinity,
         fit: BoxFit.fitWidth,
-        image: AssetImage(
-            "assets/3d_caractars/pictures_for_posts/photo-1587387119725-9d6bac0f22fb.jpg"),
+        image: NetworkImage(imageUrl),
       ),
     );
   }
