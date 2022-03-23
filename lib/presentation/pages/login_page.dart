@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/pages/sign_up_page.dart';
 import '../../domain/entities/registered_user.dart';
 import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
-import '../cubit/firestoreUserInfoCubit/firestore_user_info_cubit.dart';
-import '../screens/main_screen.dart';
+import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/or_text.dart';
 import '../widgets/toast_show.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -20,6 +20,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController(text: "");
   TextEditingController passwordController = TextEditingController(text: "");
+  bool isHeMovedToHome = false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                   hint: "Phone number, email or username",
                   controller: emailController),
               const SizedBox(height: 15),
-              CustomTextField(
-                  hint: "Password", controller: passwordController),
+              CustomTextField(hint: "Password", controller: passwordController),
               const SizedBox(height: 15),
               customTextButton(),
               const SizedBox(height: 15),
@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SignUpPage()));
+                                builder: (context) => const SignUpPage()));
                       },
                       child: const Text(
                         "Sign up",
@@ -86,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget customTextButton() {
+    bool isUserIdReady = true;
     return BlocConsumer<FirebaseAuthCubit, FirebaseAuthCubitState>(
       listener: (context, state) {},
       builder: (context, authState) {
@@ -98,75 +99,66 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: SizedBox(
                   height: 45,
-                  child: BlocConsumer<FirestoreUserInfoCubit,
-                      FirestoreGetUserInfoState>(
-                    listener: (context, state) {},
-                    builder: (context, getUserState) {
-                      FirestoreUserInfoCubit getUserCubit =
-                          FirestoreUserInfoCubit.get(context);
-                      if (authState is CubitAuthConfirmed) {
-                        getUserCubit.getUserInfo(authCubit.user!.uid);
-                        if (getUserState is CubitUserLoaded) {
-                          WidgetsBinding.instance!.addPostFrameCallback((_) async {
-                            // UserPersonalInfo prefsUserInfo=getUserState.userPersonalInfo;
-                            // Map<String, dynamic> userInfo =
-                            // {'followedPeople':prefsUserInfo.followedPeople,
-                            //   'followerPeople':prefsUserInfo.followerPeople,
-                            //   'posts':prefsUserInfo.posts,
-                            //   'name':prefsUserInfo.name,
-                            //   'userName':prefsUserInfo.userName,
-                            //   'bio':prefsUserInfo.bio,
-                            //   'email':prefsUserInfo.email,
-                            //   'profileImageUrl':prefsUserInfo.profileImageUrl,
-                            //   'userId':prefsUserInfo.userId};
-                            // final prefs = await SharedPreferences.getInstance();
-                            // await prefs.setString('userInfo', jsonEncode(userInfo));
-                            // await prefs.setBool('registered', true);
+                  child: Builder(builder: (builderContext) {
+                    PostCubit postCubit = BlocProvider.of<PostCubit>(
+                        builderContext,
+                        listen: false);
 
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MainScreen(
-                                      getUserState.userPersonalInfo)),
-                              (Route<dynamic> route) => false,
-                            );
-                          });
-                        } else if (getUserState is CubitGetUserInfoFailed) {
-                          String error;
-                          try {
-                            error = getUserState.error.split(RegExp(r']'))[1];
-                          } catch (e) {
-                            error = getUserState.error;
+                    return BlocConsumer<FirestoreUserInfoCubit,
+                        FirestoreGetUserInfoState>(
+                      listener: (context, state) {},
+                      builder: (context, getUserState) {
+                        FirestoreUserInfoCubit getUserCubit =
+                            FirestoreUserInfoCubit.get(context);
+
+                        if (authState is CubitAuthConfirmed) {
+                          String userId = authCubit.user!.uid;
+                          getUserCubit.getUserInfo(userId);
+                          if (getUserState is CubitUserLoaded) {
+                            WidgetsBinding.instance!
+                                .addPostFrameCallback((_) async {
+                              await postCubit.getPostInfo(
+                                  getUserState.userPersonalInfo.posts);
+                              if (!mounted) {
+                                setState(() {
+                                  isUserIdReady = true;
+                                });
+                              }
+                              if (!isHeMovedToHome) {
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/main', (route) => false,
+                                    arguments: userId);
+                              }
+                              isHeMovedToHome = true;
+                            });
+                          } else if (getUserState is CubitGetUserInfoFailed) {
+                            ToastShow.toastStateError(getUserState);
                           }
-                          ToastShow.toast(error);
+                        } else if (authState is CubitAuthFailed) {
+                          ToastShow.toastStateError(authState);
                         }
-                      } else if (authState is CubitAuthFailed) {
-                        String error;
-                        try {
-                          error = authState.error.split(RegExp(r']'))[1];
-                        } catch (e) {
-                          error = authState.error;
-                        }
-                        ToastShow.toast(error);
-                      }
 
-                      return TextButton(
-                          onPressed: () async {
-                            await authCubit.logIn(RegisteredUser(
-                                email: emailController.text,
-                                password: passwordController.text));
-                          },
-                          child: getUserState is CubitUserLoading ||
-                                  authState is CubitAuthConfirming
-                              ? const CircularProgressIndicator()
-                              : const Text(
-                                  "Log in",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                          style:
-                              ElevatedButton.styleFrom(primary: Colors.blue));
-                    },
-                  ),
+                        return TextButton(
+                            onPressed: () async {
+                              isUserIdReady = false;
+                              await authCubit.logIn(RegisteredUser(
+                                  email: emailController.text,
+                                  password: passwordController.text));
+                            },
+                            child: !isUserIdReady
+                                ? const ClipOval(
+                                    child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ))
+                                : const Text(
+                                    "Log in",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                            style:
+                                ElevatedButton.styleFrom(primary: Colors.blue));
+                      },
+                    );
+                  }),
                 ),
               ),
             ),
