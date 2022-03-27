@@ -11,4 +11,13 @@ class ToastShow {
         backgroundColor: Colors.black,
         textColor: Colors.white);
   }
+  static toastStateError(dynamic state){
+    String error;
+    try {
+      error = state.error.split(RegExp(r']'))[1];
+    } catch (e) {
+      error = state.error;
+    }
+    ToastShow.toast(error);
+  }
 }
