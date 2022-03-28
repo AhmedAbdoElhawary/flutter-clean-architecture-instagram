@@ -1,4 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:instegram/domain/usecases/firestoreUserUseCase/get_specific_users_usecase.dart';
+import 'package:instegram/domain/usecases/postUseCase/get_all_posts.dart';
+import 'package:instegram/domain/usecases/postUseCase/get_post_info.dart';
 import 'package:instegram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -42,13 +45,20 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<AddNewUserUseCase>(AddNewUserUseCase(injector()));
   injector
       .registerSingleton<GetUserInfoUseCase>(GetUserInfoUseCase(injector()));
+  injector.registerSingleton<GetSpecificUsersUseCase>(GetSpecificUsersUseCase(injector()));
+
   injector.registerSingleton<UpdateUserInfoUseCase>(
       UpdateUserInfoUseCase(injector()));
   injector.registerSingleton<UploadProfileImageUseCase>(
       UploadProfileImageUseCase(injector()));
+
   // *
   // Firestore Post useCases
   injector.registerSingleton<CreatePostUseCase>(CreatePostUseCase(injector()));
+  injector
+      .registerSingleton<GetPostsInfoUseCase>(GetPostsInfoUseCase(injector()));
+  injector
+      .registerSingleton<GetAllPostsInfoUseCase>(GetAllPostsInfoUseCase(injector()));
   // *
 
   // auth Blocs
@@ -62,13 +72,13 @@ Future<void> initializeDependencies() async {
     () => FirestoreAddNewUserCubit(injector()),
   );
   injector.registerFactory<FirestoreUserInfoCubit>(
-    () => FirestoreUserInfoCubit(injector(), injector(), injector()),
+    () => FirestoreUserInfoCubit(injector(), injector(), injector(), injector()),
   );
   // *
 
   // post Blocs
   injector.registerFactory<PostCubit>(
-    () => PostCubit(injector()),
+    () => PostCubit(injector(), injector(), injector()),
   );
   // *
 }
