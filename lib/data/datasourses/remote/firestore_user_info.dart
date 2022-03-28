@@ -12,12 +12,26 @@ class FirestoreUser {
   }
 
   static Future<UserPersonalInfo> getUserInfo(String userId) async {
-    DocumentSnapshot<Object?> snap =
+    DocumentSnapshot<Map<String, dynamic>> snap =
         await _firestoreUserCollection.doc(userId).get();
     if (snap.exists) {
       return UserPersonalInfo.fromSnap(snap);
     }
     return Future.error("the user not exist !");
+  }
+  static Future<List<UserPersonalInfo>> getSpecificUsersInfo(List<dynamic> usersIds) async {
+    List<UserPersonalInfo> usersInfo = [];
+    for (int i = 0; i < usersIds.length; i++) {
+      DocumentSnapshot<Map<String, dynamic>> snap =
+      await _firestoreUserCollection.doc(usersIds[i]).get();
+      if (snap.exists) {
+        UserPersonalInfo postReformat = UserPersonalInfo.fromSnap(snap);
+        usersInfo.add(postReformat);
+      } else {
+        return Future.error("the post not exist !");
+      }
+    }
+    return usersInfo;
   }
 
   static updateUserInfo(UserPersonalInfo userInfo) async {
