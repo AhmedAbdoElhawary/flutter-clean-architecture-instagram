@@ -1,46 +1,53 @@
-import 'package:instegram/domain/entities/new_user_info.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UserPersonalInfo extends NewUserInfo {
-  List<dynamic> followedPeople=[];
-  List<dynamic> followerPeople=[];
-  List<dynamic> posts=[];
+class UserPersonalInfo {
+  String bio;
+  String email;
+  String name;
+  String profileImageUrl;
+  String userName;
+  String userId;
+  List<dynamic> followedPeople;
+  List<dynamic> followerPeople;
+  List<dynamic> posts;
 
   UserPersonalInfo(
-      { List<dynamic>? followedPeople,
-        List<dynamic>? followerPeople,
-        List<dynamic>? posts,
-      String name = "",
-      String userName = "",
-      String bio = "",
-      String email = "",
-      String profileImageUrl = "",
-      String userId = ""})
-      : super(
-            name: name,
-            userName: userName,
-            bio: bio,
-            email: email,
-            profileImageUrl: profileImageUrl,
-            userId: userId);
+      {required this.followedPeople,
+      required this.followerPeople,
+      required this.posts,
+      this.name = "",
+      this.bio = "",
+      this.email = "",
+      this.profileImageUrl = "",
+      this.userName = "",
+      this.userId = ""});
+
+  static UserPersonalInfo fromSnap(
+      DocumentSnapshot<Map<String, dynamic>> snap) {
+    return UserPersonalInfo(
+      name: snap["name"],
+      userId: snap["uid"],
+      profileImageUrl: snap["profileImageUrl"],
+      email: snap["email"],
+      bio: snap["bio"],
+      userName: snap["userName"],
+      posts: snap['posts'],
+      followedPeople: snap['following'],
+      followerPeople: snap['followers'],
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
-      'followedPeople': followedPeople,
-      'followerPeople': followerPeople,
+      'following': followedPeople,
+      'followers': followerPeople,
       'posts': posts,
       'name': name,
       'userName': userName,
       'bio': bio,
       'email': email,
       'profileImageUrl': profileImageUrl,
-      'userId': userId,
+      'uid': userId,
     };
-  }
-
-  // Implement toString to make it easier to see information about
-  // each dog when using the print statement.
-  // id: $id, name: $name, age: $age
-  @override
-  String toString() {
-    return 'UserPersonalInfo{followedPeople: $followedPeople, followerPeople: $followerPeople, posts: $posts, name: $name, userName: $userName, bio: $bio, email: $email, profileImageUrl: $profileImageUrl, userId: $userId}';
   }
 }
