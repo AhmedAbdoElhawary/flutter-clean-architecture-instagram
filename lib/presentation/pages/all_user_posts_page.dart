@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
@@ -10,46 +12,52 @@ class AllUserPostPage extends StatefulWidget {
   State<AllUserPostPage> createState() => _AllUserPostPageState();
 }
 
-class _AllUserPostPageState extends State<AllUserPostPage> {
+class _AllUserPostPageState extends State<AllUserPostPage>
+    with AutomaticKeepAliveClientMixin {
   bool loading = true;
 
   getData() async {
     await BlocProvider.of<PostCubit>(context).getAllPostInfo();
     setState(() {
-      loading=false;
+      loading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if(loading){
+    super.build(context);
+
+    if (loading) {
       getData();
       return const Center(
-        child:  CircularProgressIndicator(
-            strokeWidth: 1.5, color: Colors.black54),
+        child:
+            CircularProgressIndicator(strokeWidth: 1.5, color: Colors.black54),
       );
-    }else{
+    } else {
       return BlocBuilder<PostCubit, PostState>(
         builder: (context, state) {
           if (state is CubitAllPostsLoaded) {
-            return SafeArea(
-              child: GridView.count(
-                  padding: const EdgeInsets.symmetric(vertical: 1.5),
-                  crossAxisSpacing: 1.5,
-                  mainAxisSpacing: 1.5,
-                  crossAxisCount: 3,
-                  children: state.allPostInfo.map((postsInfo) {
-                    return postsInfo.postImageUrl.isNotEmpty?
-                     Container(
-                        color: Colors.black12,
-                        child: InkWell(
-                            onLongPress: () {},
-                            child: Image.network(
-                              postsInfo.postImageUrl,
-                              fit: BoxFit.cover,
-                            )),
-                        height: 150.0):Container();
-                  }).toList()),
+            return Scaffold(
+              body: SafeArea(
+                child: GridView.count(
+                    padding: const EdgeInsets.symmetric(vertical: 1.5),
+                    crossAxisSpacing: 1.5,
+                    mainAxisSpacing: 1.5,
+                    crossAxisCount: 3,
+                    children: state.allPostInfo.map((postsInfo) {
+                      return postsInfo.postImageUrl.isNotEmpty
+                          ? Container(
+                              color: Colors.black12,
+                              child: InkWell(
+                                  onLongPress: () {},
+                                  child: Image.network(
+                                    postsInfo.postImageUrl,
+                                    fit: BoxFit.cover,
+                                  )),
+                              height: 150.0)
+                          : Container();
+                    }).toList()),
+              ),
             );
           } else if (state is CubitPostFailed) {
             ToastShow.toastStateError(state);
@@ -62,4 +70,8 @@ class _AllUserPostPageState extends State<AllUserPostPage> {
       );
     }
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
