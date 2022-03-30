@@ -35,11 +35,38 @@ dependencies:
   firebase_core: ^1.12.0
   firebase_storage: ^10.2.9
   firebase_storage_web: ^3.2.10
+  firebase_analytics: ^5.0.6
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
   flutter_svg: ^1.0.3
   readmore: ^2.1.0
+  uuid: ^3.0.5
+  image_picker: ^0.8.4+4
+  image_picker_for_web: ^2.1.4
+  file_picker: ^4.2.7
+  equatable: ^2.0.3
+  fluttertoast: ^8.0.8
+  flutter_holo_date_picker: ^1.0.3
+  intl: ^0.17.0
+  flutter_datetime_picker: ^1.5.1
+  get_it: ^7.2.0
+  lottie: ^1.2.2
+  animated_splash_screen: ^1.2.0
+  fluttermoji: ^1.0.0
+  shared_preferences: ^2.0.13
+  path_provider: ^2.0.9
+  sqflite: ^2.0.2
+  flutter_animated_dialog: ^2.0.1
+  persistent_bottom_nav_bar: ^4.0.2
+
+
+
+
+
+
+
+
 
 
 dev_dependencies:
@@ -47,14 +74,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-dependency_overrides:
-  cloud_firestore_web: ^2.6.5
-  firebase_messaging_platform_interface: ^3.1.6
-  firebase_storage_platform_interface: ^4.0.14
-  cloud_functions_platform_interface: ^5.0.21
-  cloud_firestore_platform_interface: ^5.4.13
-  firebase_auth_platform_interface: ^6.1.11
-  firebase_database_platform_interface: ^0.2.0+5
+#dependency_overrides:
+#  cloud_firestore_web: ^2.6.5
+#  firebase_messaging_platform_interface: ^3.1.6
+#  firebase_storage_platform_interface: ^4.0.14
+#  cloud_functions_platform_interface: ^5.0.21
+#  cloud_firestore_platform_interface: ^5.4.13
+#  firebase_auth_platform_interface: ^6.1.11
+#  firebase_database_platform_interface: ^0.2.0+5
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -72,6 +99,7 @@ flutter:
     - assets/3d_caractars/pictures_for_posts/
     - assets/3d_caractars/caractars/
     - assets/icons/
+    - assets/splash_gif/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
