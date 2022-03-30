@@ -1,12 +1,14 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/presentation/cubit/blocObserver/bloc_observer.dart';
 import 'package:instegram/presentation/pages/login_page.dart';
 import 'package:instegram/presentation/widgets/multi_bloc_provider.dart';
 import 'package:lottie/lottie.dart';
 import 'config/routes/app_routes.dart';
-import 'config/themes/app_theme.dart';
 import 'injector.dart';
 
 Future<void> main() async {
@@ -23,7 +25,11 @@ Future<void> main() async {
     await Firebase.initializeApp();
   }
   await initializeDependencies();
-  runApp(const MyApp());
+  BlocOverrides.runZoned(
+    () {},
+    blocObserver: MyBlocObserver(),
+  );
+  return runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -35,16 +41,30 @@ class MyApp extends StatelessWidget {
   }
 
   static Widget materialApp() {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'instagram',
-      theme: AppTheme.light,
-      home: AnimatedSplashScreen(
-        centered: true,
-        splash: Lottie.asset('assets/splash_gif/instagram.json'),
-        nextScreen: LoginPage(),
-      ),
-      onGenerateRoute: AppRoutes.onGenerateRoutes,
-    );
+    return Localizations(
+        locale: const Locale('en', 'US'),
+        delegates: const <LocalizationsDelegate<dynamic>>[
+          DefaultWidgetsLocalizations.delegate,
+          DefaultMaterialLocalizations.delegate,
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'instagram',
+          theme: ThemeData(
+            appBarTheme:const AppBarTheme(
+              elevation: 0,
+              color: Colors.white,
+            ),
+            primarySwatch: Colors.grey,
+            scaffoldBackgroundColor: Colors.white,
+            canvasColor: Colors.transparent,
+          ),
+          home: AnimatedSplashScreen(
+            centered: true,
+            splash: Lottie.asset('assets/splash_gif/instagram.json'),
+            nextScreen: const LoginPage(),
+          ),
+          onGenerateRoute: AppRoutes.onGenerateRoutes,
+        ));
   }
 }
