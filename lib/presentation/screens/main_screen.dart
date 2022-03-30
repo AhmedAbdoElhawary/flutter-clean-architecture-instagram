@@ -17,15 +17,14 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
-
     return CupertinoTabScaffold(
-        tabBar: CupertinoTabBar(items: [
+        tabBar:
+            CupertinoTabBar(backgroundColor: Colors.white, height: 40, items: [
           navigationBarItem("house_white.svg"),
           navigationBarItem("search.svg"),
           navigationBarItem("video.svg"),
@@ -34,36 +33,32 @@ class _MainScreenState extends State<MainScreen> {
             icon:
                 BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
                     builder: (context, state) {
-              if (state is CubitUserLoaded) {
-                return CircleAvatar(
-                    radius: 14,
-                    backgroundColor: Colors.black12,
-                    child: ClipOval(
-                      child: state.userPersonalInfo.profileImageUrl.isEmpty
-                          ? const Icon(Icons.person, color: Colors.white)
-                          : Image.network(
-                              state.userPersonalInfo.profileImageUrl),
-                    ));
-              } else if (state is CubitGetUserInfoFailed) {
-                return Container();
-              } else {
-                return const ClipOval(child: CircularProgressIndicator());
-              }
+              FirestoreUserInfoCubit userCubit =
+                  FirestoreUserInfoCubit.get(context);
+              String userImage = userCubit.personalInfo!.profileImageUrl;
+
+              return CircleAvatar(
+                  radius: 14,
+                  backgroundColor: Colors.black12,
+                  child: ClipOval(
+                    child: userImage.isEmpty
+                        ? const Icon(Icons.person, color: Colors.white)
+                        : Image.network(userImage),
+                  ));
             }),
-            label: '',
           ),
         ]),
         tabBuilder: (context, index) {
           switch (index) {
             case 0:
               return CupertinoTabView(
-                builder: (context) =>
-                    CupertinoPageScaffold(child: HomeScreen(widget.userId)),
+                builder: (context) => CupertinoPageScaffold(
+                    child: HomeScreen(userId: widget.userId)),
               );
             case 1:
               return CupertinoTabView(
-                builder: (context) =>
-                    const CupertinoPageScaffold(child: AllUserPostPage()),
+                builder: (context) => CupertinoPageScaffold(
+                    child: AllUserPostPage(userId: widget.userId)),
               );
             case 2:
               return CupertinoTabView(
@@ -84,7 +79,7 @@ class _MainScreenState extends State<MainScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      HomeScreen(widget.userId)));
+                                      HomeScreen(userId: widget.userId)));
                         },
                         child: const Text("Click here mother f***k")),
                   ),
@@ -105,7 +100,6 @@ class _MainScreenState extends State<MainScreen> {
         "assets/icons/$fileName",
         height: 25,
       ),
-      label: '',
     );
   }
 }
