@@ -5,101 +5,158 @@ import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/widgets/read_more_text.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
-
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../widgets/circle_avatar_name.dart';
 import '../widgets/circle_avatar_of_profile_image.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final String userId;
+  List postsInfoIds = [];
+  bool isThatUserPosts;
+
+  HomeScreen(
+      {Key? key,
+      this.isThatUserPosts = true,
+      required this.userId,
+      List? postsInfoIds})
+      : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
+  bool loadingStories = true;
+  bool loadingPosts = true;
+  bool rebuild=true;
+
   bool isLiked = false;
   bool isSaved = false;
   bool isItDone = false;
+  UserPersonalInfo? personalInfo;
+  void getData() async {
+    personalInfo =
+        BlocProvider.of<FirestoreUserInfoCubit>(context, listen: false)
+            .personalInfo;
+    setState(() {
+      loadingStories = false;
+    });
+
+    if (widget.isThatUserPosts) {
+      widget.postsInfoIds = personalInfo!.posts +
+          personalInfo!.followedPeople +
+          personalInfo!.followerPeople;
+      PostCubit postCubit = PostCubit.get(context);
+      await postCubit.getPostInfo(widget.postsInfoIds);
+    }
+
+    setState(() {
+      loadingPosts = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final mediaQuery = MediaQuery.of(context);
     final bodyHeight = mediaQuery.size.height -
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
+    if(rebuild) {
+      getData();
+      rebuild=false;
+    }
     return Scaffold(
       appBar: appBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
-              width: double.infinity,
-              height: bodyHeight * 0.155,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: 10,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-                itemBuilder: (BuildContext context, int index) {
-                  String circleAvatarName = "Ahmed";
-                  return Builder(builder: (context) {
-                    UserPersonalInfo? userInfo =
-                        context.watch<FirestoreUserInfoCubit>().personalInfo;
-                    return CircleAvatarOfProfileImage(
-                      circleAvatarName:
-                          userInfo != null ? userInfo.name : circleAvatarName,
-                      bodyHeight: bodyHeight,
-                      thisForStoriesLine: true,
-                      imageUrl:
-                          userInfo != null ? userInfo.profileImageUrl : '',
-                    );
-                  });
-                },
-              ),
-            ),
+            storiesLines(bodyHeight),
             const Divider(thickness: 0.5),
-
-            //TODO for now (it's not for all user, it'll make errors)
-
-            BlocBuilder<PostCubit, PostState>(
-              builder: (context, state) {
-                List<Post>? postsInfo;
-                if (state is CubitPostsInfoLoaded) {
-                  postsInfo = state.postsInfo;
-                  //TODO it's so slow
-                  // WidgetsBinding.instance!.addPostFrameCallback((_) async {
-                  //   setState(() {
-                      isItDone = true;
-                  //   });
-                  // });
-                } else if (state is CubitPostFailed) {
-                  ToastShow.toastStateError(state);
-                }
-
-                return
-                  isItDone
-                    ?
-                  ListView.separated(
-                        itemCount: postsInfo!.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        separatorBuilder: (BuildContext context, int index) =>
-                            const Divider(),
-                        itemBuilder: (BuildContext context, int index) {
-                          return thePostsOfHomePage(
-                              postsInfo![index], bodyHeight);
-                        },
-                      )
-                    :
-                const CircularProgressIndicator(
-                    strokeWidth: 1.5, color: Colors.black54);
-              },
-            ),
+            posts(bodyHeight),
           ],
         ),
       ),
+    );
+    // }
+  }
+
+  Widget posts(double bodyHeight) {
+    if (loadingPosts) {
+      return const Center(
+        child:
+            CircularProgressIndicator(strokeWidth: 1.5, color: Colors.black54),
+      );
+    } else {
+      return BlocBuilder<PostCubit, PostState>(
+        buildWhen: (previous, current) {
+          if (previous is CubitPostLoaded || current is CubitPostLoaded) {
+            return false;
+          }
+          return true;
+        },
+        builder: (context, state) {
+          if (state is CubitPostsInfoLoaded && personalInfo != null) {
+            return ListView.separated(
+              itemCount: state.postsInfo.length,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
+              itemBuilder: (BuildContext context, int index) {
+                return thePostsOfHomePage(state.postsInfo[index], bodyHeight);
+              },
+            );
+          } else if (state is CubitPostFailed) {
+            ToastShow.toastStateError(state);
+            return const Center(child: Text("There's no posts..."));
+          } else {
+            return const CircularProgressIndicator(
+                strokeWidth: 1.5, color: Colors.black54);
+          }
+        },
+      );
+    }
+  }
+
+  Widget storiesLines(double bodyHeight) {
+    return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
+      builder: (context, state) {
+        if (state is CubitUserLoaded) {
+          return SizedBox(
+            width: double.infinity,
+            height: bodyHeight * 0.155,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: 10,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
+              itemBuilder: (BuildContext context, int index) {
+                String circleAvatarName = "Ahmed";
+                return CircleAvatarOfProfileImage(
+                  circleAvatarName: state.userPersonalInfo.name.isNotEmpty
+                      ? personalInfo!.name
+                      : circleAvatarName,
+                  bodyHeight: bodyHeight,
+                  thisForStoriesLine: true,
+                  imageUrl: state.userPersonalInfo.profileImageUrl.isNotEmpty
+                      ? state.userPersonalInfo.profileImageUrl
+                      : '',
+                );
+              },
+            ),
+          );
+        } else if (state is CubitGetUserInfoFailed) {
+          return Container();
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(
+                strokeWidth: 1.5, color: Colors.black54),
+          );
+        }
+      },
     );
   }
 
@@ -151,14 +208,15 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 6.0),
               child: CircleAvatarOfProfileImage(
-                circleAvatarName: postInfo.publisherName,
+                circleAvatarName: postInfo.publisherInfo!.name,
                 bodyHeight: bodyHeight / 2,
                 thisForStoriesLine: false,
-                imageUrl: postInfo.publisherProfileImageUrl,
+                imageUrl: postInfo.publisherInfo!.profileImageUrl,
               ),
             ),
             const SizedBox(width: 5),
-            Expanded(child: NameOfCircleAvatar(postInfo.publisherName, false)),
+            Expanded(
+                child: NameOfCircleAvatar(postInfo.publisherInfo!.name, false)),
             menuButton()
           ],
         ),
@@ -167,21 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
               child: Row(
             children: [
-              IconButton(
-                icon: isLiked
-                    ? const Icon(
-                        Icons.favorite_border,
-                      )
-                    : const Icon(
-                        Icons.favorite,
-                        color: Colors.red,
-                      ),
-                onPressed: () {
-                  setState(() {
-                    isLiked = isLiked ? false : true;
-                  });
-                },
-              ),
+              loveButton(),
               IconButton(
                 icon: iconsOfImagePost("assets/icons/comment.svg"),
                 onPressed: () {},
@@ -213,14 +257,13 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              numbersOfLikes(postInfo),
+              if (postInfo.likes.isNotEmpty) numbersOfLikes(postInfo),
               const SizedBox(height: 5),
-              ReadMore("${postInfo.publisherName} ${postInfo.caption}", 2),
+              ReadMore(
+                  "${postInfo.publisherInfo!.name} ${postInfo.caption}", 2),
               const SizedBox(height: 5),
-              const Text("View all 171 comment...",
-                  style: TextStyle(color: Colors.grey)),
               const SizedBox(height: 8),
-              addCommentRow(postInfo)
+              addCommentRow(postInfo, personalInfo!)
             ],
           ),
         )
@@ -228,15 +271,34 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Row addCommentRow(Post postInfo) {
+  IconButton loveButton() {
+    return IconButton(
+      icon: isLiked
+          ? const Icon(
+              Icons.favorite_border,
+            )
+          : const Icon(
+              Icons.favorite,
+              color: Colors.red,
+            ),
+      onPressed: () {
+        setState(() {
+          isLiked = isLiked ? false : true;
+        });
+      },
+    );
+  }
+
+  Row addCommentRow(Post postInfo, UserPersonalInfo personalInfo) {
+    String imageUrl = postInfo.publisherInfo!.profileImageUrl;
     return Row(
       children: [
         CircleAvatar(
             radius: 16,
             backgroundColor: Colors.black12,
-            child: postInfo.publisherProfileImageUrl.isEmpty
+            child: imageUrl.isEmpty
                 ? const Icon(Icons.person, color: Colors.white)
-                : ClipOval(child: Image.network(postInfo.publisherProfileImageUrl))),
+                : ClipOval(child: Image.network(imageUrl))),
         const SizedBox(width: 10),
         const Text(
           "Add a comment...",
@@ -290,4 +352,7 @@ class _HomeScreenState extends State<HomeScreen> {
       onPressed: () {},
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

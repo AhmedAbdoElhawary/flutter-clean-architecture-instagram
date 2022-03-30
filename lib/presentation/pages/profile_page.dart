@@ -1,11 +1,13 @@
+import 'dart:async';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
+import 'package:instegram/presentation/pages/new_post_page.dart';
+import 'package:instegram/presentation/widgets/animated_dialog.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -23,16 +25,13 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  bool isDone = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+class _ProfilePageState extends State<ProfilePage>
+    with AutomaticKeepAliveClientMixin {
+  bool rebuild = true;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return scaffold();
   }
 
@@ -54,7 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ];
             },
-            body: tapBar(),
+            body: tapBar(personalInfo),
           ),
         ),
       );
@@ -107,33 +106,35 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  Widget tapBar() {
+  getPostsData(UserPersonalInfo personalInfo) async {
+    PostCubit postCubit = PostCubit.get(context);
+    await postCubit.getPostInfo(personalInfo.posts);
+  }
+
+  Widget tapBar(UserPersonalInfo personalInfo) {
+    if (rebuild) {
+      getPostsData(personalInfo);
+      rebuild = false;
+    }
+
     return BlocBuilder<PostCubit, PostState>(
       builder: (context, state) {
-
-        List<Post>? postsInfo;
         if (state is CubitPostsInfoLoaded) {
-          postsInfo = state.postsInfo;
-          // WidgetsBinding.instance!.addPostFrameCallback((_) async {
-          //   setState(() {
-              isDone = true;
-          //   });
-          // });
+          return Column(
+            children: [
+              tabBarIcons(),
+              tapBarView(state.postsInfo),
+            ],
+          );
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
+          return const Text("there is no posts...");
+        } else {
+          return Transform.scale(
+              scale: 0.1,
+              child: const CircularProgressIndicator(
+                  strokeWidth: 20, color: Colors.black54));
         }
-
-        return isDone
-            ? Column(
-                children: [
-                  tabBarIcons(),
-                  tapBarView(postsInfo ?? []),
-                ],
-              )
-            : Transform.scale(
-                scale: 0.1,
-                child: const CircularProgressIndicator(
-                    strokeWidth: 20, color: Colors.black54));
       },
     );
   }
@@ -149,93 +150,105 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
   Widget normalVideoView(List<Post> postsInfo) {
-    return GridView.count(
-        padding: const EdgeInsets.symmetric(vertical: 1.5),
-        crossAxisSpacing: 1.5,
-        mainAxisSpacing: 1.5,
-        crossAxisCount: 3,
-        children: postsInfo.map((postsInfo) {
-          return SizedBox(
-              child: InkWell(
-                  onLongPress: () {
-                    showGeneralDialog(
-                      barrierDismissible: true,
-                      barrierLabel: '',
-                      barrierColor: Colors.black38,
-                      transitionDuration: const Duration(milliseconds: 500),
-                      pageBuilder: (ctx, anim1, anim2) => AlertDialog(
-                        title: const Text('blured background'),
-                        content: const Text(
-                            'background should be blured and little bit darker '),
-                        elevation: 2,
-                        actions: [
-                          FlatButton(
-                            child: const Text('OK'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      ),
-                      transitionBuilder: (ctx, anim1, anim2, child) =>
-                          BackdropFilter(
-                        filter: ImageFilter.blur(
-                            sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
-                        child: FadeTransition(
-                          child: child,
-                          opacity: anim1,
-                        ),
-                      ),
-                      context: context,
-                    );
-                    // showDialog(
-                    //     context: context,
-                    //     builder: (_) => AlertDialog(
-                    //       backgroundColor:
-                    //       const Color.fromRGBO(255, 255, 255, 0.0),
-                    //       elevation: 0,
-                    //       content: Builder(
-                    //         builder: (context) {
-                    //           double height =
-                    //               MediaQuery.of(context).size.height;
-                    //           double width =
-                    //               MediaQuery.of(context).size.width;
-                    //           double size =
-                    //               (height >= width ? width : height) / 2;
-                    //           return SizedBox(
-                    //             height: 200,
-                    //             width: double.maxFinite,
-                    //             child: ClipRRect(
-                    //               // make sure we apply clip it properly
-                    //               child: BackdropFilter(
-                    //                 filter: ImageFilter.blur(
-                    //                     sigmaX: 10, sigmaY: 10),
-                    //                 child: Container(
-                    //                   alignment: Alignment.center,
-                    //                   color: Colors.grey.withOpacity(0.5),
-                    //                   height: size,
-                    //                   width: size,
-                    //                   child: Image.network(
-                    //                       postsInfo.postImageUrl,
-                    //                       fit: BoxFit.fill),
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           );
-                    //         },
-                    //       ),
-                    //     ));
-                  },
-                  child: Image.network(
-                    postsInfo.postImageUrl,
-                    fit: BoxFit.cover,
-                  )),
-              height: 150.0);
-        }).toList());
+    return postsInfo.isNotEmpty
+        ? GridView.count(
+            padding: const EdgeInsets.symmetric(vertical: 1.5),
+            crossAxisSpacing: 1.5,
+            mainAxisSpacing: 1.5,
+            crossAxisCount: 3,
+            childAspectRatio: 1.0,
+            children: postsInfo.map((postInfo) {
+              return createGridTileWidget(postInfo);
+            }).toList())
+        : const Center(child: Text("There's no posts..."));
   }
 
+  OverlayEntry? _popupDialog;
+
+  Widget createGridTileWidget(Post postInfo) => Builder(
+        builder: (context) => GestureDetector(
+          onLongPress: () {
+            _popupDialog = _createPopupDialog(postInfo);
+            Overlay.of(context)!.insert(_popupDialog!);
+          },
+          onLongPressEnd: (details) => _popupDialog?.remove(),
+          child: Image.network(postInfo.postImageUrl, fit: BoxFit.cover),
+        ),
+      );
+  OverlayEntry _createPopupDialog(Post postInfo) {
+    return OverlayEntry(
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 25, sigmaY: 20),
+        child: AnimatedDialog(
+          child: _createPopupContent(postInfo),
+        ),
+      ),
+    );
+  }
+
+  Widget _createPopupContent(Post postInfo) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _createPhotoTitle(postInfo),
+              Container(
+                  color: Colors.white,
+                  width: double.infinity,
+                  child: Image.network(postInfo.postImageUrl,
+                      fit: BoxFit.fitWidth)),
+              _createActionBar(),
+            ],
+          ),
+        ),
+      );
+  Widget _createPhotoTitle(Post postInfo) => Container(
+        padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+        height: 55,
+        width: double.infinity,
+        color: Colors.white,
+        child: Row(
+          children: [
+            CircleAvatarOfProfileImage(
+              imageUrl: postInfo.publisherInfo!.profileImageUrl,
+              thisForStoriesLine: false,
+              bodyHeight: 370,
+              circleAvatarName: '',
+            ),
+            const SizedBox(width: 7),
+            Text(postInfo.publisherInfo!.name,
+                style: const TextStyle(
+                  color: Colors.black,
+                )),
+          ],
+        ),
+      );
+
+  Widget _createActionBar() => Container(
+        height: 50,
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: const [
+            Icon(
+              Icons.favorite_border,
+              color: Colors.black,
+            ),
+            Icon(
+              Icons.chat_bubble_outline,
+              color: Colors.black,
+            ),
+            Icon(
+              Icons.send,
+              color: Colors.black,
+            ),
+          ],
+        ),
+      );
   GridView verticalVideosView() {
     return GridView(
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -318,11 +331,11 @@ class _ProfilePageState extends State<ProfilePage> {
       child: InkWell(
         onTap: () async {
           Future.delayed(Duration.zero, () async {
-            // Navigator.pushNamed(context, '/edit_profile',arguments: userInfo);
-            UserPersonalInfo result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => EditProfilePage(userInfo)));
+            UserPersonalInfo result =
+                await Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(
+                        builder: (context) => EditProfilePage(userInfo),
+                        maintainState: false));
             setState(() {
               userInfo = result;
             });
@@ -414,8 +427,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         await _picker.pickImage(source: ImageSource.gallery);
                     if (image != null) {
                       File photo = File(image.path);
-                      Navigator.pushNamed(context, '/create_post',
-                          arguments: photo);
+                      await Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                              builder: (context) => CreatePostPage(photo),
+                              maintainState: false));
                     }
                     // // Capture a photo
                     // final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
@@ -463,4 +478,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ]),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
