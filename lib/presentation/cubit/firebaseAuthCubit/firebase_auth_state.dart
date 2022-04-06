@@ -9,7 +9,11 @@ class CubitAuthConfirmed extends FirebaseAuthCubitState {
   final User user;
 
   CubitAuthConfirmed(this.user);
+
 }
+
+class CubitAuthSignOut extends FirebaseAuthCubitState {}
+
 
 class CubitAuthFailed extends FirebaseAuthCubitState {
   final String error;

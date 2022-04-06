@@ -1,5 +1,5 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:instegram/presentation/pages/edit_profile_page.dart';
 import 'package:instegram/presentation/pages/home_page.dart';
 import 'package:instegram/presentation/pages/login_page.dart';
@@ -13,17 +13,17 @@ class AppRoutes {
     final arg = settings.arguments;
     switch (settings.name) {
       case '/login':
-        return _materialRoute(LoginPage());
+        return _materialRoute(const LoginPage());
       case '/main':
         return _materialRoute(MainScreen(arg as String));
       case '/home':
-        return _materialRoute(const HomeScreen());
+        return _materialRoute( HomeScreen(userId:arg as String,));
       case '/profile':
         return _materialRoute(ProfilePage(arg as String));
       case '/edit_profile':
         return _materialRoute(EditProfilePage(arg as UserPersonalInfo));
       case '/create_post':
-        return _materialRoute(CreatePostPage(arg as XFile));
+        return _materialRoute(CreatePostPage(arg as File));
       default:
         return null;
     }

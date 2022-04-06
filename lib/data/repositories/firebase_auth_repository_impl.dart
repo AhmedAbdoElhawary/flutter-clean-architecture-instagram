@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:instegram/domain/entities/registered_user.dart';
 import 'package:instegram/domain/entities/unregistered_user.dart';
-import 'package:instegram/domain/repositories/firebase_auth_repository.dart';
+import 'package:instegram/domain/repositories/auth_repository.dart';
 import '../datasourses/remote/firebase_auth.dart';
 
-class FirebaseAuthRepositoryImpl extends FirebaseAuthRepository {
+class FirebaseAuthRepositoryImpl implements FirebaseAuthRepository {
   @override
   Future<User> logIn(RegisteredUser userInfo) {
     try {
