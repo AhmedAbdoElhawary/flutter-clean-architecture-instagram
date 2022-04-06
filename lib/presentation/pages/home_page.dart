@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen>
     with AutomaticKeepAliveClientMixin {
   bool loadingStories = true;
   bool loadingPosts = true;
-  bool rebuild=true;
+  bool rebuild = true;
 
   bool isLiked = false;
   bool isSaved = false;
@@ -58,15 +58,21 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   @override
+  void initState() {
+    // rebuild = true;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     final mediaQuery = MediaQuery.of(context);
     final bodyHeight = mediaQuery.size.height -
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
-    if(rebuild) {
+    if (rebuild) {
       getData();
-      rebuild=false;
+      rebuild = false;
     }
     return Scaffold(
       appBar: appBar(),
@@ -298,7 +304,10 @@ class _HomeScreenState extends State<HomeScreen>
             backgroundColor: Colors.black12,
             child: imageUrl.isEmpty
                 ? const Icon(Icons.person, color: Colors.white)
-                : ClipOval(child: Image.network(imageUrl))),
+                : ClipOval(
+                    child: Image.network(
+                    imageUrl,
+                  ))),
         const SizedBox(width: 10),
         const Text(
           "Add a comment...",
@@ -333,10 +342,21 @@ class _HomeScreenState extends State<HomeScreen>
           isLiked = isLiked ? false : true;
         });
       },
-      child: Image(
+      child: Image.network(
+        imageUrl,
         width: double.infinity,
         fit: BoxFit.fitWidth,
-        image: NetworkImage(imageUrl),
+        frameBuilder: (context, child, frame, loaded) {
+          if (!loaded) return child;
+          return const SizedBox(
+            width: double.infinity,
+            height: 300,
+            child: Center(
+              child: CircularProgressIndicator(
+                  color: Colors.black87, strokeWidth: 1),
+            ),
+          );
+        },
       ),
     );
   }
@@ -354,5 +374,5 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }
