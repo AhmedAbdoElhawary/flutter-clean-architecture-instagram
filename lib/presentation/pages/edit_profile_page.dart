@@ -8,13 +8,15 @@ import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../widgets/toast_show.dart';
 
+
+// ignore: must_be_immutable
 class EditProfilePage extends StatefulWidget {
-  UserPersonalInfo userInfo;
+  final UserPersonalInfo userInfo;
   File? _photo;
   TextEditingController nameController = TextEditingController(text: "");
   TextEditingController userNameController = TextEditingController(text: "");
-  TextEditingController pronounsController = TextEditingController(text: "");
-  TextEditingController websiteController = TextEditingController(text: "");
+ final TextEditingController pronounsController = TextEditingController(text: "");
+ final TextEditingController websiteController = TextEditingController(text: "");
   TextEditingController bioController = TextEditingController(text: "");
   EditProfilePage(this.userInfo, {Key? key}) : super(key: key);
 
@@ -31,7 +33,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
         TextEditingController(text: widget.userInfo.userName);
     widget.bioController = TextEditingController(text: widget.userInfo.bio);
     super.initState();
-    BlocProvider.of<FirestoreUserInfoCubit>(context).initialState();
+    // TODO -----------------------------------
+    BlocProvider.of<FirestoreUserInfoCubit>(context).emit(CubitInitial());
   }
 
   @override
@@ -40,6 +43,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       builder: (context, getUserState) {
         FirestoreUserInfoCubit updateUserCubit =
             FirestoreUserInfoCubit.get(context);
+
         if (getUserState is CubitUserLoaded) {
           Future.delayed(Duration.zero, () {
             Navigator.of(context).maybePop(widget.userInfo);
@@ -48,14 +52,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ToastShow.toastStateError(getUserState);
         }
         if (getUserState is CubitImageLoaded) {
+
           Future.delayed(Duration.zero, () {
             if (mounted) {
               setState(() {
                 widget.userInfo.profileImageUrl = getUserState.imageUrl;
                 isImageUpload = true;
               });
+              Navigator.of(context).maybePop(widget.userInfo);
             }
-            Navigator.of(context).maybePop(widget.userInfo);
           });
         }
 
@@ -89,7 +94,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       dynamic getUserState, FirestoreUserInfoCubit updateUserCubit) {
     return [
       getUserState is CubitUserLoading
-          ? const CustomCircularProgress()
+          ?  const CustomCircularProgress(Colors.blue)
           : IconButton(
               onPressed: () {
                 UserPersonalInfo updatedUserInfo = UserPersonalInfo(

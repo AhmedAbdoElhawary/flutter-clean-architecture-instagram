@@ -1,5 +1,5 @@
 import '../../../core/usecase/usecase.dart';
-import '../../repositories/firebase_auth_repository.dart';
+import '../../repositories/auth_repository.dart';
 
 class SignOutAuthUseCase implements UseCase<void, void> {
   final FirebaseAuthRepository _firebaseAuthRepository;

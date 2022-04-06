@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instegram/domain/entities/unregistered_user.dart';
-import '../../domain/entities/user_personal_info.dart';
+import '../../data/models/user_personal_info.dart';
 import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
-import '../cubit/firestoreUserInfoCubit/firestore_add_new_user_cubit.dart';
-import '../screens/main_screen.dart';
+import '../cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/or_text.dart';
 import '../widgets/toast_show.dart';
 
 class SignUpPage extends StatefulWidget {
-  SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -130,13 +129,13 @@ class _SignUpPageState extends State<SignUpPage> {
                             // await prefs.setString('userInfo', jsonEncode(newUserInfo));
                             // await prefs.setBool('registered', true);
 
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      MainScreen(newUserInfo)),
-                              (Route<dynamic> route) => false,
-                            );
+                            // Navigator.pushAndRemoveUntil(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) =>
+                            //           MainScreen(newUserInfo)),
+                            //   (Route<dynamic> route) => false,
+                            // );
                           });
                         } else if (userState is CubitAddNewUserFailed) {
                           String error;

@@ -23,7 +23,8 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
       BlocProvider.of(context);
 
   Future<UserPersonalInfo?> getUserInfo(String userId) async {
-    // emit(CubitUserLoading());
+    emit(CubitUserLoading());
+
     await getUserInfoUseCase.call(params: userId).then((userInfo) {
       personalInfo = userInfo;
       emit(CubitUserLoaded(userInfo));
@@ -33,7 +34,8 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
     return personalInfo;
   }
   Future<void> getSpecificUsersInfo(List<dynamic> usersIds) async {
-    // emit(CubitUserLoading());
+    emit(CubitUserLoading());
+
     await _getSpecificUsersUseCase.call(params: usersIds).then((userInfo) {
       emit(CubitSpecificUsersLoaded(userInfo));
     }).catchError((e) {
@@ -62,6 +64,7 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
         .call(params: [photo, userId, previousImageUrl]).then((imageUrl) {
       emit(CubitImageLoaded(imageUrl));
       personalInfo!.profileImageUrl = imageUrl;
+      emit(CubitUserLoaded(personalInfo!));
     }).catchError((e) {
       emit(CubitGetUserInfoFailed(e.toString()));
     });

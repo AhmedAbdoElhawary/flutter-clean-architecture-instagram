@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class NameOfCircleAvatar extends StatelessWidget {
-  String circleAvatarName;
-  bool isForStoriesLine;
+ final String circleAvatarName;
+ final bool isForStoriesLine;
 
-  NameOfCircleAvatar(
+  const NameOfCircleAvatar(
     this.circleAvatarName,
     this.isForStoriesLine, {
     Key? key,

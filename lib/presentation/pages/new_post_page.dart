@@ -153,9 +153,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return Post(
         publisherId: personalInfo.userId,
         datePublished: timeOfNow(),
-        publisherName: personalInfo.name,
         caption: captionController.text,
-        publisherProfileImageUrl: personalInfo.profileImageUrl,
         likes: [],);
   }
 

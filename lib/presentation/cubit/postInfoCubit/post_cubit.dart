@@ -10,18 +10,18 @@ part 'post_state.dart';
 
 class PostCubit extends Cubit<PostState> {
   final CreatePostUseCase _createPostUseCase;
-  final GetPostInfoUseCase _getPostInfoUseCase;
-  final GetAllPostInfoUseCase _getAllPostInfoUseCase;
+  final GetPostsInfoUseCase _getPostsInfoUseCase;
+  final GetAllPostsInfoUseCase _getAllPostInfoUseCase;
   String? postId;
   List<Post>? postsInfo;
   List<Post>? allPostsInfo;
 
-  PostCubit(this._createPostUseCase,this._getPostInfoUseCase,this._getAllPostInfoUseCase) : super(CubitPostLoading());
+  PostCubit(this._createPostUseCase,this._getPostsInfoUseCase,this._getAllPostInfoUseCase) : super(CubitPostLoading());
 
   static PostCubit get(BuildContext context) => BlocProvider.of(context);
 
   Future<String?> createPost(Post postInfo,Comment commentInfo, File photo) async {
-    // emit(CubitPostLoading());
+    emit(CubitPostLoading());
     await _createPostUseCase.call(params: [postInfo,commentInfo, photo]).then((postId) {
       this.postId=postId;
       emit(CubitPostLoaded());
@@ -32,8 +32,8 @@ class PostCubit extends Cubit<PostState> {
   }
 
   Future<List<Post>?> getPostInfo(List<dynamic> postIds) async {
-    // emit(CubitPostLoading());
-    await _getPostInfoUseCase.call(params:postIds).then((postsInfo) {
+    emit(CubitPostLoading());
+    await _getPostsInfoUseCase.call(params:postIds).then((postsInfo) {
       this.postsInfo=postsInfo;
       emit(CubitPostsInfoLoaded(postsInfo));
     }).catchError((e) {
