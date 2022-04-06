@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/pages/sign_up_page.dart';
 import '../../domain/entities/registered_user.dart';
 import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
@@ -99,66 +98,70 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: SizedBox(
                   height: 45,
-                  child: Builder(builder: (builderContext) {
-                    PostCubit postCubit = BlocProvider.of<PostCubit>(
-                        builderContext,
-                        listen: false);
+                  child: BlocConsumer<FirestoreUserInfoCubit,
+                      FirestoreGetUserInfoState>(
+                    listener: (context, state) {},
+                    builder: (context, getUserState) {
+                      FirestoreUserInfoCubit getUserCubit =
+                          FirestoreUserInfoCubit.get(context);
 
-                    return BlocConsumer<FirestoreUserInfoCubit,
-                        FirestoreGetUserInfoState>(
-                      listener: (context, state) {},
-                      builder: (context, getUserState) {
-                        FirestoreUserInfoCubit getUserCubit =
-                            FirestoreUserInfoCubit.get(context);
-
-                        if (authState is CubitAuthConfirmed) {
-                          String userId = authCubit.user!.uid;
-                          getUserCubit.getUserInfo(userId);
-                          if (getUserState is CubitUserLoaded) {
-                            WidgetsBinding.instance!
-                                .addPostFrameCallback((_) async {
-                              await postCubit.getPostInfo(
-                                  getUserState.userPersonalInfo.posts);
-                              if (!mounted) {
-                                setState(() {
-                                  isUserIdReady = true;
-                                });
-                              }
-                              if (!isHeMovedToHome) {
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context, '/main', (route) => false,
-                                    arguments: userId);
-                              }
-                              isHeMovedToHome = true;
+                      if (authState is CubitAuthConfirmed) {
+                        String userId = authCubit.user!.uid;
+                        getUserCubit.getUserInfo(userId);
+                        if (getUserState is CubitUserLoaded) {
+                          WidgetsBinding.instance!
+                              .addPostFrameCallback((_) async {
+                            setState(() {
+                              isUserIdReady = true;
                             });
-                          } else if (getUserState is CubitGetUserInfoFailed) {
-                            ToastShow.toastStateError(getUserState);
-                          }
-                        } else if (authState is CubitAuthFailed) {
-                          ToastShow.toastStateError(authState);
-                        }
+                            if (!isHeMovedToHome) {
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, '/main', (route) => false,
+                                  arguments: userId);
+                            }
+                            isHeMovedToHome = true;
+                          });
+                        } else if (getUserState is CubitGetUserInfoFailed) {
+                          WidgetsBinding.instance!
+                              .addPostFrameCallback((_) async {
+                            setState(() {
+                              isUserIdReady = true;
+                            });
+                          });
 
-                        return TextButton(
-                            onPressed: () async {
-                              isUserIdReady = false;
-                              await authCubit.logIn(RegisteredUser(
-                                  email: emailController.text,
-                                  password: passwordController.text));
-                            },
-                            child: !isUserIdReady
-                                ? const ClipOval(
-                                    child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ))
-                                : const Text(
-                                    "Log in",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                            style:
-                                ElevatedButton.styleFrom(primary: Colors.blue));
-                      },
-                    );
-                  }),
+                          ToastShow.toastStateError(getUserState);
+                        }
+                      } else if (authState is CubitAuthFailed) {
+                        WidgetsBinding.instance!
+                            .addPostFrameCallback((_) async {
+                          setState(() {
+                            isUserIdReady = true;
+                          });
+                        });
+
+                        ToastShow.toastStateError(authState);
+                      }
+
+                      return TextButton(
+                          onPressed: () async {
+                            isUserIdReady = false;
+                            await authCubit.logIn(RegisteredUser(
+                                email: emailController.text,
+                                password: passwordController.text));
+                          },
+                          child: !isUserIdReady
+                              ? const ClipOval(
+                                  child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ))
+                              : const Text(
+                                  "Log in",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                          style:
+                              ElevatedButton.styleFrom(primary: Colors.blue));
+                    },
+                  ),
                 ),
               ),
             ),
