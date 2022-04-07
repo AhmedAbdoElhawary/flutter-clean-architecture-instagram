@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/core/constant.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/domain/usecases/firestoreUserUseCase/get_specific_users_usecase.dart';
 import '../../../domain/usecases/firestoreUserUsecase/get_user_info_usecase.dart';
@@ -13,26 +14,29 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
   final GetSpecificUsersUseCase _getSpecificUsersUseCase;
   UpdateUserInfoUseCase updateUserInfoUseCase;
   UploadProfileImageUseCase uploadImageUseCase;
+  UserPersonalInfo? myPersonalInfo;
+  UserPersonalInfo? userInfo;
 
-  UserPersonalInfo? personalInfo;
-  FirestoreUserInfoCubit(this.getUserInfoUseCase, this.updateUserInfoUseCase,this._getSpecificUsersUseCase,
-      this.uploadImageUseCase)
+  FirestoreUserInfoCubit(this.getUserInfoUseCase, this.updateUserInfoUseCase,
+      this._getSpecificUsersUseCase, this.uploadImageUseCase)
       : super(CubitInitial());
 
   static FirestoreUserInfoCubit get(BuildContext context) =>
       BlocProvider.of(context);
 
-  Future<UserPersonalInfo?> getUserInfo(String userId) async {
+  Future<void> getUserInfo(String userId,bool isThatMyPersonalId) async {
     emit(CubitUserLoading());
 
     await getUserInfoUseCase.call(params: userId).then((userInfo) {
-      personalInfo = userInfo;
+      isThatMyPersonalId
+          ? myPersonalInfo = userInfo
+          : this.userInfo = userInfo;
       emit(CubitUserLoaded(userInfo));
     }).catchError((e) {
       emit(CubitGetUserInfoFailed(e.toString()));
     });
-    return personalInfo;
   }
+
   Future<void> getSpecificUsersInfo(List<dynamic> usersIds) async {
     emit(CubitUserLoading());
 
@@ -47,12 +51,12 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
       UserPersonalInfo updatedUserInfo) async {
     emit(CubitUserLoading());
     await updateUserInfoUseCase.call(params: updatedUserInfo).then((userInfo) {
-      personalInfo = userInfo;
+      myPersonalInfo = userInfo;
       emit(CubitUserLoaded(userInfo));
     }).catchError((e) {
       emit(CubitGetUserInfoFailed(e.toString()));
     });
-    return personalInfo;
+    return myPersonalInfo;
   }
 
   Future<void> uploadProfileImage(
@@ -63,8 +67,8 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
     await uploadImageUseCase
         .call(params: [photo, userId, previousImageUrl]).then((imageUrl) {
       emit(CubitImageLoaded(imageUrl));
-      personalInfo!.profileImageUrl = imageUrl;
-      emit(CubitUserLoaded(personalInfo!));
+      myPersonalInfo!.profileImageUrl = imageUrl;
+      emit(CubitUserLoaded(myPersonalInfo!));
     }).catchError((e) {
       emit(CubitGetUserInfoFailed(e.toString()));
     });
