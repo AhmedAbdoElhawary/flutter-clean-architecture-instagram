@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instegram/presentation/pages/all_user_posts_page.dart';
-import 'package:instegram/presentation/pages/profile_page.dart';
+import 'package:instegram/presentation/pages/search_about_user_page.dart';
+import 'package:instegram/presentation/pages/personal_profile_page.dart';
+import 'package:instegram/presentation/pages/shop_page.dart';
+import 'package:instegram/presentation/pages/videos_page.dart';
 import '../pages/home_page.dart';
 
 class MainScreen extends StatefulWidget {
@@ -17,8 +18,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
                     builder: (context, state) {
               FirestoreUserInfoCubit userCubit =
                   FirestoreUserInfoCubit.get(context);
-              String userImage = userCubit.personalInfo!.profileImageUrl;
+              String userImage = userCubit.myPersonalInfo!.profileImageUrl;
 
               return CircleAvatar(
                   radius: 14,
@@ -53,42 +52,30 @@ class _MainScreenState extends State<MainScreen> {
             case 0:
               return CupertinoTabView(
                 builder: (context) => CupertinoPageScaffold(
-                    child: HomeScreen(userId: widget.userId)),
+                  child: HomeScreen(userId: widget.userId, postsInfo: const []),
+                ),
               );
             case 1:
               return CupertinoTabView(
                 builder: (context) => CupertinoPageScaffold(
-                    child: AllUserPostPage(userId: widget.userId)),
+                    child: SearchAboutUserPage(userId: widget.userId)),
               );
             case 2:
               return CupertinoTabView(
                 builder: (context) => const CupertinoPageScaffold(
-                  child: Text(
-                    "widget.userInfo.email",
-                    style: optionStyle,
-                  ),
+                  child: VideosPage(),
                 ),
               );
             case 3:
               return CupertinoTabView(
-                builder: (context) => CupertinoPageScaffold(
-                  child: Center(
-                    child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      HomeScreen(userId: widget.userId)));
-                        },
-                        child: const Text("Click here mother f***k")),
-                  ),
+                builder: (context) => const CupertinoPageScaffold(
+                  child: ShopPage(),
                 ),
               );
             default:
               return CupertinoTabView(
                 builder: (context) =>
-                    CupertinoPageScaffold(child: ProfilePage(widget.userId)),
+                    CupertinoPageScaffold(child: PersonalProfilePage(widget.userId)),
               );
           }
         });
