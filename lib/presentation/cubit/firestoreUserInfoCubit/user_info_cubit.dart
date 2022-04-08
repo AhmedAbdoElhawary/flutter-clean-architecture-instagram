@@ -24,14 +24,19 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
   static FirestoreUserInfoCubit get(BuildContext context) =>
       BlocProvider.of(context);
 
-  Future<void> getUserInfo(String userId,bool isThatMyPersonalId) async {
+  Future<void> getUserInfo(String userId, bool isThatMyPersonalId) async {
     emit(CubitUserLoading());
 
     await getUserInfoUseCase.call(params: userId).then((userInfo) {
-      isThatMyPersonalId
-          ? myPersonalInfo = userInfo
-          : this.userInfo = userInfo;
-      emit(CubitUserLoaded(userInfo));
+      if (isThatMyPersonalId) {
+        myPersonalInfo = userInfo;
+        emit(CubitMyPersonalInfoLoaded(userInfo));
+      } else {
+        this.userInfo = userInfo;
+        emit(CubitUserLoaded(userInfo));
+
+      }
+
     }).catchError((e) {
       emit(CubitGetUserInfoFailed(e.toString()));
     });
@@ -52,7 +57,7 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
     emit(CubitUserLoading());
     await updateUserInfoUseCase.call(params: updatedUserInfo).then((userInfo) {
       myPersonalInfo = userInfo;
-      emit(CubitUserLoaded(userInfo));
+      emit(CubitMyPersonalInfoLoaded(userInfo));
     }).catchError((e) {
       emit(CubitGetUserInfoFailed(e.toString()));
     });
@@ -68,7 +73,7 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
         .call(params: [photo, userId, previousImageUrl]).then((imageUrl) {
       emit(CubitImageLoaded(imageUrl));
       myPersonalInfo!.profileImageUrl = imageUrl;
-      emit(CubitUserLoaded(myPersonalInfo!));
+      emit(CubitMyPersonalInfoLoaded(myPersonalInfo!));
     }).catchError((e) {
       emit(CubitGetUserInfoFailed(e.toString()));
     });

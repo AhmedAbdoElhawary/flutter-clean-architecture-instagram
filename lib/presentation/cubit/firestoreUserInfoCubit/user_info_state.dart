@@ -13,6 +13,12 @@ class CubitImageLoaded extends FirestoreGetUserInfoState {
 
   CubitImageLoaded(this.imageUrl);
 }
+class CubitMyPersonalInfoLoaded extends FirestoreGetUserInfoState {
+  UserPersonalInfo userPersonalInfo;
+
+  CubitMyPersonalInfoLoaded(this.userPersonalInfo);
+
+}
 class CubitUserLoaded extends FirestoreGetUserInfoState {
   UserPersonalInfo userPersonalInfo;
 
