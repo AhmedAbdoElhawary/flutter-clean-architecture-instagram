@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instegram/core/constant.dart';
 import 'package:instegram/presentation/pages/sign_up_page.dart';
 import '../../domain/entities/registered_user.dart';
 import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
@@ -107,14 +108,16 @@ class _LoginPageState extends State<LoginPage> {
 
                       if (authState is CubitAuthConfirmed) {
                         String userId = authCubit.user!.uid;
-                        getUserCubit.getUserInfo(userId);
-                        if (getUserState is CubitUserLoaded) {
+                        getUserCubit.getUserInfo(userId,true);
+                        if (getUserState is CubitMyPersonalInfoLoaded) {
                           WidgetsBinding.instance!
                               .addPostFrameCallback((_) async {
                             setState(() {
                               isUserIdReady = true;
                             });
                             if (!isHeMovedToHome) {
+                              myPersonalId=userId;
+                              print('$myPersonalId ===================================');
                               Navigator.pushNamedAndRemoveUntil(
                                   context, '/main', (route) => false,
                                   arguments: userId);
