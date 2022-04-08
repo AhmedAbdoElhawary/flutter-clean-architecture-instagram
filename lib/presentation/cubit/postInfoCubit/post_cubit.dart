@@ -13,17 +13,23 @@ class PostCubit extends Cubit<PostState> {
   final GetPostsInfoUseCase _getPostsInfoUseCase;
   final GetAllPostsInfoUseCase _getAllPostInfoUseCase;
   String? postId;
-  List<Post>? postsInfo;
+  List<Post>? myPostsInfo;
+  List<Post>? userPostsInfo;
+
   List<Post>? allPostsInfo;
 
-  PostCubit(this._createPostUseCase,this._getPostsInfoUseCase,this._getAllPostInfoUseCase) : super(CubitPostLoading());
+  PostCubit(this._createPostUseCase, this._getPostsInfoUseCase,
+      this._getAllPostInfoUseCase)
+      : super(CubitPostLoading());
 
   static PostCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future<String?> createPost(Post postInfo,Comment commentInfo, File photo) async {
+  Future<String?> createPost(
+      Post postInfo, Comment commentInfo, File photo) async {
     emit(CubitPostLoading());
-    await _createPostUseCase.call(params: [postInfo,commentInfo, photo]).then((postId) {
-      this.postId=postId;
+    await _createPostUseCase
+        .call(params: [postInfo, commentInfo, photo]).then((postId) {
+      this.postId = postId;
       emit(CubitPostLoaded());
     }).catchError((e) {
       emit(CubitPostFailed(e));
@@ -31,25 +37,31 @@ class PostCubit extends Cubit<PostState> {
     return postId;
   }
 
-  Future<List<Post>?> getPostInfo(List<dynamic> postIds) async {
+  Future<List<Post>?> getPostsInfo(
+      List<dynamic> postIds, bool isThatForMyPosts) async {
     emit(CubitPostLoading());
-    await _getPostsInfoUseCase.call(params:postIds).then((postsInfo) {
-      this.postsInfo=postsInfo;
-      emit(CubitPostsInfoLoaded(postsInfo));
+    await _getPostsInfoUseCase.call(params: postIds).then((postsInfo) {
+      if (isThatForMyPosts) {
+        myPostsInfo = postsInfo;
+        emit(CubitMyPostsInfoLoaded(postsInfo));
+      } else {
+        userPostsInfo = postsInfo;
+        emit(CubitPostsInfoLoaded(postsInfo));
+      }
     }).catchError((e) {
       emit(CubitPostFailed(e));
     });
-    return postsInfo;
+    return myPostsInfo;
   }
 
   Future<List<Post>?> getAllPostInfo() async {
-    // emit(CubitPostLoading());
-    await _getAllPostInfoUseCase.call(params:null).then((allPostsInfo) {
-      this.allPostsInfo=allPostsInfo;
+    emit(CubitPostLoading());
+    await _getAllPostInfoUseCase.call(params: null).then((allPostsInfo) {
+      this.allPostsInfo = allPostsInfo;
       emit(CubitAllPostsLoaded(allPostsInfo));
     }).catchError((e) {
       emit(CubitPostFailed(e));
     });
-    return postsInfo;
+    return myPostsInfo;
   }
 }
