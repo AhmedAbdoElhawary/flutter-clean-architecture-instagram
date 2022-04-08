@@ -52,7 +52,7 @@ class _MainScreenState extends State<MainScreen> {
             case 0:
               return CupertinoTabView(
                 builder: (context) => CupertinoPageScaffold(
-                  child: HomeScreen(userId: widget.userId, postsInfo: const []),
+                  child: HomeScreen(userId: widget.userId, postsInfo: const [],isThatMyPosts: true),
                 ),
               );
             case 1:

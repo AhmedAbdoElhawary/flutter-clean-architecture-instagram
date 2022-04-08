@@ -103,7 +103,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
         FirestoreUserInfoCubit userCubit =
             BlocProvider.of<FirestoreUserInfoCubit>(builderContext,
                 listen: false);
-        UserPersonalInfo? personalInfo = userCubit.personalInfo;
+        UserPersonalInfo? personalInfo = userCubit.myPersonalInfo;
 
         return Builder(
           builder: (builder2context) {
@@ -140,7 +140,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       if (postId != null) {
         personalInfo.posts += [postId];
         await userCubit.updateUserInfo(personalInfo);
-        await postCubit.getPostInfo(personalInfo.posts);
+        await postCubit.getPostsInfo(personalInfo.posts,true);
         setState(() {
           isItDone = true;
         });

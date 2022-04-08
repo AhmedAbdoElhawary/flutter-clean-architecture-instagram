@@ -44,7 +44,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         FirestoreUserInfoCubit updateUserCubit =
             FirestoreUserInfoCubit.get(context);
 
-        if (getUserState is CubitUserLoaded) {
+        if (getUserState is CubitMyPersonalInfoLoaded) {
           Future.delayed(Duration.zero, () {
             Navigator.of(context).maybePop(widget.userInfo);
           });
