@@ -19,11 +19,13 @@ class FirestoreUser {
     }
     return Future.error("the user not exist !");
   }
-  static Future<List<UserPersonalInfo>> getSpecificUsersInfo(List<dynamic> usersIds) async {
+
+  static Future<List<UserPersonalInfo>> getSpecificUsersInfo(
+      List<dynamic> usersIds) async {
     List<UserPersonalInfo> usersInfo = [];
     for (int i = 0; i < usersIds.length; i++) {
       DocumentSnapshot<Map<String, dynamic>> snap =
-      await _firestoreUserCollection.doc(usersIds[i]).get();
+          await _firestoreUserCollection.doc(usersIds[i]).get();
       if (snap.exists) {
         UserPersonalInfo postReformat = UserPersonalInfo.fromSnap(snap);
         usersInfo.add(postReformat);
@@ -34,16 +36,51 @@ class FirestoreUser {
     return usersInfo;
   }
 
+  static updateProfileImage(
+      {required String imageUrl, required String userId}) async {
+    await _firestoreUserCollection.doc(userId).update({
+      "profileImageUrl": imageUrl,
+    });
+  }
+
   static updateUserInfo(UserPersonalInfo userInfo) async {
     await _firestoreUserCollection
         .doc(userInfo.userId)
         .update(userInfo.toMap());
   }
 
-  static updateProfileImage(
-      {required String imageUrl, required String userId}) async {
-    await _firestoreUserCollection.doc(userId).update({
-      "profileImageUrl": imageUrl,
+  static followThisUser(String followingUserId, String myPersonalId) async {
+    await _firestoreUserCollection.doc(followingUserId).update({
+      'followers': FieldValue.arrayUnion([myPersonalId])
     });
+
+    await _firestoreUserCollection.doc(myPersonalId).update({
+      'following': FieldValue.arrayUnion([followingUserId])
+    });
+  }
+
+  static removeThisFollower(String followingUserId, String myPersonalId) async {
+    await _firestoreUserCollection.doc(followingUserId).update({
+      'followers': FieldValue.arrayRemove([myPersonalId])
+    });
+
+    await _firestoreUserCollection.doc(myPersonalId).update({
+      'following': FieldValue.arrayRemove([followingUserId])
+    });
+  }
+
+  static Future<List> getSpecificUsersPosts(List<dynamic> usersIds) async {
+    List postsInfo = [];
+    for (int i = 0; i < usersIds.length; i++) {
+      DocumentSnapshot<Map<String, dynamic>> snap =
+          await _firestoreUserCollection.doc(usersIds[i]).get();
+      if (snap.exists) {
+
+        postsInfo+=snap.get('posts');
+      } else {
+        return Future.error("the post not exist !");
+      }
+    }
+    return postsInfo;
   }
 }
