@@ -2,9 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
 import 'package:instegram/presentation/widgets/recommendation_people.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
+import '../../core/constant.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 
@@ -18,6 +20,7 @@ class UserProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<UserProfilePage>
     with AutomaticKeepAliveClientMixin {
+  bool rebuildUserInfo = false;
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -28,9 +31,18 @@ class _ProfilePageState extends State<UserProfilePage>
     return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
       bloc: BlocProvider.of<FirestoreUserInfoCubit>(context)
         ..getUserInfo(widget.userId, false),
-      buildWhen: (previous, current) =>
-          previous != current && current is CubitUserLoaded,
+      buildWhen: (previous, current) {
+        print("build when =========================================");
+        if (previous != current && current is CubitUserLoaded) {
+          return true;
+        }
+        if (rebuildUserInfo && current is CubitUserLoaded) {
+          return true;
+        }
+        return false;
+      },
       builder: (context, state) {
+        print("build =========================================");
         if (state is CubitUserLoaded) {
           return Scaffold(
             appBar: appBar(state.userPersonalInfo.userName),
@@ -38,12 +50,13 @@ class _ProfilePageState extends State<UserProfilePage>
               isThatMyPersonalId: false,
               userId: widget.userId,
               userInfo: state.userPersonalInfo,
-              widgetsAboveTapBars: widgetsAboveTapBars(state.userPersonalInfo),
+              widgetsAboveTapBars:
+                  widgetsAboveTapBars(state.userPersonalInfo, state),
             ),
           );
         } else if (state is CubitGetUserInfoFailed) {
           ToastShow.toastStateError(state);
-          return const Text("there is no posts...");
+          return const Text("Something Wrong");
         } else {
           return const Center(
             child: CircularProgressIndicator(
@@ -131,9 +144,10 @@ class _ProfilePageState extends State<UserProfilePage>
     return Text(text, style: const TextStyle(fontSize: 15));
   }
 
-  List<Widget> widgetsAboveTapBars(UserPersonalInfo userInfo) {
+  List<Widget> widgetsAboveTapBars(
+      UserPersonalInfo userInfo, FirestoreGetUserInfoState userInfoState) {
     return [
-      followButton(userInfo),
+      followButton(userInfo, userInfoState),
       const SizedBox(width: 5),
       massageButton(userInfo),
       const SizedBox(width: 5),
@@ -141,61 +155,86 @@ class _ProfilePageState extends State<UserProfilePage>
       const SizedBox(width: 10),
     ];
   }
-bool isIFollowed=false;
-  Expanded followButton(UserPersonalInfo userInfo) {
-    return Expanded(
-      child: InkWell(
-        onTap: () async {
-          setState(() {
-            isIFollowed=!isIFollowed;
-          });
-        },
-        child:isIFollowed? containerOfWhiteText('Following'):containerOfBlueText('Follow'),
-      ),
+
+  Widget followButton(
+      UserPersonalInfo userInfo, FirestoreGetUserInfoState userInfoState) {
+    return BlocBuilder<FollowCubit, FollowState>(
+      // buildWhen: ,
+      builder: (context, stateOfFollow) {
+        return Expanded(
+          child: InkWell(
+              onTap: () async {
+                setState(() {
+                  rebuildUserInfo = false;
+                });
+                if (userInfo.followerPeople.contains(myPersonalId)) {
+                  BlocProvider.of<FollowCubit>(context)
+                      .removeThisFollower(followingUserId:widget.userId,myPersonalId:  myPersonalId);
+                } else {
+                  BlocProvider.of<FollowCubit>(context)
+                      .followThisUser(followingUserId: widget.userId,myPersonalId:  myPersonalId);
+                }
+
+                setState(() {
+                  rebuildUserInfo = true;
+                });
+              },
+              child:
+                  whichContainerOfText(stateOfFollow, userInfo)),
+        );
+      },
     );
   }
 
-  Container containerOfBlueText(String text) {
-    return Container(
-      height: 35.0,
-      decoration: BoxDecoration(
-        color: Colors.blue,
-        // border: Border.all(color: Colors.black26, width: 1.0),
-        borderRadius: BorderRadius.circular(6.0),
-      ),
-      child:  Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-              fontSize: 17.0, color: Colors.white, fontWeight: FontWeight.w500),
-        ),
-      ),
-    );
+  Widget whichContainerOfText(FollowState stateOfFollow, UserPersonalInfo userInfo) {
+    bool isFollowLoading = stateOfFollow is CubitFollowThisUserLoading;
+    if (stateOfFollow is CubitFollowThisUserFailed) {
+      ToastShow.toastStateError(stateOfFollow);
+    }
+    return !userInfo.followerPeople.contains(myPersonalId)
+        ? containerOfFollowText(
+            text: 'Follow', isThatFollower: false, isItLoading: isFollowLoading)
+        : containerOfFollowText(
+            text: 'Following',
+            isThatFollower: true,
+            isItLoading: isFollowLoading);
   }
 
   Expanded massageButton(UserPersonalInfo userInfo) {
     return Expanded(
       child: InkWell(
         onTap: () async {},
-        child: containerOfWhiteText('Massage'),
+        child: containerOfFollowText(
+            text: 'Massage', isThatFollower: true, isItLoading: false),
       ),
     );
   }
 
-  Container containerOfWhiteText(String text) {
+  Container containerOfFollowText(
+      {required String text,
+      required bool isThatFollower,
+      required bool isItLoading}) {
     return Container(
       height: 35.0,
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.black26, width: 1.0),
+        color: isThatFollower ? Colors.white : Colors.blue,
+        border:
+            Border.all(color: Colors.black26, width: isThatFollower ? 1.0 : 0),
         borderRadius: BorderRadius.circular(6.0),
       ),
       child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-              fontSize: 17.0, color: Colors.black, fontWeight: FontWeight.w500),
-        ),
+        child: isItLoading
+            ? CircularProgressIndicator(
+                color: isThatFollower ? Colors.black : Colors.white,
+                strokeWidth: 1,
+              )
+            : Text(
+                text,
+                style: TextStyle(
+                    fontSize: 17.0,
+                    color: isThatFollower ? Colors.black : Colors.white,
+                    fontWeight: FontWeight.w500),
+              ),
       ),
     );
   }
