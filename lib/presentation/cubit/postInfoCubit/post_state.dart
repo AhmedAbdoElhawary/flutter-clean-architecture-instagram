@@ -8,10 +8,10 @@ class CubitPostLoading extends PostState {}
 
 class CubitPostLoaded extends PostState {}
 
-class CubitMyPostsInfoLoaded extends PostState {
+class CubitMyPersonalPostsLoaded extends PostState {
   List<Post> postsInfo;
 
-  CubitMyPostsInfoLoaded(this.postsInfo);
+  CubitMyPersonalPostsLoaded(this.postsInfo);
 }
 class CubitPostsInfoLoaded extends PostState {
   List<Post> postsInfo;

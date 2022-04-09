@@ -25,13 +25,6 @@ class CubitUserLoaded extends FirestoreGetUserInfoState {
   CubitUserLoaded(this.userPersonalInfo);
 
 }
-class CubitSpecificUsersLoaded extends FirestoreGetUserInfoState {
-  List<UserPersonalInfo> userPersonalInfo;
-
-  CubitSpecificUsersLoaded(this.userPersonalInfo);
-
-}
-
 class CubitGetUserInfoFailed extends FirestoreGetUserInfoState {
   final String error;
   CubitGetUserInfoFailed(this.error);

@@ -10,6 +10,6 @@ class GetSpecificUsersUseCase
 
   @override
   Future<List<UserPersonalInfo>> call({required List<dynamic> params}) {
-    return _fireStoreUserRepository.getSpecificUsersInfo(params);
+    return _fireStoreUserRepository.getSpecificUsersInfo(usersIds: params);
   }
 }

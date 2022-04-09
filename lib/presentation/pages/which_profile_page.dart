@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instegram/core/constant.dart';
 import 'package:instegram/presentation/pages/personal_profile_page.dart';
-import 'package:instegram/presentation/pages/user_profile_page.dart';
+import 'package:instegram/presentation/widgets/user_profile_page.dart';
 
 class WhichProfilePage extends StatelessWidget {
   final String userId;

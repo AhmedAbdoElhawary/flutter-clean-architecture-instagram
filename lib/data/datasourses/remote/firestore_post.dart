@@ -64,4 +64,17 @@ class FirestorePost {
     }
     return allData;
   }
+
+  static putLikeOnThisPost({required String postId,required String userId}) async {
+    await _firestorePostCollection.doc(postId).update({
+      'likes': FieldValue.arrayUnion([userId])
+
+    });
+  }
+  static removeTheLikeOnThisPost({required String postId,required String userId}) async {
+    await _firestorePostCollection.doc(postId).update({
+      'likes': FieldValue.arrayRemove([userId])
+    });
+  }
+
 }
