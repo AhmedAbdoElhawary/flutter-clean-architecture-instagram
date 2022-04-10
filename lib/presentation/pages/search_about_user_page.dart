@@ -15,35 +15,46 @@ class SearchAboutUserPage extends StatefulWidget {
 
 class _SearchAboutUserPageState extends State<SearchAboutUserPage>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
-  // bool rebuild = true;
+
+  bool rebuildUsersInfo = false;
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    // getData();
-    return SafeArea(child: blocBuilder());
+    rebuildUsersInfo = false;
+    return SafeArea(child: Scaffold(body: blocBuilder()));
   }
 
   Future<void> getData() async {
-     BlocProvider.of<PostCubit>(context).getAllPostInfo();
+     await BlocProvider.of<PostCubit>(context).getAllPostInfo();
+     setState(() {
+       rebuildUsersInfo=true;
+     });
+
 
   }
 
   BlocBuilder<PostCubit, PostState> blocBuilder() {
     return BlocBuilder<PostCubit, PostState>(
       bloc: BlocProvider.of<PostCubit>(context)..getAllPostInfo(),
-      buildWhen: (previous, current) =>
-          previous != current && current is CubitAllPostsLoaded,
-      builder: (context, state) {
-        print("========================================= ${state}");
+      buildWhen: (previous, current) {
+        if (previous != current && current is CubitAllPostsLoaded) {
+          return true;
+        }
+        if (rebuildUsersInfo && current is CubitAllPostsLoaded) {
+          rebuildUsersInfo=false;
+          return true;
+        }
+        return false;
+      },      builder: (context, state) {
         if (state is CubitAllPostsLoaded) {
           return SmarterRefresh(
-            onRefreshData: getData(),
+            onRefreshData: getData,
             smartRefresherChild: CustomGridView(
                 postsInfo: state.allPostInfo, userId: widget.userId),
           );
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
-          return const Center(child: Text("There's no posts..."));
+          return const Center(child: Text("There's no posts...",style: TextStyle(color:Colors.black,fontSize: 20),));
         } else {
           return const Center(
             child: CircularProgressIndicator(
