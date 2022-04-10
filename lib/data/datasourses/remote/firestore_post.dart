@@ -41,6 +41,35 @@ class FirestorePost {
     });
   }
 
+  static Future<List<Comment>> getCommentsOfThisPost({required String postId}) async {
+    List<Comment> allComments = [];
+
+    final _fireStoreCommentCollection =
+        _fireStorePostCollection.doc(postId).collection("comments");
+    QuerySnapshot<Map<String, dynamic>> snap =
+        await _fireStoreCommentCollection.get();
+
+    for (int i = 0; i < snap.docs.length; i++) {
+      QueryDocumentSnapshot<Map<String, dynamic>> doc = snap.docs[i];
+      Comment postReformat = Comment.fromSnap(doc)   ;
+
+      allComments.add(postReformat);
+    }
+    return allComments;
+  }
+
+  static Future<Comment> getCommentInfo(
+      {required String commentId,required String postId}) async {
+    final _fireStoreCommentCollection =
+        _fireStorePostCollection.doc(postId).collection("comments");
+    DocumentSnapshot<Map<String, dynamic>> snap =
+        await _fireStoreCommentCollection.doc(commentId).get();
+    if (snap.exists) {
+      return Comment.fromSnap(snap);
+    }
+    return Future.error("the user not exist !");
+  }
+
   static Future<List<Post>> getPostsInfo(List<dynamic> postsIds) async {
     List<Post> postsInfo = [];
     for (int i = 0; i < postsIds.length; i++) {
