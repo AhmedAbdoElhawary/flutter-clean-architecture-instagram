@@ -21,7 +21,7 @@ class CircleAvatarOfProfileImage extends StatelessWidget {
       onTap: () {},
       onLongPress: () {},
       child: SizedBox(
-        height: bodyHeight * 0.14,
+        height:bodyHeight * 0.14,
         width: bodyHeight * 0.145 - 10,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
