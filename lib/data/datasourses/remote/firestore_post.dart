@@ -5,36 +5,47 @@ import 'package:instegram/data/models/post.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 
 class FirestorePost {
-  static final _firestorePostCollection =
+  static final _fireStorePostCollection =
       FirebaseFirestore.instance.collection('posts');
 
   static Future<String> createPost(Post postInfo) async {
     DocumentReference<Map<String, dynamic>> postRef =
-        await _firestorePostCollection.add(postInfo.toMap());
+        await _fireStorePostCollection.add(postInfo.toMap());
 
-    await _firestorePostCollection
+    await _fireStorePostCollection
         .doc(postRef.id)
         .update({"postUid": postRef.id});
     return postRef.id;
   }
 
-  static addComment(Comment commentInfo) async {
-    final _firestoreCommentCollection =
-        _firestorePostCollection.doc(commentInfo.postId).collection("comments");
+  static Future<String> addComment({required Comment commentInfo}) async {
+    final _fireStoreCommentCollection =
+        _fireStorePostCollection.doc(commentInfo.postId).collection("comments");
 
     DocumentReference<Map<String, dynamic>> commentRef =
-        await _firestoreCommentCollection.add(commentInfo.toMap());
+        await _fireStoreCommentCollection.add(commentInfo.toMap());
 
-    await _firestoreCommentCollection
+    await _fireStoreCommentCollection
         .doc(commentRef.id)
         .update({'commentUid': commentRef.id});
+    return commentRef.id;
+  }
+  static Future<void> putLikeOnThisComment({required String postId,required String commentId,required String myPersonalId}) async {
+    await _fireStorePostCollection.doc(postId).collection('comments').doc(commentId).update({
+      'likes': FieldValue.arrayUnion([myPersonalId])
+    });
+  }
+  static Future<void> removeLikeOnThisComment({required String postId,required String commentId,required String myPersonalId}) async {
+    await _fireStorePostCollection.doc(postId).collection('comments').doc(commentId).update({
+      'likes': FieldValue.arrayRemove([myPersonalId])
+    });
   }
 
   static Future<List<Post>> getPostsInfo(List<dynamic> postsIds) async {
     List<Post> postsInfo = [];
     for (int i = 0; i < postsIds.length; i++) {
       DocumentSnapshot<Map<String, dynamic>> snap =
-          await _firestorePostCollection.doc(postsIds[i]).get();
+          await _fireStorePostCollection.doc(postsIds[i]).get();
       if (snap.exists) {
         Post postReformat = Post.fromJson(snap);
         UserPersonalInfo publisherInfo =
@@ -49,9 +60,9 @@ class FirestorePost {
   }
 
   static Future<List<Post>> getAllPostsInfo() async {
-    List<Post> allData = [];
+    List<Post> allPosts = [];
     QuerySnapshot<Map<String, dynamic>> snap =
-        await _firestorePostCollection.get();
+        await _fireStorePostCollection.get();
 
     for (int i = 0; i < snap.docs.length; i++) {
       QueryDocumentSnapshot<Map<String, dynamic>> doc = snap.docs[i];
@@ -60,21 +71,22 @@ class FirestorePost {
           await FirestoreUser.getUserInfo(postReformat.publisherId);
       postReformat.publisherInfo = publisherInfo;
 
-      allData.add(postReformat);
+      allPosts.add(postReformat);
     }
-    return allData;
+    return allPosts;
   }
 
-  static putLikeOnThisPost({required String postId,required String userId}) async {
-    await _firestorePostCollection.doc(postId).update({
+  static putLikeOnThisPost(
+      {required String postId, required String userId}) async {
+    await _fireStorePostCollection.doc(postId).update({
       'likes': FieldValue.arrayUnion([userId])
-
     });
   }
-  static removeTheLikeOnThisPost({required String postId,required String userId}) async {
-    await _firestorePostCollection.doc(postId).update({
+
+  static removeTheLikeOnThisPost(
+      {required String postId, required String userId}) async {
+    await _fireStorePostCollection.doc(postId).update({
       'likes': FieldValue.arrayRemove([userId])
     });
   }
-
 }
