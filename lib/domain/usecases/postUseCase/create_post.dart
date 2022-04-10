@@ -9,6 +9,6 @@ class CreatePostUseCase implements UseCase<String, List> {
   @override
   Future<String> call({required List params}) {
     return _createPostRepository.createPost(
-        postInfo: params[0], commentInfo: params[1], photo: params[2]);
+        postInfo: params[0], photo: params[2]);
   }
 }
