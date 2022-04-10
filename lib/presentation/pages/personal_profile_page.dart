@@ -118,36 +118,40 @@ class _ProfilePageState extends State<PersonalProfilePage>
 
   Expanded editProfile(UserPersonalInfo userInfo) {
     return Expanded(
-      child: InkWell(
-        onTap: () async {
-          Future.delayed(Duration.zero, () async {
-            UserPersonalInfo result =
-                await Navigator.of(context, rootNavigator: true).push(
-                    MaterialPageRoute(
-                        builder: (context) => EditProfilePage(userInfo),
-                        maintainState: false));
-            setState(() {
-              userInfo = result;
-            });
-          });
-        },
-        child: Container(
-          height: 35.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.black26, width: 1.0),
-            borderRadius: BorderRadius.circular(6.0),
-          ),
-          child: const Center(
-            child: Text(
-              'Edit profile',
-              style: TextStyle(
-                  fontSize: 17.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500),
+      child: Builder(
+        builder: (buildContext) {
+          return InkWell(
+            onTap: () async {
+              Future.delayed(Duration.zero, () async {
+                UserPersonalInfo result =
+                    await Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(
+                            builder: (context) => EditProfilePage(userInfo),
+                            maintainState: false));
+                setState(() {
+                  userInfo = result;
+                });
+              });
+            },
+            child: Container(
+              height: 35.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.black26, width: 1.0),
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              child: const Center(
+                child: Text(
+                  'Edit profile',
+                  style: TextStyle(
+                      fontSize: 17.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
             ),
-          ),
-        ),
+          );
+        }
       ),
     );
   }
