@@ -1,38 +1,38 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instegram/data/models/user_personal_info.dart';
 class Comment {
   String datePublished;
-  String name;
-  String profileImageUrl;
   String theComment;
   String commentUid;
   String postId;
+  // bool isThisReply;
   String commentatorId;
-  List<String> repliesIds = [];
-  List<dynamic> likes = [];
+  UserPersonalInfo? commentatorInfo;
+  List<dynamic>? repliesIds;
+  List<dynamic>? likes;
 
   Comment({
-    required this.datePublished,
-    required this.name,
-    required this.profileImageUrl,
-    required this.theComment,
-    this.commentUid = '',
-    this.postId = '',
     required this.commentatorId,
-    List<dynamic>? repliesIds,
-    List<dynamic>? likes,
+    required this.datePublished,
+    required this.theComment,
+    // required this.isThisReply,
+    this.commentUid = "",
+    required this.postId ,
+    this.commentatorInfo,
+    this.repliesIds,
+    this.likes,
   });
-  static Comment fromSnap(DocumentSnapshot snap) {
-    var snapshot = snap.data() as Map<String, dynamic>;
 
+
+  static Comment fromSnap(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return Comment(
       datePublished: snapshot["datePublished"],
-      name: snapshot["name"],
-      profileImageUrl: snapshot["profileImageUrl"],
       theComment: snapshot["theComment"],
       commentUid: snapshot["commentUid"],
       repliesIds: snapshot["repliesIds"],
       postId: snapshot["postId"],
+      // isThisReply: snapshot["isThisReply"],
       commentatorId: snapshot["commentatorId"],
       likes: snapshot['likes'],
     );
@@ -40,12 +40,11 @@ class Comment {
 
   Map<String, dynamic> toMap() => {
         'datePublished': datePublished,
-        "name": name,
-        "profileImageUrl": profileImageUrl,
         "theComment": theComment,
         "commentUid": commentUid,
         "repliesIds": repliesIds,
         "postId": postId,
+        // "isThisReply": isThisReply,
         "commentatorId": commentatorId,
         'likes': likes,
       };
