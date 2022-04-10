@@ -32,9 +32,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     widget.userNameController =
         TextEditingController(text: widget.userInfo.userName);
     widget.bioController = TextEditingController(text: widget.userInfo.bio);
+
     super.initState();
-    // TODO -----------------------------------
-    BlocProvider.of<FirestoreUserInfoCubit>(context).emit(CubitInitial());
   }
 
   @override
@@ -44,11 +43,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         FirestoreUserInfoCubit updateUserCubit =
             FirestoreUserInfoCubit.get(context);
 
-        if (getUserState is CubitMyPersonalInfoLoaded) {
-          Future.delayed(Duration.zero, () {
-            Navigator.of(context).maybePop(widget.userInfo);
-          });
-        } else if (getUserState is CubitGetUserInfoFailed) {
+         if (getUserState is CubitGetUserInfoFailed) {
           ToastShow.toastStateError(getUserState);
         }
         if (getUserState is CubitImageLoaded) {
@@ -96,7 +91,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       getUserState is CubitUserLoading
           ?  const CustomCircularProgress(Colors.blue)
           : IconButton(
-              onPressed: () {
+              onPressed: () async {
                 UserPersonalInfo updatedUserInfo = UserPersonalInfo(
                     followerPeople: widget.userInfo.followerPeople,
                     followedPeople: widget.userInfo.followedPeople,
@@ -107,7 +102,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     profileImageUrl: widget.userInfo.profileImageUrl,
                     email: widget.userInfo.email,
                     userId: widget.userInfo.userId);
-                updateUserCubit.updateUserInfo(updatedUserInfo);
+                await updateUserCubit.updateUserInfo(updatedUserInfo).whenComplete(() {
+                  Future.delayed(Duration.zero, () {
+                    Navigator.of(context).maybePop(widget.userInfo);
+                  });
+                });
+
               },
               icon: const Icon(
                 Icons.check,

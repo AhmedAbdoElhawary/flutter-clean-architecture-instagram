@@ -126,7 +126,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
   createPost(UserPersonalInfo personalInfo, FirestoreUserInfoCubit userCubit,
       BuildContext builder2context) {
     Post postInfo = addPostInfo(personalInfo);
-    Comment captionInfo = addCommentInfo(personalInfo);
     setState(() {
       isItDone = false;
     });
@@ -135,12 +134,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
           BlocProvider.of<PostCubit>(builder2context, listen: false);
 
       String? postId = await postCubit.createPost(
-          postInfo, captionInfo, widget.selectedImage);
+          postInfo, widget.selectedImage);
 
       if (postId != null) {
         personalInfo.posts += [postId];
         await userCubit.updateUserInfo(personalInfo);
-        await postCubit.getPostsInfo(personalInfo.posts,true);
+        await postCubit.getPostsInfo(postIds:personalInfo.posts,isThatForMyPosts: true);
         setState(() {
           isItDone = true;
         });
@@ -155,15 +154,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
         datePublished: timeOfNow(),
         caption: captionController.text,
         likes: [],);
-  }
-
-  Comment addCommentInfo(UserPersonalInfo personalInfo) {
-    return Comment(
-        datePublished: timeOfNow(),
-        name: personalInfo.name,
-        profileImageUrl: personalInfo.profileImageUrl,
-        theComment: captionController.text,
-        commentatorId: personalInfo.userId);
   }
 
   String timeOfNow() {

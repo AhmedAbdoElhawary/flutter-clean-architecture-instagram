@@ -3,19 +3,25 @@ import 'package:instegram/domain/usecases/firestoreUserUseCase/get_specific_user
 import 'package:instegram/domain/usecases/followUseCase/follow_this_user.dart';
 import 'package:instegram/domain/usecases/firestoreUserUseCase/get_followers_and_followings_usecase.dart';
 import 'package:instegram/domain/usecases/followUseCase/remove_this_follower.dart';
+import 'package:instegram/domain/usecases/postUseCase/comments/add_comment_use_case.dart';
+import 'package:instegram/domain/usecases/postUseCase/comments/get_all_comment.dart';
+import 'package:instegram/domain/usecases/postUseCase/comments/put_like.dart';
+import 'package:instegram/domain/usecases/postUseCase/comments/remove_like.dart';
 import 'package:instegram/domain/usecases/postUseCase/get_all_posts.dart';
 import 'package:instegram/domain/usecases/postUseCase/get_post_info.dart';
 import 'package:instegram/domain/usecases/postUseCase/get_specific_users_posts.dart';
-import 'package:instegram/domain/usecases/postUseCase/put_like_on_this_post.dart';
-import 'package:instegram/domain/usecases/postUseCase/remove_the_like_on_this_post.dart';
+import 'package:instegram/domain/usecases/postUseCase/likes/put_like_on_this_post.dart';
+import 'package:instegram/domain/usecases/postUseCase/likes/remove_the_like_on_this_post.dart';
+import 'package:instegram/presentation/cubit/commentsInfo/comments_info_cubit.dart';
+import 'package:instegram/presentation/cubit/commentsInfo/post_likes/comment_likes_cubit.dart';
 import 'package:instegram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
-import 'package:instegram/presentation/cubit/postLikes/post_likes_cubit.dart';
 import 'data/repositories/firebase_auth_repository_impl.dart';
 import 'data/repositories/firestore_post_repo_impl.dart';
 import 'data/repositories/firestore_user_repo_impl.dart';
@@ -70,14 +76,29 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<CreatePostUseCase>(CreatePostUseCase(injector()));
   injector
       .registerSingleton<GetPostsInfoUseCase>(GetPostsInfoUseCase(injector()));
+
   injector.registerSingleton<GetAllPostsInfoUseCase>(
       GetAllPostsInfoUseCase(injector()));
+
   injector.registerSingleton<GetSpecificUsersPostsUseCase>(
       GetSpecificUsersPostsUseCase(injector()));
+
   injector.registerSingleton<PutLikeOnThisPostUseCase>(
       PutLikeOnThisPostUseCase(injector()));
+
   injector.registerSingleton<RemoveTheLikeOnThisPostUseCase>(
       RemoveTheLikeOnThisPostUseCase(injector()));
+
+  injector.registerSingleton<GetAllCommentsUseCase>(
+      GetAllCommentsUseCase(injector()));
+
+  injector.registerSingleton<AddCommentUseCase>(AddCommentUseCase(injector()));
+
+  injector.registerSingleton<PutLikeOnThisCommentUseCase>(
+      PutLikeOnThisCommentUseCase(injector()));
+
+  injector.registerSingleton<RemoveLikeOnThisCommentUseCase>(
+      RemoveLikeOnThisCommentUseCase(injector()));
   // *
 
   // follow useCases
@@ -101,7 +122,7 @@ Future<void> initializeDependencies() async {
   injector.registerFactory<FirestoreUserInfoCubit>(
       () => FirestoreUserInfoCubit(injector(), injector(), injector()));
   injector.registerFactory<UsersInfoCubit>(
-    () => UsersInfoCubit(injector(),injector()),
+    () => UsersInfoCubit(injector(), injector()),
   );
   // *
 
@@ -115,6 +136,16 @@ Future<void> initializeDependencies() async {
   injector.registerFactory<PostLikesCubit>(
     () => PostLikesCubit(injector(), injector()),
   );
+  // *
+
+  // comment bloc
+  injector.registerFactory<CommentsInfoCubit>(
+    () => CommentsInfoCubit(injector(), injector()),
+  );
+  injector.registerFactory<CommentLikesCubit>(
+    () => CommentLikesCubit(injector(), injector()),
+  );
+
   // *
 
   // post Blocs

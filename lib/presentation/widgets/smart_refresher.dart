@@ -1,9 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SmarterRefresh extends StatefulWidget {
   final Widget smartRefresherChild;
-  final Future<void> onRefreshData;
+  final AsyncValueGetter<void> onRefreshData;
   const SmarterRefresh(
       {required this.onRefreshData,
       required this.smartRefresherChild,
@@ -57,10 +58,11 @@ class _SmarterRefreshState extends State<SmarterRefresh>
         controller: _refreshController,
         scrollDirection: Axis.vertical,
         onRefresh: () async {
-          await widget.onRefreshData;
-          setState(() {});
-
-          _refreshController.refreshCompleted();
+          await Future.delayed(const Duration(milliseconds: 2000));
+          widget.onRefreshData().whenComplete(() {
+            _refreshController.refreshCompleted();
+            setState(() {});
+          });
         },
         onLoading: () async {
           await Future.delayed(const Duration(milliseconds: 1000));

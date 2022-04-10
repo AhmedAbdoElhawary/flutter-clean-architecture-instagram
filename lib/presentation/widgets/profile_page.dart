@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instegram/data/models/post.dart';
+import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
+import 'package:instegram/presentation/pages/followers_and_followings_info_page.dart';
 import 'package:instegram/presentation/widgets/custom_grid_view.dart';
 import '../../data/models/user_personal_info.dart';
 import 'circle_avatar_of_profile_image.dart';
@@ -16,7 +18,7 @@ class ProfilePage extends StatefulWidget {
   List<Widget> widgetsAboveTapBars;
   ProfilePage(
       {required this.widgetsAboveTapBars,
-        required this.isThatMyPersonalId,
+      required this.isThatMyPersonalId,
       required this.userInfo,
       required this.userId,
       Key? key})
@@ -52,21 +54,29 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
+  bool reBuild = false;
   Widget tapBar() {
     return BlocBuilder<PostCubit, PostState>(
-      bloc: PostCubit.get(context)..getPostsInfo(widget.userInfo.posts,widget.isThatMyPersonalId),
-      buildWhen:(previous, current) =>
-      previous != current &&
-        ((current is CubitMyPostsInfoLoaded && widget.isThatMyPersonalId) ||
-          (current is CubitPostsInfoLoaded && !widget.isThatMyPersonalId)),
-      builder: (BuildContext context, PostState state) {
-
-        if (state is CubitMyPostsInfoLoaded && widget.isThatMyPersonalId) {
-          return columnOfWidgets( state.postsInfo);
-        } else if (state is CubitPostsInfoLoaded && !widget.isThatMyPersonalId) {
-          return columnOfWidgets( state.postsInfo);
+      bloc: PostCubit.get(context)
+        ..getPostsInfo(postIds: widget.userInfo.posts,isThatForMyPosts:  widget.isThatMyPersonalId),
+      buildWhen: (previous, current) {
+        if (reBuild) {
+          reBuild = false;
+          return true;
         }
-        else if (state is CubitPostFailed) {
+        return previous != current &&
+            ((current is CubitMyPersonalPostsLoaded &&
+                    widget.isThatMyPersonalId) ||
+                (current is CubitPostsInfoLoaded &&
+                    !widget.isThatMyPersonalId));
+      },
+      builder: (BuildContext context, PostState state) {
+        if (state is CubitMyPersonalPostsLoaded && widget.isThatMyPersonalId) {
+          return columnOfWidgets(state.postsInfo);
+        } else if (state is CubitPostsInfoLoaded &&
+            !widget.isThatMyPersonalId) {
+          return columnOfWidgets(state.postsInfo);
+        } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
           return const Center(child: Text("there is no posts..."));
         } else {
@@ -81,11 +91,11 @@ class _ProfilePageState extends State<ProfilePage>
 
   Column columnOfWidgets(List<Post> postsInfo) {
     return Column(
-          children: [
-            tabBarIcons(),
-            tapBarView(postsInfo),
-          ],
-        );
+      children: [
+        tabBarIcons(),
+        tapBarView(postsInfo),
+      ],
+    );
   }
 
   Expanded tapBarView(List<Post> postsInfo) {
@@ -146,6 +156,7 @@ class _ProfilePageState extends State<ProfilePage>
             Text(userInfo.name,
                 style: const TextStyle(fontWeight: FontWeight.bold)),
             ReadMore(userInfo.bio, 4),
+            const SizedBox(height: 10),
             Row(
               children: widget.widgetsAboveTapBars,
             ),
@@ -162,22 +173,42 @@ class _ProfilePageState extends State<ProfilePage>
           bodyHeight: 900,
           thisForStoriesLine: false,
           imageUrl: userInfo.profileImageUrl),
-      personalNumbersInfo(userInfo.posts.length, "Posts"),
-      personalNumbersInfo(userInfo.followerPeople.length, "Followers"),
-      personalNumbersInfo(userInfo.followedPeople.length, "Following"),
+      personalNumbersInfo(userInfo.posts, "Posts", userInfo),
+      personalNumbersInfo(userInfo.followerPeople, "Followers", userInfo),
+      personalNumbersInfo(userInfo.followedPeople, "Following", userInfo),
     ]);
   }
 
-  Expanded personalNumbersInfo(int number, String text) {
+  Expanded personalNumbersInfo(
+      List usersInfo, String text, UserPersonalInfo userInfo) {
     return Expanded(
-      child: Column(
-        children: [
-          Text("$number",
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
-          Text(text, style: const TextStyle(fontSize: 15))
-        ],
-      ),
+      child: Builder(builder: (builderContext) {
+        return InkWell(
+          onTap: () async {
+            if (text != 'Posts') {
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => FollowersAndFollowingsInfoPage(
+                      userInfo: userInfo,
+                      initialIndex:
+                          usersInfo == userInfo.followerPeople ? 0 : 1)));
+
+              BlocProvider.of<FirestoreUserInfoCubit>(context)
+                  .getUserInfo(userInfo.userId, widget.isThatMyPersonalId);
+              setState(() {
+                reBuild = true;
+              });
+            }
+          },
+          child: Column(
+            children: [
+              Text("${usersInfo.length}",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 17)),
+              Text(text, style: const TextStyle(fontSize: 15))
+            ],
+          ),
+        );
+      }),
     );
   }
 

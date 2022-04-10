@@ -1,12 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/domain/usecases/postUseCase/get_all_posts.dart';
 import 'package:instegram/domain/usecases/postUseCase/get_post_info.dart';
-import 'package:instegram/domain/usecases/postUseCase/put_like_on_this_post.dart';
-import 'package:instegram/domain/usecases/postUseCase/remove_the_like_on_this_post.dart';
 import '../../../domain/usecases/postUseCase/create_post.dart';
 part 'post_state.dart';
 
@@ -28,10 +25,10 @@ class PostCubit extends Cubit<PostState> {
   static PostCubit get(BuildContext context) => BlocProvider.of(context);
 
   Future<String?> createPost(
-      Post postInfo, Comment commentInfo, File photo) async {
+      Post postInfo, File photo) async {
     emit(CubitPostLoading());
     await _createPostUseCase
-        .call(params: [postInfo, commentInfo, photo]).then((postId) {
+        .call(params: [postInfo, photo]).then((postId) {
       this.postId = postId;
       emit(CubitPostLoaded());
     }).catchError((e) {
