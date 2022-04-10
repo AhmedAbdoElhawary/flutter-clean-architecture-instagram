@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instegram/core/constant.dart';
 import 'package:instegram/data/models/post.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
+import 'package:instegram/presentation/pages/comments_page.dart';
+import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_name.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
 import 'package:instegram/presentation/widgets/read_more_text.dart';
 
 class CustomPostListView extends StatefulWidget {
-   List postsInfo;
-   CustomPostListView({Key? key, required this.postsInfo})
-      : super(key: key);
+  final List postsInfo;
+ const CustomPostListView({Key? key, required this.postsInfo}) : super(key: key);
 
   @override
   State<CustomPostListView> createState() => _CustomPostListViewState();
 }
 
 class _CustomPostListViewState extends State<CustomPostListView> {
-  bool isLiked = false;
 
   bool isSaved = false;
 
@@ -75,10 +78,15 @@ class _CustomPostListViewState extends State<CustomPostListView> {
           Expanded(
               child: Row(
             children: [
-              loveButton(),
+              loveButton(postInfo),
               IconButton(
                 icon: iconsOfImagePost("assets/icons/comment.svg"),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+                      builder: (context) =>
+                          CommentsPage(postId: postInfo.postUid),
+                      maintainState: false));
+                },
               ),
               IconButton(
                 icon: iconsOfImagePost("assets/icons/send.svg"),
@@ -121,9 +129,11 @@ class _CustomPostListViewState extends State<CustomPostListView> {
     );
   }
 
-  IconButton loveButton() {
+  IconButton loveButton(Post postInfo) {
+    bool isLiked = postInfo.likes.contains(myPersonalId);
+    print(isLiked);
     return IconButton(
-      icon: isLiked
+      icon: !isLiked
           ? const Icon(
               Icons.favorite_border,
             )
@@ -133,7 +143,15 @@ class _CustomPostListViewState extends State<CustomPostListView> {
             ),
       onPressed: () {
         setState(() {
-          isLiked = isLiked ? false : true;
+          if (isLiked) {
+            BlocProvider.of<PostLikesCubit>(context).removeTheLikeOnThisPost(
+                postId: postInfo.postUid, userId: myPersonalId);
+            postInfo.likes.remove(myPersonalId);
+          } else {
+            BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
+                postId: postInfo.postUid, userId: myPersonalId);
+            postInfo.likes.add(myPersonalId);
+          }
         });
       },
     );
@@ -163,7 +181,13 @@ class _CustomPostListViewState extends State<CustomPostListView> {
 
   Widget numbersOfLikes(Post postInfo) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => UsersWhoLikesOnPostPage(
+              showSearchBar: true,
+                  usersIds: postInfo.likes,
+                )));
+      },
       child: Text('${postInfo.likes.length} Likes',
           textAlign: TextAlign.left,
           style: const TextStyle(
@@ -182,9 +206,6 @@ class _CustomPostListViewState extends State<CustomPostListView> {
   Widget imageOfPost(String imageUrl) {
     return InkWell(
       onDoubleTap: () {
-        setState(() {
-          isLiked = isLiked ? false : true;
-        });
       },
       child: Image.network(
         imageUrl,
