@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 
 class FirestoreUser {
@@ -19,14 +18,6 @@ class FirestoreUser {
       return UserPersonalInfo.fromSnap(snap);
     }
     return Future.error("the user not exist !");
-  }
-
-  static Future<List<Comment>> getCommentatorsInfo(List<Comment> commentsInfo) async {
-    for (int i = 0; i < commentsInfo.length; i++) {
-      UserPersonalInfo commentatorInfo=await getUserInfo(commentsInfo[i].commentatorId);
-      commentsInfo[i].commentatorInfo=commentatorInfo;
-    }
-    return commentsInfo;
   }
 
   static Future<List<UserPersonalInfo>> getSpecificUsersInfo(

@@ -8,6 +8,7 @@ class Post {
   String postImageUrl;
   String publisherId;
   String postUid;
+  int numbersOfComments;
   List<dynamic> likes;
   UserPersonalInfo? publisherInfo;
 
@@ -18,6 +19,7 @@ class Post {
     this.postUid = "",
     this.postImageUrl = "",
     this.caption = "",
+    required this.numbersOfComments,
     required this.likes,
   });
 
@@ -29,6 +31,7 @@ class Post {
       publisherId: snap["publisherId"],
       postUid: snap["postUid"],
       likes: snap["likes"],
+      numbersOfComments: snap["numbersOfComments"],
     );
   }
 
@@ -38,6 +41,7 @@ class Post {
       datePublished: snap["datePublished"],
       postImageUrl: snap["postImageUrl"],
       publisherId: snap["publisherId"],
+      numbersOfComments: snap["numbersOfComments"],
       postUid: snap["postUid"],
       likes: snap["likes"],
     );
@@ -48,6 +52,7 @@ class Post {
         "datePublished": datePublished,
         "postImageUrl": postImageUrl,
         "publisherId": publisherId,
+        'numbersOfComments': numbersOfComments,
         'postUid': postUid,
         'likes': likes,
         'publisherInfo': publisherInfo,
