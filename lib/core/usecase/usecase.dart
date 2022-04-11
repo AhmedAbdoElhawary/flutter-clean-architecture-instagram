@@ -10,3 +10,11 @@ abstract class UseCaseThreeParams<R, A, B, C> {
   Future<R> call(
       {required A paramsOne, required B paramsTwo, required C paramsThree});
 }
+
+abstract class UseCaseFourParams<R, A, B, C, D> {
+  Future<R> call(
+      {required A paramsOne,
+      required B paramsTwo,
+      required C paramsThree,
+      required D paramsFour});
+}
