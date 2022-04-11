@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/presentation/cubit/commentsInfo/comments_info_cubit.dart';
-import 'package:instegram/presentation/cubit/commentsInfo/post_likes/comment_likes_cubit.dart';
 import 'package:instegram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/comment_likes/comment_likes_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/comments_info_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/replyLikes/reply_likes_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/reply_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
 import '../../injector.dart';
@@ -51,6 +53,12 @@ class MultiBloc extends StatelessWidget {
       ),
       BlocProvider<CommentLikesCubit>(
         create: (context) => injector<CommentLikesCubit>(),
+      ),
+      BlocProvider<ReplyLikesCubit>(
+        create: (context) => injector<ReplyLikesCubit>(),
+      ),
+      BlocProvider<ReplyInfoCubit>(
+        create: (context) => injector<ReplyInfoCubit>(),
       ),
     ], child: materialApp);
   }
