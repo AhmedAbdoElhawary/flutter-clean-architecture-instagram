@@ -1,55 +1,83 @@
 import 'package:get_it/get_it.dart';
-import 'package:instegram/domain/usecases/firestoreUserUseCase/get_specific_users_usecase.dart';
+import 'package:instegram/data/repositories/post/comment/firestore_comment_repo_impl.dart';
+import 'package:instegram/data/repositories/post/comment/firestore_reply_repo_impl.dart';
+import 'package:instegram/domain/repositories/post/comment/comment_repository.dart';
+import 'package:instegram/domain/repositories/post/comment/reply_repository.dart';
+import 'package:instegram/domain/usecases/firestoreUserUseCase/add_post_to_user.dart';
+import 'package:instegram/domain/usecases/firestoreUserUseCase/getUserInfo/get_specific_users_usecase.dart';
+import 'package:instegram/domain/usecases/firestoreUserUseCase/update_user_info.dart';
 import 'package:instegram/domain/usecases/followUseCase/follow_this_user.dart';
-import 'package:instegram/domain/usecases/firestoreUserUseCase/get_followers_and_followings_usecase.dart';
+import 'package:instegram/domain/usecases/firestoreUserUseCase/getUserInfo/get_followers_and_followings_usecase.dart';
 import 'package:instegram/domain/usecases/followUseCase/remove_this_follower.dart';
 import 'package:instegram/domain/usecases/postUseCase/comments/add_comment_use_case.dart';
 import 'package:instegram/domain/usecases/postUseCase/comments/get_all_comment.dart';
 import 'package:instegram/domain/usecases/postUseCase/comments/put_like.dart';
 import 'package:instegram/domain/usecases/postUseCase/comments/remove_like.dart';
-import 'package:instegram/domain/usecases/postUseCase/get_all_posts.dart';
-import 'package:instegram/domain/usecases/postUseCase/get_post_info.dart';
-import 'package:instegram/domain/usecases/postUseCase/get_specific_users_posts.dart';
+import 'package:instegram/domain/usecases/postUseCase/comments/replies/get_replies_of_this_comment.dart';
+import 'package:instegram/domain/usecases/postUseCase/comments/replies/likes/put_like_on_this_reply.dart';
+import 'package:instegram/domain/usecases/postUseCase/comments/replies/likes/remove_like_on_this_reply.dart';
+import 'package:instegram/domain/usecases/postUseCase/comments/replies/reply_on_this_comment.dart';
+import 'package:instegram/domain/usecases/postUseCase/getPostInfo/get_all_posts.dart';
+import 'package:instegram/domain/usecases/postUseCase/getPostInfo/get_post_info.dart';
+import 'package:instegram/domain/usecases/postUseCase/getPostInfo/get_specific_users_posts.dart';
 import 'package:instegram/domain/usecases/postUseCase/likes/put_like_on_this_post.dart';
 import 'package:instegram/domain/usecases/postUseCase/likes/remove_the_like_on_this_post.dart';
-import 'package:instegram/presentation/cubit/commentsInfo/comments_info_cubit.dart';
-import 'package:instegram/presentation/cubit/commentsInfo/post_likes/comment_likes_cubit.dart';
 import 'package:instegram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/comment_likes/comment_likes_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/comments_info_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/reply_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
 import 'data/repositories/firebase_auth_repository_impl.dart';
-import 'data/repositories/firestore_post_repo_impl.dart';
+import 'data/repositories/post/firestore_post_repo_impl.dart';
 import 'data/repositories/firestore_user_repo_impl.dart';
 import 'domain/repositories/auth_repository.dart';
-import 'domain/repositories/post_repository.dart';
+import 'domain/repositories/post/post_repository.dart';
 import 'domain/repositories/user_repository.dart';
 import 'domain/usecases/authUsecase/sign_out_auth_usecase.dart';
 import 'domain/usecases/authusecase/log_in_auth_usecase.dart';
 import 'domain/usecases/authusecase/sign_up_auth_usecase.dart';
+import 'domain/usecases/firestoreUserUseCase/getUserInfo/get_user_info_usecase.dart';
 import 'domain/usecases/firestoreUserUseCase/upload_profile_image_usecase.dart';
 import 'domain/usecases/firestoreUserUsecase/add_new_user_usecase.dart';
-import 'domain/usecases/firestoreUserUsecase/get_user_info_usecase.dart';
-import 'domain/usecases/firestoreUserUsecase/update_user_info.dart';
+import 'package:instegram/domain/usecases/authusecase/sign_up_auth_usecase.dart';
+import 'package:instegram/domain/usecases/authusecase/log_in_auth_usecase.dart';
 import 'domain/usecases/postUseCase/create_post.dart';
+import 'presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/replyLikes/reply_likes_cubit.dart';
 
 final injector = GetIt.I;
 
 Future<void> initializeDependencies() async {
   // Repository
+
+  // Post
   injector.registerSingleton<FirestorePostRepository>(
     FirestorePostRepositoryImpl(),
   );
+  // comment
+  injector.registerSingleton<FirestoreCommentRepository>(
+    FirestoreCommentRepositoryImpl(),
+  );
+  //reply
+
+  injector.registerSingleton<FirestoreReplyRepository>(
+    FirestoreRepliesRepositoryImpl(),
+  );
+  // *
+  // *
+  // *
   injector.registerSingleton<FirebaseAuthRepository>(
     FirebaseAuthRepositoryImpl(),
   );
   injector.registerSingleton<FirestoreUserRepository>(
     FirebaseUserRepoImpl(),
   );
+  // *
 
   // Firebase auth useCases
   injector.registerSingleton<LogInAuthUseCase>(LogInAuthUseCase(injector()));
@@ -70,6 +98,8 @@ Future<void> initializeDependencies() async {
       UploadProfileImageUseCase(injector()));
   injector.registerSingleton<GetSpecificUsersUseCase>(
       GetSpecificUsersUseCase(injector()));
+  injector.registerSingleton<AddPostToUserUseCase>(
+      AddPostToUserUseCase(injector()));
 
   // *
   // Firestore Post useCases
@@ -88,9 +118,9 @@ Future<void> initializeDependencies() async {
 
   injector.registerSingleton<RemoveTheLikeOnThisPostUseCase>(
       RemoveTheLikeOnThisPostUseCase(injector()));
-
-  injector.registerSingleton<GetAllCommentsUseCase>(
-      GetAllCommentsUseCase(injector()));
+  //Firestore Comment UseCase
+  injector.registerSingleton<GetSpecificCommentsUseCase>(
+      GetSpecificCommentsUseCase(injector()));
 
   injector.registerSingleton<AddCommentUseCase>(AddCommentUseCase(injector()));
 
@@ -99,6 +129,21 @@ Future<void> initializeDependencies() async {
 
   injector.registerSingleton<RemoveLikeOnThisCommentUseCase>(
       RemoveLikeOnThisCommentUseCase(injector()));
+
+  //Firestore reply UseCase
+  injector.registerSingleton<PutLikeOnThisReplyUseCase>(
+      PutLikeOnThisReplyUseCase(injector()));
+
+  injector.registerSingleton<RemoveLikeOnThisReplyUseCase>(
+      RemoveLikeOnThisReplyUseCase(injector()));
+
+  injector.registerSingleton<GetRepliesOfThisCommentUseCase>(
+      GetRepliesOfThisCommentUseCase(injector()));
+
+  injector.registerSingleton<ReplyOnThisCommentUseCase>(
+      ReplyOnThisCommentUseCase(injector()));
+  // *
+
   // *
 
   // follow useCases
@@ -119,8 +164,8 @@ Future<void> initializeDependencies() async {
   injector.registerFactory<FirestoreAddNewUserCubit>(
     () => FirestoreAddNewUserCubit(injector()),
   );
-  injector.registerFactory<FirestoreUserInfoCubit>(
-      () => FirestoreUserInfoCubit(injector(), injector(), injector()));
+  injector.registerFactory<FirestoreUserInfoCubit>(() =>
+      FirestoreUserInfoCubit(injector(), injector(), injector(), injector()));
   injector.registerFactory<UsersInfoCubit>(
     () => UsersInfoCubit(injector(), injector()),
   );
@@ -146,6 +191,14 @@ Future<void> initializeDependencies() async {
     () => CommentLikesCubit(injector(), injector()),
   );
 
+  // *
+  // post Blocs
+  injector.registerFactory<ReplyInfoCubit>(
+    () => ReplyInfoCubit(injector(), injector()),
+  );
+  injector.registerFactory<ReplyLikesCubit>(
+    () => ReplyLikesCubit(injector(), injector()),
+  );
   // *
 
   // post Blocs

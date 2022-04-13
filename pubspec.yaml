@@ -61,6 +61,8 @@ dependencies:
   persistent_bottom_nav_bar: ^4.0.2
   pull_to_refresh: ^2.0.0
   flutter_spinkit: ^5.1.0
+  detectable_text_field: ^2.0.3
+
 
 
 

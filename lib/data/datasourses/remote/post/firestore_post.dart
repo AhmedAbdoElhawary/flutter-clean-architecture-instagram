@@ -35,6 +35,17 @@ class FirestorePost {
     return postsInfo;
   }
 
+  static Future<List<dynamic>> getCommentsOfPost({required String postId}) async {
+    DocumentSnapshot<Map<String, dynamic>> snap =
+        await _fireStorePostCollection.doc(postId).get();
+    if (snap.exists) {
+      Post postReformat = Post.fromJson(snap);
+      return postReformat.comments;
+    } else {
+      return Future.error("the post not exist !");
+    }
+  }
+
   //it's belong to post not comment (it's just update a field)
   static Future<void> updateNumbersOfComments(
       {required String postId, required int oldNumbersOfComments}) async {
@@ -71,6 +82,21 @@ class FirestorePost {
       {required String postId, required String userId}) async {
     await _fireStorePostCollection.doc(postId).update({
       'likes': FieldValue.arrayRemove([userId])
+    });
+  }
+
+  static putCommentOnThisPost(
+      {required String postId, required String commentId}) async {
+    await _fireStorePostCollection.doc(postId).update({
+      'comments': FieldValue.arrayUnion([commentId])
+    });
+  }
+
+
+  static removeTheCommentOnThisPost(
+      {required String postId, required String commentId}) async {
+    await _fireStorePostCollection.doc(postId).update({
+      'comments': FieldValue.arrayRemove([commentId])
     });
   }
 }

@@ -7,7 +7,9 @@ abstract class FirestoreUserRepository {
 
   Future<UserPersonalInfo> getPersonalInfo(String userId);
 
-  Future<UserPersonalInfo> updateUserInfo(UserPersonalInfo updatedUserInfo);
+  Future<UserPersonalInfo> updateUserPostsInfo(
+      {required String userId, required String postId});
+  Future<UserPersonalInfo> updateUserInfo({required UserPersonalInfo userInfo});
 
   Future<String> uploadProfileImage(
       {required File photo,

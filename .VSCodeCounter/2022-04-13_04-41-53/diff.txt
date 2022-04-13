@@ -1,0 +1,75 @@
+Date : 2022-04-13 04:41:53
+Directory : d:\updated_instagram_day_4_6\instagram
+Total : 24 files,  503 codes, -308 comments, 82 blanks, all 277 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Dart     |         24 |        503 |       -308 |         82 |        277 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                                   | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                                      |         24 |        503 |       -308 |         82 |        277 |
+| lib                                                                                                                                    |         24 |        503 |       -308 |         82 |        277 |
+| lib\data                                                                                                                               |          8 |        124 |       -137 |         29 |         16 |
+| lib\data\datasourses                                                                                                                   |          4 |         56 |       -112 |         13 |        -43 |
+| lib\data\datasourses\remote                                                                                                            |          4 |         56 |       -112 |         13 |        -43 |
+| lib\data\datasourses\remote\post                                                                                                       |          3 |         62 |       -112 |         14 |        -36 |
+| lib\data\datasourses\remote\post\comment                                                                                               |          2 |         62 |       -112 |         13 |        -37 |
+| lib\data\models                                                                                                                        |          2 |         23 |         51 |          9 |         83 |
+| lib\data\repositories                                                                                                                  |          2 |         45 |        -76 |          7 |        -24 |
+| lib\data\repositories\post                                                                                                             |          2 |         45 |        -76 |          7 |        -24 |
+| lib\data\repositories\post\comment                                                                                                     |          2 |         45 |        -76 |          7 |        -24 |
+| lib\domain                                                                                                                             |          6 |         58 |       -102 |         12 |        -32 |
+| lib\domain\repositories                                                                                                                |          2 |          6 |        -16 |          0 |        -10 |
+| lib\domain\repositories\post                                                                                                           |          2 |          6 |        -16 |          0 |        -10 |
+| lib\domain\repositories\post\comment                                                                                                   |          2 |          6 |        -16 |          0 |        -10 |
+| lib\domain\usecases                                                                                                                    |          4 |         52 |        -86 |         12 |        -22 |
+| lib\domain\usecases\postUseCase                                                                                                        |          4 |         52 |        -86 |         12 |        -22 |
+| lib\domain\usecases\postUseCase\comments                                                                                               |          4 |         52 |        -86 |         12 |        -22 |
+| lib\domain\usecases\postUseCase\comments\replies                                                                                       |          4 |         52 |        -86 |         12 |        -22 |
+| lib\domain\usecases\postUseCase\comments\replies\likes                                                                                 |          2 |         26 |        -44 |          6 |        -12 |
+| lib\presentation                                                                                                                       |          8 |        307 |        -44 |         37 |        300 |
+| lib\presentation\cubit                                                                                                                 |          4 |        104 |       -148 |         26 |        -18 |
+| lib\presentation\cubit\postInfoCubit                                                                                                   |          4 |        104 |       -148 |         26 |        -18 |
+| lib\presentation\cubit\postInfoCubit\commentsInfo                                                                                      |          4 |        104 |       -148 |         26 |        -18 |
+| lib\presentation\cubit\postInfoCubit\commentsInfo\repliesInfo                                                                          |          4 |        104 |       -148 |         26 |        -18 |
+| lib\presentation\cubit\postInfoCubit\commentsInfo\repliesInfo\replyLikes                                                               |          2 |         49 |        -75 |         13 |        -13 |
+| lib\presentation\pages                                                                                                                 |          1 |         76 |        -18 |          4 |         62 |
+| lib\presentation\widgets                                                                                                               |          3 |        127 |        122 |          7 |        256 |
++----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                                               | language | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\updated_instagram_day_4_6\instagram\lib\data\datasourses\remote\firestore_user_info.dart                                            | Dart     |         -6 |          0 |         -1 |         -7 |
+| d:\updated_instagram_day_4_6\instagram\lib\data\datasourses\remote\post\comment\firestore_comment.dart                                 | Dart     |         18 |          0 |          4 |         22 |
+| d:\updated_instagram_day_4_6\instagram\lib\data\datasourses\remote\post\comment\firestore_reply.dart                                   | Dart     |         44 |       -112 |          9 |        -59 |
+| d:\updated_instagram_day_4_6\instagram\lib\data\datasourses\remote\post\firestore_post.dart                                            | Dart     |          0 |          0 |          1 |          1 |
+| d:\updated_instagram_day_4_6\instagram\lib\data\models\comment.dart                                                                    | Dart     |         23 |         43 |          9 |         75 |
+| d:\updated_instagram_day_4_6\instagram\lib\data\models\reply_comment.dart                                                              | Dart     |          0 |          8 |          0 |          8 |
+| d:\updated_instagram_day_4_6\instagram\lib\data\repositories\post\comment\firestore_comment_repo_impl.dart                             | Dart     |         -1 |          0 |          2 |          1 |
+| d:\updated_instagram_day_4_6\instagram\lib\data\repositories\post\comment\firestore_reply_repo_impl.dart                               | Dart     |         46 |        -76 |          5 |        -25 |
+| d:\updated_instagram_day_4_6\instagram\lib\domain\repositories\post\comment\comment_repository.dart                                    | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\updated_instagram_day_4_6\instagram\lib\domain\repositories\post\comment\reply_repository.dart                                      | Dart     |          7 |        -16 |          0 |         -9 |
+| d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\postUseCase\comments\replies\get_replies_of_this_comment.dart               | Dart     |         14 |        -22 |          3 |         -5 |
+| d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\postUseCase\comments\replies\likes\put_like_on_this_reply.dart              | Dart     |         13 |        -22 |          3 |         -6 |
+| d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\postUseCase\comments\replies\likes\remove_like_on_this_reply.dart           | Dart     |         13 |        -22 |          3 |         -6 |
+| d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\postUseCase\comments\replies\reply_on_this_comment.dart                     | Dart     |         12 |        -20 |          3 |         -5 |
+| d:\updated_instagram_day_4_6\instagram\lib\injector.dart                                                                               | Dart     |         14 |        -15 |          4 |          3 |
+| d:\updated_instagram_day_4_6\instagram\lib\main.dart                                                                                   | Dart     |          0 |        -10 |          0 |        -10 |
+| d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\postInfoCubit\commentsInfo\repliesInfo\replyLikes\reply_likes_cubit.dart | Dart     |         36 |        -56 |          7 |        -13 |
+| d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\postInfoCubit\commentsInfo\repliesInfo\replyLikes\reply_likes_state.dart | Dart     |         13 |        -19 |          6 |          0 |
+| d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\postInfoCubit\commentsInfo\repliesInfo\reply_info_cubit.dart             | Dart     |         39 |        -50 |          6 |         -5 |
+| d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\postInfoCubit\commentsInfo\repliesInfo\reply_info_state.dart             | Dart     |         16 |        -23 |          7 |          0 |
+| d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\comments_page.dart                                                       | Dart     |         76 |        -18 |          4 |         62 |
+| d:\updated_instagram_day_4_6\instagram\lib\presentation\widgets\commentator.dart                                                       | Dart     |        121 |         76 |          4 |        201 |
+| d:\updated_instagram_day_4_6\instagram\lib\presentation\widgets\multi_bloc_provider.dart                                               | Dart     |          6 |         -6 |          1 |          1 |
+| d:\updated_instagram_day_4_6\instagram\lib\presentation\widgets\try.dart                                                               | Dart     |          0 |         52 |          2 |         54 |
+| Total                                                                                                                                  |          |        503 |       -308 |         82 |        277 |
++----------------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

@@ -9,6 +9,6 @@ class UpdateUserInfoUseCase implements UseCase< UserPersonalInfo,UserPersonalInf
 
   @override
   Future<UserPersonalInfo> call({required UserPersonalInfo params}) {
-    return _addNewUserRepository.updateUserInfo(params);
+    return _addNewUserRepository.updateUserInfo(userInfo: params);
   }
 }
