@@ -27,29 +27,40 @@ class _HomeScreenState extends State<HomeScreen>
   bool reLoadData = false;
   UserPersonalInfo? personalInfo;
 
-  Future<void> getData(
-      ) async {
+  Future<void> getData() async {
     reLoadData = false;
-    personalInfo =
-        await BlocProvider.of<FirestoreUserInfoCubit>(context, listen: false)
-            .getUserInfo(widget.userId, true);
+    FirestoreUserInfoCubit userCubit =
+        BlocProvider.of<FirestoreUserInfoCubit>(context, listen: false);
+    await userCubit.getUserInfo(widget.userId, true).then((value) async {
 
-    List usersIds = personalInfo!.followedPeople + personalInfo!.followerPeople;
-    List usersPostsIds =
-        await BlocProvider.of<SpecificUsersPostsCubit>(context, listen: false)
-            .getSpecificUsersPostsInfo(usersIds: usersIds);
-    List postsIds = usersPostsIds+personalInfo!.posts;
+      personalInfo = userCubit.myPersonalInfo;
 
-    PostCubit postCubit = PostCubit.get(context);
-    List<Post>? s =
-        await postCubit.getPostsInfo(postIds: postsIds, isThatForMyPosts: true);
-    for (int i = 0; i < s!.length; i++) {
-    }
+      List usersIds =
+          personalInfo!.followedPeople + personalInfo!.followerPeople;
 
-    Future.delayed(Duration.zero, () {
-      setState(() {});
+      SpecificUsersPostsCubit usersPostsCubit =
+          BlocProvider.of<SpecificUsersPostsCubit>(context, listen: false);
+
+      await usersPostsCubit
+          .getSpecificUsersPostsInfo(usersIds: usersIds)
+          .then((value) async {
+
+        List usersPostsIds = usersPostsCubit.usersPostsInfo;
+
+        List postsIds = usersPostsIds + personalInfo!.posts;
+
+        PostCubit postCubit = PostCubit.get(context);
+        await postCubit
+            .getPostsInfo(postsIds: postsIds, isThatForMyPosts: true)
+            .then((value) {
+
+          Future.delayed(Duration.zero, () {
+            setState(() {});
+          });
+          reLoadData = true;
+        });
+      });
     });
-    reLoadData = true;
   }
 
   @override
@@ -61,9 +72,8 @@ class _HomeScreenState extends State<HomeScreen>
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
     if (rebuild) {
-      getData(
-          );
-    rebuild = false;
+      getData();
+      rebuild = false;
     }
     return Scaffold(
       appBar: customAppBar(),
@@ -77,14 +87,19 @@ class _HomeScreenState extends State<HomeScreen>
   BlocBuilder<PostCubit, PostState> blocBuilder(double bodyHeight) {
     return BlocBuilder<PostCubit, PostState>(
       buildWhen: (previous, current) {
+        print("$previous ====================================================== $current");
         if (reLoadData &&
-            previous == current &&
             current is CubitMyPersonalPostsLoaded) {
           reLoadData = false;
           return true;
         }
 
-        if (current is CubitMyPersonalPostsLoaded) {
+        if (
+        previous != current &&current is CubitMyPersonalPostsLoaded) {
+          return true;
+        }
+        if (
+        previous != current && current is CubitPostFailed) {
           return true;
         }
         return false;
@@ -119,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget posts(List<Post> postsInfo) {
-  
     return CustomPostListView(postsInfo: postsInfo);
   }
 
@@ -129,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen>
       height: bodyHeight * 0.155,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: 10,
+        itemCount: postsInfo.length,
         separatorBuilder: (BuildContext context, int index) => const Divider(),
         itemBuilder: (BuildContext context, int index) {
           UserPersonalInfo publisherInfo = postsInfo[index].publisherInfo!;
