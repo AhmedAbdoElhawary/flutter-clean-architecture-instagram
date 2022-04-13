@@ -23,18 +23,31 @@ class PersonalProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<PersonalProfilePage>
     with AutomaticKeepAliveClientMixin {
-  // UserPersonalInfo? personalInfo;
+  bool rebuildUserInfo = false;
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    // getPersonalData();
     return scaffold();
   }
 
   Widget scaffold() {
     return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
-      bloc: BlocProvider.of<FirestoreUserInfoCubit>(context)..getUserInfo(widget.personalId, true),
-      buildWhen: (context, state) => state is CubitMyPersonalInfoLoaded,
+      bloc: BlocProvider.of<FirestoreUserInfoCubit>(context)
+        ..getUserInfo(widget.personalId, true),
+      buildWhen: (previous, current) {
+        if (previous!=current&&current is CubitMyPersonalInfoLoaded) {
+          return true;
+        }
+        if (
+        previous != current && current is CubitGetUserInfoFailed) {
+          return true;
+        }
+        if (rebuildUserInfo) {
+          rebuildUserInfo = false;
+          return true;
+        }
+        return false;
+      },
       builder: (context, state) {
         if (state is CubitMyPersonalInfoLoaded) {
           return Scaffold(
@@ -42,7 +55,7 @@ class _ProfilePageState extends State<PersonalProfilePage>
             body: ProfilePage(
               isThatMyPersonalId: true,
               userId: widget.personalId,
-              userInfo:state.userPersonalInfo,
+              userInfo: state.userPersonalInfo,
               widgetsAboveTapBars: widgetsAboveTapBars(state.userPersonalInfo),
             ),
           );
@@ -52,7 +65,7 @@ class _ProfilePageState extends State<PersonalProfilePage>
         } else {
           return const Center(
             child: CircularProgressIndicator(
-                strokeWidth:1, color: Colors.black54),
+                strokeWidth: 1, color: Colors.black54),
           );
         }
       },
@@ -118,41 +131,41 @@ class _ProfilePageState extends State<PersonalProfilePage>
 
   Expanded editProfile(UserPersonalInfo userInfo) {
     return Expanded(
-      child: Builder(
-        builder: (buildContext) {
-          return InkWell(
-            onTap: () async {
-              Future.delayed(Duration.zero, () async {
-                UserPersonalInfo result =
-                    await Navigator.of(context, rootNavigator: true).push(
-                        MaterialPageRoute(
-                            builder: (context) => EditProfilePage(userInfo),
-                            maintainState: false));
-                setState(() {
-                  userInfo = result;
-                });
+      child: Builder(builder: (buildContext) {
+        return InkWell(
+          onTap: () async {
+            Future.delayed(Duration.zero, () async {
+              UserPersonalInfo result =
+                  await Navigator.of(context, rootNavigator: true).push(
+                      MaterialPageRoute(
+                          builder: (context) => EditProfilePage(userInfo),
+                          maintainState: false));
+              setState(() {
+                rebuildUserInfo = true;
+
+                userInfo = result;
               });
-            },
-            child: Container(
-              height: 35.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.black26, width: 1.0),
-                borderRadius: BorderRadius.circular(6.0),
-              ),
-              child: const Center(
-                child: Text(
-                  'Edit profile',
-                  style: TextStyle(
-                      fontSize: 17.0,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500),
-                ),
+            });
+          },
+          child: Container(
+            height: 35.0,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.black26, width: 1.0),
+              borderRadius: BorderRadius.circular(6.0),
+            ),
+            child: const Center(
+              child: Text(
+                'Edit profile',
+                style: TextStyle(
+                    fontSize: 17.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500),
               ),
             ),
-          );
-        }
-      ),
+          ),
+        );
+      }),
     );
   }
 
@@ -171,51 +184,56 @@ class _ProfilePageState extends State<PersonalProfilePage>
     );
   }
 
-  Column listOfAddPost() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        SvgPicture.asset(
-          "assets/icons/minus.svg",
-          color: Colors.black87,
-          height: 40,
-        ),
-        const Text("Create",
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
-        const Divider(),
-        Padding(
-          padding: const EdgeInsets.only(left: 20.0),
-          child: Column(
-            children: [
-              InkWell(
-                  onTap: () async {
-                    final ImagePicker _picker = ImagePicker();
-                    final XFile? image =
-                        await _picker.pickImage(source: ImageSource.gallery);
-                    if (image != null) {
-                      File photo = File(image.path);
-                      await Navigator.of(context, rootNavigator: true).push(
-                          MaterialPageRoute(
-                              builder: (context) => CreatePostPage(photo),
-                              maintainState: false));
-                    }
-                  },
-                  child: createSizedBox("Post", "grid")),
-              const Divider(indent: 40, endIndent: 15),
-              createSizedBox("Reel", "video"),
-              const Divider(indent: 40, endIndent: 15),
-              createSizedBox("Story", "add-instagram-story"),
-              const Divider(indent: 40, endIndent: 15),
-              createSizedBox("Live", "instagram-highlight-story"),
-              const Divider(indent: 40, endIndent: 15),
-              Container(
-                height: 50,
-              )
-            ],
+  Widget listOfAddPost() {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SvgPicture.asset(
+            "assets/icons/minus.svg",
+            color: Colors.black87,
+            height: 40,
           ),
-        ),
-      ],
+          const Text("Create",
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
+          const Divider(),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Column(
+              children: [
+                InkWell(
+                    onTap: () async {
+                      final ImagePicker _picker = ImagePicker();
+                      final XFile? image =
+                          await _picker.pickImage(source: ImageSource.gallery);
+                      if (image != null) {
+                        File photo = File(image.path);
+                        await Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                                builder: (context) => CreatePostPage(photo),
+                                maintainState: false));
+                        setState(() {
+                          rebuildUserInfo = true;
+                        });
+                      }
+                    },
+                    child: createSizedBox("Post", "grid")),
+                const Divider(indent: 40, endIndent: 15),
+                createSizedBox("Reel", "video"),
+                const Divider(indent: 40, endIndent: 15),
+                createSizedBox("Story", "add-instagram-story"),
+                const Divider(indent: 40, endIndent: 15),
+                createSizedBox("Live", "instagram-highlight-story"),
+                const Divider(indent: 40, endIndent: 15),
+                Container(
+                  height: 50,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
