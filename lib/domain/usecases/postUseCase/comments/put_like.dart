@@ -1,19 +1,15 @@
 import 'package:instegram/core/usecase/usecase.dart';
-import 'package:instegram/data/models/comment.dart';
-import 'package:instegram/domain/repositories/post_repository.dart';
+import 'package:instegram/domain/repositories/post/comment/comment_repository.dart';
 
 class PutLikeOnThisCommentUseCase
-    implements UseCaseThreeParams<void, String, String, String> {
-  final FirestorePostRepository _putLikeRepository;
+    implements UseCaseTwoParams<void, String, String> {
+  final FirestoreCommentRepository _putLikeRepository;
 
   PutLikeOnThisCommentUseCase(this._putLikeRepository);
 
   @override
-  Future<void> call(
-      {required String paramsOne,
-      required String paramsTwo,
-      required String paramsThree}) {
+  Future<void> call({required String paramsOne, required String paramsTwo}) {
     return _putLikeRepository.putLikeOnThisComment(
-        postId: paramsOne, commentId: paramsTwo, myPersonalId: paramsThree);
+        commentId: paramsOne, myPersonalId: paramsTwo);
   }
 }
