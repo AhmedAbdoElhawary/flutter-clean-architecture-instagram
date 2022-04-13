@@ -27,10 +27,21 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
 
   @override
   Future<UserPersonalInfo> updateUserInfo(
-      UserPersonalInfo updatedUserInfo) async {
+      {required UserPersonalInfo userInfo}) async {
     try {
-      await FirestoreUser.updateUserInfo(updatedUserInfo);
-      return getPersonalInfo(updatedUserInfo.userId);
+      await FirestoreUser.updateUserInfo(userInfo);
+      return getPersonalInfo(userInfo.userId);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  @override
+  Future<UserPersonalInfo> updateUserPostsInfo(
+      {required String userId, required String postId}) async {
+    try {
+      await FirestoreUser.updateUserPosts(userId: userId, postId: postId);
+      return await getPersonalInfo(userId);
     } catch (e) {
       return Future.error(e.toString());
     }
