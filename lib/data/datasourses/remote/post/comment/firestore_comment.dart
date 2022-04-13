@@ -4,12 +4,9 @@ import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 
 class FirestoreComment {
-  static final _fireStorePostCollection =
-      FirebaseFirestore.instance.collection('posts');
+  static final _fireStoreCommentCollection =
+      FirebaseFirestore.instance.collection('comments');
   static Future<String> addComment({required Comment commentInfo}) async {
-    final _fireStoreCommentCollection =
-        _fireStorePostCollection.doc(commentInfo.postId).collection("comments");
-
     DocumentReference<Map<String, dynamic>> commentRef =
         await _fireStoreCommentCollection.add(commentInfo.toMapComment());
 
@@ -19,74 +16,70 @@ class FirestoreComment {
     return commentRef.id;
   }
 
-  static Future<List<Comment>> getCommentatorsInfo(
-      List<Comment> commentsInfo) async {
-    for (int i = 0; i < commentsInfo.length; i++) {
-      //TODO maybe here will happen some bugs
-      UserPersonalInfo commentatorInfo =
-          await FirestoreUser.getUserInfo(commentsInfo[i].commentatorId);
-      commentsInfo[i].commentatorInfo = commentatorInfo;
-    }
-    return commentsInfo;
-  }
-
   static Future<void> putLikeOnThisComment(
-      {required String postId,
-      required String commentId,
-      required String myPersonalId}) async {
-    await _fireStorePostCollection
-        .doc(postId)
-        .collection('comments')
-        .doc(commentId)
-        .update({
+      {required String commentId, required String myPersonalId}) async {
+    await _fireStoreCommentCollection.doc(commentId).update({
       'likes': FieldValue.arrayUnion([myPersonalId])
     });
   }
 
   static Future<void> removeLikeOnThisComment(
-      {required String postId,
-      required String commentId,
-      required String myPersonalId}) async {
-    await _fireStorePostCollection
-        .doc(postId)
-        .collection('comments')
-        .doc(commentId)
-        .update({
+      {required String commentId, required String myPersonalId}) async {
+    await _fireStoreCommentCollection.doc(commentId).update({
       'likes': FieldValue.arrayRemove([myPersonalId])
     });
   }
 
-  static Future<List<Comment>> getCommentsOfThisPost(
-      {required String postId}) async {
-    List<Comment> allComments = [];
-    CollectionReference<Map<String, dynamic>>? _fireStoreCommentCollection;
-    try {
-      _fireStoreCommentCollection =
-          _fireStorePostCollection.doc(postId).collection("comments");
-    } catch (e) {
-      return [];
+  static putReplyOnThisComment({
+    required String commentId,
+    required String replyId,
+  }) async {
+    await _fireStoreCommentCollection.doc(commentId).update({
+      'replies': FieldValue.arrayUnion([replyId])
+    });
+  }
+
+  static Future<List<dynamic>?> getRepliesOfComments(
+      {required String commentId}) async {
+    DocumentSnapshot<Map<String, dynamic>> snap =
+        await _fireStoreCommentCollection.doc(commentId).get();
+    if (snap.exists) {
+      Comment commentReformat = Comment.fromSnapComment(snap);
+
+      return commentReformat.replies;
+    } else {
+      return Future.error("the post not exist !");
     }
+  }
 
-    QuerySnapshot<Map<String, dynamic>> snap =
-        await _fireStoreCommentCollection.get();
+  static Future<List<Comment>> getSpecificComments(
+      {required List<dynamic> commentsIds}) async {
+    List<Comment> allComments = [];
 
-    for (int i = 0; i < snap.docs.length; i++) {
-      QueryDocumentSnapshot<Map<String, dynamic>> doc = snap.docs[i];
-      Comment postReformat = Comment.fromSnapComment(doc);
+    for (int i = 0; i < commentsIds.length; i++) {
+      DocumentSnapshot<Map<String, dynamic>> snap =
+          await _fireStoreCommentCollection.doc(commentsIds[i]).get();
+      Comment commentReformat = Comment.fromSnapComment(snap);
 
-      allComments.add(postReformat);
+      UserPersonalInfo commentatorInfo =
+          await FirestoreUser.getUserInfo(commentReformat.whoCommentId);
+      commentReformat.whoCommentInfo = commentatorInfo;
+
+      allComments.add(commentReformat);
     }
     return allComments;
   }
 
-  static Future<Comment> getCommentInfo(
-      {required String commentId, required String postId}) async {
-    final _fireStoreCommentCollection =
-        _fireStorePostCollection.doc(postId).collection("comments");
+  static Future<Comment> getCommentInfo({required String commentId}) async {
     DocumentSnapshot<Map<String, dynamic>> snap =
         await _fireStoreCommentCollection.doc(commentId).get();
     if (snap.exists) {
-      return Comment.fromSnapComment(snap);
+      Comment theCommentInfo = Comment.fromSnapComment(snap);
+      UserPersonalInfo commentatorInfo =
+          await FirestoreUser.getUserInfo(theCommentInfo.whoCommentId);
+      theCommentInfo.whoCommentInfo = commentatorInfo;
+
+      return theCommentInfo;
     }
     return Future.error("the user not exist !");
   }
