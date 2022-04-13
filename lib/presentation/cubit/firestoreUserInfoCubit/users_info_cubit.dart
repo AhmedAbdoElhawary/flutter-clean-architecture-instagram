@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/data/models/specific_users_info.dart';
-import 'package:instegram/domain/usecases/firestoreUserUseCase/get_followers_and_followings_usecase.dart';
-import 'package:instegram/domain/usecases/firestoreUserUseCase/get_specific_users_usecase.dart';
+import 'package:instegram/domain/usecases/firestoreUserUseCase/getUserInfo/get_followers_and_followings_usecase.dart';
+import 'package:instegram/domain/usecases/firestoreUserUseCase/getUserInfo/get_specific_users_usecase.dart';
 import '../../../data/models/user_personal_info.dart';
 
 part 'users_info_state.dart';

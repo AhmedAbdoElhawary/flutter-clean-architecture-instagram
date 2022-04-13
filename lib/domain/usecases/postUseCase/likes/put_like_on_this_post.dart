@@ -1,4 +1,4 @@
-import 'package:instegram/domain/repositories/post_repository.dart';
+import 'package:instegram/domain/repositories/post/post_repository.dart';
 import '../../../../core/usecase/usecase.dart';
 
 class PutLikeOnThisPostUseCase
