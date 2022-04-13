@@ -1,18 +1,15 @@
 import 'package:instegram/core/usecase/usecase.dart';
-import 'package:instegram/domain/repositories/post_repository.dart';
+import 'package:instegram/domain/repositories/post/comment/comment_repository.dart';
 
 class RemoveLikeOnThisCommentUseCase
-    implements UseCaseThreeParams<void, String, String, String> {
-  final FirestorePostRepository _removeLikeRepository;
+    implements UseCaseTwoParams<void, String, String> {
+  final FirestoreCommentRepository _removeLikeRepository;
 
   RemoveLikeOnThisCommentUseCase(this._removeLikeRepository);
 
   @override
-  Future<void> call(
-      {required String paramsOne,
-      required String paramsTwo,
-      required String paramsThree}) {
+  Future<void> call({required String paramsOne, required String paramsTwo}) {
     return _removeLikeRepository.removeLikeOnThisComment(
-        postId: paramsOne, commentId: paramsTwo, myPersonalId: paramsThree);
+        commentId: paramsOne, myPersonalId: paramsTwo);
   }
 }

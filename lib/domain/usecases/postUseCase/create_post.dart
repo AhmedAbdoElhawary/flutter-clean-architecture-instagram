@@ -1,14 +1,16 @@
+import 'dart:io';
+import 'package:instegram/data/models/post.dart';
 import '../../../core/usecase/usecase.dart';
-import '../../repositories/post_repository.dart';
+import '../../repositories/post/post_repository.dart';
 
-class CreatePostUseCase implements UseCase<String, List> {
+class CreatePostUseCase implements UseCaseTwoParams<String, Post , File > {
   final FirestorePostRepository _createPostRepository;
 
   CreatePostUseCase(this._createPostRepository);
 
   @override
-  Future<String> call({required List params}) {
+  Future<String> call({required Post paramsOne,required File paramsTwo}) {
     return _createPostRepository.createPost(
-        postInfo: params[0], photo: params[2]);
+        postInfo: paramsOne, photo: paramsTwo);
   }
 }
