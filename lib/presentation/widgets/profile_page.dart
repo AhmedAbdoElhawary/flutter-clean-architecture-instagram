@@ -58,10 +58,15 @@ class _ProfilePageState extends State<ProfilePage>
   Widget tapBar() {
     return BlocBuilder<PostCubit, PostState>(
       bloc: PostCubit.get(context)
-        ..getPostsInfo(postIds: widget.userInfo.posts,isThatForMyPosts:  widget.isThatMyPersonalId),
+        ..getPostsInfo(
+            postsIds: widget.userInfo.posts,
+            isThatForMyPosts: widget.isThatMyPersonalId),
       buildWhen: (previous, current) {
         if (reBuild) {
           reBuild = false;
+          return true;
+        }
+        if (previous != current && current is CubitPostFailed) {
           return true;
         }
         return previous != current &&
@@ -76,10 +81,12 @@ class _ProfilePageState extends State<ProfilePage>
         } else if (state is CubitPostsInfoLoaded &&
             !widget.isThatMyPersonalId) {
           return columnOfWidgets(state.postsInfo);
-        } else if (state is CubitPostFailed) {
-          ToastShow.toastStateError(state);
-          return const Center(child: Text("there is no posts..."));
-        } else {
+        }
+        //else if (state is CubitPostFailed) {
+        //   // ToastShow.toastStateError(state);
+        //   // return const Center(child: Text("there is no posts..."));
+        // }
+        else {
           return Transform.scale(
               scale: 0.1,
               child: const CircularProgressIndicator(

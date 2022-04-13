@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instegram/core/constant.dart';
+import 'package:instegram/domain/entities/registered_user.dart';
+import 'package:instegram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
+import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/pages/sign_up_page.dart';
-import '../../domain/entities/registered_user.dart';
-import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
-import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/or_text.dart';
-import '../widgets/toast_show.dart';
+import 'package:instegram/presentation/widgets/custom_text_field.dart';
+import 'package:instegram/presentation/widgets/or_text.dart';
+import 'package:instegram/presentation/widgets/toast_show.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
