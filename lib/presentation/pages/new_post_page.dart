@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -10,7 +9,7 @@ import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:intl/intl.dart';
 
 class CreatePostPage extends StatefulWidget {
- final File selectedImage;
+  final File selectedImage;
 
   const CreatePostPage(this.selectedImage, {Key? key}) : super(key: key);
 
@@ -133,32 +132,41 @@ class _CreatePostPageState extends State<CreatePostPage> {
       PostCubit postCubit =
           BlocProvider.of<PostCubit>(builder2context, listen: false);
 
-      String? postId = await postCubit.createPost(
-          postInfo, widget.selectedImage);
+      await postCubit
+          .createPost(postInfo, widget.selectedImage)
+          .then((_) async {
 
-      if (postId != null) {
-        personalInfo.posts += [postId];
-        await userCubit.updateUserInfo(personalInfo);
-        await postCubit.getPostsInfo(postIds:personalInfo.posts,isThatForMyPosts: true);
-        setState(() {
-          isItDone = true;
-        });
-      }
-      Navigator.pop(context);
+        if (postCubit.postId !='') {
+          await userCubit.updateUserPostsInfo(userId: personalInfo.userId,postId: postCubit.postId);
+          await postCubit.getPostsInfo(
+              postsIds: personalInfo.posts, isThatForMyPosts: true);
+          setState(() {
+            isItDone = true;
+          });
+          // Navigator.maybePop(context);
+
+        }
+      });
+
+      Navigator.maybePop(context);
     });
   }
 
   Post addPostInfo(UserPersonalInfo personalInfo) {
     return Post(
-        publisherId: personalInfo.userId,
-        datePublished: timeOfNow(),
-        caption: captionController.text,
-        likes: [],);
+      publisherId: personalInfo.userId,
+      datePublished: timeOfNow(),
+      caption: captionController.text,
+      comments: [],
+      likes: [],
+    );
   }
 
   String timeOfNow() {
     DateTime now = DateTime.now();
-    DateFormat formatter = DateFormat('MM/dd/yyyy');
-    return formatter.format(now);
+    DateFormat formatter = DateFormat('yyyy/MM/dd');
+    String formattedDate = formatter.format(now);
+    formattedDate += "/${now.hour}/${now.minute}";
+    return formattedDate;
   }
 }
