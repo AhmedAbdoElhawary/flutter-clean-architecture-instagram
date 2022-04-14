@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/data/models/post.dart';
-import 'package:instegram/domain/usecases/postUseCase/get_all_posts.dart';
-import 'package:instegram/domain/usecases/postUseCase/get_post_info.dart';
+import 'package:instegram/domain/usecases/postUseCase/getPostInfo/get_all_posts.dart';
+import 'package:instegram/domain/usecases/postUseCase/getPostInfo/get_post_info.dart';
 import '../../../domain/usecases/postUseCase/create_post.dart';
 part 'post_state.dart';
 
@@ -12,7 +12,7 @@ class PostCubit extends Cubit<PostState> {
   final GetPostsInfoUseCase _getPostsInfoUseCase;
   final GetAllPostsInfoUseCase _getAllPostInfoUseCase;
 
-  String? postId;
+  String postId='';
   List<Post>? myPostsInfo;
   List<Post>? userPostsInfo;
 
@@ -24,24 +24,24 @@ class PostCubit extends Cubit<PostState> {
 
   static PostCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future<String?> createPost(
-      Post postInfo, File photo) async {
+  Future<void> createPost(Post postInfo, File photo) async {
     emit(CubitPostLoading());
     await _createPostUseCase
-        .call(params: [postInfo, photo]).then((postId) {
+        .call(paramsOne: postInfo, paramsTwo: photo)
+        .then((postId) {
       this.postId = postId;
-      emit(CubitPostLoaded());
+      emit(CubitPostLoaded(postId));
+      return postId;
     }).catchError((e) {
+
       emit(CubitPostFailed(e));
     });
-    return postId;
   }
 
-  Future<List<Post>?> getPostsInfo(
-      {required List<dynamic> postIds, required bool isThatForMyPosts}) async {
-    List<Post>w=[];
+  Future<void> getPostsInfo(
+      {required List<dynamic> postsIds, required bool isThatForMyPosts}) async {
     emit(CubitPostLoading());
-    await _getPostsInfoUseCase.call(params: postIds).then((postsInfo) {
+    await _getPostsInfoUseCase.call(params: postsIds).then((postsInfo) {
       if (isThatForMyPosts) {
         myPostsInfo = postsInfo;
 
@@ -50,14 +50,13 @@ class PostCubit extends Cubit<PostState> {
         userPostsInfo = postsInfo;
         emit(CubitPostsInfoLoaded(postsInfo));
       }
-      w=postsInfo;
     }).catchError((e) {
+
       emit(CubitPostFailed(e));
     });
-    return w;
   }
 
-  Future<List<Post>?> getAllPostInfo() async {
+  Future<void> getAllPostInfo() async {
     emit(CubitPostLoading());
     await _getAllPostInfoUseCase.call(params: null).then((allPostsInfo) {
       this.allPostsInfo = allPostsInfo;
@@ -65,7 +64,5 @@ class PostCubit extends Cubit<PostState> {
     }).catchError((e) {
       emit(CubitPostFailed(e));
     });
-    return myPostsInfo;
   }
-
 }

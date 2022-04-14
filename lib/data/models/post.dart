@@ -2,14 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 
 class Post {
-  // TODO it's for now (WhoLikes)
   String datePublished;
   String caption;
   String postImageUrl;
   String publisherId;
   String postUid;
-  int numbersOfComments;
   List<dynamic> likes;
+  List<dynamic> comments;
   UserPersonalInfo? publisherInfo;
 
   Post({
@@ -19,7 +18,7 @@ class Post {
     this.postUid = "",
     this.postImageUrl = "",
     this.caption = "",
-    required this.numbersOfComments,
+    required this.comments,
     required this.likes,
   });
 
@@ -31,7 +30,7 @@ class Post {
       publisherId: snap["publisherId"],
       postUid: snap["postUid"],
       likes: snap["likes"],
-      numbersOfComments: snap["numbersOfComments"],
+      comments: snap["comments"],
     );
   }
 
@@ -41,7 +40,7 @@ class Post {
       datePublished: snap["datePublished"],
       postImageUrl: snap["postImageUrl"],
       publisherId: snap["publisherId"],
-      numbersOfComments: snap["numbersOfComments"],
+      comments: snap["comments"],
       postUid: snap["postUid"],
       likes: snap["likes"],
     );
@@ -52,9 +51,8 @@ class Post {
         "datePublished": datePublished,
         "postImageUrl": postImageUrl,
         "publisherId": publisherId,
-        'numbersOfComments': numbersOfComments,
+        'comments': comments,
         'postUid': postUid,
         'likes': likes,
-        'publisherInfo': publisherInfo,
       };
 }

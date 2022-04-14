@@ -1,20 +1,15 @@
 import 'package:instegram/core/usecase/usecase.dart';
 import 'package:instegram/data/models/comment.dart';
-import 'package:instegram/data/models/reply_comment.dart';
 import 'package:instegram/domain/repositories/post/comment/reply_repository.dart';
 
-class ReplyOnThisCommentUseCase
-    implements UseCaseThreeParams<Comment, String, String, Comment> {
+class ReplyOnThisCommentUseCase implements UseCase<Comment, Comment> {
   final FirestoreReplyRepository _replayOnThisCommentRepository;
 
   ReplyOnThisCommentUseCase(this._replayOnThisCommentRepository);
 
   @override
-  Future<Comment> call(
-      {required String paramsOne,
-      required String paramsTwo,
-      required Comment paramsThree}) async {
+  Future<Comment> call({required Comment params}) async {
     return await _replayOnThisCommentRepository.replyOnThisComment(
-        postId: paramsOne, commentId: paramsTwo, replyInfo: paramsThree);
+        replyInfo: params);
   }
 }
