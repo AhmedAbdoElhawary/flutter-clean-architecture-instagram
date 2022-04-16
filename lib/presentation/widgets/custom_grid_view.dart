@@ -105,18 +105,31 @@ class CustomGridView extends StatelessWidget{
     color: Colors.white,
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: const [
-        Icon(
-          Icons.favorite_border,
-          color: Colors.black,
+      children:  [
+        GestureDetector(
+onPanStart:  (d){
+
+},
+          child: const Icon(
+            Icons.favorite_border,
+            color: Colors.black,
+          ),
         ),
-        Icon(
-          Icons.chat_bubble_outline,
-          color: Colors.black,
+        GestureDetector(
+          onVerticalDragStart: (d){
+
+          },          child: const Icon(
+            Icons.chat_bubble_outline,
+            color: Colors.black,
+          ),
         ),
-        Icon(
-          Icons.send,
-          color: Colors.black,
+
+        GestureDetector(
+          onTertiaryLongPress: (){
+          },          child: const Icon(
+            Icons.send,
+            color: Colors.black,
+          ),
         ),
       ],
     ),

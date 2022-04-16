@@ -5,12 +5,10 @@ class Massage {
   String receiverId;
   String massageUid;
   String senderId;
-  // UserPersonalInfo? publisherInfo;
 
   Massage({
     required this.datePublished,
     required this.massage,
-    // this.publisherInfo,
     required this.receiverId,
     required this.senderId,
     required this.massageUid,

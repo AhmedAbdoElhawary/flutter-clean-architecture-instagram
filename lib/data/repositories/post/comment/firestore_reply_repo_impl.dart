@@ -1,7 +1,6 @@
 import 'package:instegram/data/datasourses/remote/post/comment/firestore_comment.dart';
 import 'package:instegram/data/datasourses/remote/post/comment/firestore_reply.dart';
 import 'package:instegram/data/models/comment.dart';
-import 'package:instegram/data/models/reply_comment.dart';
 import 'package:instegram/domain/repositories/post/comment/reply_repository.dart';
 
 class FirestoreRepliesRepositoryImpl implements FirestoreReplyRepository {
@@ -13,10 +12,10 @@ class FirestoreRepliesRepositoryImpl implements FirestoreReplyRepository {
 
       Comment theReplyInfo =
           await FirestoreReply.getReplyInfo(replyId: replyId);
-
       await FirestoreComment.putReplyOnThisComment(
           commentId: theReplyInfo.parentCommentId,
           replyId: theReplyInfo.commentUid);
+
       return theReplyInfo;
     } catch (e) {
       return Future.error(e.toString());
