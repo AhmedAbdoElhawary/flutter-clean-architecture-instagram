@@ -110,4 +110,13 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       return Future.error(e.toString());
     }
   }
+
+  @override
+  Future<UserPersonalInfo?> getUserFromUserName({required String userName}) async {
+    try {
+      return await FirestoreUser.getUserFromUserName(userName:userName);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
 }
