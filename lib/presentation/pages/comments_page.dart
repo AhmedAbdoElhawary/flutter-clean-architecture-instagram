@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/core/globall.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/injector.dart';
@@ -8,7 +9,6 @@ import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/comments
 import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/reply_info_cubit.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
 import 'package:instegram/presentation/widgets/commentator.dart';
-import 'package:intl/intl.dart';
 
 import '../widgets/toast_show.dart';
 
@@ -42,17 +42,13 @@ class _CommentsPageState extends State<CommentsPage> {
             bloc: CommentsInfoCubit.get(context)
               ..getSpecificComments(postId: widget.postId),
             buildWhen: (previous, current) {
-              print("$previous         ===================         $current");
               if (previous != current && (current is CubitCommentsInfoLoaded)) {
                 return true;
               }
               if (previous != current && (current is CubitCommentsInfoFailed)) {
                 return true;
               }
-              // if (rebuildUsersInfo &&
-              //     (current is CubitCommentsInfoLoaded)) {
-              //   return true;
-              // }
+            
               return false;
             },
             builder: (context, state) {
@@ -83,29 +79,30 @@ class _CommentsPageState extends State<CommentsPage> {
   Widget buildListView(
       CubitCommentsInfoLoaded state, UserPersonalInfo myPersonalInfo) {
     return state.commentsOfThePost.isNotEmpty
-        ? ListView.separated(
-            // physics:
-            //     const NeverScrollableScrollPhysics(), // <-- this will disable scroll
-            // shrinkWrap: true,
-            scrollDirection: Axis.vertical, // shrinkWrap: true,
-            // primary: false,
-            itemBuilder: (context, index) {
-              return BlocProvider<ReplyInfoCubit>(
-                create: (_) => injector<ReplyInfoCubit>(),
-                child: CommentInfo(
-                  commentInfo: state.commentsOfThePost[index],
-                  textController: _textController,
-                  selectedCommentInfo: selectedComment,
-                  myPersonalInfo: myPersonalInfo,
-                  addReply: addReply,
-                ),
-              );
-            },
-            itemCount: state.commentsOfThePost.length,
-            separatorBuilder: (BuildContext context, int index) =>
-                const SizedBox(
-                  height: 20,
-                ))
+        ? Scrollbar(
+          child: ListView.separated(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              primary: false,
+              itemBuilder: (context, index) {
+                return BlocProvider<ReplyInfoCubit>(
+                  create: (_) => injector<ReplyInfoCubit>(),
+                  child: CommentInfo(
+                    commentInfo: state.commentsOfThePost[index],
+                    textController: _textController,
+                    selectedCommentInfo: selectedComment,
+                    myPersonalInfo: myPersonalInfo,
+                    addReply: addReply,
+                  ),
+                );
+              },
+              itemCount: state.commentsOfThePost.length,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const SizedBox(
+                    height: 20,
+                  )),
+        )
         : const Center(
             child: Text("There is no comments!",
                 style: TextStyle(
@@ -198,13 +195,7 @@ class _CommentsPageState extends State<CommentsPage> {
                   ),
                   BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
                       builder: (context1, state) {
-                    // if(state is CubitCommentsInfoLoading){
-                    //   return Transform.scale(
-                    //       scale: 0.50
-                    //       ,child: const CircularProgressIndicator(color: Colors.blue,strokeWidth: 2,));
-                    // }else if(state is CubitCommentsInfoFailed){
-                    //   ToastShow.toastStateError(state);
-                    // }
+                   
                     //TODO here we want to make comment loading when he loading
                     return InkWell(
                       onTap: () {
@@ -212,15 +203,15 @@ class _CommentsPageState extends State<CommentsPage> {
                           postTheComment(userPersonalInfo);
                         }
                       },
-                      child: const Text(
+                      child: Text(
                         'Post',
                         style: TextStyle(
                             color:
-                                // _textController.text.isNotEmpty?
-                                Color.fromARGB(255, 33, 150, 243)
-                            // :
-                            // const Color.fromARGB(
-                            //     255, 147, 198, 246)
+                                _textController.text.isNotEmpty?
+                                const Color.fromARGB(255, 33, 150, 243)
+                            :
+                            const Color.fromARGB(
+                                255, 147, 198, 246)
                             ),
                       ),
                     );
@@ -236,25 +227,19 @@ class _CommentsPageState extends State<CommentsPage> {
   }
 
   Future<void> postTheComment(UserPersonalInfo myPersonalInfo) async {
-    DateTime now = DateTime.now();
-    DateFormat formatter = DateFormat('yyyy/MM/dd');
-    String formattedDate = formatter.format(now);
-    formattedDate += "/${now.hour}/${now.minute}";
     if (selectedCommentInfo == null) {
       CommentsInfoCubit commentsInfoCubit =
           BlocProvider.of<CommentsInfoCubit>(context);
       await commentsInfoCubit.addComment(
-          commentInfo: newCommentInfo(myPersonalInfo, formattedDate));
+          commentInfo: newCommentInfo(myPersonalInfo, DateOfNow.dateOfNow()));
 
     } else {
+  Comment replyInfo = newReplyInfo(
+      DateOfNow.dateOfNow(), selectedCommentInfo!, myPersonalInfo.userId);
 
-      Comment replyInfo = newReplyInfo(
-          formattedDate, selectedCommentInfo!, myPersonalInfo.userId);
-
-      await ReplyInfoCubit.get(context)
-          .replyOnThisComment(replyInfo: replyInfo);
+  await ReplyInfoCubit.get(context)
+      .replyOnThisComment(replyInfo: replyInfo);
     }
-
     setState(() {
       selectedCommentInfo = null;
       _textController.text = '';
@@ -282,7 +267,7 @@ class _CommentsPageState extends State<CommentsPage> {
         _textController.text.replaceAll(_whitespaceRE, " ");
     return Comment(
         datePublished: formattedDate,
-        parentCommentId: commentInfo.commentUid,
+        parentCommentId: commentInfo.parentCommentId,
         postId: commentInfo.postId,
         theComment: textWithOneSpaces,
         whoCommentId: myPersonalId,

@@ -8,15 +8,16 @@ import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../widgets/toast_show.dart';
 
-
 // ignore: must_be_immutable
 class EditProfilePage extends StatefulWidget {
-  final UserPersonalInfo userInfo;
+   UserPersonalInfo userInfo;
   File? _photo;
   TextEditingController nameController = TextEditingController(text: "");
   TextEditingController userNameController = TextEditingController(text: "");
- final TextEditingController pronounsController = TextEditingController(text: "");
- final TextEditingController websiteController = TextEditingController(text: "");
+  final TextEditingController pronounsController =
+      TextEditingController(text: "");
+  final TextEditingController websiteController =
+      TextEditingController(text: "");
   TextEditingController bioController = TextEditingController(text: "");
   EditProfilePage(this.userInfo, {Key? key}) : super(key: key);
 
@@ -25,7 +26,7 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  bool isImageUpload = true;
+  bool isImageUpload = false;
   @override
   void initState() {
     widget.nameController = TextEditingController(text: widget.userInfo.name);
@@ -43,19 +44,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
         FirestoreUserInfoCubit updateUserCubit =
             FirestoreUserInfoCubit.get(context);
 
-         if (getUserState is CubitGetUserInfoFailed) {
+        if (getUserState is CubitGetUserInfoFailed) {
           ToastShow.toastStateError(getUserState);
         }
-        if (getUserState is CubitImageLoaded) {
-
+        if (getUserState is CubitMyPersonalInfoLoaded) {
           Future.delayed(Duration.zero, () {
             if (mounted) {
               setState(() {
-                widget.userInfo.profileImageUrl = getUserState.imageUrl;
-                isImageUpload = true;
+
+                widget.userInfo = getUserState.userPersonalInfo;
+                if(isImageUpload){
+                  Navigator.of(context).maybePop(widget.userInfo);
+                }
               });
-              Navigator.of(context).maybePop(widget.userInfo);
             }
+
           });
         }
 
@@ -89,7 +92,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       dynamic getUserState, FirestoreUserInfoCubit updateUserCubit) {
     return [
       getUserState is CubitUserLoading
-          ?  const CustomCircularProgress(Colors.blue)
+          ? const CustomCircularProgress(Colors.blue)
           : IconButton(
               onPressed: () async {
                 UserPersonalInfo updatedUserInfo = UserPersonalInfo(
@@ -102,12 +105,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     profileImageUrl: widget.userInfo.profileImageUrl,
                     email: widget.userInfo.email,
                     userId: widget.userInfo.userId);
-                await updateUserCubit.updateUserInfo(updatedUserInfo).whenComplete(() {
+                await updateUserCubit
+                    .updateUserInfo(updatedUserInfo)
+                    .whenComplete(() {
                   Future.delayed(Duration.zero, () {
                     Navigator.of(context).maybePop(widget.userInfo);
                   });
                 });
-
               },
               icon: const Icon(
                 Icons.check,
@@ -144,18 +148,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
             final pickedFile =
                 await _picker.pickImage(source: ImageSource.gallery);
 
-            setState(() {
-              if (pickedFile != null) {
+            if (pickedFile != null) {
+              setState(() {
                 widget._photo = File(pickedFile.path);
                 isImageUpload = false;
-                updateUserCubit.uploadProfileImage(
-                    photo: widget._photo!,
-                    userId: widget.userInfo.userId,
-                    previousImageUrl: widget.userInfo.profileImageUrl);
-              } else {
-                ToastShow.toast('No image selected.');
-              }
-            });
+              });
+
+              await updateUserCubit.uploadProfileImage(
+                  photo: widget._photo!,
+                  userId: widget.userInfo.userId,
+                  previousImageUrl: widget.userInfo.profileImageUrl);
+              setState(() {
+                isImageUpload = true;
+              });
+            } else {
+              ToastShow.toast('No image selected.');
+            }
           },
           child: const Text(
             "Change profile photo",
@@ -202,7 +210,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       onTap: () async {},
       child: CircleAvatar(
         child: ClipOval(
-          child: !isImageUpload
+          child: isImageUpload
               ? const CircularProgressIndicator()
               : (widget.userInfo.profileImageUrl.isEmpty
                   ? const Icon(Icons.person, color: Colors.white)

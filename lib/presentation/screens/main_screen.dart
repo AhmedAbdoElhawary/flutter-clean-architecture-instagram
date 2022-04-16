@@ -75,7 +75,7 @@ class _MainScreenState extends State<MainScreen> {
             default:
               return CupertinoTabView(
                 builder: (context) =>
-                    CupertinoPageScaffold(child: PersonalProfilePage(widget.userId)),
+                    CupertinoPageScaffold(child: PersonalProfilePage(personalId:widget.userId)),
               );
           }
         });
