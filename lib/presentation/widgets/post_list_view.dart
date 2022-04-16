@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -82,10 +83,12 @@ class _CustomPostListViewState extends State<CustomPostListView> {
               IconButton(
                 icon: iconsOfImagePost("assets/icons/comment.svg"),
                 onPressed: () {
-                  Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+                  Navigator.of(context,
+                  ).push(CupertinoPageRoute(
+
                       builder: (context) =>
                           CommentsPage(postId: postInfo.postUid),
-                      maintainState: false));
+                  ));
                 },
               ),
               IconButton(

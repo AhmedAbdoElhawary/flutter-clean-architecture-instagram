@@ -90,7 +90,6 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
 
   Widget followButton(UserPersonalInfo userInfo, bool isThatFollower) {
     return BlocBuilder<FollowCubit, FollowState>(
-   
       builder: (followContext, stateOfFollow) {
         return Expanded(
           child: Builder(builder: (userContext) {
@@ -102,12 +101,14 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                 child: InkWell(
                     onTap: () async {
                       widget.rebuildVariable(false);
-                      
+                
                       if (userInfo.followerPeople.contains(myPersonalId)) {
                         BlocProvider.of<FollowCubit>(followContext)
                             .removeThisFollower(
                                 followingUserId: userInfo.userId,
                                 myPersonalId: myPersonalId);
+                        // TODO it's not prefect (not listing in all behind pages when you push to several pages) try to solve it
+                        // TODO here ============================================================================================
                         if (widget.userInfo != null) {
                           if (myPersonalId == widget.userInfo!.userId) {
                             setState(() {

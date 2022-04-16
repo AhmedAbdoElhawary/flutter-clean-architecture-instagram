@@ -1,5 +1,4 @@
 import 'package:instegram/data/models/comment.dart';
-import 'package:instegram/data/models/reply_comment.dart';
 
 abstract class FirestoreReplyRepository {
   Future<Comment> replyOnThisComment({required Comment replyInfo});

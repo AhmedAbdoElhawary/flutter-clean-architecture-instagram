@@ -80,7 +80,8 @@ class FirestoreComment {
       theCommentInfo.whoCommentInfo = commentatorInfo;
 
       return theCommentInfo;
+    } else {
+      return Future.error("the user not exist !");
     }
-    return Future.error("the user not exist !");
   }
 }

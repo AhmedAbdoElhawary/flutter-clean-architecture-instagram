@@ -5,6 +5,9 @@ import 'package:instegram/domain/repositories/post/comment/comment_repository.da
 import 'package:instegram/domain/repositories/post/comment/reply_repository.dart';
 import 'package:instegram/domain/usecases/firestoreUserUseCase/add_post_to_user.dart';
 import 'package:instegram/domain/usecases/firestoreUserUseCase/getUserInfo/get_specific_users_usecase.dart';
+import 'package:instegram/domain/usecases/firestoreUserUseCase/getUserInfo/get_user_from_user_name.dart';
+import 'package:instegram/domain/usecases/firestoreUserUseCase/massage/add_massage.dart';
+import 'package:instegram/domain/usecases/firestoreUserUseCase/massage/get_massages.dart';
 import 'package:instegram/domain/usecases/firestoreUserUseCase/update_user_info.dart';
 import 'package:instegram/domain/usecases/followUseCase/follow_this_user.dart';
 import 'package:instegram/domain/usecases/firestoreUserUseCase/getUserInfo/get_followers_and_followings_usecase.dart';
@@ -24,6 +27,7 @@ import 'package:instegram/domain/usecases/postUseCase/likes/put_like_on_this_pos
 import 'package:instegram/domain/usecases/postUseCase/likes/remove_the_like_on_this_post.dart';
 import 'package:instegram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
+import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
@@ -100,7 +104,13 @@ Future<void> initializeDependencies() async {
       GetSpecificUsersUseCase(injector()));
   injector.registerSingleton<AddPostToUserUseCase>(
       AddPostToUserUseCase(injector()));
-
+  injector.registerSingleton<GetUserFromUserNameUseCase>(
+      GetUserFromUserNameUseCase(injector()));
+  // massage use case
+  injector.registerSingleton<AddMassageUseCase>(AddMassageUseCase(injector()));
+  injector
+      .registerSingleton<GetMassagesUseCase>(GetMassagesUseCase(injector()));
+  // *
   // *
   // Firestore Post useCases
   injector.registerSingleton<CreatePostUseCase>(CreatePostUseCase(injector()));
@@ -164,11 +174,16 @@ Future<void> initializeDependencies() async {
   injector.registerFactory<FirestoreAddNewUserCubit>(
     () => FirestoreAddNewUserCubit(injector()),
   );
-  injector.registerFactory<FirestoreUserInfoCubit>(() =>
-      FirestoreUserInfoCubit(injector(), injector(), injector(), injector()));
+  injector.registerFactory<FirestoreUserInfoCubit>(() => FirestoreUserInfoCubit(
+      injector(), injector(), injector(), injector(), injector()));
   injector.registerFactory<UsersInfoCubit>(
     () => UsersInfoCubit(injector(), injector()),
   );
+  // massage bloc
+  injector.registerFactory<MassageCubit>(
+    () => MassageCubit(injector(), injector()),
+  );
+  // *
   // *
 
   // follow Blocs

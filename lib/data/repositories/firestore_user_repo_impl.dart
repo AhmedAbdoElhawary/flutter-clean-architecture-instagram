@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instegram/data/datasourses/remote/firebase_storage.dart';
+import 'package:instegram/data/models/massage.dart';
 import 'package:instegram/data/models/specific_users_info.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import '../../domain/repositories/user_repository.dart';
@@ -112,11 +114,40 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Future<UserPersonalInfo?> getUserFromUserName({required String userName}) async {
+  Future<UserPersonalInfo?> getUserFromUserName(
+      {required String userName}) async {
     try {
-      return await FirestoreUser.getUserFromUserName(userName:userName);
+      return await FirestoreUser.getUserFromUserName(userName: userName);
     } catch (e) {
       return Future.error(e.toString());
+    }
+  }
+
+  @override
+  Future<Massage> sendMassage({required Massage massageInfo}) async {
+    try {
+      Massage myMassageInfo = await FirestoreUser.sendMassage(
+          userId: massageInfo.senderId,
+          chatId: massageInfo.receiverId,
+          massage: massageInfo);
+      await FirestoreUser.sendMassage(
+          userId: massageInfo.receiverId,
+          chatId: massageInfo.senderId,
+          massage: massageInfo);
+
+      return myMassageInfo;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getMassages({required String receiverId})async* {
+    try {
+      yield*  FirestoreUser.getMassages(receiverId: receiverId);
+    }
+    catch (e) {
+      yield* Stream.error(e.toString());
     }
   }
 }

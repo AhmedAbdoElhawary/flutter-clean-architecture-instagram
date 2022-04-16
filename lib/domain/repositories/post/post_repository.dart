@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/post.dart';
 
 abstract class FirestorePostRepository {

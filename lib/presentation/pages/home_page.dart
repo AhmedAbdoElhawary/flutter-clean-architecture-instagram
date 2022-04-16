@@ -87,7 +87,6 @@ class _HomeScreenState extends State<HomeScreen>
   BlocBuilder<PostCubit, PostState> blocBuilder(double bodyHeight) {
     return BlocBuilder<PostCubit, PostState>(
       buildWhen: (previous, current) {
-        print("$previous ====================================================== $current");
         if (reLoadData &&
             current is CubitMyPersonalPostsLoaded) {
           reLoadData = false;

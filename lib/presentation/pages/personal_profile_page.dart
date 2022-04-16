@@ -15,7 +15,11 @@ import 'dart:io';
 
 class PersonalProfilePage extends StatefulWidget {
   final String personalId;
-  const PersonalProfilePage(this.personalId, {Key? key}) : super(key: key);
+  final String userName;
+
+  const PersonalProfilePage(
+      {Key? key, required this.personalId, this.userName = ''})
+      : super(key: key);
 
   @override
   State<PersonalProfilePage> createState() => _ProfilePageState();
@@ -32,14 +36,16 @@ class _ProfilePageState extends State<PersonalProfilePage>
 
   Widget scaffold() {
     return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
-      bloc: BlocProvider.of<FirestoreUserInfoCubit>(context)
-        ..getUserInfo(widget.personalId, true),
+      bloc: widget.userName.isNotEmpty
+          ? (BlocProvider.of<FirestoreUserInfoCubit>(context)
+            ..getUserFromUserName(widget.userName))
+          : (BlocProvider.of<FirestoreUserInfoCubit>(context)
+            ..getUserInfo(widget.personalId, true)),
       buildWhen: (previous, current) {
-        if (previous!=current&&current is CubitMyPersonalInfoLoaded) {
+        if (previous != current && current is CubitMyPersonalInfoLoaded) {
           return true;
         }
-        if (
-        previous != current && current is CubitGetUserInfoFailed) {
+        if (previous != current && current is CubitGetUserInfoFailed) {
           return true;
         }
         if (rebuildUserInfo) {
@@ -54,7 +60,7 @@ class _ProfilePageState extends State<PersonalProfilePage>
             appBar: appBar(state.userPersonalInfo.userName),
             body: ProfilePage(
               isThatMyPersonalId: true,
-              userId: widget.personalId,
+              userId: state.userPersonalInfo.userId,
               userInfo: state.userPersonalInfo,
               widgetsAboveTapBars: widgetsAboveTapBars(state.userPersonalInfo),
             ),

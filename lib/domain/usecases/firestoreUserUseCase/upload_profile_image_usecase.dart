@@ -1,15 +1,19 @@
+import 'dart:io';
 import '../../../core/usecase/usecase.dart';
 import '../../repositories/user_repository.dart';
-//TODO UseCase
-class UploadProfileImageUseCase implements UseCase<String, List> {
+
+class UploadProfileImageUseCase
+    implements UseCaseThreeParams<String, File, String, String> {
   final FirestoreUserRepository _addNewUserRepository;
 
   UploadProfileImageUseCase(this._addNewUserRepository);
 
   @override
-  Future<String> call({required List params}) {
+  Future<String> call(
+      {required File paramsOne,
+      required String paramsTwo,
+      required String paramsThree}) {
     return _addNewUserRepository.uploadProfileImage(
-        photo: params[0], userId: params[1],previousImageUrl: params[2]);
-    
+        photo: paramsOne, userId: paramsTwo, previousImageUrl: paramsThree);
   }
 }
