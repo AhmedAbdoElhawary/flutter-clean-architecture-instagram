@@ -2,7 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instegram/injector.dart';
+import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
+import 'package:instegram/presentation/pages/texting_page.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
 import 'package:instegram/presentation/widgets/recommendation_people.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
@@ -12,7 +15,10 @@ import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 
 class UserProfilePage extends StatefulWidget {
   final String userId;
-  const UserProfilePage(this.userId, {Key? key}) : super(key: key);
+  final String userName;
+
+  const UserProfilePage({Key? key, required this.userId, this.userName = ''})
+      : super(key: key);
 
   @override
   State<UserProfilePage> createState() => _ProfilePageState();
@@ -29,10 +35,12 @@ class _ProfilePageState extends State<UserProfilePage>
 
   Widget scaffold() {
     return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
-      bloc: BlocProvider.of<FirestoreUserInfoCubit>(context)
-        ..getUserInfo(widget.userId, false),
+      bloc: widget.userName.isNotEmpty
+          ? (BlocProvider.of<FirestoreUserInfoCubit>(context)
+            ..getUserFromUserName(widget.userName))
+          : (BlocProvider.of<FirestoreUserInfoCubit>(context)
+            ..getUserInfo(widget.userId, false)),
       buildWhen: (previous, current) {
-        print("build when =========================================");
         if (previous != current && current is CubitUserLoaded) {
           return true;
         }
@@ -42,7 +50,6 @@ class _ProfilePageState extends State<UserProfilePage>
         return false;
       },
       builder: (context, state) {
-        print("build =========================================");
         if (state is CubitUserLoaded) {
           return Scaffold(
             appBar: appBar(state.userPersonalInfo.userName),
@@ -168,25 +175,27 @@ class _ProfilePageState extends State<UserProfilePage>
                   rebuildUserInfo = false;
                 });
                 if (userInfo.followerPeople.contains(myPersonalId)) {
-                  BlocProvider.of<FollowCubit>(context)
-                      .removeThisFollower(followingUserId:widget.userId,myPersonalId:  myPersonalId);
+                  BlocProvider.of<FollowCubit>(context).removeThisFollower(
+                      followingUserId: userInfo.userId,
+                      myPersonalId: myPersonalId);
                 } else {
-                  BlocProvider.of<FollowCubit>(context)
-                      .followThisUser(followingUserId: widget.userId,myPersonalId:  myPersonalId);
+                  BlocProvider.of<FollowCubit>(context).followThisUser(
+                      followingUserId: userInfo.userId,
+                      myPersonalId: myPersonalId);
                 }
 
                 setState(() {
                   rebuildUserInfo = true;
                 });
               },
-              child:
-                  whichContainerOfText(stateOfFollow, userInfo)),
+              child: whichContainerOfText(stateOfFollow, userInfo)),
         );
       },
     );
   }
 
-  Widget whichContainerOfText(FollowState stateOfFollow, UserPersonalInfo userInfo) {
+  Widget whichContainerOfText(
+      FollowState stateOfFollow, UserPersonalInfo userInfo) {
     bool isFollowLoading = stateOfFollow is CubitFollowThisUserLoading;
     if (stateOfFollow is CubitFollowThisUserFailed) {
       ToastShow.toastStateError(stateOfFollow);
@@ -202,10 +211,23 @@ class _ProfilePageState extends State<UserProfilePage>
 
   Expanded massageButton(UserPersonalInfo userInfo) {
     return Expanded(
-      child: InkWell(
-        onTap: () async {},
-        child: containerOfFollowText(
-            text: 'Massage', isThatFollower: true, isItLoading: false),
+      child: BlocProvider<MassageCubit>(
+        create: (context) => injector<MassageCubit>(),
+        child: GestureDetector(
+          onTap: () async {
+            Navigator.of(
+              context,
+              rootNavigator: true,
+            ).push(MaterialPageRoute(
+              builder: (context) => TextingPage(
+                userInfo: userInfo,
+              ),
+              maintainState: false,
+            ));
+          },
+          child: containerOfFollowText(
+              text: 'Massage', isThatFollower: true, isItLoading: false),
+        ),
       ),
     );
   }
