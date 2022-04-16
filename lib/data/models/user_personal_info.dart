@@ -22,8 +22,9 @@ class UserPersonalInfo {
       this.userName = "",
       this.userId = ""});
 
-  static UserPersonalInfo fromSnap(
-      DocumentSnapshot<Map<String, dynamic>> snap) {
+  static UserPersonalInfo fromDocSnap(
+      {DocumentSnapshot<Map<String, dynamic>>? docSnap,Map<String, dynamic>? mapSnap}) {
+    dynamic snap=docSnap ?? mapSnap;
     return UserPersonalInfo(
       name: snap["name"],
       userId: snap["uid"],
