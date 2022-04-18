@@ -3,15 +3,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import 'dart:io';
 
-class FirebaseStorageImage {
-  static Future<String> uploadImage(File photo, String folderName) async {
-    final fileName = basename(photo.path);
+class FirebaseStoragePost {
+  static Future<String> uploadFile(File postFile, String folderName) async {
+    final fileName = basename(postFile.path);
     final destination = 'files/$folderName/$fileName';
     final ref = firebase_storage.FirebaseStorage.instance.ref(destination);
-    UploadTask uploadTask = ref.putFile(photo);
-    var imageUrl =
+    UploadTask uploadTask = ref.putFile(postFile);
+    var fileOfPostUrl =
         await (await uploadTask.whenComplete(() {})).ref.getDownloadURL();
-    return imageUrl.toString();
+    return fileOfPostUrl.toString();
   }
 
   static Future<void> deleteImageFromStorage(String previousImageUrl) async {
