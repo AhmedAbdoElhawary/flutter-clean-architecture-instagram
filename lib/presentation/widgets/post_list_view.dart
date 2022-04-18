@@ -13,11 +13,11 @@ import 'package:instegram/presentation/widgets/circle_avatar_name.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
 import 'package:instegram/presentation/widgets/read_more_text.dart';
 import 'package:inview_notifier_list/inview_notifier_list.dart';
+
 class ImageList extends StatefulWidget {
-  // final VoidCallback callback;
   final List postsInfo;
 
-  const ImageList({Key? key,required this.postsInfo}) : super(key: key);
+  const ImageList({Key? key, required this.postsInfo}) : super(key: key);
 
   @override
   State<ImageList> createState() => _ImageListState();
@@ -33,42 +33,36 @@ class _ImageListState extends State<ImageList> {
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
     return Stack(
-      fit: StackFit.expand,
-      children: <Widget>[
+      fit: StackFit.passthrough,
+      children: [
         InViewNotifierList(
+          primary: false,
           scrollDirection: Axis.vertical,
           initialInViewIds: const ['0'],
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
           isInViewPortCondition:
               (double deltaTop, double deltaBottom, double viewPortDimension) {
             return
               deltaTop < (0.5 * viewPortDimension) &&
                   deltaBottom > (0.5 * viewPortDimension);
           },
-          itemCount: 10,
+          itemCount:widget.postsInfo.length ,
           builder: (BuildContext context, int index) {
             return Container(
               width: double.infinity,
-              // color: Colors.black45,
-              // height: 100.0,
-              // alignment: Alignment.center,
               margin: const EdgeInsets.symmetric(vertical: 0.5),
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
                   return InViewNotifierWidget(
                     id: '$index',
-                    builder:
-                        (_, bool isInView, __) {
+                    builder: (_, bool isInView, __) {
                       if (isInView) {
-                        // inViewIndex = index.toString();
-                        // widget.callback();
-                      }
-                      return Container(
-                        height: index.isEven? 50 : 150 ,
-                        width: double.infinity,
-                        color: Colors.lightGreen,
-                        child: thePostsOfHomePage(postInfo:widget.postsInfo[index],bodyHeight:  bodyHeight,isInView: isInView)
-                        // Text("$index ${isInView.toString()}")
-                        ,);
+                       }
+                     return thePostsOfHomePage(
+                          postInfo: widget.postsInfo[index],
+                          bodyHeight: bodyHeight,
+                          isInView: isInView);
                     },
                   );
                 },
@@ -79,7 +73,7 @@ class _ImageListState extends State<ImageList> {
         Align(
           alignment: Alignment.center,
           child: Container(
-            height: 1.0,
+            height: 3.0,
             color: Colors.redAccent,
           ),
         )
@@ -92,7 +86,10 @@ class _ImageListState extends State<ImageList> {
         builder: (context) => WhichProfilePage(userId: postInfo.publisherId),
       ));
 
-  Widget thePostsOfHomePage({required Post postInfo, required double bodyHeight,required bool isInView}) {
+  Widget thePostsOfHomePage(
+      {required Post postInfo,
+      required double bodyHeight,
+      required bool isInView}) {
     return SizedBox(
       width: double.infinity,
       // height: 200,
@@ -121,44 +118,39 @@ class _ImageListState extends State<ImageList> {
             menuButton()
           ],
         ),
-        imageOfPost(postInfo,isInView),
+        imageOfPost(postInfo, isInView),
         Row(children: [
           Expanded(
               child: Row(
-                children: [
-                  loveButton(postInfo),
-                  IconButton(
-                    icon: iconsOfImagePost("assets/icons/comment.svg"),
-                    onPressed: () {
-                      Navigator.of(
-                        context,
-                      ).push(CupertinoPageRoute(
-                        builder: (context) =>
-                            CommentsPage(postId: postInfo.postUid),
-                      ));
-                    },
-                  ),
-                  IconButton(
-                    icon: iconsOfImagePost("assets/icons/send.svg"),
-                    onPressed: () {
-                      // Navigator.of(context,
-                      // ).push(CupertinoPageRoute(
-                      //
-                      //   builder: (context) =>
-                      //       MassagesPage(postInfo.publisherId),
-                      // ));
-                    },
-                  ),
-                ],
-              )),
+            children: [
+              loveButton(postInfo),
+              IconButton(
+                icon: iconsOfImagePost("assets/icons/comment.svg"),
+                onPressed: () {
+                  Navigator.of(
+                    context,
+                  ).push(CupertinoPageRoute(
+                    builder: (context) =>
+                        CommentsPage(postId: postInfo.postUid),
+                  ));
+                },
+              ),
+              IconButton(
+                icon: iconsOfImagePost("assets/icons/send.svg"),
+                onPressed: () {
+    
+                },
+              ),
+            ],
+          )),
           IconButton(
             icon: isSaved
                 ? const Icon(
-              Icons.bookmark_border,
-            )
+                    Icons.bookmark_border,
+                  )
                 : const Icon(
-              Icons.bookmark,
-            ),
+                    Icons.bookmark,
+                  ),
             onPressed: () {
               setState(() {
                 isSaved = isSaved ? false : true;
@@ -191,12 +183,12 @@ class _ImageListState extends State<ImageList> {
     return GestureDetector(
       child: !isLiked
           ? const Icon(
-        Icons.favorite_border,
-      )
+              Icons.favorite_border,
+            )
           : const Icon(
-        Icons.favorite,
-        color: Colors.red,
-      ),
+              Icons.favorite,
+              color: Colors.red,
+            ),
       onTap: () {
         setState(() {
           if (isLiked) {
@@ -223,9 +215,9 @@ class _ImageListState extends State<ImageList> {
             child: imageUrl.isEmpty
                 ? const Icon(Icons.person, color: Colors.white)
                 : ClipOval(
-                child: Image.network(
-                  imageUrl,
-                ))),
+                    child: Image.network(
+                    imageUrl,
+                  ))),
         const SizedBox(width: 10),
         const Text(
           "Add a comment...",
@@ -240,9 +232,9 @@ class _ImageListState extends State<ImageList> {
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => UsersWhoLikesOnPostPage(
-              showSearchBar: true,
-              usersIds: postInfo.likes,
-            )));
+                  showSearchBar: true,
+                  usersIds: postInfo.likes,
+                )));
       },
       child: Text('${postInfo.likes.length} Likes',
           textAlign: TextAlign.left,
@@ -259,7 +251,7 @@ class _ImageListState extends State<ImageList> {
     );
   }
 
-  Widget imageOfPost(Post postInfo,bool isInView) {
+  Widget imageOfPost(Post postInfo, bool isInView) {
     return InkWell(
       onDoubleTap: () {},
       child: postInfo.isThatImage
