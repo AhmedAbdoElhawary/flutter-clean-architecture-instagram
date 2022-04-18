@@ -12,18 +12,17 @@ import 'package:instegram/presentation/pages/which_profile_page.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_name.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
 import 'package:instegram/presentation/widgets/read_more_text.dart';
-import 'package:inview_notifier_list/inview_notifier_list.dart';
-class ImageList extends StatefulWidget {
-  // final VoidCallback callback;
-  final List postsInfo;
 
-  const ImageList({Key? key,required this.postsInfo}) : super(key: key);
+class CustomPostListView extends StatefulWidget {
+  final List postsInfo;
+  const CustomPostListView({Key? key, required this.postsInfo})
+      : super(key: key);
 
   @override
-  State<ImageList> createState() => _ImageListState();
+  State<CustomPostListView> createState() => _CustomPostListViewState();
 }
 
-class _ImageListState extends State<ImageList> {
+class _CustomPostListViewState extends State<CustomPostListView> {
   bool isSaved = false;
 
   @override
@@ -32,58 +31,14 @@ class _ImageListState extends State<ImageList> {
     final bodyHeight = mediaQuery.size.height -
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
-    return Stack(
-      fit: StackFit.expand,
-      children: <Widget>[
-        InViewNotifierList(
-          scrollDirection: Axis.vertical,
-          initialInViewIds: const ['0'],
-          isInViewPortCondition:
-              (double deltaTop, double deltaBottom, double viewPortDimension) {
-            return
-              deltaTop < (0.5 * viewPortDimension) &&
-                  deltaBottom > (0.5 * viewPortDimension);
-          },
-          itemCount: 10,
-          builder: (BuildContext context, int index) {
-            return Container(
-              width: double.infinity,
-              // color: Colors.black45,
-              // height: 100.0,
-              // alignment: Alignment.center,
-              margin: const EdgeInsets.symmetric(vertical: 0.5),
-              child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  return InViewNotifierWidget(
-                    id: '$index',
-                    builder:
-                        (_, bool isInView, __) {
-                      if (isInView) {
-                        // inViewIndex = index.toString();
-                        // widget.callback();
-                      }
-                      return Container(
-                        height: index.isEven? 50 : 150 ,
-                        width: double.infinity,
-                        color: Colors.lightGreen,
-                        child: thePostsOfHomePage(postInfo:widget.postsInfo[index],bodyHeight:  bodyHeight,isInView: isInView)
-                        // Text("$index ${isInView.toString()}")
-                        ,);
-                    },
-                  );
-                },
-              ),
-            );
-          },
-        ),
-        Align(
-          alignment: Alignment.center,
-          child: Container(
-            height: 1.0,
-            color: Colors.redAccent,
-          ),
-        )
-      ],
+    return ListView.separated(
+      itemCount: widget.postsInfo.length,
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      itemBuilder: (BuildContext context, int index) {
+        return thePostsOfHomePage(widget.postsInfo[index], bodyHeight);
+      },
     );
   }
 
@@ -91,8 +46,7 @@ class _ImageListState extends State<ImageList> {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => WhichProfilePage(userId: postInfo.publisherId),
       ));
-
-  Widget thePostsOfHomePage({required Post postInfo, required double bodyHeight,required bool isInView}) {
+  Widget thePostsOfHomePage(Post postInfo, double bodyHeight) {
     return SizedBox(
       width: double.infinity,
       // height: 200,
@@ -121,7 +75,7 @@ class _ImageListState extends State<ImageList> {
             menuButton()
           ],
         ),
-        imageOfPost(postInfo,isInView),
+        imageOfPost(postInfo),
         Row(children: [
           Expanded(
               child: Row(
@@ -259,12 +213,12 @@ class _ImageListState extends State<ImageList> {
     );
   }
 
-  Widget imageOfPost(Post postInfo,bool isInView) {
+  Widget imageOfPost(Post postInfo) {
     return InkWell(
       onDoubleTap: () {},
       child: postInfo.isThatImage
           ? buildImage(postInfo)
-          : PlayThisVideo(videoUrl: postInfo.postUrl, play: isInView),
+          : PlayThisVideo(videoUrl: postInfo.postUrl, play: true),
     );
   }
 

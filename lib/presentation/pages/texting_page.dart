@@ -1,64 +1,188 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:instegram/data/models/massage.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart';
+import 'package:instegram/presentation/widgets/toast_show.dart';
 import 'package:instegram/presentation/widgets/user_profile_page.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-class TextingPage extends StatelessWidget {
-  final TextEditingController _textController = TextEditingController();
+import '../../core/constant.dart';
+import '../../core/globall.dart';
 
+class TextingPage extends StatefulWidget {
   final UserPersonalInfo userInfo;
   TextingPage({Key? key, required this.userInfo}) : super(key: key);
+
+  @override
+  State<TextingPage> createState() => _TextingPageState();
+}
+
+class _TextingPageState extends State<TextingPage> {
+  final TextEditingController _textController = TextEditingController();
+  final itemScrollController = ItemScrollController();
+  List<DocumentSnapshot> massages=[];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      body: BlocBuilder<MassageCubit, MassageState>(
-        bloc: MassageCubit.get(context)..getMassages(userInfo.userId),
-        builder: (context, state) {
-          return ListView.separated(
-              itemBuilder: (context, index) {
-                return Column(
+      body: Builder(builder: (context) {
+        MassageCubit massageCubit = MassageCubit.get(context);
+        return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: massageCubit.getMassages(widget.userInfo.userId),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+            // MassageCubit massageCubit = MassageCubit.get(context);
+
+            if (!snapshots.hasData) {
+              return Column(
+                children: [
+                  buildUserInfo(context),
+                  const Center(
+                    child: Text('There is no Massages yet!'),
+                  ),
+                ],
+              );
+            } else {
+              massages = snapshots.data!.docs;
+              // itemScrollController.jumpTo(index: massages.length-1);
+              return Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
                   children: [
-                    circleAvatarOfImage(),
-                    const SizedBox(height: 10),
-                    nameOfUser(),
-                    const SizedBox(height: 5),
-                    userName(),
-                    const SizedBox(height: 5),
-                    someInfoOfUser(),
-                    viewProfileButton(context)
+                    Expanded(
+                      child: ScrollablePositionedList.separated(
+                          itemScrollController: itemScrollController,
+                          itemBuilder: (context, index) {
+                            // Massage theMassageInfo = Massage.fromJson(massages[index]);
+
+                            return Column(
+                              children: [
+                                if (index == 0) buildUserInfo(context),
+                                // if (index > 0)
+                                buildTheMassage(massages[index]),
+                                if (index == massages.length - 1)
+                                  const SizedBox(height: 10),
+                              ],
+                            );
+                          },
+                          itemCount: massages.length,
+                          separatorBuilder: (BuildContext context, int index) =>
+                              const SizedBox(height: 5)),
+                    ),
+                    fieldOfMassage(),
                   ],
-                );
-              },
-              itemCount: 1,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider());
-        },
-      ),
-      bottomSheet: fieldOfMassage(),
+                ),
+              );
+            }
+          },
+        );
+      }),
     );
   }
 
-  SingleChildScrollView fieldOfMassage() {
+  Column buildUserInfo(BuildContext context) {
+    return Column(
+      children: [
+        circleAvatarOfImage(),
+        const SizedBox(height: 10),
+        nameOfUser(),
+        const SizedBox(height: 5),
+        userName(),
+        const SizedBox(height: 5),
+        someInfoOfUser(),
+        viewProfileButton(context),
+      ],
+    );
+  }
+
+  Widget buildTheMassage(DocumentSnapshot massageInfo) {
+    // Massage theMassageInfo = Massage.fromJson(massages[index]);
+
+    bool isThatMine = false;
+    if (massageInfo["senderId"] == myPersonalId) isThatMine = true;
+    String massage = massageInfo["massage"];
+    String imageUrl = massageInfo["imageUrl"].toString();
+    return Row(
+      children: [
+        if (isThatMine)
+          const SizedBox(
+            width: 100,
+          ),
+        Expanded(
+          child: Align(
+            alignment: isThatMine
+                ? AlignmentDirectional.centerEnd
+                : AlignmentDirectional.centerStart,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: isThatMine ? Colors.blueAccent : Colors.grey[200],
+                  borderRadius: BorderRadiusDirectional.only(
+                    bottomStart: Radius.circular(isThatMine ? 20 : 0),
+                    bottomEnd: Radius.circular(isThatMine ? 0 : 20),
+                    topStart: const Radius.circular(20),
+                    topEnd: const Radius.circular(20),
+                  )),
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              padding: imageUrl.isEmpty
+                  ? const EdgeInsets.symmetric(vertical: 8, horizontal: 10)
+                  : const EdgeInsets.all(0),
+              child: imageUrl.isEmpty
+                  ? Text(
+                      massage,
+                      style: TextStyle(
+                          color: isThatMine ? Colors.white : Colors.black),
+                    )
+                  : SizedBox(
+                      width: 90,
+                      height: 150,
+                      child: Image.network(imageUrl, fit: BoxFit.cover)),
+            ),
+          ),
+        ),
+        if (!isThatMine)
+          const SizedBox(
+            width: 100,
+          )
+      ],
+    );
+  }
+
+  Widget fieldOfMassage() {
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(6.0),
-        child: Container(
-          decoration: BoxDecoration(
-              color: Colors.grey[200], borderRadius: BorderRadius.circular(35)),
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          height: 50,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.grey[200], borderRadius: BorderRadius.circular(35)),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        height: 50,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Builder(builder: (context) {
+            MassageCubit massageCubit = MassageCubit.get(context);
+
+            return Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 InkWell(
-                  onTap: () {},
+                  onTap: () async {
+                    final ImagePicker _picker = ImagePicker();
+                    final XFile? pickedFile =
+                        await _picker.pickImage(source: ImageSource.camera);
+                    if (pickedFile != null) {
+                      await massageCubit.sendMassage(
+                          massageInfo: newMassage(),
+                          pathOfPhoto: pickedFile.path);
+                      // setState(() {
+                      //   isImageUpload = true;
+                      // });
+                    } else {
+                      ToastShow.toast('No image selected.');
+                    }
+                  },
                   child: const CircleAvatar(
-                      backgroundColor: Colors.indigo,
+                      backgroundColor: Colors.blueAccent,
                       child: ClipOval(
                           child: Icon(
                         Icons.camera_alt,
@@ -67,7 +191,7 @@ class TextingPage extends StatelessWidget {
                       radius: 20),
                 ),
                 const SizedBox(
-                  width: 20.0,
+                  width: 10.0,
                 ),
                 Expanded(
                   child: TextFormField(
@@ -79,26 +203,74 @@ class TextingPage extends StatelessWidget {
                         hintStyle: TextStyle(color: Colors.black26)),
                     autofocus: false,
                     controller: _textController,
+                    cursorWidth: 1.5,
+                    onChanged: (e) {
+                      setState(() {
+                        _textController;
+                      });
+                      print(e.toString());
+                    },
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    // if (_textController.text.isNotEmpty) {
-                    //   postTheComment(userPersonalInfo);
-                    // }
-                  },
-                  child: const Text(
-                    'Send',
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 33, 150, 243),
-                        fontWeight: FontWeight.w500),
+                if (_textController.text.isNotEmpty)
+                  GestureDetector(
+                    onTap: () {
+                      // if (_textController.text.isNotEmpty) {
+                      massageCubit.sendMassage(
+                          massageInfo: newMassage(), pathOfPhoto: "");
+                      _textController.text = "";
+                      // }
+                    },
+                    child: Text(
+                      'Send',
+                      style: TextStyle(
+                          color: _textController.text.isNotEmpty
+                              ? const Color.fromARGB(255, 33, 150, 243)
+                              : const Color.fromARGB(255, 147, 198, 246),
+                          fontWeight: FontWeight.w500),
+                    ),
                   ),
-                )
+                if (_textController.text.isEmpty)
+                  Row(
+                    children: [
+                      const SizedBox(width: 10,),
+
+                      GestureDetector(onTap: (){},child: const Icon(Icons.mic_none_rounded),),
+                      const SizedBox(width: 10,),
+                      GestureDetector(onTap: () async {
+                        final ImagePicker _picker = ImagePicker();
+                        final XFile? pickedFile =
+                            await _picker.pickImage(source: ImageSource.gallery);
+                        if (pickedFile != null) {
+                          await massageCubit.sendMassage(
+                              massageInfo: newMassage(),
+                              pathOfPhoto: pickedFile.path);
+                          // setState(() {
+                          //   isImageUpload = true;
+                          // });
+                        } else {
+                          ToastShow.toast('No image selected.');
+                        }
+                      },child: const Icon(Icons.photo),),
+                      const SizedBox(width: 10,),
+
+                      GestureDetector(onTap: (){},child: const Icon(Icons.sticky_note_2),),
+                    ],
+                  )
               ],
-            ),
-          ),
+            );
+          }),
         ),
       ),
+    );
+  }
+
+  Massage newMassage() {
+    return Massage(
+      datePublished: DateOfNow.dateOfNow().toString(),
+      massage: _textController.text,
+      senderId: myPersonalId,
+      receiverId: widget.userInfo.userId,
     );
   }
 
@@ -106,7 +278,7 @@ class TextingPage extends StatelessWidget {
     return CircleAvatar(
         child: ClipOval(
             child: Image.network(
-          userInfo.profileImageUrl,
+          widget.userInfo.profileImageUrl,
           fit: BoxFit.cover,
         )),
         radius: 45);
@@ -117,7 +289,7 @@ class TextingPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          userInfo.userName,
+          widget.userInfo.userName,
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
         ),
         const SizedBox(
@@ -133,7 +305,7 @@ class TextingPage extends StatelessWidget {
 
   Text nameOfUser() {
     return Text(
-      userInfo.name,
+      widget.userInfo.name,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
     );
   }
@@ -143,14 +315,14 @@ class TextingPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "${userInfo.followerPeople.length} Followers",
+          "${widget.userInfo.followerPeople.length} Followers",
           style: const TextStyle(fontSize: 13, color: Colors.grey),
         ),
         const SizedBox(
           width: 15,
         ),
         Text(
-          "${userInfo.posts.length} Posts",
+          "${widget.userInfo.posts.length} Posts",
           style: const TextStyle(fontSize: 13, color: Colors.grey),
         ),
       ],
@@ -165,7 +337,7 @@ class TextingPage extends StatelessWidget {
           rootNavigator: true,
         ).push(MaterialPageRoute(
           builder: (context) => UserProfilePage(
-            userId: userInfo.userId,
+            userId: widget.userInfo.userId,
           ),
           maintainState: false,
         ));
@@ -183,16 +355,16 @@ class TextingPage extends StatelessWidget {
           CircleAvatar(
               child: ClipOval(
                   child: Image.network(
-                userInfo.profileImageUrl,
+                widget.userInfo.profileImageUrl,
                 fit: BoxFit.cover,
               )),
-              radius: 12),
+              radius: 17),
           const SizedBox(
             width: 15,
           ),
           Text(
-            userInfo.name,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
+            widget.userInfo.name,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
           )
         ],
       ),
