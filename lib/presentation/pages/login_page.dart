@@ -118,7 +118,6 @@ class _LoginPageState extends State<LoginPage> {
                             });
                             if (!isHeMovedToHome) {
                               myPersonalId=userId;
-                              print('$myPersonalId ===================================');
                               Navigator.pushNamedAndRemoveUntil(
                                   context, '/main', (route) => false,
                                   arguments: userId);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
+import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
@@ -59,6 +60,9 @@ class MultiBloc extends StatelessWidget {
       ),
       BlocProvider<ReplyInfoCubit>(
         create: (context) => injector<ReplyInfoCubit>(),
+      ),
+      BlocProvider<MassageCubit>(
+        create: (context) => injector<MassageCubit>(),
       ),
     ], child: materialApp);
   }

@@ -125,8 +125,6 @@ class _ProfilePageState extends State<PersonalProfilePage>
   }
 
   List<Widget> widgetsAboveTapBars(UserPersonalInfo userInfo) {
-    print("widgetsAboveTapBars =============================== ");
-
     return [
       editProfile(userInfo),
       const SizedBox(width: 5),
@@ -208,25 +206,25 @@ class _ProfilePageState extends State<PersonalProfilePage>
             padding: const EdgeInsets.only(left: 20.0),
             child: Column(
               children: [
-                InkWell(
+                createNewPost(),
+                const Divider(indent: 40, endIndent: 15),
+                GestureDetector(
                     onTap: () async {
                       final ImagePicker _picker = ImagePicker();
-                      final XFile? image =
-                          await _picker.pickImage(source: ImageSource.gallery);
-                      if (image != null) {
-                        File photo = File(image.path);
+                      final XFile? video =
+                      await _picker.pickVideo(source: ImageSource.camera);
+                      if (video != null) {
+                        File videoFile = File(video.path);
                         await Navigator.of(context, rootNavigator: true).push(
                             MaterialPageRoute(
-                                builder: (context) => CreatePostPage(photo),
+                                builder: (context) => CreatePostPage(selectedFile:videoFile,isThatImage: false),
                                 maintainState: false));
                         setState(() {
                           rebuildUserInfo = true;
                         });
                       }
                     },
-                    child: createSizedBox("Post", "grid")),
-                const Divider(indent: 40, endIndent: 15),
-                createSizedBox("Reel", "video"),
+                    child: createSizedBox("Reel", "video")),
                 const Divider(indent: 40, endIndent: 15),
                 createSizedBox("Story", "add-instagram-story"),
                 const Divider(indent: 40, endIndent: 15),
@@ -241,6 +239,26 @@ class _ProfilePageState extends State<PersonalProfilePage>
         ],
       ),
     );
+  }
+
+  GestureDetector createNewPost() {
+    return GestureDetector(
+        onTap: () async {
+          final ImagePicker _picker = ImagePicker();
+          final XFile? image =
+              await _picker.pickImage(source: ImageSource.gallery);
+          if (image != null) {
+            File photo = File(image.path);
+            await Navigator.of(context, rootNavigator: true).push(
+                MaterialPageRoute(
+                    builder: (context) => CreatePostPage(selectedFile:photo),
+                    maintainState: false));
+            setState(() {
+              rebuildUserInfo = true;
+            });
+          }
+        },
+        child: createSizedBox("Post", "grid"));
   }
 
   SizedBox createSizedBox(String text, String nameOfPath) {

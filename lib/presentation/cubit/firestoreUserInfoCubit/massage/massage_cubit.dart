@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,24 +17,16 @@ class MassageCubit extends Cubit<MassageState> {
 
   static MassageCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future<void> sendMassage(Massage massageInfo) async {
+  Future<void> sendMassage({required Massage massageInfo,required String pathOfPhoto}) async {
     emit(SendMassageLoading());
-    await _addMassageUseCase.call(params: massageInfo).then((massageInfo) {
+    await _addMassageUseCase.call(paramsOne: massageInfo,paramsTwo: pathOfPhoto).then((massageInfo) {
       emit(SendMassageLoaded(massageInfo));
     }).catchError((e) {
       emit(SendMassageFailed(e.toString()));
     });
   }
 
-  Stream<void> getMassages(String receiverId) async* {
-    _getMassagesUseCase.call(params: receiverId).listen((event) {
-      massagesInfo = [];
-      for (var element in event.docs) {
-        Map<String, dynamic> data = element.data();
-        massagesInfo.add(Massage.fromJson(data));
-      }
-      emit(GetMassageSuccess());
-    });
-    // emit(GetMassageFailed(e.toString()));
+  Stream<QuerySnapshot<Map<String, dynamic>>> getMassages(String receiverId) async* {
+   yield* _getMassagesUseCase.call(params: receiverId);
   }
 }

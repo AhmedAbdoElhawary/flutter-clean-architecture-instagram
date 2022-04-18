@@ -23,7 +23,7 @@ class FirestorePost {
       DocumentSnapshot<Map<String, dynamic>> snap =
           await _fireStorePostCollection.doc(postsIds[i]).get();
       if (snap.exists) {
-        Post postReformat = Post.fromJson(snap);
+        Post postReformat = Post.fromSnap(docSnap: snap);
         UserPersonalInfo publisherInfo =
             await FirestoreUser.getUserInfo(postReformat.publisherId);
         postReformat.publisherInfo = publisherInfo;
@@ -35,23 +35,16 @@ class FirestorePost {
     return postsInfo;
   }
 
-  static Future<List<dynamic>> getCommentsOfPost({required String postId}) async {
+  static Future<List<dynamic>> getCommentsOfPost(
+      {required String postId}) async {
     DocumentSnapshot<Map<String, dynamic>> snap =
         await _fireStorePostCollection.doc(postId).get();
     if (snap.exists) {
-      Post postReformat = Post.fromJson(snap);
+      Post postReformat = Post.fromSnap(docSnap: snap);
       return postReformat.comments;
     } else {
       return Future.error("the post not exist !");
     }
-  }
-
-  //it's belong to post not comment (it's just update a field)
-  static Future<void> updateNumbersOfComments(
-      {required String postId, required int oldNumbersOfComments}) async {
-    await _fireStorePostCollection
-        .doc(postId)
-        .update({"numbersOfComments": oldNumbersOfComments + 1});
   }
 
   static Future<List<Post>> getAllPostsInfo() async {
@@ -61,7 +54,7 @@ class FirestorePost {
 
     for (int i = 0; i < snap.docs.length; i++) {
       QueryDocumentSnapshot<Map<String, dynamic>> doc = snap.docs[i];
-      Post postReformat = Post.fromSnap(doc);
+      Post postReformat = Post.fromSnap(querySnap: doc);
       UserPersonalInfo publisherInfo =
           await FirestoreUser.getUserInfo(postReformat.publisherId);
       postReformat.publisherInfo = publisherInfo;
@@ -91,7 +84,6 @@ class FirestorePost {
       'comments': FieldValue.arrayUnion([commentId])
     });
   }
-
 
   static removeTheCommentOnThisPost(
       {required String postId, required String commentId}) async {

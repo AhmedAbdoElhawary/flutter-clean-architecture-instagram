@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:instegram/injector.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
 import 'package:instegram/presentation/pages/texting_page.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
@@ -211,23 +209,20 @@ class _ProfilePageState extends State<UserProfilePage>
 
   Expanded massageButton(UserPersonalInfo userInfo) {
     return Expanded(
-      child: BlocProvider<MassageCubit>(
-        create: (context) => injector<MassageCubit>(),
-        child: GestureDetector(
-          onTap: () async {
-            Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(MaterialPageRoute(
-              builder: (context) => TextingPage(
-                userInfo: userInfo,
-              ),
-              maintainState: false,
-            ));
-          },
-          child: containerOfFollowText(
-              text: 'Massage', isThatFollower: true, isItLoading: false),
-        ),
+      child: GestureDetector(
+        onTap: () async {
+          Navigator.of(
+            context,
+            rootNavigator: true,
+          ).push(MaterialPageRoute(
+            builder: (context) => TextingPage(
+              userInfo: userInfo,
+            ),
+            maintainState: false,
+          ));
+        },
+        child: containerOfFollowText(
+            text: 'Massage', isThatFollower: true, isItLoading: false),
       ),
     );
   }

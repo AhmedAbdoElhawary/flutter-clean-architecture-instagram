@@ -62,7 +62,6 @@ class _HomeScreenState extends State<HomeScreen>
       });
     });
   }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -119,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  SingleChildScrollView columnOfWidgets(
+  Widget columnOfWidgets(
       double bodyHeight, List<Post> postsInfo) {
     return SingleChildScrollView(
       child: Column(
@@ -133,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget posts(List<Post> postsInfo) {
-    return CustomPostListView(postsInfo: postsInfo);
+    return ImageList(postsInfo: postsInfo);
   }
 
   Widget storiesLines(double bodyHeight, List<Post> postsInfo) {
