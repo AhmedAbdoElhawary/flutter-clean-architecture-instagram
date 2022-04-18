@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Massage {
   String datePublished;
@@ -5,23 +6,25 @@ class Massage {
   String receiverId;
   String massageUid;
   String senderId;
+  String imageUrl;
 
   Massage({
     required this.datePublished,
     required this.massage,
     required this.receiverId,
     required this.senderId,
-    required this.massageUid,
+    this.massageUid = "",
+    this.imageUrl = "",
   });
 
-  static Massage fromJson(Map<String, dynamic> snap) {
+  static Massage fromJson(DocumentSnapshot snap) {
     return Massage(
       datePublished: snap["datePublished"],
       massage: snap["massage"],
       receiverId: snap["receiverId"],
       senderId: snap["senderId"],
       massageUid: snap["massageUid"],
-
+      imageUrl: snap["imageUrl"],
     );
   }
 
@@ -29,6 +32,7 @@ class Massage {
         "datePublished": datePublished,
         "massage": massage,
         "receiverId": receiverId,
-        'senderId': senderId,
+        "senderId": senderId,
+        "imageUrl": imageUrl,
       };
 }

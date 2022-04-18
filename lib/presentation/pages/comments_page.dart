@@ -191,6 +191,11 @@ class _CommentsPageState extends State<CommentsPage> {
                           hintStyle: TextStyle(color: Colors.black26)),
                       autofocus: false,
                       controller: _textController,
+                      onChanged: (e){
+                        setState(() {
+                          _textController;
+                        });
+                      },
                     ),
                   ),
                   BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
@@ -231,11 +236,11 @@ class _CommentsPageState extends State<CommentsPage> {
       CommentsInfoCubit commentsInfoCubit =
           BlocProvider.of<CommentsInfoCubit>(context);
       await commentsInfoCubit.addComment(
-          commentInfo: newCommentInfo(myPersonalInfo, DateOfNow.dateOfNow()));
+          commentInfo: newCommentInfo(myPersonalInfo, DateOfNow.dateOfNow().toString()));
 
     } else {
   Comment replyInfo = newReplyInfo(
-      DateOfNow.dateOfNow(), selectedCommentInfo!, myPersonalInfo.userId);
+      DateOfNow.dateOfNow().toString(), selectedCommentInfo!, myPersonalInfo.userId);
 
   await ReplyInfoCubit.get(context)
       .replyOnThisComment(replyInfo: replyInfo);

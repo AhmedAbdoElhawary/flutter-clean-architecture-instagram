@@ -96,8 +96,6 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
         .call(
             paramsOne: photo, paramsTwo: userId, paramsThree: previousImageUrl)
         .then((imageUrl) {
-      // emit(CubitImageLoaded(imageUrl));
-      print("herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrreeeeeeeeee");
       myPersonalInfo!.profileImageUrl = imageUrl;
       emit(CubitMyPersonalInfoLoaded(myPersonalInfo!));
     }).catchError((e) {

@@ -10,7 +10,7 @@ import '../widgets/toast_show.dart';
 
 // ignore: must_be_immutable
 class EditProfilePage extends StatefulWidget {
-   UserPersonalInfo userInfo;
+  UserPersonalInfo userInfo;
   File? _photo;
   TextEditingController nameController = TextEditingController(text: "");
   TextEditingController userNameController = TextEditingController(text: "");
@@ -51,14 +51,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
           Future.delayed(Duration.zero, () {
             if (mounted) {
               setState(() {
-
                 widget.userInfo = getUserState.userPersonalInfo;
-                if(isImageUpload){
+                if (isImageUpload) {
                   Navigator.of(context).maybePop(widget.userInfo);
                 }
               });
             }
-
           });
         }
 

@@ -4,55 +4,50 @@ import 'package:instegram/data/models/user_personal_info.dart';
 class Post {
   String datePublished;
   String caption;
-  String postImageUrl;
+  String postUrl;
   String publisherId;
   String postUid;
   List<dynamic> likes;
   List<dynamic> comments;
   UserPersonalInfo? publisherInfo;
+  bool isThatImage;
 
   Post({
     required this.datePublished,
     required this.publisherId,
     this.publisherInfo,
     this.postUid = "",
-    this.postImageUrl = "",
+    this.postUrl = "",
     this.caption = "",
     required this.comments,
     required this.likes,
+    this.isThatImage = true,
   });
 
-  static Post fromSnap(QueryDocumentSnapshot<Map<String, dynamic>> snap) {
+  static Post fromSnap(
+      {QueryDocumentSnapshot<Map<String, dynamic>>? querySnap,
+      DocumentSnapshot<Map<String, dynamic>>? docSnap}) {
+    dynamic snap = querySnap ?? docSnap;
     return Post(
       caption: snap["caption"],
       datePublished: snap["datePublished"],
-      postImageUrl: snap["postImageUrl"],
       publisherId: snap["publisherId"],
-      postUid: snap["postUid"],
       likes: snap["likes"],
       comments: snap["comments"],
-    );
-  }
-
-  static Post fromJson(DocumentSnapshot<Map<String, dynamic>> snap) {
-    return Post(
-      caption: snap["caption"],
-      datePublished: snap["datePublished"],
-      postImageUrl: snap["postImageUrl"],
-      publisherId: snap["publisherId"],
-      comments: snap["comments"],
       postUid: snap["postUid"],
-      likes: snap["likes"],
+      postUrl: snap["postUrl"],
+      isThatImage: snap["isThatImage"],
     );
   }
 
   Map<String, dynamic> toMap() => {
         'caption': caption,
         "datePublished": datePublished,
-        "postImageUrl": postImageUrl,
         "publisherId": publisherId,
         'comments': comments,
-        'postUid': postUid,
         'likes': likes,
+        'postUid': postUid,
+        "postUrl": postUrl,
+        "isThatImage": isThatImage,
       };
 }

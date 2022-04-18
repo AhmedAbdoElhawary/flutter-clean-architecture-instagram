@@ -56,10 +56,10 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       required String previousImageUrl}) async {
     try {
       String imageUrl =
-          await FirebaseStorageImage.uploadImage(photo, 'personalImage');
+          await FirebaseStoragePost.uploadFile(photo, 'personalImage');
       await FirestoreUser.updateProfileImage(
           imageUrl: imageUrl, userId: userId);
-      await FirebaseStorageImage.deleteImageFromStorage(previousImageUrl);
+      await FirebaseStoragePost.deleteImageFromStorage(previousImageUrl);
       return imageUrl;
     } catch (e) {
       return Future.error(e.toString());
@@ -124,8 +124,15 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Future<Massage> sendMassage({required Massage massageInfo}) async {
+  Future<Massage> sendMassage(
+      {required Massage massageInfo, required String pathOfPhoto}) async {
     try {
+      if(pathOfPhoto.isNotEmpty){
+        String imageUrl =
+        await FirebaseStoragePost.uploadFile(File(pathOfPhoto), "massagesImages");
+        massageInfo.imageUrl = imageUrl;
+      }
+
       Massage myMassageInfo = await FirestoreUser.sendMassage(
           userId: massageInfo.senderId,
           chatId: massageInfo.receiverId,
@@ -142,12 +149,13 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> getMassages({required String receiverId})async* {
-    try {
-      yield*  FirestoreUser.getMassages(receiverId: receiverId);
-    }
-    catch (e) {
-      yield* Stream.error(e.toString());
-    }
+  Stream<QuerySnapshot<Map<String, dynamic>>> getMassages(
+      {required String receiverId}) async* {
+    // try {
+    yield* FirestoreUser.getMassages(receiverId: receiverId);
+    // }
+    // catch (e) {
+    //   yield* Stream.error(e.toString());
+    // }
   }
 }
