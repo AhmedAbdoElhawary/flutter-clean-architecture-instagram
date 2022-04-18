@@ -141,14 +141,8 @@ class FirestoreUser {
             .collection("chats")
             .doc(receiverId)
             .collection("massages")
+            .orderBy("datePublished", descending: false)
             .snapshots();
-
-    // _snapshotsMassages.listen((event) {
-    //   for (var element in event.docs) {
-    //     Map<String, dynamic> a = element.data();
-    //     massagesInfo.add(Massage.fromJson(a));
-    //   }
-    // });
     yield* _snapshotsMassages;
   }
 }
