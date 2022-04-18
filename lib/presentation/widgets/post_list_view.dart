@@ -6,22 +6,24 @@ import 'package:instegram/core/constant.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instegram/presentation/pages/comments_page.dart';
+import 'package:instegram/presentation/pages/play_this_video.dart';
 import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_name.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
 import 'package:instegram/presentation/widgets/read_more_text.dart';
-
-class CustomPostListView extends StatefulWidget {
+import 'package:inview_notifier_list/inview_notifier_list.dart';
+class ImageList extends StatefulWidget {
+  // final VoidCallback callback;
   final List postsInfo;
- const CustomPostListView({Key? key, required this.postsInfo}) : super(key: key);
+
+  const ImageList({Key? key,required this.postsInfo}) : super(key: key);
 
   @override
-  State<CustomPostListView> createState() => _CustomPostListViewState();
+  State<ImageList> createState() => _ImageListState();
 }
 
-class _CustomPostListViewState extends State<CustomPostListView> {
-
+class _ImageListState extends State<ImageList> {
   bool isSaved = false;
 
   @override
@@ -30,14 +32,58 @@ class _CustomPostListViewState extends State<CustomPostListView> {
     final bodyHeight = mediaQuery.size.height -
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
-    return ListView.separated(
-      itemCount: widget.postsInfo.length,
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
-      itemBuilder: (BuildContext context, int index) {
-        return thePostsOfHomePage(widget.postsInfo[index], bodyHeight);
-      },
+    return Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        InViewNotifierList(
+          scrollDirection: Axis.vertical,
+          initialInViewIds: const ['0'],
+          isInViewPortCondition:
+              (double deltaTop, double deltaBottom, double viewPortDimension) {
+            return
+              deltaTop < (0.5 * viewPortDimension) &&
+                  deltaBottom > (0.5 * viewPortDimension);
+          },
+          itemCount: 10,
+          builder: (BuildContext context, int index) {
+            return Container(
+              width: double.infinity,
+              // color: Colors.black45,
+              // height: 100.0,
+              // alignment: Alignment.center,
+              margin: const EdgeInsets.symmetric(vertical: 0.5),
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  return InViewNotifierWidget(
+                    id: '$index',
+                    builder:
+                        (_, bool isInView, __) {
+                      if (isInView) {
+                        // inViewIndex = index.toString();
+                        // widget.callback();
+                      }
+                      return Container(
+                        height: index.isEven? 50 : 150 ,
+                        width: double.infinity,
+                        color: Colors.lightGreen,
+                        child: thePostsOfHomePage(postInfo:widget.postsInfo[index],bodyHeight:  bodyHeight,isInView: isInView)
+                        // Text("$index ${isInView.toString()}")
+                        ,);
+                    },
+                  );
+                },
+              ),
+            );
+          },
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: Container(
+            height: 1.0,
+            color: Colors.redAccent,
+          ),
+        )
+      ],
     );
   }
 
@@ -45,7 +91,8 @@ class _CustomPostListViewState extends State<CustomPostListView> {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => WhichProfilePage(userId: postInfo.publisherId),
       ));
-  Widget thePostsOfHomePage(Post postInfo, double bodyHeight) {
+
+  Widget thePostsOfHomePage({required Post postInfo, required double bodyHeight,required bool isInView}) {
     return SizedBox(
       width: double.infinity,
       // height: 200,
@@ -74,37 +121,44 @@ class _CustomPostListViewState extends State<CustomPostListView> {
             menuButton()
           ],
         ),
-        imageOfPost(postInfo.postImageUrl),
+        imageOfPost(postInfo,isInView),
         Row(children: [
           Expanded(
               child: Row(
-            children: [
-              loveButton(postInfo),
-              IconButton(
-                icon: iconsOfImagePost("assets/icons/comment.svg"),
-                onPressed: () {
-                  Navigator.of(context,
-                  ).push(CupertinoPageRoute(
-
-                      builder: (context) =>
-                          CommentsPage(postId: postInfo.postUid),
-                  ));
-                },
-              ),
-              IconButton(
-                icon: iconsOfImagePost("assets/icons/send.svg"),
-                onPressed: () {},
-              ),
-            ],
-          )),
+                children: [
+                  loveButton(postInfo),
+                  IconButton(
+                    icon: iconsOfImagePost("assets/icons/comment.svg"),
+                    onPressed: () {
+                      Navigator.of(
+                        context,
+                      ).push(CupertinoPageRoute(
+                        builder: (context) =>
+                            CommentsPage(postId: postInfo.postUid),
+                      ));
+                    },
+                  ),
+                  IconButton(
+                    icon: iconsOfImagePost("assets/icons/send.svg"),
+                    onPressed: () {
+                      // Navigator.of(context,
+                      // ).push(CupertinoPageRoute(
+                      //
+                      //   builder: (context) =>
+                      //       MassagesPage(postInfo.publisherId),
+                      // ));
+                    },
+                  ),
+                ],
+              )),
           IconButton(
             icon: isSaved
                 ? const Icon(
-                    Icons.bookmark_border,
-                  )
+              Icons.bookmark_border,
+            )
                 : const Icon(
-                    Icons.bookmark,
-                  ),
+              Icons.bookmark,
+            ),
             onPressed: () {
               setState(() {
                 isSaved = isSaved ? false : true;
@@ -118,7 +172,7 @@ class _CustomPostListViewState extends State<CustomPostListView> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (postInfo.likes.isNotEmpty) numbersOfLikes(postInfo),
+              if (postInfo.likes.isNotEmpty) numberOfLikes(postInfo),
               const SizedBox(height: 5),
               ReadMore(
                   "${postInfo.publisherInfo!.name} ${postInfo.caption}", 2),
@@ -132,19 +186,18 @@ class _CustomPostListViewState extends State<CustomPostListView> {
     );
   }
 
-  IconButton loveButton(Post postInfo) {
+  Widget loveButton(Post postInfo) {
     bool isLiked = postInfo.likes.contains(myPersonalId);
-    print(isLiked);
-    return IconButton(
-      icon: !isLiked
+    return GestureDetector(
+      child: !isLiked
           ? const Icon(
-              Icons.favorite_border,
-            )
+        Icons.favorite_border,
+      )
           : const Icon(
-              Icons.favorite,
-              color: Colors.red,
-            ),
-      onPressed: () {
+        Icons.favorite,
+        color: Colors.red,
+      ),
+      onTap: () {
         setState(() {
           if (isLiked) {
             BlocProvider.of<PostLikesCubit>(context).removeTheLikeOnThisPost(
@@ -170,9 +223,9 @@ class _CustomPostListViewState extends State<CustomPostListView> {
             child: imageUrl.isEmpty
                 ? const Icon(Icons.person, color: Colors.white)
                 : ClipOval(
-                    child: Image.network(
-                    imageUrl,
-                  ))),
+                child: Image.network(
+                  imageUrl,
+                ))),
         const SizedBox(width: 10),
         const Text(
           "Add a comment...",
@@ -182,14 +235,14 @@ class _CustomPostListViewState extends State<CustomPostListView> {
     );
   }
 
-  Widget numbersOfLikes(Post postInfo) {
+  Widget numberOfLikes(Post postInfo) {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => UsersWhoLikesOnPostPage(
               showSearchBar: true,
-                  usersIds: postInfo.likes,
-                )));
+              usersIds: postInfo.likes,
+            )));
       },
       child: Text('${postInfo.likes.length} Likes',
           textAlign: TextAlign.left,
@@ -206,30 +259,35 @@ class _CustomPostListViewState extends State<CustomPostListView> {
     );
   }
 
-  Widget imageOfPost(String imageUrl) {
+  Widget imageOfPost(Post postInfo,bool isInView) {
     return InkWell(
-      onDoubleTap: () {
-      },
-      child: Image.network(
-        imageUrl,
-        width: double.infinity,
-        fit: BoxFit.fitWidth,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) {
-            return child;
-          }
-          return const SizedBox(
-            width: double.infinity,
-            height: 300,
-            child: Center(
-              child: CircularProgressIndicator(
-                color: Colors.black87,
-                strokeWidth: 1,
-              ),
+      onDoubleTap: () {},
+      child: postInfo.isThatImage
+          ? buildImage(postInfo)
+          : PlayThisVideo(videoUrl: postInfo.postUrl, play: isInView),
+    );
+  }
+
+  Image buildImage(Post postInfo) {
+    return Image.network(
+      postInfo.postUrl,
+      width: double.infinity,
+      fit: BoxFit.fitWidth,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) {
+          return child;
+        }
+        return const SizedBox(
+          width: double.infinity,
+          height: 300,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: Colors.black87,
+              strokeWidth: 1,
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
