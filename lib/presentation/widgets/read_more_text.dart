@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
 
 class ReadMore extends StatelessWidget{
-  String text;
-  int timeLines;
-  ReadMore(this.text,this.timeLines,{Key? key}) : super(key: key);
+  final String text;
+  final int timeLines;
+  const ReadMore(this.text,this.timeLines,{Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
       return ReadMoreText(

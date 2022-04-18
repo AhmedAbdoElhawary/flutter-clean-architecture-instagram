@@ -1,17 +1,20 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/core/globall.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
-import 'package:intl/intl.dart';
 
 class CreatePostPage extends StatefulWidget {
-  final File selectedImage;
+  final File selectedFile;
+  final bool isThatImage;
 
-  const CreatePostPage(this.selectedImage, {Key? key}) : super(key: key);
+  const CreatePostPage(
+      {Key? key, required this.selectedFile, this.isThatImage = true})
+      : super(key: key);
 
   @override
   State<CreatePostPage> createState() => _CreatePostPageState();
@@ -38,7 +41,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 SizedBox(
                   height: 70,
                   width: 70,
-                  child: Image.file(widget.selectedImage),
+                  child: widget.isThatImage
+                      ? Image.file(widget.selectedFile)
+                      : const Center(
+                          child: Icon(Icons.slow_motion_video_sharp)),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -132,12 +138,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
       PostCubit postCubit =
           BlocProvider.of<PostCubit>(builder2context, listen: false);
 
-      await postCubit
-          .createPost(postInfo, widget.selectedImage)
-          .then((_) async {
-
-        if (postCubit.postId !='') {
-          await userCubit.updateUserPostsInfo(userId: personalInfo.userId,postId: postCubit.postId);
+      await postCubit.createPost(postInfo, widget.selectedFile).then((_) async {
+        if (postCubit.postId != '') {
+          await userCubit.updateUserPostsInfo(
+              userId: personalInfo.userId, postId: postCubit.postId);
           await postCubit.getPostsInfo(
               postsIds: personalInfo.posts, isThatForMyPosts: true);
           setState(() {
@@ -155,18 +159,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
   Post addPostInfo(UserPersonalInfo personalInfo) {
     return Post(
       publisherId: personalInfo.userId,
-      datePublished: timeOfNow(),
+      datePublished: DateOfNow.dateOfNow().toString(),
       caption: captionController.text,
       comments: [],
       likes: [],
+      isThatImage: widget.isThatImage,
     );
-  }
-
-  String timeOfNow() {
-    DateTime now = DateTime.now();
-    DateFormat formatter = DateFormat('yyyy/MM/dd');
-    String formattedDate = formatter.format(now);
-    formattedDate += "/${now.hour}/${now.minute}";
-    return formattedDate;
   }
 }

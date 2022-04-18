@@ -6,10 +6,10 @@ import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cu
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/pages/followers_and_followings_info_page.dart';
 import 'package:instegram/presentation/widgets/custom_grid_view.dart';
+import 'package:instegram/presentation/widgets/custom_videos_grid_view.dart';
 import '../../data/models/user_personal_info.dart';
 import 'circle_avatar_of_profile_image.dart';
 import 'read_more_text.dart';
-import 'toast_show.dart';
 
 class ProfilePage extends StatefulWidget {
   String userId;
@@ -106,29 +106,26 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   Expanded tapBarView(List<Post> postsInfo) {
+    List<Post> videosPostsInfo =
+        postsInfo.where((element) => element.isThatImage == false).toList();
+
+    List<Post> imagesPostsInfo =
+        postsInfo.where((element) => element.isThatImage == true).toList();
     return Expanded(
       child: TabBarView(
         children: [
           CustomGridView(
-              postsInfo: postsInfo, userId: widget.userId, shrinkWrap: false),
-          verticalVideosView(),
+              postsInfo: imagesPostsInfo,
+              userId: widget.userId,
+              shrinkWrap: false),
+          CustomVideosGridView(
+              postsInfo: videosPostsInfo, userId: widget.userId),
           CustomGridView(
-              postsInfo: postsInfo, userId: widget.userId, shrinkWrap: false),
+              postsInfo: imagesPostsInfo,
+              userId: widget.userId,
+              shrinkWrap: false),
         ],
       ),
-    );
-  }
-
-  GridView verticalVideosView() {
-    return GridView(
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 150,
-        mainAxisExtent: 215,
-      ),
-      padding: EdgeInsets.zero,
-      children: Colors.primaries.map((color) {
-        return Container(color: color, height: 150.0);
-      }).toList(),
     );
   }
 

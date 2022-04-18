@@ -10,7 +10,7 @@ class CustomPostsDisplay extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(body:SingleChildScrollView(
-      child: CustomPostListView(
+      child: ImageList(
         postsInfo: postsInfo,
       ),
     ) ,
