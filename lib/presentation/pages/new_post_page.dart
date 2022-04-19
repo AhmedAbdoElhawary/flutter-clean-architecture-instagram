@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/globall.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -29,7 +30,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorManager.white,
       appBar: appBar(context),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,12 +51,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 Expanded(
                   child: TextFormField(
                     controller: captionController,
-                    cursorColor: Colors.teal,
+                    cursorColor: ColorManager.teal,
                     style: const TextStyle(fontSize: 15),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: "Write a caption...",
-                      hintStyle: TextStyle(color: Colors.black26),
+                      hintStyle: TextStyle(color: ColorManager.black26),
                     ),
                   ),
                 ),
@@ -78,8 +79,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   isSwitched = value;
                   // });
                 },
-                activeTrackColor: Colors.blue,
-                activeColor: Colors.white,
+                activeTrackColor: ColorManager.blue,
+                activeColor: ColorManager.white,
               ),
             ],
           ),
@@ -97,7 +98,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   AppBar appBar(BuildContext context) {
     return AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: ColorManager.white,
         title: const Text("New Post"),
         actions: actionsWidgets(context));
   }
@@ -113,14 +114,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
         return Builder(
           builder: (builder2context) {
             return !isItDone
-                ? const CustomCircularProgress(Colors.blue)
+                ? const CustomCircularProgress(ColorManager.blue)
                 : IconButton(
                     onPressed: () =>
                         createPost(personalInfo!, userCubit, builder2context),
                     icon: const Icon(
                       Icons.check,
                       size: 30,
-                      color: Colors.blue,
+                      color: ColorManager.blue,
                     ));
           },
         );
