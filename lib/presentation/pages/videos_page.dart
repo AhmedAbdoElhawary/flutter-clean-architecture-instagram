@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
@@ -14,7 +15,7 @@ import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
 import 'package:instegram/presentation/widgets/reel_video_play.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
 
-import '../../core/constant.dart';
+import '../../core/utility/constant.dart';
 
 class VideosPage extends StatefulWidget {
   const VideosPage({Key? key}) : super(key: key);
@@ -165,7 +166,7 @@ class VideosPageState extends State<VideosPage> {
               GestureDetector(
                 onTap: () {},
                 child: SvgPicture.asset(
-                  "assets/icons/send.svg",
+                  IconsAssets.sendIcon,
                   color: Colors.white,
                   height: 25,
                 ),
@@ -174,7 +175,7 @@ class VideosPageState extends State<VideosPage> {
               GestureDetector(
                 onTap: () {},
                 child: SvgPicture.asset(
-                  "assets/icons/menu_horizontal.svg",
+                  IconsAssets.menuHorizontalIcon,
                   color: Colors.white,
                   height: 25,
                 ),
@@ -195,7 +196,7 @@ class VideosPageState extends State<VideosPage> {
         ));
       },
       child: SvgPicture.asset(
-        "assets/icons/comment.svg",
+        IconsAssets.commentIcon,
         color: Colors.white,
         height: 35,
       ),
