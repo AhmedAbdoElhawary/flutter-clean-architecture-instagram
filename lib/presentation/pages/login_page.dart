@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:instegram/core/constant.dart';
+import 'package:instegram/core/resources/assets_manager.dart';
+import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/domain/entities/registered_user.dart';
 import 'package:instegram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -26,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorManager.white,
       body: SafeArea(
         child: Center(
             child: SingleChildScrollView(
@@ -35,8 +37,8 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(
-                "assets/icons/ic_instagram.svg",
-                color: Colors.black,
+                IconsAssets.instagramLogo,
+                color: ColorManager.black,
                 height: 50,
               ),
               const SizedBox(height: 30),
@@ -53,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   const Text(
                     "Don't have an account? ",
-                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                    style: TextStyle(fontSize: 13, color: ColorManager.grey),
                   ),
                   InkWell(
                       onTap: () {
@@ -66,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                         "Sign up",
                         style: TextStyle(
                             fontSize: 13,
-                            color: Colors.black,
+                            color: ColorManager.black,
                             fontWeight: FontWeight.bold),
                       )),
                 ],
@@ -77,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {},
                   child: const Text(
                     "Login with Facebook",
-                    style: TextStyle(color: Colors.blue),
+                    style: TextStyle(color: ColorManager.blue),
                   ))
             ],
           ),
@@ -155,14 +157,14 @@ class _LoginPageState extends State<LoginPage> {
                           child: !isUserIdReady
                               ? const ClipOval(
                                   child: CircularProgressIndicator(
-                                  color: Colors.white,
+                                  color: ColorManager.white,
                                 ))
                               : const Text(
                                   "Log in",
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: ColorManager.white),
                                 ),
                           style:
-                              ElevatedButton.styleFrom(primary: Colors.blue));
+                              ElevatedButton.styleFrom(primary: ColorManager.blue));
                     },
                   ),
                 ),
