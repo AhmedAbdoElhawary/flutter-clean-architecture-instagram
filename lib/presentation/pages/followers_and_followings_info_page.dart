@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/widgets/show_me_the_users.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
@@ -30,10 +31,10 @@ class _FollowersAndFollowingsInfoPageState
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: ColorManager.white,
           bottom: TabBar(
-            unselectedLabelColor: Colors.grey,
-            indicatorColor: Colors.black,
+            unselectedLabelColor: ColorManager.grey,
+            indicatorColor: ColorManager.black,
             indicatorWeight: 1,
             tabs: [
               Tab(
@@ -90,7 +91,7 @@ class _FollowersAndFollowingsInfoPageState
             } else {
               return const Center(
                 child: CircularProgressIndicator(
-                    strokeWidth: 1, color: Colors.black54),
+                    strokeWidth: 1, color: ColorManager.black54),
               );
             }
           },
