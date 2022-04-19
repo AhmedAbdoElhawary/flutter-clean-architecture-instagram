@@ -4,7 +4,7 @@ import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
 import '../cubit/followCubit/follow_cubit.dart';
 import 'circle_avatar_of_profile_image.dart';
-import 'package:instegram/core/constant.dart';
+import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
 
 
