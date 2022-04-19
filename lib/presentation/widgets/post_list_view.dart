@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instegram/core/constant.dart';
+import 'package:instegram/core/resources/assets_manager.dart';
+import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instegram/presentation/pages/comments_page.dart';
@@ -15,6 +16,7 @@ import 'package:instegram/presentation/widgets/read_more_text.dart';
 import 'package:inview_notifier_list/inview_notifier_list.dart';
 
 class ImageList extends StatefulWidget {
+  // final VoidCallback callback;
   final List postsInfo;
 
   const ImageList({Key? key, required this.postsInfo}) : super(key: key);
@@ -51,15 +53,31 @@ class _ImageListState extends State<ImageList> {
           builder: (BuildContext context, int index) {
             return Container(
               width: double.infinity,
+              // color: Colors.black45,
+              // height: 100.0,
+              // alignment: Alignment.center,
               margin: const EdgeInsets.symmetric(vertical: 0.5),
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
                   return InViewNotifierWidget(
+
                     id: '$index',
                     builder: (_, bool isInView, __) {
                       if (isInView) {
-                       }
-                     return thePostsOfHomePage(
+                        // inViewIndex = index.toString();
+                        // widget.callback();
+                        print(
+                            "iffffffffffffffffffffffffffffffffffffffffffffffffff======== ${index} => $isInView");
+                      }
+                      print(
+                          "============================================================= ${index} => $isInView");
+                      // Future.delayed(Duration.zero, () {
+                      //   setState(() {
+                      //     isInView;
+                      //   });
+                      // });
+                      print("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ${widget.postsInfo.length}");
+                      return thePostsOfHomePage(
                           postInfo: widget.postsInfo[index],
                           bodyHeight: bodyHeight,
                           isInView: isInView);
@@ -125,7 +143,7 @@ class _ImageListState extends State<ImageList> {
             children: [
               loveButton(postInfo),
               IconButton(
-                icon: iconsOfImagePost("assets/icons/comment.svg"),
+                icon: iconsOfImagePost(IconsAssets.commentIcon),
                 onPressed: () {
                   Navigator.of(
                     context,
@@ -136,9 +154,14 @@ class _ImageListState extends State<ImageList> {
                 },
               ),
               IconButton(
-                icon: iconsOfImagePost("assets/icons/send.svg"),
+                icon: iconsOfImagePost(IconsAssets.sendIcon),
                 onPressed: () {
-    
+                  // Navigator.of(context,
+                  // ).push(CupertinoPageRoute(
+                  //
+                  //   builder: (context) =>
+                  //       MassagesPage(postInfo.publisherId),
+                  // ));
                 },
               ),
             ],
@@ -252,6 +275,7 @@ class _ImageListState extends State<ImageList> {
   }
 
   Widget imageOfPost(Post postInfo, bool isInView) {
+    print("||||||||||||||||||||||||| $isInView");
     return InkWell(
       onDoubleTap: () {},
       child: postInfo.isThatImage
@@ -286,7 +310,7 @@ class _ImageListState extends State<ImageList> {
   IconButton menuButton() {
     return IconButton(
       icon: SvgPicture.asset(
-        "assets/icons/menu_horizontal.svg",
+        IconsAssets.menuHorizontalIcon,
         color: Colors.black,
         height: 23,
       ),

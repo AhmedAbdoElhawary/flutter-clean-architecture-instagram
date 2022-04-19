@@ -8,7 +8,7 @@ import 'package:instegram/presentation/widgets/toast_show.dart';
 import 'package:instegram/presentation/widgets/user_profile_page.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import '../../core/constant.dart';
+import '../../core/utility/constant.dart';
 import '../../core/globall.dart';
 
 class TextingPage extends StatefulWidget {

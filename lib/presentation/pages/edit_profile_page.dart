@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instegram/core/resources/assets_manager.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -61,17 +63,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
         }
 
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: ColorManager.white,
           appBar: AppBar(
               elevation: 0,
-              backgroundColor: Colors.white,
+              backgroundColor: ColorManager.white,
               leading: IconButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
                   icon: SvgPicture.asset(
-                    "assets/icons/cancel.svg",
-                    color: Colors.black,
+                    IconsAssets.cancelIcon,
+                    color: ColorManager.black,
                     height: 30,
                   )),
               title: const Text("Edit profile"),
@@ -90,7 +92,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       dynamic getUserState, FirestoreUserInfoCubit updateUserCubit) {
     return [
       getUserState is CubitUserLoading
-          ? const CustomCircularProgress(Colors.blue)
+          ? const CustomCircularProgress(ColorManager.blue)
           : IconButton(
               onPressed: () async {
                 UserPersonalInfo updatedUserInfo = UserPersonalInfo(
@@ -114,7 +116,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               icon: const Icon(
                 Icons.check,
                 size: 30,
-                color: Colors.blue,
+                color: ColorManager.blue,
               ))
     ];
   }
@@ -165,7 +167,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           },
           child: const Text(
             "Change profile photo",
-            style: TextStyle(fontSize: 18, color: Colors.blue),
+            style: TextStyle(fontSize: 18, color: ColorManager.blue),
           ),
         )),
         textFormField(widget.nameController, "Name"),
@@ -184,7 +186,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           onTap: () {},
           child: const Text(
             "Personal information settings",
-            style: TextStyle(fontSize: 18, color: Colors.blue),
+            style: TextStyle(fontSize: 18, color: ColorManager.blue),
           ),
         ),
         const SizedBox(height: 8),
@@ -211,11 +213,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: isImageUpload
               ? const CircularProgressIndicator()
               : (widget.userInfo.profileImageUrl.isEmpty
-                  ? const Icon(Icons.person, color: Colors.white)
+                  ? const Icon(Icons.person, color: ColorManager.white)
                   : Image.network(widget.userInfo.profileImageUrl)),
         ),
         radius: 50,
-        backgroundColor: Colors.black,
+        backgroundColor: ColorManager.black,
       ),
     );
   }
@@ -223,7 +225,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextFormField textFormField(TextEditingController controller, String text) {
     return TextFormField(
       controller: controller,
-      cursorColor: Colors.teal,
+      cursorColor: ColorManager.teal,
       style: const TextStyle(fontSize: 15),
       decoration: InputDecoration(
         labelText: text,

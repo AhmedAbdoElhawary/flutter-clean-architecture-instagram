@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
 
@@ -11,7 +12,7 @@ class MassagesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: ColorManager.white,
         // title: ,
         actions: [
           IconButton(
@@ -32,7 +33,7 @@ class MassagesPage extends StatelessWidget {
                  return ListTile(
                    title: const Text("The Name"),
                    leading: const CircleAvatar(
-                       child: Icon(Icons.person, color: Colors.white, size: 50),
+                       child: Icon(Icons.person, color: ColorManager.white, size: 50),
                        radius: 30),
                    onTap: () {
 
@@ -48,7 +49,7 @@ class MassagesPage extends StatelessWidget {
          } else {
            return const Center(
              child: CircularProgressIndicator(
-                 strokeWidth: 1, color: Colors.black54),
+                 strokeWidth: 1, color: ColorManager.black54),
            );
          }
 

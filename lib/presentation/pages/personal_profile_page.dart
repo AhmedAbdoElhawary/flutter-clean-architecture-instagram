@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instegram/core/resources/assets_manager.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/presentation/pages/new_post_page.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
 import 'package:instegram/presentation/widgets/recommendation_people.dart';
@@ -71,7 +73,7 @@ class _ProfilePageState extends State<PersonalProfilePage>
         } else {
           return const Center(
             child: CircularProgressIndicator(
-                strokeWidth: 1, color: Colors.black54),
+                strokeWidth: 1, color:ColorManager.black54),
           );
         }
       },
@@ -81,13 +83,13 @@ class _ProfilePageState extends State<PersonalProfilePage>
   AppBar appBar(String userName) {
     return AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: ColorManager.white,
         title: Text(userName),
         actions: [
           IconButton(
             icon: SvgPicture.asset(
-              "assets/icons/add.svg",
-              color: Colors.black,
+              IconsAssets.addIcon,
+              color: ColorManager.black,
               height: 22.5,
             ),
             onPressed: () => bottomSheetOfAdd(),
@@ -113,8 +115,8 @@ class _ProfilePageState extends State<PersonalProfilePage>
       }
       return IconButton(
         icon: SvgPicture.asset(
-          "assets/icons/menu.svg",
-          color: Colors.black,
+          IconsAssets.menuIcon,
+          color: ColorManager.black,
           height: 30,
         ),
         onPressed: () async {
@@ -154,8 +156,8 @@ class _ProfilePageState extends State<PersonalProfilePage>
           child: Container(
             height: 35.0,
             decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.black26, width: 1.0),
+              color: ColorManager.white,
+              border: Border.all(color: ColorManager.black26, width: 1.0),
               borderRadius: BorderRadius.circular(6.0),
             ),
             child: const Center(
@@ -163,7 +165,7 @@ class _ProfilePageState extends State<PersonalProfilePage>
                 'Edit profile',
                 style: TextStyle(
                     fontSize: 17.0,
-                    color: Colors.black,
+                    color: ColorManager.black,
                     fontWeight: FontWeight.w500),
               ),
             ),
@@ -179,7 +181,7 @@ class _ProfilePageState extends State<PersonalProfilePage>
       builder: (BuildContext context) {
         return Container(
           decoration: const BoxDecoration(
-            color: Colors.white,
+            color: ColorManager.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
           ),
           child: listOfAddPost(),
@@ -195,8 +197,8 @@ class _ProfilePageState extends State<PersonalProfilePage>
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           SvgPicture.asset(
-            "assets/icons/minus.svg",
-            color: Colors.black87,
+            IconsAssets.minusIcon,
+            color: ColorManager.black87,
             height: 40,
           ),
           const Text("Create",
@@ -224,11 +226,11 @@ class _ProfilePageState extends State<PersonalProfilePage>
                         });
                       }
                     },
-                    child: createSizedBox("Reel", "video")),
+                    child: createSizedBox("Reel", IconsAssets.videoIcon)),
                 const Divider(indent: 40, endIndent: 15),
-                createSizedBox("Story", "add-instagram-story"),
+                createSizedBox("Story", IconsAssets.addInstagramStoryIcon),
                 const Divider(indent: 40, endIndent: 15),
-                createSizedBox("Live", "instagram-highlight-story"),
+                createSizedBox("Live", IconsAssets.instagramHighlightStoryIcon),
                 const Divider(indent: 40, endIndent: 15),
                 Container(
                   height: 50,
@@ -258,7 +260,7 @@ class _ProfilePageState extends State<PersonalProfilePage>
             });
           }
         },
-        child: createSizedBox("Post", "grid"));
+        child: createSizedBox("Post", IconsAssets.gridIcon));
   }
 
   SizedBox createSizedBox(String text, String nameOfPath) {
@@ -267,8 +269,8 @@ class _ProfilePageState extends State<PersonalProfilePage>
       child: Row(children: [
         text != "Post"
             ? SvgPicture.asset(
-                "assets/icons/$nameOfPath.svg",
-                color: Colors.black87,
+          nameOfPath,
+                color: ColorManager.black87,
                 height: 25,
               )
             : const Icon(Icons.grid_on_sharp),

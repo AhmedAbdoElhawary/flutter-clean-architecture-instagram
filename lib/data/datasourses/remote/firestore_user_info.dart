@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instegram/data/models/massage.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 
-import '../../../core/constant.dart';
+import '../../../core/utility/constant.dart';
 
 class FirestoreUser {
   static final _fireStoreUserCollection =
@@ -143,6 +143,14 @@ class FirestoreUser {
             .collection("massages")
             .orderBy("datePublished", descending: false)
             .snapshots();
+    print("QuerySnapshot ===============================");
+
+    // _snapshotsMassages.listen((event) {
+    //   for (var element in event.docs) {
+    //     Map<String, dynamic> a = element.data();
+    //     massagesInfo.add(Massage.fromJson(a));
+    //   }
+    // });
     yield* _snapshotsMassages;
   }
 }

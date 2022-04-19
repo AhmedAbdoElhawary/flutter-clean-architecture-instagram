@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/globall.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/injector.dart';
@@ -35,7 +36,7 @@ class _CommentsPageState extends State<CommentsPage> {
       return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: ColorManager.white,
           title: const Text('Comments'),
         ),
         body: BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
@@ -48,11 +49,10 @@ class _CommentsPageState extends State<CommentsPage> {
               if (previous != current && (current is CubitCommentsInfoFailed)) {
                 return true;
               }
-            
+
               return false;
             },
             builder: (context, state) {
-
               if (state is CubitCommentsInfoLoaded) {
                 return buildListView(state, myPersonalInfo!);
               } else if (state is CubitCommentsInfoFailed) {
@@ -61,7 +61,7 @@ class _CommentsPageState extends State<CommentsPage> {
               } else {
                 return const Center(
                   child: CircularProgressIndicator(
-                      strokeWidth: 1, color: Colors.black54),
+                      strokeWidth: 1, color: ColorManager.black54),
                 );
               }
             }),
@@ -80,29 +80,30 @@ class _CommentsPageState extends State<CommentsPage> {
       CubitCommentsInfoLoaded state, UserPersonalInfo myPersonalInfo) {
     return state.commentsOfThePost.isNotEmpty
         ? Scrollbar(
-          child: ListView.separated(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              primary: false,
-              itemBuilder: (context, index) {
-                return BlocProvider<ReplyInfoCubit>(
-                  create: (_) => injector<ReplyInfoCubit>(),
-                  child: CommentInfo(
-                    commentInfo: state.commentsOfThePost[index],
-                    textController: _textController,
-                    selectedCommentInfo: selectedComment,
-                    myPersonalInfo: myPersonalInfo,
-                    addReply: addReply,
-                  ),
-                );
-              },
-              itemCount: state.commentsOfThePost.length,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const SizedBox(
-                    height: 20,
-                  )),
-        )
+            child: ListView.separated(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                primary: false,
+                itemBuilder: (context, index) {
+                  return BlocProvider<ReplyInfoCubit>(
+                    create: (_) => injector<ReplyInfoCubit>(),
+                    child: CommentInfo(
+                      commentInfo: state.commentsOfThePost[index],
+                      textController: _textController,
+                      selectedCommentInfo: selectedComment,
+                      myPersonalInfo: myPersonalInfo,
+                      addReply: addReply,
+                    ),
+                  );
+                },
+                itemCount: state.commentsOfThePost.length,
+                separatorBuilder: (BuildContext context, int index) =>
+                    const SizedBox(
+                      height: 20,
+                    )),
+          )
         : const Center(
             child: Text("There is no comments!",
                 style: TextStyle(
@@ -116,7 +117,7 @@ class _CommentsPageState extends State<CommentsPage> {
       UserPersonalInfo userPersonalInfo) {
     return SingleChildScrollView(
       child: Container(
-        color: Colors.white,
+        color: ColorManager.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -125,7 +126,7 @@ class _CommentsPageState extends State<CommentsPage> {
               Container(
                 width: double.infinity,
                 height: 45,
-                color: const Color.fromARGB(45, 134, 133, 133),
+                color: ColorManager.lightGrey,
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10.0, right: 17),
@@ -136,7 +137,8 @@ class _CommentsPageState extends State<CommentsPage> {
                             padding: const EdgeInsets.only(left: 0),
                             child: Text(
                                 "Replying to ${selectedCommentInfo!.whoCommentInfo!.userName}",
-                                style: const TextStyle(color: Colors.black54)),
+                                style: const TextStyle(
+                                    color: ColorManager.black54)),
                           ),
                         ),
                         GestureDetector(
@@ -184,14 +186,14 @@ class _CommentsPageState extends State<CommentsPage> {
                   Expanded(
                     child: TextFormField(
                       keyboardType: TextInputType.multiline,
-                      cursorColor: Colors.teal,
+                      cursorColor: ColorManager.teal,
                       maxLines: null,
                       decoration: const InputDecoration.collapsed(
                           hintText: 'Add a comment...',
-                          hintStyle: TextStyle(color: Colors.black26)),
+                          hintStyle: TextStyle(color: ColorManager.black26)),
                       autofocus: false,
                       controller: _textController,
-                      onChanged: (e){
+                      onChanged: (e) {
                         setState(() {
                           _textController;
                         });
@@ -200,7 +202,6 @@ class _CommentsPageState extends State<CommentsPage> {
                   ),
                   BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
                       builder: (context1, state) {
-                   
                     //TODO here we want to make comment loading when he loading
                     return InkWell(
                       onTap: () {
@@ -211,13 +212,9 @@ class _CommentsPageState extends State<CommentsPage> {
                       child: Text(
                         'Post',
                         style: TextStyle(
-                            color:
-                                _textController.text.isNotEmpty?
-                                const Color.fromARGB(255, 33, 150, 243)
-                            :
-                            const Color.fromARGB(
-                                255, 147, 198, 246)
-                            ),
+                            color: _textController.text.isNotEmpty
+                                ? ColorManager.blue
+                                : ColorManager.lightBlue),
                       ),
                     );
                   })
@@ -236,14 +233,14 @@ class _CommentsPageState extends State<CommentsPage> {
       CommentsInfoCubit commentsInfoCubit =
           BlocProvider.of<CommentsInfoCubit>(context);
       await commentsInfoCubit.addComment(
-          commentInfo: newCommentInfo(myPersonalInfo, DateOfNow.dateOfNow().toString()));
-
+          commentInfo:
+              newCommentInfo(myPersonalInfo, DateOfNow.dateOfNow().toString()));
     } else {
-  Comment replyInfo = newReplyInfo(
-      DateOfNow.dateOfNow().toString(), selectedCommentInfo!, myPersonalInfo.userId);
+      Comment replyInfo = newReplyInfo(DateOfNow.dateOfNow().toString(),
+          selectedCommentInfo!, myPersonalInfo.userId);
 
-  await ReplyInfoCubit.get(context)
-      .replyOnThisComment(replyInfo: replyInfo);
+      await ReplyInfoCubit.get(context)
+          .replyOnThisComment(replyInfo: replyInfo);
     }
     setState(() {
       selectedCommentInfo = null;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
@@ -135,7 +136,7 @@ class _ProfilePageState extends State<ProfilePage>
         const Tab(icon: Icon(Icons.grid_on_sharp)),
         Tab(
             icon: SvgPicture.asset(
-          "assets/icons/video.svg",
+              IconsAssets.videoIcon,
           color: Colors.black,
           height: 22.5,
         )),

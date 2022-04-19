@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instegram/core/constant.dart';
+import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/pages/personal_profile_page.dart';

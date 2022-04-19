@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/domain/entities/unregistered_user.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
@@ -34,7 +35,7 @@ class _SignUpPageState extends State<SignUpPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(
-                "assets/icons/ic_instagram.svg",
+                IconsAssets.instagramLogo,
                 color: Colors.black,
                 height: 50,
               ),

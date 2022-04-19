@@ -2,12 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
 import 'package:instegram/presentation/pages/texting_page.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
 import 'package:instegram/presentation/widgets/recommendation_people.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
-import '../../core/constant.dart';
+import '../../core/utility/constant.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 
@@ -80,7 +81,7 @@ class _ProfilePageState extends State<UserProfilePage>
         actions: [
           IconButton(
             icon: SvgPicture.asset(
-              "assets/icons/menu_horizontal.svg",
+              IconsAssets.menuHorizontalIcon,
               color: Colors.black,
               height: 22.5,
             ),
@@ -113,7 +114,7 @@ class _ProfilePageState extends State<UserProfilePage>
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         SvgPicture.asset(
-          "assets/icons/minus.svg",
+          IconsAssets.minusIcon,
           color: Colors.black54,
           height: 40,
         ),

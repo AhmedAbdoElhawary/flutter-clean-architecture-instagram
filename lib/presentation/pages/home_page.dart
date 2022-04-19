@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
@@ -111,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen>
         } else {
           return const Center(
             child: CircularProgressIndicator(
-                strokeWidth: 1.5, color: Colors.black54),
+                strokeWidth: 1.5, color: ColorManager.black54),
           );
         }
       },
