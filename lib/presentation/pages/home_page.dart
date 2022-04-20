@@ -8,6 +8,7 @@ import 'package:instegram/presentation/widgets/custom_app_bar.dart';
 import 'package:instegram/presentation/widgets/post_list_view.dart';
 import 'package:instegram/presentation/widgets/smart_refresher.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
+import 'package:inview_notifier_list/inview_notifier_list.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../widgets/circle_avatar_of_profile_image.dart';
@@ -33,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen>
     FirestoreUserInfoCubit userCubit =
         BlocProvider.of<FirestoreUserInfoCubit>(context, listen: false);
     await userCubit.getUserInfo(widget.userId, true).then((value) async {
-
       personalInfo = userCubit.myPersonalInfo;
 
       List usersIds =
@@ -45,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen>
       await usersPostsCubit
           .getSpecificUsersPostsInfo(usersIds: usersIds)
           .then((value) async {
-
         List usersPostsIds = usersPostsCubit.usersPostsInfo;
 
         List postsIds = usersPostsIds + personalInfo!.posts;
@@ -54,7 +53,6 @@ class _HomeScreenState extends State<HomeScreen>
         await postCubit
             .getPostsInfo(postsIds: postsIds, isThatForMyPosts: true)
             .then((value) {
-
           Future.delayed(Duration.zero, () {
             setState(() {});
           });
@@ -63,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen>
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -87,25 +86,63 @@ class _HomeScreenState extends State<HomeScreen>
   BlocBuilder<PostCubit, PostState> blocBuilder(double bodyHeight) {
     return BlocBuilder<PostCubit, PostState>(
       buildWhen: (previous, current) {
-        if (reLoadData &&
-            current is CubitMyPersonalPostsLoaded) {
+        if (reLoadData && current is CubitMyPersonalPostsLoaded) {
           reLoadData = false;
           return true;
         }
 
-        if (
-        previous != current &&current is CubitMyPersonalPostsLoaded) {
+        if (previous != current && current is CubitMyPersonalPostsLoaded) {
           return true;
         }
-        if (
-        previous != current && current is CubitPostFailed) {
+        if (previous != current && current is CubitPostFailed) {
           return true;
         }
         return false;
       },
       builder: (BuildContext context, PostState state) {
         if (state is CubitMyPersonalPostsLoaded) {
-          return columnOfWidgets(bodyHeight, state.postsInfo);
+          return SingleChildScrollView(
+            child: InViewNotifierList(
+              primary: false,
+              scrollDirection: Axis.vertical,
+              initialInViewIds: const ['0'],
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              isInViewPortCondition: (double deltaTop, double deltaBottom,
+                  double viewPortDimension) {
+                return deltaTop < (0.5 * viewPortDimension) &&
+                    deltaBottom > (0.5 * viewPortDimension);
+              },
+              itemCount: state.postsInfo.length,
+              builder: (BuildContext context, int index) {
+                return Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(vertical: 0.5),
+                  child: LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                      return InViewNotifierWidget(
+                        id: '$index',
+                        builder: (_, bool isInView, __) {
+                          if (isInView) {}
+                          return columnOfWidgets(
+                              bodyHeight, state.postsInfo, index, () {
+                            WidgetsBinding.instance!
+                                .addPostFrameCallback((_) async {
+                              setState(() {
+                                isInView;
+                              });
+                            });
+                            return isInView;
+                          });
+                        },
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          );
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
           return const Center(child: Text("There's no posts..."));
@@ -118,22 +155,33 @@ class _HomeScreenState extends State<HomeScreen>
       },
     );
   }
+  //
+  // bool isVideoInView() {
+  //   WidgetsBinding.instance!.addPostFrameCallback((_) async {
+  //     setState(() {
+  //       isInView;
+  //     });
+  //   });
+  //   return isInView;
+  //
+  // }
 
-  Widget columnOfWidgets(
-      double bodyHeight, List<Post> postsInfo) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          storiesLines(bodyHeight, postsInfo),
-          const Divider(thickness: 0.5),
-          posts(postsInfo),
-        ],
-      ),
+  Widget columnOfWidgets(double bodyHeight, List<Post> postsInfo, int index,
+      ValueGetter<bool> isVideoInView) {
+    return Column(
+      children: [
+        if (index == 0) storiesLines(bodyHeight, postsInfo),
+        const Divider(thickness: 0.5),
+        posts(postsInfo[index], isVideoInView),
+      ],
     );
   }
 
-  Widget posts(List<Post> postsInfo) {
-    return ImageList(postsInfo: postsInfo);
+  Widget posts(Post postInfo, ValueGetter<bool> isVideoInView) {
+    return ImageList(
+      postInfo: postInfo,
+      isVideoInView: isVideoInView,
+    );
   }
 
   Widget storiesLines(double bodyHeight, List<Post> postsInfo) {
