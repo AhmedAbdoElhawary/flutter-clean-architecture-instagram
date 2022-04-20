@@ -117,14 +117,12 @@ class _ProfilePageState extends State<ProfilePage>
         children: [
           CustomGridView(
               postsInfo: imagesPostsInfo,
-              userId: widget.userId,
-              shrinkWrap: false),
+              userId: widget.userId,),
           CustomVideosGridView(
               postsInfo: videosPostsInfo, userId: widget.userId),
           CustomGridView(
               postsInfo: imagesPostsInfo,
-              userId: widget.userId,
-              shrinkWrap: false),
+              userId: widget.userId,),
         ],
       ),
     );

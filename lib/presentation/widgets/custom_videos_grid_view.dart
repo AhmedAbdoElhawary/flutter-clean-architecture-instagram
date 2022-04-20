@@ -49,7 +49,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
         builder: (context) => GestureDetector(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => CustomPostsDisplay(widget.postsInfo),
+              builder: (context) => CustomPostsDisplay(postInfo),
             ));
           },
           onLongPress: () {
@@ -57,7 +57,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
             Overlay.of(context)!.insert(_popupDialog!);
           },
           onLongPressEnd: (details) => _popupDialog?.remove(),
-          child: PlayThisVideo(videoUrl:postInfo.postUrl),
+          child: PlayThisVideo(videoUrl:postInfo.postUrl,isVideoInView: (){return false;}),
         ),
       );
 
@@ -87,7 +87,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
                   color: Colors.white,
                   width: double.infinity,
                   height: bodyHeight-200,
-                  child: PlayThisVideo(videoUrl:postInfo.postUrl,play: true),),
+                  child: PlayThisVideo(videoUrl:postInfo.postUrl,isVideoInView: (){return true;}),),
               _createActionBar(),
             ],
           ),

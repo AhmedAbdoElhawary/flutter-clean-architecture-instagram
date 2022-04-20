@@ -160,7 +160,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   Post addPostInfo(UserPersonalInfo personalInfo) {
     return Post(
       publisherId: personalInfo.userId,
-      datePublished: DateOfNow.dateOfNow().toString(),
+      datePublished:  DateTime.now().toString(),
       caption: captionController.text,
       comments: [],
       likes: [],

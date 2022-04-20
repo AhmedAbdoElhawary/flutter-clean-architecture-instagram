@@ -1,23 +1,22 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/pages/play_this_video.dart';
 import 'package:instegram/presentation/widgets/animated_dialog.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
 import 'package:instegram/presentation/widgets/custom_posts_display.dart';
+import 'package:instegram/presentation/widgets/fade_in_image.dart';
 
 // ignore: must_be_immutable
 class CustomGridView extends StatefulWidget {
   List<Post> postsInfo;
   final String userId;
-  bool shrinkWrap;
 
-  CustomGridView(
-      {this.shrinkWrap = true,
-      required this.userId,
-      required this.postsInfo,
-      Key? key})
+  CustomGridView({required this.userId, required this.postsInfo, Key? key})
       : super(key: key);
 
   @override
@@ -35,6 +34,9 @@ class _CustomGridViewState extends State<CustomGridView> {
             crossAxisSpacing: 1.5,
             mainAxisSpacing: 1.5,
             crossAxisCount: 3,
+            primary: false,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
             itemCount: widget.postsInfo.length,
             itemBuilder: (context, index) {
               return createGridTileWidget(widget.postsInfo[index]);
@@ -43,16 +45,15 @@ class _CustomGridViewState extends State<CustomGridView> {
               double num = widget.postsInfo[index].isThatImage ? 1 : 2;
               return StaggeredTile.count(1, num);
             },
-        
           )
-        : const Center(child: Text("There's no posts..."));
+        : const Center(child: Text(StringsManager.noPosts));
   }
 
   Widget createGridTileWidget(Post postInfo) => Builder(
         builder: (context) => GestureDetector(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => CustomPostsDisplay(widget.postsInfo),
+              builder: (context) => CustomPostsDisplay(postInfo),
             ));
           },
           onLongPress: () {
@@ -61,8 +62,9 @@ class _CustomGridViewState extends State<CustomGridView> {
           },
           onLongPressEnd: (details) => _popupDialog?.remove(),
           child: postInfo.isThatImage
-              ? Image.network(postInfo.postUrl, fit: BoxFit.cover)
-              : PlayThisVideo(videoUrl: postInfo.postUrl),
+              ? CustomFadeInImage(
+                  imageUrl: postInfo.postUrl, boxFit: BoxFit.cover)
+              : PlayThisVideo(videoUrl: postInfo.postUrl,isVideoInView: (){return false;}),
         ),
       );
 
@@ -90,17 +92,17 @@ class _CustomGridViewState extends State<CustomGridView> {
             _createPhotoTitle(postInfo),
             postInfo.isThatImage
                 ? Container(
-                    color: Colors.white,
+                    color: ColorManager.white,
                     width: double.infinity,
-                    child:
-                        Image.network(postInfo.postUrl, fit: BoxFit.fitWidth))
+                    child: CustomFadeInImage(
+                        imageUrl: postInfo.postUrl, boxFit: BoxFit.fitWidth))
                 : Container(
-                    color: Colors.white,
+                    color: ColorManager.white,
                     width: double.infinity,
                     height: bodyHeight - 200,
                     child: PlayThisVideo(
                       videoUrl: postInfo.postUrl,
-                      play: true,
+                      isVideoInView: (){return true;},
                     )),
             _createActionBar(),
           ],
@@ -113,7 +115,7 @@ class _CustomGridViewState extends State<CustomGridView> {
         padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
         height: 55,
         width: double.infinity,
-        color: Colors.white,
+        color: ColorManager.white,
         child: Row(
           children: [
             CircleAvatarOfProfileImage(
@@ -123,10 +125,7 @@ class _CustomGridViewState extends State<CustomGridView> {
               circleAvatarName: '',
             ),
             const SizedBox(width: 7),
-            Text(postInfo.publisherInfo!.name,
-                style: const TextStyle(
-                  color: Colors.black,
-                )),
+            Text(postInfo.publisherInfo!.name, style: getNormalStyle()),
           ],
         ),
       );
@@ -134,7 +133,7 @@ class _CustomGridViewState extends State<CustomGridView> {
   Widget _createActionBar() => Container(
         height: 50,
         padding: const EdgeInsets.symmetric(vertical: 5.0),
-        color: Colors.white,
+        color: ColorManager.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -142,21 +141,21 @@ class _CustomGridViewState extends State<CustomGridView> {
               onPanStart: (d) {},
               child: const Icon(
                 Icons.favorite_border,
-                color: Colors.black,
+                color: ColorManager.black,
               ),
             ),
             GestureDetector(
               onVerticalDragStart: (d) {},
               child: const Icon(
                 Icons.chat_bubble_outline,
-                color: Colors.black,
+                color: ColorManager.black,
               ),
             ),
             GestureDetector(
               onTertiaryLongPress: () {},
               child: const Icon(
                 Icons.send,
-                color: Colors.black,
+                color: ColorManager.black,
               ),
             ),
           ],
