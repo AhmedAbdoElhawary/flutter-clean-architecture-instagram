@@ -234,9 +234,9 @@ class _CommentsPageState extends State<CommentsPage> {
           BlocProvider.of<CommentsInfoCubit>(context);
       await commentsInfoCubit.addComment(
           commentInfo:
-              newCommentInfo(myPersonalInfo, DateOfNow.dateOfNow().toString()));
+              newCommentInfo(myPersonalInfo, DateTime.now().toString()));
     } else {
-      Comment replyInfo = newReplyInfo(DateOfNow.dateOfNow().toString(),
+      Comment replyInfo = newReplyInfo( DateTime.now().toString(),
           selectedCommentInfo!, myPersonalInfo.userId);
 
       await ReplyInfoCubit.get(context)

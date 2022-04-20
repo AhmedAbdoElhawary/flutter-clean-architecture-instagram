@@ -15,6 +15,8 @@ import '../widgets/toast_show.dart';
 import 'edit_profile_page.dart';
 import 'dart:io';
 
+import 'login_page.dart';
+
 class PersonalProfilePage extends StatefulWidget {
   final String personalId;
   final String userName;
@@ -73,7 +75,7 @@ class _ProfilePageState extends State<PersonalProfilePage>
         } else {
           return const Center(
             child: CircularProgressIndicator(
-                strokeWidth: 1, color:ColorManager.black54),
+                strokeWidth: 1, color: ColorManager.black54),
           );
         }
       },
@@ -105,8 +107,10 @@ class _ProfilePageState extends State<PersonalProfilePage>
       FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
       if (state is CubitAuthSignOut) {
         WidgetsBinding.instance!.addPostFrameCallback((_) async {
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/login', (route) => false);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const LoginPage()),
+              (route) => false);
         });
       } else if (state is CubitAuthConfirming) {
         ToastShow.toast("Loading...");
@@ -214,12 +218,14 @@ class _ProfilePageState extends State<PersonalProfilePage>
                     onTap: () async {
                       final ImagePicker _picker = ImagePicker();
                       final XFile? video =
-                      await _picker.pickVideo(source: ImageSource.camera);
+                          await _picker.pickVideo(source: ImageSource.camera);
                       if (video != null) {
                         File videoFile = File(video.path);
                         await Navigator.of(context, rootNavigator: true).push(
                             MaterialPageRoute(
-                                builder: (context) => CreatePostPage(selectedFile:videoFile,isThatImage: false),
+                                builder: (context) => CreatePostPage(
+                                    selectedFile: videoFile,
+                                    isThatImage: false),
                                 maintainState: false));
                         setState(() {
                           rebuildUserInfo = true;
@@ -253,7 +259,7 @@ class _ProfilePageState extends State<PersonalProfilePage>
             File photo = File(image.path);
             await Navigator.of(context, rootNavigator: true).push(
                 MaterialPageRoute(
-                    builder: (context) => CreatePostPage(selectedFile:photo),
+                    builder: (context) => CreatePostPage(selectedFile: photo),
                     maintainState: false));
             setState(() {
               rebuildUserInfo = true;
@@ -269,7 +275,7 @@ class _ProfilePageState extends State<PersonalProfilePage>
       child: Row(children: [
         text != "Post"
             ? SvgPicture.asset(
-          nameOfPath,
+                nameOfPath,
                 color: ColorManager.black87,
                 height: 25,
               )

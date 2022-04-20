@@ -19,8 +19,9 @@ class FirestoreUser {
         await _fireStoreUserCollection.doc(userId).get();
     if (snap.exists) {
       return UserPersonalInfo.fromDocSnap(docSnap: snap);
+    }else {
+      return Future.error("the user not exist !");
     }
-    return Future.error("the user not exist !");
   }
 
   static Future<List<UserPersonalInfo>> getSpecificUsersInfo(

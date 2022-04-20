@@ -12,6 +12,9 @@ class IconsAssets {
   static const String videoIcon = "$iconPath/video.svg";
   static const String cancelIcon = "$iconPath/cancel.svg";
   static const String heartIcon = "$iconPath/heart.svg";
+  static const String warningIcon = "$iconPath/warning.svg";
+  static const String addLikeLoadingIcon = "$iconPath/add.svg";
+
 
   static const String addInstagramStoryIcon =
       "$iconPath/add-instagram-story.svg";

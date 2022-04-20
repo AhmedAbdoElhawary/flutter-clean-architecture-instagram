@@ -49,8 +49,10 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage>
         if (state is CubitAllPostsLoaded) {
           return SmarterRefresh(
             onRefreshData: getData,
-            smartRefresherChild: CustomGridView(
-                postsInfo: state.allPostInfo, userId: widget.userId),
+            smartRefresherChild: SingleChildScrollView(
+              child: CustomGridView(
+                  postsInfo: state.allPostInfo, userId: widget.userId),
+            ),
           );
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);

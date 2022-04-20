@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/widgets/custom_app_bar.dart';
 import 'package:instegram/presentation/widgets/post_list_view.dart';
 
 class CustomPostsDisplay extends StatelessWidget{
-  final List postsInfo;
+  final Post postInfo;
 
-  const CustomPostsDisplay(this.postsInfo, {Key? key}) : super(key: key);
+  const CustomPostsDisplay(this.postInfo, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(body:SingleChildScrollView(
       child: ImageList(
-        postsInfo: postsInfo,
+        postInfo: postInfo,
+          isVideoInView: (){return false;}
       ),
     ) ,
         appBar: customAppBar());

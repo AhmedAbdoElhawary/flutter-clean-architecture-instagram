@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instegram/core/constant.dart';
+import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instegram/presentation/pages/comments_page.dart';
@@ -218,7 +218,7 @@ class _CustomPostListViewState extends State<CustomPostListView> {
       onDoubleTap: () {},
       child: postInfo.isThatImage
           ? buildImage(postInfo)
-          : PlayThisVideo(videoUrl: postInfo.postUrl, play: true),
+          : PlayThisVideo(videoUrl: postInfo.postUrl, isVideoInView: (){return true;}),
     );
   }
 
