@@ -16,9 +16,11 @@ import 'package:instegram/presentation/widgets/read_more_text.dart';
 
 class ImageList extends StatefulWidget {
   final Post postInfo;
-  final ValueGetter<bool> isVideoInView;
+  // final ValueGetter<bool> isVideoInView;
 
-  const ImageList({Key? key, required this.postInfo,required this.isVideoInView})
+  const ImageList({Key? key, required this.postInfo,
+    // required this.isVideoInView,
+  })
       : super(key: key);
 
   @override
@@ -37,7 +39,8 @@ class _ImageListState extends State<ImageList> {
     return thePostsOfHomePage(
         postInfo: widget.postInfo,
         bodyHeight: bodyHeight,
-         isVideoInView: widget.isVideoInView);
+         // isVideoInView: widget.isVideoInView,
+    );
   }
 
   pushToProfilePage(Post postInfo) =>
@@ -48,7 +51,8 @@ class _ImageListState extends State<ImageList> {
   Widget thePostsOfHomePage(
       {required Post postInfo,
       required double bodyHeight,
-      required ValueGetter<bool> isVideoInView}) {
+      // required ValueGetter<bool> isVideoInView,
+      }) {
     return SizedBox(
       width: double.infinity,
       // height: 200,
@@ -61,9 +65,7 @@ class _ImageListState extends State<ImageList> {
               child: InkWell(
                 onTap: () => pushToProfilePage(postInfo),
                 child: CircleAvatarOfProfileImage(
-                  circleAvatarName: postInfo.publisherInfo!.name,
                   bodyHeight: bodyHeight / 2,
-                  thisForStoriesLine: false,
                   imageUrl: postInfo.publisherInfo!.profileImageUrl,
                 ),
               ),
@@ -77,51 +79,57 @@ class _ImageListState extends State<ImageList> {
             menuButton()
           ],
         ),
-        imageOfPost(postInfo, isVideoInView),
-        Row(children: [
-          Expanded(
-              child: Row(
-            children: [
-              loveButton(postInfo),
-              IconButton(
-                icon: iconsOfImagePost(IconsAssets.commentIcon),
-                onPressed: () {
-                  Navigator.of(
-                    context,
-                  ).push(CupertinoPageRoute(
-                    builder: (context) =>
-                        CommentsPage(postId: postInfo.postUid),
-                  ));
-                },
-              ),
-              IconButton(
-                icon: iconsOfImagePost(IconsAssets.sendIcon),
-                onPressed: () {
-                  // Navigator.of(context,
-                  // ).push(CupertinoPageRoute(
-                  //
-                  //   builder: (context) =>
-                  //       MassagesPage(postInfo.publisherId),
-                  // ));
-                },
-              ),
-            ],
-          )),
-          IconButton(
-            icon: isSaved
-                ? const Icon(
-                    Icons.bookmark_border,
-                  )
-                : const Icon(
-                    Icons.bookmark,
+        imageOfPost(postInfo,
+          // isVideoInView,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left:12.0,top: 10,bottom: 8),
+          child: Row(children: [
+            Expanded(
+                child: Row(
+              children: [
+                loveButton(postInfo),
+                Padding(
+                  padding: const EdgeInsets.only(left:15.0),
+                  child: GestureDetector(
+                    child: iconsOfImagePost(IconsAssets.commentIcon),
+                    onTap: () {
+                      Navigator.of(
+                        context,
+                      ).push(CupertinoPageRoute(
+                        builder: (context) =>
+                            CommentsPage(postId: postInfo.postUid),
+                      ));
+                    },
                   ),
-            onPressed: () {
-              setState(() {
-                isSaved = isSaved ? false : true;
-              });
-            },
-          ),
-        ]),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left:15.0),
+                  child: GestureDetector(
+                    child: iconsOfImagePost(IconsAssets.sendIcon,lowHeight: true),
+                  ),
+                ),
+              ],
+            )),
+            Padding(
+              padding: const EdgeInsets.only(right:12.0),
+              child: GestureDetector(
+                child: isSaved
+                    ? const Icon(
+                        Icons.bookmark_border,
+                      )
+                    : const Icon(
+                        Icons.bookmark,
+                      ),
+                onTap: () {
+                  setState(() {
+                    isSaved = isSaved ? false : true;
+                  });
+                },
+              ),
+            ),
+          ]),
+        ),
         Padding(
           padding: const EdgeInsets.only(left: 11.5),
           child: Column(
@@ -132,7 +140,6 @@ class _ImageListState extends State<ImageList> {
               const SizedBox(height: 5),
               ReadMore(
                   "${postInfo.publisherInfo!.name} ${postInfo.caption}", 2),
-              const SizedBox(height: 5),
               const SizedBox(height: 8),
               addCommentRow(postInfo)
             ],
@@ -169,25 +176,20 @@ class _ImageListState extends State<ImageList> {
     );
   }
 
-  Row addCommentRow(Post postInfo) {
-    String imageUrl = postInfo.publisherInfo!.profileImageUrl;
-    return Row(
-      children: [
-        CircleAvatar(
-            radius: 16,
-            backgroundColor: Colors.black12,
-            child: imageUrl.isEmpty
-                ? const Icon(Icons.person, color: Colors.white)
-                : ClipOval(
-                    child: Image.network(
-                    imageUrl,
-                  ))),
-        const SizedBox(width: 10),
-        const Text(
-          "Add a comment...",
-          style: TextStyle(color: Colors.grey),
-        )
-      ],
+  Widget addCommentRow(Post postInfo) {
+    return GestureDetector(
+      onTap:(){
+        Navigator.of(
+          context,
+        ).push(CupertinoPageRoute(
+          builder: (context) =>
+              CommentsPage(postId: postInfo.postUid),
+        ));
+      },
+      child: Text(
+      "View all ${postInfo.comments.length} comments",
+      style: const TextStyle(color: Colors.grey),
+      ),
     );
   }
 
@@ -207,20 +209,22 @@ class _ImageListState extends State<ImageList> {
     );
   }
 
-  SvgPicture iconsOfImagePost(String path) {
+  SvgPicture iconsOfImagePost(String path,{bool lowHeight=false}) {
     return SvgPicture.asset(
       path,
       color: Colors.black,
-      height: 28,
+      height:lowHeight?22:25,
     );
   }
 
-  Widget imageOfPost(Post postInfo,ValueGetter<bool> isVideoInView) {
+  Widget imageOfPost(Post postInfo) {
     return InkWell(
       onDoubleTap: () {},
       child: postInfo.isThatImage
           ? buildImage(postInfo)
-          : PlayThisVideo(videoUrl: postInfo.postUrl, isVideoInView: isVideoInView),
+          : PlayThisVideo(videoUrl: postInfo.postUrl,
+        // isVideoInView: isVideoInView,
+      ),
     );
   }
 

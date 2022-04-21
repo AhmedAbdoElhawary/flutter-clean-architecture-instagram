@@ -59,9 +59,7 @@ class _CustomPostListViewState extends State<CustomPostListView> {
               child: InkWell(
                 onTap: () => pushToProfilePage(postInfo),
                 child: CircleAvatarOfProfileImage(
-                  circleAvatarName: postInfo.publisherInfo!.name,
                   bodyHeight: bodyHeight / 2,
-                  thisForStoriesLine: false,
                   imageUrl: postInfo.publisherInfo!.profileImageUrl,
                 ),
               ),
@@ -218,7 +216,9 @@ class _CustomPostListViewState extends State<CustomPostListView> {
       onDoubleTap: () {},
       child: postInfo.isThatImage
           ? buildImage(postInfo)
-          : PlayThisVideo(videoUrl: postInfo.postUrl, isVideoInView: (){return true;}),
+          : PlayThisVideo(videoUrl: postInfo.postUrl,
+          // isVideoInView: (){return true;}
+      ),
     );
   }
 

@@ -34,7 +34,6 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          if(widget.showSearchBar)Container(height: 40, color: Colors.blue),
           widget.usersInfo.isNotEmpty
               ? ListView.builder(
                   shrinkWrap: true,
@@ -61,8 +60,6 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
       child: Row(children: [
         CircleAvatarOfProfileImage(
           bodyHeight: 600,
-          circleAvatarName: '',
-          thisForStoriesLine: false,
           imageUrl: userInfo.profileImageUrl,
         ),
         const SizedBox(width: 10),

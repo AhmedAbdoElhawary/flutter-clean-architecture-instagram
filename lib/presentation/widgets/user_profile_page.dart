@@ -23,12 +23,10 @@ class UserProfilePage extends StatefulWidget {
   State<UserProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<UserProfilePage>
-    with AutomaticKeepAliveClientMixin {
+class _ProfilePageState extends State<UserProfilePage> {
   bool rebuildUserInfo = false;
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return scaffold();
   }
 
@@ -256,7 +254,4 @@ class _ProfilePageState extends State<UserProfilePage>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => false;
 }
