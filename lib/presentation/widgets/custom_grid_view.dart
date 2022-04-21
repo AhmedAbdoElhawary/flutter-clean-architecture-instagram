@@ -64,7 +64,9 @@ class _CustomGridViewState extends State<CustomGridView> {
           child: postInfo.isThatImage
               ? CustomFadeInImage(
                   imageUrl: postInfo.postUrl, boxFit: BoxFit.cover)
-              : PlayThisVideo(videoUrl: postInfo.postUrl,isVideoInView: (){return false;}),
+              : PlayThisVideo(videoUrl: postInfo.postUrl
+              // ,isVideoInView: (){return false;}
+          ),
         ),
       );
 
@@ -102,7 +104,7 @@ class _CustomGridViewState extends State<CustomGridView> {
                     height: bodyHeight - 200,
                     child: PlayThisVideo(
                       videoUrl: postInfo.postUrl,
-                      isVideoInView: (){return true;},
+                      // isVideoInView: (){return true;},
                     )),
             _createActionBar(),
           ],
@@ -120,9 +122,7 @@ class _CustomGridViewState extends State<CustomGridView> {
           children: [
             CircleAvatarOfProfileImage(
               imageUrl: postInfo.publisherInfo!.profileImageUrl,
-              thisForStoriesLine: false,
               bodyHeight: 370,
-              circleAvatarName: '',
             ),
             const SizedBox(width: 7),
             Text(postInfo.publisherInfo!.name, style: getNormalStyle()),
