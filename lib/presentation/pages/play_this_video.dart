@@ -5,8 +5,10 @@ import '../../core/resources/color_manager.dart';
 
 class PlayThisVideo extends StatefulWidget {
   final String videoUrl;
-  final ValueGetter<bool> isVideoInView;
-  const PlayThisVideo({Key? key, required this.videoUrl,required this.isVideoInView})
+  // final ValueGetter<bool> isVideoInView;
+  const PlayThisVideo({Key? key, required this.videoUrl,
+    // required this.isVideoInView,
+  })
       : super(key: key);
 
   @override
@@ -24,7 +26,9 @@ class VideoPlayerState extends State<PlayThisVideo> {
       ..addListener(() => setState(() {}))
       ..setLooping(true)
       ..initialize()
-          .then((_) =>widget.isVideoInView() ? _controller.play() : _controller.pause());
+          .then((_) =>
+      true
+          ? _controller.play() : _controller.pause());
     _initializeVideoPlayerFuture = _controller.initialize();
   }
 

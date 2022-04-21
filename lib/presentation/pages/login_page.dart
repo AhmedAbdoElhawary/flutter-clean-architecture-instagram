@@ -27,65 +27,71 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    return
+      buildScaffold(context)
+    ;
+  }
+
+  Scaffold buildScaffold(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.white,
-      body: SafeArea(
-        child: Center(
-            child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                IconsAssets.instagramLogo,
-                color: ColorManager.black,
-                height: 50,
-              ),
-              const SizedBox(height: 30),
-              CustomTextField(
-                  hint: "Phone number, email or username",
-                  controller: emailController),
-              const SizedBox(height: 15),
-              CustomTextField(hint: "Password", controller: passwordController),
-              const SizedBox(height: 15),
-              customTextButton(),
-              const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Don't have an account? ",
-                    style: TextStyle(fontSize: 13, color: ColorManager.grey),
-                  ),
-                  InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignUpPage()));
-                      },
-                      child: const Text(
-                        "Sign up",
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: ColorManager.black,
-                            fontWeight: FontWeight.bold),
-                      )),
-                ],
-              ),
-              const SizedBox(height: 8),
-              const OrText(),
-              TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Login with Facebook",
-                    style: TextStyle(color: ColorManager.blue),
-                  ))
-            ],
-          ),
-        )),
-      ),
-    );
+    backgroundColor: ColorManager.white,
+    body: SafeArea(
+      child: Center(
+          child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              IconsAssets.instagramLogo,
+              color: ColorManager.black,
+              height: 50,
+            ),
+            const SizedBox(height: 30),
+            CustomTextField(
+                hint: "Phone number, email or username",
+                controller: emailController),
+            const SizedBox(height: 15),
+            CustomTextField(hint: "Password", controller: passwordController),
+            const SizedBox(height: 15),
+            customTextButton(),
+            const SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Don't have an account? ",
+                  style: TextStyle(fontSize: 13, color: ColorManager.grey),
+                ),
+                InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignUpPage()));
+                    },
+                    child: const Text(
+                      "Sign up",
+                      style: TextStyle(
+                          fontSize: 13,
+                          color: ColorManager.black,
+                          fontWeight: FontWeight.bold),
+                    )),
+              ],
+            ),
+            const SizedBox(height: 8),
+            const OrText(),
+            TextButton(
+                onPressed: () {},
+                child: const Text(
+                  "Login with Facebook",
+                  style: TextStyle(color: ColorManager.blue),
+                ))
+          ],
+        ),
+      )),
+    ),
+  );
   }
 
   Widget customTextButton() {
