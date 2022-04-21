@@ -12,13 +12,16 @@ class NameOfCircleAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      circleAvatarName,
-      maxLines: 1,
-      style: TextStyle(
-          fontWeight: isForStoriesLine ? FontWeight.normal : FontWeight.bold),
-      overflow: TextOverflow.ellipsis,
-      softWrap: false,
+    return Padding(
+      padding: const EdgeInsets.only(left:8.0),
+      child: Text(
+        circleAvatarName,
+        maxLines: 1,
+        style: TextStyle(
+            fontWeight: isForStoriesLine ? FontWeight.normal : FontWeight.bold),
+        overflow: TextOverflow.ellipsis,
+        softWrap: false,
+      ),
     );
   }
 }
