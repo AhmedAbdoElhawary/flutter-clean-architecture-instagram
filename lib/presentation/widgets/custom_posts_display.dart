@@ -13,7 +13,7 @@ class CustomPostsDisplay extends StatelessWidget{
     return Scaffold(body:SingleChildScrollView(
       child: ImageList(
         postInfo: postInfo,
-          isVideoInView: (){return false;}
+          // isVideoInView: (){return false;}
       ),
     ) ,
         appBar: customAppBar());

@@ -5,9 +5,11 @@ import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
 import 'package:instegram/presentation/pages/followers_and_followings_info_page.dart';
 import 'package:instegram/presentation/widgets/custom_grid_view.dart';
 import 'package:instegram/presentation/widgets/custom_videos_grid_view.dart';
+import 'package:instegram/presentation/widgets/smart_refresher.dart';
 import '../../data/models/user_personal_info.dart';
 import 'circle_avatar_of_profile_image.dart';
 import 'read_more_text.dart';
@@ -29,33 +31,37 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
-    with AutomaticKeepAliveClientMixin {
+class _ProfilePageState extends State<ProfilePage>{
+  bool reBuild = false;
+
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return defaultTabController();
   }
 
-  DefaultTabController defaultTabController() {
+  Widget defaultTabController() {
     return DefaultTabController(
       length: 3,
-      child: NestedScrollView(
-        headerSliverBuilder: (_, __) {
-          return [
-            SliverList(
-              delegate: SliverChildListDelegate(
-                listOfWidgetsAboveTapBars(widget.userInfo),
+      child:
+      //  SmarterRefresh(
+      //   onRefreshData: getData,
+      //   smartRefresherChild:
+         NestedScrollView(
+          headerSliverBuilder: (_, __) {
+            return [
+              SliverList(
+
+                delegate: SliverChildListDelegate(
+                  listOfWidgetsAboveTapBars(widget.userInfo),
+                ),
               ),
-            ),
-          ];
-        },
-        body: tapBar(),
+            ];
+          },
+          body: tapBar(),
+        // ),
       ),
     );
   }
-
-  bool reBuild = false;
   Widget tapBar() {
     return BlocBuilder<PostCubit, PostState>(
       bloc: PostCubit.get(context)
@@ -172,9 +178,7 @@ class _ProfilePageState extends State<ProfilePage>
   Row personalPhotoAndNumberInfo(UserPersonalInfo userInfo) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       CircleAvatarOfProfileImage(
-          circleAvatarName: '',
           bodyHeight: 900,
-          thisForStoriesLine: false,
           imageUrl: userInfo.profileImageUrl),
       personalNumbersInfo(userInfo.posts, "Posts", userInfo),
       personalNumbersInfo(userInfo.followerPeople, "Followers", userInfo),
@@ -214,7 +218,4 @@ class _ProfilePageState extends State<ProfilePage>
       }),
     );
   }
-
-  @override
-  bool get wantKeepAlive => false;
 }

@@ -8,10 +8,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/pages/comments_page.dart';
 import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
+import 'package:instegram/presentation/pages/which_profile_page.dart';
 import 'package:instegram/presentation/widgets/reel_video_play.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
 
@@ -20,14 +22,13 @@ import '../../core/utility/constant.dart';
 class VideosPage extends StatefulWidget {
   const VideosPage({Key? key}) : super(key: key);
 
-
-
   @override
   VideosPageState createState() => VideosPageState();
 }
 
 class VideosPageState extends State<VideosPage> {
   File? videoFile;
+  bool rebuildUserInfo = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +36,9 @@ class VideosPageState extends State<VideosPage> {
       bloc: BlocProvider.of<PostCubit>(context)..getAllPostInfo(),
       buildWhen: (previous, current) {
         if (previous != current && current is CubitAllPostsLoaded) {
+          return true;
+        }
+        if (rebuildUserInfo && current is CubitAllPostsLoaded) {
           return true;
         }
         return false;
@@ -108,16 +112,20 @@ class VideosPageState extends State<VideosPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 18,
-                backgroundColor: Colors.white,
-                child: ClipOval(child: Image.network(personalInfo!.profileImageUrl)),
+              GestureDetector(
+                onTap: ()=>goToUserProfile(personalInfo!),
+                child: CircleAvatar(
+                  radius: 18,
+                  backgroundColor: Colors.white,
+                  child: ClipOval(
+                      child: Image.network(personalInfo!.profileImageUrl)),
+                ),
               ),
               const SizedBox(
                 width: 10,
               ),
               GestureDetector(
-                  onTap: () {},
+                  onTap:  ()=>goToUserProfile(personalInfo),
                   child: Text(
                     personalInfo.name,
                     style: const TextStyle(color: Colors.white),
@@ -125,23 +133,54 @@ class VideosPageState extends State<VideosPage> {
               const SizedBox(
                 width: 10,
               ),
-              GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 2, horizontal: 5),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.white, width: 1)),
-                      child: Text(
-                        personalInfo.followedPeople.contains(myPersonalId)
-                            ? "Following"
-                            : "Follow",
-                        style: const TextStyle(color: Colors.white),
-                      ))),
+              followButton(personalInfo),
             ],
           )),
     );
+  }
+  goToUserProfile(UserPersonalInfo personalInfo )=>Navigator.of(
+    context,
+  ).push(CupertinoPageRoute(
+    builder: (context) => WhichProfilePage(
+        userId: personalInfo.userId,
+        userName: personalInfo.userName),
+  ));
+
+  GestureDetector followButton(UserPersonalInfo personalInfo) {
+    return GestureDetector(
+        onTap: () {
+          setState(() {
+            rebuildUserInfo = false;
+          });
+          if (personalInfo.followerPeople.contains(myPersonalId)) {
+            BlocProvider.of<FollowCubit>(context).removeThisFollower(
+                followingUserId: personalInfo.userId,
+                myPersonalId: myPersonalId);
+          } else {
+            BlocProvider.of<FollowCubit>(context).followThisUser(
+                followingUserId: personalInfo.userId,
+                myPersonalId: myPersonalId);
+          }
+
+          setState(() {
+            rebuildUserInfo = true;
+          });
+        },
+        child: followText(personalInfo));
+  }
+
+  Container followText(UserPersonalInfo personalInfo) {
+    return Container(
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(color: Colors.white, width: 1)),
+        child: Text(
+          personalInfo.followedPeople.contains(myPersonalId)
+              ? "Following"
+              : "Follow",
+          style: const TextStyle(color: Colors.white),
+        ));
   }
 
   Padding horizontalWidgets(Post postInfo) {

@@ -13,13 +13,11 @@ class SearchAboutUserPage extends StatefulWidget {
   State<SearchAboutUserPage> createState() => _SearchAboutUserPageState();
 }
 
-class _SearchAboutUserPageState extends State<SearchAboutUserPage>
-    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
+class _SearchAboutUserPageState extends State<SearchAboutUserPage>{
 
   bool rebuildUsersInfo = false;
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     rebuildUsersInfo = false;
     return SafeArea(child: Scaffold(body: blocBuilder()));
   }

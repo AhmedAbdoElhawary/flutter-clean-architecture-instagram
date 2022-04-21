@@ -267,7 +267,7 @@ class _TextingPageState extends State<TextingPage> {
 
   Massage newMassage() {
     return Massage(
-      datePublished:  DateTime.now().toString(),
+      datePublished:  DateOfNow.dateOfNow(),
       massage: _textController.text,
       senderId: myPersonalId,
       receiverId: widget.userInfo.userId,

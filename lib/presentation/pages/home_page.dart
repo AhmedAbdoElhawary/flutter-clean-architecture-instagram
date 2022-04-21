@@ -22,50 +22,44 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> {
   bool rebuild = true;
   bool loadingPosts = true;
   bool reLoadData = false;
-  UserPersonalInfo? personalInfo;
 
   Future<void> getData() async {
+    UserPersonalInfo? personalInfo;
     reLoadData = false;
     FirestoreUserInfoCubit userCubit =
         BlocProvider.of<FirestoreUserInfoCubit>(context, listen: false);
-    await userCubit.getUserInfo(widget.userId, true).then((value) async {
-      personalInfo = userCubit.myPersonalInfo;
+    await userCubit.getUserInfo(widget.userId, true);
+    personalInfo = userCubit.myPersonalInfo;
 
-      List usersIds =
-          personalInfo!.followedPeople + personalInfo!.followerPeople;
+    List usersIds = personalInfo!.followedPeople + personalInfo.followerPeople;
 
-      SpecificUsersPostsCubit usersPostsCubit =
-          BlocProvider.of<SpecificUsersPostsCubit>(context, listen: false);
+    SpecificUsersPostsCubit usersPostsCubit =
+        BlocProvider.of<SpecificUsersPostsCubit>(context, listen: false);
 
-      await usersPostsCubit
-          .getSpecificUsersPostsInfo(usersIds: usersIds)
-          .then((value) async {
-        List usersPostsIds = usersPostsCubit.usersPostsInfo;
+    await usersPostsCubit
+        .getSpecificUsersPostsInfo(usersIds: usersIds);
 
-        List postsIds = usersPostsIds + personalInfo!.posts;
+      List usersPostsIds = usersPostsCubit.usersPostsInfo;
 
-        PostCubit postCubit = PostCubit.get(context);
-        await postCubit
-            .getPostsInfo(postsIds: postsIds, isThatForMyPosts: true)
-            .then((value) {
-          Future.delayed(Duration.zero, () {
-            setState(() {});
-          });
-          reLoadData = true;
+      List postsIds = usersPostsIds + personalInfo.posts;
+
+      PostCubit postCubit = PostCubit.get(context);
+      await postCubit
+          .getPostsInfo(postsIds: postsIds, isThatForMyPosts: true)
+          .then((value) {
+        Future.delayed(Duration.zero, () {
+          setState(() {});
         });
+        reLoadData = true;
       });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     final mediaQuery = MediaQuery.of(context);
     final bodyHeight = mediaQuery.size.height -
         AppBar().preferredSize.height -
@@ -101,48 +95,7 @@ class _HomeScreenState extends State<HomeScreen>
       },
       builder: (BuildContext context, PostState state) {
         if (state is CubitMyPersonalPostsLoaded) {
-          return SingleChildScrollView(
-            child: InViewNotifierList(
-              primary: false,
-              scrollDirection: Axis.vertical,
-              initialInViewIds: const ['0'],
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              isInViewPortCondition: (double deltaTop, double deltaBottom,
-                  double viewPortDimension) {
-                return deltaTop < (0.5 * viewPortDimension) &&
-                    deltaBottom > (0.5 * viewPortDimension);
-              },
-              itemCount: state.postsInfo.length,
-              builder: (BuildContext context, int index) {
-                return Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.symmetric(vertical: 0.5),
-                  child: LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) {
-                      return InViewNotifierWidget(
-                        id: '$index',
-                        builder: (_, bool isInView, __) {
-                          if (isInView) {}
-                          return columnOfWidgets(
-                              bodyHeight, state.postsInfo, index, () {
-                            WidgetsBinding.instance!
-                                .addPostFrameCallback((_) async {
-                              setState(() {
-                                isInView;
-                              });
-                            });
-                            return isInView;
-                          });
-                        },
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-          );
+          return inViewNotifier(state, bodyHeight);
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
           return const Center(child: Text("There's no posts..."));
@@ -155,32 +108,67 @@ class _HomeScreenState extends State<HomeScreen>
       },
     );
   }
-  //
-  // bool isVideoInView() {
-  //   WidgetsBinding.instance!.addPostFrameCallback((_) async {
-  //     setState(() {
-  //       isInView;
-  //     });
-  //   });
-  //   return isInView;
-  //
-  // }
 
-  Widget columnOfWidgets(double bodyHeight, List<Post> postsInfo, int index,
-      ValueGetter<bool> isVideoInView) {
+  SingleChildScrollView inViewNotifier(
+      CubitMyPersonalPostsLoaded state, double bodyHeight) {
+    return SingleChildScrollView(
+      child: InViewNotifierList(
+        primary: false,
+        scrollDirection: Axis.vertical,
+        initialInViewIds: const ['0'],
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        isInViewPortCondition:
+            (double deltaTop, double deltaBottom, double viewPortDimension) {
+          return deltaTop < (0.5 * viewPortDimension) &&
+              deltaBottom > (0.5 * viewPortDimension);
+        },
+        itemCount: state.postsInfo.length,
+        builder: (BuildContext context, int index) {
+          return Container(
+            width: double.infinity,
+            margin: const EdgeInsets.symmetric(vertical: 0.5),
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return InViewNotifierWidget(
+                  id: '$index',
+                  builder: (_, bool isInView, __) {
+                    if (isInView) {}
+                    return columnOfWidgets(
+                      bodyHeight, state.postsInfo, index,
+                      //     () {
+                      //   WidgetsBinding.instance!.addPostFrameCallback((_) async {
+                      //     setState(() {
+                      //       isInView;
+                      //     });
+                      //   });
+                      //   return isInView;
+                      // }
+                    );
+                  },
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget columnOfWidgets(double bodyHeight, List<Post> postsInfo, int index) {
     return Column(
       children: [
         if (index == 0) storiesLines(bodyHeight, postsInfo),
         const Divider(thickness: 0.5),
-        posts(postsInfo[index], isVideoInView),
+        posts(postsInfo[index]),
       ],
     );
   }
 
-  Widget posts(Post postInfo, ValueGetter<bool> isVideoInView) {
+  Widget posts(Post postInfo) {
     return ImageList(
       postInfo: postInfo,
-      isVideoInView: isVideoInView,
+      // isVideoInView: isVideoInView,
     );
   }
 
@@ -207,7 +195,4 @@ class _HomeScreenState extends State<HomeScreen>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => false;
 }

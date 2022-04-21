@@ -57,7 +57,9 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
             Overlay.of(context)!.insert(_popupDialog!);
           },
           onLongPressEnd: (details) => _popupDialog?.remove(),
-          child: PlayThisVideo(videoUrl:postInfo.postUrl,isVideoInView: (){return false;}),
+          child: PlayThisVideo(videoUrl:postInfo.postUrl,
+              // isVideoInView: (){return false;}
+          ),
         ),
       );
 
@@ -87,7 +89,9 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
                   color: Colors.white,
                   width: double.infinity,
                   height: bodyHeight-200,
-                  child: PlayThisVideo(videoUrl:postInfo.postUrl,isVideoInView: (){return true;}),),
+                  child: PlayThisVideo(videoUrl:postInfo.postUrl,
+                      // isVideoInView: (){return true;}
+                  ),),
               _createActionBar(),
             ],
           ),
@@ -103,9 +107,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
           children: [
             CircleAvatarOfProfileImage(
               imageUrl: postInfo.publisherInfo!.profileImageUrl,
-              thisForStoriesLine: false,
               bodyHeight: 370,
-              circleAvatarName: '',
             ),
             const SizedBox(width: 7),
             Text(postInfo.publisherInfo!.name,

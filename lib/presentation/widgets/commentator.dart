@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
@@ -154,9 +155,7 @@ class _CommentInfoState extends State<CommentInfo> {
       children: [
         CircleAvatarOfProfileImage(
             imageUrl: widget.commentInfo.whoCommentInfo!.profileImageUrl,
-            circleAvatarName: '',
-            bodyHeight: widget.isThatReply ? 280 : 400,
-            thisForStoriesLine: false),
+            bodyHeight: widget.isThatReply ? 280 : 400,),
         const SizedBox(width: 8),
         Expanded(
           child: Padding(
@@ -206,7 +205,7 @@ class _CommentInfoState extends State<CommentInfo> {
                   const SizedBox(height: 5),
                   Row(
                     children: [
-                      Text(widget.commentInfo.datePublished,
+                      Text(DateOfNow.differenceDateOfNow(widget.commentInfo.datePublished),
                           style: const TextStyle(color: Colors.grey)),
                       if (widget.commentInfo.likes.isNotEmpty)
                         Padding(

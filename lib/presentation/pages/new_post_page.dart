@@ -5,6 +5,7 @@ import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instegram/injector.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
@@ -29,62 +30,65 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorManager.white,
-      appBar: appBar(context),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, right: 10, top: 10),
-            child: Row(
-              children: [
-                SizedBox(
-                  height: 70,
-                  width: 70,
-                  child: widget.isThatImage
-                      ? Image.file(widget.selectedFile)
-                      : const Center(
-                          child: Icon(Icons.slow_motion_video_sharp)),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextFormField(
-                    controller: captionController,
-                    cursorColor: ColorManager.teal,
-                    style: const TextStyle(fontSize: 15),
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Write a caption...",
-                      hintStyle: TextStyle(color: ColorManager.black26),
+    return  BlocProvider<PostCubit>(
+      create: (context) => injector<PostCubit>(),
+      child: Scaffold(
+        backgroundColor: ColorManager.white,
+        appBar: appBar(context),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0, right: 10, top: 10),
+              child: Row(
+                children: [
+                  SizedBox(
+                    height: 70,
+                    width: 70,
+                    child: widget.isThatImage
+                        ? Image.file(widget.selectedFile)
+                        : const Center(
+                            child: Icon(Icons.slow_motion_video_sharp)),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextFormField(
+                      controller: captionController,
+                      cursorColor: ColorManager.teal,
+                      style: const TextStyle(fontSize: 15),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Write a caption...",
+                        hintStyle: TextStyle(color: ColorManager.black26),
+                      ),
                     ),
                   ),
+                ],
+              ),
+            ),
+            const Divider(),
+            buildText("Tag People"),
+            const Divider(),
+            buildText("Add location"),
+            const Divider(),
+            buildText("Also post to"),
+            Row(
+              children: [
+                Expanded(child: buildText("Facebook")),
+                Switch(
+                  value: isSwitched,
+                  onChanged: (value) {
+                    // setState(() {
+                    isSwitched = value;
+                    // });
+                  },
+                  activeTrackColor: ColorManager.blue,
+                  activeColor: ColorManager.white,
                 ),
               ],
             ),
-          ),
-          const Divider(),
-          buildText("Tag People"),
-          const Divider(),
-          buildText("Add location"),
-          const Divider(),
-          buildText("Also post to"),
-          Row(
-            children: [
-              Expanded(child: buildText("Facebook")),
-              Switch(
-                value: isSwitched,
-                onChanged: (value) {
-                  // setState(() {
-                  isSwitched = value;
-                  // });
-                },
-                activeTrackColor: ColorManager.blue,
-                activeColor: ColorManager.white,
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -160,7 +164,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   Post addPostInfo(UserPersonalInfo personalInfo) {
     return Post(
       publisherId: personalInfo.userId,
-      datePublished:  DateTime.now().toString(),
+      datePublished:  DateOfNow.dateOfNow(),
       caption: captionController.text,
       comments: [],
       likes: [],

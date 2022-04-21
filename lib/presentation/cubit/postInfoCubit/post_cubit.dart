@@ -44,7 +44,6 @@ class PostCubit extends Cubit<PostState> {
     await _getPostsInfoUseCase.call(params: postsIds).then((postsInfo) {
       if (isThatForMyPosts) {
         myPostsInfo = postsInfo;
-
         emit(CubitMyPersonalPostsLoaded(postsInfo));
       } else {
         userPostsInfo = postsInfo;

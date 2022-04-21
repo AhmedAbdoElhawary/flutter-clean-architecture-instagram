@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instegram/injector.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/pages/search_about_user_page.dart';
 import 'package:instegram/presentation/pages/personal_profile_page.dart';
 import 'package:instegram/presentation/pages/shop_page.dart';
@@ -18,7 +20,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
@@ -52,18 +53,24 @@ class _MainScreenState extends State<MainScreen> {
             case 0:
               return CupertinoTabView(
                 builder: (context) => CupertinoPageScaffold(
+                    child: BlocProvider<PostCubit>(
+                  create: (context) => injector<PostCubit>(),
                   child: HomeScreen(userId: widget.userId),
-                ),
+                )),
               );
             case 1:
               return CupertinoTabView(
                 builder: (context) => CupertinoPageScaffold(
-                    child: SearchAboutUserPage(userId: widget.userId)),
+                    child: BlocProvider<PostCubit>(
+                        create: (context) => injector<PostCubit>()..getAllPostInfo(),
+                        child: SearchAboutUserPage(userId: widget.userId))),
               );
             case 2:
               return CupertinoTabView(
-                builder: (context) => const CupertinoPageScaffold(
-                  child: VideosPage(),
+                builder: (context) => CupertinoPageScaffold(
+                  child: BlocProvider<PostCubit>(
+                      create: (context) => injector<PostCubit>(),
+                      child: const VideosPage()),
                 ),
               );
             case 3:
@@ -74,8 +81,12 @@ class _MainScreenState extends State<MainScreen> {
               );
             default:
               return CupertinoTabView(
-                builder: (context) =>
-                    CupertinoPageScaffold(child: PersonalProfilePage(personalId:widget.userId)),
+                builder: (context) => CupertinoPageScaffold(
+                  child: BlocProvider<PostCubit>(
+                    create: (context) => injector<PostCubit>(),
+                    child: PersonalProfilePage(personalId: widget.userId),
+                  ),
+                ),
               );
           }
         });

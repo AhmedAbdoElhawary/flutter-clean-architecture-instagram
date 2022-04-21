@@ -19,7 +19,7 @@ class FirestoreUser {
         await _fireStoreUserCollection.doc(userId).get();
     if (snap.exists) {
       return UserPersonalInfo.fromDocSnap(docSnap: snap);
-    }else {
+    } else {
       return Future.error("the user not exist !");
     }
   }
@@ -98,13 +98,17 @@ class FirestoreUser {
 
   static Future<List> getSpecificUsersPosts(List<dynamic> usersIds) async {
     List postsInfo = [];
+    List<dynamic> usersIdsUnique = [];
     for (int i = 0; i < usersIds.length; i++) {
-      DocumentSnapshot<Map<String, dynamic>> snap =
-          await _fireStoreUserCollection.doc(usersIds[i]).get();
-      if (snap.exists) {
-        postsInfo += snap.get('posts');
-      } else {
-        return Future.error("the post not exist !");
+      if (!usersIdsUnique.contains(usersIds[i])) {
+        DocumentSnapshot<Map<String, dynamic>> snap =
+            await _fireStoreUserCollection.doc(usersIds[i]).get();
+        if (snap.exists) {
+          postsInfo += snap.get('posts');
+        } else {
+          return Future.error("the post not exist !");
+        }
+        usersIdsUnique.add(usersIds[i]);
       }
     }
     return postsInfo;
