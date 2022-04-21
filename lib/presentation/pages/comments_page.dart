@@ -159,7 +159,6 @@ class _CommentsPageState extends State<CommentsPage> {
               padding: EdgeInsets.only(left: 10),
               child: Text(
                 'put emoticons here',
-                // style: TextStyles.textBody2
               ),
             ),
             const Divider(),
@@ -169,16 +168,12 @@ class _CommentsPageState extends State<CommentsPage> {
                 crossAxisAlignment: _textController.text.length < 70
                     ? CrossAxisAlignment.center
                     : CrossAxisAlignment.end,
-                // mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   InkWell(
                     onTap: () {},
                     child: CircleAvatarOfProfileImage(
                         imageUrl: userPersonalInfo.profileImageUrl,
-                        circleAvatarName: '',
-                        bodyHeight: 330,
-                        // isForCommentSection: true,
-                        thisForStoriesLine: false),
+                        bodyHeight: 330,),
                   ),
                   const SizedBox(
                     width: 20.0,
@@ -234,9 +229,9 @@ class _CommentsPageState extends State<CommentsPage> {
           BlocProvider.of<CommentsInfoCubit>(context);
       await commentsInfoCubit.addComment(
           commentInfo:
-              newCommentInfo(myPersonalInfo, DateTime.now().toString()));
+              newCommentInfo(myPersonalInfo, DateOfNow.dateOfNow()));
     } else {
-      Comment replyInfo = newReplyInfo( DateTime.now().toString(),
+      Comment replyInfo = newReplyInfo( DateOfNow.dateOfNow(),
           selectedCommentInfo!, myPersonalInfo.userId);
 
       await ReplyInfoCubit.get(context)

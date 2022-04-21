@@ -7,7 +7,7 @@ part 'specific_users_posts_state.dart';
 
 class SpecificUsersPostsCubit extends Cubit<SpecificUsersPostsState> {
   GetSpecificUsersPostsUseCase getSpecificUsersPostsUseCase;
-  List usersPostsInfo=[];
+  List usersPostsInfo = [];
 
   SpecificUsersPostsCubit(this.getSpecificUsersPostsUseCase)
       : super(SpecificUsersPostsInitial());
@@ -21,7 +21,7 @@ class SpecificUsersPostsCubit extends Cubit<SpecificUsersPostsState> {
     await getSpecificUsersPostsUseCase
         .call(params: usersIds)
         .then((specificPostsInfo) {
-      usersPostsInfo=specificPostsInfo;
+      usersPostsInfo = specificPostsInfo;
       emit(SpecificUsersPostsLoaded(specificPostsInfo));
     }).catchError((e) {
       usersPostsInfo=[];
