@@ -11,15 +11,15 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../core/utility/constant.dart';
 import '../../core/globall.dart';
 
-class TextingPage extends StatefulWidget {
+class ChatingPage extends StatefulWidget {
   final UserPersonalInfo userInfo;
-  TextingPage({Key? key, required this.userInfo}) : super(key: key);
+  ChatingPage({Key? key, required this.userInfo}) : super(key: key);
 
   @override
-  State<TextingPage> createState() => _TextingPageState();
+  State<ChatingPage> createState() => _ChatingPageState();
 }
 
-class _TextingPageState extends State<TextingPage> {
+class _ChatingPageState extends State<ChatingPage> {
   final TextEditingController _textController = TextEditingController();
   final itemScrollController = ItemScrollController();
   List<DocumentSnapshot> massages=[];
