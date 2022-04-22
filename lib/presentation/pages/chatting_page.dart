@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,15 +13,15 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../core/utility/constant.dart';
 import '../../core/globall.dart';
 
-class ChatingPage extends StatefulWidget {
+class ChattingPage extends StatefulWidget {
   final UserPersonalInfo userInfo;
-  ChatingPage({Key? key, required this.userInfo}) : super(key: key);
+  ChattingPage({Key? key, required this.userInfo}) : super(key: key);
 
   @override
-  State<ChatingPage> createState() => _ChatingPageState();
+  State<ChattingPage> createState() => _ChattingPageState();
 }
 
-class _ChatingPageState extends State<ChatingPage> {
+class _ChattingPageState extends State<ChattingPage> {
   final TextEditingController _textController = TextEditingController();
   final itemScrollController = ItemScrollController();
   List<DocumentSnapshot> massages=[];
@@ -53,7 +55,7 @@ class _ChatingPageState extends State<ChatingPage> {
                 child: Column(
                   children: [
                     Expanded(
-                      child: ScrollablePositionedList.separated(
+                      child:massages.isNotEmpty? ScrollablePositionedList.separated(
                           itemScrollController: itemScrollController,
                           itemBuilder: (context, index) {
                             // Massage theMassageInfo = Massage.fromJson(massages[index]);
@@ -62,7 +64,7 @@ class _ChatingPageState extends State<ChatingPage> {
                               children: [
                                 if (index == 0) buildUserInfo(context),
                                 // if (index > 0)
-                                buildTheMassage(massages[index]),
+                                buildTheMassage(massages[index],massages[index!=0?index-1:0]['datePublished']),
                                 if (index == massages.length - 1)
                                   const SizedBox(height: 10),
                               ],
@@ -70,7 +72,7 @@ class _ChatingPageState extends State<ChatingPage> {
                           },
                           itemCount: massages.length,
                           separatorBuilder: (BuildContext context, int index) =>
-                              const SizedBox(height: 5)),
+                              const SizedBox(height: 5)):buildUserInfo(context),
                     ),
                     fieldOfMassage(),
                   ],
@@ -98,57 +100,77 @@ class _ChatingPageState extends State<ChatingPage> {
     );
   }
 
-  Widget buildTheMassage(DocumentSnapshot massageInfo) {
+  Widget buildTheMassage(DocumentSnapshot massageInfo,String previousDateOfMassage) {
     // Massage theMassageInfo = Massage.fromJson(massages[index]);
-
     bool isThatMine = false;
     if (massageInfo["senderId"] == myPersonalId) isThatMine = true;
     String massage = massageInfo["massage"];
     String imageUrl = massageInfo["imageUrl"].toString();
-    return Row(
+    String theDate=DateOfNow.chattingDateOfNow(massageInfo['datePublished'],previousDateOfMassage);
+    return Column(
       children: [
-        if (isThatMine)
-          const SizedBox(
-            width: 100,
-          ),
-        Expanded(
-          child: Align(
-            alignment: isThatMine
-                ? AlignmentDirectional.centerEnd
-                : AlignmentDirectional.centerStart,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: isThatMine ? Colors.blueAccent : Colors.grey[200],
-                  borderRadius: BorderRadiusDirectional.only(
-                    bottomStart: Radius.circular(isThatMine ? 20 : 0),
-                    bottomEnd: Radius.circular(isThatMine ? 0 : 20),
-                    topStart: const Radius.circular(20),
-                    topEnd: const Radius.circular(20),
-                  )),
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              padding: imageUrl.isEmpty
-                  ? const EdgeInsets.symmetric(vertical: 8, horizontal: 10)
-                  : const EdgeInsets.all(0),
-              child: imageUrl.isEmpty
-                  ? Text(
-                      massage,
-                      style: TextStyle(
-                          color: isThatMine ? Colors.white : Colors.black),
-                    )
-                  : SizedBox(
-                      width: 90,
-                      height: 150,
-                      child: Image.network(imageUrl, fit: BoxFit.cover)),
+        if(theDate.isNotEmpty)Align(
+          alignment:AlignmentDirectional.center,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15.0),
+            child: Text(
+              theDate ,
+              style: const TextStyle(
+                  color: Colors.black54),
             ),
-          ),
-        ),
-        if (!isThatMine)
-          const SizedBox(
-            width: 100,
           )
+        ),
+        const SizedBox(height: 5),
+        Row(
+          children: [
+            if (isThatMine)
+              const SizedBox(
+                width: 100,
+              ),
+            Expanded(
+              child: Align(
+                alignment: isThatMine
+                    ? AlignmentDirectional.centerEnd
+                    : AlignmentDirectional.centerStart,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: isThatMine ? Colors.blueAccent : Colors.grey[200],
+                      borderRadius: BorderRadiusDirectional.only(
+                        bottomStart: Radius.circular(isThatMine ? 20 : 0),
+                        bottomEnd: Radius.circular(isThatMine ? 0 : 20),
+                        topStart: const Radius.circular(20),
+                        topEnd: const Radius.circular(20),
+                      )),
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  padding: imageUrl.isEmpty
+                      ? const EdgeInsets.symmetric(vertical: 8, horizontal: 10)
+                      : const EdgeInsets.all(0),
+                  child: imageUrl.isEmpty
+                      ? Text(
+                          massage,
+                          style: TextStyle(
+                              color: isThatMine ? Colors.white : Colors.black),
+                        )
+                      : SizedBox(
+                          width: 90,
+                          height: 150,
+                          child: Image.network(imageUrl, fit: BoxFit.cover)),
+                ),
+              ),
+            ),
+            if (!isThatMine)
+              const SizedBox(
+                width: 100,
+              )
+          ],
+        ),
       ],
     );
   }
+  // static String handlingTheDate(String theDate){
+  //
+  // }
+
 
   Widget fieldOfMassage() {
     return SingleChildScrollView(

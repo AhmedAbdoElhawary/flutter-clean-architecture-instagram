@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
-import 'package:instegram/presentation/pages/texting_page.dart';
+import 'package:instegram/presentation/pages/chatting_page.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
 import 'package:instegram/presentation/widgets/recommendation_people.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
@@ -214,7 +214,7 @@ class _ProfilePageState extends State<UserProfilePage> {
             context,
             rootNavigator: true,
           ).push(MaterialPageRoute(
-            builder: (context) => TextingPage(
+            builder: (context) => ChattingPage(
               userInfo: userInfo,
             ),
             maintainState: false,

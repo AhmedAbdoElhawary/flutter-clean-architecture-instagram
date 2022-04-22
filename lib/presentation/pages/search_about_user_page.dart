@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/widgets/custom_grid_view.dart';
 import 'package:instegram/presentation/widgets/smart_refresher.dart';
@@ -45,11 +46,15 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage>{
         return false;
       },      builder: (context, state) {
         if (state is CubitAllPostsLoaded) {
+          List<Post> imagesPostsInfo =
+          state.allPostInfo.where((element) =>element.isThatStory == false).toList();
+          List<Post> storiesInfo =
+          state.allPostInfo.where((element) => element.isThatStory == true).toList();
           return SmarterRefresh(
             onRefreshData: getData,
             smartRefresherChild: SingleChildScrollView(
               child: CustomGridView(
-                  postsInfo: state.allPostInfo, userId: widget.userId),
+                  postsInfo: imagesPostsInfo, userId: widget.userId),
             ),
           );
         } else if (state is CubitPostFailed) {
@@ -64,7 +69,4 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage>{
       },
     );
   }
-
-  @override
-  bool get wantKeepAlive => false;
 }
