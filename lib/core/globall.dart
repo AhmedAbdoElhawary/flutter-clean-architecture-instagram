@@ -90,3 +90,20 @@ class DateOfNow {
     // }
   }
 }
+List _splitTheDate(String theDate) {
+  List dateDetails;
+  if (theDate.split("/").length > 2) {
+    dateDetails = theDate.split("/");
+  } else {
+    dateDetails = theDate.split("-");
+    List<String> w1 = dateDetails[2].split(" ");
+    List<String> w2 = w1[1].split(":");
+    w1.removeAt(1);
+    dateDetails += w1 + w2;
+    dateDetails.removeAt(2);
+  }
+  return dateDetails;
+}
+
+DateTime _dateTime(DateTime theDate) => DateTime(
+    theDate.year, theDate.month, theDate.day, theDate.hour, theDate.minute);
