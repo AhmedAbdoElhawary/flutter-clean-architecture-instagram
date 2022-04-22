@@ -11,6 +11,7 @@ class Post {
   List<dynamic> comments;
   UserPersonalInfo? publisherInfo;
   bool isThatImage;
+  bool isThatStory;
 
   Post({
     required this.datePublished,
@@ -22,6 +23,7 @@ class Post {
     required this.comments,
     required this.likes,
     this.isThatImage = true,
+    this.isThatStory = false,
   });
 
   static Post fromSnap(
@@ -37,6 +39,7 @@ class Post {
       postUid: snap["postUid"],
       postUrl: snap["postUrl"],
       isThatImage: snap["isThatImage"],
+      isThatStory: snap["isThatStory"],
     );
   }
 
@@ -49,5 +52,6 @@ class Post {
         'postUid': postUid,
         "postUrl": postUrl,
         "isThatImage": isThatImage,
+        "isThatStory": isThatStory,
       };
 }

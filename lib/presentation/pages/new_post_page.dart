@@ -13,9 +13,12 @@ import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 class CreatePostPage extends StatefulWidget {
   final File selectedFile;
   final bool isThatImage;
-
+  final bool isThatStory;
   const CreatePostPage(
-      {Key? key, required this.selectedFile, this.isThatImage = true})
+      {Key? key,
+      required this.selectedFile,
+      this.isThatImage = true,
+      this.isThatStory = false})
       : super(key: key);
 
   @override
@@ -30,7 +33,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   @override
   Widget build(BuildContext context) {
-    return  BlocProvider<PostCubit>(
+    return BlocProvider<PostCubit>(
       create: (context) => injector<PostCubit>(),
       child: Scaffold(
         backgroundColor: ColorManager.white,
@@ -164,11 +167,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
   Post addPostInfo(UserPersonalInfo personalInfo) {
     return Post(
       publisherId: personalInfo.userId,
-      datePublished:  DateOfNow.dateOfNow(),
+      datePublished: DateOfNow.dateOfNow(),
       caption: captionController.text,
       comments: [],
       likes: [],
       isThatImage: widget.isThatImage,
+      isThatStory: widget.isThatStory,
     );
   }
 }

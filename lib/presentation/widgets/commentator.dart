@@ -205,7 +205,7 @@ class _CommentInfoState extends State<CommentInfo> {
                   const SizedBox(height: 5),
                   Row(
                     children: [
-                      Text(DateOfNow.differenceDateOfNow(widget.commentInfo.datePublished),
+                      Text(DateOfNow.commentsDateOfNow(widget.commentInfo.datePublished),
                           style: const TextStyle(color: Colors.grey)),
                       if (widget.commentInfo.likes.isNotEmpty)
                         Padding(

@@ -29,7 +29,7 @@ class PersonalProfilePage extends StatefulWidget {
   State<PersonalProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<PersonalProfilePage>{
+class _ProfilePageState extends State<PersonalProfilePage> {
   bool rebuildUserInfo = false;
   @override
   Widget build(BuildContext context) {
@@ -212,27 +212,26 @@ class _ProfilePageState extends State<PersonalProfilePage>{
               children: [
                 createNewPost(),
                 const Divider(indent: 40, endIndent: 15),
-                GestureDetector(
-                    onTap: () async {
-                      final ImagePicker _picker = ImagePicker();
-                      final XFile? video =
-                          await _picker.pickVideo(source: ImageSource.camera);
-                      if (video != null) {
-                        File videoFile = File(video.path);
-                        await Navigator.of(context, rootNavigator: true).push(
-                            MaterialPageRoute(
-                                builder: (context) => CreatePostPage(
-                                    selectedFile: videoFile,
-                                    isThatImage: false),
-                                maintainState: false));
-                        setState(() {
-                          rebuildUserInfo = true;
-                        });
-                      }
-                    },
-                    child: createSizedBox("Reel", IconsAssets.videoIcon)),
+                createNewVideo(),
                 const Divider(indent: 40, endIndent: 15),
-                createSizedBox("Story", IconsAssets.addInstagramStoryIcon),
+                GestureDetector(
+                  onTap: () async {
+                    final ImagePicker _picker = ImagePicker();
+                    final XFile? image =
+                        await _picker.pickImage(source: ImageSource.camera);
+                    if (image != null) {
+                      File photo = File(image.path);
+                      await Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                              builder: (context) => CreatePostPage(selectedFile: photo,isThatStory: true),
+                              maintainState: false));
+                      setState(() {
+                        rebuildUserInfo = true;
+                      });
+                    }
+                  },
+                    child: createSizedBox(
+                        "Story", IconsAssets.addInstagramStoryIcon)),
                 const Divider(indent: 40, endIndent: 15),
                 createSizedBox("Live", IconsAssets.instagramHighlightStoryIcon),
                 const Divider(indent: 40, endIndent: 15),
@@ -245,6 +244,27 @@ class _ProfilePageState extends State<PersonalProfilePage>{
         ],
       ),
     );
+  }
+
+  GestureDetector createNewVideo() {
+    return GestureDetector(
+        onTap: () async {
+          final ImagePicker _picker = ImagePicker();
+          final XFile? video =
+              await _picker.pickVideo(source: ImageSource.camera);
+          if (video != null) {
+            File videoFile = File(video.path);
+            await Navigator.of(context, rootNavigator: true).push(
+                MaterialPageRoute(
+                    builder: (context) => CreatePostPage(
+                        selectedFile: videoFile, isThatImage: false),
+                    maintainState: false));
+            setState(() {
+              rebuildUserInfo = true;
+            });
+          }
+        },
+        child: createSizedBox("Reel", IconsAssets.videoIcon));
   }
 
   GestureDetector createNewPost() {

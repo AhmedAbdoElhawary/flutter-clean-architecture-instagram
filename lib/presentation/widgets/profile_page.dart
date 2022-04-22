@@ -104,6 +104,7 @@ class _ProfilePageState extends State<ProfilePage>{
   }
 
   Column columnOfWidgets(List<Post> postsInfo) {
+
     return Column(
       children: [
         tabBarIcons(),
@@ -114,10 +115,12 @@ class _ProfilePageState extends State<ProfilePage>{
 
   Expanded tapBarView(List<Post> postsInfo) {
     List<Post> videosPostsInfo =
-        postsInfo.where((element) => element.isThatImage == false).toList();
+        postsInfo.where((element) => element.isThatImage == false&&element.isThatStory == false).toList();
 
     List<Post> imagesPostsInfo =
-        postsInfo.where((element) => element.isThatImage == true).toList();
+        postsInfo.where((element) => element.isThatImage == true&&element.isThatStory == false).toList();
+    List<Post> storiesInfo =
+    postsInfo.where((element) => element.isThatStory == true).toList();
     return Expanded(
       child: TabBarView(
         children: [
@@ -177,9 +180,16 @@ class _ProfilePageState extends State<ProfilePage>{
 
   Row personalPhotoAndNumberInfo(UserPersonalInfo userInfo) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      CircleAvatarOfProfileImage(
-          bodyHeight: 900,
-          imageUrl: userInfo.profileImageUrl),
+      GestureDetector(
+        onLongPress: (){
+          if(widget.isThatMyPersonalId){
+
+          }
+        },
+        child: CircleAvatarOfProfileImage(
+            bodyHeight: 900,
+            imageUrl: userInfo.profileImageUrl),
+      ),
       personalNumbersInfo(userInfo.posts, "Posts", userInfo),
       personalNumbersInfo(userInfo.followerPeople, "Followers", userInfo),
       personalNumbersInfo(userInfo.followedPeople, "Following", userInfo),

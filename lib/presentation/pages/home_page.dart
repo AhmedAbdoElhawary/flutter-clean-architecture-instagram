@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/resources/color_manager.dart';
@@ -8,6 +9,7 @@ import 'package:instegram/presentation/widgets/custom_app_bar.dart';
 import 'package:instegram/presentation/widgets/post_list_view.dart';
 import 'package:instegram/presentation/widgets/smart_refresher.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
+import 'package:instegram/presentation/widgets/story_page.dart';
 import 'package:inview_notifier_list/inview_notifier_list.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -111,6 +113,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   SingleChildScrollView inViewNotifier(
       CubitMyPersonalPostsLoaded state, double bodyHeight) {
+    List<Post> imagesPostsInfo =
+    state.postsInfo.where((element) =>element.isThatStory == false).toList();
+
+    List<Post> storiesInfo =
+    state.postsInfo.where((element) => element.isThatStory == true).toList();
+
+
     return SingleChildScrollView(
       child: InViewNotifierList(
         primary: false,
@@ -123,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return deltaTop < (0.5 * viewPortDimension) &&
               deltaBottom > (0.5 * viewPortDimension);
         },
-        itemCount: state.postsInfo.length,
+        itemCount: imagesPostsInfo.length,
         builder: (BuildContext context, int index) {
           return Container(
             width: double.infinity,
@@ -135,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (_, bool isInView, __) {
                     if (isInView) {}
                     return columnOfWidgets(
-                      bodyHeight, state.postsInfo, index,
+                      bodyHeight, imagesPostsInfo, index,storiesInfo
                       //     () {
                       //   WidgetsBinding.instance!.addPostFrameCallback((_) async {
                       //     setState(() {
@@ -155,10 +164,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget columnOfWidgets(double bodyHeight, List<Post> postsInfo, int index) {
+  Widget columnOfWidgets(double bodyHeight, List<Post> postsInfo, int index,List<Post> storiesInfo) {
     return Column(
       children: [
-        if (index == 0) storiesLines(bodyHeight, postsInfo),
+        if (index == 0) storiesLines(bodyHeight, storiesInfo),
         const Divider(thickness: 0.5),
         posts(postsInfo[index]),
       ],
@@ -172,24 +181,35 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget storiesLines(double bodyHeight, List<Post> postsInfo) {
+  Widget storiesLines(double bodyHeight, List<Post> storiesInfo) {
+
     return SizedBox(
       width: double.infinity,
       height: bodyHeight * 0.155,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: postsInfo.length,
+        itemCount: storiesInfo.length,
         separatorBuilder: (BuildContext context, int index) => const Divider(),
         itemBuilder: (BuildContext context, int index) {
-          UserPersonalInfo publisherInfo = postsInfo[index].publisherInfo!;
-          return CircleAvatarOfProfileImage(
-            circleAvatarName:
-                publisherInfo.name.isNotEmpty ? publisherInfo.name : '',
-            bodyHeight: bodyHeight,
-            thisForStoriesLine: true,
-            imageUrl: publisherInfo.profileImageUrl.isNotEmpty
-                ? publisherInfo.profileImageUrl
-                : '',
+          UserPersonalInfo publisherInfo = storiesInfo[index].publisherInfo!;
+          return GestureDetector(
+            onTap: (){
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(
+                builder: (context) =>
+                    StoryPage(postInfo:storiesInfo[index]),
+              ));
+            },
+            child: CircleAvatarOfProfileImage(
+              circleAvatarName:
+                  publisherInfo.name.isNotEmpty ? publisherInfo.name : '',
+              bodyHeight: bodyHeight,
+              thisForStoriesLine: true,
+              imageUrl: publisherInfo.profileImageUrl.isNotEmpty
+                  ? publisherInfo.profileImageUrl
+                  : '',
+            ),
           );
         },
       ),
