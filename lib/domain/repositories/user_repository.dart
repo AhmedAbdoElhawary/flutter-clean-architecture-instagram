@@ -29,7 +29,11 @@ abstract class FirestoreUserRepository {
 
   Future<void> removeThisFollower(String followingUserId, String myPersonalId);
 
-  Future<Massage> sendMassage({required Massage massageInfo,required String pathOfPhoto});
+  Future<Massage> sendMassage(
+      {required Massage massageInfo,
+      required String pathOfPhoto,
+      required String pathOfRecorded});
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getMassages({required String receiverId});
+  Stream<QuerySnapshot<Map<String, dynamic>>> getMassages(
+      {required String receiverId});
 }
