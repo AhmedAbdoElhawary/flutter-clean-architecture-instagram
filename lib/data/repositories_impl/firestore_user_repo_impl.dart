@@ -125,12 +125,19 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
 
   @override
   Future<Massage> sendMassage(
-      {required Massage massageInfo, required String pathOfPhoto}) async {
+      {required Massage massageInfo,
+      required String pathOfPhoto,
+      required String pathOfRecorded}) async {
     try {
-      if(pathOfPhoto.isNotEmpty){
-        String imageUrl =
-        await FirebaseStoragePost.uploadFile(File(pathOfPhoto), "massagesImages");
+      if (pathOfPhoto.isNotEmpty) {
+        String imageUrl = await FirebaseStoragePost.uploadFile(
+            File(pathOfPhoto), "massagesFiles");
         massageInfo.imageUrl = imageUrl;
+      }
+      if (pathOfRecorded.isNotEmpty) {
+        String recordedUrl = await FirebaseStoragePost.uploadFile(
+            File(pathOfRecorded), "massagesFiles");
+        massageInfo.recordedUrl = recordedUrl;
       }
 
       Massage myMassageInfo = await FirestoreUser.sendMassage(
