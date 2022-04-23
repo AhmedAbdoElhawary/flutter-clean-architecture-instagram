@@ -51,7 +51,7 @@ Total : 56 files,  1364 codes, -558 comments, 138 blanks, all 944 lines
 | [lib/presentation/pages/new_post_page.dart](/lib/presentation/pages/new_post_page.dart) | Dart | -1 | -1 | -3 | -5 |
 | [lib/presentation/pages/personal_profile_page.dart](/lib/presentation/pages/personal_profile_page.dart) | Dart | 23 | 0 | 1 | 24 |
 | [lib/presentation/pages/play_this_video.dart](/lib/presentation/pages/play_this_video.dart) | Dart | 38 | 0 | 10 | 48 |
-| [lib/presentation/pages/texting_page.dart](/lib/presentation/pages/texting_page.dart) | Dart | 357 | 13 | 23 | 393 |
+| [lib/presentation/pages/texting_page.dart](/lib/presentation/pages/chatting_page.dart) | Dart | 357 | 13 | 23 | 393 |
 | [lib/presentation/pages/ttry.dart](/lib/presentation/pages/ttry.dart) | Dart | 133 | 11 | 22 | 166 |
 | [lib/presentation/pages/videos_page.dart](/lib/presentation/pages/videos_page.dart) | Dart | 192 | 14 | 9 | 215 |
 | [lib/presentation/pages/which_profile_page.dart](/lib/presentation/pages/which_profile_page.dart) | Dart | 21 | 0 | 2 | 23 |

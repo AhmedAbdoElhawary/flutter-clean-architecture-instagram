@@ -17,16 +17,25 @@ class MassageCubit extends Cubit<MassageState> {
 
   static MassageCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future<void> sendMassage({required Massage massageInfo,required String pathOfPhoto}) async {
+  Future<void> sendMassage(
+      {required Massage massageInfo,
+      String pathOfPhoto = "",
+      String pathOfRecorded = ""}) async {
     emit(SendMassageLoading());
-    await _addMassageUseCase.call(paramsOne: massageInfo,paramsTwo: pathOfPhoto).then((massageInfo) {
+    await _addMassageUseCase
+        .call(
+            paramsOne: massageInfo,
+            paramsTwo: pathOfPhoto,
+            paramsThree: pathOfRecorded)
+        .then((massageInfo) {
       emit(SendMassageLoaded(massageInfo));
     }).catchError((e) {
       emit(SendMassageFailed(e.toString()));
     });
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getMassages(String receiverId) async* {
-   yield* _getMassagesUseCase.call(params: receiverId);
+  Stream<QuerySnapshot<Map<String, dynamic>>> getMassages(
+      String receiverId) async* {
+    yield* _getMassagesUseCase.call(params: receiverId);
   }
 }

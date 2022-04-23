@@ -68,7 +68,7 @@ class DateOfNow {
 
     DateTime from = _dateTime(theActualDate);
     DateTime to = _dateTime(thePreviousDate);
-    int date = to.difference(from).inHours;
+    int date = from.difference(to).inHours;
     return (!theActualDate.isAtSameMomentAs(thePreviousDate) && date < 1)
         ? ""
         : theDateOTime;

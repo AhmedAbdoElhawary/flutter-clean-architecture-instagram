@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
-class Massage {
+class Massage extends Equatable {
   String datePublished;
   String massage;
   String receiverId;
   String massageUid;
   String senderId;
   String imageUrl;
+  String recordedUrl;
 
   Massage({
     required this.datePublished,
@@ -15,6 +17,7 @@ class Massage {
     required this.senderId,
     this.massageUid = "",
     this.imageUrl = "",
+    this.recordedUrl = "",
   });
 
   static Massage fromJson(DocumentSnapshot snap) {
@@ -25,6 +28,7 @@ class Massage {
       senderId: snap["senderId"],
       massageUid: snap["massageUid"],
       imageUrl: snap["imageUrl"],
+      recordedUrl: snap["recordedUrl"],
     );
   }
 
@@ -34,5 +38,17 @@ class Massage {
         "receiverId": receiverId,
         "senderId": senderId,
         "imageUrl": imageUrl,
+        "recordedUrl": recordedUrl,
       };
+
+  @override
+  List<Object?> get props => [
+        datePublished,
+        massage,
+        receiverId,
+        massageUid,
+        senderId,
+        imageUrl,
+        recordedUrl
+      ];
 }

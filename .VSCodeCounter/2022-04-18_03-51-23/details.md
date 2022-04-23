@@ -174,7 +174,7 @@ Total : 207 files,  8107 codes, 512 comments, 1158 blanks, all 9777 lines
 | [lib/presentation/pages/shop_page.dart](/lib/presentation/pages/shop_page.dart) | Dart | 10 | 0 | 3 | 13 |
 | [lib/presentation/pages/show_me_who_are_like.dart](/lib/presentation/pages/show_me_who_are_like.dart) | Dart | 69 | 0 | 7 | 76 |
 | [lib/presentation/pages/sign_up_page.dart](/lib/presentation/pages/sign_up_page.dart) | Dart | 165 | 11 | 13 | 189 |
-| [lib/presentation/pages/texting_page.dart](/lib/presentation/pages/texting_page.dart) | Dart | 357 | 13 | 23 | 393 |
+| [lib/presentation/pages/texting_page.dart](/lib/presentation/pages/chatting_page.dart) | Dart | 357 | 13 | 23 | 393 |
 | [lib/presentation/pages/ttry.dart](/lib/presentation/pages/ttry.dart) | Dart | 133 | 11 | 22 | 166 |
 | [lib/presentation/pages/videos_page.dart](/lib/presentation/pages/videos_page.dart) | Dart | 202 | 14 | 12 | 228 |
 | [lib/presentation/pages/which_profile_page.dart](/lib/presentation/pages/which_profile_page.dart) | Dart | 35 | 0 | 5 | 40 |
@@ -200,7 +200,7 @@ Total : 207 files,  8107 codes, 512 comments, 1158 blanks, all 9777 lines
 | [lib/presentation/widgets/show_me_the_users.dart](/lib/presentation/widgets/show_me_the_users.dart) | Dart | 172 | 2 | 14 | 188 |
 | [lib/presentation/widgets/smart_refresher.dart](/lib/presentation/widgets/smart_refresher.dart) | Dart | 127 | 0 | 6 | 133 |
 | [lib/presentation/widgets/toast_show.dart](/lib/presentation/widgets/toast_show.dart) | Dart | 22 | 0 | 1 | 23 |
-| [lib/presentation/widgets/try.dart](/lib/presentation/widgets/try.dart) | Dart | 0 | 52 | 2 | 54 |
+| [lib/presentation/widgets/try.dart](/lib/presentation/widgets/story_page.dart) | Dart | 0 | 52 | 2 | 54 |
 | [lib/presentation/widgets/user_profile_page.dart](/lib/presentation/widgets/user_profile_page.dart) | Dart | 244 | 1 | 17 | 262 |
 | [lib/responsive_layout.dart](/lib/responsive_layout.dart) | Dart | 17 | 0 | 4 | 21 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 62 | 57 | 24 | 143 |
