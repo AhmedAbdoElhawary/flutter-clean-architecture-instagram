@@ -34,6 +34,6 @@ Total : 24 files,  503 codes, -308 comments, 82 blanks, all 277 lines
 | [lib/presentation/pages/comments_page.dart](/lib/presentation/pages/comments_page.dart) | Dart | 76 | -18 | 4 | 62 |
 | [lib/presentation/widgets/commentator.dart](/lib/presentation/widgets/commentator.dart) | Dart | 121 | 76 | 4 | 201 |
 | [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 6 | -6 | 1 | 1 |
-| [lib/presentation/widgets/try.dart](/lib/presentation/widgets/try.dart) | Dart | 0 | 52 | 2 | 54 |
+| [lib/presentation/widgets/try.dart](/lib/presentation/widgets/story_page.dart) | Dart | 0 | 52 | 2 | 54 |
 
 [summary](results.md) / [details](details.md) / [diff summary](diff.md) / diff details

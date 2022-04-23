@@ -187,7 +187,7 @@ Total : 195 files,  6743 codes, 1070 comments, 1020 blanks, all 8833 lines
 | [lib/presentation/widgets/show_me_the_users.dart](/lib/presentation/widgets/show_me_the_users.dart) | Dart | 172 | 17 | 15 | 204 |
 | [lib/presentation/widgets/smart_refresher.dart](/lib/presentation/widgets/smart_refresher.dart) | Dart | 127 | 0 | 6 | 133 |
 | [lib/presentation/widgets/toast_show.dart](/lib/presentation/widgets/toast_show.dart) | Dart | 22 | 0 | 1 | 23 |
-| [lib/presentation/widgets/try.dart](/lib/presentation/widgets/try.dart) | Dart | 0 | 52 | 2 | 54 |
+| [lib/presentation/widgets/try.dart](/lib/presentation/widgets/story_page.dart) | Dart | 0 | 52 | 2 | 54 |
 | [lib/presentation/widgets/user_profile_page.dart](/lib/presentation/widgets/user_profile_page.dart) | Dart | 228 | 1 | 16 | 245 |
 | [lib/responsive_layout.dart](/lib/responsive_layout.dart) | Dart | 17 | 0 | 4 | 21 |
 | [lib/try.dart](/lib/try.dart) | Dart | 0 | 289 | 1 | 290 |

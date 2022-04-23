@@ -74,7 +74,13 @@ dependencies:
   carousel_slider: ^4.0.0
   flutter_staggered_grid_view: ^0.4.1
   inview_notifier_list: ^3.0.0
-
+  story_view: ^0.13.2
+  flutter_sound: ^9.2.9
+  audioplayers:
+  flutter_audio_recorder2: ^0.0.2
+  audio_video_progress_bar: ^0.10.0
+  audio_wave: ^0.1.2
+  dartz: ^0.10.1
 
 
 
