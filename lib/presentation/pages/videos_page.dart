@@ -14,6 +14,7 @@ import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/pages/comments_page.dart';
 import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
+import 'package:instegram/presentation/widgets/fade_in_image.dart';
 import 'package:instegram/presentation/widgets/reel_video_play.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
 
@@ -118,7 +119,7 @@ class VideosPageState extends State<VideosPage> {
                   radius: 18,
                   backgroundColor: Colors.white,
                   child: ClipOval(
-                      child: Image.network(personalInfo!.profileImageUrl)),
+                      child:CustomFadeInImage(imageUrl:personalInfo!.profileImageUrl)),
                 ),
               ),
               const SizedBox(
