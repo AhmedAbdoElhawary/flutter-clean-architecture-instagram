@@ -9,6 +9,7 @@ class Massage extends Equatable {
   String senderId;
   String imageUrl;
   String recordedUrl;
+  bool isThatImage;
 
   Massage({
     required this.datePublished,
@@ -18,17 +19,19 @@ class Massage extends Equatable {
     this.massageUid = "",
     this.imageUrl = "",
     this.recordedUrl = "",
+    required this.isThatImage,
   });
 
   static Massage fromJson(DocumentSnapshot snap) {
     return Massage(
-      datePublished: snap["datePublished"],
-      massage: snap["massage"],
-      receiverId: snap["receiverId"],
-      senderId: snap["senderId"],
-      massageUid: snap["massageUid"],
-      imageUrl: snap["imageUrl"],
-      recordedUrl: snap["recordedUrl"],
+      datePublished: snap["datePublished"] ?? '',
+      massage: snap["massage"] ?? '',
+      receiverId: snap["receiverId"] ?? '',
+      senderId: snap["senderId"] ?? '',
+      massageUid: snap["massageUid"] ?? '',
+      imageUrl: snap["imageUrl"] ?? '',
+      recordedUrl: snap["recordedUrl"] ?? '',
+      isThatImage: snap["isThatImage"] ?? '',
     );
   }
 
@@ -39,6 +42,7 @@ class Massage extends Equatable {
         "senderId": senderId,
         "imageUrl": imageUrl,
         "recordedUrl": recordedUrl,
+        "isThatImage": isThatImage,
       };
 
   @override
