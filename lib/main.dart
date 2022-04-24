@@ -2,8 +2,6 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/presentation/cubit/blocObserver/bloc_observer.dart';
 import 'package:instegram/presentation/pages/login_page.dart';
 import 'package:instegram/presentation/widgets/multi_bloc_provider.dart';
 import 'package:lottie/lottie.dart';
@@ -24,10 +22,6 @@ Future<void> main() async {
     await Firebase.initializeApp();
   }
   await initializeDependencies();
-  BlocOverrides.runZoned(
-    () {},
-    blocObserver: MyBlocObserver(),
-  );
   return runApp(const MyApp());
 }
 

@@ -31,7 +31,7 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>{
+class _ProfilePageState extends State<ProfilePage> {
   bool reBuild = false;
 
   @override
@@ -43,25 +43,25 @@ class _ProfilePageState extends State<ProfilePage>{
     return DefaultTabController(
       length: 3,
       child:
-      //  SmarterRefresh(
-      //   onRefreshData: getData,
-      //   smartRefresherChild:
-         NestedScrollView(
-          headerSliverBuilder: (_, __) {
-            return [
-              SliverList(
-
-                delegate: SliverChildListDelegate(
-                  listOfWidgetsAboveTapBars(widget.userInfo),
-                ),
+          //  SmarterRefresh(
+          //   onRefreshData: getData,
+          //   smartRefresherChild:
+          NestedScrollView(
+        headerSliverBuilder: (_, __) {
+          return [
+            SliverList(
+              delegate: SliverChildListDelegate(
+                listOfWidgetsAboveTapBars(widget.userInfo),
               ),
-            ];
-          },
-          body: tapBar(),
+            ),
+          ];
+        },
+        body: tapBar(),
         // ),
       ),
     );
   }
+
   Widget tapBar() {
     return BlocBuilder<PostCubit, PostState>(
       bloc: PostCubit.get(context)
@@ -104,7 +104,6 @@ class _ProfilePageState extends State<ProfilePage>{
   }
 
   Column columnOfWidgets(List<Post> postsInfo) {
-
     return Column(
       children: [
         tabBarIcons(),
@@ -115,23 +114,25 @@ class _ProfilePageState extends State<ProfilePage>{
 
   Expanded tapBarView(List<Post> postsInfo) {
     List<Post> videosPostsInfo =
-        postsInfo.where((element) => element.isThatImage == false&&element.isThatStory == false).toList();
+        postsInfo.where((element) => element.isThatImage == false).toList();
 
     List<Post> imagesPostsInfo =
-        postsInfo.where((element) => element.isThatImage == true&&element.isThatStory == false).toList();
-    List<Post> storiesInfo =
-    postsInfo.where((element) => element.isThatStory == true).toList();
+        postsInfo.where((element) => element.isThatImage == true).toList();
+    // List<Post> storiesInfo =
+    // postsInfo.where((element) => element.isThatStory == true).toList();
     return Expanded(
       child: TabBarView(
         children: [
           CustomGridView(
-              postsInfo: imagesPostsInfo,
-              userId: widget.userId,),
+            postsInfo: imagesPostsInfo,
+            userId: widget.userId,
+          ),
           CustomVideosGridView(
               postsInfo: videosPostsInfo, userId: widget.userId),
           CustomGridView(
-              postsInfo: imagesPostsInfo,
-              userId: widget.userId,),
+            postsInfo: imagesPostsInfo,
+            userId: widget.userId,
+          ),
         ],
       ),
     );
@@ -143,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage>{
         const Tab(icon: Icon(Icons.grid_on_sharp)),
         Tab(
             icon: SvgPicture.asset(
-              IconsAssets.videoIcon,
+          IconsAssets.videoIcon,
           color: Colors.black,
           height: 22.5,
         )),
@@ -181,14 +182,11 @@ class _ProfilePageState extends State<ProfilePage>{
   Row personalPhotoAndNumberInfo(UserPersonalInfo userInfo) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       GestureDetector(
-        onLongPress: (){
-          if(widget.isThatMyPersonalId){
-
-          }
+        onLongPress: () {
+          if (widget.isThatMyPersonalId) {}
         },
         child: CircleAvatarOfProfileImage(
-            bodyHeight: 900,
-            imageUrl: userInfo.profileImageUrl),
+            bodyHeight: 900, imageUrl: userInfo.profileImageUrl),
       ),
       personalNumbersInfo(userInfo.posts, "Posts", userInfo),
       personalNumbersInfo(userInfo.followerPeople, "Followers", userInfo),

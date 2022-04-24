@@ -1,30 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instegram/data/models/parent_post.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 
-class Post {
-  String datePublished;
-  String caption;
+class Post extends ParentPost {
   String postUrl;
-  String publisherId;
   String postUid;
-  List<dynamic> likes;
-  List<dynamic> comments;
-  UserPersonalInfo? publisherInfo;
-  bool isThatImage;
-  bool isThatStory;
-
   Post({
-    required this.datePublished,
-    required this.publisherId,
-    this.publisherInfo,
+    required String datePublished,
+    required String publisherId,
+    UserPersonalInfo? publisherInfo,
     this.postUid = "",
     this.postUrl = "",
-    this.caption = "",
-    required this.comments,
-    required this.likes,
-    this.isThatImage = true,
-    this.isThatStory = false,
-  });
+    String caption = "",
+    required List<dynamic> comments,
+    required List<dynamic> likes,
+    bool isThatImage = true,
+  }) : super(
+            datePublished: datePublished,
+            likes: likes,
+            comments: comments,
+            publisherId: publisherId,
+            isThatImage: isThatImage,
+            caption: caption,
+            publisherInfo: publisherInfo);
 
   static Post fromSnap(
       {QueryDocumentSnapshot<Map<String, dynamic>>? querySnap,
@@ -39,7 +37,6 @@ class Post {
       postUid: snap["postUid"],
       postUrl: snap["postUrl"],
       isThatImage: snap["isThatImage"],
-      isThatStory: snap["isThatStory"],
     );
   }
 
@@ -52,6 +49,5 @@ class Post {
         'postUid': postUid,
         "postUrl": postUrl,
         "isThatImage": isThatImage,
-        "isThatStory": isThatStory,
       };
 }

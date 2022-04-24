@@ -37,8 +37,8 @@ Total : 56 files,  1364 codes, -558 comments, 138 blanks, all 944 lines
 | [lib/injector.dart](/lib/injector.dart) | Dart | 12 | 4 | -1 | 15 |
 | [lib/main.dart](/lib/main.dart) | Dart | 0 | 12 | -1 | 11 |
 | [lib/presentation/cubit/blocObserver/bloc_observer.dart](/lib/presentation/cubit/blocObserver/bloc_observer.dart) | Dart | -30 | 30 | 0 | 0 |
-| [lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart) | Dart | 28 | 10 | 7 | 45 |
-| [lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_state.dart) | Dart | 21 | 2 | 8 | 31 |
+| [lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart) | Dart | 28 | 10 | 7 | 45 |
+| [lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_state.dart) | Dart | 21 | 2 | 8 | 31 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart) | Dart | 24 | 1 | 2 | 27 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/user_info_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/user_info_state.dart) | Dart | -4 | 6 | -2 | 0 |
 | [lib/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/reply_info_cubit.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/reply_info_cubit.dart) | Dart | -1 | 0 | 0 | -1 |

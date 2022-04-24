@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instegram/data/models/massage.dart';
 import 'package:instegram/data/models/specific_users_info.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
@@ -11,6 +10,8 @@ abstract class FirestoreUserRepository {
   Future<UserPersonalInfo?> getUserFromUserName({required String userName});
   Future<UserPersonalInfo> updateUserPostsInfo(
       {required String userId, required String postId});
+  Future<UserPersonalInfo> updateUserStoriesInfo(
+      {required String userId, required String storyId});
   Future<UserPersonalInfo> updateUserInfo({required UserPersonalInfo userInfo});
 
   Future<String> uploadProfileImage(
@@ -34,6 +35,5 @@ abstract class FirestoreUserRepository {
       required String pathOfPhoto,
       required String pathOfRecorded});
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getMassages(
-      {required String receiverId});
+  Stream<List<Massage>> getMassages({required String receiverId});
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instegram/presentation/widgets/fade_in_image.dart';
 
 import 'circle_avatar_name.dart';
 
@@ -33,7 +34,7 @@ class CircleAvatarOfProfileImage extends StatelessWidget {
                 child: ClipOval(
                   child: imageUrl.isEmpty
                       ? const Icon(Icons.person, color: Colors.white)
-                      : Image.network(imageUrl),
+                      : CustomFadeInImage(imageUrl:imageUrl),
                 ),
                 radius: bodyHeight * .046,
                 backgroundColor: Colors.black,

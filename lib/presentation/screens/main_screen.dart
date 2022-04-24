@@ -9,6 +9,7 @@ import 'package:instegram/presentation/pages/search_about_user_page.dart';
 import 'package:instegram/presentation/pages/personal_profile_page.dart';
 import 'package:instegram/presentation/pages/shop_page.dart';
 import 'package:instegram/presentation/pages/videos_page.dart';
+import 'package:instegram/presentation/widgets/fade_in_image.dart';
 import '../pages/home_page.dart';
 
 class MainScreen extends StatefulWidget {
@@ -43,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
                   child: ClipOval(
                     child: userImage.isEmpty
                         ? const Icon(Icons.person, color: Colors.white)
-                        : Image.network(userImage),
+                        :CustomFadeInImage(imageUrl:userImage) ,
                   ));
             }),
           ),

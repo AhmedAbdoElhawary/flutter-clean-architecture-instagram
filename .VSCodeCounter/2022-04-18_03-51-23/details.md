@@ -139,8 +139,8 @@ Total : 207 files,  8107 codes, 512 comments, 1158 blanks, all 9777 lines
 | [lib/presentation/cubit/firebaseAuthCubit/firebase_auth_state.dart](/lib/presentation/cubit/firebaseAuthCubit/firebase_auth_state.dart) | Dart | 13 | 0 | 9 | 22 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart) | Dart | 19 | 0 | 5 | 24 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/add_new_user_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/add_new_user_state.dart) | Dart | 9 | 0 | 6 | 15 |
-| [lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart) | Dart | 28 | 10 | 7 | 45 |
-| [lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_state.dart) | Dart | 21 | 2 | 8 | 31 |
+| [lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart) | Dart | 28 | 10 | 7 | 45 |
+| [lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_state.dart) | Dart | 21 | 2 | 8 | 31 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart) | Dart | 96 | 1 | 10 | 107 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/user_info_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/user_info_state.dart) | Dart | 17 | 6 | 9 | 32 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart) | Dart | 35 | 0 | 6 | 41 |

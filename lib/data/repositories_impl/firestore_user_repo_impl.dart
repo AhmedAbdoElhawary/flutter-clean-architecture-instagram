@@ -50,6 +50,17 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
+  Future<UserPersonalInfo> updateUserStoriesInfo(
+      {required String userId, required String storyId}) async {
+    try {
+      await FirestoreUser.updateUserStories(userId: userId, storyId: storyId);
+      return await getPersonalInfo(userId);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  @override
   Future<String> uploadProfileImage(
       {required File photo,
       required String userId,
@@ -156,10 +167,9 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> getMassages(
-      {required String receiverId}) async* {
+  Stream<List<Massage>> getMassages({required String receiverId}) {
     // try {
-    yield* FirestoreUser.getMassages(receiverId: receiverId);
+    return FirestoreUser.getMassages(receiverId: receiverId);
     // }
     // catch (e) {
     //   yield* Stream.error(e.toString());

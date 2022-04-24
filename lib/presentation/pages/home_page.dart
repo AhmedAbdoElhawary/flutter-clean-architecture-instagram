@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/data/models/post.dart';
+import 'package:instegram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
 import 'package:instegram/presentation/widgets/custom_app_bar.dart';
@@ -28,16 +28,16 @@ class _HomeScreenState extends State<HomeScreen> {
   bool rebuild = true;
   bool loadingPosts = true;
   bool reLoadData = false;
+  UserPersonalInfo? personalInfo;
 
   Future<void> getData() async {
-    UserPersonalInfo? personalInfo;
     reLoadData = false;
     FirestoreUserInfoCubit userCubit =
         BlocProvider.of<FirestoreUserInfoCubit>(context, listen: false);
     await userCubit.getUserInfo(widget.userId, true);
     personalInfo = userCubit.myPersonalInfo;
 
-    List usersIds = personalInfo!.followedPeople + personalInfo.followerPeople;
+    List usersIds = personalInfo!.followedPeople + personalInfo!.followerPeople;
 
     SpecificUsersPostsCubit usersPostsCubit =
         BlocProvider.of<SpecificUsersPostsCubit>(context, listen: false);
@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       List usersPostsIds = usersPostsCubit.usersPostsInfo;
 
-      List postsIds = usersPostsIds + personalInfo.posts;
+      List postsIds = usersPostsIds + personalInfo!.posts;
 
       PostCubit postCubit = PostCubit.get(context);
       await postCubit
@@ -102,24 +102,21 @@ class _HomeScreenState extends State<HomeScreen> {
           ToastShow.toastStateError(state);
           return const Center(child: Text("There's no posts..."));
         } else {
-          return const Center(
-            child: CircularProgressIndicator(
-                strokeWidth: 1.5, color: ColorManager.black54),
-          );
+          return circularProgress();
         }
       },
     );
   }
 
+  Center circularProgress() {
+    return const Center(
+          child: CircularProgressIndicator(
+              strokeWidth: 1.5, color: ColorManager.black54),
+        );
+  }
+
   SingleChildScrollView inViewNotifier(
       CubitMyPersonalPostsLoaded state, double bodyHeight) {
-    List<Post> imagesPostsInfo =
-    state.postsInfo.where((element) =>element.isThatStory == false).toList();
-
-    List<Post> storiesInfo =
-    state.postsInfo.where((element) => element.isThatStory == true).toList();
-
-
     return SingleChildScrollView(
       child: InViewNotifierList(
         primary: false,
@@ -132,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return deltaTop < (0.5 * viewPortDimension) &&
               deltaBottom > (0.5 * viewPortDimension);
         },
-        itemCount: imagesPostsInfo.length,
+        itemCount: state.postsInfo.length,
         builder: (BuildContext context, int index) {
           return Container(
             width: double.infinity,
@@ -144,15 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (_, bool isInView, __) {
                     if (isInView) {}
                     return columnOfWidgets(
-                      bodyHeight, imagesPostsInfo, index,storiesInfo
-                      //     () {
-                      //   WidgetsBinding.instance!.addPostFrameCallback((_) async {
-                      //     setState(() {
-                      //       isInView;
-                      //     });
-                      //   });
-                      //   return isInView;
-                      // }
+                      bodyHeight, state.postsInfo, index
                     );
                   },
                 );
@@ -164,10 +153,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget columnOfWidgets(double bodyHeight, List<Post> postsInfo, int index,List<Post> storiesInfo) {
+  Widget columnOfWidgets(double bodyHeight, List<Post> postsInfo, int index) {
     return Column(
       children: [
-        if (index == 0) storiesLines(bodyHeight, storiesInfo),
+        if (index == 0) storiesLines(bodyHeight),
         const Divider(thickness: 0.5),
         posts(postsInfo[index]),
       ],
@@ -181,38 +170,52 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget storiesLines(double bodyHeight, List<Post> storiesInfo) {
-
-    return SizedBox(
-      width: double.infinity,
-      height: bodyHeight * 0.155,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: storiesInfo.length,
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
-        itemBuilder: (BuildContext context, int index) {
-          UserPersonalInfo publisherInfo = storiesInfo[index].publisherInfo!;
-          return GestureDetector(
-            onTap: (){
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(
-                builder: (context) =>
-                    StoryPage(postInfo:storiesInfo[index]),
-              ));
-            },
-            child: CircleAvatarOfProfileImage(
-              circleAvatarName:
-                  publisherInfo.name.isNotEmpty ? publisherInfo.name : '',
-              bodyHeight: bodyHeight,
-              thisForStoriesLine: true,
-              imageUrl: publisherInfo.profileImageUrl.isNotEmpty
-                  ? publisherInfo.profileImageUrl
-                  : '',
+  Widget storiesLines(double bodyHeight) {
+    List usersStoriesIds=personalInfo!.followedPeople+personalInfo!.followerPeople;
+    return BlocBuilder<StoryCubit,StoryState>(
+      bloc:StoryCubit.get(context)..getStoriesInfo(usersIds: usersStoriesIds,myPersonalInfo:personalInfo! ) ,
+      // buildWhen: ,
+      builder:(context, state) {
+        if(state is CubitStoriesInfoLoaded){
+          return SizedBox(
+            width: double.infinity,
+            height: bodyHeight * 0.155,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: state.personsWhoHaveStoriesInfo.length,
+              separatorBuilder: (BuildContext context, int index) => const Divider(),
+              itemBuilder: (BuildContext context, int index) {
+                UserPersonalInfo publisherInfo = state.personsWhoHaveStoriesInfo[index];
+                return GestureDetector(
+                  onTap: (){
+                    Navigator.of(
+                      context,
+                    ).push(MaterialPageRoute(
+                      builder: (context) =>
+                          StoryPage(publisherInfo:publisherInfo),
+                    ));
+                  },
+                  child: CircleAvatarOfProfileImage(
+                    circleAvatarName:
+                    publisherInfo.name.isNotEmpty ? publisherInfo.name : '',
+                    bodyHeight: bodyHeight,
+                    thisForStoriesLine: true,
+                    imageUrl: publisherInfo.profileImageUrl.isNotEmpty
+                        ? publisherInfo.profileImageUrl
+                        : '',
+                  ),
+                );
+              },
             ),
           );
-        },
-      ),
+        }else if(state is CubitStoryFailed){
+          ToastShow.toastStateError(state);
+          return const Center(child: Text("There's something wrong..."));
+        }else{
+          return circularProgress();
+        }
+
+      },
     );
   }
 }
