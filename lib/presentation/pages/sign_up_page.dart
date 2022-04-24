@@ -44,8 +44,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   hint: "Phone number, email or username",
                   controller: emailController),
               const SizedBox(height: 15),
-              CustomTextField(
-                  hint: "Password", controller: passwordController),
+              CustomTextField(hint: "Password", controller: passwordController),
               const SizedBox(height: 15),
               CustomTextField(
                   hint: "Confirm the password",
@@ -113,19 +112,21 @@ class _SignUpPageState extends State<SignUpPage> {
                         String name = authState.user.email!.split('@')[0];
                         String userName = "${name}4263";
                         UserPersonalInfo newUserInfo = UserPersonalInfo(
-                            name: name,
-                            email: authState.user.email!,
-                            userName: userName,
-                            bio: "",
-                            profileImageUrl: "",
-                            userId: authState.user.uid,
-                            followerPeople: [],
-                            followedPeople: [],
-                            posts: []);
+                          name: name,
+                          email: authState.user.email!,
+                          userName: userName,
+                          bio: "",
+                          profileImageUrl: "",
+                          userId: authState.user.uid,
+                          followerPeople: [],
+                          followedPeople: [],
+                          posts: [],
+                          stories: [],
+                        );
                         userCubit.addNewUser(newUserInfo);
                         if (userState is CubitUserAdded) {
-                          WidgetsBinding.instance!.addPostFrameCallback((_) async {
-
+                          WidgetsBinding.instance!
+                              .addPostFrameCallback((_) async {
                             // final prefs = await SharedPreferences.getInstance();
                             // await prefs.setString('userInfo', jsonEncode(newUserInfo));
                             // await prefs.setBool('registered', true);
@@ -156,7 +157,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           error = authState.error;
                         }
                         ToastShow.toast(error);
-
                       }
 
                       return TextButton(

@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/presentation/pages/new_post_page.dart';
+import 'package:instegram/presentation/pages/story_config.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
 import 'package:instegram/presentation/widgets/recommendation_people.dart';
 import '../../data/models/user_personal_info.dart';
@@ -214,24 +215,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
                 const Divider(indent: 40, endIndent: 15),
                 createNewVideo(),
                 const Divider(indent: 40, endIndent: 15),
-                GestureDetector(
-                  onTap: () async {
-                    final ImagePicker _picker = ImagePicker();
-                    final XFile? image =
-                        await _picker.pickImage(source: ImageSource.camera);
-                    if (image != null) {
-                      File photo = File(image.path);
-                      await Navigator.of(context, rootNavigator: true).push(
-                          MaterialPageRoute(
-                              builder: (context) => CreatePostPage(selectedFile: photo,isThatStory: true),
-                              maintainState: false));
-                      setState(() {
-                        rebuildUserInfo = true;
-                      });
-                    }
-                  },
-                    child: createSizedBox(
-                        "Story", IconsAssets.addInstagramStoryIcon)),
+                createStoryButton(),
                 const Divider(indent: 40, endIndent: 15),
                 createSizedBox("Live", IconsAssets.instagramHighlightStoryIcon),
                 const Divider(indent: 40, endIndent: 15),
@@ -244,6 +228,26 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         ],
       ),
     );
+  }
+
+  GestureDetector createStoryButton() {
+    return GestureDetector(
+        onTap: () async {
+          final ImagePicker _picker = ImagePicker();
+          final XFile? image =
+              await _picker.pickImage(source: ImageSource.camera);
+          if (image != null) {
+            File photo = File(image.path);
+            await Navigator.of(context, rootNavigator: true).push(
+                MaterialPageRoute(
+                    builder: (context) => NewStoryPage(storyImage: photo),
+                    maintainState: false));
+            setState(() {
+              rebuildUserInfo = true;
+            });
+          }
+        },
+        child: createSizedBox("Story", IconsAssets.addInstagramStoryIcon));
   }
 
   GestureDetector createNewVideo() {
