@@ -1,11 +1,14 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instegram/data/models/massage.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart';
+import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart';
+import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart';
 import 'package:instegram/presentation/widgets/audio_recorder_view.dart';
+import 'package:instegram/presentation/widgets/fade_in_image.dart';
 import 'package:instegram/presentation/widgets/record_view.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
 import 'package:instegram/presentation/widgets/user_profile_page.dart';
@@ -25,9 +28,9 @@ class ChattingPage extends StatefulWidget {
 class _ChattingPageState extends State<ChattingPage> {
   final TextEditingController _textController = TextEditingController();
   final itemScrollController = ItemScrollController();
-  List<Massage> massagesInfo = [];
-  bool isThatLoaded = false;
-  bool isThatRecordedLoaded = false;
+  List<Massage> globalMassagesInfo = [];
+  Massage? newMassageInfo;
+  bool isMassageLoaded = false;
 
   late Directory appDirectory;
   String records = '';
@@ -54,93 +57,73 @@ class _ChattingPageState extends State<ChattingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      body: Builder(builder: (context) {
-        MassageCubit massageCubit = MassageCubit.get(context);
-        return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            stream: massageCubit.getMassages(widget.userInfo.userId),
-            builder: (BuildContext context,
-                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshots) {
-              if (!snapshots.hasData) {
-                return Column(
-                  children: [
-                    buildUserInfo(context),
-                    const Center(
-                      child: Text('There is no Massages yet!'),
-                    ),
-                  ],
-                );
-              } else {
-                List<QueryDocumentSnapshot<Map<String, dynamic>>> snap =
-                    snapshots.data!.docs;
-                if (!isThatLoaded) {
-                  for (int i = 0; i < snap.length; i++) {
-                    if (!massagesInfo.contains(Massage.fromJson(snap[i]))) {
-                      massagesInfo.add(Massage.fromJson(snap[i]));
-                    }
-                  }
-                  WidgetsBinding.instance!.addPostFrameCallback((_) async {
-                    setState(() {
-                      isThatLoaded = true;
-                    });
-                  });
-
-
-                  return const Center(
-                      child: CircularProgressIndicator(
-                    color: Colors.black54,
-                    strokeWidth: 1.3,
-                  ));
-                }
-                if(isThatRecordedLoaded){
-                  massagesInfo.removeLast();
-                  massagesInfo.add(Massage.fromJson(snap[snap.length - 1]));
-                  WidgetsBinding.instance!.addPostFrameCallback((_) async {
-                    setState(() {
-                      isThatRecordedLoaded = true;
-                    });
-                  });
-                }
-                return Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: massagesInfo.isNotEmpty
-                            ? ScrollablePositionedList.separated(
-                                itemScrollController: itemScrollController,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    children: [
-                                      if (index == 0) buildUserInfo(context),
-                                      // if (index > 0)
-                                      buildTheMassage(
-                                          massagesInfo[index],
-                                          massagesInfo[
-                                                  index != 0 ? index - 1 : 0]
-                                              .datePublished),
-                                      if (index == massagesInfo.length - 1)
-                                        const SizedBox(height: 10),
-                                    ],
-                                  );
-                                },
-                                itemCount: massagesInfo.length,
-                                separatorBuilder:
-                                    (BuildContext context, int index) =>
-                                        const SizedBox(height: 5))
-                            : buildUserInfo(context),
-                      ),
-                      fieldOfMassage(),
-                    ],
-                  ),
-                );
-              }
-            }
-
-            // },
-            );
-      }),
+      body: buildBody(context),
     );
   }
+
+  BlocBuilder<MassageBloc, MassageBlocState> buildBody(BuildContext context) {
+    return BlocBuilder<MassageBloc, MassageBlocState>(
+        bloc: BlocProvider.of<MassageBloc>(context)
+          ..add(LoadMassages(widget.userInfo.userId)),
+        buildWhen: (previous, current) {
+          if (previous != current && (current is MassageBlocLoaded)) {
+            return true;
+          }
+          return false;
+        },
+        builder: (context, state) {
+          if (state is MassageBlocLoaded) {
+            if (state.massages.length >= globalMassagesInfo.length) {
+              globalMassagesInfo = state.massages;
+            }
+            if (newMassageInfo != null && isMassageLoaded) {
+              isMassageLoaded = false;
+              globalMassagesInfo.add(newMassageInfo!);
+            }
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: globalMassagesInfo.isNotEmpty
+                        ? ScrollablePositionedList.separated(
+                            itemScrollController: itemScrollController,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  if (index == 0) buildUserInfo(context),
+                                  // if (index > 0)
+                                  buildTheMassage(
+                                      globalMassagesInfo[index],
+                                      globalMassagesInfo[
+                                              index != 0 ? index - 1 : 0]
+                                          .datePublished),
+                                  if (index == globalMassagesInfo.length - 1)
+                                    const SizedBox(height: 10),
+                                ],
+                              );
+                            },
+                            itemCount: globalMassagesInfo.length,
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const SizedBox(height: 5))
+                        : buildUserInfo(context),
+                  ),
+                  if (!unSend) fieldOfMassage(),
+                ],
+              ),
+            );
+          } else {
+            return buildCircularProgress();
+          }
+        });
+  }
+
+  Center buildCircularProgress() => const Center(
+          child: CircularProgressIndicator(
+        color: Colors.black54,
+        strokeWidth: 1.3,
+      ));
 
   Column buildUserInfo(BuildContext context) {
     return Column(
@@ -157,13 +140,10 @@ class _ChattingPageState extends State<ChattingPage> {
     );
   }
 
+  Massage? deleteThisMassage;
   Widget buildTheMassage(Massage massageInfo, String previousDateOfMassage) {
     bool isThatMine = false;
     if (massageInfo.senderId == myPersonalId) isThatMine = true;
-    String massage = massageInfo.massage;
-    String imageUrl = massageInfo.imageUrl.toString();
-    String recordedUrl = massageInfo.recordedUrl.toString();
-    bool check=recordedUrl.isNotEmpty;
     String theDate = DateOfNow.chattingDateOfNow(
         massageInfo.datePublished, previousDateOfMassage);
     return Column(
@@ -180,59 +160,80 @@ class _ChattingPageState extends State<ChattingPage> {
               )),
         const SizedBox(height: 5),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            if (isThatMine)
-              const SizedBox(
-                width: 100,
-              ),
+            if (isThatMine) const SizedBox(width: 100),
             Expanded(
-              child: Align(
-                alignment: isThatMine
-                    ? AlignmentDirectional.centerEnd
-                    : AlignmentDirectional.centerStart,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: isThatMine
-                          ? const Color.fromARGB(255, 4, 113, 238)
-                          : Colors.grey[200],
-                      borderRadius: BorderRadiusDirectional.only(
-                        bottomStart: Radius.circular(isThatMine ? 20 : 0),
-                        bottomEnd: Radius.circular(isThatMine ? 0 : 20),
-                        topStart: const Radius.circular(20),
-                        topEnd: const Radius.circular(20),
-                      )),
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  padding: imageUrl.isEmpty
-                      ? const EdgeInsets.symmetric(vertical: 8, horizontal: 10)
-                      : const EdgeInsets.all(0),
-                  child: imageUrl.isEmpty
-                      ? (check&&records.isEmpty
-                          // recordedUrl.isEmpty
-                          ? Text(
-                              massage,
-                              style: TextStyle(
-                                  color:
-                                      isThatMine ? Colors.white : Colors.black),
-                            )
-                          : SizedBox(
-                              child: RecordView(
-                              record:
-                                  recordedUrl.isEmpty ? records : recordedUrl,
-                            )))
-                      : SizedBox(
-                          width: 90,
-                          height: 150,
-                          child: Image.network(imageUrl, fit: BoxFit.cover)),
-                ),
+              child: GestureDetector(
+                onLongPress: () {
+                  setState(() {
+                    deleteThisMassage = massageInfo;
+                    unSend = true;
+                  });
+                },
+                child: buildMassage(isThatMine, massageInfo),
               ),
             ),
-            if (!isThatMine)
-              const SizedBox(
-                width: 100,
-              )
+            if (!isThatMine) const SizedBox(width: 100),
+            Visibility(
+                visible: massageInfo.massageUid.isEmpty,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 5.0),
+                  child: SvgPicture.asset(
+                    "assets/icons/paper_plane_right.svg",
+                    height: 15,
+                  ),
+                )),
           ],
         ),
       ],
+    );
+  }
+
+  bool unSend = false;
+  Align buildMassage(bool isThatMine, Massage massageInfo) {
+    String massage = massageInfo.massage;
+    String imageUrl = massageInfo.imageUrl;
+    String recordedUrl = massageInfo.recordedUrl;
+    return Align(
+      alignment: isThatMine
+          ? AlignmentDirectional.centerEnd
+          : AlignmentDirectional.centerStart,
+      child: Container(
+        decoration: BoxDecoration(
+            color: isThatMine
+                ? const Color.fromARGB(255, 4, 113, 238)
+                : Colors.grey[200],
+            borderRadius: BorderRadiusDirectional.only(
+              bottomStart: Radius.circular(isThatMine ? 20 : 0),
+              bottomEnd: Radius.circular(isThatMine ? 0 : 20),
+              topStart: const Radius.circular(20),
+              topEnd: const Radius.circular(20),
+            )),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        padding: imageUrl.isEmpty
+            ? const EdgeInsets.symmetric(vertical: 8, horizontal: 10)
+            : const EdgeInsets.all(0),
+        child: massage.isNotEmpty
+            ? Text(
+                massage,
+                style:
+                    TextStyle(color: isThatMine ? Colors.white : Colors.black),
+              )
+            : (massageInfo.isThatImage
+                ? SizedBox(
+                    width: 90,
+                    height: 150,
+                    child: massageInfo.massageUid.isNotEmpty
+                        ? CustomFadeInImage(
+                            imageUrl: imageUrl,
+                          )
+                        : Image.asset(imageUrl, fit: BoxFit.cover))
+                : SizedBox(
+                    child: RecordView(
+                    record: recordedUrl.isEmpty ? records : recordedUrl,
+                  ))),
+      ),
     );
   }
 
@@ -241,22 +242,17 @@ class _ChattingPageState extends State<ChattingPage> {
       if (onData.path.contains('.aac')) records = onData.path;
     }).onDone(() async {
       setState(() {});
-      massagesInfo.add(newMassage());
-
       MassageCubit massageCubit = MassageCubit.get(context);
-      await massageCubit.sendMassage(
+      newMassageInfo = newMassage();
+      isMassageLoaded = true;
+      massageCubit.sendMassage(
           massageInfo: newMassage(), pathOfRecorded: records);
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
-        setState(() {
-          isThatRecordedLoaded = true;
-        });
-      });
     });
   }
 
   Widget fieldOfMassage() {
     return SingleChildScrollView(
-      child: Container(
+      child:unSend? deleteTheMassage(): Container(
         decoration: BoxDecoration(
             color: Colors.grey[200], borderRadius: BorderRadius.circular(35)),
         clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -269,6 +265,52 @@ class _ChattingPageState extends State<ChattingPage> {
           }),
         ),
       ),
+    );
+  }
+
+  Container deleteTheMassage() {
+    return Container(
+        height: 60,
+        color: Colors.grey[100],
+        child: Padding(
+          padding:
+          const EdgeInsets.symmetric(horizontal: 80.0),
+          child: Row(
+              mainAxisAlignment:
+              MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("Replay",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15)),
+                GestureDetector(
+                    onTap: () {
+                      // massageCubit.
+                    },
+                    child: const Text("UnSend",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15))),
+              ]),
+        ),
+      );
+  }
+
+  Widget sss(MassageCubit massageCubit) {
+    return Container(
+      height: 40,
+      width: double.infinity,
+      color: Colors.white,
+      child: Row(children: [
+        const Expanded(child: Text("Replay"), flex: 1),
+        Expanded(
+            child: GestureDetector(
+                onTap: () {
+                  // massageCubit.
+                },
+                child: const Text("UnSend")),
+            flex: 1),
+      ]),
     );
   }
 
@@ -302,11 +344,16 @@ class _ChattingPageState extends State<ChattingPage> {
         final XFile? pickedFile =
             await _picker.pickImage(source: ImageSource.camera);
         if (pickedFile != null) {
-          await massageCubit.sendMassage(
-              massageInfo: newMassage(), pathOfPhoto: pickedFile.path);
-          // setState(() {
-          //   isImageUpload = true;
-          // });
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
+            setState(() {
+              isMassageLoaded = true;
+              newMassageInfo = newMassage(isThatImage: true);
+              newMassageInfo!.imageUrl = pickedFile.path;
+            });
+          });
+          massageCubit.sendMassage(
+              massageInfo: newMassage(isThatImage: true),
+              pathOfPhoto: pickedFile.path);
         } else {
           ToastShow.toast('No image selected.');
         }
@@ -338,7 +385,6 @@ class _ChattingPageState extends State<ChattingPage> {
           setState(() {
             _textController;
           });
-          print(e.toString());
         },
       ),
     );
@@ -368,7 +414,10 @@ class _ChattingPageState extends State<ChattingPage> {
   GestureDetector pickSticker() {
     return GestureDetector(
       onTap: () {},
-      child: const Icon(Icons.sticky_note_2),
+      child: SvgPicture.asset(
+        "assets/icons/sticker.svg",
+        height: 25,
+      ),
     );
   }
 
@@ -379,8 +428,16 @@ class _ChattingPageState extends State<ChattingPage> {
         final XFile? pickedFile =
             await _picker.pickImage(source: ImageSource.gallery);
         if (pickedFile != null) {
-          await massageCubit.sendMassage(
-              massageInfo: newMassage(), pathOfPhoto: pickedFile.path);
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
+            setState(() {
+              isMassageLoaded = true;
+              newMassageInfo = newMassage(isThatImage: true);
+              newMassageInfo!.imageUrl = pickedFile.path;
+            });
+          });
+          massageCubit.sendMassage(
+              massageInfo: newMassage(isThatImage: true),
+              pathOfPhoto: pickedFile.path);
           // setState(() {
           //   isImageUpload = true;
           // });
@@ -388,25 +445,28 @@ class _ChattingPageState extends State<ChattingPage> {
           ToastShow.toast('No image selected.');
         }
       },
-      child: const Icon(Icons.photo),
+      child: SvgPicture.asset(
+        "assets/icons/gallery.svg",
+        height: 25,
+      ),
     );
   }
 
-  Massage newMassage() {
+  Massage newMassage({bool isThatImage = false}) {
     return Massage(
       datePublished: DateOfNow.dateOfNow(),
       massage: _textController.text,
       senderId: myPersonalId,
       receiverId: widget.userInfo.userId,
+      isThatImage: isThatImage,
     );
   }
 
   CircleAvatar circleAvatarOfImage() {
     return CircleAvatar(
         child: ClipOval(
-            child: Image.network(
-          widget.userInfo.profileImageUrl,
-          fit: BoxFit.cover,
+            child: CustomFadeInImage(
+          imageUrl: widget.userInfo.profileImageUrl,
         )),
         radius: 45);
   }
@@ -481,9 +541,8 @@ class _ChattingPageState extends State<ChattingPage> {
         children: [
           CircleAvatar(
               child: ClipOval(
-                  child: Image.network(
-                widget.userInfo.profileImageUrl,
-                fit: BoxFit.cover,
+                  child: CustomFadeInImage(
+                imageUrl: widget.userInfo.profileImageUrl,
               )),
               radius: 17),
           const SizedBox(
@@ -495,19 +554,19 @@ class _ChattingPageState extends State<ChattingPage> {
           )
         ],
       ),
-      actions: const [
-        Icon(
-          Icons.phone,
-          color: Colors.black,
+      actions: [
+        SvgPicture.asset(
+          "assets/icons/phone.svg",
+          height: 27,
         ),
-        SizedBox(
+        const SizedBox(
           width: 20,
         ),
-        Icon(
-          Icons.video_call,
-          color: Colors.black,
+        SvgPicture.asset(
+          "assets/icons/video_point.svg",
+          height: 25,
         ),
-        SizedBox(
+        const SizedBox(
           width: 15,
         ),
       ],
