@@ -1,12 +1,15 @@
 import 'package:get_it/get_it.dart';
 import 'package:instegram/data/repositories_impl/firebase_auth_repository_impl.dart';
+import 'package:instegram/data/repositories_impl/firestore_story_repo_impl.dart';
 import 'package:instegram/data/repositories_impl/firestore_user_repo_impl.dart';
 import 'package:instegram/data/repositories_impl/post/comment/firestore_comment_repo_impl.dart';
 import 'package:instegram/data/repositories_impl/post/comment/firestore_reply_repo_impl.dart';
 import 'package:instegram/data/repositories_impl/post/firestore_post_repo_impl.dart';
 import 'package:instegram/domain/repositories/post/comment/comment_repository.dart';
 import 'package:instegram/domain/repositories/post/comment/reply_repository.dart';
+import 'package:instegram/domain/repositories/story_repository.dart';
 import 'package:instegram/domain/usecases/firestoreUserUseCase/add_post_to_user.dart';
+import 'package:instegram/domain/usecases/firestoreUserUseCase/add_story_to_user.dart';
 import 'package:instegram/domain/usecases/firestoreUserUseCase/getUserInfo/get_specific_users_usecase.dart';
 import 'package:instegram/domain/usecases/firestoreUserUseCase/getUserInfo/get_user_from_user_name.dart';
 import 'package:instegram/domain/usecases/firestoreUserUseCase/massage/add_massage.dart';
@@ -28,9 +31,13 @@ import 'package:instegram/domain/usecases/postUseCase/getPostInfo/get_post_info.
 import 'package:instegram/domain/usecases/postUseCase/getPostInfo/get_specific_users_posts.dart';
 import 'package:instegram/domain/usecases/postUseCase/likes/put_like_on_this_post.dart';
 import 'package:instegram/domain/usecases/postUseCase/likes/remove_the_like_on_this_post.dart';
+import 'package:instegram/domain/usecases/storyUseCase/create_story.dart';
+import 'package:instegram/domain/usecases/storyUseCase/get_stories_info.dart';
+import 'package:instegram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instegram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart';
+import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart';
+import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
@@ -81,7 +88,12 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<FirestoreUserRepository>(
     FirebaseUserRepoImpl(),
   );
+  // story
+  injector.registerSingleton<FirestoreStoryRepository>(
+    FirestoreStoryRepositoryImpl(),
+  );
   // *
+  // todo ==============================================================================================>
 
   // Firebase auth useCases
   injector.registerSingleton<LogInAuthUseCase>(LogInAuthUseCase(injector()));
@@ -106,6 +118,9 @@ Future<void> initializeDependencies() async {
       AddPostToUserUseCase(injector()));
   injector.registerSingleton<GetUserFromUserNameUseCase>(
       GetUserFromUserNameUseCase(injector()));
+  injector.registerSingleton<AddStoryToUserUseCase>(
+      AddStoryToUserUseCase(injector()));
+
   // massage use case
   injector.registerSingleton<AddMassageUseCase>(AddMassageUseCase(injector()));
   injector
@@ -153,7 +168,6 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<ReplyOnThisCommentUseCase>(
       ReplyOnThisCommentUseCase(injector()));
   // *
-
   // *
 
   // follow useCases
@@ -163,6 +177,15 @@ Future<void> initializeDependencies() async {
       RemoveThisFollowerUseCase(injector()));
 
   // *
+
+  // story useCases
+  injector.registerSingleton<GetStoriesInfoUseCase>(
+      GetStoriesInfoUseCase(injector()));
+  injector
+      .registerSingleton<CreateStoryUseCase>(CreateStoryUseCase(injector()));
+
+  // *
+  // todo ==============================================================================================>
 
   // auth Blocs
   injector.registerFactory<FirebaseAuthCubit>(
@@ -175,13 +198,16 @@ Future<void> initializeDependencies() async {
     () => FirestoreAddNewUserCubit(injector()),
   );
   injector.registerFactory<FirestoreUserInfoCubit>(() => FirestoreUserInfoCubit(
-      injector(), injector(), injector(), injector(), injector()));
+      injector(), injector(), injector(), injector(), injector(), injector()));
   injector.registerFactory<UsersInfoCubit>(
     () => UsersInfoCubit(injector(), injector()),
   );
   // massage bloc
   injector.registerFactory<MassageCubit>(
-    () => MassageCubit(injector(), injector()),
+    () => MassageCubit(injector()),
+  );
+  injector.registerFactory<MassageBloc>(
+    () => MassageBloc(injector()),
   );
   // *
   // *
@@ -223,5 +249,10 @@ Future<void> initializeDependencies() async {
   injector.registerFactory<SpecificUsersPostsCubit>(
     () => SpecificUsersPostsCubit(injector()),
   );
+  // story Blocs
+  injector.registerFactory<StoryCubit>(
+    () => StoryCubit(injector(), injector()),
+  );
+  // *
   // *
 }
