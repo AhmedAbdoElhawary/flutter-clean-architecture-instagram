@@ -1,4 +1,4 @@
-part of '../../firestoreUserInfoCubit/massage/massage_cubit.dart';
+part of 'massage_cubit.dart';
 
 abstract class MassageState extends Equatable {
   const MassageState();
