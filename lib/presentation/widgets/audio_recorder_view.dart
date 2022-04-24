@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_audio_recorder2/flutter_audio_recorder2.dart';
 import 'dart:io';
@@ -17,9 +18,10 @@ enum RecordingState {
   recording,
   stopped,
 }
+  SvgPicture microphoneIcon() => SvgPicture.asset("assets/icons/microphone.svg", height: 25);
 
 class _RecorderViewState extends State<RecorderView> {
-  IconData _recordIcon = Icons.mic_none;
+  Widget _recordIcon = microphoneIcon();
   RecordingState _recordingState = RecordingState.nSet;
 
   late FlutterAudioRecorder2 audioRecorder;
@@ -31,10 +33,11 @@ class _RecorderViewState extends State<RecorderView> {
     FlutterAudioRecorder2.hasPermissions.then((hasPermission) {
       if (hasPermission!) {
         _recordingState = RecordingState.set;
-        _recordIcon = Icons.mic_none;
+        _recordIcon = microphoneIcon();
       }
     });
   }
+
 
   @override
   void dispose() {
@@ -53,10 +56,7 @@ class _RecorderViewState extends State<RecorderView> {
         await _onRecordButtonPressed();
         setState(() {});
       },
-      child: Icon(
-        _recordIcon,
-        size: 25,
-      ),
+      child:_recordIcon ,
     );
   }
 
@@ -69,7 +69,7 @@ class _RecorderViewState extends State<RecorderView> {
       case RecordingState.recording:
         await _stopRecording();
         _recordingState = RecordingState.stopped;
-        _recordIcon = Icons.mic_none;
+        _recordIcon = SvgPicture.asset("assets/icons/microphone.svg", height: 25);
         break;
 
       case RecordingState.stopped:
@@ -115,7 +115,7 @@ class _RecorderViewState extends State<RecorderView> {
 
       await _startRecording();
       _recordingState = RecordingState.recording;
-      _recordIcon = Icons.fiber_manual_record;
+      _recordIcon = SvgPicture.asset("assets/icons/microphone_black.svg", height: 25);
     } else {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
