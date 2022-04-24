@@ -172,7 +172,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
       comments: [],
       likes: [],
       isThatImage: widget.isThatImage,
-      isThatStory: widget.isThatStory,
     );
   }
 }

@@ -46,15 +46,11 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage>{
         return false;
       },      builder: (context, state) {
         if (state is CubitAllPostsLoaded) {
-          List<Post> imagesPostsInfo =
-          state.allPostInfo.where((element) =>element.isThatStory == false).toList();
-          List<Post> storiesInfo =
-          state.allPostInfo.where((element) => element.isThatStory == true).toList();
-          return SmarterRefresh(
+         return SmarterRefresh(
             onRefreshData: getData,
             smartRefresherChild: SingleChildScrollView(
               child: CustomGridView(
-                  postsInfo: imagesPostsInfo, userId: widget.userId),
+                  postsInfo: state.allPostInfo, userId: widget.userId),
             ),
           );
         } else if (state is CubitPostFailed) {

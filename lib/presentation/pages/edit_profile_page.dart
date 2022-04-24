@@ -7,6 +7,7 @@ import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
+import 'package:instegram/presentation/widgets/fade_in_image.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../widgets/toast_show.dart';
 
@@ -104,6 +105,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     bio: widget.bioController.text,
                     profileImageUrl: widget.userInfo.profileImageUrl,
                     email: widget.userInfo.email,
+                    stories: widget.userInfo.stories,
                     userId: widget.userInfo.userId);
                 await updateUserCubit
                     .updateUserInfo(updatedUserInfo)
@@ -214,7 +216,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ? const CircularProgressIndicator()
               : (widget.userInfo.profileImageUrl.isEmpty
                   ? const Icon(Icons.person, color: ColorManager.white)
-                  : Image.network(widget.userInfo.profileImageUrl)),
+                  : CustomFadeInImage(
+                      imageUrl: widget.userInfo.profileImageUrl)),
         ),
         radius: 50,
         backgroundColor: ColorManager.black,
