@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instegram/data/models/massage.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
-
 import '../../../core/utility/constant.dart';
 
 class FirestoreUser {
@@ -75,6 +74,12 @@ class FirestoreUser {
       'posts': FieldValue.arrayUnion([postId])
     });
   }
+  static updateUserStories(
+      {required String userId, required String storyId}) async {
+    await _fireStoreUserCollection.doc(userId).update({
+      'stories': FieldValue.arrayUnion([storyId])
+    });
+  }
 
   static followThisUser(String followingUserId, String myPersonalId) async {
     await _fireStoreUserCollection.doc(followingUserId).update({
@@ -137,8 +142,8 @@ class FirestoreUser {
     return massage;
   }
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getMassages(
-      {required String receiverId}) async* {
+  static Stream<List<Massage>> getMassages(
+      {required String receiverId}) {
     // List<Massage> massagesInfo = [];
     Stream<QuerySnapshot<Map<String, dynamic>>> _snapshotsMassages =
         _fireStoreUserCollection
@@ -149,13 +154,13 @@ class FirestoreUser {
             .orderBy("datePublished", descending: false)
             .snapshots();
     print("QuerySnapshot ===============================");
-
+    return _snapshotsMassages.map((snapshot) => snapshot.docs.map((doc) =>Massage.fromJson(doc)).toList());
     // _snapshotsMassages.listen((event) {
     //   for (var element in event.docs) {
     //     Map<String, dynamic> a = element.data();
     //     massagesInfo.add(Massage.fromJson(a));
     //   }
     // });
-    yield* _snapshotsMassages;
+    // yield* _snapshotsMassages;
   }
 }
