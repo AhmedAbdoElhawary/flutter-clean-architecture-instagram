@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instegram/data/models/story.dart';
 
 class UserPersonalInfo {
   String bio;
@@ -10,11 +11,15 @@ class UserPersonalInfo {
   List<dynamic> followedPeople;
   List<dynamic> followerPeople;
   List<dynamic> posts;
+  List<dynamic> stories;
+  List<Story>? storiesInfo;
 
   UserPersonalInfo(
       {required this.followedPeople,
       required this.followerPeople,
       required this.posts,
+      required this.stories,
+      this.storiesInfo,
       this.name = "",
       this.bio = "",
       this.email = "",
@@ -34,6 +39,7 @@ class UserPersonalInfo {
       bio: snap["bio"],
       userName: snap["userName"],
       posts: snap['posts'],
+      stories: snap['stories'],
       followedPeople: snap['following'],
       followerPeople: snap['followers'],
     );
@@ -44,6 +50,7 @@ class UserPersonalInfo {
       'following': followedPeople,
       'followers': followerPeople,
       'posts': posts,
+      'stories': stories,
       'name': name,
       'userName': userName,
       'bio': bio,
