@@ -11,6 +11,7 @@ import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_name.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
+import 'package:instegram/presentation/widgets/fade_in_image.dart';
 import 'package:instegram/presentation/widgets/read_more_text.dart';
 
 class CustomPostListView extends StatefulWidget {
@@ -77,40 +78,40 @@ class _CustomPostListViewState extends State<CustomPostListView> {
         Row(children: [
           Expanded(
               child: Row(
-                children: [
-                  loveButton(postInfo),
-                  IconButton(
-                    icon: iconsOfImagePost("assets/icons/comment.svg"),
-                    onPressed: () {
-                      Navigator.of(
-                        context,
-                      ).push(CupertinoPageRoute(
-                        builder: (context) =>
-                            CommentsPage(postId: postInfo.postUid),
-                      ));
-                    },
-                  ),
-                  IconButton(
-                    icon: iconsOfImagePost("assets/icons/send.svg"),
-                    onPressed: () {
-                      // Navigator.of(context,
-                      // ).push(CupertinoPageRoute(
-                      //
-                      //   builder: (context) =>
-                      //       MassagesPage(postInfo.publisherId),
-                      // ));
-                    },
-                  ),
-                ],
-              )),
+            children: [
+              loveButton(postInfo),
+              IconButton(
+                icon: iconsOfImagePost("assets/icons/comment.svg"),
+                onPressed: () {
+                  Navigator.of(
+                    context,
+                  ).push(CupertinoPageRoute(
+                    builder: (context) =>
+                        CommentsPage(postId: postInfo.postUid),
+                  ));
+                },
+              ),
+              IconButton(
+                icon: iconsOfImagePost("assets/icons/send.svg"),
+                onPressed: () {
+                  // Navigator.of(context,
+                  // ).push(CupertinoPageRoute(
+                  //
+                  //   builder: (context) =>
+                  //       MassagesPage(postInfo.publisherId),
+                  // ));
+                },
+              ),
+            ],
+          )),
           IconButton(
             icon: isSaved
                 ? const Icon(
-              Icons.bookmark_border,
-            )
+                    Icons.bookmark_border,
+                  )
                 : const Icon(
-              Icons.bookmark,
-            ),
+                    Icons.bookmark,
+                  ),
             onPressed: () {
               setState(() {
                 isSaved = isSaved ? false : true;
@@ -143,12 +144,12 @@ class _CustomPostListViewState extends State<CustomPostListView> {
     return GestureDetector(
       child: !isLiked
           ? const Icon(
-        Icons.favorite_border,
-      )
+              Icons.favorite_border,
+            )
           : const Icon(
-        Icons.favorite,
-        color: Colors.red,
-      ),
+              Icons.favorite,
+              color: Colors.red,
+            ),
       onTap: () {
         setState(() {
           if (isLiked) {
@@ -174,10 +175,7 @@ class _CustomPostListViewState extends State<CustomPostListView> {
             backgroundColor: Colors.black12,
             child: imageUrl.isEmpty
                 ? const Icon(Icons.person, color: Colors.white)
-                : ClipOval(
-                child: Image.network(
-                  imageUrl,
-                ))),
+                : ClipOval(child: CustomFadeInImage(imageUrl: imageUrl))),
         const SizedBox(width: 10),
         const Text(
           "Add a comment...",
@@ -192,9 +190,9 @@ class _CustomPostListViewState extends State<CustomPostListView> {
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => UsersWhoLikesOnPostPage(
-              showSearchBar: true,
-              usersIds: postInfo.likes,
-            )));
+                  showSearchBar: true,
+                  usersIds: postInfo.likes,
+                )));
       },
       child: Text('${postInfo.likes.length} Likes',
           textAlign: TextAlign.left,
@@ -215,33 +213,11 @@ class _CustomPostListViewState extends State<CustomPostListView> {
     return InkWell(
       onDoubleTap: () {},
       child: postInfo.isThatImage
-          ? buildImage(postInfo)
-          : PlayThisVideo(videoUrl: postInfo.postUrl,
-          // isVideoInView: (){return true;}
-      ),
-    );
-  }
-
-  Image buildImage(Post postInfo) {
-    return Image.network(
-      postInfo.postUrl,
-      width: double.infinity,
-      fit: BoxFit.fitWidth,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) {
-          return child;
-        }
-        return const SizedBox(
-          width: double.infinity,
-          height: 300,
-          child: Center(
-            child: CircularProgressIndicator(
-              color: Colors.black87,
-              strokeWidth: 1,
+          ? CustomFadeInImage(imageUrl: postInfo.postUrl)
+          : PlayThisVideo(
+              videoUrl: postInfo.postUrl,
+              // isVideoInView: (){return true;}
             ),
-          ),
-        );
-      },
     );
   }
 

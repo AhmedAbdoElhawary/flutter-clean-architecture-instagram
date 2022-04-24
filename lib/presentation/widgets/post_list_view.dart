@@ -12,16 +12,18 @@ import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_name.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
+import 'package:instegram/presentation/widgets/fade_in_image.dart';
 import 'package:instegram/presentation/widgets/read_more_text.dart';
 
 class ImageList extends StatefulWidget {
   final Post postInfo;
   // final ValueGetter<bool> isVideoInView;
 
-  const ImageList({Key? key, required this.postInfo,
+  const ImageList({
+    Key? key,
+    required this.postInfo,
     // required this.isVideoInView,
-  })
-      : super(key: key);
+  }) : super(key: key);
 
   @override
   State<ImageList> createState() => _ImageListState();
@@ -37,9 +39,9 @@ class _ImageListState extends State<ImageList> {
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
     return thePostsOfHomePage(
-        postInfo: widget.postInfo,
-        bodyHeight: bodyHeight,
-         // isVideoInView: widget.isVideoInView,
+      postInfo: widget.postInfo,
+      bodyHeight: bodyHeight,
+      // isVideoInView: widget.isVideoInView,
     );
   }
 
@@ -48,11 +50,11 @@ class _ImageListState extends State<ImageList> {
         builder: (context) => WhichProfilePage(userId: postInfo.publisherId),
       ));
 
-  Widget thePostsOfHomePage(
-      {required Post postInfo,
-      required double bodyHeight,
-      // required ValueGetter<bool> isVideoInView,
-      }) {
+  Widget thePostsOfHomePage({
+    required Post postInfo,
+    required double bodyHeight,
+    // required ValueGetter<bool> isVideoInView,
+  }) {
     return SizedBox(
       width: double.infinity,
       // height: 200,
@@ -79,18 +81,19 @@ class _ImageListState extends State<ImageList> {
             menuButton()
           ],
         ),
-        imageOfPost(postInfo,
+        imageOfPost(
+          postInfo,
           // isVideoInView,
         ),
         Padding(
-          padding: const EdgeInsets.only(left:12.0,top: 10,bottom: 8),
+          padding: const EdgeInsets.only(left: 12.0, top: 10, bottom: 8),
           child: Row(children: [
             Expanded(
                 child: Row(
               children: [
                 loveButton(postInfo),
                 Padding(
-                  padding: const EdgeInsets.only(left:15.0),
+                  padding: const EdgeInsets.only(left: 15.0),
                   child: GestureDetector(
                     child: iconsOfImagePost(IconsAssets.commentIcon),
                     onTap: () {
@@ -104,15 +107,16 @@ class _ImageListState extends State<ImageList> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left:15.0),
+                  padding: const EdgeInsets.only(left: 15.0),
                   child: GestureDetector(
-                    child: iconsOfImagePost(IconsAssets.sendIcon,lowHeight: true),
+                    child:
+                        iconsOfImagePost(IconsAssets.sendIcon, lowHeight: true),
                   ),
                 ),
               ],
             )),
             Padding(
-              padding: const EdgeInsets.only(right:12.0),
+              padding: const EdgeInsets.only(right: 12.0),
               child: GestureDetector(
                 child: isSaved
                     ? const Icon(
@@ -178,17 +182,16 @@ class _ImageListState extends State<ImageList> {
 
   Widget addCommentRow(Post postInfo) {
     return GestureDetector(
-      onTap:(){
+      onTap: () {
         Navigator.of(
           context,
         ).push(CupertinoPageRoute(
-          builder: (context) =>
-              CommentsPage(postId: postInfo.postUid),
+          builder: (context) => CommentsPage(postId: postInfo.postUid),
         ));
       },
       child: Text(
-      "View all ${postInfo.comments.length} comments",
-      style: const TextStyle(color: Colors.grey),
+        "View all ${postInfo.comments.length} comments",
+        style: const TextStyle(color: Colors.grey),
       ),
     );
   }
@@ -209,11 +212,11 @@ class _ImageListState extends State<ImageList> {
     );
   }
 
-  SvgPicture iconsOfImagePost(String path,{bool lowHeight=false}) {
+  SvgPicture iconsOfImagePost(String path, {bool lowHeight = false}) {
     return SvgPicture.asset(
       path,
       color: Colors.black,
-      height:lowHeight?22:25,
+      height: lowHeight ? 22 : 25,
     );
   }
 
@@ -221,33 +224,11 @@ class _ImageListState extends State<ImageList> {
     return InkWell(
       onDoubleTap: () {},
       child: postInfo.isThatImage
-          ? buildImage(postInfo)
-          : PlayThisVideo(videoUrl: postInfo.postUrl,
-        // isVideoInView: isVideoInView,
-      ),
-    );
-  }
-
-  Image buildImage(Post postInfo) {
-    return Image.network(
-      postInfo.postUrl,
-      width: double.infinity,
-      fit: BoxFit.fitWidth,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) {
-          return child;
-        }
-        return const SizedBox(
-          width: double.infinity,
-          height: 300,
-          child: Center(
-            child: CircularProgressIndicator(
-              color: Colors.black87,
-              strokeWidth: 1,
+          ? CustomFadeInImage(imageUrl: postInfo.postUrl)
+          : PlayThisVideo(
+              videoUrl: postInfo.postUrl,
+              // isVideoInView: isVideoInView,
             ),
-          ),
-        );
-      },
     );
   }
 

@@ -30,7 +30,7 @@ class _RecordViewState extends State<RecordView> {
             children: [
               GestureDetector(
                 child: _isPlaying
-                    ? buildIcon(Icons.pause)
+                    ? buildIcon(Icons.pause_sharp)
                     : buildIcon(Icons.play_arrow_rounded),
                 onTap: () => _onPlay(filePath: widget.record),
               ),
