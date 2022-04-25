@@ -42,22 +42,21 @@ class _HomeScreenState extends State<HomeScreen> {
     SpecificUsersPostsCubit usersPostsCubit =
         BlocProvider.of<SpecificUsersPostsCubit>(context, listen: false);
 
-    await usersPostsCubit
-        .getSpecificUsersPostsInfo(usersIds: usersIds);
+    await usersPostsCubit.getSpecificUsersPostsInfo(usersIds: usersIds);
 
-      List usersPostsIds = usersPostsCubit.usersPostsInfo;
+    List usersPostsIds = usersPostsCubit.usersPostsInfo;
 
-      List postsIds = usersPostsIds + personalInfo!.posts;
+    List postsIds = usersPostsIds + personalInfo!.posts;
 
-      PostCubit postCubit = PostCubit.get(context);
-      await postCubit
-          .getPostsInfo(postsIds: postsIds, isThatForMyPosts: true)
-          .then((value) {
-        Future.delayed(Duration.zero, () {
-          setState(() {});
-        });
-        reLoadData = true;
+    PostCubit postCubit = PostCubit.get(context);
+    await postCubit
+        .getPostsInfo(postsIds: postsIds, isThatForMyPosts: true)
+        .then((value) {
+      Future.delayed(Duration.zero, () {
+        setState(() {});
       });
+      reLoadData = true;
+    });
   }
 
   @override
@@ -110,9 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Center circularProgress() {
     return const Center(
-          child: CircularProgressIndicator(
-              strokeWidth: 1.5, color: ColorManager.black54),
-        );
+      child: CircularProgressIndicator(
+          strokeWidth: 1.5, color: ColorManager.black54),
+    );
   }
 
   SingleChildScrollView inViewNotifier(
@@ -140,9 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   id: '$index',
                   builder: (_, bool isInView, __) {
                     if (isInView) {}
-                    return columnOfWidgets(
-                      bodyHeight, state.postsInfo, index
-                    );
+                    return columnOfWidgets(bodyHeight, state.postsInfo, index);
                   },
                 );
               },
@@ -171,33 +168,38 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget storiesLines(double bodyHeight) {
-    List usersStoriesIds=personalInfo!.followedPeople+personalInfo!.followerPeople;
-    return BlocBuilder<StoryCubit,StoryState>(
-      bloc:StoryCubit.get(context)..getStoriesInfo(usersIds: usersStoriesIds,myPersonalInfo:personalInfo! ) ,
+    List usersStoriesIds =
+        personalInfo!.followedPeople + personalInfo!.followerPeople;
+    return BlocBuilder<StoryCubit, StoryState>(
+      bloc: StoryCubit.get(context)
+        ..getStoriesInfo(
+            usersIds: usersStoriesIds, myPersonalInfo: personalInfo!),
       // buildWhen: ,
-      builder:(context, state) {
-        if(state is CubitStoriesInfoLoaded){
+      builder: (context, state) {
+        if (state is CubitStoriesInfoLoaded) {
           return SizedBox(
             width: double.infinity,
             height: bodyHeight * 0.155,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: state.personsWhoHaveStoriesInfo.length,
-              separatorBuilder: (BuildContext context, int index) => const Divider(),
+              itemCount: state.storiesOwnersInfo.length,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
               itemBuilder: (BuildContext context, int index) {
-                UserPersonalInfo publisherInfo = state.personsWhoHaveStoriesInfo[index];
+                UserPersonalInfo publisherInfo = state.storiesOwnersInfo[index];
                 return GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     Navigator.of(
                       context,
                     ).push(MaterialPageRoute(
-                      builder: (context) =>
-                          StoryPage(publisherInfo:publisherInfo),
+                      builder: (context) => StoryPage(
+                          user: publisherInfo,
+                          storiesOwnersInfo: state.storiesOwnersInfo),
                     ));
                   },
                   child: CircleAvatarOfProfileImage(
                     circleAvatarName:
-                    publisherInfo.name.isNotEmpty ? publisherInfo.name : '',
+                        publisherInfo.name.isNotEmpty ? publisherInfo.name : '',
                     bodyHeight: bodyHeight,
                     thisForStoriesLine: true,
                     imageUrl: publisherInfo.profileImageUrl.isNotEmpty
@@ -208,13 +210,12 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           );
-        }else if(state is CubitStoryFailed){
+        } else if (state is CubitStoryFailed) {
           ToastShow.toastStateError(state);
           return const Center(child: Text("There's something wrong..."));
-        }else{
+        } else {
           return circularProgress();
         }
-
       },
     );
   }

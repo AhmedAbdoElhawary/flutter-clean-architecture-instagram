@@ -19,11 +19,11 @@ class CubitStoryLoaded extends StoryState {
   List<Object> get props => [postId];
 }
 class CubitStoriesInfoLoaded extends StoryState {
-  final List<UserPersonalInfo> personsWhoHaveStoriesInfo;
+  final List<UserPersonalInfo> storiesOwnersInfo;
 
-  const CubitStoriesInfoLoaded(this.personsWhoHaveStoriesInfo);
+  const CubitStoriesInfoLoaded(this.storiesOwnersInfo);
   @override
-  List<Object> get props => [personsWhoHaveStoriesInfo];
+  List<Object> get props => [storiesOwnersInfo];
 }
 
 class CubitStoryFailed extends StoryState {

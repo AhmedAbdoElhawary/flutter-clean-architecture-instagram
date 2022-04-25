@@ -29,7 +29,7 @@ AppBar customAppBar () {
         ),
         IconButton(
           icon: SvgPicture.asset(
-            IconsAssets.sendIcon,
+            IconsAssets.send1Icon,
             color: Colors.black,
             height: 22.5,
           ),
