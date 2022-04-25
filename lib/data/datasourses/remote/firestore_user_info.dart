@@ -26,15 +26,19 @@ class FirestoreUser {
   static Future<List<UserPersonalInfo>> getSpecificUsersInfo(
       List<dynamic> usersIds) async {
     List<UserPersonalInfo> usersInfo = [];
+    List<dynamic> ids = [];
     for (int i = 0; i < usersIds.length; i++) {
-      DocumentSnapshot<Map<String, dynamic>> snap =
-          await _fireStoreUserCollection.doc(usersIds[i]).get();
-      if (snap.exists) {
-        UserPersonalInfo postReformat =
-            UserPersonalInfo.fromDocSnap(docSnap: snap);
-        usersInfo.add(postReformat);
-      } else {
-        return Future.error("the post not exist !");
+      if (!ids.contains(usersIds[i])) {
+        DocumentSnapshot<Map<String, dynamic>> snap =
+            await _fireStoreUserCollection.doc(usersIds[i]).get();
+        if (snap.exists) {
+          UserPersonalInfo postReformat =
+              UserPersonalInfo.fromDocSnap(docSnap: snap);
+          usersInfo.add(postReformat);
+        } else {
+          return Future.error("the post not exist !");
+        }
+        ids.add(usersIds[i]);
       }
     }
     return usersInfo;
@@ -74,6 +78,7 @@ class FirestoreUser {
       'posts': FieldValue.arrayUnion([postId])
     });
   }
+
   static updateUserStories(
       {required String userId, required String storyId}) async {
     await _fireStoreUserCollection.doc(userId).update({
@@ -142,8 +147,7 @@ class FirestoreUser {
     return massage;
   }
 
-  static Stream<List<Massage>> getMassages(
-      {required String receiverId}) {
+  static Stream<List<Massage>> getMassages({required String receiverId}) {
     // List<Massage> massagesInfo = [];
     Stream<QuerySnapshot<Map<String, dynamic>>> _snapshotsMassages =
         _fireStoreUserCollection
@@ -154,7 +158,8 @@ class FirestoreUser {
             .orderBy("datePublished", descending: false)
             .snapshots();
     print("QuerySnapshot ===============================");
-    return _snapshotsMassages.map((snapshot) => snapshot.docs.map((doc) =>Massage.fromJson(doc)).toList());
+    return _snapshotsMassages.map((snapshot) =>
+        snapshot.docs.map((doc) => Massage.fromJson(doc)).toList());
     // _snapshotsMassages.listen((event) {
     //   for (var element in event.docs) {
     //     Map<String, dynamic> a = element.data();

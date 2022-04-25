@@ -206,7 +206,7 @@ class VideosPageState extends State<VideosPage> {
               GestureDetector(
                 onTap: () {},
                 child: SvgPicture.asset(
-                  IconsAssets.sendIcon,
+                  IconsAssets.send1Icon,
                   color: Colors.white,
                   height: 25,
                 ),

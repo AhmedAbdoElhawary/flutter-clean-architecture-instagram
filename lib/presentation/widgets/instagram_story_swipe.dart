@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 
 class InstagramStorySwipe extends StatefulWidget {
   final List<Widget> children;
-  final int initialPage;
+  late final PageController controller;
 
-  InstagramStorySwipe({
+  InstagramStorySwipe({Key? key,
     required this.children,
-    this.initialPage = 0,
-  }) {
+    required this.controller,
+  }) : super(key: key) {
     assert(children.isNotEmpty);
   }
 
@@ -19,16 +19,14 @@ class InstagramStorySwipe extends StatefulWidget {
 }
 
 class _InstagramStorySwipeState extends State<InstagramStorySwipe> {
-  late PageController _pageController;
   double currentPageValue = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: widget.initialPage);
-    _pageController.addListener(() {
+    widget.controller.addListener(() {
       setState(() {
-        currentPageValue = _pageController.page!;
+        currentPageValue = widget.controller.page!;
       });
     });
   }
@@ -36,15 +34,14 @@ class _InstagramStorySwipeState extends State<InstagramStorySwipe> {
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
-      controller: _pageController,
+      controller: widget.controller,
       itemCount: widget.children.length,
-
       itemBuilder: (context, index) {
         double value;
-        if (_pageController.position.haveDimensions == false) {
+        if (widget.controller.position.haveDimensions == false) {
           value = index.toDouble();
         } else {
-          value = _pageController.page!;
+          value = widget.controller.page!;
         }
         return _SwipeWidget(
           index: index,
