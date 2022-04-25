@@ -32,9 +32,13 @@ class StoryCubit extends Cubit<StoryState> {
     });
   }
 
-  Future<void> getStoriesInfo({required List<dynamic> usersIds,required UserPersonalInfo myPersonalInfo}) async {
+  Future<void> getStoriesInfo(
+      {required List<dynamic> usersIds,
+      required UserPersonalInfo myPersonalInfo}) async {
     emit(CubitStoryLoading());
-    await _getStoriesInfoUseCase.call(paramsOne: usersIds,paramsTwo:myPersonalInfo ).then((updatedUsersInfo) {
+    await _getStoriesInfoUseCase
+        .call(paramsOne: usersIds, paramsTwo: myPersonalInfo)
+        .then((updatedUsersInfo) {
       emit(CubitStoriesInfoLoaded(updatedUsersInfo));
     }).catchError((e) {
       emit(CubitStoryFailed(e));
