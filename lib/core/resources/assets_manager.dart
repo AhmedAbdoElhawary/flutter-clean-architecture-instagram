@@ -1,7 +1,9 @@
 const String iconPath = "assets/icons";
 
 class IconsAssets {
-  static const String sendIcon = "$iconPath/send.svg";
+  static const String send1Icon = "$iconPath/send.svg";
+  static const String send2Icon = "$iconPath/paper-plane-right.svg";
+  static const String loveIcon = "$iconPath/heart.svg";
   static const String menuIcon = "$iconPath/menu.svg";
   static const String menuHorizontalIcon = "$iconPath/menu_horizontal.svg";
   static const String commentIcon = "$iconPath/comment.svg";
