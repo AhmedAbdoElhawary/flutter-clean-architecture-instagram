@@ -39,7 +39,8 @@ class _CustomGridViewState extends State<CustomGridView> {
             shrinkWrap: true,
             itemCount: widget.postsInfo.length,
             itemBuilder: (context, index) {
-              return createGridTileWidget(widget.postsInfo[index]);
+              return createGridTileWidget(
+                  widget.postsInfo[index], widget.postsInfo, index);
             },
             staggeredTileBuilder: (index) {
               double num = widget.postsInfo[index].isThatImage ? 1 : 2;
@@ -49,24 +50,31 @@ class _CustomGridViewState extends State<CustomGridView> {
         : const Center(child: Text(StringsManager.noPosts));
   }
 
-  Widget createGridTileWidget(Post postInfo) => Builder(
+  Widget createGridTileWidget(
+          Post postClickedInfo, List<Post> postsInfo, int index) =>
+      Builder(
         builder: (context) => GestureDetector(
           onTap: () {
+            List<Post> w = postsInfo;
+            w.removeWhere((value) => value.postUid == postClickedInfo.postUid);
+            w.insert(0, postClickedInfo);
+
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => CustomPostsDisplay(postInfo),
+              builder: (context) => CustomPostsDisplay(
+                  postClickedInfo: postClickedInfo, postsInfo: w, index: index),
             ));
           },
           onLongPress: () {
-            _popupDialog = _createPopupDialog(postInfo);
+            _popupDialog = _createPopupDialog(postClickedInfo);
             Overlay.of(context)!.insert(_popupDialog!);
           },
           onLongPressEnd: (details) => _popupDialog?.remove(),
-          child: postInfo.isThatImage
+          child: postClickedInfo.isThatImage
               ? CustomFadeInImage(
-                  imageUrl: postInfo.postUrl, boxFit: BoxFit.cover)
-              : PlayThisVideo(videoUrl: postInfo.postUrl
-              // ,isVideoInView: (){return false;}
-          ),
+                  imageUrl: postClickedInfo.postUrl, boxFit: BoxFit.cover)
+              : PlayThisVideo(videoUrl: postClickedInfo.postUrl
+                  // ,isVideoInView: (){return false;}
+                  ),
         ),
       );
 

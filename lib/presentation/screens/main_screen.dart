@@ -62,9 +62,7 @@ class _MainScreenState extends State<MainScreen> {
             case 1:
               return CupertinoTabView(
                 builder: (context) => CupertinoPageScaffold(
-                    child: BlocProvider<PostCubit>(
-                        create: (context) => injector<PostCubit>()..getAllPostInfo(),
-                        child: SearchAboutUserPage(userId: widget.userId))),
+                    child: SearchAboutUserPage(userId: widget.userId)),
               );
             case 2:
               return CupertinoTabView(
