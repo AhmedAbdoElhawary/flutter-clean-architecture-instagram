@@ -110,7 +110,7 @@ class _ImageListState extends State<ImageList> {
                   padding: const EdgeInsets.only(left: 15.0),
                   child: GestureDetector(
                     child:
-                        iconsOfImagePost(IconsAssets.sendIcon, lowHeight: true),
+                        iconsOfImagePost(IconsAssets.send1Icon, lowHeight: true),
                   ),
                 ),
               ],

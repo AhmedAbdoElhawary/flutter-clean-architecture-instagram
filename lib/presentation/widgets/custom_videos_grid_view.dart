@@ -48,9 +48,6 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
   Widget createGridTileWidget(Post postInfo) => Builder(
         builder: (context) => GestureDetector(
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => CustomPostsDisplay(postInfo),
-            ));
           },
           onLongPress: () {
             _popupDialog = _createPopupDialog(postInfo);
