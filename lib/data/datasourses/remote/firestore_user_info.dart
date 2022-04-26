@@ -148,7 +148,6 @@ class FirestoreUser {
   }
 
   static Stream<List<Massage>> getMassages({required String receiverId}) {
-    // List<Massage> massagesInfo = [];
     Stream<QuerySnapshot<Map<String, dynamic>>> _snapshotsMassages =
         _fireStoreUserCollection
             .doc(myPersonalId)
@@ -157,15 +156,7 @@ class FirestoreUser {
             .collection("massages")
             .orderBy("datePublished", descending: false)
             .snapshots();
-    print("QuerySnapshot ===============================");
     return _snapshotsMassages.map((snapshot) =>
         snapshot.docs.map((doc) => Massage.fromJson(doc)).toList());
-    // _snapshotsMassages.listen((event) {
-    //   for (var element in event.docs) {
-    //     Map<String, dynamic> a = element.data();
-    //     massagesInfo.add(Massage.fromJson(a));
-    //   }
-    // });
-    // yield* _snapshotsMassages;
   }
 }

@@ -83,6 +83,13 @@ dependencies:
   audio_video_progress_bar: ^0.10.0
   audio_wave: ^0.1.2
   dartz: ^0.10.1
+  stream_feed_flutter_core: ^0.7.0+1
+  provider: ^6.0.2
+  google_fonts: ^2.3.1
+  cached_network_image: ^3.2.0
+  transparent_image: ^2.0.0
+  jiffy: ^5.0.0
+
 
 
 
