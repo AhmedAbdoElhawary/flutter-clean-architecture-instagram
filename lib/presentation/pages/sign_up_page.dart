@@ -30,6 +30,8 @@ class _SignUpPageState extends State<SignUpPage> {
       body: SafeArea(
         child: Center(
             child: SingleChildScrollView(
+              keyboardDismissBehavior:
+              ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,

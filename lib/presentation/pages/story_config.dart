@@ -49,6 +49,8 @@ class _NewStoryPageState extends State<NewStoryPage> {
 
   Widget listOfAddPost() {
     return SingleChildScrollView(
+      keyboardDismissBehavior:
+      ScrollViewKeyboardDismissBehavior.onDrag,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
