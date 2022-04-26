@@ -115,7 +115,7 @@ Total : 194 files,  6240 codes, 1378 comments, 938 blanks, all 8556 lines
 | [lib/domain/usecases/followUseCase/follow_this_user.dart](/lib/domain/usecases/followUseCase/follow_this_user.dart) | Dart | 10 | 0 | 4 | 14 |
 | [lib/domain/usecases/followUseCase/remove_this_follower.dart](/lib/domain/usecases/followUseCase/remove_this_follower.dart) | Dart | 10 | 0 | 4 | 14 |
 | [lib/domain/usecases/postUseCase/comments/add_comment_use_case.dart](/lib/domain/usecases/postUseCase/comments/add_comment_use_case.dart) | Dart | 11 | 0 | 4 | 15 |
-| [lib/domain/usecases/postUseCase/comments/get_all_comment.dart](/lib/domain/usecases/postUseCase/comments/get_all_comment.dart) | Dart | 11 | 0 | 4 | 15 |
+| [lib/domain/usecases/postUseCase/comments/get_all_comment.dart](/lib/domain/usecases/postUseCase/comments/getComment/get_all_comment.dart) | Dart | 11 | 0 | 4 | 15 |
 | [lib/domain/usecases/postUseCase/comments/put_like.dart](/lib/domain/usecases/postUseCase/comments/put_like.dart) | Dart | 12 | 0 | 4 | 16 |
 | [lib/domain/usecases/postUseCase/comments/remove_like.dart](/lib/domain/usecases/postUseCase/comments/remove_like.dart) | Dart | 12 | 0 | 4 | 16 |
 | [lib/domain/usecases/postUseCase/comments/replies/get_replies_of_this_comment.dart](/lib/domain/usecases/postUseCase/comments/replies/get_replies_of_this_comment.dart) | Dart | 0 | 22 | 1 | 23 |

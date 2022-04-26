@@ -1,4 +1,5 @@
 import 'package:instegram/data/models/comment.dart';
+import 'package:instegram/data/models/post.dart';
 
 abstract class FirestoreCommentRepository {
   Future<Comment> addComment({required Comment commentInfo});
@@ -6,5 +7,7 @@ abstract class FirestoreCommentRepository {
       {required String commentId, required String myPersonalId});
   Future<void> removeLikeOnThisComment(
       {required String commentId, required String myPersonalId});
-  Future<List<Comment>> getSpecificComments({required String postId});
+  Stream<Post> getPostInfoStreamed({required String postId});
+  Future<List<Comment>> getSpecificComments(
+      {required List<dynamic> commentsIds});
 }

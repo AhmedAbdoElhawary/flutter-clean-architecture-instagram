@@ -55,7 +55,6 @@ class FirestoreComment {
   static Future<List<Comment>> getSpecificComments(
       {required List<dynamic> commentsIds}) async {
     List<Comment> allComments = [];
-
     for (int i = 0; i < commentsIds.length; i++) {
       DocumentSnapshot<Map<String, dynamic>> snap =
           await _fireStoreCommentCollection.doc(commentsIds[i]).get();

@@ -252,6 +252,8 @@ class _ChattingPageState extends State<ChattingPage> {
 
   Widget fieldOfMassage() {
     return SingleChildScrollView(
+      keyboardDismissBehavior:
+      ScrollViewKeyboardDismissBehavior.onDrag,
       child:unSend? deleteTheMassage(): Container(
         decoration: BoxDecoration(
             color: Colors.grey[200], borderRadius: BorderRadius.circular(35)),

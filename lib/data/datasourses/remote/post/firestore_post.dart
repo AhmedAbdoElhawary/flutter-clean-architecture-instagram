@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instegram/data/datasourses/remote/firestore_user_info.dart';
 import 'package:instegram/data/models/post.dart';
@@ -35,16 +37,22 @@ class FirestorePost {
     return postsInfo;
   }
 
-  static Future<List<dynamic>> getCommentsOfPost(
-      {required String postId}) async {
-    DocumentSnapshot<Map<String, dynamic>> snap =
-        await _fireStorePostCollection.doc(postId).get();
-    if (snap.exists) {
-      Post postReformat = Post.fromSnap(docSnap: snap);
-      return postReformat.comments;
-    } else {
-      return Future.error("the post not exist !");
-    }
+  static Stream<Post> getPostInfoStreamed({required String postId}) {
+    Stream<DocumentSnapshot<Map<String, dynamic>>> snap =
+        _fireStorePostCollection.doc(postId).snapshots();
+    return snap.map((event) => Post.fromSnap(docSnap: event));
+
+    // snap.map((event) => null)
+    //     .listen((event) => Post.fromSnap(docSnap: event));
+    // // ;
+    // if (postReformat == null) {
+    //   print("33333333333333333333333333333333");
+    //
+    // } else {
+    //   print("4444444444444444444444444444444444");
+    //
+    //   return postReformat!.comments;
+    // }
   }
 
   static Future<List<Post>> getAllPostsInfo() async {

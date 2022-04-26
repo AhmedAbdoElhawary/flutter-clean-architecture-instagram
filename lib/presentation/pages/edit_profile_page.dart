@@ -129,6 +129,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(
+          keyboardDismissBehavior:
+          ScrollViewKeyboardDismissBehavior.onDrag,
           child: textFieldsColumn(context, updateUserCubit),
         ),
       ),

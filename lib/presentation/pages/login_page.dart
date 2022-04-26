@@ -38,6 +38,8 @@ class _LoginPageState extends State<LoginPage> {
     body: SafeArea(
       child: Center(
           child: SingleChildScrollView(
+            keyboardDismissBehavior:
+            ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

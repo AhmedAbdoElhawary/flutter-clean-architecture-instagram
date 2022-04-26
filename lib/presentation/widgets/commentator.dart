@@ -12,21 +12,26 @@ import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
+
 class CommentInfo extends StatefulWidget {
   final Comment commentInfo;
   TextEditingController textController;
   ValueChanged<Comment>? selectedCommentInfo;
   UserPersonalInfo myPersonalInfo;
+  int index;
   bool isThatReply;
-  bool showMeReplies = false;
+
   bool addReply;
+  Map<int, bool> showMeReplies;
 
   CommentInfo(
       {Key? key,
       required this.commentInfo,
       this.selectedCommentInfo,
+      required this.index,
       this.isThatReply = false,
       required this.myPersonalInfo,
+      required this.showMeReplies,
       required this.addReply,
       required this.textController})
       : super(key: key);
@@ -39,24 +44,33 @@ class _CommentInfoState extends State<CommentInfo> {
   @override
   Widget build(BuildContext context) {
     bool isLiked = widget.commentInfo.likes.contains(myPersonalId);
+    print("11111111111111${widget.showMeReplies[widget.index]}");
+
     return Padding(
       padding: const EdgeInsets.only(left: 10.0),
       child: Column(
         children: [
-          rowOfCommentator(context, isLiked, splitTheComment()),
+          rowOfCommentator(context, isLiked, widget.commentInfo.theComment),
           if (!widget.isThatReply && widget.commentInfo.replies!.isNotEmpty)
-            !widget.showMeReplies
+            widget.showMeReplies[widget.index] == false
                 ? Padding(
                     padding: const EdgeInsets.only(left: 50.0),
                     child: Row(
                       children: [
-                        Container(color: Colors.black12, height: 1, width: 40),
+                        Container(
+                            color: Colors.black12, height: 1, width: 40),
                         const SizedBox(width: 10),
                         Expanded(
                             child: GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    widget.showMeReplies = true;
+                                    print(
+                                        "11111111111111${widget.showMeReplies[widget.index]}");
+
+                                    widget.showMeReplies.update(
+                                        widget.index, (value) => true);
+                                    print(
+                                        "11111111111111${widget.showMeReplies[widget.index]}");
                                   });
                                 },
                                 child: Text(
@@ -85,30 +99,31 @@ class _CommentInfoState extends State<CommentInfo> {
                                 .repliesOnComment;
                         return Padding(
                           padding: const EdgeInsets.only(left: 40.0),
-                          child: Scrollbar(
-                            child: ListView.separated(
-                                keyboardDismissBehavior:
-                                    ScrollViewKeyboardDismissBehavior.onDrag,
-                                shrinkWrap: true,
-                                primary: false,
-                                itemBuilder: (context, index) {
-                                  return CommentInfo(
-                                    commentInfo: repliesInfo[index],
-                                    textController: widget.textController,
-                                    selectedCommentInfo:
-                                        widget.selectedCommentInfo,
-                                    myPersonalInfo: widget.myPersonalInfo,
-                                    addReply: widget.addReply,
-                                    isThatReply: true,
-                                  );
-                                },
-                                itemCount: repliesInfo.length,
-                                separatorBuilder:
-                                    (BuildContext context, int index) =>
-                                        const SizedBox(
-                                          height: 20,
-                                        )),
-                          ),
+                          child: ListView.separated(
+                              keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                              // physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              primary: false,
+                              itemBuilder: (context, index) {
+                                return CommentInfo(
+                                  showMeReplies: widget.showMeReplies,
+                                  commentInfo: repliesInfo[index],
+                                  textController: widget.textController,
+                                  index: index,
+                                  selectedCommentInfo:
+                                      widget.selectedCommentInfo,
+                                  myPersonalInfo: widget.myPersonalInfo,
+                                  addReply: widget.addReply,
+                                  isThatReply: true,
+                                );
+                              },
+                              itemCount: repliesInfo.length,
+                              separatorBuilder:
+                                  (BuildContext context, int index) =>
+                                      const SizedBox(
+                                        height: 20,
+                                      )),
                         );
                       } else if (state is CubitReplyInfoFailed) {
                         ToastShow.toastStateError(state);
@@ -120,11 +135,14 @@ class _CommentInfoState extends State<CommentInfo> {
                             children: [
                               // const Divider(thickness: 30,color: Colors.black,indent: 10,endIndent: 60),
                               Container(
-                                  color: Colors.black12, height: 1, width: 40),
+                                  color: Colors.black12,
+                                  height: 1,
+                                  width: 40),
                               const SizedBox(width: 10),
                               const Expanded(
                                   child: Text("Loading...",
-                                      style: TextStyle(color: Colors.black45)))
+                                      style:
+                                          TextStyle(color: Colors.black45)))
                             ],
                           ),
                         );
@@ -135,18 +153,6 @@ class _CommentInfoState extends State<CommentInfo> {
     );
   }
 
-  String splitTheComment() {
-    String theComment = widget.commentInfo.theComment;
-    List<String> f = theComment.split(" ");
-    if (theComment[0] == '@' && f[0].length > 1) {
-      String hashTageOfUserName = f[0];
-      f.removeAt(0);
-      widget.commentInfo.theComment = f.join(" ");
-      return hashTageOfUserName;
-    }
-    return '';
-  }
-
   Row rowOfCommentator(
       BuildContext context, bool isLiked, String hashTageOfUserName) {
     return Row(
@@ -154,8 +160,9 @@ class _CommentInfoState extends State<CommentInfo> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         CircleAvatarOfProfileImage(
-            imageUrl: widget.commentInfo.whoCommentInfo!.profileImageUrl,
-            bodyHeight: widget.isThatReply ? 280 : 400,),
+          imageUrl: widget.commentInfo.whoCommentInfo!.profileImageUrl,
+          bodyHeight: widget.isThatReply ? 280 : 400,
+        ),
         const SizedBox(width: 8),
         Expanded(
           child: Padding(
@@ -176,15 +183,17 @@ class _CommentInfoState extends State<CommentInfo> {
                           const TextSpan(
                             text: '  ',
                           ),
-                          if (hashTageOfUserName.isNotEmpty)
+                          if (widget.isThatReply)
                             TextSpan(
-                              text: hashTageOfUserName,
+                              text: hashTageOfUserName.split(" ")[0],
                               style: const TextStyle(
                                   color: Color.fromARGB(232, 20, 44, 116)),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () async {
+                                  List<String> hashTagName =
+                                      hashTageOfUserName.split(" ");
                                   String userName =
-                                      hashTageOfUserName.replaceAll('@', '');
+                                      hashTagName[0].replaceAll('@', '');
                                   await Navigator.of(
                                     context,
                                   ).push(MaterialPageRoute(
@@ -196,7 +205,8 @@ class _CommentInfoState extends State<CommentInfo> {
                             ),
                           TextSpan(
                             style: const TextStyle(color: Colors.black),
-                            text: " ${widget.commentInfo.theComment}",
+                            text:
+                                " ${widget.isThatReply ? hashTageOfUserName.split(" ")[1] : hashTageOfUserName}",
                           )
                         ],
                       ),
@@ -205,7 +215,9 @@ class _CommentInfoState extends State<CommentInfo> {
                   const SizedBox(height: 5),
                   Row(
                     children: [
-                      Text(DateOfNow.commentsDateOfNow(widget.commentInfo.datePublished),
+                      Text(
+                          DateOfNow.commentsDateOfNow(
+                              widget.commentInfo.datePublished),
                           style: const TextStyle(color: Colors.grey)),
                       if (widget.commentInfo.likes.isNotEmpty)
                         Padding(
@@ -243,7 +255,6 @@ class _CommentInfoState extends State<CommentInfo> {
                           setState(() {
                             widget.selectedCommentInfo!(commentInfo);
                           });
-                            
                         },
                         child: const Text(
                           "Reply",

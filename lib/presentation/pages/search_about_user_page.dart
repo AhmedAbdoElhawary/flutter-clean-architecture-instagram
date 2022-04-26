@@ -49,6 +49,8 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage>{
          return SmarterRefresh(
             onRefreshData: getData,
             smartRefresherChild: SingleChildScrollView(
+              keyboardDismissBehavior:
+              ScrollViewKeyboardDismissBehavior.onDrag,
               child: CustomGridView(
                   postsInfo: state.allPostInfo, userId: widget.userId),
             ),

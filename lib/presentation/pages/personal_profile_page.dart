@@ -195,6 +195,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   Widget listOfAddPost() {
     return SingleChildScrollView(
+      keyboardDismissBehavior:
+      ScrollViewKeyboardDismissBehavior.onDrag,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
