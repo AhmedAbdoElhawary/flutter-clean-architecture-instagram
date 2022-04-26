@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instegram/data/datasourses/remote/post/comment/firestore_comment.dart';
 import 'package:instegram/data/datasourses/remote/post/firestore_post.dart';
 import 'package:instegram/data/models/comment.dart';
+import 'package:instegram/data/models/post.dart';
 import 'package:instegram/domain/repositories/post/comment/comment_repository.dart';
 
 class FirestoreCommentRepositoryImpl implements FirestoreCommentRepository {
@@ -22,7 +24,8 @@ class FirestoreCommentRepositoryImpl implements FirestoreCommentRepository {
   }
 
   @override
-  Future<void> putLikeOnThisComment({required String commentId, required String myPersonalId}) async {
+  Future<void> putLikeOnThisComment(
+      {required String commentId, required String myPersonalId}) async {
     try {
       return await FirestoreComment.putLikeOnThisComment(
           myPersonalId: myPersonalId, commentId: commentId);
@@ -43,14 +46,16 @@ class FirestoreCommentRepositoryImpl implements FirestoreCommentRepository {
   }
 
   @override
-  Future<List<Comment>> getSpecificComments({required String postId}) async {
-    try {
-      List<dynamic> commentsIds =
-          await FirestorePost.getCommentsOfPost(postId: postId);
-      List<Comment> theComments =
-          await FirestoreComment.getSpecificComments(commentsIds: commentsIds);
+  Stream<Post> getPostInfoStreamed({required String postId}) {
+    return FirestorePost.getPostInfoStreamed(postId: postId);
+  }
 
-      return theComments;
+  @override
+  Future<List<Comment>> getSpecificComments(
+      {required List<dynamic> commentsIds}) async {
+    try {
+      return await FirestoreComment.getSpecificComments(
+          commentsIds: commentsIds);
     } catch (e) {
       return Future.error(e.toString());
     }
