@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/domain/usecases/postUseCase/comments/add_comment_use_case.dart';
-import 'package:instegram/domain/usecases/postUseCase/comments/get_all_comment.dart';
+import 'package:instegram/domain/usecases/postUseCase/comments/getComment/get_all_comment.dart';
 
 part 'comments_info_state.dart';
 
 class CommentsInfoCubit extends Cubit<CommentsInfoState> {
-  final GetSpecificCommentsUseCase _getSpecificCommentsUseCase;
+  final GetPostInfoStreamedUseCase _getSpecificCommentsUseCase;
   final AddCommentUseCase _addCommentUseCase;
   List<Comment> commentsOfThePost = [];
 
@@ -18,15 +18,15 @@ class CommentsInfoCubit extends Cubit<CommentsInfoState> {
   static CommentsInfoCubit get(BuildContext context) =>
       BlocProvider.of(context);
 
-  Future<void> getSpecificComments({required String postId}) async {
-    emit(CubitCommentsInfoLoading());
-    await _getSpecificCommentsUseCase.call(params: postId).then((commentsInfo) {
-      commentsOfThePost = commentsInfo;
-      emit(CubitCommentsInfoLoaded(commentsInfo));
-    }).catchError((e) {
-      emit(CubitCommentsInfoFailed(e.toString()));
-    });
-  }
+  // Future<void> getSpecificComments({required String postId}) async {
+  //   // emit(CubitCommentsInfoLoading());
+  //   // await _getSpecificCommentsUseCase.call(params: postId).then((commentsInfo) {
+  //   //   commentsOfThePost = commentsInfo;
+  //   //   emit(CubitCommentsInfoLoaded(commentsInfo));
+  //   // }).catchError((e) {
+  //   //   emit(CubitCommentsInfoFailed(e.toString()));
+  //   // });
+  // }
 
   Future<void> addComment({required Comment commentInfo}) async {
     emit(CubitCommentsInfoLoading());
