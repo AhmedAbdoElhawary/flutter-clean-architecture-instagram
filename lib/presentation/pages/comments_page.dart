@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/injector.dart';
+import 'package:instegram/presentation/cubit/bloc/get_comments_bloc.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/comments_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/reply_info_cubit.dart';
-import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
+import 'package:instegram/presentation/widgets/add_comment.dart';
 import 'package:instegram/presentation/widgets/commentator.dart';
-
-import '../widgets/toast_show.dart';
 
 class CommentsPage extends StatefulWidget {
   final String postId;
@@ -24,9 +21,9 @@ class CommentsPage extends StatefulWidget {
 
 class _CommentsPageState extends State<CommentsPage> {
   final TextEditingController _textController = TextEditingController();
-  // bool rebuildComments = false;
   Comment? selectedCommentInfo;
   bool addReply = false;
+
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
@@ -39,26 +36,26 @@ class _CommentsPageState extends State<CommentsPage> {
           backgroundColor: ColorManager.white,
           title: const Text('Comments'),
         ),
-        body: BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
-            bloc: CommentsInfoCubit.get(context)
-              ..getSpecificComments(postId: widget.postId),
+        body: BlocBuilder<GetCommentsBloc, GetCommentsState>(
+            bloc: BlocProvider.of<GetCommentsBloc>(context)
+              ..add(LoadComments(postId: widget.postId)),
+            // ..getSpecificComments(postId: widget.postId),
             buildWhen: (previous, current) {
-              if (previous != current && (current is CubitCommentsInfoLoaded)) {
-                return true;
-              }
-              if (previous != current && (current is CubitCommentsInfoFailed)) {
+              if (previous != current && (current is GetCommentsLoaded)) {
                 return true;
               }
 
               return false;
             },
             builder: (context, state) {
-              if (state is CubitCommentsInfoLoaded) {
+              if (state is GetCommentsLoaded) {
                 return buildListView(state, myPersonalInfo!);
-              } else if (state is CubitCommentsInfoFailed) {
-                ToastShow.toastStateError(state);
-                return const Text("Something Wrong");
-              } else {
+              }
+              // else if (state is GetComments) {
+              //   ToastShow.toastStateError(state);
+              //   return const Text("Something Wrong");
+              // }
+              else {
                 return const Center(
                   child: CircularProgressIndicator(
                       strokeWidth: 1, color: ColorManager.black54),
@@ -77,20 +74,25 @@ class _CommentsPageState extends State<CommentsPage> {
   }
 
   Widget buildListView(
-      CubitCommentsInfoLoaded state, UserPersonalInfo myPersonalInfo) {
-    return state.commentsOfThePost.isNotEmpty
-        ? Scrollbar(
+      GetCommentsLoaded state, UserPersonalInfo myPersonalInfo) {
+    Map<int, bool> showMeReplies = {};
+    return state.comments.isNotEmpty
+        ? SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: ListView.separated(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
+
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 primary: false,
                 itemBuilder: (context, index) {
+                  showMeReplies[index] = false;
+
                   return BlocProvider<ReplyInfoCubit>(
                     create: (_) => injector<ReplyInfoCubit>(),
                     child: CommentInfo(
-                      commentInfo: state.commentsOfThePost[index],
+                      commentInfo: state.comments[index],
+                      index: index,
+                      showMeReplies: showMeReplies,
                       textController: _textController,
                       selectedCommentInfo: selectedComment,
                       myPersonalInfo: myPersonalInfo,
@@ -98,7 +100,7 @@ class _CommentsPageState extends State<CommentsPage> {
                     ),
                   );
                 },
-                itemCount: state.commentsOfThePost.length,
+                itemCount: state.comments.length,
                 separatorBuilder: (BuildContext context, int index) =>
                     const SizedBox(
                       height: 20,
@@ -116,6 +118,8 @@ class _CommentsPageState extends State<CommentsPage> {
   SingleChildScrollView addCommentBottomSheet(
       UserPersonalInfo userPersonalInfo) {
     return SingleChildScrollView(
+      keyboardDismissBehavior:
+      ScrollViewKeyboardDismissBehavior.onDrag,
       child: Container(
         color: ColorManager.white,
         child: Column(
@@ -155,65 +159,33 @@ class _CommentsPageState extends State<CommentsPage> {
                 ),
               ),
             const Divider(),
-            const Padding(
-              padding: EdgeInsets.only(left: 10),
-              child: Text(
-                'put emoticons here',
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                textOfEmoji('❤'),
+                textOfEmoji('🙌'),
+                textOfEmoji('🔥'),
+                textOfEmoji('👏🏻'),
+                textOfEmoji('😢'),
+                textOfEmoji('😍'),
+                textOfEmoji('😮'),
+                textOfEmoji('😂'),
+              ],
             ),
             const Divider(),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                crossAxisAlignment: _textController.text.length < 70
-                    ? CrossAxisAlignment.center
-                    : CrossAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: () {},
-                    child: CircleAvatarOfProfileImage(
-                        imageUrl: userPersonalInfo.profileImageUrl,
-                        bodyHeight: 330,),
-                  ),
-                  const SizedBox(
-                    width: 20.0,
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      keyboardType: TextInputType.multiline,
-                      cursorColor: ColorManager.teal,
-                      maxLines: null,
-                      decoration: const InputDecoration.collapsed(
-                          hintText: 'Add a comment...',
-                          hintStyle: TextStyle(color: ColorManager.black26)),
-                      autofocus: false,
-                      controller: _textController,
-                      onChanged: (e) {
-                        setState(() {
-                          _textController;
-                        });
-                      },
-                    ),
-                  ),
-                  BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
-                      builder: (context1, state) {
-                    //TODO here we want to make comment loading when he loading
-                    return InkWell(
-                      onTap: () {
-                        if (_textController.text.isNotEmpty) {
-                          postTheComment(userPersonalInfo);
-                        }
-                      },
-                      child: Text(
-                        'Post',
-                        style: TextStyle(
-                            color: _textController.text.isNotEmpty
-                                ? ColorManager.blue
-                                : ColorManager.lightBlue),
-                      ),
-                    );
-                  })
-                ],
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: AddComment(
+                postId: widget.postId,
+                selectedCommentInfo: selectedCommentInfo,
+                textController: _textController,
+                userPersonalInfo: userPersonalInfo,
+                makeSelectedCommentNullable: (){
+                  setState(() {
+                    selectedCommentInfo = null;
+                    _textController.text = '';
+                  });
+                },
               ),
             ),
             const SizedBox(height: 10),
@@ -223,51 +195,20 @@ class _CommentsPageState extends State<CommentsPage> {
     );
   }
 
-  Future<void> postTheComment(UserPersonalInfo myPersonalInfo) async {
-    if (selectedCommentInfo == null) {
-      CommentsInfoCubit commentsInfoCubit =
-          BlocProvider.of<CommentsInfoCubit>(context);
-      await commentsInfoCubit.addComment(
-          commentInfo:
-              newCommentInfo(myPersonalInfo, DateOfNow.dateOfNow()));
-    } else {
-      Comment replyInfo = newReplyInfo( DateOfNow.dateOfNow(),
-          selectedCommentInfo!, myPersonalInfo.userId);
 
-      await ReplyInfoCubit.get(context)
-          .replyOnThisComment(replyInfo: replyInfo);
-    }
-    setState(() {
-      selectedCommentInfo = null;
-      _textController.text = '';
-    });
-  }
-
-  Comment newCommentInfo(
-      UserPersonalInfo myPersonalInfo, String formattedDate) {
-    final _whitespaceRE = RegExp(r"\s+");
-    String textWithOneSpaces =
-        _textController.text.replaceAll(_whitespaceRE, " ");
-    return Comment(
-        theComment: textWithOneSpaces,
-        whoCommentId: myPersonalInfo.userId,
-        datePublished: formattedDate,
-        postId: widget.postId,
-        likes: [],
-        replies: []);
-  }
-
-  Comment newReplyInfo(
-      String formattedDate, Comment commentInfo, String myPersonalId) {
-    final _whitespaceRE = RegExp(r"\s+");
-    String textWithOneSpaces =
-        _textController.text.replaceAll(_whitespaceRE, " ");
-    return Comment(
-        datePublished: formattedDate,
-        parentCommentId: commentInfo.parentCommentId,
-        postId: commentInfo.postId,
-        theComment: textWithOneSpaces,
-        whoCommentId: myPersonalId,
-        likes: []);
+  Widget textOfEmoji(String emoji) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _textController.text = _textController.text + emoji;
+          _textController.selection = TextSelection.fromPosition(
+              TextPosition(offset: _textController.text.length));
+        });
+      },
+      child: Text(
+        emoji,
+        style: const TextStyle(fontSize: 24),
+      ),
+    );
   }
 }
