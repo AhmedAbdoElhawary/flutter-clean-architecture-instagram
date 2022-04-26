@@ -10,9 +10,11 @@ import 'package:instegram/presentation/pages/comments_page.dart';
 import 'package:instegram/presentation/pages/play_this_video.dart';
 import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
+import 'package:instegram/presentation/widgets/add_comment.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_name.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
 import 'package:instegram/presentation/widgets/fade_in_image.dart';
+import 'package:instegram/presentation/widgets/picture_viewer.dart';
 import 'package:instegram/presentation/widgets/read_more_text.dart';
 
 class ImageList extends StatefulWidget {
@@ -30,10 +32,13 @@ class ImageList extends StatefulWidget {
 }
 
 class _ImageListState extends State<ImageList> {
+  final TextEditingController _textController = TextEditingController();
   bool isSaved = false;
 
   @override
   Widget build(BuildContext context) {
+    print("--------------------------${ MediaQuery.of(context).viewInsets.bottom}");
+
     final mediaQuery = MediaQuery.of(context);
     final bodyHeight = mediaQuery.size.height -
         AppBar().preferredSize.height -
@@ -109,8 +114,8 @@ class _ImageListState extends State<ImageList> {
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
                   child: GestureDetector(
-                    child:
-                        iconsOfImagePost(IconsAssets.send1Icon, lowHeight: true),
+                    child: iconsOfImagePost(IconsAssets.send1Icon,
+                        lowHeight: true),
                   ),
                 ),
               ],
@@ -145,14 +150,28 @@ class _ImageListState extends State<ImageList> {
               ReadMore(
                   "${postInfo.publisherInfo!.name} ${postInfo.caption}", 2),
               const SizedBox(height: 8),
-              addCommentRow(postInfo)
+              addCommentRow(postInfo),
+              Padding(
+                padding: const EdgeInsets.only(right:10.0),
+                child: AddComment(
+                  postId: widget.postInfo.postUid,
+                  selectedCommentInfo: null,
+                  textController: _textController,
+                  userPersonalInfo: widget.postInfo.publisherInfo!,
+                  makeSelectedCommentNullable: (){
+                    setState(() {
+                      _textController.text = '';
+                    });
+                  },
+                ),
+              ),
             ],
           ),
         )
       ]),
     );
   }
-
+  
   Widget loveButton(Post postInfo) {
     bool isLiked = postInfo.likes.contains(myPersonalId);
     return GestureDetector(
@@ -221,10 +240,20 @@ class _ImageListState extends State<ImageList> {
   }
 
   Widget imageOfPost(Post postInfo) {
-    return InkWell(
-      onDoubleTap: () {},
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return PictureViewer(imageUrl:  postInfo.postUrl);
+            },
+          ),
+        );
+      },
       child: postInfo.isThatImage
-          ? CustomFadeInImage(imageUrl: postInfo.postUrl)
+          ? Hero(
+              tag: postInfo.postUrl,
+              child: CustomFadeInImage(imageUrl: postInfo.postUrl))
           : PlayThisVideo(
               videoUrl: postInfo.postUrl,
               // isVideoInView: isVideoInView,

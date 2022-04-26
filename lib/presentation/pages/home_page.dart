@@ -117,6 +117,8 @@ class _HomeScreenState extends State<HomeScreen> {
   SingleChildScrollView inViewNotifier(
       CubitMyPersonalPostsLoaded state, double bodyHeight) {
     return SingleChildScrollView(
+      keyboardDismissBehavior:
+      ScrollViewKeyboardDismissBehavior.onDrag,
       child: InViewNotifierList(
         primary: false,
         scrollDirection: Axis.vertical,
@@ -214,7 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ToastShow.toastStateError(state);
           return const Center(child: Text("There's something wrong..."));
         } else {
-          return circularProgress();
+          return Container();
         }
       },
     );
