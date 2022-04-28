@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/data/models/massage.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart';
@@ -121,7 +122,7 @@ class _ChattingPageState extends State<ChattingPage> {
 
   Center buildCircularProgress() => const Center(
           child: CircularProgressIndicator(
-        color: Colors.black54,
+        color: ColorManager.black54,
         strokeWidth: 1.3,
       ));
 
@@ -155,7 +156,7 @@ class _ChattingPageState extends State<ChattingPage> {
                 padding: const EdgeInsets.symmetric(vertical: 15.0),
                 child: Text(
                   theDate,
-                  style: const TextStyle(color: Colors.black54),
+                  style: const TextStyle(color: ColorManager.black54),
                 ),
               )),
         const SizedBox(height: 5),
@@ -202,8 +203,8 @@ class _ChattingPageState extends State<ChattingPage> {
       child: Container(
         decoration: BoxDecoration(
             color: isThatMine
-                ? const Color.fromARGB(255, 4, 113, 238)
-                : Colors.grey[200],
+                ? ColorManager.darkBlue
+                : ColorManager.lightGrey,
             borderRadius: BorderRadiusDirectional.only(
               bottomStart: Radius.circular(isThatMine ? 20 : 0),
               bottomEnd: Radius.circular(isThatMine ? 0 : 20),
@@ -218,7 +219,7 @@ class _ChattingPageState extends State<ChattingPage> {
             ? Text(
                 massage,
                 style:
-                    TextStyle(color: isThatMine ? Colors.white : Colors.black),
+                    TextStyle(color: isThatMine ? ColorManager.white : ColorManager.black),
               )
             : (massageInfo.isThatImage
                 ? SizedBox(
@@ -256,7 +257,7 @@ class _ChattingPageState extends State<ChattingPage> {
       ScrollViewKeyboardDismissBehavior.onDrag,
       child:unSend? deleteTheMassage(): Container(
         decoration: BoxDecoration(
-            color: Colors.grey[200], borderRadius: BorderRadius.circular(35)),
+            color: ColorManager.lightGrey, borderRadius: BorderRadius.circular(35)),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         height: 50,
         child: Padding(
@@ -273,7 +274,7 @@ class _ChattingPageState extends State<ChattingPage> {
   Container deleteTheMassage() {
     return Container(
         height: 60,
-        color: Colors.grey[100],
+        color: ColorManager.lowOpacityGrey,
         child: Padding(
           padding:
           const EdgeInsets.symmetric(horizontal: 80.0),
@@ -302,7 +303,7 @@ class _ChattingPageState extends State<ChattingPage> {
     return Container(
       height: 40,
       width: double.infinity,
-      color: Colors.white,
+      color: ColorManager.white,
       child: Row(children: [
         const Expanded(child: Text("Replay"), flex: 1),
         Expanded(
@@ -361,11 +362,11 @@ class _ChattingPageState extends State<ChattingPage> {
         }
       },
       child: const CircleAvatar(
-          backgroundColor: Color.fromARGB(255, 4, 113, 238),
+          backgroundColor: ColorManager.darkBlue,
           child: ClipOval(
               child: Icon(
             Icons.camera_alt,
-            color: Colors.white,
+            color: ColorManager.white,
           )),
           radius: 20),
     );
@@ -375,11 +376,11 @@ class _ChattingPageState extends State<ChattingPage> {
     return Expanded(
       child: TextFormField(
         keyboardType: TextInputType.multiline,
-        cursorColor: Colors.teal,
+        cursorColor: ColorManager.teal,
         maxLines: null,
         decoration: const InputDecoration.collapsed(
             hintText: 'Message...',
-            hintStyle: TextStyle(color: Colors.black26)),
+            hintStyle: TextStyle(color: ColorManager.black26)),
         autofocus: false,
         controller: _textController,
         cursorWidth: 1.5,

@@ -4,11 +4,12 @@ import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/injector.dart';
-import 'package:instegram/presentation/cubit/bloc/get_comments_bloc.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/reply_info_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
 import 'package:instegram/presentation/widgets/add_comment.dart';
 import 'package:instegram/presentation/widgets/commentator.dart';
+import 'package:instegram/presentation/widgets/toast_show.dart';
 
 class CommentsPage extends StatefulWidget {
   final String postId;
@@ -36,33 +37,42 @@ class _CommentsPageState extends State<CommentsPage> {
           backgroundColor: ColorManager.white,
           title: const Text('Comments'),
         ),
-        body: BlocBuilder<GetCommentsBloc, GetCommentsState>(
-            bloc: BlocProvider.of<GetCommentsBloc>(context)
-              ..add(LoadComments(postId: widget.postId)),
-            // ..getSpecificComments(postId: widget.postId),
-            buildWhen: (previous, current) {
-              if (previous != current && (current is GetCommentsLoaded)) {
-                return true;
-              }
+        body: Column(
+          children: [
+            Expanded(
+              child: BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
+                  bloc: BlocProvider.of<CommentsInfoCubit>(context)
+                    ..getSpecificComments(postId: widget.postId),
+                  buildWhen: (previous, current) {
+                    if (previous != current &&
+                        (current is CubitCommentsInfoLoaded)) {
+                      return true;
+                    }
 
-              return false;
-            },
-            builder: (context, state) {
-              if (state is GetCommentsLoaded) {
-                return buildListView(state, myPersonalInfo!);
-              }
-              // else if (state is GetComments) {
-              //   ToastShow.toastStateError(state);
-              //   return const Text("Something Wrong");
-              // }
-              else {
-                return const Center(
-                  child: CircularProgressIndicator(
-                      strokeWidth: 1, color: ColorManager.black54),
-                );
-              }
-            }),
-        bottomSheet: addCommentBottomSheet(myPersonalInfo!),
+                    return false;
+                  },
+                  builder: (context, state) {
+                    if (state is CubitCommentsInfoLoaded) {
+
+                      // List<Comment> a=state.commentsOfThePost.map((e) => ).toList();
+                      state.commentsOfThePost.sort(
+                          (a, b) => b.datePublished.compareTo(a. datePublished ));
+                      return buildListView(
+                          state.commentsOfThePost, myPersonalInfo!);
+                    } else if (state is CubitCommentsInfoFailed) {
+                      ToastShow.toastStateError(state);
+                      return const Text("Something Wrong");
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                            strokeWidth: 1, color: ColorManager.black54),
+                      );
+                    }
+                  }),
+            ),
+            addCommentBottomSheet(myPersonalInfo!),
+          ],
+        ),
       );
     });
   }
@@ -74,13 +84,12 @@ class _CommentsPageState extends State<CommentsPage> {
   }
 
   Widget buildListView(
-      GetCommentsLoaded state, UserPersonalInfo myPersonalInfo) {
+      List<Comment> commentsOfThePost, UserPersonalInfo myPersonalInfo) {
     Map<int, bool> showMeReplies = {};
-    return state.comments.isNotEmpty
+    return commentsOfThePost.isNotEmpty
         ? SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: ListView.separated(
-
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 primary: false,
@@ -90,7 +99,7 @@ class _CommentsPageState extends State<CommentsPage> {
                   return BlocProvider<ReplyInfoCubit>(
                     create: (_) => injector<ReplyInfoCubit>(),
                     child: CommentInfo(
-                      commentInfo: state.comments[index],
+                      commentInfo: commentsOfThePost[index],
                       index: index,
                       showMeReplies: showMeReplies,
                       textController: _textController,
@@ -100,7 +109,7 @@ class _CommentsPageState extends State<CommentsPage> {
                     ),
                   );
                 },
-                itemCount: state.comments.length,
+                itemCount: commentsOfThePost.length,
                 separatorBuilder: (BuildContext context, int index) =>
                     const SizedBox(
                       height: 20,
@@ -115,86 +124,84 @@ class _CommentsPageState extends State<CommentsPage> {
           );
   }
 
-  SingleChildScrollView addCommentBottomSheet(
-      UserPersonalInfo userPersonalInfo) {
-    return SingleChildScrollView(
-      keyboardDismissBehavior:
-      ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Container(
-        color: ColorManager.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            if (selectedCommentInfo != null)
-              Container(
-                width: double.infinity,
-                height: 45,
-                color: ColorManager.lightGrey,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10.0, right: 17),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 0),
-                            child: Text(
-                                "Replying to ${selectedCommentInfo!.whoCommentInfo!.userName}",
-                                style: const TextStyle(
-                                    color: ColorManager.black54)),
-                          ),
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedCommentInfo = null;
-                                _textController.text = '';
-                              });
-                            },
-                            child: const Icon(Icons.close, size: 15)),
-                      ],
+  Widget addCommentBottomSheet(UserPersonalInfo userPersonalInfo) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        if (selectedCommentInfo != null) ...[
+          Container(
+            width: double.infinity,
+            height: 45,
+            color: const Color.fromARGB(18, 59, 59, 59),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10.0, right: 17),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 0),
+                        child: Text(
+                            "Replying to ${selectedCommentInfo!.whoCommentInfo!.userName}",
+                            style:
+                                const TextStyle(color: ColorManager.black54)),
+                      ),
                     ),
-                  ),
+                    GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedCommentInfo = null;
+                            _textController.text = '';
+                          });
+                        },
+                        child: const Icon(Icons.close, size: 18)),
+                  ],
                 ),
               ),
-            const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                textOfEmoji('❤'),
-                textOfEmoji('🙌'),
-                textOfEmoji('🔥'),
-                textOfEmoji('👏🏻'),
-                textOfEmoji('😢'),
-                textOfEmoji('😍'),
-                textOfEmoji('😮'),
-                textOfEmoji('😂'),
-              ],
             ),
-            const Divider(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: AddComment(
-                postId: widget.postId,
-                selectedCommentInfo: selectedCommentInfo,
-                textController: _textController,
-                userPersonalInfo: userPersonalInfo,
-                makeSelectedCommentNullable: (){
-                  setState(() {
-                    selectedCommentInfo = null;
-                    _textController.text = '';
-                  });
-                },
-              ),
-            ),
-            const SizedBox(height: 10),
+          ),
+        ],
+        customDivider(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            textOfEmoji('❤'),
+            textOfEmoji('🙌'),
+            textOfEmoji('🔥'),
+            textOfEmoji('👏🏻'),
+            textOfEmoji('😢'),
+            textOfEmoji('😍'),
+            textOfEmoji('😮'),
+            textOfEmoji('😂'),
           ],
         ),
-      ),
+        const Divider(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: AddComment(
+            postId: widget.postId,
+            selectedCommentInfo: selectedCommentInfo,
+            textController: _textController,
+            userPersonalInfo: userPersonalInfo,
+            makeSelectedCommentNullable: () {
+              setState(() {
+                selectedCommentInfo = null;
+                _textController.text = '';
+              });
+            },
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
     );
   }
 
+  Container customDivider() => Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      color: Colors.grey,
+      width: double.infinity,
+      height: 0.2);
 
   Widget textOfEmoji(String emoji) {
     return GestureDetector(
