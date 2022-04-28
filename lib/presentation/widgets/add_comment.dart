@@ -4,8 +4,8 @@ import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/comments_info_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/reply_info_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
 
 class AddComment extends StatefulWidget {
@@ -118,16 +118,11 @@ class _AddCommentState extends State<AddComment> {
           .replyOnThisComment(replyInfo: replyInfo);
     }
     widget.makeSelectedCommentNullable();
-
-    // setState(() {
-    //   widget.selectedCommentInfo = null;
-    //   widget.textController.text = '';
-    // });
   }
+
   Widget textOfEmoji(String emoji) {
     return GestureDetector(
       onTap: () {
-        // focusNode.requestFocus();
         setState(() {
           widget.textController.text = widget.textController.text + emoji;
           widget.textController.selection = TextSelection.fromPosition(
@@ -140,6 +135,7 @@ class _AddCommentState extends State<AddComment> {
       ),
     );
   }
+
   Comment newCommentInfo(
       UserPersonalInfo myPersonalInfo, String formattedDate) {
     final _whitespaceRE = RegExp(r"\s+");

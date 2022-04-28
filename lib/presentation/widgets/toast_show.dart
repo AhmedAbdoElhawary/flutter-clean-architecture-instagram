@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 
 class ToastShow {
   static toast(String toast) {
@@ -8,8 +9,8 @@ class ToastShow {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white);
+        backgroundColor: ColorManager.black,
+        textColor: ColorManager.white);
   }
   static toastStateError(dynamic state){
     String error;

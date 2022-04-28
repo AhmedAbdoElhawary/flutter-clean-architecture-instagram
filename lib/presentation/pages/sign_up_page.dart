@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/domain/entities/unregistered_user.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
@@ -26,7 +27,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorManager.white,
       body: SafeArea(
         child: Center(
             child: SingleChildScrollView(
@@ -38,7 +39,7 @@ class _SignUpPageState extends State<SignUpPage> {
             children: [
               SvgPicture.asset(
                 IconsAssets.instagramLogo,
-                color: Colors.black,
+                color: ColorManager.black,
                 height: 50,
               ),
               const SizedBox(height: 30),
@@ -59,7 +60,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: [
                   const Text(
                     "Already have an account? ",
-                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                    style: TextStyle(fontSize: 13, color: ColorManager.grey),
                   ),
                   InkWell(
                       onTap: () {
@@ -69,7 +70,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         "Log in",
                         style: TextStyle(
                             fontSize: 13,
-                            color: Colors.black,
+                            color: ColorManager.black,
                             fontWeight: FontWeight.bold),
                       )),
                 ],
@@ -80,7 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   onPressed: () {},
                   child: const Text(
                     "Login with Facebook",
-                    style: TextStyle(color: Colors.blue),
+                    style: TextStyle(color: ColorManager.blue),
                   ))
             ],
           ),

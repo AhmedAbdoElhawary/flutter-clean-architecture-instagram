@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/data/models/post.dart';
@@ -37,7 +38,8 @@ class _ImageListState extends State<ImageList> {
 
   @override
   Widget build(BuildContext context) {
-    print("--------------------------${ MediaQuery.of(context).viewInsets.bottom}");
+    print(
+        "--------------------------${MediaQuery.of(context).viewInsets.bottom}");
 
     final mediaQuery = MediaQuery.of(context);
     final bodyHeight = mediaQuery.size.height -
@@ -151,18 +153,13 @@ class _ImageListState extends State<ImageList> {
                   "${postInfo.publisherInfo!.name} ${postInfo.caption}", 2),
               const SizedBox(height: 8),
               addCommentRow(postInfo),
+              addComment(),
               Padding(
-                padding: const EdgeInsets.only(right:10.0),
-                child: AddComment(
-                  postId: widget.postInfo.postUid,
-                  selectedCommentInfo: null,
-                  textController: _textController,
-                  userPersonalInfo: widget.postInfo.publisherInfo!,
-                  makeSelectedCommentNullable: (){
-                    setState(() {
-                      _textController.text = '';
-                    });
-                  },
+                padding: const EdgeInsets.only(top:5.0),
+                child: Text(
+                  DateOfNow.chattingDateOfNow(
+                      postInfo.datePublished, postInfo.datePublished),
+                  style: const TextStyle(color: Colors.black26),
                 ),
               ),
             ],
@@ -171,7 +168,24 @@ class _ImageListState extends State<ImageList> {
       ]),
     );
   }
-  
+
+  Padding addComment() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 15.0, top: 5),
+      child: AddComment(
+        postId: widget.postInfo.postUid,
+        selectedCommentInfo: null,
+        textController: _textController,
+        userPersonalInfo: widget.postInfo.publisherInfo!,
+        makeSelectedCommentNullable: () {
+          setState(() {
+            _textController.text = '';
+          });
+        },
+      ),
+    );
+  }
+
   Widget loveButton(Post postInfo) {
     bool isLiked = postInfo.likes.contains(myPersonalId);
     return GestureDetector(
@@ -245,7 +259,7 @@ class _ImageListState extends State<ImageList> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {
-              return PictureViewer(imageUrl:  postInfo.postUrl);
+              return PictureViewer(imageUrl: postInfo.postUrl);
             },
           ),
         );

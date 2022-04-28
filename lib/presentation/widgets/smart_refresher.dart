@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SmarterRefresh extends StatefulWidget {
@@ -90,7 +91,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
                 break;
               default:
                 child = const CircularProgressIndicator(
-                    strokeWidth: 1.5, color: Colors.white);
+                    strokeWidth: 1.5, color: ColorManager.white);
                 break;
             }
             return SizedBox(
@@ -114,10 +115,10 @@ class _SmarterRefreshState extends State<SmarterRefresh>
               child: FadeTransition(
                 opacity: _scaleController,
                 child: ScaleTransition(
-                  child: const CircularProgressIndicator(
+                  child:   const CircularProgressIndicator(
                     strokeWidth: 1.5,
-                    color: Colors.black38,
-                    backgroundColor: Colors.black12,
+                    color: ColorManager.black38,
+                    backgroundColor: ColorManager.black12,
                   ),
                   scale: _scaleController,
                 ),
