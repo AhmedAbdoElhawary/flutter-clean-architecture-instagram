@@ -12,15 +12,15 @@ import 'package:instegram/presentation/pages/videos_page.dart';
 import 'package:instegram/presentation/widgets/fade_in_image.dart';
 import '../pages/home_page.dart';
 
-class MainScreen extends StatefulWidget {
+class NavigationBarScreen extends StatefulWidget {
   final String userId;
-  const MainScreen(this.userId, {Key? key}) : super(key: key);
+  const NavigationBarScreen(this.userId, {Key? key}) : super(key: key);
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<NavigationBarScreen> createState() => _NavigationBarScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _NavigationBarScreenState extends State<NavigationBarScreen> {
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
