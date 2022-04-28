@@ -19,7 +19,7 @@ import 'package:instegram/domain/usecases/followUseCase/follow_this_user.dart';
 import 'package:instegram/domain/usecases/firestoreUserUseCase/getUserInfo/get_followers_and_followings_usecase.dart';
 import 'package:instegram/domain/usecases/followUseCase/remove_this_follower.dart';
 import 'package:instegram/domain/usecases/postUseCase/comments/add_comment_use_case.dart';
-import 'package:instegram/domain/usecases/postUseCase/comments/get_all_comment.dart';
+import 'package:instegram/domain/usecases/postUseCase/comments/getComment/get_all_comment.dart';
 import 'package:instegram/domain/usecases/postUseCase/comments/put_like.dart';
 import 'package:instegram/domain/usecases/postUseCase/comments/remove_like.dart';
 import 'package:instegram/domain/usecases/postUseCase/comments/replies/get_replies_of_this_comment.dart';
@@ -41,9 +41,10 @@ import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/cubi
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/comment_likes/comment_likes_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/comments_info_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/reply_info_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comment_likes/comment_likes_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/replyLikes/reply_likes_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
@@ -59,7 +60,6 @@ import 'domain/usecases/firestoreUserUsecase/add_new_user_usecase.dart';
 import 'package:instegram/domain/usecases/authusecase/sign_up_auth_usecase.dart';
 import 'package:instegram/domain/usecases/authusecase/log_in_auth_usecase.dart';
 import 'domain/usecases/postUseCase/create_post.dart';
-import 'presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/replyLikes/reply_likes_cubit.dart';
 
 final injector = GetIt.I;
 

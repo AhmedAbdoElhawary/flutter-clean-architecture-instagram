@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
@@ -56,12 +57,12 @@ class VideosPageState extends State<VideosPage> {
           return const Center(
               child: Text(
             "There's no posts...",
-            style: TextStyle(color: Colors.black, fontSize: 20),
+            style: TextStyle(color: ColorManager.black, fontSize: 20),
           ));
         } else {
           return const Center(
             child: CircularProgressIndicator(
-                strokeWidth: 1.5, color: Colors.black54),
+                strokeWidth: 1.5, color: ColorManager.black54),
           );
         }
       },

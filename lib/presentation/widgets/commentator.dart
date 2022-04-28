@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,9 +6,9 @@ import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/comment_likes/comment_likes_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/replyLikes/reply_likes_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/reply_info_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comment_likes/comment_likes_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/replyLikes/reply_likes_cubit.dart';
+import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
 import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
@@ -102,7 +103,6 @@ class _CommentInfoState extends State<CommentInfo> {
                           child: ListView.separated(
                               keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,
-                              // physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               primary: false,
                               itemBuilder: (context, index) {
@@ -159,9 +159,19 @@ class _CommentInfoState extends State<CommentInfo> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        CircleAvatarOfProfileImage(
-          imageUrl: widget.commentInfo.whoCommentInfo!.profileImageUrl,
-          bodyHeight: widget.isThatReply ? 280 : 400,
+        GestureDetector(
+          onTap: (){
+            Navigator.of(
+              context,
+            ).push(CupertinoPageRoute(
+              builder: (context) =>
+                  WhichProfilePage(userId: widget.commentInfo.whoCommentInfo!.userId),
+            ));
+          },
+          child: CircleAvatarOfProfileImage(
+            imageUrl: widget.commentInfo.whoCommentInfo!.profileImageUrl,
+            bodyHeight: widget.isThatReply ? 280 : 400,
+          ),
         ),
         const SizedBox(width: 8),
         Expanded(
@@ -172,7 +182,14 @@ class _CommentInfoState extends State<CommentInfo> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(
+                        context,
+                      ).push(CupertinoPageRoute(
+                        builder: (context) =>
+                            WhichProfilePage(userId: widget.commentInfo.whoCommentInfo!.userId),
+                      ));
+                    },
                     child: Text.rich(
                       TextSpan(
                         children: <TextSpan>[

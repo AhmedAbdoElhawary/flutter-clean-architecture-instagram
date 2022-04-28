@@ -57,7 +57,6 @@ class MyApp extends StatelessWidget {
             splash: Lottie.asset('assets/splash_gif/instagram.json'),
             nextScreen: const LoginPage(),
           ),
-          onGenerateRoute: AppRoutes.onGenerateRoutes,
         ));
   }
 }

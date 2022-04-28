@@ -8,7 +8,7 @@ import 'package:instegram/domain/usecases/postUseCase/comments/getComment/get_al
 part 'comments_info_state.dart';
 
 class CommentsInfoCubit extends Cubit<CommentsInfoState> {
-  final GetPostInfoStreamedUseCase _getSpecificCommentsUseCase;
+  final GetSpecificCommentsUseCase _getSpecificCommentsUseCase;
   final AddCommentUseCase _addCommentUseCase;
   List<Comment> commentsOfThePost = [];
 
@@ -18,15 +18,15 @@ class CommentsInfoCubit extends Cubit<CommentsInfoState> {
   static CommentsInfoCubit get(BuildContext context) =>
       BlocProvider.of(context);
 
-  // Future<void> getSpecificComments({required String postId}) async {
-  //   // emit(CubitCommentsInfoLoading());
-  //   // await _getSpecificCommentsUseCase.call(params: postId).then((commentsInfo) {
-  //   //   commentsOfThePost = commentsInfo;
-  //   //   emit(CubitCommentsInfoLoaded(commentsInfo));
-  //   // }).catchError((e) {
-  //   //   emit(CubitCommentsInfoFailed(e.toString()));
-  //   // });
-  // }
+  Future<void> getSpecificComments({required String postId}) async {
+    emit(CubitCommentsInfoLoading());
+    await _getSpecificCommentsUseCase.call(params: postId).then((commentsInfo) {
+      commentsOfThePost = commentsInfo;
+      emit(CubitCommentsInfoLoaded(commentsInfo));
+    }).catchError((e) {
+      emit(CubitCommentsInfoFailed(e.toString()));
+    });
+  }
 
   Future<void> addComment({required Comment commentInfo}) async {
     emit(CubitCommentsInfoLoading());
@@ -39,5 +39,4 @@ class CommentsInfoCubit extends Cubit<CommentsInfoState> {
       emit(CubitCommentsInfoFailed(e.toString()));
     });
   }
-
 }

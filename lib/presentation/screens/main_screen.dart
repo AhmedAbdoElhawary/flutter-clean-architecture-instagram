@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/injector.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
@@ -23,9 +24,10 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
+
     return CupertinoTabScaffold(
         tabBar:
-            CupertinoTabBar(backgroundColor: Colors.white, height: 40, items: [
+            CupertinoTabBar(backgroundColor: ColorManager.white, height: 40, items: [
           navigationBarItem("house_white.svg"),
           navigationBarItem("search.svg"),
           navigationBarItem("video.svg"),
@@ -40,10 +42,10 @@ class _MainScreenState extends State<MainScreen> {
 
               return CircleAvatar(
                   radius: 14,
-                  backgroundColor: Colors.black12,
+                  backgroundColor: ColorManager.black12,
                   child: ClipOval(
                     child: userImage.isEmpty
-                        ? const Icon(Icons.person, color: Colors.white)
+                        ? const Icon(Icons.person, color: ColorManager.white)
                         :CustomFadeInImage(imageUrl:userImage) ,
                   ));
             }),
