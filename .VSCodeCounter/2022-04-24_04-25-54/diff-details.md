@@ -66,9 +66,9 @@ Total : 107 files,  1675 codes, 505 comments, 176 blanks, all 2356 lines
 | [lib/presentation/cubit/StoryCubit/story_cubit.dart](/lib/presentation/cubit/StoryCubit/story_cubit.dart) | Dart | 37 | 0 | 7 | 44 |
 | [lib/presentation/cubit/StoryCubit/story_state.dart](/lib/presentation/cubit/StoryCubit/story_state.dart) | Dart | 26 | 0 | 9 | 35 |
 | [lib/presentation/cubit/blocObserver/bloc_observer.dart](/lib/presentation/cubit/blocObserver/bloc_observer.dart) | Dart | -3 | -30 | -5 | -38 |
-| [lib/presentation/cubit/bloc/get_comments_bloc.dart](/lib/presentation/cubit/bloc/get_comments_bloc.dart) | Dart | 0 | 30 | 1 | 31 |
-| [lib/presentation/cubit/bloc/get_comments_event.dart](/lib/presentation/cubit/bloc/get_comments_event.dart) | Dart | 0 | 23 | 1 | 24 |
-| [lib/presentation/cubit/bloc/get_comments_state.dart](/lib/presentation/cubit/bloc/get_comments_state.dart) | Dart | 0 | 20 | 1 | 21 |
+| [lib/presentation/cubit/bloc/get_comments_bloc.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/bloc/get_comments_bloc.dart) | Dart | 0 | 30 | 1 | 31 |
+| [lib/presentation/cubit/bloc/get_comments_event.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/bloc/get_comments_event.dart) | Dart | 0 | 23 | 1 | 24 |
+| [lib/presentation/cubit/bloc/get_comments_state.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/bloc/get_comments_state.dart) | Dart | 0 | 20 | 1 | 21 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart](/lib/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart) | Dart | 35 | 0 | 7 | 42 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_event.dart](/lib/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_event.dart) | Dart | 18 | 0 | 7 | 25 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_state.dart) | Dart | 14 | 0 | 7 | 21 |
