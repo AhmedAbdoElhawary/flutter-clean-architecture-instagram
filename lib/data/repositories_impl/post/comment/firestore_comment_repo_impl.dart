@@ -45,17 +45,16 @@ class FirestoreCommentRepositoryImpl implements FirestoreCommentRepository {
     }
   }
 
-  @override
-  Stream<Post> getPostInfoStreamed({required String postId}) {
-    return FirestorePost.getPostInfoStreamed(postId: postId);
-  }
 
   @override
-  Future<List<Comment>> getSpecificComments(
-      {required List<dynamic> commentsIds}) async {
+  Future<List<Comment>> getSpecificComments({required String postId}) async {
     try {
-      return await FirestoreComment.getSpecificComments(
-          commentsIds: commentsIds);
+      List<dynamic> commentsIds =
+      await FirestorePost.getCommentsOfPost(postId: postId);
+      List<Comment> theComments =
+      await FirestoreComment.getSpecificComments(commentsIds: commentsIds);
+
+      return theComments;
     } catch (e) {
       return Future.error(e.toString());
     }
