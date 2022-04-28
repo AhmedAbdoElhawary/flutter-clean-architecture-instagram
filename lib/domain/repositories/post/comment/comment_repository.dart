@@ -7,7 +7,5 @@ abstract class FirestoreCommentRepository {
       {required String commentId, required String myPersonalId});
   Future<void> removeLikeOnThisComment(
       {required String commentId, required String myPersonalId});
-  Stream<Post> getPostInfoStreamed({required String postId});
-  Future<List<Comment>> getSpecificComments(
-      {required List<dynamic> commentsIds});
+  Future<List<Comment>> getSpecificComments({required String postId});
 }
