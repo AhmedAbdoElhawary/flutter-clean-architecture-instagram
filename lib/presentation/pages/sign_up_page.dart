@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/domain/entities/unregistered_user.dart';
+import 'package:instegram/presentation/screens/main_screen.dart';
+import 'package:instegram/presentation/widgets/custom_elevated_button.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
@@ -31,8 +34,7 @@ class _SignUpPageState extends State<SignUpPage> {
       body: SafeArea(
         child: Center(
             child: SingleChildScrollView(
-              keyboardDismissBehavior:
-              ScrollViewKeyboardDismissBehavior.onDrag,
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -44,13 +46,15 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SizedBox(height: 30),
               CustomTextField(
-                  hint: "Phone number, email or username",
+                  hint: StringsManager.phoneOrEmailOrUserName,
                   controller: emailController),
               const SizedBox(height: 15),
-              CustomTextField(hint: "Password", controller: passwordController),
+              CustomTextField(
+                  hint: StringsManager.password,
+                  controller: passwordController),
               const SizedBox(height: 15),
               CustomTextField(
-                  hint: "Confirm the password",
+                  hint: StringsManager.confirmPassword,
                   controller: confirmPasswordController),
               const SizedBox(height: 15),
               customTextButton(),
@@ -59,7 +63,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    "Already have an account? ",
+                    StringsManager.noAccount,
                     style: TextStyle(fontSize: 13, color: ColorManager.grey),
                   ),
                   InkWell(
@@ -67,7 +71,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         Navigator.pop(context);
                       },
                       child: const Text(
-                        "Log in",
+                        StringsManager.logIn,
                         style: TextStyle(
                             fontSize: 13,
                             color: ColorManager.black,
@@ -80,7 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
               TextButton(
                   onPressed: () {},
                   child: const Text(
-                    "Login with Facebook",
+                    StringsManager.loginWithFacebook,
                     style: TextStyle(color: ColorManager.blue),
                   ))
             ],
@@ -91,102 +95,77 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget customTextButton() {
-    return BlocConsumer<FirebaseAuthCubit, FirebaseAuthCubitState>(
-      listener: (context, state) {},
-      builder: (context, authState) {
-        FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
+    return Builder(builder: (context) {
+      FirestoreAddNewUserCubit userCubit =
+          FirestoreAddNewUserCubit.get(context);
+      return BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState>(
+        builder: (context, authState) {
+          FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
+          if (authState is CubitAuthConfirmed) {
+            addNewUser(authState, userCubit);
+            moveToMain(authState);
+          } else if (authState is CubitAuthFailed) {
+            authFailed(authState);
+          }
+          return CustomElevatedButton(
+            isItDone: authState is! CubitAuthConfirming,
+            nameOfButton: StringsManager.signUp,
+            onPressed: () async {
+              await authCubit.signUp(UnRegisteredUser(
+                  email: emailController.text,
+                  password: passwordController.text,
+                  confirmPassword: confirmPasswordController.text));
+            },
+          );
+        },
+      );
+    });
+  }
 
-        return Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: SizedBox(
-                  height: 45,
-                  child: BlocConsumer<FirestoreAddNewUserCubit,
-                      FirestoreAddNewUserState>(
-                    listener: (context, state) {},
-                    builder: (context, userState) {
-                      FirestoreAddNewUserCubit userCubit =
-                          FirestoreAddNewUserCubit.get(context);
-                      if (authState is CubitAuthConfirmed) {
-                        // TODO ----> we need to get more details from user in the first to change this view
+  Future<void> onPressed(FirebaseAuthCubit authCubit) async {
+    await authCubit.signUp(UnRegisteredUser(
+        email: emailController.text,
+        password: passwordController.text,
+        confirmPassword: confirmPasswordController.text));
+  }
 
-                        String name = authState.user.email!.split('@')[0];
-                        String userName = "${name}4263";
-                        UserPersonalInfo newUserInfo = UserPersonalInfo(
-                          name: name,
-                          email: authState.user.email!,
-                          userName: userName,
-                          bio: "",
-                          profileImageUrl: "",
-                          userId: authState.user.uid,
-                          followerPeople: [],
-                          followedPeople: [],
-                          posts: [],
-                          stories: [],
-                        );
-                        userCubit.addNewUser(newUserInfo);
-                        if (userState is CubitUserAdded) {
-                          WidgetsBinding.instance!
-                              .addPostFrameCallback((_) async {
-                            // final prefs = await SharedPreferences.getInstance();
-                            // await prefs.setString('userInfo', jsonEncode(newUserInfo));
-                            // await prefs.setBool('registered', true);
+  moveToMain(CubitAuthConfirmed authState) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => MainScreen(authState.user.uid)),
+        (Route<dynamic> route) => false,
+      );
+    });
+  }
 
-                            // Navigator.pushAndRemoveUntil(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) =>
-                            //           MainScreen(newUserInfo)),
-                            //   (Route<dynamic> route) => false,
-                            // );
-                          });
-                        } else if (userState is CubitAddNewUserFailed) {
-                          String error;
-                          try {
-                            error = userState.error.split(RegExp(r']'))[1];
-                          } catch (e) {
-                            error = userState.error;
-                          }
+  authFailed(CubitAuthFailed authState) {
+    String error;
+    try {
+      error = authState.error.split(RegExp(r']'))[1];
+    } catch (e) {
+      error = authState.error;
+    }
+    ToastShow.toast(error);
+  }
 
-                          ToastShow.toast(error);
-                        }
-                      } else if (authState is CubitAuthFailed) {
-                        String error;
-                        try {
-                          error = authState.error.split(RegExp(r']'))[1];
-                        } catch (e) {
-                          error = authState.error;
-                        }
-                        ToastShow.toast(error);
-                      }
+  addNewUser(CubitAuthConfirmed authState, FirestoreAddNewUserCubit userCubit) {
+    // TODO ----> we need to get more details from user in the first to change this view
 
-                      return TextButton(
-                          onPressed: () async {
-                            await authCubit.signUp(UnRegisteredUser(
-                                email: emailController.text,
-                                password: passwordController.text,
-                                confirmPassword:
-                                    confirmPasswordController.text));
-                          },
-                          child: userState is CubitUserAdding ||
-                                  authState is CubitAuthConfirming
-                              ? const CircularProgressIndicator()
-                              : const Text(
-                                  "Sign Up",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                          style:
-                              ElevatedButton.styleFrom(primary: Colors.blue));
-                    },
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
+    String name = authState.user.email!.split('@')[0];
+    String userName = "${name}4263";
+    UserPersonalInfo newUserInfo = UserPersonalInfo(
+      name: name,
+      email: authState.user.email!,
+      userName: userName,
+      bio: "",
+      profileImageUrl: "",
+      userId: authState.user.uid,
+      followerPeople: [],
+      followedPeople: [],
+      posts: [],
+      stories: [],
     );
+    userCubit.addNewUser(newUserInfo);
   }
 }

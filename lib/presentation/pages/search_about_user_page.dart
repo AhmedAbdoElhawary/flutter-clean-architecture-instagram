@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/data/models/post.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/widgets/custom_grid_view.dart';
 import 'package:instegram/presentation/widgets/smart_refresher.dart';
@@ -57,7 +57,7 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage>{
           );
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
-          return const Center(child: Text("There's no posts...",style: TextStyle(color:Colors.black,fontSize: 20),));
+          return const Center(child: Text(StringsManager.noPosts,style: TextStyle(color:Colors.black,fontSize: 20),));
         } else {
           return const Center(
             child: CircularProgressIndicator(

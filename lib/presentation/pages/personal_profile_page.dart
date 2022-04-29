@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/presentation/pages/new_post_page.dart';
 import 'package:instegram/presentation/pages/story_config.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
@@ -70,7 +72,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           );
         } else if (state is CubitGetUserInfoFailed) {
           ToastShow.toastStateError(state);
-          return const Text("there is no posts...");
+          return const Text(StringsManager.noPosts);
         } else {
           return const Center(
             child: CircularProgressIndicator(
@@ -108,11 +110,11 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         WidgetsBinding.instance!.addPostFrameCallback((_) async {
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (_) => const LoginPage()),
-              (route) => false);
+              CupertinoPageRoute(builder: (_) => const LoginPage(),maintainState: false),
+              (route) => false,);
         });
       } else if (state is CubitAuthConfirming) {
-        ToastShow.toast("Loading...");
+        ToastShow.toast(StringsManager.loading);
       } else if (state is CubitAuthFailed) {
         ToastShow.toastStateError(state);
       }
@@ -146,7 +148,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             Future.delayed(Duration.zero, () async {
               UserPersonalInfo result =
                   await Navigator.of(context, rootNavigator: true).push(
-                      MaterialPageRoute(
+                      CupertinoPageRoute(
                           builder: (context) => EditProfilePage(userInfo),
                           maintainState: false));
               setState(() {
@@ -165,7 +167,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             ),
             child: const Center(
               child: Text(
-                'Edit profile',
+                StringsManager.editProfile,
                 style: TextStyle(
                     fontSize: 17.0,
                     color: ColorManager.black,
@@ -195,8 +197,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   Widget listOfAddPost() {
     return SingleChildScrollView(
-      keyboardDismissBehavior:
-      ScrollViewKeyboardDismissBehavior.onDrag,
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -206,7 +207,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             color: ColorManager.black87,
             height: 40,
           ),
-          const Text("Create",
+          const Text(StringsManager.create,
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
           const Divider(),
           Padding(
@@ -217,9 +218,10 @@ class _ProfilePageState extends State<PersonalProfilePage> {
                 const Divider(indent: 40, endIndent: 15),
                 createNewVideo(),
                 const Divider(indent: 40, endIndent: 15),
-                createStoryButton(),
+                createNewStory(),
                 const Divider(indent: 40, endIndent: 15),
-                createSizedBox("Live", IconsAssets.instagramHighlightStoryIcon),
+                createSizedBox(StringsManager.live,
+                    IconsAssets.instagramHighlightStoryIcon),
                 const Divider(indent: 40, endIndent: 15),
                 Container(
                   height: 50,
@@ -232,7 +234,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     );
   }
 
-  GestureDetector createStoryButton() {
+  GestureDetector createNewStory() {
     return GestureDetector(
         onTap: () async {
           final ImagePicker _picker = ImagePicker();
@@ -241,7 +243,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           if (image != null) {
             File photo = File(image.path);
             await Navigator.of(context, rootNavigator: true).push(
-                MaterialPageRoute(
+                CupertinoPageRoute(
                     builder: (context) => NewStoryPage(storyImage: photo),
                     maintainState: false));
             setState(() {
@@ -249,7 +251,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             });
           }
         },
-        child: createSizedBox("Story", IconsAssets.addInstagramStoryIcon));
+        child: createSizedBox(
+            StringsManager.story, IconsAssets.addInstagramStoryIcon));
   }
 
   GestureDetector createNewVideo() {
@@ -261,7 +264,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           if (video != null) {
             File videoFile = File(video.path);
             await Navigator.of(context, rootNavigator: true).push(
-                MaterialPageRoute(
+                CupertinoPageRoute(
                     builder: (context) => CreatePostPage(
                         selectedFile: videoFile, isThatImage: false),
                     maintainState: false));
@@ -270,7 +273,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             });
           }
         },
-        child: createSizedBox("Reel", IconsAssets.videoIcon));
+        child: createSizedBox(StringsManager.reel, IconsAssets.videoIcon));
   }
 
   GestureDetector createNewPost() {
@@ -282,7 +285,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           if (image != null) {
             File photo = File(image.path);
             await Navigator.of(context, rootNavigator: true).push(
-                MaterialPageRoute(
+                CupertinoPageRoute(
                     builder: (context) => CreatePostPage(selectedFile: photo),
                     maintainState: false));
             setState(() {
@@ -290,14 +293,14 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             });
           }
         },
-        child: createSizedBox("Post", IconsAssets.gridIcon));
+        child: createSizedBox(StringsManager.post, IconsAssets.gridIcon));
   }
 
   SizedBox createSizedBox(String text, String nameOfPath) {
     return SizedBox(
       height: 40,
       child: Row(children: [
-        text != "Post"
+        text != StringsManager.post
             ? SvgPicture.asset(
                 nameOfPath,
                 color: ColorManager.black87,
