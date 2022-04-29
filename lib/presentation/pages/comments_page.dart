@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/injector.dart';
@@ -35,7 +36,7 @@ class _CommentsPageState extends State<CommentsPage> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: ColorManager.white,
-          title: const Text('Comments'),
+          title: const Text(StringsManager.comments),
         ),
         body: Column(
           children: [
@@ -61,7 +62,7 @@ class _CommentsPageState extends State<CommentsPage> {
                           state.commentsOfThePost, myPersonalInfo!);
                     } else if (state is CubitCommentsInfoFailed) {
                       ToastShow.toastStateError(state);
-                      return const Text("Something Wrong");
+                      return const Text(StringsManager.somethingWrong);
                     } else {
                       return const Center(
                         child: CircularProgressIndicator(
@@ -116,7 +117,7 @@ class _CommentsPageState extends State<CommentsPage> {
                     )),
           )
         : const Center(
-            child: Text("There is no comments!",
+            child: Text(StringsManager.noComments,
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -143,7 +144,7 @@ class _CommentsPageState extends State<CommentsPage> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 0),
                         child: Text(
-                            "Replying to ${selectedCommentInfo!.whoCommentInfo!.userName}",
+                            "${StringsManager.replyingTo} ${selectedCommentInfo!.whoCommentInfo!.userName}",
                             style:
                                 const TextStyle(color: ColorManager.black54)),
                       ),

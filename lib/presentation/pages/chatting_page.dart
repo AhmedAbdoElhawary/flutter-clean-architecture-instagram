@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/massage.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart';
@@ -282,7 +284,7 @@ class _ChattingPageState extends State<ChattingPage> {
               mainAxisAlignment:
               MainAxisAlignment.spaceBetween,
               children: [
-                const Text("Replay",
+                const Text(StringsManager.reply,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15)),
@@ -290,31 +292,13 @@ class _ChattingPageState extends State<ChattingPage> {
                     onTap: () {
                       // massageCubit.
                     },
-                    child: const Text("UnSend",
+                    child: const Text(StringsManager.unSend,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15))),
               ]),
         ),
       );
-  }
-
-  Widget sss(MassageCubit massageCubit) {
-    return Container(
-      height: 40,
-      width: double.infinity,
-      color: ColorManager.white,
-      child: Row(children: [
-        const Expanded(child: Text("Replay"), flex: 1),
-        Expanded(
-            child: GestureDetector(
-                onTap: () {
-                  // massageCubit.
-                },
-                child: const Text("UnSend")),
-            flex: 1),
-      ]),
-    );
   }
 
   Row rowOfTextField(MassageCubit massageCubit) {
@@ -358,7 +342,7 @@ class _ChattingPageState extends State<ChattingPage> {
               massageInfo: newMassage(isThatImage: true),
               pathOfPhoto: pickedFile.path);
         } else {
-          ToastShow.toast('No image selected.');
+          ToastShow.toast(StringsManager.noImageSelected);
         }
       },
       child: const CircleAvatar(
@@ -379,7 +363,7 @@ class _ChattingPageState extends State<ChattingPage> {
         cursorColor: ColorManager.teal,
         maxLines: null,
         decoration: const InputDecoration.collapsed(
-            hintText: 'Message...',
+            hintText: StringsManager.massage,
             hintStyle: TextStyle(color: ColorManager.black26)),
         autofocus: false,
         controller: _textController,
@@ -404,7 +388,7 @@ class _ChattingPageState extends State<ChattingPage> {
         // }
       },
       child: Text(
-        'Send',
+        StringsManager.send,
         style: TextStyle(
             color: _textController.text.isNotEmpty
                 ? const Color.fromARGB(255, 33, 150, 243)
@@ -445,7 +429,7 @@ class _ChattingPageState extends State<ChattingPage> {
           //   isImageUpload = true;
           // });
         } else {
-          ToastShow.toast('No image selected.');
+          ToastShow.toast(StringsManager.noImageSelected);
         }
       },
       child: SvgPicture.asset(
@@ -505,14 +489,14 @@ class _ChattingPageState extends State<ChattingPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "${widget.userInfo.followerPeople.length} Followers",
+          "${widget.userInfo.followerPeople.length} ${StringsManager.followers}",
           style: const TextStyle(fontSize: 13, color: Colors.grey),
         ),
         const SizedBox(
           width: 15,
         ),
         Text(
-          "${widget.userInfo.posts.length} Posts",
+          "${widget.userInfo.posts.length} ${StringsManager.posts}",
           style: const TextStyle(fontSize: 13, color: Colors.grey),
         ),
       ],
@@ -525,14 +509,14 @@ class _ChattingPageState extends State<ChattingPage> {
         Navigator.of(
           context,
           rootNavigator: true,
-        ).push(MaterialPageRoute(
+        ).push(CupertinoPageRoute(
           builder: (context) => UserProfilePage(
             userId: widget.userInfo.userId,
           ),
           maintainState: false,
         ));
       },
-      child: const Text("View Profile",
+      child: const Text(StringsManager.viewProfile,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal)),
     );
   }

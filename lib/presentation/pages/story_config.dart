@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/story.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/StoryCubit/story_cubit.dart';
@@ -59,7 +60,7 @@ class _NewStoryPageState extends State<NewStoryPage> {
             color: ColorManager.black87,
             height: 40,
           ),
-          const Text("Create",
+          const Text(StringsManager.create,
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
           const Divider(),
           Padding(
@@ -86,7 +87,7 @@ class _NewStoryPageState extends State<NewStoryPage> {
                         ? const Padding(
                             padding: EdgeInsets.all(3.0),
                             child: Text(
-                              "Share",
+                              StringsManager.share,
                               style: TextStyle(color: Colors.white),
                             ),
                           )

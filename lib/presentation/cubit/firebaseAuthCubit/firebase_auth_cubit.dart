@@ -32,7 +32,7 @@ class FirebaseAuthCubit extends Cubit<FirebaseAuthCubitState> {
     return user;
   }
 
-  Future<User?> logIn(RegisteredUser userInfo) async {
+  Future<void> logIn(RegisteredUser userInfo) async {
     emit(CubitAuthConfirming());
     await logInAuthUseCase(params: userInfo).then((user) {
       emit(CubitAuthConfirmed(user));
@@ -40,7 +40,6 @@ class FirebaseAuthCubit extends Cubit<FirebaseAuthCubitState> {
     }).catchError((e) {
       emit(CubitAuthFailed(e.toString()));
     });
-    return user;
   }
 
   Future<void> signOut() async {
