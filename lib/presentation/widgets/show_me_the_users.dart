@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
 import '../cubit/followCubit/follow_cubit.dart';
@@ -146,9 +147,9 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
     }
     return !userInfo.followerPeople.contains(myPersonalId)
         ? containerOfFollowText(
-            text: 'Follow', isThatFollower: false, isItLoading: isFollowLoading)
+            text: StringsManager.follow, isThatFollower: false, isItLoading: isFollowLoading)
         : containerOfFollowText(
-            text: 'Following',
+            text: StringsManager.following,
             isThatFollower: true,
             isItLoading: isFollowLoading);
   }

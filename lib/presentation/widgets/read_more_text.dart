@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:readmore/readmore.dart';
 
 class ReadMore extends StatelessWidget{
@@ -13,8 +14,8 @@ class ReadMore extends StatelessWidget{
         trimLines: timeLines,
         colorClickableText: Colors.grey,
         trimMode: TrimMode.Line,
-        trimCollapsedText: 'more',
-        trimExpandedText: 'less',
+        trimCollapsedText: StringsManager.more,
+        trimExpandedText: StringsManager.less,
         style: const TextStyle(color: Colors.black),
         moreStyle: const TextStyle(fontSize: 14, color: Colors.grey),
       );
