@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/pages/play_this_video.dart';
 import 'package:instegram/presentation/widgets/animated_dialog.dart';
@@ -40,7 +41,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
             children: widget.postsInfo.map((postInfo) {
               return createGridTileWidget(postInfo);
             }).toList())
-        : const Center(child: Text("There's no posts..."));
+        : const Center(child: Text(StringsManager.noPosts));
   }
 
   OverlayEntry? _popupDialog;

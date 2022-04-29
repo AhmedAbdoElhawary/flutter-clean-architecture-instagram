@@ -38,9 +38,6 @@ class _ImageListState extends State<ImageList> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        "--------------------------${MediaQuery.of(context).viewInsets.bottom}");
-
     final mediaQuery = MediaQuery.of(context);
     final bodyHeight = mediaQuery.size.height -
         AppBar().preferredSize.height -
@@ -53,7 +50,7 @@ class _ImageListState extends State<ImageList> {
   }
 
   pushToProfilePage(Post postInfo) =>
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context).push(CupertinoPageRoute(
         builder: (context) => WhichProfilePage(userId: postInfo.publisherId),
       ));
 
@@ -232,7 +229,7 @@ class _ImageListState extends State<ImageList> {
   Widget numberOfLikes(Post postInfo) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context).push(CupertinoPageRoute(
             builder: (context) => UsersWhoLikesOnPostPage(
                   showSearchBar: true,
                   usersIds: postInfo.likes,
@@ -257,7 +254,7 @@ class _ImageListState extends State<ImageList> {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
-          MaterialPageRoute(
+          CupertinoPageRoute(
             builder: (context) {
               return PictureViewer(imageUrl: postInfo.postUrl);
             },

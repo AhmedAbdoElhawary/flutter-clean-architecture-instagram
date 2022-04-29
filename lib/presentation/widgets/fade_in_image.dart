@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 
 class CustomFadeInImage extends StatelessWidget {
   final String imageUrl;
   final BoxFit boxFit;
+  final bool circularLoading;
+
   const CustomFadeInImage(
-      {Key? key, required this.imageUrl, this.boxFit = BoxFit.cover})
+      {Key? key, required this.imageUrl,this.circularLoading=true, this.boxFit = BoxFit.cover})
       : super(key: key);
 
   @override
@@ -20,7 +23,7 @@ class CustomFadeInImage extends StatelessWidget {
           return child;
         }
         return Center(
-          child: buildCircularProgress(),
+          child: circularLoading?buildCircularProgress():const CircleAvatar(radius: 15,backgroundColor: ColorManager.lowOpacityGrey),
         );
       },
       errorBuilder:
