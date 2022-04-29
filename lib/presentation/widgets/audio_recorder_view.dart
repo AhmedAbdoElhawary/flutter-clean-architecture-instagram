@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_audio_recorder2/flutter_audio_recorder2.dart';
 import 'dart:io';
@@ -80,7 +81,7 @@ class _RecorderViewState extends State<RecorderView> {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Please allow recording from settings.'),
+          content: Text(StringsManager.allowRecordingFromSettings),
         ));
         break;
     }
@@ -119,7 +120,7 @@ class _RecorderViewState extends State<RecorderView> {
     } else {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Please allow recording from settings.'),
+        content: Text(StringsManager.allowRecordingFromSettings),
       ));
     }
   }

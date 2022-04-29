@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/globall.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
@@ -45,8 +46,6 @@ class _CommentInfoState extends State<CommentInfo> {
   @override
   Widget build(BuildContext context) {
     bool isLiked = widget.commentInfo.likes.contains(myPersonalId);
-    print("11111111111111${widget.showMeReplies[widget.index]}");
-
     return Padding(
       padding: const EdgeInsets.only(left: 10.0),
       child: Column(
@@ -58,24 +57,18 @@ class _CommentInfoState extends State<CommentInfo> {
                     padding: const EdgeInsets.only(left: 50.0),
                     child: Row(
                       children: [
-                        Container(
-                            color: Colors.black12, height: 1, width: 40),
+                        Container(color: Colors.black12, height: 1, width: 40),
                         const SizedBox(width: 10),
                         Expanded(
                             child: GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    print(
-                                        "11111111111111${widget.showMeReplies[widget.index]}");
-
-                                    widget.showMeReplies.update(
-                                        widget.index, (value) => true);
-                                    print(
-                                        "11111111111111${widget.showMeReplies[widget.index]}");
+                                    widget.showMeReplies
+                                        .update(widget.index, (value) => true);
                                   });
                                 },
                                 child: Text(
-                                    "View ${widget.commentInfo.replies!.length} more ${widget.commentInfo.replies!.length > 1 ? 'replies' : 'reply'}",
+                                    "${StringsManager.view} ${widget.commentInfo.replies!.length} ${StringsManager.more} ${widget.commentInfo.replies!.length > 1 ? StringsManager.replies : StringsManager.reply}",
                                     style: const TextStyle(
                                         color: Colors.black45))))
                       ],
@@ -102,7 +95,7 @@ class _CommentInfoState extends State<CommentInfo> {
                           padding: const EdgeInsets.only(left: 40.0),
                           child: ListView.separated(
                               keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior.onDrag,
+                                  ScrollViewKeyboardDismissBehavior.onDrag,
                               shrinkWrap: true,
                               primary: false,
                               itemBuilder: (context, index) {
@@ -135,14 +128,11 @@ class _CommentInfoState extends State<CommentInfo> {
                             children: [
                               // const Divider(thickness: 30,color: Colors.black,indent: 10,endIndent: 60),
                               Container(
-                                  color: Colors.black12,
-                                  height: 1,
-                                  width: 40),
+                                  color: Colors.black12, height: 1, width: 40),
                               const SizedBox(width: 10),
                               const Expanded(
-                                  child: Text("Loading...",
-                                      style:
-                                          TextStyle(color: Colors.black45)))
+                                  child: Text(StringsManager.loading,
+                                      style: TextStyle(color: Colors.black45)))
                             ],
                           ),
                         );
@@ -160,12 +150,12 @@ class _CommentInfoState extends State<CommentInfo> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         GestureDetector(
-          onTap: (){
+          onTap: () {
             Navigator.of(
               context,
             ).push(CupertinoPageRoute(
-              builder: (context) =>
-                  WhichProfilePage(userId: widget.commentInfo.whoCommentInfo!.userId),
+              builder: (context) => WhichProfilePage(
+                  userId: widget.commentInfo.whoCommentInfo!.userId),
             ));
           },
           child: CircleAvatarOfProfileImage(
@@ -186,8 +176,8 @@ class _CommentInfoState extends State<CommentInfo> {
                       Navigator.of(
                         context,
                       ).push(CupertinoPageRoute(
-                        builder: (context) =>
-                            WhichProfilePage(userId: widget.commentInfo.whoCommentInfo!.userId),
+                        builder: (context) => WhichProfilePage(
+                            userId: widget.commentInfo.whoCommentInfo!.userId),
                       ));
                     },
                     child: Text.rich(
@@ -213,7 +203,7 @@ class _CommentInfoState extends State<CommentInfo> {
                                       hashTagName[0].replaceAll('@', '');
                                   await Navigator.of(
                                     context,
-                                  ).push(MaterialPageRoute(
+                                  ).push(CupertinoPageRoute(
                                       builder: (context) => WhichProfilePage(
                                             userName: userName,
                                           ),
@@ -241,14 +231,14 @@ class _CommentInfoState extends State<CommentInfo> {
                           padding: const EdgeInsets.only(left: 20.0),
                           child: InkWell(
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
+                              Navigator.of(context).push(CupertinoPageRoute(
                                   builder: (context) => UsersWhoLikesOnPostPage(
                                         showSearchBar: false,
                                         usersIds: widget.commentInfo.likes,
                                       )));
                             },
                             child: Text(
-                              "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? 'Like' : 'Likes'}",
+                              "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like : StringsManager.likes}",
                               style: const TextStyle(color: Colors.grey),
                             ),
                           ),
@@ -274,7 +264,7 @@ class _CommentInfoState extends State<CommentInfo> {
                           });
                         },
                         child: const Text(
-                          "Reply",
+                          StringsManager.reply,
                           style: TextStyle(color: Colors.grey),
                         ),
                       ),

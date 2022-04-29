@@ -9,11 +9,13 @@ class CircleAvatarOfProfileImage extends StatelessWidget {
   final double bodyHeight;
   final bool thisForStoriesLine;
   final String imageUrl;
+  final bool bigCircleColor;
   const CircleAvatarOfProfileImage({
     required this.imageUrl,
     required this.bodyHeight,
     this.circleAvatarName = '',
     this.thisForStoriesLine = false,
+    this.bigCircleColor = true,
     Key? key,
   }) : super(key: key);
 
@@ -25,26 +27,34 @@ class CircleAvatarOfProfileImage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircleAvatar(
-            radius: bodyHeight * .054,
-            backgroundColor: ColorManager.redAccent,
-            child: CircleAvatar(
-              radius: bodyHeight * .051,
-              backgroundColor: ColorManager.white,
-              child: CircleAvatar(
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              if (bigCircleColor) ...[
+                CircleAvatar(
+                  radius: bodyHeight * .054,
+                  backgroundColor: ColorManager.redAccent,
+                ),
+                CircleAvatar(
+                  radius: bodyHeight * .051,
+                  backgroundColor: ColorManager.white,
+                ),
+              ],
+              CircleAvatar(
                 child: ClipOval(
                   child: imageUrl.isEmpty
                       ? const Icon(Icons.person, color: ColorManager.white)
-                      : CustomFadeInImage(imageUrl:imageUrl),
+                      : CustomFadeInImage(imageUrl: imageUrl),
                 ),
                 radius: bodyHeight * .046,
                 backgroundColor: ColorManager.black,
               ),
-            ),
+            ],
           ),
-          if (thisForStoriesLine) const SizedBox(height: 5),
-          if (thisForStoriesLine)
+          if (thisForStoriesLine) ...[
+            const SizedBox(height: 5),
             NameOfCircleAvatar(circleAvatarName, thisForStoriesLine),
+          ]
         ],
       ),
     );

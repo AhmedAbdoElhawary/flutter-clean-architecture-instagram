@@ -13,7 +13,7 @@ class NameOfCircleAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left:8.0),
+      padding: const EdgeInsets.only(left:5.0),
       child: Text(
         circleAvatarName,
         maxLines: 1,
