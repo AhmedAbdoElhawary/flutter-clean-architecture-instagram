@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/story.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 
@@ -18,10 +19,12 @@ class FireStoreStory {
 
   static Future<List<UserPersonalInfo>> getPostsInfo(
       List<UserPersonalInfo> usersInfo) async {
-    for (int i = 0; i < usersInfo.length; i++) {
-      List<dynamic> userStories = usersInfo[i].stories;
+    List<UserPersonalInfo> usersStoriesInfo = usersInfo;
+    List<String> storiesIds = [];
+    for (int i = 0; i < usersStoriesInfo.length; i++) {
+      List<dynamic> userStories = usersStoriesInfo[i].stories;
       if (userStories.isEmpty) {
-        usersInfo.removeAt(i);
+        usersStoriesInfo.removeAt(i);
         i--;
         continue;
       }
@@ -30,18 +33,23 @@ class FireStoreStory {
             await _fireStoreStoryCollection.doc(userStories[j]).get();
         if (snap.exists) {
           Story postReformat = Story.fromSnap(docSnap: snap);
-
-          postReformat.publisherInfo = usersInfo[i];
-          if (usersInfo[i].storiesInfo == null) {
-            usersInfo[i].storiesInfo = [postReformat];
-          } else {
-            usersInfo[i].storiesInfo!.add(postReformat);
+          postReformat.publisherInfo = usersStoriesInfo[i];
+          if (usersStoriesInfo[i].storiesInfo == null) {
+            usersStoriesInfo[i].storiesInfo = [postReformat];
+            print(
+                "wwwwwwwwwwwwwwwwwwwwwwwwwww ${usersStoriesInfo[i].storiesInfo!.length}");
+            storiesIds.add(postReformat.storyUid);
+          } else if (!storiesIds.contains(postReformat.storyUid)) {
+            usersStoriesInfo[i].storiesInfo!.add(postReformat);
+            print(
+                "qqqqqqqqqqqqqqqqqqqqqqqqqqq ${usersStoriesInfo[i].storiesInfo!.length}");
+            storiesIds.add(postReformat.storyUid);
           }
         } else {
-          return Future.error("the story not exist !");
+          return Future.error(StringsManager.userNotExist);
         }
       }
     }
-    return usersInfo;
+    return usersStoriesInfo;
   }
 }
