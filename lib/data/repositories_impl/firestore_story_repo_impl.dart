@@ -28,7 +28,6 @@ class FirestoreStoryRepositoryImpl implements FirestoreStoryRepository {
     try {
       List<UserPersonalInfo> usersInfo =
           await FirestoreUser.getSpecificUsersInfo(usersIds);
-      usersInfo.add(myPersonalInfo);
       return await FireStoreStory.getPostsInfo(usersInfo);
     } catch (e) {
       return Future.error(e.toString());

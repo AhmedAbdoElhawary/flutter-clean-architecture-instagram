@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/datasourses/remote/firestore_user_info.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
@@ -55,7 +56,7 @@ class FirestoreReply {
     if (snap.exists) {
       return Comment.fromSnapReply(snap);
     } else {
-      return Future.error("the user not exist !");
+      return Future.error(StringsManager.userNotExist);
     }
   }
 }
