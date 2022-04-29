@@ -1,15 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
 import 'package:instegram/presentation/pages/followers_and_followings_info_page.dart';
 import 'package:instegram/presentation/widgets/custom_grid_view.dart';
 import 'package:instegram/presentation/widgets/custom_videos_grid_view.dart';
-import 'package:instegram/presentation/widgets/smart_refresher.dart';
 import '../../data/models/user_personal_info.dart';
 import 'circle_avatar_of_profile_image.dart';
 import 'read_more_text.dart';
@@ -188,9 +188,9 @@ class _ProfilePageState extends State<ProfilePage> {
         child: CircleAvatarOfProfileImage(
             bodyHeight: 900, imageUrl: userInfo.profileImageUrl),
       ),
-      personalNumbersInfo(userInfo.posts, "Posts", userInfo),
-      personalNumbersInfo(userInfo.followerPeople, "Followers", userInfo),
-      personalNumbersInfo(userInfo.followedPeople, "Following", userInfo),
+      personalNumbersInfo(userInfo.posts, StringsManager.posts, userInfo),
+      personalNumbersInfo(userInfo.followerPeople, StringsManager.followers, userInfo),
+      personalNumbersInfo(userInfo.followedPeople, StringsManager.following, userInfo),
     ]);
   }
 
@@ -200,8 +200,8 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Builder(builder: (builderContext) {
         return InkWell(
           onTap: () async {
-            if (text != 'Posts') {
-              await Navigator.of(context).push(MaterialPageRoute(
+            if (text != StringsManager.posts) {
+              await Navigator.of(context).push(CupertinoPageRoute(
                   builder: (context) => FollowersAndFollowingsInfoPage(
                       userInfo: userInfo,
                       initialIndex:

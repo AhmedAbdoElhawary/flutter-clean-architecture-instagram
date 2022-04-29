@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
@@ -54,7 +55,7 @@ class _AddCommentState extends State<AddComment> {
                 cursorColor: ColorManager.teal,
                 maxLines: null,
                 decoration: const InputDecoration.collapsed(
-                    hintText: 'Add a comment...',
+                    hintText: StringsManager.addComment,
                     hintStyle: TextStyle(color: ColorManager.black26)),
                 autofocus: false,
                 controller: widget.textController,
@@ -89,7 +90,7 @@ class _AddCommentState extends State<AddComment> {
                     }
                   },
                   child: Text(
-                    'Post',
+                    StringsManager.post,
                     style: TextStyle(
                         color: widget.textController.text.isNotEmpty
                             ? ColorManager.blue

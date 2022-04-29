@@ -35,6 +35,9 @@ class StoryCubit extends Cubit<StoryState> {
   Future<void> getStoriesInfo(
       {required List<dynamic> usersIds,
       required UserPersonalInfo myPersonalInfo}) async {
+    if (!usersIds.contains(myPersonalInfo.userId)) {
+      usersIds = [myPersonalInfo.userId]+usersIds;
+    }
     emit(CubitStoryLoading());
     await _getStoriesInfoUseCase
         .call(paramsOne: usersIds, paramsTwo: myPersonalInfo)

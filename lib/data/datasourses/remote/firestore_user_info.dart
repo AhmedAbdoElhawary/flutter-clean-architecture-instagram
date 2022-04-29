@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/massage.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import '../../../core/utility/constant.dart';
@@ -19,7 +20,7 @@ class FirestoreUser {
     if (snap.exists) {
       return UserPersonalInfo.fromDocSnap(docSnap: snap);
     } else {
-      return Future.error("the user not exist !");
+      return Future.error(StringsManager.userNotExist);
     }
   }
 
@@ -36,7 +37,7 @@ class FirestoreUser {
               UserPersonalInfo.fromDocSnap(docSnap: snap);
           usersInfo.add(postReformat);
         } else {
-          return Future.error("the post not exist !");
+          return Future.error(StringsManager.userNotExist);
         }
         ids.add(usersIds[i]);
       }
@@ -116,7 +117,7 @@ class FirestoreUser {
         if (snap.exists) {
           postsInfo += snap.get('posts');
         } else {
-          return Future.error("the post not exist !");
+          return Future.error(StringsManager.userNotExist);
         }
         usersIdsUnique.add(usersIds[i]);
       }

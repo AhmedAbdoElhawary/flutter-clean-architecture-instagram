@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/injector.dart';
@@ -61,7 +62,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       style: const TextStyle(fontSize: 15),
                       decoration: const InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Write a caption...",
+                        hintText: StringsManager.writeACaption,
                         hintStyle: TextStyle(color: ColorManager.black26),
                       ),
                     ),
@@ -70,14 +71,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
               ),
             ),
             const Divider(),
-            buildText("Tag People"),
+            buildText(StringsManager.tagPeople),
             const Divider(),
-            buildText("Add location"),
+            buildText(StringsManager.addLocation),
             const Divider(),
-            buildText("Also post to"),
+            buildText(StringsManager.alsoPostTo),
             Row(
               children: [
-                Expanded(child: buildText("Facebook")),
+                Expanded(child: buildText(StringsManager.facebook)),
                 Switch(
                   value: isSwitched,
                   onChanged: (value) {
@@ -106,7 +107,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return AppBar(
         elevation: 0,
         backgroundColor: ColorManager.white,
-        title: const Text("New Post"),
+        title: const Text(StringsManager.newPost),
         actions: actionsWidgets(context));
   }
 

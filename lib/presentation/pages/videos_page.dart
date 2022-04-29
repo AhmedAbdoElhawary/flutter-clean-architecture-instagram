@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
@@ -56,7 +56,7 @@ class VideosPageState extends State<VideosPage> {
           ToastShow.toastStateError(state);
           return const Center(
               child: Text(
-            "There's no posts...",
+                StringsManager.noPosts,
             style: TextStyle(color: ColorManager.black, fontSize: 20),
           ));
         } else {
@@ -98,7 +98,7 @@ class VideosPageState extends State<VideosPage> {
                 videoFile = File(pickedFile.path);
               });
             } else {
-              ToastShow.toast('No image selected.');
+              ToastShow.toast(StringsManager.noImageSelected);
             }
           },
           icon: const Icon(Icons.camera_alt, size: 30, color: Colors.white),
@@ -179,8 +179,8 @@ class VideosPageState extends State<VideosPage> {
             border: Border.all(color: Colors.white, width: 1)),
         child: Text(
           personalInfo.followedPeople.contains(myPersonalId)
-              ? "Following"
-              : "Follow",
+              ? StringsManager.following
+              : StringsManager.follow,
           style: const TextStyle(color: Colors.white),
         ));
   }
@@ -247,7 +247,7 @@ class VideosPageState extends State<VideosPage> {
   Widget numberOfLikes(Post postInfo) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context).push(CupertinoPageRoute(
             builder: (context) => UsersWhoLikesOnPostPage(
                   showSearchBar: true,
                   usersIds: postInfo.likes,

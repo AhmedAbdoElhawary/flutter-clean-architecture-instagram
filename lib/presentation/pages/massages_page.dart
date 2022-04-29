@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
 
@@ -13,7 +14,6 @@ class MassagesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorManager.white,
-        // title: ,
         actions: [
           IconButton(
               onPressed: () {},
@@ -25,13 +25,12 @@ class MassagesPage extends StatelessWidget {
       ),
 
       body: BlocBuilder<UsersInfoCubit,UsersInfoState>(
-        // bloc:UsersInfoCubit.get(context)..getSpecificUsersInfo(usersIds: usersIds) ,
        builder: (context, state) {
          if(state is CubitGettingSpecificUsersLoaded){
            return ListView.separated(
                itemBuilder: (context, index) {
                  return ListTile(
-                   title: const Text("The Name"),
+                   title: const Text(StringsManager.theName),
                    leading: const CircleAvatar(
                        child: Icon(Icons.person, color: ColorManager.white, size: 50),
                        radius: 30),
@@ -45,7 +44,7 @@ class MassagesPage extends StatelessWidget {
                const Divider());
          }else if(state is CubitGettingSpecificUsersFailed){
            ToastShow.toastStateError(state);
-           return const Text("Something Wrong");
+           return const Text(StringsManager.somethingWrong);
          } else {
            return const Center(
              child: CircularProgressIndicator(

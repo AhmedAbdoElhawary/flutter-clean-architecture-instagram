@@ -1,15 +1,21 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
+import 'package:instegram/presentation/pages/story_config.dart';
 import 'package:instegram/presentation/widgets/custom_app_bar.dart';
 import 'package:instegram/presentation/widgets/post_list_view.dart';
 import 'package:instegram/presentation/widgets/smart_refresher.dart';
+import 'package:instegram/presentation/widgets/stroy_page.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
-import 'package:instegram/presentation/widgets/story_page.dart';
 import 'package:inview_notifier_list/inview_notifier_list.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -99,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return inViewNotifier(state, bodyHeight);
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
-          return const Center(child: Text("There's no posts..."));
+          return const Center(child: Text(StringsManager.noPosts));
         } else {
           return circularProgress();
         }
@@ -117,8 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
   SingleChildScrollView inViewNotifier(
       CubitMyPersonalPostsLoaded state, double bodyHeight) {
     return SingleChildScrollView(
-      keyboardDismissBehavior:
-      ScrollViewKeyboardDismissBehavior.onDrag,
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: InViewNotifierList(
         primary: false,
         scrollDirection: Axis.vertical,
@@ -169,56 +174,152 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  createNewStory() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      File photo = File(image.path);
+      await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+          builder: (context) => NewStoryPage(storyImage: photo),
+          maintainState: false));
+      setState(() {
+        reLoadData = true;
+      });
+    }
+  }
+
   Widget storiesLines(double bodyHeight) {
-    List usersStoriesIds =
-        personalInfo!.followedPeople + personalInfo!.followerPeople;
+    List<dynamic> usersStoriesIds =
+    personalInfo!.followedPeople+ personalInfo!.followerPeople ;
     return BlocBuilder<StoryCubit, StoryState>(
       bloc: StoryCubit.get(context)
         ..getStoriesInfo(
             usersIds: usersStoriesIds, myPersonalInfo: personalInfo!),
-      // buildWhen: ,
+      buildWhen: (previous, current) {
+        if (reLoadData && current is CubitStoriesInfoLoaded) {
+          reLoadData = false;
+          return true;
+        }
+
+        if (previous != current && current is CubitStoriesInfoLoaded) {
+          return true;
+        }
+        if (previous != current && current is CubitStoryFailed) {
+          return true;
+        }
+        return false;
+      },
       builder: (context, state) {
         if (state is CubitStoriesInfoLoaded) {
+          List<UserPersonalInfo> storiesOwnersInfo = state.storiesOwnersInfo;
           return SizedBox(
             width: double.infinity,
             height: bodyHeight * 0.155,
-            child: ListView.separated(
+            child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              itemCount: state.storiesOwnersInfo.length,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
-              itemBuilder: (BuildContext context, int index) {
-                UserPersonalInfo publisherInfo = state.storiesOwnersInfo[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.of(
-                      context,
-                    ).push(MaterialPageRoute(
-                      builder: (context) => StoryPage(
-                          user: publisherInfo,
-                          storiesOwnersInfo: state.storiesOwnersInfo),
-                    ));
-                  },
-                  child: CircleAvatarOfProfileImage(
-                    circleAvatarName:
-                        publisherInfo.name.isNotEmpty ? publisherInfo.name : '',
-                    bodyHeight: bodyHeight,
-                    thisForStoriesLine: true,
-                    imageUrl: publisherInfo.profileImageUrl.isNotEmpty
-                        ? publisherInfo.profileImageUrl
-                        : '',
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // if (!storiesOwnersInfo.contains(personalInfo))
+                  //   myOwnStory(context, storiesOwnersInfo, bodyHeight),
+                  ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: storiesOwnersInfo.length,
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider(),
+                    itemBuilder: (BuildContext context, int index) {
+                      UserPersonalInfo publisherInfo = storiesOwnersInfo[index];
+                      return Stack(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context, rootNavigator: true)
+                                  .push(CupertinoPageRoute(
+                                maintainState: false,
+                                builder: (context) => StoryPage(
+                                    user: publisherInfo,
+                                    storiesOwnersInfo: storiesOwnersInfo),
+                              ));
+                            },
+                            child: CircleAvatarOfProfileImage(
+                              circleAvatarName:
+                                  publisherInfo.userId != personalInfo!.userId
+                                      ? publisherInfo.name
+                                      : "Your Story",
+                              bodyHeight: bodyHeight,
+                              thisForStoriesLine: true,
+                              imageUrl: publisherInfo.profileImageUrl.isNotEmpty
+                                  ? publisherInfo.profileImageUrl
+                                  : '',
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
-                );
-              },
+                ],
+              ),
             ),
           );
         } else if (state is CubitStoryFailed) {
           ToastShow.toastStateError(state);
-          return const Center(child: Text("There's something wrong..."));
+          return const Center(child: Text(StringsManager.somethingWrong));
         } else {
           return Container();
         }
       },
+    );
+  }
+
+  moveToStoryPage(
+          List<UserPersonalInfo> storiesOwnersInfo, UserPersonalInfo user) =>
+      Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+        maintainState: false,
+        builder: (context) =>
+            StoryPage(user: user, storiesOwnersInfo: storiesOwnersInfo),
+      ));
+
+  Stack myOwnStory(BuildContext context,
+      List<UserPersonalInfo> storiesOwnersInfo, double bodyHeight) {
+    bool isPersonalStoriesEmpty = personalInfo!.stories.isEmpty;
+    return Stack(
+      children: [
+        GestureDetector(
+          onTap: () async {
+            if (isPersonalStoriesEmpty) {
+              await createNewStory();
+            } else {
+              moveToStoryPage(storiesOwnersInfo, personalInfo!);
+            }
+          },
+          child: CircleAvatarOfProfileImage(
+            circleAvatarName: "Your Story",
+            bodyHeight: bodyHeight,
+            thisForStoriesLine: true,
+            bigCircleColor: !isPersonalStoriesEmpty,
+            imageUrl: personalInfo!.profileImageUrl.isNotEmpty
+                ? personalInfo!.profileImageUrl
+                : '',
+          ),
+        ),
+        if (isPersonalStoriesEmpty)
+          const Positioned(
+              top: 49,
+              left: 50,
+              right: 0,
+              child: CircleAvatar(
+                  radius: 9.5,
+                  backgroundColor: ColorManager.white,
+                  child: CircleAvatar(
+                      radius: 8,
+                      backgroundColor: ColorManager.blue,
+                      child: Icon(
+                        Icons.add,
+                        size: 15,
+                      )))),
+      ],
     );
   }
 }

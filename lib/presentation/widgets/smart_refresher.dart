@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SmarterRefresh extends StatefulWidget {
@@ -84,10 +85,10 @@ class _SmarterRefreshState extends State<SmarterRefresh>
             Widget child;
             switch (mode) {
               case LoadStatus.failed:
-                child = const Text("failed,click retry");
+                child = const Text(StringsManager.somethingWrong);
                 break;
               case LoadStatus.noMore:
-                child = const Text("no more data");
+                child = const Text(StringsManager.noMoreData);
                 break;
               default:
                 child = const CircularProgressIndicator(

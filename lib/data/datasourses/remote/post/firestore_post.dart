@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/datasourses/remote/firestore_user_info.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
@@ -31,7 +32,7 @@ class FirestorePost {
         postReformat.publisherInfo = publisherInfo;
         postsInfo.add(postReformat);
       } else {
-        return Future.error("the post not exist !");
+        return Future.error(StringsManager.userNotExist);
       }
     }
     return postsInfo;
@@ -45,7 +46,7 @@ class FirestorePost {
       Post postReformat = Post.fromSnap(docSnap: snap);
       return postReformat.comments;
     } else {
-      return Future.error("the post not exist !");
+      return Future.error(StringsManager.userNotExist);
     }
   }
 

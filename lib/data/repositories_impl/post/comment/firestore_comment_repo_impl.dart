@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instegram/data/datasourses/remote/post/comment/firestore_comment.dart';
 import 'package:instegram/data/datasourses/remote/post/firestore_post.dart';
 import 'package:instegram/data/models/comment.dart';
-import 'package:instegram/data/models/post.dart';
 import 'package:instegram/domain/repositories/post/comment/comment_repository.dart';
 
 class FirestoreCommentRepositoryImpl implements FirestoreCommentRepository {
@@ -45,14 +43,13 @@ class FirestoreCommentRepositoryImpl implements FirestoreCommentRepository {
     }
   }
 
-
   @override
   Future<List<Comment>> getSpecificComments({required String postId}) async {
     try {
       List<dynamic> commentsIds =
-      await FirestorePost.getCommentsOfPost(postId: postId);
+          await FirestorePost.getCommentsOfPost(postId: postId);
       List<Comment> theComments =
-      await FirestoreComment.getSpecificComments(commentsIds: commentsIds);
+          await FirestoreComment.getSpecificComments(commentsIds: commentsIds);
 
       return theComments;
     } catch (e) {

@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
 import 'package:instegram/presentation/pages/chatting_page.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
@@ -60,7 +62,7 @@ class _ProfilePageState extends State<UserProfilePage> {
           );
         } else if (state is CubitGetUserInfoFailed) {
           ToastShow.toastStateError(state);
-          return const Text("Something Wrong");
+          return const Text(StringsManager.somethingWrong);
         } else {
           return const Center(
             child: CircularProgressIndicator(
@@ -123,19 +125,19 @@ class _ProfilePageState extends State<UserProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              textOfBottomSheet('Report...'),
+              textOfBottomSheet(StringsManager.report),
               const SizedBox(height: 15),
-              textOfBottomSheet('Block'),
+              textOfBottomSheet(StringsManager.block),
               const SizedBox(height: 15),
-              textOfBottomSheet('About this account'),
+              textOfBottomSheet(StringsManager.aboutThisAccount),
               const SizedBox(height: 15),
-              textOfBottomSheet('Restrict'),
+              textOfBottomSheet(StringsManager.restrict),
               const SizedBox(height: 15),
-              textOfBottomSheet('Hide your story'),
+              textOfBottomSheet(StringsManager.hideYourStory),
               const SizedBox(height: 15),
-              textOfBottomSheet('Copy profile URL'),
+              textOfBottomSheet(StringsManager.copyProfileURL),
               const SizedBox(height: 15),
-              textOfBottomSheet('Share this profile'),
+              textOfBottomSheet(StringsManager.shareThisProfile),
               const SizedBox(height: 15),
             ],
           ),
@@ -199,9 +201,9 @@ class _ProfilePageState extends State<UserProfilePage> {
     }
     return !userInfo.followerPeople.contains(myPersonalId)
         ? containerOfFollowText(
-            text: 'Follow', isThatFollower: false, isItLoading: isFollowLoading)
+            text: StringsManager.follow, isThatFollower: false, isItLoading: isFollowLoading)
         : containerOfFollowText(
-            text: 'Following',
+            text: StringsManager.following,
             isThatFollower: true,
             isItLoading: isFollowLoading);
   }
@@ -213,7 +215,7 @@ class _ProfilePageState extends State<UserProfilePage> {
           Navigator.of(
             context,
             rootNavigator: true,
-          ).push(MaterialPageRoute(
+          ).push(CupertinoPageRoute(
             builder: (context) => ChattingPage(
               userInfo: userInfo,
             ),
@@ -221,7 +223,7 @@ class _ProfilePageState extends State<UserProfilePage> {
           ));
         },
         child: containerOfFollowText(
-            text: 'Massage', isThatFollower: true, isItLoading: false),
+            text: StringsManager.massage, isThatFollower: true, isItLoading: false),
       ),
     );
   }

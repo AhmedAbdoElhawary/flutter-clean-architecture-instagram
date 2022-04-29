@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:instegram/presentation/widgets/fade_in_image.dart';
@@ -43,7 +44,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
+      buildWhen: (previous, current) {
+        if (previous != current && (current is CubitMyPersonalInfoLoaded)) {
+          return true;
+        }
+        return false;
+      },
       builder: (context, getUserState) {
+        print("1111111111111111111111");
         FirestoreUserInfoCubit updateUserCubit =
             FirestoreUserInfoCubit.get(context);
 
@@ -77,7 +85,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     color: ColorManager.black,
                     height: 30,
                   )),
-              title: const Text("Edit profile"),
+              title: const Text(StringsManager.editProfile),
               actions: actionsWidgets(getUserState, updateUserCubit)),
           body: Column(
             children: [
@@ -166,30 +174,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 isImageUpload = true;
               });
             } else {
-              ToastShow.toast('No image selected.');
+              ToastShow.toast(StringsManager.noImageSelected);
             }
           },
           child: const Text(
-            "Change profile photo",
+            StringsManager.changeProfilePhoto,
             style: TextStyle(fontSize: 18, color: ColorManager.blue),
           ),
         )),
-        textFormField(widget.nameController, "Name"),
+        textFormField(widget.nameController, StringsManager.name),
         const SizedBox(height: 10),
-        textFormField(widget.userNameController, "Username"),
+        textFormField(widget.userNameController,StringsManager.username ),
         const SizedBox(height: 10),
-        textFormField(widget.pronounsController, "Pronouns"),
+        textFormField(widget.pronounsController,StringsManager.pronouns),
         const SizedBox(height: 10),
-        textFormField(widget.websiteController, "Website"),
+        textFormField(widget.websiteController, StringsManager.website),
         const SizedBox(height: 10),
-        textFormField(widget.bioController, "Bio"),
+        textFormField(widget.bioController, StringsManager.bio),
         const SizedBox(height: 15),
         const Divider(),
         const SizedBox(height: 8),
         InkWell(
           onTap: () {},
           child: const Text(
-            "Personal information settings",
+            StringsManager.personalInformationSettings,
             style: TextStyle(fontSize: 18, color: ColorManager.blue),
           ),
         ),

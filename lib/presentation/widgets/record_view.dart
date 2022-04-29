@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 
 class RecordView extends StatefulWidget {
   final String record;
@@ -25,7 +26,7 @@ class _RecordViewState extends State<RecordView> {
   @override
   Widget build(BuildContext context) {
     return widget.record.isEmpty
-        ? const Center(child: Text('No records yet'))
+        ? const Center(child: Text(StringsManager.noRecordsYet))
         : Row(
             children: [
               GestureDetector(

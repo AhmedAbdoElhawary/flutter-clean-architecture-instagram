@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/injector.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -42,11 +43,14 @@ class _MainScreenState extends State<MainScreen> {
 
               return CircleAvatar(
                   radius: 14,
-                  backgroundColor: ColorManager.black12,
-                  child: ClipOval(
+                  backgroundImage:userImage.isNotEmpty? NetworkImage(userImage):null,
+                  backgroundColor: Colors.transparent,
+
+                  child: ClipRRect(
+                    borderRadius:BorderRadius.circular(12),
                     child: userImage.isEmpty
                         ? const Icon(Icons.person, color: ColorManager.white)
-                        :CustomFadeInImage(imageUrl:userImage) ,
+                        :CustomFadeInImage(imageUrl:userImage,circularLoading: false) ,
                   ));
             }),
           ),

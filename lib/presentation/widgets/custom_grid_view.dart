@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:instegram/core/resources/color_manager.dart';
@@ -59,7 +60,7 @@ class _CustomGridViewState extends State<CustomGridView> {
             w.removeWhere((value) => value.postUid == postClickedInfo.postUid);
             w.insert(0, postClickedInfo);
 
-            Navigator.of(context).push(MaterialPageRoute(
+            Navigator.of(context).push(CupertinoPageRoute(
               builder: (context) => CustomPostsDisplay(
                   postClickedInfo: postClickedInfo, postsInfo: w, index: index),
             ));
