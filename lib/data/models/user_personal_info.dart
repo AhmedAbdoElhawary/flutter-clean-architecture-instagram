@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:instegram/data/models/story.dart';
 
-class UserPersonalInfo {
+class UserPersonalInfo extends Equatable {
   String bio;
   String email;
   String name;
   String profileImageUrl;
   String userName;
-  String userId;
+  dynamic userId;
   List<dynamic> followedPeople;
   List<dynamic> followerPeople;
   List<dynamic> posts;
@@ -59,4 +60,19 @@ class UserPersonalInfo {
       'uid': userId,
     };
   }
+
+  @override
+  List<Object?> get props => [
+        bio,
+        email,
+        name,
+        profileImageUrl,
+        userName,
+        userId,
+        followedPeople,
+        followerPeople,
+        posts,
+        stories,
+        storiesInfo,
+      ];
 }
