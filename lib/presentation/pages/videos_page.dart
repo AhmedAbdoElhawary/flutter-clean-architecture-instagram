@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,10 +55,10 @@ class VideosPageState extends State<VideosPage> {
           );
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
-          return const Center(
+          return  Center(
               child: Text(
-                StringsManager.noPosts,
-            style: TextStyle(color: ColorManager.black, fontSize: 20),
+                StringsManager.noPosts.tr(),
+            style: const TextStyle(color: ColorManager.black, fontSize: 20),
           ));
         } else {
           return const Center(
@@ -98,7 +99,7 @@ class VideosPageState extends State<VideosPage> {
                 videoFile = File(pickedFile.path);
               });
             } else {
-              ToastShow.toast(StringsManager.noImageSelected);
+              ToastShow.toast(StringsManager.noImageSelected.tr());
             }
           },
           icon: const Icon(Icons.camera_alt, size: 30, color: Colors.white),
@@ -179,8 +180,8 @@ class VideosPageState extends State<VideosPage> {
             border: Border.all(color: Colors.white, width: 1)),
         child: Text(
           personalInfo.followedPeople.contains(myPersonalId)
-              ? StringsManager.following
-              : StringsManager.follow,
+              ? StringsManager.following.tr()
+              : StringsManager.follow.tr(),
           style: const TextStyle(color: Colors.white),
         ));
   }

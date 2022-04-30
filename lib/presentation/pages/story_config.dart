@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -60,8 +61,8 @@ class _NewStoryPageState extends State<NewStoryPage> {
             color: ColorManager.black87,
             height: 40,
           ),
-          const Text(StringsManager.create,
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
+           Text(StringsManager.create.tr(),
+              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
           const Divider(),
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
@@ -84,10 +85,10 @@ class _NewStoryPageState extends State<NewStoryPage> {
                     onPressed: () =>
                         createPost(personalInfo!, userCubit, builderContext),
                     child: isItDone
-                        ? const Padding(
+                        ? Padding(
                             padding: EdgeInsets.all(3.0),
                             child: Text(
-                              StringsManager.share,
+                              StringsManager.share.tr(),
                               style: TextStyle(color: Colors.white),
                             ),
                           )
