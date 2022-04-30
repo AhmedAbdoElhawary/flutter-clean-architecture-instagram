@@ -1,9 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
+import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
@@ -11,7 +14,6 @@ import 'package:instegram/presentation/pages/comments_page.dart';
 import 'package:instegram/presentation/pages/play_this_video.dart';
 import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
-import 'package:instegram/presentation/widgets/add_comment.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_name.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
 import 'package:instegram/presentation/widgets/fade_in_image.dart';
@@ -21,10 +23,15 @@ import 'package:instegram/presentation/widgets/read_more_text.dart';
 class ImageList extends StatefulWidget {
   final Post postInfo;
   // final ValueGetter<bool> isVideoInView;
+  final TextEditingController textController;
+  final ValueChanged<Post> selectedPostInfo;
+
 
   const ImageList({
     Key? key,
     required this.postInfo,
+    required this.selectedPostInfo,
+    required this.textController,
     // required this.isVideoInView,
   }) : super(key: key);
 
@@ -33,7 +40,6 @@ class ImageList extends StatefulWidget {
 }
 
 class _ImageListState extends State<ImageList> {
-  final TextEditingController _textController = TextEditingController();
   bool isSaved = false;
 
   @override
@@ -72,7 +78,7 @@ class _ImageListState extends State<ImageList> {
                 onTap: () => pushToProfilePage(postInfo),
                 child: CircleAvatarOfProfileImage(
                   bodyHeight: bodyHeight / 2,
-                  imageUrl: postInfo.publisherInfo!.profileImageUrl,
+                  userInfo: postInfo.publisherInfo!,
                 ),
               ),
             ),
@@ -149,8 +155,8 @@ class _ImageListState extends State<ImageList> {
               ReadMore(
                   "${postInfo.publisherInfo!.name} ${postInfo.caption}", 2),
               const SizedBox(height: 8),
-              addCommentRow(postInfo),
-              addComment(),
+              numberOfComment(postInfo),
+              buildCommentBox(),
               Padding(
                 padding: const EdgeInsets.only(top:5.0),
                 child: Text(
@@ -166,20 +172,65 @@ class _ImageListState extends State<ImageList> {
     );
   }
 
-  Padding addComment() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 15.0, top: 5),
-      child: AddComment(
-        postId: widget.postInfo.postUid,
-        selectedCommentInfo: null,
-        textController: _textController,
-        userPersonalInfo: widget.postInfo.publisherInfo!,
-        makeSelectedCommentNullable: () {
-          setState(() {
-            _textController.text = '';
-          });
-        },
-      ),
+  Widget buildCommentBox(){
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment:widget.textController.text.length < 70
+              ? CrossAxisAlignment.center
+              : CrossAxisAlignment.end,
+          children: [
+            GestureDetector(
+              onTap: () {},
+              child: CircleAvatarOfProfileImage(
+                userInfo: widget.postInfo.publisherInfo!,
+                bodyHeight: 330,
+              ),
+            ),
+            const SizedBox(
+              width: 20.0,
+            ),
+            Expanded(
+              child: TextFormField(
+                keyboardType: TextInputType.multiline,
+                cursorColor: ColorManager.teal,
+                maxLines: null,
+                readOnly: true,
+                decoration:  InputDecoration.collapsed(
+                    hintText: StringsManager.addComment.tr(),
+                    hintStyle:const TextStyle(color: ColorManager.black26)),
+                autofocus: false,
+                controller: TextEditingController(),
+                onTap: (){
+                  // setState(() {
+                    widget.selectedPostInfo(widget.postInfo);
+
+                },
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  widget.textController.text = '❤';
+                });
+              },
+              child: const Text('❤'),
+            ),
+            const SizedBox(width: 8),
+
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  widget.textController.text = '🙌';
+                });
+              },
+              child: const Text('🙌'),
+            ),
+            const SizedBox(width: 8),
+
+          ],
+        ),
+      ],
     );
   }
 
@@ -210,7 +261,7 @@ class _ImageListState extends State<ImageList> {
     );
   }
 
-  Widget addCommentRow(Post postInfo) {
+  Widget numberOfComment(Post postInfo) {
     return GestureDetector(
       onTap: () {
         Navigator.of(

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
@@ -27,7 +28,7 @@ class _UsersWhoLikesOnPostPageState extends State<UsersWhoLikesOnPostPage> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
-          title: const Text(StringsManager.likes),
+          title: Text(StringsManager.likes.tr()),
         ),
         body: BlocBuilder(
           bloc: BlocProvider.of<UsersInfoCubit>(context)
@@ -55,7 +56,7 @@ class _UsersWhoLikesOnPostPageState extends State<UsersWhoLikesOnPostPage> {
             }
             if (state is CubitGettingSpecificUsersFailed) {
               ToastShow.toastStateError(state);
-              return const Text(StringsManager.somethingWrong);
+              return  Text(StringsManager.somethingWrong.tr());
             } else {
               return const Center(
                 child: CircularProgressIndicator(

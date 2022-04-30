@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/resources/color_manager.dart';
@@ -40,10 +41,10 @@ class _FollowersAndFollowingsInfoPageState
             tabs: [
               Tab(
                   icon: Text(
-                      "${widget.userInfo.followerPeople.length} ${StringsManager.followers}")),
+                      "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr()}")),
               Tab(
                   icon: Text(
-                      "${widget.userInfo.followedPeople.length} ${StringsManager.following}")),
+                      "${widget.userInfo.followedPeople.length} ${StringsManager.following.tr()}")),
             ],
           ),
           title: Text(widget.userInfo.userName),
@@ -88,7 +89,7 @@ class _FollowersAndFollowingsInfoPageState
             }
             if (state is CubitGettingSpecificUsersFailed) {
               ToastShow.toastStateError(state);
-              return const Text(StringsManager.somethingWrong);
+              return Text(StringsManager.somethingWrong.tr());
             } else {
               return const Center(
                 child: CircularProgressIndicator(

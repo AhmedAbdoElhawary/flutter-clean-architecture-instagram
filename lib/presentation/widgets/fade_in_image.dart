@@ -9,7 +9,10 @@ class CustomFadeInImage extends StatelessWidget {
   final bool circularLoading;
 
   const CustomFadeInImage(
-      {Key? key, required this.imageUrl,this.circularLoading=true, this.boxFit = BoxFit.cover})
+      {Key? key,
+      required this.imageUrl,
+      this.circularLoading = true,
+      this.boxFit = BoxFit.cover})
       : super(key: key);
 
   @override
@@ -23,7 +26,10 @@ class CustomFadeInImage extends StatelessWidget {
           return child;
         }
         return Center(
-          child: circularLoading?buildCircularProgress():const CircleAvatar(radius: 15,backgroundColor: ColorManager.lowOpacityGrey),
+          child: circularLoading
+              ? buildCircularProgress()
+              : const CircleAvatar(
+                  radius: 15, backgroundColor: ColorManager.lowOpacityGrey),
         );
       },
       errorBuilder:

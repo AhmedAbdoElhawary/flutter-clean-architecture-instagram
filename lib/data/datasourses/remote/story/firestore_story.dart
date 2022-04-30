@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/story.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
@@ -36,17 +37,13 @@ class FireStoreStory {
           postReformat.publisherInfo = usersStoriesInfo[i];
           if (usersStoriesInfo[i].storiesInfo == null) {
             usersStoriesInfo[i].storiesInfo = [postReformat];
-            print(
-                "wwwwwwwwwwwwwwwwwwwwwwwwwww ${usersStoriesInfo[i].storiesInfo!.length}");
             storiesIds.add(postReformat.storyUid);
           } else if (!storiesIds.contains(postReformat.storyUid)) {
             usersStoriesInfo[i].storiesInfo!.add(postReformat);
-            print(
-                "qqqqqqqqqqqqqqqqqqqqqqqqqqq ${usersStoriesInfo[i].storiesInfo!.length}");
             storiesIds.add(postReformat.storyUid);
           }
         } else {
-          return Future.error(StringsManager.userNotExist);
+          return Future.error(StringsManager.userNotExist.tr());
         }
       }
     }

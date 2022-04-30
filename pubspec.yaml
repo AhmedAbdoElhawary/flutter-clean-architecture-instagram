@@ -89,6 +89,9 @@ dependencies:
   cached_network_image: ^3.2.0
   transparent_image: ^2.0.0
   jiffy: ^5.0.0
+  flutter_phoenix: ^1.0.0
+  easy_localization: ^3.0.0
+  flutter_keyboard_visibility: ^5.2.0
 
 
 
@@ -131,7 +134,7 @@ flutter:
     - assets/3d_caractars/caractars/
     - assets/icons/
     - assets/splash_gif/
-
+    - assets/translations/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

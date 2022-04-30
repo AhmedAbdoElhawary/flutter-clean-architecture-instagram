@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -85,7 +86,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     color: ColorManager.black,
                     height: 30,
                   )),
-              title: const Text(StringsManager.editProfile),
+              title: Text(StringsManager.editProfile.tr()),
               actions: actionsWidgets(getUserState, updateUserCubit)),
           body: Column(
             children: [
@@ -174,31 +175,31 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 isImageUpload = true;
               });
             } else {
-              ToastShow.toast(StringsManager.noImageSelected);
+              ToastShow.toast(StringsManager.noImageSelected.tr());
             }
           },
-          child: const Text(
-            StringsManager.changeProfilePhoto,
-            style: TextStyle(fontSize: 18, color: ColorManager.blue),
+          child:  Text(
+            StringsManager.changeProfilePhoto.tr(),
+            style:const TextStyle(fontSize: 18, color: ColorManager.blue),
           ),
         )),
-        textFormField(widget.nameController, StringsManager.name),
+        textFormField(widget.nameController, StringsManager.name.tr()),
         const SizedBox(height: 10),
-        textFormField(widget.userNameController,StringsManager.username ),
+        textFormField(widget.userNameController,StringsManager.username.tr() ),
         const SizedBox(height: 10),
-        textFormField(widget.pronounsController,StringsManager.pronouns),
+        textFormField(widget.pronounsController,StringsManager.pronouns.tr()),
         const SizedBox(height: 10),
-        textFormField(widget.websiteController, StringsManager.website),
+        textFormField(widget.websiteController, StringsManager.website.tr()),
         const SizedBox(height: 10),
-        textFormField(widget.bioController, StringsManager.bio),
+        textFormField(widget.bioController, StringsManager.bio.tr()),
         const SizedBox(height: 15),
         const Divider(),
         const SizedBox(height: 8),
         InkWell(
           onTap: () {},
-          child: const Text(
-            StringsManager.personalInformationSettings,
-            style: TextStyle(fontSize: 18, color: ColorManager.blue),
+          child:  Text(
+            StringsManager.personalInformationSettings.tr(),
+            style:const TextStyle(fontSize: 18, color: ColorManager.blue),
           ),
         ),
         const SizedBox(height: 8),

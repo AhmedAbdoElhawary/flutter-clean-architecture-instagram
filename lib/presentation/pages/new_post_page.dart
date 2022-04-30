@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/globall.dart';
@@ -60,10 +61,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       controller: captionController,
                       cursorColor: ColorManager.teal,
                       style: const TextStyle(fontSize: 15),
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                         border: InputBorder.none,
-                        hintText: StringsManager.writeACaption,
-                        hintStyle: TextStyle(color: ColorManager.black26),
+                        hintText: StringsManager.writeACaption.tr(),
+                        hintStyle:const TextStyle(color: ColorManager.black26),
                       ),
                     ),
                   ),
@@ -71,14 +72,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
               ),
             ),
             const Divider(),
-            buildText(StringsManager.tagPeople),
+            buildText(StringsManager.tagPeople.tr()),
             const Divider(),
-            buildText(StringsManager.addLocation),
+            buildText(StringsManager.addLocation.tr()),
             const Divider(),
-            buildText(StringsManager.alsoPostTo),
+            buildText(StringsManager.alsoPostTo.tr()),
             Row(
               children: [
-                Expanded(child: buildText(StringsManager.facebook)),
+                Expanded(child: buildText(StringsManager.facebook.tr())),
                 Switch(
                   value: isSwitched,
                   onChanged: (value) {
@@ -107,7 +108,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return AppBar(
         elevation: 0,
         backgroundColor: ColorManager.white,
-        title: const Text(StringsManager.newPost),
+        title: Text(StringsManager.newPost.tr()),
         actions: actionsWidgets(context));
   }
 

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -46,15 +47,15 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SizedBox(height: 30),
               CustomTextField(
-                  hint: StringsManager.phoneOrEmailOrUserName,
+                  hint: StringsManager.phoneOrEmailOrUserName.tr(),
                   controller: emailController),
               const SizedBox(height: 15),
               CustomTextField(
-                  hint: StringsManager.password,
+                  hint: StringsManager.password.tr(),
                   controller: passwordController),
               const SizedBox(height: 15),
               CustomTextField(
-                  hint: StringsManager.confirmPassword,
+                  hint: StringsManager.confirmPassword.tr(),
                   controller: confirmPasswordController),
               const SizedBox(height: 15),
               customTextButton(),
@@ -62,17 +63,17 @@ class _SignUpPageState extends State<SignUpPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    StringsManager.noAccount,
-                    style: TextStyle(fontSize: 13, color: ColorManager.grey),
+                   Text(
+                    StringsManager.haveAccount.tr(),
+                    style:const TextStyle(fontSize: 13, color: ColorManager.grey),
                   ),
                   InkWell(
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: const Text(
-                        StringsManager.logIn,
-                        style: TextStyle(
+                      child:  Text(
+                        StringsManager.logIn.tr(),
+                        style:const TextStyle(
                             fontSize: 13,
                             color: ColorManager.black,
                             fontWeight: FontWeight.bold),
@@ -83,9 +84,9 @@ class _SignUpPageState extends State<SignUpPage> {
               const OrText(),
               TextButton(
                   onPressed: () {},
-                  child: const Text(
-                    StringsManager.loginWithFacebook,
-                    style: TextStyle(color: ColorManager.blue),
+                  child:  Text(
+                    StringsManager.loginWithFacebook.tr(),
+                    style:const TextStyle(color: ColorManager.blue),
                   ))
             ],
           ),
@@ -109,7 +110,7 @@ class _SignUpPageState extends State<SignUpPage> {
           }
           return CustomElevatedButton(
             isItDone: authState is! CubitAuthConfirming,
-            nameOfButton: StringsManager.signUp,
+            nameOfButton: StringsManager.signUp.tr(),
             onPressed: () async {
               await authCubit.signUp(UnRegisteredUser(
                   email: emailController.text,

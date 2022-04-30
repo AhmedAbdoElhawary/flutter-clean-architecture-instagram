@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,7 +73,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           );
         } else if (state is CubitGetUserInfoFailed) {
           ToastShow.toastStateError(state);
-          return const Text(StringsManager.noPosts);
+          return Text(StringsManager.noPosts.tr());
         } else {
           return const Center(
             child: CircularProgressIndicator(
@@ -108,13 +109,14 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
       if (state is CubitAuthSignOut) {
         WidgetsBinding.instance!.addPostFrameCallback((_) async {
-          Navigator.pushAndRemoveUntil(
-              context,
-              CupertinoPageRoute(builder: (_) => const LoginPage(),maintainState: false),
-              (route) => false,);
+          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+            CupertinoPageRoute(
+                builder: (_) => const LoginPage(), maintainState: false),
+            (route) => false,
+          );
         });
       } else if (state is CubitAuthConfirming) {
-        ToastShow.toast(StringsManager.loading);
+        ToastShow.toast(StringsManager.loading.tr());
       } else if (state is CubitAuthFailed) {
         ToastShow.toastStateError(state);
       }
@@ -165,10 +167,10 @@ class _ProfilePageState extends State<PersonalProfilePage> {
               border: Border.all(color: ColorManager.black26, width: 1.0),
               borderRadius: BorderRadius.circular(6.0),
             ),
-            child: const Center(
+            child: Center(
               child: Text(
-                StringsManager.editProfile,
-                style: TextStyle(
+                StringsManager.editProfile.tr(),
+                style: const TextStyle(
                     fontSize: 17.0,
                     color: ColorManager.black,
                     fontWeight: FontWeight.w500),
@@ -207,8 +209,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             color: ColorManager.black87,
             height: 40,
           ),
-          const Text(StringsManager.create,
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
+          Text(StringsManager.create.tr(),
+              style:
+                  const TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
           const Divider(),
           Padding(
             padding: const EdgeInsets.only(left: 20.0),
@@ -220,7 +223,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
                 const Divider(indent: 40, endIndent: 15),
                 createNewStory(),
                 const Divider(indent: 40, endIndent: 15),
-                createSizedBox(StringsManager.live,
+                createSizedBox(StringsManager.live.tr(),
                     IconsAssets.instagramHighlightStoryIcon),
                 const Divider(indent: 40, endIndent: 15),
                 Container(
@@ -252,7 +255,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           }
         },
         child: createSizedBox(
-            StringsManager.story, IconsAssets.addInstagramStoryIcon));
+            StringsManager.story.tr(), IconsAssets.addInstagramStoryIcon));
   }
 
   GestureDetector createNewVideo() {
@@ -273,7 +276,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             });
           }
         },
-        child: createSizedBox(StringsManager.reel, IconsAssets.videoIcon));
+        child: createSizedBox(StringsManager.reel.tr(), IconsAssets.videoIcon));
   }
 
   GestureDetector createNewPost() {
@@ -293,14 +296,14 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             });
           }
         },
-        child: createSizedBox(StringsManager.post, IconsAssets.gridIcon));
+        child: createSizedBox(StringsManager.post.tr(), IconsAssets.gridIcon));
   }
 
   SizedBox createSizedBox(String text, String nameOfPath) {
     return SizedBox(
       height: 40,
       child: Row(children: [
-        text != StringsManager.post
+        text != StringsManager.post.tr()
             ? SvgPicture.asset(
                 nameOfPath,
                 color: ColorManager.black87,

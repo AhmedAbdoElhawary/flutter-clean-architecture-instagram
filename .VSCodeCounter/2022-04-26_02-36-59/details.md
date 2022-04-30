@@ -210,7 +210,7 @@ Total : 289 files,  14210 codes, 750 comments, 1934 blanks, all 16894 lines
 | [lib/presentation/pages/new_post_page.dart](/lib/presentation/pages/new_post_page.dart) | Dart | 160 | 3 | 15 | 178 |
 | [lib/presentation/pages/personal_profile_page.dart](/lib/presentation/pages/personal_profile_page.dart) | Dart | 296 | 0 | 18 | 314 |
 | [lib/presentation/pages/play_this_video.dart](/lib/presentation/pages/play_this_video.dart) | Dart | 58 | 2 | 9 | 69 |
-| [lib/presentation/pages/search_about_user_page.dart](/lib/presentation/pages/search_about_user_page.dart) | Dart | 60 | 0 | 9 | 69 |
+| [lib/presentation/pages/search_about_user_page.dart](/lib/presentation/pages/all_users_time_line.dart) | Dart | 60 | 0 | 9 | 69 |
 | [lib/presentation/pages/shop_page.dart](/lib/presentation/pages/shop_page.dart) | Dart | 10 | 0 | 3 | 13 |
 | [lib/presentation/pages/show_me_who_are_like.dart](/lib/presentation/pages/show_me_who_are_like.dart) | Dart | 69 | 0 | 7 | 76 |
 | [lib/presentation/pages/sign_up_page.dart](/lib/presentation/pages/sign_up_page.dart) | Dart | 168 | 11 | 11 | 190 |

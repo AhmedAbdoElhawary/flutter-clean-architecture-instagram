@@ -1,15 +1,23 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:instegram/core/resources/langauge_manager.dart';
 import 'package:instegram/presentation/pages/login_page.dart';
 import 'package:instegram/presentation/widgets/multi_bloc_provider.dart';
 import 'package:lottie/lottie.dart';
-import 'config/routes/app_routes.dart';
 import 'injector.dart';
 
 Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  runApp(EasyLocalization(
+      child:Phoenix(child: const MyApp()) ,
+      supportedLocales: const [arabicLocal, englishLocal],
+      path: assetPathLocalisations));
   if (kIsWeb) {
     await Firebase.initializeApp(
         options: const FirebaseOptions(
@@ -22,7 +30,7 @@ Future<void> main() async {
     await Firebase.initializeApp();
   }
   await initializeDependencies();
-  return runApp(const MyApp());
+  return ;
 }
 
 class MyApp extends StatelessWidget {
@@ -41,6 +49,7 @@ class MyApp extends StatelessWidget {
           DefaultMaterialLocalizations.delegate,
         ],
         child: MaterialApp(
+
           debugShowCheckedModeBanner: false,
           title: 'instagram',
           theme: ThemeData(

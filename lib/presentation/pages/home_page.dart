@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +11,7 @@ import 'package:instegram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
 import 'package:instegram/presentation/pages/story_config.dart';
+import 'package:instegram/presentation/widgets/add_comment.dart';
 import 'package:instegram/presentation/widgets/custom_app_bar.dart';
 import 'package:instegram/presentation/widgets/post_list_view.dart';
 import 'package:instegram/presentation/widgets/smart_refresher.dart';
@@ -20,6 +21,7 @@ import 'package:inview_notifier_list/inview_notifier_list.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../widgets/circle_avatar_of_profile_image.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userId;
@@ -35,6 +37,11 @@ class _HomeScreenState extends State<HomeScreen> {
   bool loadingPosts = true;
   bool reLoadData = false;
   UserPersonalInfo? personalInfo;
+  // final ValueNotifier<bool> _showCommentBox = ValueNotifier(false);
+  final TextEditingController _textController = TextEditingController();
+  Post? selectedPostInfo;
+  // final FocusNode focusNode=FocusNode();
+  final ValueNotifier<FocusNode> _showCommentBox = ValueNotifier(FocusNode());
 
   Future<void> getData() async {
     reLoadData = false;
@@ -66,6 +73,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    // focusNode.requestFocus();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _showCommentBox.value.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final bodyHeight = mediaQuery.size.height -
@@ -81,6 +100,34 @@ class _HomeScreenState extends State<HomeScreen> {
         onRefreshData: getData,
         smartRefresherChild: blocBuilder(bodyHeight),
       ),
+      bottomSheet: addComment(),
+    );
+  }
+
+  selectPost(Post selectedPost) {
+    setState(() {
+      _showCommentBox.value.requestFocus();
+      selectedPostInfo = selectedPost;
+    });
+  }
+
+  Widget? addComment() {
+    return selectedPostInfo != null
+        ? AddComment(
+            showCommentBox: _showCommentBox,
+            postsInfo: selectedPostInfo!,
+            textController: _textController,
+          )
+        : null;
+  }
+
+  Widget posts(Post postInfo, int index) {
+    return ImageList(
+
+      postInfo: postInfo,
+      selectedPostInfo: selectPost,
+      textController: _textController,
+      // isVideoInView: isVideoInView,
     );
   }
 
@@ -102,10 +149,12 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       builder: (BuildContext context, PostState state) {
         if (state is CubitMyPersonalPostsLoaded) {
-          return inViewNotifier(state, bodyHeight);
+          return state.postsInfo.isNotEmpty
+              ? inViewNotifier(state, bodyHeight)
+              : emptyMassage();
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
-          return const Center(child: Text(StringsManager.noPosts));
+          return Center(child: Text(StringsManager.noPosts.tr()));
         } else {
           return circularProgress();
         }
@@ -120,10 +169,19 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  SingleChildScrollView inViewNotifier(
-      CubitMyPersonalPostsLoaded state, double bodyHeight) {
+  Widget emptyMassage() {
+    return Center(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        Text(StringsManager.noPosts),
+        Text(StringsManager.tryAddPost),
+      ],
+    ));
+  }
+
+  Widget inViewNotifier(CubitMyPersonalPostsLoaded state, double bodyHeight) {
     return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: InViewNotifierList(
         primary: false,
         scrollDirection: Axis.vertical,
@@ -159,18 +217,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget columnOfWidgets(double bodyHeight, List<Post> postsInfo, int index) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         if (index == 0) storiesLines(bodyHeight),
         const Divider(thickness: 0.5),
-        posts(postsInfo[index]),
+        posts(postsInfo[index], index),
       ],
-    );
-  }
-
-  Widget posts(Post postInfo) {
-    return ImageList(
-      postInfo: postInfo,
-      // isVideoInView: isVideoInView,
     );
   }
 
@@ -190,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget storiesLines(double bodyHeight) {
     List<dynamic> usersStoriesIds =
-    personalInfo!.followedPeople+ personalInfo!.followerPeople ;
+        personalInfo!.followedPeople + personalInfo!.followerPeople;
     return BlocBuilder<StoryCubit, StoryState>(
       bloc: StoryCubit.get(context)
         ..getStoriesInfo(
@@ -244,15 +296,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ));
                             },
                             child: CircleAvatarOfProfileImage(
-                              circleAvatarName:
-                                  publisherInfo.userId != personalInfo!.userId
-                                      ? publisherInfo.name
-                                      : "Your Story",
+                              userInfo: publisherInfo,
                               bodyHeight: bodyHeight,
                               thisForStoriesLine: true,
-                              imageUrl: publisherInfo.profileImageUrl.isNotEmpty
-                                  ? publisherInfo.profileImageUrl
-                                  : '',
                             ),
                           ),
                         ],
@@ -265,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         } else if (state is CubitStoryFailed) {
           ToastShow.toastStateError(state);
-          return const Center(child: Text(StringsManager.somethingWrong));
+          return Center(child: Text(StringsManager.somethingWrong.tr()));
         } else {
           return Container();
         }
@@ -295,13 +341,9 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           },
           child: CircleAvatarOfProfileImage(
-            circleAvatarName: "Your Story",
+            userInfo: personalInfo!,
             bodyHeight: bodyHeight,
             thisForStoriesLine: true,
-            bigCircleColor: !isPersonalStoriesEmpty,
-            imageUrl: personalInfo!.profileImageUrl.isNotEmpty
-                ? personalInfo!.profileImageUrl
-                : '',
           ),
         ),
         if (isPersonalStoriesEmpty)
