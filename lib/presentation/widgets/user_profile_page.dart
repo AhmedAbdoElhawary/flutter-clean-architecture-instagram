@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,7 +63,7 @@ class _ProfilePageState extends State<UserProfilePage> {
           );
         } else if (state is CubitGetUserInfoFailed) {
           ToastShow.toastStateError(state);
-          return const Text(StringsManager.somethingWrong);
+          return  Text(StringsManager.somethingWrong.tr());
         } else {
           return const Center(
             child: CircularProgressIndicator(
@@ -125,19 +126,19 @@ class _ProfilePageState extends State<UserProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              textOfBottomSheet(StringsManager.report),
+              textOfBottomSheet(StringsManager.report.tr()),
               const SizedBox(height: 15),
-              textOfBottomSheet(StringsManager.block),
+              textOfBottomSheet(StringsManager.block.tr()),
               const SizedBox(height: 15),
-              textOfBottomSheet(StringsManager.aboutThisAccount),
+              textOfBottomSheet(StringsManager.aboutThisAccount.tr()),
               const SizedBox(height: 15),
-              textOfBottomSheet(StringsManager.restrict),
+              textOfBottomSheet(StringsManager.restrict.tr()),
               const SizedBox(height: 15),
-              textOfBottomSheet(StringsManager.hideYourStory),
+              textOfBottomSheet(StringsManager.hideYourStory.tr()),
               const SizedBox(height: 15),
-              textOfBottomSheet(StringsManager.copyProfileURL),
+              textOfBottomSheet(StringsManager.copyProfileURL.tr()),
               const SizedBox(height: 15),
-              textOfBottomSheet(StringsManager.shareThisProfile),
+              textOfBottomSheet(StringsManager.shareThisProfile.tr()),
               const SizedBox(height: 15),
             ],
           ),
@@ -201,9 +202,9 @@ class _ProfilePageState extends State<UserProfilePage> {
     }
     return !userInfo.followerPeople.contains(myPersonalId)
         ? containerOfFollowText(
-            text: StringsManager.follow, isThatFollower: false, isItLoading: isFollowLoading)
+            text: StringsManager.follow.tr(), isThatFollower: false, isItLoading: isFollowLoading)
         : containerOfFollowText(
-            text: StringsManager.following,
+            text: StringsManager.following.tr(),
             isThatFollower: true,
             isItLoading: isFollowLoading);
   }
@@ -223,7 +224,7 @@ class _ProfilePageState extends State<UserProfilePage> {
           ));
         },
         child: containerOfFollowText(
-            text: StringsManager.massage, isThatFollower: true, isItLoading: false),
+            text: StringsManager.massage.tr(), isThatFollower: true, isItLoading: false),
       ),
     );
   }

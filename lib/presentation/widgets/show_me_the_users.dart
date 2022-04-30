@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
@@ -61,7 +62,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
       child: Row(children: [
         CircleAvatarOfProfileImage(
           bodyHeight: 600,
-          imageUrl: userInfo.profileImageUrl,
+          userInfo: userInfo,
         ),
         const SizedBox(width: 10),
         Expanded(
@@ -147,9 +148,9 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
     }
     return !userInfo.followerPeople.contains(myPersonalId)
         ? containerOfFollowText(
-            text: StringsManager.follow, isThatFollower: false, isItLoading: isFollowLoading)
+            text: StringsManager.follow.tr(), isThatFollower: false, isItLoading: isFollowLoading)
         : containerOfFollowText(
-            text: StringsManager.following,
+            text: StringsManager.following.tr(),
             isThatFollower: true,
             isItLoading: isFollowLoading);
   }

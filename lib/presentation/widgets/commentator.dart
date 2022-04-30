@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +69,7 @@ class _CommentInfoState extends State<CommentInfo> {
                                   });
                                 },
                                 child: Text(
-                                    "${StringsManager.view} ${widget.commentInfo.replies!.length} ${StringsManager.more} ${widget.commentInfo.replies!.length > 1 ? StringsManager.replies : StringsManager.reply}",
+                                    "${StringsManager.view} ${widget.commentInfo.replies!.length} ${StringsManager.more.tr()} ${widget.commentInfo.replies!.length > 1 ? StringsManager.replies.tr() : StringsManager.reply.tr()}",
                                     style: const TextStyle(
                                         color: Colors.black45))))
                       ],
@@ -130,9 +131,10 @@ class _CommentInfoState extends State<CommentInfo> {
                               Container(
                                   color: Colors.black12, height: 1, width: 40),
                               const SizedBox(width: 10),
-                              const Expanded(
-                                  child: Text(StringsManager.loading,
-                                      style: TextStyle(color: Colors.black45)))
+                              Expanded(
+                                  child: Text(StringsManager.loading.tr(),
+                                      style: const TextStyle(
+                                          color: Colors.black45)))
                             ],
                           ),
                         );
@@ -159,7 +161,7 @@ class _CommentInfoState extends State<CommentInfo> {
             ));
           },
           child: CircleAvatarOfProfileImage(
-            imageUrl: widget.commentInfo.whoCommentInfo!.profileImageUrl,
+            userInfo: widget.commentInfo.whoCommentInfo!,
             bodyHeight: widget.isThatReply ? 280 : 400,
           ),
         ),
@@ -238,7 +240,7 @@ class _CommentInfoState extends State<CommentInfo> {
                                       )));
                             },
                             child: Text(
-                              "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like : StringsManager.likes}",
+                              "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like.tr() : StringsManager.likes.tr()}",
                               style: const TextStyle(color: Colors.grey),
                             ),
                           ),
@@ -263,9 +265,9 @@ class _CommentInfoState extends State<CommentInfo> {
                             widget.selectedCommentInfo!(commentInfo);
                           });
                         },
-                        child: const Text(
-                          StringsManager.reply,
-                          style: TextStyle(color: Colors.grey),
+                        child: Text(
+                          StringsManager.reply.tr(),
+                          style: const TextStyle(color: Colors.grey),
                         ),
                       ),
                     ],

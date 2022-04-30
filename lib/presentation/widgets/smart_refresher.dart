@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:instegram/core/resources/color_manager.dart';
@@ -85,10 +86,10 @@ class _SmarterRefreshState extends State<SmarterRefresh>
             Widget child;
             switch (mode) {
               case LoadStatus.failed:
-                child = const Text(StringsManager.somethingWrong);
+                child = Text(StringsManager.clickRetry.tr());
                 break;
               case LoadStatus.noMore:
-                child = const Text(StringsManager.noMoreData);
+                child =  Text(StringsManager.noMoreData.tr());
                 break;
               default:
                 child = const CircularProgressIndicator(

@@ -21,10 +21,7 @@ class CustomPostsDisplay extends StatelessWidget {
         body: ListView.separated(
           itemCount: postsInfo.length,
           itemBuilder: (context, indexOfList) {
-            return ImageList(
-              postInfo: postsInfo[indexOfList],
-              // isVideoInView: (){return false;}
-            );
+            return const Text("herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
           },
           separatorBuilder: (context, index) => const Divider(),
         ),

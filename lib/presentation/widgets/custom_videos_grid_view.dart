@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/post.dart';
@@ -41,7 +42,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
             children: widget.postsInfo.map((postInfo) {
               return createGridTileWidget(postInfo);
             }).toList())
-        : const Center(child: Text(StringsManager.noPosts));
+        : Center(child: Text(StringsManager.noPosts.tr()));
   }
 
   OverlayEntry? _popupDialog;
@@ -104,7 +105,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
         child: Row(
           children: [
             CircleAvatarOfProfileImage(
-              imageUrl: postInfo.publisherInfo!.profileImageUrl,
+              userInfo: postInfo.publisherInfo!,
               bodyHeight: 370,
             ),
             const SizedBox(width: 7),

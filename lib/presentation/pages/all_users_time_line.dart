@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/widgets/custom_grid_view.dart';
@@ -14,22 +16,48 @@ class SearchAboutUserPage extends StatefulWidget {
   State<SearchAboutUserPage> createState() => _SearchAboutUserPageState();
 }
 
-class _SearchAboutUserPageState extends State<SearchAboutUserPage>{
-
+class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
   bool rebuildUsersInfo = false;
   @override
   Widget build(BuildContext context) {
     rebuildUsersInfo = false;
-    return SafeArea(child: Scaffold(body: blocBuilder()));
+    return Scaffold(
+      body: blocBuilder(),
+      appBar: AppBar(
+        toolbarHeight: 50,
+        title: Container(
+          width: double.infinity,
+          height: 35,
+          decoration: BoxDecoration(
+              color: ColorManager.veryLowOpacityGrey,
+              borderRadius: BorderRadius.circular(10)),
+          child: const Center(
+            child: TextField(
+              readOnly: true,
+              decoration: InputDecoration(
+                  prefixIcon:
+                      Icon(Icons.search_rounded, color: ColorManager.black),
+                  hintText: 'Search',
+                  border: InputBorder.none),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  OutlineInputBorder outlineInputBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5.0),
+      borderSide: const BorderSide(color: Colors.black12, width: 1.0),
+    );
   }
 
   Future<void> getData() async {
-     await BlocProvider.of<PostCubit>(context).getAllPostInfo();
-     setState(() {
-       rebuildUsersInfo=true;
-     });
-
-
+    await BlocProvider.of<PostCubit>(context).getAllPostInfo();
+    setState(() {
+      rebuildUsersInfo = true;
+    });
   }
 
   BlocBuilder<PostCubit, PostState> blocBuilder() {
@@ -40,24 +68,28 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage>{
           return true;
         }
         if (rebuildUsersInfo && current is CubitAllPostsLoaded) {
-          rebuildUsersInfo=false;
+          rebuildUsersInfo = false;
           return true;
         }
         return false;
-      },      builder: (context, state) {
+      },
+      builder: (context, state) {
         if (state is CubitAllPostsLoaded) {
-         return SmarterRefresh(
+          return SmarterRefresh(
             onRefreshData: getData,
             smartRefresherChild: SingleChildScrollView(
-              keyboardDismissBehavior:
-              ScrollViewKeyboardDismissBehavior.onDrag,
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               child: CustomGridView(
                   postsInfo: state.allPostInfo, userId: widget.userId),
             ),
           );
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
-          return const Center(child: Text(StringsManager.noPosts,style: TextStyle(color:Colors.black,fontSize: 20),));
+          return Center(
+              child: Text(
+            StringsManager.noPosts.tr(),
+            style: const TextStyle(color: Colors.black, fontSize: 20),
+          ));
         } else {
           return const Center(
             child: CircularProgressIndicator(

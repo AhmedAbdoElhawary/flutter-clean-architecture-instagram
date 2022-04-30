@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -48,7 +49,7 @@ class _CustomGridViewState extends State<CustomGridView> {
               return StaggeredTile.count(1, num);
             },
           )
-        : const Center(child: Text(StringsManager.noPosts));
+        : Center(child: Text(StringsManager.noPosts.tr()));
   }
 
   Widget createGridTileWidget(
@@ -130,7 +131,7 @@ class _CustomGridViewState extends State<CustomGridView> {
         child: Row(
           children: [
             CircleAvatarOfProfileImage(
-              imageUrl: postInfo.publisherInfo!.profileImageUrl,
+              userInfo: postInfo.publisherInfo!,
               bodyHeight: 370,
             ),
             const SizedBox(width: 7),

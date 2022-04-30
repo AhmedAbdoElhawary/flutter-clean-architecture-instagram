@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -186,11 +187,11 @@ class _ProfilePageState extends State<ProfilePage> {
           if (widget.isThatMyPersonalId) {}
         },
         child: CircleAvatarOfProfileImage(
-            bodyHeight: 900, imageUrl: userInfo.profileImageUrl),
+            bodyHeight: 900, userInfo: userInfo),
       ),
-      personalNumbersInfo(userInfo.posts, StringsManager.posts, userInfo),
-      personalNumbersInfo(userInfo.followerPeople, StringsManager.followers, userInfo),
-      personalNumbersInfo(userInfo.followedPeople, StringsManager.following, userInfo),
+      personalNumbersInfo(userInfo.posts, StringsManager.posts.tr(), userInfo),
+      personalNumbersInfo(userInfo.followerPeople, StringsManager.followers.tr(), userInfo),
+      personalNumbersInfo(userInfo.followedPeople, StringsManager.following.tr(), userInfo),
     ]);
   }
 
@@ -200,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Builder(builder: (builderContext) {
         return InkWell(
           onTap: () async {
-            if (text != StringsManager.posts) {
+            if (text != StringsManager.posts.tr()) {
               await Navigator.of(context).push(CupertinoPageRoute(
                   builder: (context) => FollowersAndFollowingsInfoPage(
                       userInfo: userInfo,
