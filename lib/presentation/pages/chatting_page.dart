@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -284,16 +285,16 @@ class _ChattingPageState extends State<ChattingPage> {
               mainAxisAlignment:
               MainAxisAlignment.spaceBetween,
               children: [
-                const Text(StringsManager.reply,
-                    style: TextStyle(
+                 Text(StringsManager.reply.tr(),
+                    style:const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15)),
                 GestureDetector(
                     onTap: () {
                       // massageCubit.
                     },
-                    child: const Text(StringsManager.unSend,
-                        style: TextStyle(
+                    child:  Text(StringsManager.unSend.tr(),
+                        style:const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15))),
               ]),
@@ -342,7 +343,7 @@ class _ChattingPageState extends State<ChattingPage> {
               massageInfo: newMassage(isThatImage: true),
               pathOfPhoto: pickedFile.path);
         } else {
-          ToastShow.toast(StringsManager.noImageSelected);
+          ToastShow.toast(StringsManager.noImageSelected.tr());
         }
       },
       child: const CircleAvatar(
@@ -362,9 +363,9 @@ class _ChattingPageState extends State<ChattingPage> {
         keyboardType: TextInputType.multiline,
         cursorColor: ColorManager.teal,
         maxLines: null,
-        decoration: const InputDecoration.collapsed(
-            hintText: StringsManager.massage,
-            hintStyle: TextStyle(color: ColorManager.black26)),
+        decoration:  InputDecoration.collapsed(
+            hintText: StringsManager.massage.tr(),
+            hintStyle:const TextStyle(color: ColorManager.black26)),
         autofocus: false,
         controller: _textController,
         cursorWidth: 1.5,
@@ -388,7 +389,7 @@ class _ChattingPageState extends State<ChattingPage> {
         // }
       },
       child: Text(
-        StringsManager.send,
+        StringsManager.send.tr(),
         style: TextStyle(
             color: _textController.text.isNotEmpty
                 ? const Color.fromARGB(255, 33, 150, 243)
@@ -429,7 +430,7 @@ class _ChattingPageState extends State<ChattingPage> {
           //   isImageUpload = true;
           // });
         } else {
-          ToastShow.toast(StringsManager.noImageSelected);
+          ToastShow.toast(StringsManager.noImageSelected.tr());
         }
       },
       child: SvgPicture.asset(
@@ -489,14 +490,14 @@ class _ChattingPageState extends State<ChattingPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "${widget.userInfo.followerPeople.length} ${StringsManager.followers}",
+          "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr()}",
           style: const TextStyle(fontSize: 13, color: Colors.grey),
         ),
         const SizedBox(
           width: 15,
         ),
         Text(
-          "${widget.userInfo.posts.length} ${StringsManager.posts}",
+          "${widget.userInfo.posts.length} ${StringsManager.posts.tr()}",
           style: const TextStyle(fontSize: 13, color: Colors.grey),
         ),
       ],
@@ -516,8 +517,8 @@ class _ChattingPageState extends State<ChattingPage> {
           maintainState: false,
         ));
       },
-      child: const Text(StringsManager.viewProfile,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal)),
+      child:  Text(StringsManager.viewProfile.tr(),
+          style:const TextStyle(color: Colors.black, fontWeight: FontWeight.normal)),
     );
   }
 

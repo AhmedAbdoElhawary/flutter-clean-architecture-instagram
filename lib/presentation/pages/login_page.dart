@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,11 +50,11 @@ class _LoginPageState extends State<LoginPage> {
                   color: ColorManager.black, height: 50),
               const SizedBox(height: 30),
               CustomTextField(
-                  hint: StringsManager.phoneOrEmailOrUserName,
+                  hint: StringsManager.phoneOrEmailOrUserName.tr(),
                   controller: emailController),
               const SizedBox(height: 15),
               CustomTextField(
-                  hint: StringsManager.password,
+                  hint: StringsManager.password.tr(),
                   controller: passwordController),
               const SizedBox(height: 15),
               customTextButton(),
@@ -61,9 +62,9 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    StringsManager.noAccount,
-                    style: TextStyle(fontSize: 13, color: ColorManager.grey),
+                   Text(
+                    StringsManager.noAccount.tr(),
+                    style:const TextStyle(fontSize: 13, color: ColorManager.grey),
                   ),
                   InkWell(
                       onTap: () {
@@ -72,9 +73,9 @@ class _LoginPageState extends State<LoginPage> {
                             CupertinoPageRoute(
                                 builder: (context) => const SignUpPage()));
                       },
-                      child: const Text(
-                        StringsManager.signUp,
-                        style: TextStyle(
+                      child:  Text(
+                        StringsManager.signUp.tr(),
+                        style:const TextStyle(
                             fontSize: 13,
                             color: ColorManager.black,
                             fontWeight: FontWeight.bold),
@@ -85,9 +86,9 @@ class _LoginPageState extends State<LoginPage> {
               const OrText(),
               TextButton(
                   onPressed: () {},
-                  child: const Text(
-                    StringsManager.loginWithFacebook,
-                    style: TextStyle(color: ColorManager.blue),
+                  child:  Text(
+                    StringsManager.loginWithFacebook.tr(),
+                    style:const TextStyle(color: ColorManager.blue),
                   ))
             ],
           ),
@@ -103,6 +104,15 @@ class _LoginPageState extends State<LoginPage> {
       FirestoreUserInfoCubit.get(context);
 
         return BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState>(
+          buildWhen: (previous, current) {
+            if (previous != current&&isUserIdReady) {
+              return true;
+            }
+            if (previous != current && current is CubitAuthConfirmed) {
+              return true;
+            }
+            return false;
+          },
           builder: (context, authState) {
             FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
             WidgetsBinding.instance!.addPostFrameCallback((_) async {
@@ -127,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
             });
             return CustomElevatedButton(
               isItDone: isUserIdReady,
-              nameOfButton: StringsManager.logIn,
+              nameOfButton: StringsManager.logIn.tr(),
               onPressed: () async {
                 isUserIdReady = false;
                 await authCubit.logIn(RegisteredUser(

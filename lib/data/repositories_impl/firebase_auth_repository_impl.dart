@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/domain/entities/registered_user.dart';
@@ -29,7 +30,7 @@ class FirebaseAuthRepositoryImpl implements FirebaseAuthRepository {
   Future<User> signUp(UnRegisteredUser newUserInfo) {
     try {
       if (newUserInfo.password != newUserInfo.confirmPassword) {
-        throw StringsManager.passwordWrong;
+        throw StringsManager.passwordWrong.tr();
       }
       return FirebaseAuthentication.signUp(
           email: newUserInfo.email, password: newUserInfo.password);
