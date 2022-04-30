@@ -48,14 +48,16 @@ class StringsManager {
   static const String followers = "followers"; //9
   static const String following = "following";
   static const String facebook = "Facebook";
-  static const String sendMassage = "'Send message'";
+  static const String sendMassage = "Send message";
 
   static const String passwordWrong = "Password wrong !";
 
   static const String allowRecordingFromSettings =
       'Please allow recording from settings.';
 
-  static const String noPosts = "There's no posts...";
+  static const String noPosts = "There's no posts yet!";
+  static const String tryAddPost = "Try add one or make some friends";
+
   static const String noAccount = "Don't have an account?";
   static const String haveAccount = "Already have an account? ";
   static const String tagPeople = "Tag People";
@@ -69,7 +71,6 @@ class StringsManager {
   static const String noMoreData = "no more data";
   static const String clickRetry = "failed,click retry";
   static const String underWork = "It's under work !";
-  static const String noMassages = "There is no Massages yet!";
   static const String phoneOrEmailOrUserName =
       "Phone number, email or username";
   static const String loginWithFacebook = "Login with Facebook";
