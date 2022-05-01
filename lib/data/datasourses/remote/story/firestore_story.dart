@@ -8,7 +8,7 @@ class FireStoreStory {
   static final _fireStoreStoryCollection =
       FirebaseFirestore.instance.collection('stories');
 
-  static Future<String> createPost(Story postInfo) async {
+  static Future<String> createStory(Story postInfo) async {
     DocumentReference<Map<String, dynamic>> postRef =
         await _fireStoreStoryCollection.add(postInfo.toMap());
 
@@ -18,7 +18,10 @@ class FireStoreStory {
     return postRef.id;
   }
 
-  static Future<List<UserPersonalInfo>> getPostsInfo(
+  static Future<void> deleteThisStory({required String storyId}) async =>
+      await _fireStoreStoryCollection.doc(storyId).delete();
+
+  static Future<List<UserPersonalInfo>> getStoriesInfo(
       List<UserPersonalInfo> usersInfo) async {
     List<UserPersonalInfo> usersStoriesInfo = usersInfo;
     List<String> storiesIds = [];
