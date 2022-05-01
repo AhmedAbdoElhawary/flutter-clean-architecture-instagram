@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
@@ -108,25 +110,12 @@ class FirestoreUser {
     });
   }
 
-  // static Stream searchAboutUser(String name) async {
-  //   List<QueryDocumentSnapshot<Map<String, dynamic>>> documentList =
-  //       (await _fireStoreUserCollection
-  //               .where("name", isGreaterThanOrEqualTo: name)
-  //               .get())
-  //           .docs;
-  // }
-  static Stream<List<Massage>> getMassages({required String receiverId}) {
-    Stream<QuerySnapshot<Map<String, dynamic>>> _snapshotsMassages =
-    _fireStoreUserCollection
-        .doc(myPersonalId)
-        .collection("chats")
-        .doc(receiverId)
-        .collection("massages")
-        .orderBy("datePublished", descending: false)
-        .snapshots();
-    return _snapshotsMassages.map((snapshot) =>
-        snapshot.docs.map((doc) => Massage.fromJson(doc)).toList());
+  static deleteThisStory({required String storyId}) async {
+    await _fireStoreUserCollection.doc(myPersonalId).update({
+      'stories': FieldValue.arrayRemove([storyId])
+    });
   }
+
   static Future<List> getSpecificUsersPosts(List<dynamic> usersIds) async {
     List postsInfo = [];
     List<dynamic> usersIdsUnique = [];
@@ -168,5 +157,31 @@ class FirestoreUser {
     return massage;
   }
 
+  static Stream<List<UserPersonalInfo>> searchAboutUser(
+      {required String name}) {
+   name= name.toLowerCase();
+    Stream<QuerySnapshot<Map<String, dynamic>>> snapSearch =
+        _fireStoreUserCollection
+            .where("charactersOfName", arrayContains: name)
+            .snapshots();
 
+    return snapSearch.map((snapshot) => snapshot.docs.map((doc) {
+          UserPersonalInfo userInfo =
+              UserPersonalInfo.fromDocSnap(docSnap: doc);
+          return userInfo;
+        }).toList());
+  }
+
+  static Stream<List<Massage>> getMassages({required String receiverId}) {
+    Stream<QuerySnapshot<Map<String, dynamic>>> _snapshotsMassages =
+        _fireStoreUserCollection
+            .doc(myPersonalId)
+            .collection("chats")
+            .doc(receiverId)
+            .collection("massages")
+            .orderBy("datePublished", descending: false)
+            .snapshots();
+    return _snapshotsMassages.map((snapshot) =>
+        snapshot.docs.map((doc) => Massage.fromJson(doc)).toList());
+  }
 }
