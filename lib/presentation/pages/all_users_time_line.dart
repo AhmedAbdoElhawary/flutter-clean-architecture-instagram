@@ -42,7 +42,7 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
           child: TextField(
             onTap: (){
               Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => const SearchAboutUserPage()));
+                  builder: (context) => SearchAboutUserPage()));
             },
             readOnly: true,
             decoration: const InputDecoration(

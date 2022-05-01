@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:instegram/presentation/widgets/fade_in_image.dart';
@@ -32,6 +33,8 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   bool isImageUpload = false;
+  bool reBuild = false;
+
   @override
   void initState() {
     widget.nameController = TextEditingController(text: widget.userInfo.name);
@@ -47,6 +50,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
       buildWhen: (previous, current) {
         if (previous != current && (current is CubitMyPersonalInfoLoaded)) {
+          return true;
+        }
+
+        if (previous != current && reBuild) {
+          reBuild = false;
           return true;
         }
         return false;
@@ -86,7 +94,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     color: ColorManager.black,
                     height: 30,
                   )),
-              title: Text(StringsManager.editProfile.tr()),
+              title: Text(
+                StringsManager.editProfile.tr(),
+                style: getMediumStyle(fontSize: 20),
+              ),
               actions: actionsWidgets(getUserState, updateUserCubit)),
           body: Column(
             children: [
@@ -101,10 +112,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
   List<Widget> actionsWidgets(
       dynamic getUserState, FirestoreUserInfoCubit updateUserCubit) {
     return [
-      getUserState is CubitUserLoading
-          ? const CustomCircularProgress(ColorManager.blue)
+      getUserState is! CubitMyPersonalInfoLoaded
+          ? Transform.scale(
+              scaleY: 1,
+              scaleX: 1.2,
+              child: const CustomCircularProgress(ColorManager.blue))
           : IconButton(
               onPressed: () async {
+                reBuild = true;
+                List<dynamic> charactersOfName = [];
+                String name = widget.nameController.text.toLowerCase();
+                for (int i = 0; i < name.length; i++) {
+                  charactersOfName =
+                      charactersOfName + [name.substring(0, i + 1)];
+                }
                 UserPersonalInfo updatedUserInfo = UserPersonalInfo(
                     followerPeople: widget.userInfo.followerPeople,
                     followedPeople: widget.userInfo.followedPeople,
@@ -114,6 +135,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     bio: widget.bioController.text,
                     profileImageUrl: widget.userInfo.profileImageUrl,
                     email: widget.userInfo.email,
+                    charactersOfName: charactersOfName,
                     stories: widget.userInfo.stories,
                     userId: widget.userInfo.userId);
                 await updateUserCubit
@@ -121,12 +143,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     .whenComplete(() {
                   Future.delayed(Duration.zero, () {
                     Navigator.of(context).maybePop(widget.userInfo);
+                    reBuild = false;
                   });
                 });
               },
               icon: const Icon(
                 Icons.check,
-                size: 30,
+                size: 32,
                 color: ColorManager.blue,
               ))
     ];
@@ -138,8 +161,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(
-          keyboardDismissBehavior:
-          ScrollViewKeyboardDismissBehavior.onDrag,
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: textFieldsColumn(context, updateUserCubit),
         ),
       ),
@@ -178,16 +200,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ToastShow.toast(StringsManager.noImageSelected.tr());
             }
           },
-          child:  Text(
+          child: Text(
             StringsManager.changeProfilePhoto.tr(),
-            style:const TextStyle(fontSize: 18, color: ColorManager.blue),
+            style: const TextStyle(fontSize: 18, color: ColorManager.blue),
           ),
         )),
         textFormField(widget.nameController, StringsManager.name.tr()),
         const SizedBox(height: 10),
-        textFormField(widget.userNameController,StringsManager.username.tr() ),
+        textFormField(widget.userNameController, StringsManager.username.tr()),
         const SizedBox(height: 10),
-        textFormField(widget.pronounsController,StringsManager.pronouns.tr()),
+        textFormField(widget.pronounsController, StringsManager.pronouns.tr()),
         const SizedBox(height: 10),
         textFormField(widget.websiteController, StringsManager.website.tr()),
         const SizedBox(height: 10),
@@ -197,9 +219,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         const SizedBox(height: 8),
         InkWell(
           onTap: () {},
-          child:  Text(
+          child: Text(
             StringsManager.personalInformationSettings.tr(),
-            style:const TextStyle(fontSize: 18, color: ColorManager.blue),
+            style: const TextStyle(fontSize: 18, color: ColorManager.blue),
           ),
         ),
         const SizedBox(height: 8),

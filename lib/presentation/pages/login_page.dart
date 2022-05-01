@@ -16,6 +16,7 @@ import 'package:instegram/presentation/widgets/custom_elevated_button.dart';
 import 'package:instegram/presentation/widgets/custom_text_field.dart';
 import 'package:instegram/presentation/widgets/or_text.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -124,6 +125,8 @@ class _LoginPageState extends State<LoginPage> {
                 });
                 if (!isHeMovedToHome) {
                   myPersonalId = userId;
+
+                  sharePrefs=await SharedPreferences.getInstance();
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => MainScreen(userId)));
                 }

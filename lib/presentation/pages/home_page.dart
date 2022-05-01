@@ -21,7 +21,6 @@ import 'package:inview_notifier_list/inview_notifier_list.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../widgets/circle_avatar_of_profile_image.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userId;
@@ -123,7 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget posts(Post postInfo, int index) {
     return ImageList(
-
       postInfo: postInfo,
       selectedPostInfo: selectPost,
       textController: _textController,
@@ -219,12 +217,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (index == 0) storiesLines(bodyHeight),
-        const Divider(thickness: 0.5),
+        if (index == 0) ...[
+          storiesLines(bodyHeight),
+          customDivider(),
+        ] else ...[
+          const Divider(),
+        ],
         posts(postsInfo[index], index),
       ],
     );
   }
+
+  Container customDivider() => Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      color: Colors.grey,
+      width: double.infinity,
+      height: 0.3);
 
   createNewStory() async {
     final ImagePicker _picker = ImagePicker();
@@ -264,48 +272,53 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, state) {
         if (state is CubitStoriesInfoLoaded) {
           List<UserPersonalInfo> storiesOwnersInfo = state.storiesOwnersInfo;
-          return SizedBox(
-            width: double.infinity,
-            height: bodyHeight * 0.155,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // if (!storiesOwnersInfo.contains(personalInfo))
-                  //   myOwnStory(context, storiesOwnersInfo, bodyHeight),
-                  ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: storiesOwnersInfo.length,
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Divider(),
-                    itemBuilder: (BuildContext context, int index) {
-                      UserPersonalInfo publisherInfo = storiesOwnersInfo[index];
-                      return Stack(
-                        children: [
-                          GestureDetector(
+          return Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: SizedBox(
+              width: double.infinity,
+              height: bodyHeight * 0.155,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (personalInfo!.stories.isEmpty)
+                      myOwnStory(context, storiesOwnersInfo, bodyHeight),
+                    ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: storiesOwnersInfo.length,
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const SizedBox(width: 8),
+                      itemBuilder: (BuildContext context, int index) {
+                        UserPersonalInfo publisherInfo =
+                            storiesOwnersInfo[index];
+                        return Hero(
+                          tag: "${publisherInfo.userId.hashCode}",
+                          child: GestureDetector(
                             onTap: () {
                               Navigator.of(context, rootNavigator: true)
-                                  .push(CupertinoPageRoute(
+                                  .push(MaterialPageRoute(
                                 maintainState: false,
                                 builder: (context) => StoryPage(
                                     user: publisherInfo,
+                                    hashTag: "${publisherInfo.userId.hashCode}",
                                     storiesOwnersInfo: storiesOwnersInfo),
                               ));
                             },
                             child: CircleAvatarOfProfileImage(
                               userInfo: publisherInfo,
-                              bodyHeight: bodyHeight,
+                              bodyHeight: bodyHeight * 1.1,
                               thisForStoriesLine: true,
+                              nameOfCircle: index == 0 ? "Your story" : "",
                             ),
                           ),
-                        ],
-                      );
-                    },
-                  ),
-                ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -329,38 +342,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Stack myOwnStory(BuildContext context,
       List<UserPersonalInfo> storiesOwnersInfo, double bodyHeight) {
-    bool isPersonalStoriesEmpty = personalInfo!.stories.isEmpty;
     return Stack(
       children: [
         GestureDetector(
           onTap: () async {
-            if (isPersonalStoriesEmpty) {
-              await createNewStory();
-            } else {
-              moveToStoryPage(storiesOwnersInfo, personalInfo!);
-            }
+            await createNewStory();
           },
           child: CircleAvatarOfProfileImage(
             userInfo: personalInfo!,
             bodyHeight: bodyHeight,
             thisForStoriesLine: true,
+            nameOfCircle: "Your story",
           ),
         ),
-        if (isPersonalStoriesEmpty)
-          const Positioned(
-              top: 49,
-              left: 50,
-              right: 0,
-              child: CircleAvatar(
-                  radius: 9.5,
-                  backgroundColor: ColorManager.white,
-                  child: CircleAvatar(
-                      radius: 8,
-                      backgroundColor: ColorManager.blue,
-                      child: Icon(
-                        Icons.add,
-                        size: 15,
-                      )))),
+        const Positioned(
+            top: 49,
+            left: 50,
+            right: 0,
+            child: CircleAvatar(
+                radius: 9.5,
+                backgroundColor: ColorManager.white,
+                child: CircleAvatar(
+                    radius: 8,
+                    backgroundColor: ColorManager.blue,
+                    child: Icon(
+                      Icons.add,
+                      size: 15,
+                    )))),
       ],
     );
   }
