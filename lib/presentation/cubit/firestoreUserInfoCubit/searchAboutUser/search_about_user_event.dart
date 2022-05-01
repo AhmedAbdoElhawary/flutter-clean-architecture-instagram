@@ -6,3 +6,19 @@ abstract class SearchAboutUserEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class FindSpecificUser extends SearchAboutUserEvent {
+  final String name;
+
+  const FindSpecificUser(this.name);
+  @override
+  List<Object> get props => [name];
+}
+
+class UpdateUser extends SearchAboutUserEvent {
+  final List<UserPersonalInfo> users;
+
+  const UpdateUser(this.users);
+  @override
+  List<Object> get props => [users];
+}
