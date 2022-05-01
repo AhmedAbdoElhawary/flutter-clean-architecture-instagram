@@ -37,10 +37,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return defaultTabController();
+    final mediaQuery = MediaQuery.of(context);
+    final bodyHeight = mediaQuery.size.height -
+        AppBar().preferredSize.height -
+        mediaQuery.padding.top;
+    return defaultTabController(bodyHeight);
   }
 
-  Widget defaultTabController() {
+  Widget defaultTabController(double bodyHeight) {
     return DefaultTabController(
       length: 3,
       child:
@@ -52,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
           return [
             SliverList(
               delegate: SliverChildListDelegate(
-                listOfWidgetsAboveTapBars(widget.userInfo),
+                listOfWidgetsAboveTapBars(widget.userInfo, bodyHeight),
               ),
             ),
           ];
@@ -158,9 +162,10 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  List<Widget> listOfWidgetsAboveTapBars(UserPersonalInfo userInfo) {
+  List<Widget> listOfWidgetsAboveTapBars(
+      UserPersonalInfo userInfo, double bodyHeight) {
     return [
-      personalPhotoAndNumberInfo(userInfo),
+      personalPhotoAndNumberInfo(userInfo, bodyHeight),
       Padding(
         padding: const EdgeInsets.only(left: 15.0),
         child: Column(
@@ -180,18 +185,22 @@ class _ProfilePageState extends State<ProfilePage> {
     ];
   }
 
-  Row personalPhotoAndNumberInfo(UserPersonalInfo userInfo) {
+  Row personalPhotoAndNumberInfo(UserPersonalInfo userInfo, double bodyHeight) {
+    String hash="${userInfo.userId.hashCode}personal";
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      GestureDetector(
-        onLongPress: () {
-          if (widget.isThatMyPersonalId) {}
-        },
-        child: CircleAvatarOfProfileImage(
-            bodyHeight: 900, userInfo: userInfo),
+      Hero(
+        tag:hash ,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 15.0),
+          child:
+              CircleAvatarOfProfileImage(bodyHeight: bodyHeight*1.45, userInfo: userInfo,hashTag:hash ),
+        ),
       ),
       personalNumbersInfo(userInfo.posts, StringsManager.posts.tr(), userInfo),
-      personalNumbersInfo(userInfo.followerPeople, StringsManager.followers.tr(), userInfo),
-      personalNumbersInfo(userInfo.followedPeople, StringsManager.following.tr(), userInfo),
+      personalNumbersInfo(
+          userInfo.followerPeople, StringsManager.followers.tr(), userInfo),
+      personalNumbersInfo(
+          userInfo.followedPeople, StringsManager.following.tr(), userInfo),
     ]);
   }
 

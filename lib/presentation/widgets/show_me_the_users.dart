@@ -9,7 +9,6 @@ import 'circle_avatar_of_profile_image.dart';
 import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
 
-
 class ShowMeTheUsers extends StatefulWidget {
   final List<UserPersonalInfo> usersInfo;
   final bool isThatFollower;
@@ -17,13 +16,13 @@ class ShowMeTheUsers extends StatefulWidget {
   final ValueChanged<bool> rebuildVariable;
   final bool showSearchBar;
 
-
   const ShowMeTheUsers(
       {Key? key,
       required this.usersInfo,
       required this.isThatFollower,
-        required this.showSearchBar,
-      this.userInfo,required this.rebuildVariable})
+      required this.showSearchBar,
+      this.userInfo,
+      required this.rebuildVariable})
       : super(key: key);
 
   @override
@@ -52,6 +51,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
   }
 
   Widget containerOfUserInfo(UserPersonalInfo userInfo, bool isThatFollower) {
+    String hash = "${userInfo.userId.hashCode}userInfo";
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
@@ -60,9 +60,13 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                 )));
       },
       child: Row(children: [
-        CircleAvatarOfProfileImage(
-          bodyHeight: 600,
-          userInfo: userInfo,
+        Hero(
+          tag: hash,
+          child: CircleAvatarOfProfileImage(
+            bodyHeight: 600,
+            hashTag: hash,
+            userInfo: userInfo,
+          ),
         ),
         const SizedBox(width: 10),
         Expanded(
@@ -100,7 +104,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                 child: InkWell(
                     onTap: () async {
                       widget.rebuildVariable(false);
-                
+
                       if (userInfo.followerPeople.contains(myPersonalId)) {
                         BlocProvider.of<FollowCubit>(followContext)
                             .removeThisFollower(
@@ -128,7 +132,6 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                                 myPersonalId: myPersonalId);
                       }
                       widget.rebuildVariable(true);
-
                     },
                     child: whichContainerOfText(stateOfFollow, userInfo)),
               );
@@ -148,7 +151,9 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
     }
     return !userInfo.followerPeople.contains(myPersonalId)
         ? containerOfFollowText(
-            text: StringsManager.follow.tr(), isThatFollower: false, isItLoading: isFollowLoading)
+            text: StringsManager.follow.tr(),
+            isThatFollower: false,
+            isItLoading: isFollowLoading)
         : containerOfFollowText(
             text: StringsManager.following.tr(),
             isThatFollower: true,

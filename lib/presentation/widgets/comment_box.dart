@@ -55,12 +55,9 @@ class _CommentBoxState extends State<CommentBox> {
                 ? CrossAxisAlignment.center
                 : CrossAxisAlignment.end,
             children: [
-              InkWell(
-                onTap: () {},
-                child: CircleAvatarOfProfileImage(
-                  userInfo: widget.userPersonalInfo,
-                  bodyHeight: 330,
-                ),
+              CircleAvatarOfProfileImage(
+                userInfo: widget.userPersonalInfo,
+                bodyHeight: 330,
               ),
               const SizedBox(
                 width: 20.0,

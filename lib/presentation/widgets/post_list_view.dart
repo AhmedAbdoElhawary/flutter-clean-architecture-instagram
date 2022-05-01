@@ -26,7 +26,6 @@ class ImageList extends StatefulWidget {
   final TextEditingController textController;
   final ValueChanged<Post> selectedPostInfo;
 
-
   const ImageList({
     Key? key,
     required this.postInfo,
@@ -68,127 +67,123 @@ class _ImageListState extends State<ImageList> {
     return SizedBox(
       width: double.infinity,
       // height: 200,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 6.0),
-              child: InkWell(
-                onTap: () => pushToProfilePage(postInfo),
-                child: CircleAvatarOfProfileImage(
-                  bodyHeight: bodyHeight / 2,
-                  userInfo: postInfo.publisherInfo!,
-                ),
-              ),
-            ),
-            const SizedBox(width: 5),
-            Expanded(
-                child: InkWell(
-                    onTap: () => pushToProfilePage(postInfo),
-                    child: NameOfCircleAvatar(
-                        postInfo.publisherInfo!.name, false))),
-            menuButton()
-          ],
-        ),
-        imageOfPost(
-          postInfo,
-          // isVideoInView,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 12.0, top: 10, bottom: 8),
-          child: Row(children: [
-            Expanded(
-                child: Row(
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                loveButton(postInfo),
                 Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: CircleAvatarOfProfileImage(
+                    bodyHeight: bodyHeight * .5,
+                    userInfo: postInfo.publisherInfo!,
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Expanded(
+                    child: InkWell(
+                        onTap: () => pushToProfilePage(postInfo),
+                        child: NameOfCircleAvatar(
+                            postInfo.publisherInfo!.name, false))),
+                menuButton()
+              ],
+            ),
+            imageOfPost(postInfo // isVideoInView
+                ),
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0, top: 10, bottom: 8),
+              child: Row(children: [
+                Expanded(
+                    child: Row(
+                  children: [
+                    loveButton(postInfo),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0),
+                      child: GestureDetector(
+                        child: iconsOfImagePost(IconsAssets.commentIcon),
+                        onTap: () {
+                          Navigator.of(
+                            context,
+                          ).push(CupertinoPageRoute(
+                            builder: (context) =>
+                                CommentsPage(postId: postInfo.postUid),
+                          ));
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0),
+                      child: GestureDetector(
+                        child: iconsOfImagePost(IconsAssets.send1Icon,
+                            lowHeight: true),
+                      ),
+                    ),
+                  ],
+                )),
+                Padding(
+                  padding: const EdgeInsets.only(right: 12.0),
                   child: GestureDetector(
-                    child: iconsOfImagePost(IconsAssets.commentIcon),
+                    child: isSaved
+                        ? const Icon(
+                            Icons.bookmark_border,
+                          )
+                        : const Icon(
+                            Icons.bookmark,
+                          ),
                     onTap: () {
-                      Navigator.of(
-                        context,
-                      ).push(CupertinoPageRoute(
-                        builder: (context) =>
-                            CommentsPage(postId: postInfo.postUid),
-                      ));
+                      setState(() {
+                        isSaved = isSaved ? false : true;
+                      });
                     },
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
-                  child: GestureDetector(
-                    child: iconsOfImagePost(IconsAssets.send1Icon,
-                        lowHeight: true),
-                  ),
-                ),
-              ],
-            )),
-            Padding(
-              padding: const EdgeInsets.only(right: 12.0),
-              child: GestureDetector(
-                child: isSaved
-                    ? const Icon(
-                        Icons.bookmark_border,
-                      )
-                    : const Icon(
-                        Icons.bookmark,
-                      ),
-                onTap: () {
-                  setState(() {
-                    isSaved = isSaved ? false : true;
-                  });
-                },
-              ),
+              ]),
             ),
-          ]),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 11.5),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (postInfo.likes.isNotEmpty) numberOfLikes(postInfo),
-              const SizedBox(height: 5),
-              ReadMore(
-                  "${postInfo.publisherInfo!.name} ${postInfo.caption}", 2),
-              const SizedBox(height: 8),
-              numberOfComment(postInfo),
-              buildCommentBox(),
-              Padding(
-                padding: const EdgeInsets.only(top:5.0),
-                child: Text(
-                  DateOfNow.chattingDateOfNow(
-                      postInfo.datePublished, postInfo.datePublished),
-                  style: const TextStyle(color: Colors.black26),
-                ),
+            Padding(
+              padding: const EdgeInsets.only(left: 11.5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (postInfo.likes.isNotEmpty) numberOfLikes(postInfo),
+                  const SizedBox(height: 5),
+                  ReadMore(
+                      "${postInfo.publisherInfo!.name} ${postInfo.caption}", 2),
+                  const SizedBox(height: 8),
+                  numberOfComment(postInfo),
+                  buildCommentBox(bodyHeight),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      DateOfNow.chattingDateOfNow(
+                          postInfo.datePublished, postInfo.datePublished),
+                      style: const TextStyle(color: Colors.black26),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        )
-      ]),
+            )
+          ]),
     );
   }
 
-  Widget buildCommentBox(){
+  Widget buildCommentBox(double bodyHeight) {
     return Column(
       children: [
         Row(
-          crossAxisAlignment:widget.textController.text.length < 70
+          crossAxisAlignment: widget.textController.text.length < 70
               ? CrossAxisAlignment.center
               : CrossAxisAlignment.end,
           children: [
-            GestureDetector(
-              onTap: () {},
-              child: CircleAvatarOfProfileImage(
-                userInfo: widget.postInfo.publisherInfo!,
-                bodyHeight: 330,
-              ),
+            CircleAvatarOfProfileImage(
+              userInfo: widget.postInfo.publisherInfo!,
+              bodyHeight: bodyHeight * .5,
             ),
             const SizedBox(
-              width: 20.0,
+              width: 12.0,
             ),
             Expanded(
               child: TextFormField(
@@ -196,15 +191,15 @@ class _ImageListState extends State<ImageList> {
                 cursorColor: ColorManager.teal,
                 maxLines: null,
                 readOnly: true,
-                decoration:  InputDecoration.collapsed(
+                decoration: InputDecoration.collapsed(
                     hintText: StringsManager.addComment.tr(),
-                    hintStyle:const TextStyle(color: ColorManager.black26)),
+                    hintStyle: const TextStyle(
+                        color: ColorManager.black26, fontSize: 14)),
                 autofocus: false,
                 controller: TextEditingController(),
-                onTap: (){
+                onTap: () {
                   // setState(() {
-                    widget.selectedPostInfo(widget.postInfo);
-
+                  widget.selectedPostInfo(widget.postInfo);
                 },
               ),
             ),
@@ -217,7 +212,6 @@ class _ImageListState extends State<ImageList> {
               child: const Text('❤'),
             ),
             const SizedBox(width: 8),
-
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -227,7 +221,6 @@ class _ImageListState extends State<ImageList> {
               child: const Text('🙌'),
             ),
             const SizedBox(width: 8),
-
           ],
         ),
       ],

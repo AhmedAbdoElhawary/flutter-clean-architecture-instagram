@@ -5,6 +5,7 @@ import 'package:instegram/presentation/cubit/firebaseAuthCubit/firebase_auth_cub
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart';
+import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
@@ -72,10 +73,9 @@ class MultiBloc extends StatelessWidget {
       BlocProvider<StoryCubit>(
         create: (context) => injector<StoryCubit>(),
       ),
-
-      // BlocProvider<GetCommentsBloc>(
-      //   create: (context) => injector<GetCommentsBloc>(),
-      // ),
+      BlocProvider<SearchAboutUserBloc>(
+        create: (context) => injector<SearchAboutUserBloc>(),
+      ),
     ], child: materialApp);
   }
 }
