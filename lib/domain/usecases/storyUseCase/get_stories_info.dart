@@ -4,16 +4,15 @@ import 'package:instegram/domain/repositories/story_repository.dart';
 
 class GetStoriesInfoUseCase
     implements
-        UseCaseTwoParams<List<UserPersonalInfo>, List<dynamic>,
-            UserPersonalInfo> {
+        UseCase<List<UserPersonalInfo>, List<dynamic>> {
   final FirestoreStoryRepository _getStoryRepository;
 
   GetStoriesInfoUseCase(this._getStoryRepository);
 
   @override
   Future<List<UserPersonalInfo>> call(
-      {required List<dynamic> paramsOne, required UserPersonalInfo paramsTwo}) {
+      {required List<dynamic> params}) {
     return _getStoryRepository.getStoriesInfo(
-        usersIds: paramsOne, myPersonalInfo: paramsTwo);
+        usersIds: params);
   }
 }

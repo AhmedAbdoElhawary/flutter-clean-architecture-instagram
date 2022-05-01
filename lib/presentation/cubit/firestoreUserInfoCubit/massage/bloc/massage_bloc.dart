@@ -11,7 +11,6 @@ part 'massage_state.dart';
 
 class MassageBloc extends Bloc<MassageEvent, MassageBlocState> {
   final GetMassagesUseCase _getMassagesUseCase;
-  List<Massage> massagesInfo = [];
   MassageBloc(this._getMassagesUseCase) : super(const MassageBlocLoaded());
 
   @override
