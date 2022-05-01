@@ -165,12 +165,10 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Stream<List<Massage>> getMassages({required String receiverId}) {
-    // try {
-    return FirestoreUser.getMassages(receiverId: receiverId);
-    // }
-    // catch (e) {
-    //   yield* Stream.error(e.toString());
-    // }
-  }
+  Stream<List<Massage>> getMassages({required String receiverId}) =>
+      FirestoreUser.getMassages(receiverId: receiverId);
+
+  @override
+  Stream<List<UserPersonalInfo>> searchAboutUser({required String name}) =>
+      FirestoreUser.searchAboutUser(name: name);
 }
