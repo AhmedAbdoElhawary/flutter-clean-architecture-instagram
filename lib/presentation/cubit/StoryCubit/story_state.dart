@@ -18,6 +18,7 @@ class CubitStoryLoaded extends StoryState {
   @override
   List<Object> get props => [postId];
 }
+
 class CubitStoriesInfoLoaded extends StoryState {
   final List<UserPersonalInfo> storiesOwnersInfo;
 
@@ -25,6 +26,17 @@ class CubitStoriesInfoLoaded extends StoryState {
   @override
   List<Object> get props => [storiesOwnersInfo];
 }
+
+class SpecificStoriesInfoLoaded extends StoryState {
+  final UserPersonalInfo userInfo;
+
+  const SpecificStoriesInfoLoaded(this.userInfo);
+  @override
+  List<Object> get props => [userInfo];
+}
+
+class CubitDeletingStoryLoaded extends StoryState {}
+class CubitDeletingStoryLoading extends StoryState {}
 
 class CubitStoryFailed extends StoryState {
   final String error;
