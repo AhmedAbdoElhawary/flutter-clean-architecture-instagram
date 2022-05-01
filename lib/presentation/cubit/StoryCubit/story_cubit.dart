@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/data/models/story.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/domain/usecases/storyUseCase/create_story.dart';
+import 'package:instegram/domain/usecases/storyUseCase/delete_story.dart';
+import 'package:instegram/domain/usecases/storyUseCase/get_specific_stories.dart';
 import 'package:instegram/domain/usecases/storyUseCase/get_stories_info.dart';
 
 part 'story_state.dart';
@@ -12,9 +14,12 @@ part 'story_state.dart';
 class StoryCubit extends Cubit<StoryState> {
   final CreateStoryUseCase _createStoryUseCase;
   final GetStoriesInfoUseCase _getStoriesInfoUseCase;
+  final GetSpecificStoriesInfoUseCase _getSpecificStoriesInfoUseCase;
+  final DeleteStoryUseCase _deleteStoryUseCase;
   String storyId = '';
 
-  StoryCubit(this._createStoryUseCase, this._getStoriesInfoUseCase)
+  StoryCubit(this._createStoryUseCase, this._getStoriesInfoUseCase,
+      this._deleteStoryUseCase, this._getSpecificStoriesInfoUseCase)
       : super(StoryInitial());
 
   static StoryCubit get(BuildContext context) => BlocProvider.of(context);
@@ -36,13 +41,34 @@ class StoryCubit extends Cubit<StoryState> {
       {required List<dynamic> usersIds,
       required UserPersonalInfo myPersonalInfo}) async {
     if (!usersIds.contains(myPersonalInfo.userId)) {
-      usersIds = [myPersonalInfo.userId]+usersIds;
+      usersIds = [myPersonalInfo.userId] + usersIds;
     }
     emit(CubitStoryLoading());
     await _getStoriesInfoUseCase
-        .call(paramsOne: usersIds, paramsTwo: myPersonalInfo)
+        .call(params: usersIds)
         .then((updatedUsersInfo) {
       emit(CubitStoriesInfoLoaded(updatedUsersInfo));
+    }).catchError((e) {
+      emit(CubitStoryFailed(e));
+    });
+  }
+
+  Future<void> getSpecificStoriesInfo(
+      {required UserPersonalInfo userInfo}) async {
+    emit(CubitStoryLoading());
+    await _getSpecificStoriesInfoUseCase
+        .call(params: userInfo)
+        .then((updatedUserInfo) {
+      emit(SpecificStoriesInfoLoaded(updatedUserInfo));
+    }).catchError((e) {
+      emit(CubitStoryFailed(e));
+    });
+  }
+
+  Future<void> deleteStory({required String storyId}) async {
+    emit(CubitDeletingStoryLoading());
+    await _deleteStoryUseCase.call(params: storyId).then((_) {
+      emit(CubitDeletingStoryLoaded());
     }).catchError((e) {
       emit(CubitStoryFailed(e));
     });

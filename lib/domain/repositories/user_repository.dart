@@ -36,4 +36,6 @@ abstract class FirestoreUserRepository {
       required String pathOfRecorded});
 
   Stream<List<Massage>> getMassages({required String receiverId});
+  Stream<List<UserPersonalInfo>> searchAboutUser({required String name});
+
 }

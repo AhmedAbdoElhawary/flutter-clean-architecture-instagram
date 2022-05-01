@@ -5,9 +5,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/domain/entities/unregistered_user.dart';
 import 'package:instegram/presentation/screens/main_screen.dart';
 import 'package:instegram/presentation/widgets/custom_elevated_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
@@ -132,6 +134,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   moveToMain(CubitAuthConfirmed authState) {
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      sharePrefs=await SharedPreferences.getInstance();
+
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => MainScreen(authState.user.uid)),
@@ -154,18 +158,25 @@ class _SignUpPageState extends State<SignUpPage> {
     // TODO ----> we need to get more details from user in the first to change this view
 
     String name = authState.user.email!.split('@')[0];
+    List<dynamic> charactersOfName=[];
+    String nameOfLower=name.toLowerCase();
+
+    for(int i=0;i<nameOfLower.length;i++){
+      charactersOfName=charactersOfName+[nameOfLower.substring(0,i+1)];
+    }
     String userName = "${name}4263";
     UserPersonalInfo newUserInfo = UserPersonalInfo(
       name: name,
+      charactersOfName:charactersOfName,
       email: authState.user.email!,
       userName: userName,
       bio: "",
       profileImageUrl: "",
       userId: authState.user.uid,
-      followerPeople: [],
-      followedPeople: [],
-      posts: [],
-      stories: [],
+      followerPeople: const [],
+      followedPeople: const [],
+      posts: const [],
+      stories: const [],
     );
     userCubit.addNewUser(newUserInfo);
   }

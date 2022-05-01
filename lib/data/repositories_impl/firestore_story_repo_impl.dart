@@ -14,7 +14,7 @@ class FirestoreStoryRepositoryImpl implements FirestoreStoryRepository {
       String postUrl =
           await FirebaseStoragePost.uploadFile(photo, 'postsImage');
       storyInfo.storyUrl = postUrl;
-      String postUid = await FireStoreStory.createPost(storyInfo);
+      String postUid = await FireStoreStory.createStory(storyInfo);
       return postUid;
     } catch (e) {
       return Future.error(e.toString());
@@ -23,12 +23,31 @@ class FirestoreStoryRepositoryImpl implements FirestoreStoryRepository {
 
   @override
   Future<List<UserPersonalInfo>> getStoriesInfo(
-      {required List<dynamic> usersIds,
-      required UserPersonalInfo myPersonalInfo}) async {
+      {required List<dynamic> usersIds}) async {
     try {
       List<UserPersonalInfo> usersInfo =
           await FirestoreUser.getSpecificUsersInfo(usersIds);
-      return await FireStoreStory.getPostsInfo(usersInfo);
+      return await FireStoreStory.getStoriesInfo(usersInfo);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  @override
+  Future<UserPersonalInfo> getSpecificStoriesInfo(
+      {required UserPersonalInfo userInfo}) async {
+    try {
+      return (await FireStoreStory.getStoriesInfo([userInfo]))[0];
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  @override
+  Future<void> deleteThisStory({required String storyId}) async {
+    try {
+      await FirestoreUser.deleteThisStory(storyId: storyId);
+      await FireStoreStory.deleteThisStory(storyId: storyId);
     } catch (e) {
       return Future.error(e.toString());
     }

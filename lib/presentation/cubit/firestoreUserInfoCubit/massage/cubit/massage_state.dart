@@ -8,7 +8,7 @@ abstract class MassageState extends Equatable {
 }
 
 class MassageInitial extends MassageState {}
-//send massage states
+
 class SendMassageLoaded extends MassageState {
   final Massage massageInfo;
 
@@ -21,7 +21,7 @@ class SendMassageFailed extends MassageState {
   final String error;
   const SendMassageFailed(this.error);
 }
-// get massage states
+
 class GetMassageSuccess extends MassageState {}
 
 class GetMassageFailed extends MassageState {

@@ -12,7 +12,7 @@ class CustomCircularProgress extends StatelessWidget{
         scale: 0.50,
         child: ClipOval(
           child: CircularProgressIndicator(
-            strokeWidth: 8,
+            strokeWidth: 6,
             color:color,
           ),
         ),
