@@ -92,7 +92,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   icon: SvgPicture.asset(
                     IconsAssets.cancelIcon,
                     color: ColorManager.black,
-                    height: 30,
+                    height: 27,
                   )),
               title: Text(
                 StringsManager.editProfile.tr(),
@@ -149,7 +149,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               },
               icon: const Icon(
                 Icons.check,
-                size: 32,
+                size: 30,
                 color: ColorManager.blue,
               ))
     ];
@@ -159,7 +159,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       BuildContext context, FirestoreUserInfoCubit updateUserCubit) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsetsDirectional.all(10),
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: textFieldsColumn(context, updateUserCubit),

@@ -5,12 +5,14 @@ import 'package:instegram/data/models/user_personal_info.dart';
 class Post extends ParentPost {
   String postUrl;
   String postUid;
+  double aspectRatio;
   Post({
     required String datePublished,
     required String publisherId,
     UserPersonalInfo? publisherInfo,
     this.postUid = "",
     this.postUrl = "",
+    required this.aspectRatio,
     String caption = "",
     required List<dynamic> comments,
     required List<dynamic> likes,
@@ -35,6 +37,7 @@ class Post extends ParentPost {
       likes: snap["likes"],
       comments: snap["comments"],
       postUid: snap["postUid"],
+      aspectRatio: snap["aspectRatio"],
       postUrl: snap["postUrl"],
       isThatImage: snap["isThatImage"],
     );
@@ -45,6 +48,7 @@ class Post extends ParentPost {
         "datePublished": datePublished,
         "publisherId": publisherId,
         'comments': comments,
+        'aspectRatio': aspectRatio,
         'likes': likes,
         'postUid': postUid,
         "postUrl": postUrl,

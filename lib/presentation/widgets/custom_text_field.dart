@@ -9,7 +9,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsetsDirectional.only(start: 20,end: 20),
       child: TextFormField(
         controller: controller,
         cursorColor: Colors.teal,
@@ -21,10 +21,7 @@ class CustomTextField extends StatelessWidget {
           filled: true,
           focusedBorder: outlineInputBorder(),
           enabledBorder: outlineInputBorder(),
-          contentPadding: const EdgeInsets.symmetric(
-            vertical: 15,
-            horizontal: 10,
-          ),
+          contentPadding: const EdgeInsetsDirectional.only(start: 10,end: 10,bottom: 15,top: 15),
         ),
       ),
     );

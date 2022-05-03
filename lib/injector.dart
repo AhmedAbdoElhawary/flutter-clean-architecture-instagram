@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:instegram/core/app_prefs.dart';
 import 'package:instegram/data/repositories_impl/firebase_auth_repository_impl.dart';
 import 'package:instegram/data/repositories_impl/firestore_story_repo_impl.dart';
 import 'package:instegram/data/repositories_impl/firestore_user_repo_impl.dart';
@@ -52,6 +53,7 @@ import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/re
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'domain/repositories/auth_repository.dart';
 import 'domain/repositories/post/post_repository.dart';
 import 'domain/repositories/user_repository.dart';
@@ -68,6 +70,15 @@ import 'domain/usecases/postUseCase/create_post.dart';
 final injector = GetIt.I;
 
 Future<void> initializeDependencies() async {
+  // shared prefs instance
+  final sharedPrefs = await SharedPreferences.getInstance();
+
+  injector.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
+
+  // app prefs instance
+  injector
+      .registerLazySingleton<AppPreferences>(() => AppPreferences(injector()));
+
   // Repository
 
   // Post

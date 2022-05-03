@@ -45,10 +45,11 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
                   builder: (context) => SearchAboutUserPage()));
             },
             readOnly: true,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
+                contentPadding:const EdgeInsetsDirectional.all(7.0) ,
                 prefixIcon:
-                    Icon(Icons.search_rounded, color: ColorManager.black),
-                hintText: 'Search',
+                    const Icon(Icons.search_rounded, color: ColorManager.black),
+                hintText: StringsManager.search.tr(),
                 border: InputBorder.none),
           ),
         ),

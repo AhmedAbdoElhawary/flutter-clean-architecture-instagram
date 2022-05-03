@@ -48,14 +48,14 @@ class _CommentInfoState extends State<CommentInfo> {
   Widget build(BuildContext context) {
     bool isLiked = widget.commentInfo.likes.contains(myPersonalId);
     return Padding(
-      padding: const EdgeInsets.only(left: 10.0),
+      padding: const EdgeInsetsDirectional.only(start: 10.0),
       child: Column(
         children: [
           rowOfCommentator(context, isLiked, widget.commentInfo.theComment),
           if (!widget.isThatReply && widget.commentInfo.replies!.isNotEmpty)
             widget.showMeReplies[widget.index] == false
                 ? Padding(
-                    padding: const EdgeInsets.only(left: 50.0),
+                    padding: const EdgeInsetsDirectional.only(start: 50.0),
                     child: Row(
                       children: [
                         Container(color: Colors.black12, height: 1, width: 40),
@@ -69,7 +69,7 @@ class _CommentInfoState extends State<CommentInfo> {
                                   });
                                 },
                                 child: Text(
-                                    "${StringsManager.view} ${widget.commentInfo.replies!.length} ${StringsManager.more.tr()} ${widget.commentInfo.replies!.length > 1 ? StringsManager.replies.tr() : StringsManager.reply.tr()}",
+                                    "${StringsManager.view.tr()} ${widget.commentInfo.replies!.length} ${StringsManager.more.tr()} ${widget.commentInfo.replies!.length > 1 ? StringsManager.replies.tr() : StringsManager.reply.tr()}",
                                     style: const TextStyle(
                                         color: Colors.black45))))
                       ],
@@ -93,7 +93,7 @@ class _CommentInfoState extends State<CommentInfo> {
                             BlocProvider.of<ReplyInfoCubit>(context)
                                 .repliesOnComment;
                         return Padding(
-                          padding: const EdgeInsets.only(left: 40.0),
+                          padding: const EdgeInsetsDirectional.only(start: 40.0),
                           child: ListView.separated(
                               keyboardDismissBehavior:
                                   ScrollViewKeyboardDismissBehavior.onDrag,
@@ -124,7 +124,7 @@ class _CommentInfoState extends State<CommentInfo> {
                         return Text(state.toString());
                       } else {
                         return Padding(
-                          padding: const EdgeInsets.only(left: 50.0),
+                          padding: const EdgeInsetsDirectional.only(start: 50.0),
                           child: Row(
                             children: [
                               // const Divider(thickness: 30,color: Colors.black,indent: 10,endIndent: 60),
@@ -168,7 +168,7 @@ class _CommentInfoState extends State<CommentInfo> {
         const SizedBox(width: 8),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(top: 3.0),
+            padding: const EdgeInsetsDirectional.only(top: 3.0),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -230,7 +230,7 @@ class _CommentInfoState extends State<CommentInfo> {
                           style: const TextStyle(color: Colors.grey)),
                       if (widget.commentInfo.likes.isNotEmpty)
                         Padding(
-                          padding: const EdgeInsets.only(left: 20.0),
+                          padding: const EdgeInsetsDirectional.only(start: 20.0),
                           child: InkWell(
                             onTap: () {
                               Navigator.of(context).push(CupertinoPageRoute(

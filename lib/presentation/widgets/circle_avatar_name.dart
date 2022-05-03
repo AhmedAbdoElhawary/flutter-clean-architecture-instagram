@@ -14,12 +14,12 @@ class NameOfCircleAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: isForStoriesLine ? 0 : 5),
+      padding: EdgeInsetsDirectional.only(start: isForStoriesLine ? 0 : 5),
       child: Text(
         circleAvatarName,
         maxLines: 1,
         style:
-            isForStoriesLine ? getNormalStyle(fontSize: 10) : getMediumStyle(),
+            isForStoriesLine ? getNormalStyle(fontSize: 12) : getMediumStyle(),
         overflow: TextOverflow.ellipsis,
         softWrap: false,
       ),

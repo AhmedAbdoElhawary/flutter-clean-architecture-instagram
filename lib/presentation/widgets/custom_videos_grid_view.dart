@@ -14,10 +14,7 @@ class CustomVideosGridView extends StatefulWidget {
   final String userId;
 
   CustomVideosGridView(
-      {
-      required this.userId,
-      required this.postsInfo,
-      Key? key})
+      {required this.userId, required this.postsInfo, Key? key})
       : super(key: key);
 
   @override
@@ -29,16 +26,16 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
   Widget build(BuildContext context) {
     return widget.postsInfo.isNotEmpty
         ? GridView(
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 150,
-          mainAxisExtent: 215,
-          crossAxisSpacing: 1.5,
-          mainAxisSpacing: 1.5,
-          childAspectRatio: 1.0,
-        ),
-        primary: false,
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(vertical: 1.5),
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 150,
+              mainAxisExtent: 215,
+              crossAxisSpacing: 1.5,
+              mainAxisSpacing: 1.5,
+              childAspectRatio: 1.0,
+            ),
+            primary: false,
+            shrinkWrap: true,
+            padding: const EdgeInsetsDirectional.only(bottom: 1.5, top: 1.5),
             children: widget.postsInfo.map((postInfo) {
               return createGridTileWidget(postInfo);
             }).toList())
@@ -49,15 +46,15 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
 
   Widget createGridTileWidget(Post postInfo) => Builder(
         builder: (context) => GestureDetector(
-          onTap: () {
-          },
+          onTap: () {},
           onLongPress: () {
             _popupDialog = _createPopupDialog(postInfo);
             Overlay.of(context)!.insert(_popupDialog!);
           },
           onLongPressEnd: (details) => _popupDialog?.remove(),
-          child: PlayThisVideo(videoUrl:postInfo.postUrl,
-              // isVideoInView: (){return false;}
+          child: PlayThisVideo(
+            videoUrl: postInfo.postUrl,
+            // isVideoInView: (){return false;}
           ),
         ),
       );
@@ -74,31 +71,35 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
   }
 
   Widget _createPopupContent(Post postInfo) {
-   double bodyHeight = MediaQuery.of(context).size.height;
+    double bodyHeight = MediaQuery.of(context).size.height;
 
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _createPhotoTitle(postInfo),
-              Container(
-                  color: Colors.white,
-                  width: double.infinity,
-                  height: bodyHeight-200,
-                  child: PlayThisVideo(videoUrl:postInfo.postUrl,
-                      // isVideoInView: (){return true;}
-                  ),),
-              _createActionBar(),
-            ],
-          ),
+      padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _createPhotoTitle(postInfo),
+            Container(
+              color: Colors.white,
+              width: double.infinity,
+              height: bodyHeight - 200,
+              child: PlayThisVideo(
+                videoUrl: postInfo.postUrl,
+                // isVideoInView: (){return true;}
+              ),
+            ),
+            _createActionBar(),
+          ],
         ),
-      );}
+      ),
+    );
+  }
 
   Widget _createPhotoTitle(Post postInfo) => Container(
-        padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+        padding: const EdgeInsetsDirectional.only(
+            bottom: 5, top: 5, end: 10, start: 10),
         height: 55,
         width: double.infinity,
         color: Colors.white,
@@ -119,7 +120,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
 
   Widget _createActionBar() => Container(
         height: 50,
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        padding: const EdgeInsetsDirectional.only(bottom: 5, top: 5),
         color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

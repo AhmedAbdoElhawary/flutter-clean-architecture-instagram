@@ -167,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return [
       personalPhotoAndNumberInfo(userInfo, bodyHeight),
       Padding(
-        padding: const EdgeInsets.only(left: 15.0),
+        padding: const EdgeInsetsDirectional.only(start: 15.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,7 +191,7 @@ class _ProfilePageState extends State<ProfilePage> {
       Hero(
         tag:hash ,
         child: Padding(
-          padding: const EdgeInsets.only(left: 15.0),
+          padding: const EdgeInsetsDirectional.only(start: 15.0),
           child:
               CircleAvatarOfProfileImage(bodyHeight: bodyHeight*1.45, userInfo: userInfo,hashTag:hash ),
         ),

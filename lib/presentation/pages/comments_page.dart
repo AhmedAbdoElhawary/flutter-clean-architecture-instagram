@@ -152,17 +152,14 @@ Future<void>loadData()async{
             color: const Color.fromARGB(18, 59, 59, 59),
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.only(left: 10.0, right: 17),
+                padding: const EdgeInsetsDirectional.only(start: 10.0, end: 17),
                 child: Row(
                   children: [
                     Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 0),
-                        child: Text(
-                            "${StringsManager.replyingTo.tr()} ${selectedCommentInfo!.whoCommentInfo!.userName}",
-                            style:
-                                const TextStyle(color: ColorManager.black54)),
-                      ),
+                      child: Text(
+                          "${StringsManager.replyingTo.tr()} ${selectedCommentInfo!.whoCommentInfo!.userName}",
+                          style:
+                              const TextStyle(color: ColorManager.black54)),
                     ),
                     GestureDetector(
                         onTap: () {
@@ -198,7 +195,7 @@ Future<void>loadData()async{
   }
 
   Container customDivider() => Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsetsDirectional.only(bottom: 8),
       color: Colors.grey,
       width: double.infinity,
       height: 0.2);

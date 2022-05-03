@@ -136,8 +136,8 @@ class _CircleAvatarOfProfileImageState
                 ),
               ),
               child: CircleAvatar(
-                radius: widget.bodyHeight < 400
-                    ? widget.bodyHeight * .053
+                radius: widget.bodyHeight < 900
+                    ? widget.bodyHeight * .0525
                     : widget.bodyHeight * .0505,
                 backgroundColor: Colors.transparent,
               ),

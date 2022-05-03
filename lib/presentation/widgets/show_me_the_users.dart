@@ -100,7 +100,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
               return Container();
             } else {
               return Padding(
-                padding: const EdgeInsets.only(right: 15.0),
+                padding: const EdgeInsetsDirectional.only(end: 15.0),
                 child: InkWell(
                     onTap: () async {
                       widget.rebuildVariable(false);

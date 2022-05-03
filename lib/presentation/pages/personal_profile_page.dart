@@ -3,11 +3,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instegram/core/app_prefs.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/injector.dart';
 import 'package:instegram/presentation/pages/new_post_page.dart';
 import 'package:instegram/presentation/pages/story_config.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
@@ -35,6 +38,8 @@ class PersonalProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<PersonalProfilePage> {
   bool rebuildUserInfo = false;
+  Size imageSize = const Size(0.00, 0.00);
+
   @override
   Widget build(BuildContext context) {
     return scaffold();
@@ -214,7 +219,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
                   const TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
           const Divider(),
           Padding(
-            padding: const EdgeInsets.only(left: 20.0),
+            padding: const EdgeInsetsDirectional.only(start: 20.0),
             child: Column(
               children: [
                 createNewPost(),
@@ -223,8 +228,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
                 const Divider(indent: 40, endIndent: 15),
                 createNewStory(),
                 const Divider(indent: 40, endIndent: 15),
-                createSizedBox(StringsManager.live.tr(),
-                    IconsAssets.instagramHighlightStoryIcon),
+                createNewLive(),
                 const Divider(indent: 40, endIndent: 15),
                 Container(
                   height: 50,
@@ -234,6 +238,19 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           ),
         ],
       ),
+    );
+  }
+
+  GestureDetector createNewLive() {
+    final AppPreferences _appPreferences = injector<AppPreferences>();
+
+    return GestureDetector(
+      onTap: () {
+        _appPreferences.changeAppLanguage();
+        Phoenix.rebirth(context);
+      },
+      child: createSizedBox(
+          StringsManager.live.tr(), IconsAssets.instagramHighlightStoryIcon),
     );
   }
 
@@ -266,10 +283,13 @@ class _ProfilePageState extends State<PersonalProfilePage> {
               await _picker.pickVideo(source: ImageSource.camera);
           if (video != null) {
             File videoFile = File(video.path);
+            _getImageDimension(videoFile);
             await Navigator.of(context, rootNavigator: true).push(
                 CupertinoPageRoute(
                     builder: (context) => CreatePostPage(
-                        selectedFile: videoFile, isThatImage: false),
+                        selectedFile: videoFile,
+                        isThatImage: false,
+                        aspectRatio: imageSize.aspectRatio),
                     maintainState: false));
             setState(() {
               rebuildUserInfo = true;
@@ -277,6 +297,23 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           }
         },
         child: createSizedBox(StringsManager.reel.tr(), IconsAssets.videoIcon));
+  }
+
+  void _getImageDimension(File photo) {
+    Image image = Image.file(photo);
+    image.image.resolve(const ImageConfiguration()).addListener(
+      ImageStreamListener(
+        (ImageInfo image, bool synchronousCall) {
+          var myImage = image.image;
+          setState(() {
+            imageSize =
+                Size(myImage.width.toDouble(), myImage.height.toDouble());
+            print("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC ${imageSize.aspectRatio}");
+
+          });
+        },
+      ),
+    );
   }
 
   GestureDetector createNewPost() {
@@ -287,9 +324,14 @@ class _ProfilePageState extends State<PersonalProfilePage> {
               await _picker.pickImage(source: ImageSource.gallery);
           if (image != null) {
             File photo = File(image.path);
+            _getImageDimension(photo);
             await Navigator.of(context, rootNavigator: true).push(
                 CupertinoPageRoute(
-                    builder: (context) => CreatePostPage(selectedFile: photo),
+                    builder: (context) {
+                      print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ${imageSize.height}");
+                      return CreatePostPage(
+                        selectedFile: photo, aspectRatio: imageSize.aspectRatio);
+                    },
                     maintainState: false));
             setState(() {
               rebuildUserInfo = true;

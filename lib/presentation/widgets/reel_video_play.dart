@@ -91,7 +91,7 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(40), color: Colors.black45),
-        padding: const EdgeInsets.all(25),
+        padding: const EdgeInsetsDirectional.all(25),
         child: Icon(
           icon,
           size: 23.0,
