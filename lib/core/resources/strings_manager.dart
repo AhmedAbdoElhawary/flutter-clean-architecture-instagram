@@ -1,87 +1,98 @@
 class StringsManager {
-  static const String or = "OR";
+  static const String or = "or";
 
   static const String less = "less"; //4
-  static const String reel = "Reel";
-  static const String like = "Like";
-  static const String post = "Post";
-  static const String live = "Live";
-  static const String view = "View";
+  static const String reel = "reel";
+  static const String like = "like";
+  static const String post = "post";
+  static const String live = "live";
+  static const String view = "view";
+
   static const String more = "more";
 
-  static const String story = "Story";
-  static const String posts = "Posts";
-  static const String block = "Block";
+  static const String story = "story";
+  static const String posts = "posts";
+  static const String block = "block";
   static const String reply = "reply";
-  static const String unSend = "UnSend";
+  static const String unSend = "unSend";
   static const String send = "send";
 
-  static const String name = "Name"; //7
+  static const String name = "name"; //7
 
-  static const String likes = "Likes"; //5
-  static const String logIn = "Log in";
+  static const String likes = "likes"; //5
+  static const String logIn = "logIn";
 
-  static const String follow = "Follow";
-  static const String create = "Create";
-  static const String signUp = "Sign up"; //6
-  static const String report = "Report.";
-  static const String username = "Username";
-  static const String pronouns = "Pronouns";
-  static const String website = "Website";
-  static const String bio = "Bio";
+  static const String follow = "follow";
+  static const String create = "create";
+  static const String search = "search";
+
+  static const String signUp = "signUp"; //6
+  static const String report = "report";
+  static const String username = "username";
+  static const String pronouns = "pronouns";
+  static const String website = "website";
+  static const String bio = "bio";
   static const String personalInformationSettings =
-      "Personal information settings";
-  static const String noRecordsYet = "No records yet";
-  static const String userNotExist = "the user not exist !";
+      "personalInformationSettings";
+  static const String noRecordsYet = "noRecordsYet";
+  static const String userNotExist = "userNotExist";
+  static const String yourStory = "yourStory";
 
-  static const String massage = "Massage...";
+  static const String massage = "massage";
   static const String replies = "replies";
-  static const String theName = "The Name"; //7
-  static const String newPost = "New Post";
-  static const String loading = "Loading...";
-  static const String password = "Password";
-  static const String viewProfile = "View Profile";
+  static const String theName = "theName"; //7
+  static const String newPost = "newPost";
+  static const String loading = "loading";
+  static const String password = "password";
+  static const String viewProfile = "viewProfile";
+  static const String viewAll = "viewAll";
 
-  static const String restrict = "Restrict"; //8
+  static const String restrict = "restrict"; //8
   static const String share = "share";
 
   static const String followers = "followers"; //9
+  static const String follower = "follower";
   static const String following = "following";
-  static const String facebook = "Facebook";
-  static const String sendMassage = "Send message";
 
-  static const String passwordWrong = "Password wrong !";
+  static const String facebook = "facebook";
+  static const String sendMassage = "sendMassage";
+
+  static const String passwordWrong = "passwordWrong";
+  static const String youFollowHim = "youFollowHim";
+
 
   static const String allowRecordingFromSettings =
-      'Please allow recording from settings.';
+      'allowRecordingFromSettings';
 
-  static const String noPosts = "There's no posts yet!";
-  static const String tryAddPost = "Try add one or make some friends";
+  static const String noPosts = "noPosts";
+  static const String tryAddPost = "tryAddPost";
 
-  static const String noAccount = "Don't have an account?";
-  static const String haveAccount = "Already have an account? ";
-  static const String tagPeople = "Tag People";
-  static const String addLocation = "Add location";
-  static const String confirmPassword = "Confirm the password";
-  static const String alsoPostTo = "Also post to";
-  static const String addComment = "Add a comment...";
-  static const String noImageSelected = "No image selected.";
-  static const String writeACaption = "Write a caption...";
+  static const String noAccount = "noAccount";
+  static const String haveAccount = "haveAccount";
+  static const String tagPeople = "tagPeople";
+  static const String addLocation = "addLocation";
+  static const String confirmPassword = "confirmPassword";
+  static const String alsoPostTo = "alsoPostTo";
+  static const String addComment = "addComment";
+  static const String noImageSelected = "noImageSelected";
+  static const String writeACaption = "writeACaption";
 
-  static const String noMoreData = "no more data";
-  static const String clickRetry = "failed,click retry";
-  static const String underWork = "It's under work !";
+  static const String noMoreData = "noMoreData";
+  static const String clickRetry = "clickRetry";
+  static const String underWork = "underWork";
   static const String phoneOrEmailOrUserName =
-      "Phone number, email or username";
-  static const String loginWithFacebook = "Login with Facebook";
-  static const String comments = "Comments";
-  static const String somethingWrong = "Something Wrong";
-  static const String noComments = "There is no comments!";
-  static const String replyingTo = "Replying to";
-  static const String aboutThisAccount = "About this account";
-  static const String hideYourStory = "Hide your story";
-  static const String copyProfileURL = "Copy profile URL";
-  static const String shareThisProfile = "Share this profile";
-  static const String editProfile = "Edit profile";
-  static const String changeProfilePhoto = "Change profile photo";
+      "phoneOrEmailOrUserName";
+  static const String loginWithFacebook = "loginWithFacebook";
+  static const String comments = "comments";
+  static const String comment = "comment";
+
+  static const String somethingWrong = "somethingWrong";
+  static const String noComments = "noComments";
+  static const String replyingTo = "replyingTo";
+  static const String aboutThisAccount = "aboutThisAccount";
+  static const String hideYourStory = "hideYourStory";
+  static const String copyProfileURL = "copyProfileURL";
+  static const String shareThisProfile = "shareThisProfile";
+  static const String editProfile = "editProfile";
+  static const String changeProfilePhoto = "changeProfilePhoto";
 }
