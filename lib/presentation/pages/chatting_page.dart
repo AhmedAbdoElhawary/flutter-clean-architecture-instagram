@@ -85,7 +85,7 @@ class _ChattingPageState extends State<ChattingPage> {
               globalMassagesInfo.add(newMassageInfo!);
             }
             return Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsetsDirectional.all(10.0),
               child: Column(
                 children: [
                   Expanded(
@@ -156,7 +156,7 @@ class _ChattingPageState extends State<ChattingPage> {
           Align(
               alignment: AlignmentDirectional.center,
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                padding: const EdgeInsetsDirectional.only(bottom: 15,top: 15),
                 child: Text(
                   theDate,
                   style: const TextStyle(color: ColorManager.black54),
@@ -182,7 +182,7 @@ class _ChattingPageState extends State<ChattingPage> {
             Visibility(
                 visible: massageInfo.massageUid.isEmpty,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 5.0),
+                  padding: const EdgeInsetsDirectional.only(start: 5.0),
                   child: SvgPicture.asset(
                     "assets/icons/paper_plane_right.svg",
                     height: 15,
@@ -216,8 +216,8 @@ class _ChattingPageState extends State<ChattingPage> {
             )),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         padding: imageUrl.isEmpty
-            ? const EdgeInsets.symmetric(vertical: 8, horizontal: 10)
-            : const EdgeInsets.all(0),
+            ? const EdgeInsetsDirectional.only(start: 10,end: 10,bottom: 8,top: 8)
+            : const EdgeInsetsDirectional.all(0),
         child: massage.isNotEmpty
             ? Text(
                 massage,
@@ -264,7 +264,7 @@ class _ChattingPageState extends State<ChattingPage> {
         clipBehavior: Clip.antiAliasWithSaveLayer,
         height: 50,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsetsDirectional.only(start: 10,end: 10),
           child: Builder(builder: (context) {
             MassageCubit massageCubit = MassageCubit.get(context);
             return rowOfTextField(massageCubit);
@@ -280,7 +280,7 @@ class _ChattingPageState extends State<ChattingPage> {
         color: ColorManager.lowOpacityGrey,
         child: Padding(
           padding:
-          const EdgeInsets.symmetric(horizontal: 80.0),
+          const EdgeInsetsDirectional.only(start: 80,end: 80),
           child: Row(
               mainAxisAlignment:
               MainAxisAlignment.spaceBetween,

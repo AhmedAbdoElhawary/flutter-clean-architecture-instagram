@@ -79,10 +79,7 @@ class StoryItem {
             bottom: Radius.circular(roundedBottom ? 8 : 0),
           ),
         ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24,
-          vertical: 16,
-        ),
+        padding: const EdgeInsetsDirectional.only(start: 24,end: 24,top: 16,bottom: 16),
         child: Center(
           child: Text(
             title,
@@ -132,13 +129,10 @@ class StoryItem {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   width: double.infinity,
-                  margin: const EdgeInsets.only(
+                  margin: const EdgeInsetsDirectional.only(
                     bottom: 24,
                   ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 8,
-                  ),
+                  padding: const EdgeInsetsDirectional.only(start: 24,end: 24,bottom: 8,top: 8),
                   color: caption != null ? Colors.black54 : Colors.transparent,
                   child: caption != null
                       ? Text(
@@ -191,8 +185,8 @@ class StoryItem {
                   requestHeaders: requestHeaders,
                 ),
                 Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                  margin: const EdgeInsetsDirectional.only(bottom: 16),
+                  padding: const EdgeInsetsDirectional.only(start: 24,end: 24,top: 8,bottom: 8),
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: SizedBox(
@@ -243,8 +237,8 @@ class StoryItem {
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     width: double.infinity,
-                    margin: const EdgeInsets.only(bottom: 24),
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                    margin: const EdgeInsetsDirectional.only(bottom: 24),
+                    padding: const EdgeInsetsDirectional.only(start: 24,end: 24,bottom: 8,top: 8),
                     color:
                     caption != null ? Colors.black54 : Colors.transparent,
                     child: caption != null
@@ -294,13 +288,10 @@ class StoryItem {
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     width: double.infinity,
-                    margin: const EdgeInsets.only(
-                      bottom: 24,
+                    margin: const EdgeInsetsDirectional.only(
+                      bottom: 24
                     ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 8,
-                    ),
+                    padding: const EdgeInsetsDirectional.only(start: 24,end: 24,bottom: 8,top: 8),
                     color:
                     caption != null ? Colors.black54 : Colors.transparent,
                     child: caption != null
@@ -349,13 +340,10 @@ class StoryItem {
               fit: BoxFit.cover,
             )),
         child: Container(
-          margin: const EdgeInsets.only(
-            bottom: 16,
+          margin: const EdgeInsetsDirectional.only(
+            bottom: 16
           ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 8,
-          ),
+          padding: const EdgeInsetsDirectional.only(start: 24,end: 24,bottom: 8,top: 8),
           child: Align(
             alignment: Alignment.bottomLeft,
             child: SizedBox(
@@ -630,10 +618,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                 bottom: widget.inline ? false : true,
                 // we use SafeArea here for notched and bezeles phones
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
+                  padding: const EdgeInsetsDirectional.only(start: 16,end: 16,bottom: 8,top: 8),
                   child: PageBar(
                     widget.storyItems
                         .map((it) => PageData(it!.duration, it.shown))
@@ -785,8 +770,8 @@ class PageBarState extends State<PageBar> {
       children: widget.pages.map((it) {
         return Expanded(
           child: Container(
-            padding: EdgeInsets.only(
-                right: widget.pages.last == it ? 0 : spacing),
+            padding: EdgeInsetsDirectional.only(
+                end: widget.pages.last == it ? 0 : spacing),
             child: StoryProgressIndicator(
               isPlaying(it) ? widget.animation!.value : (it.shown ? 1 : 0),
               indicatorHeight:

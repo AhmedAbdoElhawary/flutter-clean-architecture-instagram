@@ -40,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _textController = TextEditingController();
   Post? selectedPostInfo;
   // final FocusNode focusNode=FocusNode();
+  bool isItMoved = false;
   final ValueNotifier<FocusNode> _showCommentBox = ValueNotifier(FocusNode());
 
   Future<void> getData() async {
@@ -120,10 +121,11 @@ class _HomeScreenState extends State<HomeScreen> {
         : null;
   }
 
-  Widget posts(Post postInfo, int index) {
+  Widget posts(Post postInfo,double bodyHeight) {
     return ImageList(
       postInfo: postInfo,
       selectedPostInfo: selectPost,
+      bodyHeight: bodyHeight,
       textController: _textController,
       // isVideoInView: isVideoInView,
     );
@@ -195,14 +197,16 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (BuildContext context, int index) {
           return Container(
             width: double.infinity,
-            margin: const EdgeInsets.symmetric(vertical: 0.5),
+            margin: const EdgeInsetsDirectional.only(bottom: .5, top: .5),
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 return InViewNotifierWidget(
                   id: '$index',
                   builder: (_, bool isInView, __) {
                     if (isInView) {}
-                    return columnOfWidgets(bodyHeight, state.postsInfo, index);
+                    Post postInfo = state.postsInfo[index];
+                    return columnOfWidgets(
+                            bodyHeight, postInfo, index);
                   },
                 );
               },
@@ -213,7 +217,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget columnOfWidgets(double bodyHeight, List<Post> postsInfo, int index) {
+
+  Widget columnOfWidgets(
+      double bodyHeight, Post postInfo, int index) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -223,13 +229,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ] else ...[
           const Divider(),
         ],
-        posts(postsInfo[index], index),
+        posts(postInfo, bodyHeight),
       ],
     );
   }
 
   Container customDivider() => Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsetsDirectional.only(bottom: 8),
       color: Colors.grey,
       width: double.infinity,
       height: 0.3);
@@ -273,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if (state is CubitStoriesInfoLoaded) {
           List<UserPersonalInfo> storiesOwnersInfo = state.storiesOwnersInfo;
           return Padding(
-            padding: const EdgeInsets.only(left: 10),
+            padding: const EdgeInsetsDirectional.only(start: 10),
             child: SizedBox(
               width: double.infinity,
               height: bodyHeight * 0.155,
@@ -311,7 +317,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               userInfo: publisherInfo,
                               bodyHeight: bodyHeight * 1.1,
                               thisForStoriesLine: true,
-                              nameOfCircle: index == 0 ? "Your story" : "",
+                              nameOfCircle: index == 0
+                                  ? StringsManager.yourStory.tr()
+                                  : "",
                             ),
                           ),
                         );
@@ -352,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
             userInfo: personalInfo!,
             bodyHeight: bodyHeight,
             thisForStoriesLine: true,
-            nameOfCircle: "Your story",
+            nameOfCircle: StringsManager.yourStory.tr(),
           ),
         ),
         const Positioned(
