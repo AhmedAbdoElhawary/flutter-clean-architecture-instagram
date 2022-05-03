@@ -109,7 +109,7 @@ class VideosPageState extends State<VideosPage> {
   Padding verticalWidgets(Post postInfo) {
     UserPersonalInfo? personalInfo = postInfo.publisherInfo;
     return Padding(
-      padding: const EdgeInsets.only(right: 25.0, bottom: 25, left: 15),
+      padding: const EdgeInsetsDirectional.only(end: 25.0, bottom: 25, start: 15),
       child: Align(
           alignment: AlignmentDirectional.bottomStart,
           child: Row(
@@ -174,7 +174,7 @@ class VideosPageState extends State<VideosPage> {
 
   Container followText(UserPersonalInfo personalInfo) {
     return Container(
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+        padding: const EdgeInsetsDirectional.only(start: 5,end:5,bottom: 2,top: 2),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             border: Border.all(color: Colors.white, width: 1)),
@@ -188,7 +188,7 @@ class VideosPageState extends State<VideosPage> {
 
   Padding horizontalWidgets(Post postInfo) {
     return Padding(
-      padding: const EdgeInsets.only(right: 15.0, bottom: 8),
+      padding: const EdgeInsetsDirectional.only(end: 15.0, bottom: 8),
       child: Align(
           alignment: AlignmentDirectional.bottomEnd,
           child: Column(

@@ -65,7 +65,7 @@ class _NewStoryPageState extends State<NewStoryPage> {
               style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
           const Divider(),
           Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+            padding: const EdgeInsetsDirectional.only(bottom: 8.0),
             child: Builder(builder: (builderContext) {
               FirestoreUserInfoCubit userCubit =
                   BlocProvider.of<FirestoreUserInfoCubit>(builderContext,
@@ -73,11 +73,11 @@ class _NewStoryPageState extends State<NewStoryPage> {
               UserPersonalInfo? personalInfo = userCubit.myPersonalInfo;
 
               return Container(
-                margin: const EdgeInsets.all(3.0),
+                margin: const EdgeInsetsDirectional.all(3.0),
                 child: ElevatedButton(
                     style: ButtonStyle(
                         padding: MaterialStateProperty.all(
-                            const EdgeInsets.symmetric(horizontal: 140.0)),
+                            const EdgeInsetsDirectional.only(start: 140,end: 140)),
                         backgroundColor: MaterialStateProperty.all<Color>(
                             isItDone
                                 ? Colors.blue
@@ -86,14 +86,14 @@ class _NewStoryPageState extends State<NewStoryPage> {
                         createPost(personalInfo!, userCubit, builderContext),
                     child: isItDone
                         ? Padding(
-                            padding: EdgeInsets.all(3.0),
+                            padding: const EdgeInsetsDirectional.all(3.0),
                             child: Text(
                               StringsManager.share.tr(),
-                              style: TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white),
                             ),
                           )
                         : const Padding(
-                            padding: EdgeInsets.all(3.0),
+                            padding: EdgeInsetsDirectional.all(3.0),
                             child: ClipOval(
                               child: CircularProgressIndicator(
                                 color: Colors.white,

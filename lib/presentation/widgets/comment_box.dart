@@ -49,7 +49,7 @@ class _CommentBoxState extends State<CommentBox> {
         ),
         const Divider(),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsetsDirectional.only(start: 8,end: 8),
           child: Row(
             crossAxisAlignment: widget.textController.text.length < 70
                 ? CrossAxisAlignment.center
@@ -139,7 +139,7 @@ class _CommentBoxState extends State<CommentBox> {
   }
 
   Container customDivider() => Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsetsDirectional.only(bottom: 8),
       color: Colors.grey,
       width: double.infinity,
       height: 0.2);

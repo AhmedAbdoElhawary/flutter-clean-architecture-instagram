@@ -16,9 +16,11 @@ class CreatePostPage extends StatefulWidget {
   final File selectedFile;
   final bool isThatImage;
   final bool isThatStory;
+  final double aspectRatio;
   const CreatePostPage(
       {Key? key,
       required this.selectedFile,
+      required this.aspectRatio,
       this.isThatImage = true,
       this.isThatStory = false})
       : super(key: key);
@@ -44,7 +46,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 10.0, right: 10, top: 10),
+              padding: const EdgeInsetsDirectional.only(
+                  start: 10.0, end: 10, top: 10),
               child: Row(
                 children: [
                   SizedBox(
@@ -61,10 +64,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       controller: captionController,
                       cursorColor: ColorManager.teal,
                       style: const TextStyle(fontSize: 15),
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: StringsManager.writeACaption.tr(),
-                        hintStyle:const TextStyle(color: ColorManager.black26),
+                        hintStyle: const TextStyle(color: ColorManager.black26),
                       ),
                     ),
                   ),
@@ -100,7 +103,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   Padding buildText(String text) {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 7),
+        padding: const EdgeInsetsDirectional.only(
+            start: 7, end: 7, bottom: 10, top: 10),
         child: Text(text, style: const TextStyle(fontSize: 16.5)));
   }
 
@@ -168,6 +172,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   Post addPostInfo(UserPersonalInfo personalInfo) {
     return Post(
+      aspectRatio: widget.aspectRatio,
       publisherId: personalInfo.userId,
       datePublished: DateOfNow.dateOfNow(),
       caption: captionController.text,

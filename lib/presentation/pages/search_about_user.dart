@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
@@ -43,8 +45,9 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
           child: TextFormField(
             controller: _textController,
             onChanged: (_) => setState(() {}),
-            decoration: const InputDecoration(
-                hintText: 'Search', border: InputBorder.none),
+            decoration:  InputDecoration(
+              contentPadding:const EdgeInsetsDirectional.all(7.0) ,
+                hintText: StringsManager.search.tr(), border: InputBorder.none),
           ),
         ),
       ),
@@ -77,13 +80,13 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
                         if (stateUsersInfo[index]
                             .followerPeople
                             .contains(myPersonalId)) ...[
-                          Text("You follow him",
+                          Text(StringsManager.youFollowHim.tr(),
                               style: getNormalStyle(
                                   fontSize: 10, color: ColorManager.grey)),
                         ] else if (stateUsersInfo[index]
                             .followedPeople
                             .contains(myPersonalId)) ...[
-                          Text("Follower",
+                          Text(StringsManager.followers.tr(),
                               style: getNormalStyle(
                                   fontSize: 10, color: ColorManager.grey)),
                         ],

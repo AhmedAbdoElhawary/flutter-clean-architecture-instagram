@@ -2,11 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instegram/core/app_prefs.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/domain/entities/unregistered_user.dart';
+import 'package:instegram/injector.dart';
 import 'package:instegram/presentation/screens/main_screen.dart';
 import 'package:instegram/presentation/widgets/custom_elevated_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,7 +31,13 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController passwordController = TextEditingController(text: "");
   TextEditingController confirmPasswordController =
       TextEditingController(text: "");
+  final AppPreferences _appPreferences = injector<AppPreferences>();
 
+  @override
+  void didChangeDependencies() {
+    _appPreferences.getLocal().then((local) => {context.setLocale(local)});
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
