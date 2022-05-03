@@ -15,7 +15,7 @@ class CustomElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(3.0),
+      margin: const EdgeInsetsDirectional.all(3.0),
       child: ElevatedButton(
           style: buttonStyle(),
           onPressed: () async => onPressed(),
@@ -25,7 +25,7 @@ class CustomElevatedButton extends StatelessWidget {
 
   Padding textOfButton() {
     return Padding(
-      padding: const EdgeInsets.all(3.0),
+      padding: const EdgeInsetsDirectional.all(3.0),
       child: Text(
         nameOfButton,
         style: const TextStyle(color: Colors.white),
@@ -35,7 +35,7 @@ class CustomElevatedButton extends StatelessWidget {
 
   Padding circularProgress() {
     return const Padding(
-      padding: EdgeInsets.all(3.0),
+      padding: EdgeInsetsDirectional.all(3.0),
       child: ClipOval(
         child: CircularProgressIndicator(
           color: Colors.white,
@@ -48,7 +48,7 @@ class CustomElevatedButton extends StatelessWidget {
   ButtonStyle buttonStyle() {
     return ButtonStyle(
         padding: MaterialStateProperty.all(
-            const EdgeInsets.symmetric(horizontal: 140.0)),
+            const EdgeInsetsDirectional.only(start: 140,end: 140)),
         backgroundColor: MaterialStateProperty.all<Color>(
             isItDone ? Colors.blue : const Color.fromARGB(255, 127, 193, 255)));
   }

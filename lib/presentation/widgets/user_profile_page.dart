@@ -121,7 +121,7 @@ class _ProfilePageState extends State<UserProfilePage> {
         ),
         const Divider(),
         Padding(
-          padding: const EdgeInsets.only(left: 15.0),
+          padding: const EdgeInsetsDirectional.only(start: 15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,

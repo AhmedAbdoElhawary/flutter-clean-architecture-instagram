@@ -25,12 +25,15 @@ class ImageList extends StatefulWidget {
   // final ValueGetter<bool> isVideoInView;
   final TextEditingController textController;
   final ValueChanged<Post> selectedPostInfo;
+  final double bodyHeight;
 
   const ImageList({
     Key? key,
     required this.postInfo,
     required this.selectedPostInfo,
     required this.textController,
+    required this.bodyHeight,
+
     // required this.isVideoInView,
   }) : super(key: key);
 
@@ -40,6 +43,7 @@ class ImageList extends StatefulWidget {
 
 class _ImageListState extends State<ImageList> {
   bool isSaved = false;
+  late Size imageSize = const Size(0.0, 0.0);
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +80,7 @@ class _ImageListState extends State<ImageList> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
+                  padding: const EdgeInsetsDirectional.only(start: 10.0),
                   child: CircleAvatarOfProfileImage(
                     bodyHeight: bodyHeight * .5,
                     userInfo: postInfo.publisherInfo!,
@@ -94,14 +98,15 @@ class _ImageListState extends State<ImageList> {
             imageOfPost(postInfo // isVideoInView
                 ),
             Padding(
-              padding: const EdgeInsets.only(left: 12.0, top: 10, bottom: 8),
+              padding: const EdgeInsetsDirectional.only(
+                  start: 12.0, top: 10, bottom: 8),
               child: Row(children: [
                 Expanded(
                     child: Row(
                   children: [
                     loveButton(postInfo),
                     Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
+                      padding: const EdgeInsetsDirectional.only(start: 15.0),
                       child: GestureDetector(
                         child: iconsOfImagePost(IconsAssets.commentIcon),
                         onTap: () {
@@ -115,7 +120,7 @@ class _ImageListState extends State<ImageList> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
+                      padding: const EdgeInsetsDirectional.only(start: 15.0),
                       child: GestureDetector(
                         child: iconsOfImagePost(IconsAssets.send1Icon,
                             lowHeight: true),
@@ -124,7 +129,7 @@ class _ImageListState extends State<ImageList> {
                   ],
                 )),
                 Padding(
-                  padding: const EdgeInsets.only(right: 12.0),
+                  padding: const EdgeInsetsDirectional.only(end: 12.0),
                   child: GestureDetector(
                     child: isSaved
                         ? const Icon(
@@ -143,7 +148,7 @@ class _ImageListState extends State<ImageList> {
               ]),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 11.5),
+              padding: const EdgeInsetsDirectional.only(start: 11.5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,10 +158,10 @@ class _ImageListState extends State<ImageList> {
                   ReadMore(
                       "${postInfo.publisherInfo!.name} ${postInfo.caption}", 2),
                   const SizedBox(height: 8),
-                  numberOfComment(postInfo),
+                  if (postInfo.comments.isNotEmpty) numberOfComment(postInfo),
                   buildCommentBox(bodyHeight),
                   Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
+                    padding: const EdgeInsetsDirectional.only(top: 5.0),
                     child: Text(
                       DateOfNow.chattingDateOfNow(
                           postInfo.datePublished, postInfo.datePublished),
@@ -255,6 +260,7 @@ class _ImageListState extends State<ImageList> {
   }
 
   Widget numberOfComment(Post postInfo) {
+    int commentsLength = postInfo.comments.length;
     return GestureDetector(
       onTap: () {
         Navigator.of(
@@ -264,13 +270,14 @@ class _ImageListState extends State<ImageList> {
         ));
       },
       child: Text(
-        "View all ${postInfo.comments.length} comments",
+        "${StringsManager.viewAll.tr()} $commentsLength ${commentsLength > 1 ? StringsManager.comments.tr() : StringsManager.comment.tr()}",
         style: const TextStyle(color: Colors.grey),
       ),
     );
   }
 
   Widget numberOfLikes(Post postInfo) {
+    int likes = postInfo.likes.length;
     return InkWell(
       onTap: () {
         Navigator.of(context).push(CupertinoPageRoute(
@@ -279,7 +286,8 @@ class _ImageListState extends State<ImageList> {
                   usersIds: postInfo.likes,
                 )));
       },
-      child: Text('${postInfo.likes.length} Likes',
+      child: Text(
+          '$likes ${likes > 1 ? StringsManager.likes.tr() : StringsManager.like.tr()}',
           textAlign: TextAlign.left,
           style: const TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold)),
@@ -308,7 +316,12 @@ class _ImageListState extends State<ImageList> {
       child: postInfo.isThatImage
           ? Hero(
               tag: postInfo.postUrl,
-              child: CustomFadeInImage(imageUrl: postInfo.postUrl))
+              child: CustomFadeInImage(
+                aspectRatio: postInfo.aspectRatio,
+                bodyHeight: widget.bodyHeight,
+                imageUrl: postInfo.postUrl,
+              ),
+            )
           : PlayThisVideo(
               videoUrl: postInfo.postUrl,
               // isVideoInView: isVideoInView,

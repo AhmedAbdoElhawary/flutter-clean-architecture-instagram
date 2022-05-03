@@ -220,7 +220,7 @@ class _StoryWidgetState extends State<StoryWidget> {
                     child: Align(
                       alignment: Alignment.bottomRight,
                       child: Padding(
-                        padding: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsetsDirectional.all(15.0),
                         child: widget.user.userId == myPersonalId
                             ? const Icon(
                                 Icons.delete_rounded,
@@ -241,8 +241,8 @@ class _StoryWidgetState extends State<StoryWidget> {
                                     clipBehavior: Clip.antiAliasWithSaveLayer,
                                     height: 40,
                                     child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 20),
+                                      padding: const EdgeInsetsDirectional.only(
+                                          start: 8.0, end: 20),
                                       child: Center(
                                         child: TextFormField(
                                           keyboardType: TextInputType.multiline,
@@ -318,7 +318,7 @@ class ProfileWidget extends StatelessWidget {
   Widget build(BuildContext context) => Material(
         type: MaterialType.transparency,
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          margin: const EdgeInsetsDirectional.only(start: 16,end: 16,top: 20,bottom: 20),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

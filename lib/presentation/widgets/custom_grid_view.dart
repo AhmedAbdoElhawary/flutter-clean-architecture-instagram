@@ -32,7 +32,7 @@ class _CustomGridViewState extends State<CustomGridView> {
   Widget build(BuildContext context) {
     return widget.postsInfo.isNotEmpty
         ? StaggeredGridView.countBuilder(
-            padding: const EdgeInsets.symmetric(vertical: 1.5),
+            padding: const EdgeInsetsDirectional.only(bottom: 1.5,top: 1.5),
             crossAxisSpacing: 1.5,
             mainAxisSpacing: 1.5,
             crossAxisCount: 3,
@@ -95,7 +95,7 @@ class _CustomGridViewState extends State<CustomGridView> {
     double bodyHeight = MediaQuery.of(context).size.height;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsetsDirectional.only(start: 10,end: 10),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16.0),
         child: Column(
@@ -124,7 +124,7 @@ class _CustomGridViewState extends State<CustomGridView> {
   }
 
   Widget _createPhotoTitle(Post postInfo) => Container(
-        padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+        padding: const EdgeInsetsDirectional.only(bottom: 5,top: 5,end: 10,start: 10),
         height: 55,
         width: double.infinity,
         color: ColorManager.white,
@@ -142,7 +142,7 @@ class _CustomGridViewState extends State<CustomGridView> {
 
   Widget _createActionBar() => Container(
         height: 50,
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        padding: const EdgeInsetsDirectional.only(bottom: 5,top: 5),
         color: ColorManager.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
