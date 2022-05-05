@@ -48,9 +48,6 @@ class _ProfilePageState extends State<ProfilePage> {
     return DefaultTabController(
       length: 3,
       child:
-          //  SmarterRefresh(
-          //   onRefreshData: getData,
-          //   smartRefresherChild:
           NestedScrollView(
         headerSliverBuilder: (_, __) {
           return [
@@ -93,12 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
         } else if (state is CubitPostsInfoLoaded &&
             !widget.isThatMyPersonalId) {
           return columnOfWidgets(state.postsInfo);
-        }
-        //else if (state is CubitPostFailed) {
-        //   // ToastShow.toastStateError(state);
-        //   // return const Center(child: Text("there is no posts..."));
-        // }
-        else {
+        } else {
           return Transform.scale(
               scale: 0.1,
               child: const CircularProgressIndicator(
@@ -123,8 +115,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
     List<Post> imagesPostsInfo =
         postsInfo.where((element) => element.isThatImage == true).toList();
-    // List<Post> storiesInfo =
-    // postsInfo.where((element) => element.isThatStory == true).toList();
     return Expanded(
       child: TabBarView(
         children: [
@@ -186,14 +176,14 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Row personalPhotoAndNumberInfo(UserPersonalInfo userInfo, double bodyHeight) {
-    String hash="${userInfo.userId.hashCode}personal";
+    String hash = "${userInfo.userId.hashCode}personal";
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Hero(
-        tag:hash ,
+        tag: hash,
         child: Padding(
           padding: const EdgeInsetsDirectional.only(start: 15.0),
-          child:
-              CircleAvatarOfProfileImage(bodyHeight: bodyHeight*1.45, userInfo: userInfo,hashTag:hash ),
+          child: CircleAvatarOfProfileImage(
+              bodyHeight: bodyHeight * 1.45, userInfo: userInfo, hashTag: hash),
         ),
       ),
       personalNumbersInfo(userInfo.posts, StringsManager.posts.tr(), userInfo),
