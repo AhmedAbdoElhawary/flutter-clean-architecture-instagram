@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:instegram/core/resources/langauge_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 const String prefsKeyLang = "PREFS_KEY_LANG";
 
 class AppPreferences {

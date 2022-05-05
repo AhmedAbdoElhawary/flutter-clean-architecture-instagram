@@ -5,7 +5,7 @@ import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/injector.dart';
+import 'package:instegram/core/utility/injector.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
@@ -52,7 +52,7 @@ Future<void>loadData()async{
             Expanded(
               child: SmarterRefresh(
                 onRefreshData: loadData,
-                smartRefresherChild: BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
+                child: BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
                     bloc: BlocProvider.of<CommentsInfoCubit>(context)
                       ..getSpecificComments(postId: widget.postId),
                     buildWhen: (previous, current) {

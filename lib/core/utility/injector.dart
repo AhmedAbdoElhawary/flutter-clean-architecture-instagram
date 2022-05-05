@@ -54,18 +54,18 @@ import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'domain/repositories/auth_repository.dart';
-import 'domain/repositories/post/post_repository.dart';
-import 'domain/repositories/user_repository.dart';
-import 'domain/usecases/authUsecase/sign_out_auth_usecase.dart';
-import 'domain/usecases/authusecase/log_in_auth_usecase.dart';
-import 'domain/usecases/authusecase/sign_up_auth_usecase.dart';
-import 'domain/usecases/firestoreUserUseCase/getUserInfo/get_user_info_usecase.dart';
-import 'domain/usecases/firestoreUserUseCase/upload_profile_image_usecase.dart';
-import 'domain/usecases/firestoreUserUsecase/add_new_user_usecase.dart';
+import '../../domain/repositories/auth_repository.dart';
+import '../../domain/repositories/post/post_repository.dart';
+import '../../domain/repositories/user_repository.dart';
+import '../../domain/usecases/authUsecase/sign_out_auth_usecase.dart';
+import '../../domain/usecases/authusecase/log_in_auth_usecase.dart';
+import '../../domain/usecases/authusecase/sign_up_auth_usecase.dart';
+import '../../domain/usecases/firestoreUserUseCase/getUserInfo/get_user_info_usecase.dart';
+import '../../domain/usecases/firestoreUserUseCase/upload_profile_image_usecase.dart';
+import '../../domain/usecases/firestoreUserUsecase/add_new_user_usecase.dart';
 import 'package:instegram/domain/usecases/authusecase/sign_up_auth_usecase.dart';
 import 'package:instegram/domain/usecases/authusecase/log_in_auth_usecase.dart';
-import 'domain/usecases/postUseCase/create_post.dart';
+import '../../domain/usecases/postUseCase/create_post.dart';
 
 final injector = GetIt.I;
 
@@ -73,11 +73,10 @@ Future<void> initializeDependencies() async {
   // shared prefs instance
   final sharedPrefs = await SharedPreferences.getInstance();
 
-  injector.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
+  injector.registerSingleton<SharedPreferences>(sharedPrefs);
 
   // app prefs instance
-  injector
-      .registerLazySingleton<AppPreferences>(() => AppPreferences(injector()));
+  injector.registerSingleton<AppPreferences>(AppPreferences(injector()));
 
   // Repository
 

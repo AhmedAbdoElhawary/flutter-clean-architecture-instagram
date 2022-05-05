@@ -36,11 +36,11 @@ class _HomeScreenState extends State<HomeScreen> {
   bool loadingPosts = true;
   bool reLoadData = false;
   UserPersonalInfo? personalInfo;
-  // final ValueNotifier<bool> _showCommentBox = ValueNotifier(false);
   final TextEditingController _textController = TextEditingController();
   Post? selectedPostInfo;
-  // final FocusNode focusNode=FocusNode();
   bool isItMoved = false;
+  ScrollController scrollController = ScrollController();
+  int? centerItemIndex;
   final ValueNotifier<FocusNode> _showCommentBox = ValueNotifier(FocusNode());
 
   Future<void> getData() async {
@@ -74,7 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // focusNode.requestFocus();
     super.initState();
   }
 
@@ -90,6 +89,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final bodyHeight = mediaQuery.size.height -
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
+    if (centerItemIndex == null) {
+      centerItemIndex =
+          ((bodyHeight / 2) / bodyHeight).floor();
+      print('center item = $centerItemIndex');
+    }
     if (rebuild) {
       getData();
       rebuild = false;
@@ -98,17 +102,10 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: customAppBar(),
       body: SmarterRefresh(
         onRefreshData: getData,
-        smartRefresherChild: blocBuilder(bodyHeight),
+        child: blocBuilder(bodyHeight),
       ),
       bottomSheet: addComment(),
     );
-  }
-
-  selectPost(Post selectedPost) {
-    setState(() {
-      _showCommentBox.value.requestFocus();
-      selectedPostInfo = selectedPost;
-    });
   }
 
   Widget? addComment() {
@@ -119,16 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
             textController: _textController,
           )
         : null;
-  }
-
-  Widget posts(Post postInfo,double bodyHeight) {
-    return ImageList(
-      postInfo: postInfo,
-      selectedPostInfo: selectPost,
-      bodyHeight: bodyHeight,
-      textController: _textController,
-      // isVideoInView: isVideoInView,
-    );
   }
 
   BlocBuilder<PostCubit, PostState> blocBuilder(double bodyHeight) {
@@ -150,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (BuildContext context, PostState state) {
         if (state is CubitMyPersonalPostsLoaded) {
           return state.postsInfo.isNotEmpty
-              ? inViewNotifier(state, bodyHeight)
+              ? inView(state, bodyHeight)
               : emptyMassage();
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
@@ -159,6 +146,73 @@ class _HomeScreenState extends State<HomeScreen> {
           return circularProgress();
         }
       },
+    );
+  }
+
+  Widget inView(CubitMyPersonalPostsLoaded state, double bodyHeight) {
+    return SingleChildScrollView(
+      child: NotificationListener(
+        child: ListView.builder(
+          shrinkWrap: true,
+          // physics: const NeverScrollableScrollPhysics(),
+          controller: scrollController,
+          itemCount: state.postsInfo.length,
+          itemBuilder: (ctx, index) {
+            return columnOfWidgets(bodyHeight, state.postsInfo[index], index,
+                index == centerItemIndex);
+          },
+        ),
+        onNotification: (_) {
+          int calculatedIndex =
+              ((scrollController.position.pixels + bodyHeight / 2) / bodyHeight)
+                  .floor();
+          if (calculatedIndex != centerItemIndex) {
+            setState(() {
+              centerItemIndex = calculatedIndex;
+            });
+          }
+          return true;
+        },
+      ),
+    );
+  }
+
+  Widget columnOfWidgets(
+      double bodyHeight, Post postInfo, int index, bool playTheVideo) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (index == 0) ...[
+          storiesLines(bodyHeight),
+          customDivider(),
+        ] else ...[
+          const Divider(),
+        ],
+        posts(postInfo, bodyHeight, playTheVideo),
+      ],
+    );
+  }
+
+  Container customDivider() => Container(
+      margin: const EdgeInsetsDirectional.only(bottom: 8),
+      color: Colors.grey,
+      width: double.infinity,
+      height: 0.3);
+
+  selectPost(Post selectedPost) {
+    setState(() {
+      _showCommentBox.value.requestFocus();
+      selectedPostInfo = selectedPost;
+    });
+  }
+
+  Widget posts(Post postInfo, double bodyHeight, bool playTheVideo) {
+    return ImageList(
+      postInfo: postInfo,
+      selectedPostInfo: selectPost,
+      bodyHeight: bodyHeight,
+      textController: _textController,
+      playTheVideo: playTheVideo,
     );
   }
 
@@ -179,66 +233,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     ));
   }
-
-  Widget inViewNotifier(CubitMyPersonalPostsLoaded state, double bodyHeight) {
-    return SingleChildScrollView(
-      child: InViewNotifierList(
-        primary: false,
-        scrollDirection: Axis.vertical,
-        initialInViewIds: const ['0'],
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        isInViewPortCondition:
-            (double deltaTop, double deltaBottom, double viewPortDimension) {
-          return deltaTop < (0.5 * viewPortDimension) &&
-              deltaBottom > (0.5 * viewPortDimension);
-        },
-        itemCount: state.postsInfo.length,
-        builder: (BuildContext context, int index) {
-          return Container(
-            width: double.infinity,
-            margin: const EdgeInsetsDirectional.only(bottom: .5, top: .5),
-            child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                return InViewNotifierWidget(
-                  id: '$index',
-                  builder: (_, bool isInView, __) {
-                    if (isInView) {}
-                    Post postInfo = state.postsInfo[index];
-                    return columnOfWidgets(
-                            bodyHeight, postInfo, index);
-                  },
-                );
-              },
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-
-  Widget columnOfWidgets(
-      double bodyHeight, Post postInfo, int index) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (index == 0) ...[
-          storiesLines(bodyHeight),
-          customDivider(),
-        ] else ...[
-          const Divider(),
-        ],
-        posts(postInfo, bodyHeight),
-      ],
-    );
-  }
-
-  Container customDivider() => Container(
-      margin: const EdgeInsetsDirectional.only(bottom: 8),
-      color: Colors.grey,
-      width: double.infinity,
-      height: 0.3);
 
   createNewStory() async {
     final ImagePicker _picker = ImagePicker();
@@ -355,6 +349,10 @@ class _HomeScreenState extends State<HomeScreen> {
         GestureDetector(
           onTap: () async {
             await createNewStory();
+            await getData();
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              setState(() {});
+            });
           },
           child: CircleAvatarOfProfileImage(
             userInfo: personalInfo!,
@@ -364,14 +362,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const Positioned(
-            top: 49,
-            left: 50,
-            right: 0,
+            top: 40,
+            left: 40,
+            right: 5,
             child: CircleAvatar(
                 radius: 9.5,
                 backgroundColor: ColorManager.white,
                 child: CircleAvatar(
-                    radius: 8,
+                    radius: 10,
                     backgroundColor: ColorManager.blue,
                     child: Icon(
                       Icons.add,
