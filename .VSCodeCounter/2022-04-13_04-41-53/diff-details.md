@@ -25,7 +25,7 @@ Total : 24 files,  503 codes, -308 comments, 82 blanks, all 277 lines
 | [lib/domain/usecases/postUseCase/comments/replies/likes/put_like_on_this_reply.dart](/lib/domain/usecases/postUseCase/comments/replies/likes/put_like_on_this_reply.dart) | Dart | 13 | -22 | 3 | -6 |
 | [lib/domain/usecases/postUseCase/comments/replies/likes/remove_like_on_this_reply.dart](/lib/domain/usecases/postUseCase/comments/replies/likes/remove_like_on_this_reply.dart) | Dart | 13 | -22 | 3 | -6 |
 | [lib/domain/usecases/postUseCase/comments/replies/reply_on_this_comment.dart](/lib/domain/usecases/postUseCase/comments/replies/reply_on_this_comment.dart) | Dart | 12 | -20 | 3 | -5 |
-| [lib/injector.dart](/lib/injector.dart) | Dart | 14 | -15 | 4 | 3 |
+| [lib/injector.dart](/lib/core/utility/injector.dart) | Dart | 14 | -15 | 4 | 3 |
 | [lib/main.dart](/lib/main.dart) | Dart | 0 | -10 | 0 | -10 |
 | [lib/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/replyLikes/reply_likes_cubit.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/replyLikes/reply_likes_cubit.dart) | Dart | 36 | -56 | 7 | -13 |
 | [lib/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/replyLikes/reply_likes_state.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/replyLikes/reply_likes_state.dart) | Dart | 13 | -19 | 6 | 0 |

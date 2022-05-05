@@ -10,11 +10,13 @@ import 'package:instegram/core/app_prefs.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/injector.dart';
+import 'package:instegram/core/utility/injector.dart';
 import 'package:instegram/presentation/pages/new_post_page.dart';
 import 'package:instegram/presentation/pages/story_config.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
 import 'package:instegram/presentation/widgets/recommendation_people.dart';
+import 'package:instegram/presentation/widgets/smart_refresher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -39,6 +41,7 @@ class PersonalProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<PersonalProfilePage> {
   bool rebuildUserInfo = false;
   Size imageSize = const Size(0.00, 0.00);
+  final SharedPreferences sharePrefs = injector<SharedPreferences>();
 
   @override
   Widget build(BuildContext context) {
@@ -67,13 +70,20 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       },
       builder: (context, state) {
         if (state is CubitMyPersonalInfoLoaded) {
-          return Scaffold(
-            appBar: appBar(state.userPersonalInfo.userName),
-            body: ProfilePage(
-              isThatMyPersonalId: true,
-              userId: state.userPersonalInfo.userId,
-              userInfo: state.userPersonalInfo,
-              widgetsAboveTapBars: widgetsAboveTapBars(state.userPersonalInfo),
+          return SmarterRefresh(
+              onRefreshData: () async {
+                return setState(() {});
+              },
+
+            child: Scaffold(
+              appBar: appBar(state.userPersonalInfo.userName),
+              body: ProfilePage(
+                isThatMyPersonalId: true,
+                userId: state.userPersonalInfo.userId,
+                userInfo: state.userPersonalInfo,
+                widgetsAboveTapBars:
+                    widgetsAboveTapBars(state.userPersonalInfo),
+              ),
             ),
           );
         } else if (state is CubitGetUserInfoFailed) {
@@ -116,7 +126,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         WidgetsBinding.instance!.addPostFrameCallback((_) async {
           Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
             CupertinoPageRoute(
-                builder: (_) => const LoginPage(), maintainState: false),
+                builder: (_) => LoginPage(sharePrefs: sharePrefs),
+                maintainState: false),
             (route) => false,
           );
         });
@@ -308,8 +319,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           setState(() {
             imageSize =
                 Size(myImage.width.toDouble(), myImage.height.toDouble());
-            print("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC ${imageSize.aspectRatio}");
-
+            print(
+                "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC ${imageSize.aspectRatio}");
           });
         },
       ),
@@ -325,12 +336,14 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           if (image != null) {
             File photo = File(image.path);
             _getImageDimension(photo);
-            await Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(
+            await Navigator.of(context, rootNavigator: true)
+                .push(CupertinoPageRoute(
                     builder: (context) {
-                      print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ${imageSize.height}");
+                      print(
+                          "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ${imageSize.height}");
                       return CreatePostPage(
-                        selectedFile: photo, aspectRatio: imageSize.aspectRatio);
+                          selectedFile: photo,
+                          aspectRatio: imageSize.aspectRatio);
                     },
                     maintainState: false));
             setState(() {

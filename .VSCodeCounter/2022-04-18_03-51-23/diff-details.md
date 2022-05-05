@@ -34,7 +34,7 @@ Total : 56 files,  1364 codes, -558 comments, 138 blanks, all 944 lines
 | [lib/domain/usecases/firestoreUserUseCase/massage/add_massage.dart](/lib/domain/usecases/firestoreUserUseCase/massage/add_massage.dart) | Dart | 11 | 0 | 4 | 15 |
 | [lib/domain/usecases/firestoreUserUseCase/massage/get_massages.dart](/lib/domain/usecases/firestoreUserUseCase/massage/get_massages.dart) | Dart | 11 | 0 | 4 | 15 |
 | [lib/domain/usecases/firestoreUserUseCase/upload_profile_image_usecase.dart](/lib/domain/usecases/firestoreUserUseCase/upload_profile_image_usecase.dart) | Dart | 5 | -1 | 0 | 4 |
-| [lib/injector.dart](/lib/injector.dart) | Dart | 12 | 4 | -1 | 15 |
+| [lib/injector.dart](/lib/core/utility/injector.dart) | Dart | 12 | 4 | -1 | 15 |
 | [lib/main.dart](/lib/main.dart) | Dart | 0 | 12 | -1 | 11 |
 | [lib/presentation/cubit/blocObserver/bloc_observer.dart](/lib/presentation/cubit/blocObserver/bloc_observer.dart) | Dart | -30 | 30 | 0 | 0 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart) | Dart | 28 | 10 | 7 | 45 |

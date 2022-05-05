@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/utility/constant.dart';
 
 class CustomFadeInImage extends StatelessWidget {
   final String imageUrl;
@@ -21,7 +18,7 @@ class CustomFadeInImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return aspectRatio == 0
+    return aspectRatio <= 0.2
         ? buildImage()
         : AspectRatio(
             aspectRatio: aspectRatio < .5
@@ -31,7 +28,7 @@ class CustomFadeInImage extends StatelessWidget {
           );
   }
 
-  Image buildImage() {
+  Widget buildImage() {
     return Image.network(
       imageUrl,
       fit: boxFit,
@@ -39,7 +36,6 @@ class CustomFadeInImage extends StatelessWidget {
       loadingBuilder: (BuildContext context, Widget child,
           ImageChunkEvent? loadingProgress) {
         if (loadingProgress == null) {
-          timelinesImages[imageUrl] = true;
           return child;
         }
         return Center(
@@ -54,7 +50,7 @@ class CustomFadeInImage extends StatelessWidget {
         return SizedBox(
           width: double.infinity,
           height: aspectRatio,
-          child: SvgPicture.asset(IconsAssets.warningIcon, height: 25),
+          child:const Icon(Icons.warning_amber_rounded,size: 50),
         );
       },
     );

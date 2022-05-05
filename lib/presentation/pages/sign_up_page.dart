@@ -1,22 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:instegram/core/app_prefs.dart';
-import 'package:instegram/core/resources/assets_manager.dart';
-import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/domain/entities/unregistered_user.dart';
-import 'package:instegram/injector.dart';
+import 'package:instegram/core/utility/injector.dart';
 import 'package:instegram/presentation/screens/main_screen.dart';
 import 'package:instegram/presentation/widgets/custom_elevated_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:instegram/presentation/widgets/register_widgets.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/or_text.dart';
 import '../widgets/toast_show.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -40,68 +34,11 @@ class _SignUpPageState extends State<SignUpPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorManager.white,
-      body: SafeArea(
-        child: Center(
-            child: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                IconsAssets.instagramLogo,
-                color: ColorManager.black,
-                height: 50,
-              ),
-              const SizedBox(height: 30),
-              CustomTextField(
-                  hint: StringsManager.phoneOrEmailOrUserName.tr(),
-                  controller: emailController),
-              const SizedBox(height: 15),
-              CustomTextField(
-                  hint: StringsManager.password.tr(),
-                  controller: passwordController),
-              const SizedBox(height: 15),
-              CustomTextField(
-                  hint: StringsManager.confirmPassword.tr(),
-                  controller: confirmPasswordController),
-              const SizedBox(height: 15),
-              customTextButton(),
-              const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                   Text(
-                    StringsManager.haveAccount.tr(),
-                    style:const TextStyle(fontSize: 13, color: ColorManager.grey),
-                  ),
-                  InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child:  Text(
-                        StringsManager.logIn.tr(),
-                        style:const TextStyle(
-                            fontSize: 13,
-                            color: ColorManager.black,
-                            fontWeight: FontWeight.bold),
-                      )),
-                ],
-              ),
-              const SizedBox(height: 8),
-              const OrText(),
-              TextButton(
-                  onPressed: () {},
-                  child:  Text(
-                    StringsManager.loginWithFacebook.tr(),
-                    style:const TextStyle(color: ColorManager.blue),
-                  ))
-            ],
-          ),
-        )),
-      ),
+    return RegisterWidgets(
+      confirmPasswordController: confirmPasswordController,
+      customTextButton: customTextButton(),
+      emailController: emailController,
+      passwordController: passwordController,
     );
   }
 
@@ -142,8 +79,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   moveToMain(CubitAuthConfirmed authState) {
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      sharePrefs=await SharedPreferences.getInstance();
-
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => MainScreen(authState.user.uid)),
@@ -166,16 +101,16 @@ class _SignUpPageState extends State<SignUpPage> {
     // TODO ----> we need to get more details from user in the first to change this view
 
     String name = authState.user.email!.split('@')[0];
-    List<dynamic> charactersOfName=[];
-    String nameOfLower=name.toLowerCase();
+    List<dynamic> charactersOfName = [];
+    String nameOfLower = name.toLowerCase();
 
-    for(int i=0;i<nameOfLower.length;i++){
-      charactersOfName=charactersOfName+[nameOfLower.substring(0,i+1)];
+    for (int i = 0; i < nameOfLower.length; i++) {
+      charactersOfName = charactersOfName + [nameOfLower.substring(0, i + 1)];
     }
     String userName = "${name}4263";
     UserPersonalInfo newUserInfo = UserPersonalInfo(
       name: name,
-      charactersOfName:charactersOfName,
+      charactersOfName: charactersOfName,
       email: authState.user.email!,
       userName: userName,
       bio: "",

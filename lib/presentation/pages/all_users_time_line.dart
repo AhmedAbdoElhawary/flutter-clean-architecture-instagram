@@ -88,7 +88,7 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
         if (state is CubitAllPostsLoaded) {
           return SmarterRefresh(
             onRefreshData: getData,
-            smartRefresherChild: SingleChildScrollView(
+            child: SingleChildScrollView(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               child: CustomGridView(
                   postsInfo: state.allPostInfo, userId: widget.userId),

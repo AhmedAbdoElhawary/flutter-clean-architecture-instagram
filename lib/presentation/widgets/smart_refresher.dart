@@ -6,11 +6,11 @@ import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SmarterRefresh extends StatefulWidget {
-  final Widget smartRefresherChild;
+  final Widget child;
   final AsyncValueGetter<void> onRefreshData;
   const SmarterRefresh(
       {required this.onRefreshData,
-      required this.smartRefresherChild,
+      required this.child,
       Key? key})
       : super(key: key);
 
@@ -72,7 +72,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
           setState(() {});
           _refreshController.loadComplete();
         },
-        child: widget.smartRefresherChild,
+        child: widget.child,
         footer: CustomFooter(
           onModeChange: (mode) {
             if (mode == LoadStatus.loading) {

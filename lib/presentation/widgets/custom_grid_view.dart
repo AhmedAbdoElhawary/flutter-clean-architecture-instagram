@@ -74,8 +74,8 @@ class _CustomGridViewState extends State<CustomGridView> {
           child: postClickedInfo.isThatImage
               ? CustomFadeInImage(
                   imageUrl: postClickedInfo.postUrl, boxFit: BoxFit.cover)
-              : PlayThisVideo(videoUrl: postClickedInfo.postUrl
-                  // ,isVideoInView: (){return false;}
+              : PlayThisVideo(videoUrl: postClickedInfo.postUrl,
+              play: false
                   ),
         ),
       );
@@ -114,7 +114,7 @@ class _CustomGridViewState extends State<CustomGridView> {
                     height: bodyHeight - 200,
                     child: PlayThisVideo(
                       videoUrl: postInfo.postUrl,
-                      // isVideoInView: (){return true;},
+                        play: true
                     )),
             _createActionBar(),
           ],

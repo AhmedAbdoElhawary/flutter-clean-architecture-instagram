@@ -128,7 +128,7 @@ Total : 194 files,  6240 codes, 1378 comments, 938 blanks, all 8556 lines
 | [lib/domain/usecases/postUseCase/getPostInfo/get_specific_users_posts.dart](/lib/domain/usecases/postUseCase/getPostInfo/get_specific_users_posts.dart) | Dart | 10 | 0 | 4 | 14 |
 | [lib/domain/usecases/postUseCase/likes/put_like_on_this_post.dart](/lib/domain/usecases/postUseCase/likes/put_like_on_this_post.dart) | Dart | 12 | 0 | 4 | 16 |
 | [lib/domain/usecases/postUseCase/likes/remove_the_like_on_this_post.dart](/lib/domain/usecases/postUseCase/likes/remove_the_like_on_this_post.dart) | Dart | 12 | 0 | 4 | 16 |
-| [lib/injector.dart](/lib/injector.dart) | Dart | 137 | 48 | 25 | 210 |
+| [lib/injector.dart](/lib/core/utility/injector.dart) | Dart | 137 | 48 | 25 | 210 |
 | [lib/main.dart](/lib/main.dart) | Dart | 66 | 10 | 6 | 82 |
 | [lib/presentation/cubit/blocObserver/bloc_observer.dart](/lib/presentation/cubit/blocObserver/bloc_observer.dart) | Dart | 33 | 0 | 6 | 39 |
 | [lib/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart](/lib/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart) | Dart | 48 | 0 | 7 | 55 |
@@ -188,7 +188,7 @@ Total : 194 files,  6240 codes, 1378 comments, 938 blanks, all 8556 lines
 | [lib/presentation/widgets/smart_refresher.dart](/lib/presentation/widgets/smart_refresher.dart) | Dart | 127 | 0 | 6 | 133 |
 | [lib/presentation/widgets/toast_show.dart](/lib/presentation/widgets/toast_show.dart) | Dart | 22 | 0 | 1 | 23 |
 | [lib/presentation/widgets/user_profile_page.dart](/lib/presentation/widgets/user_profile_page.dart) | Dart | 228 | 1 | 16 | 245 |
-| [lib/responsive_layout.dart](/lib/responsive_layout.dart) | Dart | 17 | 0 | 4 | 21 |
+| [lib/responsive_layout.dart](/lib/presentation/widgets/responsive_layout.dart) | Dart | 17 | 0 | 4 | 21 |
 | [lib/try.dart](/lib/try.dart) | Dart | 0 | 289 | 1 | 290 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 54 | 56 | 22 | 132 |
 | [test/widget_test.dart](/test/widget_test.dart) | Dart | 14 | 10 | 7 | 31 |

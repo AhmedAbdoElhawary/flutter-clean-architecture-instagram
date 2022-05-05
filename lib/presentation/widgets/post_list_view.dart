@@ -16,13 +16,14 @@ import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_name.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
+import 'package:instegram/presentation/widgets/fade_animation.dart';
 import 'package:instegram/presentation/widgets/fade_in_image.dart';
 import 'package:instegram/presentation/widgets/picture_viewer.dart';
 import 'package:instegram/presentation/widgets/read_more_text.dart';
 
 class ImageList extends StatefulWidget {
   final Post postInfo;
-  // final ValueGetter<bool> isVideoInView;
+  final bool playTheVideo;
   final TextEditingController textController;
   final ValueChanged<Post> selectedPostInfo;
   final double bodyHeight;
@@ -32,9 +33,8 @@ class ImageList extends StatefulWidget {
     required this.postInfo,
     required this.selectedPostInfo,
     required this.textController,
+    required this.playTheVideo,
     required this.bodyHeight,
-
-    // required this.isVideoInView,
   }) : super(key: key);
 
   @override
@@ -44,6 +44,13 @@ class ImageList extends StatefulWidget {
 class _ImageListState extends State<ImageList> {
   bool isSaved = false;
   late Size imageSize = const Size(0.0, 0.0);
+  late Widget videoStatusAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    videoStatusAnimation = Container();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +61,6 @@ class _ImageListState extends State<ImageList> {
     return thePostsOfHomePage(
       postInfo: widget.postInfo,
       bodyHeight: bodyHeight,
-      // isVideoInView: widget.isVideoInView,
     );
   }
 
@@ -66,11 +72,9 @@ class _ImageListState extends State<ImageList> {
   Widget thePostsOfHomePage({
     required Post postInfo,
     required double bodyHeight,
-    // required ValueGetter<bool> isVideoInView,
   }) {
     return SizedBox(
       width: double.infinity,
-      // height: 200,
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -95,8 +99,7 @@ class _ImageListState extends State<ImageList> {
                 menuButton()
               ],
             ),
-            imageOfPost(postInfo // isVideoInView
-                ),
+            imageOfPost(postInfo),
             Padding(
               padding: const EdgeInsetsDirectional.only(
                   start: 12.0, top: 10, bottom: 8),
@@ -302,33 +305,57 @@ class _ImageListState extends State<ImageList> {
     );
   }
 
-  Widget imageOfPost(Post postInfo) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
-          CupertinoPageRoute(
-            builder: (context) {
-              return PictureViewer(imageUrl: postInfo.postUrl);
-            },
-          ),
-        );
-      },
-      child: postInfo.isThatImage
-          ? Hero(
-              tag: postInfo.postUrl,
-              child: CustomFadeInImage(
-                aspectRatio: postInfo.aspectRatio,
-                bodyHeight: widget.bodyHeight,
-                imageUrl: postInfo.postUrl,
-              ),
-            )
-          : PlayThisVideo(
-              videoUrl: postInfo.postUrl,
-              // isVideoInView: isVideoInView,
-            ),
+  Icon lovePopAnimation() {
+    return  const Icon(
+      Icons.favorite,
+      size: 100,
+      color: ColorManager.white,
     );
   }
 
+  Widget imageOfPost(Post postInfo) {
+    bool isLiked = postInfo.likes.contains(myPersonalId);
+
+    return Stack(
+      children: [
+        GestureDetector(
+          onDoubleTap: () {
+            videoStatusAnimation = FadeAnimation(child: lovePopAnimation());
+
+            setState(() {
+              if (!isLiked) {
+                BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
+                    postId: postInfo.postUid, userId: myPersonalId);
+                postInfo.likes.add(myPersonalId);
+              }
+            });
+          },
+          onTap: () async {
+            Navigator.of(context).push(
+              CupertinoPageRoute(
+                builder: (context) {
+                  return PictureViewer(
+                      postInfo: postInfo, imageUrl: postInfo.postUrl);
+                },
+              ),
+            );
+          },
+          child: postInfo.isThatImage
+              ? Hero(
+                  tag: postInfo.postUrl,
+                  child: CustomFadeInImage(
+                    aspectRatio: postInfo.aspectRatio,
+                    bodyHeight: widget.bodyHeight,
+                    imageUrl: postInfo.postUrl,
+                  ),
+                )
+              : PlayThisVideo(
+                  videoUrl: postInfo.postUrl, play: widget.playTheVideo),
+        ),
+        Center(child: videoStatusAnimation),
+      ],
+    );
+  }
   IconButton menuButton() {
     return IconButton(
       icon: SvgPicture.asset(

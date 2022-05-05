@@ -15,7 +15,7 @@ import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/re
 import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
-import '../../injector.dart';
+import '../../core/utility/injector.dart';
 import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../cubit/postInfoCubit/post_cubit.dart';
 

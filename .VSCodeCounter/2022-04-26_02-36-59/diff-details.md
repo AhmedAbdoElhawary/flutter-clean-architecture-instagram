@@ -21,7 +21,7 @@ Total : 73 files,  4428 codes, -267 comments, 600 blanks, all 4761 lines
 | [lib/domain/usecases/postUseCase/comments/getComment/get_all_comment.dart](/lib/domain/usecases/postUseCase/comments/getComment/get_all_comment.dart) | Dart | 13 | 0 | 4 | 17 |
 | [lib/domain/usecases/postUseCase/comments/getComment/get_comment.dart](/lib/domain/usecases/postUseCase/comments/getComment/get_comment.dart) | Dart | 11 | 0 | 4 | 15 |
 | [lib/domain/usecases/postUseCase/comments/get_all_comment.dart](/lib/domain/usecases/postUseCase/comments/get_all_comment.dart) | Dart | -11 | 0 | -4 | -15 |
-| [lib/injector.dart](/lib/injector.dart) | Dart | 7 | 0 | 1 | 8 |
+| [lib/injector.dart](/lib/core/utility/injector.dart) | Dart | 7 | 0 | 1 | 8 |
 | [lib/presentation/cubit/StoryCubit/story_cubit.dart](/lib/presentation/cubit/StoryCubit/story_cubit.dart) | Dart | 4 | 0 | 0 | 4 |
 | [lib/presentation/cubit/bloc/get_comments_bloc.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/bloc/get_comments_bloc.dart) | Dart | 38 | -30 | 4 | 12 |
 | [lib/presentation/cubit/bloc/get_comments_event.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/bloc/get_comments_event.dart) | Dart | 18 | -23 | 5 | 0 |

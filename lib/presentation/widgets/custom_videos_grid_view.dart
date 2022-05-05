@@ -54,7 +54,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
           onLongPressEnd: (details) => _popupDialog?.remove(),
           child: PlayThisVideo(
             videoUrl: postInfo.postUrl,
-            // isVideoInView: (){return false;}
+              play: false
           ),
         ),
       );
@@ -87,7 +87,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
               height: bodyHeight - 200,
               child: PlayThisVideo(
                 videoUrl: postInfo.postUrl,
-                // isVideoInView: (){return true;}
+                  play: true
               ),
             ),
             _createActionBar(),

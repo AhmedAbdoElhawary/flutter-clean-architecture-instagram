@@ -158,7 +158,7 @@ Total : 289 files,  14210 codes, 750 comments, 1934 blanks, all 16894 lines
 | [lib/domain/usecases/postUseCase/likes/remove_the_like_on_this_post.dart](/lib/domain/usecases/postUseCase/likes/remove_the_like_on_this_post.dart) | Dart | 12 | 0 | 4 | 16 |
 | [lib/domain/usecases/storyUseCase/create_story.dart](/lib/domain/usecases/storyUseCase/create_story.dart) | Dart | 13 | 0 | 4 | 17 |
 | [lib/domain/usecases/storyUseCase/get_stories_info.dart](/lib/domain/usecases/storyUseCase/get_stories_info.dart) | Dart | 16 | 0 | 4 | 20 |
-| [lib/injector.dart](/lib/injector.dart) | Dart | 192 | 44 | 31 | 267 |
+| [lib/injector.dart](/lib/core/utility/injector.dart) | Dart | 192 | 44 | 31 | 267 |
 | [lib/main.dart](/lib/main.dart) | Dart | 59 | 0 | 5 | 64 |
 | [lib/presentation/cubit/StoryCubit/story_cubit.dart](/lib/presentation/cubit/StoryCubit/story_cubit.dart) | Dart | 41 | 0 | 7 | 48 |
 | [lib/presentation/cubit/StoryCubit/story_state.dart](/lib/presentation/cubit/StoryCubit/story_state.dart) | Dart | 26 | 0 | 9 | 35 |
@@ -284,7 +284,7 @@ Total : 289 files,  14210 codes, 750 comments, 1934 blanks, all 16894 lines
 | [lib/presentation/widgets/story_page.dart](/lib/presentation/widgets/story_page.dart) | Dart | 296 | 9 | 28 | 333 |
 | [lib/presentation/widgets/toast_show.dart](/lib/presentation/widgets/toast_show.dart) | Dart | 22 | 0 | 1 | 23 |
 | [lib/presentation/widgets/user_profile_page.dart](/lib/presentation/widgets/user_profile_page.dart) | Dart | 241 | 1 | 16 | 258 |
-| [lib/responsive_layout.dart](/lib/responsive_layout.dart) | Dart | 17 | 0 | 4 | 21 |
+| [lib/responsive_layout.dart](/lib/presentation/widgets/responsive_layout.dart) | Dart | 17 | 0 | 4 | 21 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 79 | 57 | 22 | 158 |
 | [test/widget_test.dart](/test/widget_test.dart) | Dart | 14 | 10 | 7 | 31 |
 | [web/index.html](/web/index.html) | HTML | 80 | 18 | 7 | 105 |
