@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/injector.dart';
+import 'package:instegram/core/utility/injector.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/pages/all_users_time_line.dart';
@@ -21,6 +21,15 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  ValueNotifier<bool> stopVideo = ValueNotifier(false);
+  CupertinoTabController controller=CupertinoTabController();
+  @override
+  void initState() {
+    controller.addListener(() {
+      stopVideo.value = controller.index == 2 ? true : false;
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
@@ -50,7 +59,9 @@ class _MainScreenState extends State<MainScreen> {
                 }),
               ),
             ]),
+        controller:controller,
         tabBuilder: (context, index) {
+          stopVideo.value = controller.index == 2 ? true : false;
           switch (index) {
             case 0:
               return CupertinoTabView(
@@ -70,7 +81,7 @@ class _MainScreenState extends State<MainScreen> {
                 builder: (context) => CupertinoPageScaffold(
                   child: BlocProvider<PostCubit>(
                       create: (context) => injector<PostCubit>(),
-                      child: const VideosPage()),
+                      child:  VideosPage(stopVideo: stopVideo,)),
                 ),
               );
             case 3:
