@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
@@ -23,7 +24,9 @@ import 'package:instegram/presentation/widgets/toast_show.dart';
 import '../../core/utility/constant.dart';
 
 class VideosPage extends StatefulWidget {
-  const VideosPage({Key? key}) : super(key: key);
+  final ValueNotifier<bool> stopVideo;
+
+  const VideosPage({Key? key, required this.stopVideo}) : super(key: key);
 
   @override
   VideosPageState createState() => VideosPageState();
@@ -55,9 +58,9 @@ class VideosPageState extends State<VideosPage> {
           );
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
-          return  Center(
+          return Center(
               child: Text(
-                StringsManager.noPosts.tr(),
+            StringsManager.noPosts.tr(),
             style: const TextStyle(color: ColorManager.black, fontSize: 20),
           ));
         } else {
@@ -77,12 +80,16 @@ class VideosPageState extends State<VideosPage> {
       scrollDirection: Axis.vertical,
       itemCount: videosPostsInfo.length,
       itemBuilder: (context, index) {
+        ValueNotifier<Post> videoInfo=ValueNotifier(videosPostsInfo[index]);
         return Stack(children: [
           SizedBox(
               height: double.infinity,
-              child: ReelVideoPlay(videoUrl: videosPostsInfo[index].postUrl)),
-          horizontalWidgets(videosPostsInfo[index]),
-          verticalWidgets(videosPostsInfo[index]),
+              child: ReelVideoPlay(
+                videoInfo: videoInfo,
+                stopVideo: widget.stopVideo,
+              )),
+          horizontalWidgets(videoInfo),
+          verticalWidgets(videoInfo.value),
         ]);
       },
     );
@@ -106,48 +113,62 @@ class VideosPageState extends State<VideosPage> {
         )
       ]);
 
-  Padding verticalWidgets(Post postInfo) {
+  Widget verticalWidgets(Post postInfo) {
     UserPersonalInfo? personalInfo = postInfo.publisherInfo;
     return Padding(
-      padding: const EdgeInsetsDirectional.only(end: 25.0, bottom: 25, start: 15),
-      child: Align(
-          alignment: AlignmentDirectional.bottomStart,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap: ()=>goToUserProfile(personalInfo!),
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundColor: Colors.white,
-                  child: ClipOval(
-                      child:CustomFadeInImage(imageUrl:personalInfo!.profileImageUrl)),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              GestureDetector(
-                  onTap:  ()=>goToUserProfile(personalInfo),
-                  child: Text(
-                    personalInfo.name,
-                    style: const TextStyle(color: Colors.white),
-                  )),
-              const SizedBox(
-                width: 10,
-              ),
-              followButton(personalInfo),
-            ],
-          )),
+      padding:
+          const EdgeInsetsDirectional.only(end: 25.0, bottom: 20, start: 15),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Align(
+              alignment: AlignmentDirectional.bottomStart,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () => goToUserProfile(personalInfo!),
+                    child: CircleAvatar(
+                      radius: 18,
+                      backgroundColor: Colors.white,
+                      child: ClipOval(
+                          child: CustomFadeInImage(
+                              imageUrl: personalInfo!.profileImageUrl)),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                      onTap: () => goToUserProfile(personalInfo),
+                      child: Text(
+                        personalInfo.name,
+                        style: const TextStyle(color: Colors.white),
+                      )),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  if (postInfo.publisherId != myPersonalId)
+                    followButton(personalInfo),
+                ],
+              )),
+          const SizedBox(height: 10),
+          Text(postInfo.caption,
+              style: getNormalStyle(
+                color: ColorManager.white,
+              )),
+        ],
+      ),
     );
   }
-  goToUserProfile(UserPersonalInfo personalInfo )=>Navigator.of(
-    context,
-  ).push(CupertinoPageRoute(
-    builder: (context) => WhichProfilePage(
-        userId: personalInfo.userId,
-        userName: personalInfo.userName),
-  ));
+
+  goToUserProfile(UserPersonalInfo personalInfo) => Navigator.of(
+        context,
+      ).push(CupertinoPageRoute(
+        builder: (context) => WhichProfilePage(
+            userId: personalInfo.userId, userName: personalInfo.userName),
+      ));
 
   GestureDetector followButton(UserPersonalInfo personalInfo) {
     return GestureDetector(
@@ -174,7 +195,8 @@ class VideosPageState extends State<VideosPage> {
 
   Container followText(UserPersonalInfo personalInfo) {
     return Container(
-        padding: const EdgeInsetsDirectional.only(start: 5,end:5,bottom: 2,top: 2),
+        padding: const EdgeInsetsDirectional.only(
+            start: 5, end: 5, bottom: 2, top: 2),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             border: Border.all(color: Colors.white, width: 1)),
@@ -186,7 +208,7 @@ class VideosPageState extends State<VideosPage> {
         ));
   }
 
-  Padding horizontalWidgets(Post postInfo) {
+  Padding horizontalWidgets(ValueNotifier<Post> postInfo) {
     return Padding(
       padding: const EdgeInsetsDirectional.only(end: 15.0, bottom: 8),
       child: Align(
@@ -198,10 +220,10 @@ class VideosPageState extends State<VideosPage> {
               buildSizedBox(),
               numberOfLikes(postInfo),
               sizedBox(),
-              commentButton(postInfo),
+              commentButton(postInfo.value),
               buildSizedBox(),
               Text(
-                "${postInfo.comments.length}",
+                "${postInfo.value.comments.length}",
                 style: const TextStyle(color: Colors.white),
               ),
               sizedBox(),
@@ -245,48 +267,54 @@ class VideosPageState extends State<VideosPage> {
     );
   }
 
-  Widget numberOfLikes(Post postInfo) {
+  Widget numberOfLikes(ValueNotifier<Post> postInfo) {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(CupertinoPageRoute(
             builder: (context) => UsersWhoLikesOnPostPage(
                   showSearchBar: true,
-                  usersIds: postInfo.likes,
+                  usersIds: postInfo.value.likes,
                 )));
       },
       child: Text(
-        "${postInfo.likes.length}",
+        "${postInfo.value.likes.length}",
         style: const TextStyle(color: Colors.white),
       ),
     );
   }
 
-  Widget loveButton(Post postInfo) {
-    bool isLiked = postInfo.likes.contains(myPersonalId);
-    return GestureDetector(
-      child: !isLiked
-          ? const Icon(
-              Icons.favorite_border,
-              color: Colors.white,
-              size: 32,
-            )
-          : const Icon(
-              Icons.favorite,
-              color: Colors.red,
-            ),
-      onTap: () {
-        setState(() {
-          if (isLiked) {
-            BlocProvider.of<PostLikesCubit>(context).removeTheLikeOnThisPost(
-                postId: postInfo.postUid, userId: myPersonalId);
-            postInfo.likes.remove(myPersonalId);
-          } else {
-            BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
-                postId: postInfo.postUid, userId: myPersonalId);
-            postInfo.likes.add(myPersonalId);
-          }
-        });
-      },
+  Widget loveButton(ValueNotifier<Post> postInfo) {
+    bool isLiked = postInfo.value.likes.contains(myPersonalId);
+    return Builder(
+      builder: (context) {
+        PostLikesCubit likeCubit=BlocProvider.of<PostLikesCubit>(context);
+        return GestureDetector(
+          child: !isLiked
+              ? const Icon(
+                  Icons.favorite_border,
+                  color: Colors.white,
+                  size: 32,
+                )
+              : const Icon(
+                  Icons.favorite,
+                  color: Colors.red,
+                  size: 32,
+                ),
+          onTap: () {
+            setState(() {
+              if (isLiked) {
+                likeCubit.removeTheLikeOnThisPost(
+                    postId: postInfo.value.postUid, userId: myPersonalId);
+                postInfo.value.likes.remove(myPersonalId);
+              } else {
+                likeCubit.putLikeOnThisPost(
+                    postId: postInfo.value.postUid, userId: myPersonalId);
+                postInfo.value.likes.add(myPersonalId);
+              }
+            });
+          },
+        );
+      }
     );
   }
 
