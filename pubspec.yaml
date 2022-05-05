@@ -93,6 +93,9 @@ dependencies:
   easy_localization: ^3.0.0
   flutter_keyboard_visibility: ^5.2.0
   extended_image: ^6.0.3
+  video_compress: ^3.1.0
+  file_selector: ^0.8.4+1
+  video_thumbnail: ^0.5.0
 
 
 
