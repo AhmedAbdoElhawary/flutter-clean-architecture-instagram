@@ -4,12 +4,14 @@ import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/core/utility/constant.dart';
+import 'package:instegram/core/utility/injector.dart';
 import 'package:instegram/data/models/story.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/customPackages/story_view/sory_controller.dart';
 import 'package:instegram/presentation/customPackages/story_view/story_view.dart';
 import 'package:instegram/presentation/customPackages/story_view/utils.dart';
 import 'package:instegram/presentation/widgets/instagram_story_swipe.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StoryPage extends StatefulWidget {
   final UserPersonalInfo user;
@@ -29,6 +31,7 @@ class StoryPage extends StatefulWidget {
 
 class _StoryPageState extends State<StoryPage> {
   late PageController controller;
+
 
   @override
   void initState() {
@@ -84,6 +87,8 @@ class StoryWidget extends StatefulWidget {
 }
 
 class _StoryWidgetState extends State<StoryWidget> {
+  final SharedPreferences _sharePrefs = injector<SharedPreferences>();
+
   bool shownThem = true;
   final storyItems = <StoryItem>[];
   late StoryController controller;
@@ -136,7 +141,7 @@ class _StoryWidgetState extends State<StoryWidget> {
   }
 
   void handleCompleted() async {
-    sharePrefs!.setBool(widget.user.userId, true);
+    _sharePrefs.setBool(widget.user.userId, true);
 
     widget.controller.nextPage(
       duration: const Duration(milliseconds: 300),
@@ -161,14 +166,12 @@ class _StoryWidgetState extends State<StoryWidget> {
             child: GestureDetector(
               onLongPressStart: (e) {
                 setState(() {
-                  // shownThem=false;
                   controller.pause();
                   opacityLevel = 0;
                 });
               },
               onLongPressEnd: (e) {
                 setState(() {
-                  // shownThem=true;
                   opacityLevel = 1;
                   controller.play();
                 });
@@ -195,7 +198,7 @@ class _StoryWidgetState extends State<StoryWidget> {
                         final index = storyItems.indexOf(storyItem);
                         final isLastPage = storyItems.length - 1 == index;
                         if (isLastPage) {
-                          sharePrefs!.setBool(widget.user.userId, true);
+                          _sharePrefs.setBool(widget.user.userId, true);
                         }
                         if (index > 0) {
                           setState(() {
@@ -263,13 +266,8 @@ class _StoryWidgetState extends State<StoryWidget> {
                                                   hintStyle: TextStyle(
                                                       color: Colors.grey)),
                                           autofocus: false,
-                                          // controller: _textController,
                                           cursorWidth: 1.5,
-                                          // onChanged: (e) {
-                                          // setState(() {
-                                          // _textController;
-                                          // });
-                                          // },
+                                         
                                         ),
                                       ),
                                     ),
