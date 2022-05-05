@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class FadeAnimation extends StatefulWidget {
-  FadeAnimation(
-      {required this.child,
-      this.duration = const Duration(milliseconds: 1000)});
+   const FadeAnimation(
+      {Key? key, required this.child,
+      this.duration = const Duration(milliseconds: 1500)}) : super(key: key);
 
   final Widget child;
   final Duration duration;

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/app_prefs.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/utility/constant.dart';
-import 'package:instegram/injector.dart';
+import 'package:instegram/core/utility/injector.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/screens/main_screen.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
