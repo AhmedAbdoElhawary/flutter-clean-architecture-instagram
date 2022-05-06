@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/presentation/customPackages/story_view/sory_controller.dart';
 import 'package:instegram/presentation/customPackages/story_view/utils.dart';
 import 'package:video_player/video_player.dart';
@@ -113,12 +114,12 @@ class StoryVideoState extends State<StoryVideo> {
     }
 
     return widget.videoLoader.state == LoadState.loading
-        ?const Center(
+        ? Center(
       child: SizedBox(
         width: 70,
         height: 70,
         child: CircularProgressIndicator(
-          valueColor:  AlwaysStoppedAnimation<Color>(Colors.white),
+          valueColor:  AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
           strokeWidth: 3,
         ),
       ),
@@ -127,7 +128,7 @@ class StoryVideoState extends State<StoryVideo> {
         child:  Text(
           "Media failed to load.",
           style: TextStyle(
-            color: Colors.white,
+            color: ColorManager.white,
           ),
         ));
   }
@@ -135,7 +136,7 @@ class StoryVideoState extends State<StoryVideo> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black,
+      color: ColorManager.black,
       height: double.infinity,
       width: double.infinity,
       child: getContentView(),

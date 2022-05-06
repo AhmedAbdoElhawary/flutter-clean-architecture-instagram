@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/pages/search_about_user.dart';
 import 'package:instegram/presentation/widgets/custom_grid_view.dart';
@@ -48,7 +49,7 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
             decoration: InputDecoration(
                 contentPadding:const EdgeInsetsDirectional.all(7.0) ,
                 prefixIcon:
-                    const Icon(Icons.search_rounded, color: ColorManager.black),
+                Icon(Icons.search_rounded, color:  Theme.of(context).focusColor),
                 hintText: StringsManager.search.tr(),
                 border: InputBorder.none),
           ),
@@ -60,7 +61,7 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
   OutlineInputBorder outlineInputBorder() {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(5.0),
-      borderSide: const BorderSide(color: Colors.black12, width: 1.0),
+      borderSide: const BorderSide(color: ColorManager.black12, width: 1.0),
     );
   }
 
@@ -99,12 +100,12 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
           return Center(
               child: Text(
             StringsManager.noPosts.tr(),
-            style: const TextStyle(color: Colors.black, fontSize: 20),
+                  style: getNormalStyle(color: Theme.of(context).focusColor,fontSize: 20),
           ));
         } else {
-          return const Center(
+          return Center(
             child: CircularProgressIndicator(
-                strokeWidth: 1.5, color: Colors.black54),
+                strokeWidth: 1.5, color: Theme.of(context).hoverColor),
           );
         }
       },
