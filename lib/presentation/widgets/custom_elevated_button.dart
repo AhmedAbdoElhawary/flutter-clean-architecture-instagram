@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 
-class CustomElevatedButton extends StatelessWidget {
+class CustomElevatedButton extends StatefulWidget {
   final String nameOfButton;
   final bool isItDone;
   final AsyncCallback onPressed;
@@ -13,13 +14,18 @@ class CustomElevatedButton extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<CustomElevatedButton> createState() => _CustomElevatedButtonState();
+}
+
+class _CustomElevatedButtonState extends State<CustomElevatedButton> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsetsDirectional.all(3.0),
       child: ElevatedButton(
           style: buttonStyle(),
-          onPressed: () async => onPressed(),
-          child: isItDone ? textOfButton() : circularProgress()),
+          onPressed: () async => widget.onPressed(),
+          child: widget.isItDone ? textOfButton() : circularProgress()),
     );
   }
 
@@ -27,8 +33,8 @@ class CustomElevatedButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsetsDirectional.all(3.0),
       child: Text(
-        nameOfButton,
-        style: const TextStyle(color: Colors.white),
+        widget.nameOfButton,
+        style:  Theme.of(context).textTheme.bodyText2,
       ),
     );
   }
@@ -38,7 +44,7 @@ class CustomElevatedButton extends StatelessWidget {
       padding: EdgeInsetsDirectional.all(3.0),
       child: ClipOval(
         child: CircularProgressIndicator(
-          color: Colors.white,
+          color: ColorManager.white,
           strokeWidth: 3,
         ),
       ),
@@ -48,8 +54,8 @@ class CustomElevatedButton extends StatelessWidget {
   ButtonStyle buttonStyle() {
     return ButtonStyle(
         padding: MaterialStateProperty.all(
-            const EdgeInsetsDirectional.only(start: 140,end: 140)),
+            const EdgeInsetsDirectional.only(start: 140, end: 140)),
         backgroundColor: MaterialStateProperty.all<Color>(
-            isItDone ? Colors.blue : const Color.fromARGB(255, 127, 193, 255)));
+            widget.isItDone ? ColorManager.blue : ColorManager.lightBlue));
   }
 }

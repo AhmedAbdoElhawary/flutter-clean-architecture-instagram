@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 
-AppBar customAppBar () {
+AppBar customAppBar (BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).primaryColor,
       centerTitle: false,
       title: SvgPicture.asset(
         IconsAssets.instagramLogo,
         height: 32,
+        color: Theme.of(context).focusColor,
       ),
       actions: [
         IconButton(
           icon: SvgPicture.asset(
             IconsAssets.addIcon,
-            color: Colors.black,
+            color: Theme.of(context).focusColor,
             height: 22.5,
           ),
           onPressed: () {},
@@ -22,7 +24,7 @@ AppBar customAppBar () {
         IconButton(
           icon: SvgPicture.asset(
             IconsAssets.heartIcon,
-            color: Colors.black,
+            color:Theme.of(context).focusColor,
             height: 22.5,
           ),
           onPressed: () {},
@@ -30,7 +32,7 @@ AppBar customAppBar () {
         IconButton(
           icon: SvgPicture.asset(
             IconsAssets.send1Icon,
-            color: Colors.black,
+            color:Theme.of(context).focusColor,
             height: 22.5,
           ),
           onPressed: () {},
