@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
@@ -76,12 +77,12 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
             children: [
               Text(
                 userInfo.userName,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style:  Theme.of(context).textTheme.headline2,
               ),
               const SizedBox(height: 5),
               Text(
                 userInfo.name,
-                style: const TextStyle(color: Colors.grey),
+                style: Theme.of(context).textTheme.headline1,
               )
             ],
           ),
@@ -167,22 +168,22 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
     return Container(
       height: 35.0,
       decoration: BoxDecoration(
-        color: isThatFollower ? Colors.white : Colors.blue,
+        color: isThatFollower ?  Theme.of(context).primaryColor : ColorManager.blue,
         border:
-            Border.all(color: Colors.black26, width: isThatFollower ? 1.0 : 0),
+            Border.all(color: Theme.of(context).cardColor, width: isThatFollower ? 1.0 : 0),
         borderRadius: BorderRadius.circular(6.0),
       ),
       child: Center(
         child: isItLoading
             ? CircularProgressIndicator(
-                color: isThatFollower ? Colors.black : Colors.white,
+                color: isThatFollower ? Theme.of(context).focusColor :Theme.of(context).primaryColor,
                 strokeWidth: 1,
               )
             : Text(
                 text,
                 style: TextStyle(
                     fontSize: 17.0,
-                    color: isThatFollower ? Colors.black : Colors.white,
+                    color: isThatFollower ? Theme.of(context).focusColor : ColorManager.white,
                     fontWeight: FontWeight.w500),
               ),
       ),

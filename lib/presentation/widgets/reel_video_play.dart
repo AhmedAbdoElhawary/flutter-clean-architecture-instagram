@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
@@ -75,7 +76,7 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
                   return VideoPlayer(_controller);
                 } else {
                   return const Center(
-                    child: CircularProgressIndicator(color: Colors.white),
+                    child: CircularProgressIndicator(color: ColorManager.white),
                   );
                 }
               },
@@ -125,7 +126,7 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
   Container volumeContainer(IconData icon) {
     return Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(40), color: Colors.black45),
+            borderRadius: BorderRadius.circular(40), color: ColorManager.black45),
         padding: const EdgeInsetsDirectional.all(25),
         child: popIcon(icon));
   }
@@ -134,7 +135,7 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
     return Icon(
       icon,
       size: isThatLoveIcon ? 100 : 23.0,
-      color: Colors.white,
+      color: ColorManager.white,
     );
   }
 }
