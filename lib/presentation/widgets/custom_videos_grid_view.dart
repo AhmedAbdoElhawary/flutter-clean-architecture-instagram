@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/pages/play_this_video.dart';
@@ -39,7 +40,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
             children: widget.postsInfo.map((postInfo) {
               return createGridTileWidget(postInfo);
             }).toList())
-        : Center(child: Text(StringsManager.noPosts.tr()));
+        : Center(child: Text(StringsManager.noPosts.tr(),style:  Theme.of(context).textTheme.bodyText1,));
   }
 
   OverlayEntry? _popupDialog;
@@ -82,7 +83,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
           children: [
             _createPhotoTitle(postInfo),
             Container(
-              color: Colors.white,
+              color: Theme.of(context).primaryColor,
               width: double.infinity,
               height: bodyHeight - 200,
               child: PlayThisVideo(
@@ -102,7 +103,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
             bottom: 5, top: 5, end: 10, start: 10),
         height: 55,
         width: double.infinity,
-        color: Colors.white,
+        color:Theme.of(context).primaryColor,
         child: Row(
           children: [
             CircleAvatarOfProfileImage(
@@ -111,9 +112,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
             ),
             const SizedBox(width: 7),
             Text(postInfo.publisherInfo!.name,
-                style: const TextStyle(
-                  color: Colors.black,
-                )),
+                style:   Theme.of(context).textTheme.bodyText1),
           ],
         ),
       );
@@ -121,29 +120,29 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
   Widget _createActionBar() => Container(
         height: 50,
         padding: const EdgeInsetsDirectional.only(bottom: 5, top: 5),
-        color: Colors.white,
+        color: Theme.of(context).primaryColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             GestureDetector(
               onPanStart: (d) {},
-              child: const Icon(
+              child: Icon(
                 Icons.favorite_border,
-                color: Colors.black,
+                color:Theme.of(context).focusColor,
               ),
             ),
             GestureDetector(
               onVerticalDragStart: (d) {},
-              child: const Icon(
+              child: Icon(
                 Icons.chat_bubble_outline,
-                color: Colors.black,
+                color: Theme.of(context).focusColor,
               ),
             ),
             GestureDetector(
               onTertiaryLongPress: () {},
-              child: const Icon(
+              child: Icon(
                 Icons.send,
-                color: Colors.black,
+                color: Theme.of(context).focusColor,
               ),
             ),
           ],

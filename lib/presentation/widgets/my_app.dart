@@ -1,6 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:instegram/config/themes/app_theme.dart';
 import 'package:instegram/presentation/pages/login_page.dart';
 import 'package:instegram/presentation/widgets/get_my_user_info.dart';
 import 'package:instegram/presentation/widgets/multi_bloc_provider.dart';
@@ -40,15 +41,8 @@ class _MyAppState extends State<MyApp> {
           localizationsDelegates: context.localizationDelegates,
           debugShowCheckedModeBanner: false,
           title: 'instagram',
-          theme: ThemeData(
-            appBarTheme: const AppBarTheme(
-              elevation: 0,
-              color: Colors.white,
-            ),
-            primarySwatch: Colors.grey,
-            scaffoldBackgroundColor: Colors.white,
-            canvasColor: Colors.transparent,
-          ),
+          theme: AppTheme.dark,
+          darkTheme: AppTheme.dark,
           home: AnimatedSplashScreen(
             centered: true,
             splash: Lottie.asset('assets/splash_gif/instagram.json'),

@@ -4,7 +4,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/globall.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
@@ -58,7 +60,7 @@ class _CommentInfoState extends State<CommentInfo> {
                     padding: const EdgeInsetsDirectional.only(start: 50.0),
                     child: Row(
                       children: [
-                        Container(color: Colors.black12, height: 1, width: 40),
+                        Container(color: ColorManager.black12, height: 1, width: 40),
                         const SizedBox(width: 10),
                         Expanded(
                             child: GestureDetector(
@@ -70,8 +72,8 @@ class _CommentInfoState extends State<CommentInfo> {
                                 },
                                 child: Text(
                                     "${StringsManager.view.tr()} ${widget.commentInfo.replies!.length} ${StringsManager.more.tr()} ${widget.commentInfo.replies!.length > 1 ? StringsManager.replies.tr() : StringsManager.reply.tr()}",
-                                    style: const TextStyle(
-                                        color: Colors.black45))))
+                                    style: getNormalStyle(
+                                        color: Theme.of(context).indicatorColor))))
                       ],
                     ),
                   )
@@ -121,20 +123,18 @@ class _CommentInfoState extends State<CommentInfo> {
                         );
                       } else if (state is CubitReplyInfoFailed) {
                         ToastShow.toastStateError(state);
-                        return Text(state.toString());
+                        return Text(state.toString(),style: Theme.of(context).textTheme.bodyText1);
                       } else {
                         return Padding(
                           padding: const EdgeInsetsDirectional.only(start: 50.0),
                           child: Row(
                             children: [
-                              // const Divider(thickness: 30,color: Colors.black,indent: 10,endIndent: 60),
                               Container(
-                                  color: Colors.black12, height: 1, width: 40),
+                                  color: ColorManager.black12, height: 1, width: 40),
                               const SizedBox(width: 10),
                               Expanded(
                                   child: Text(StringsManager.loading.tr(),
-                                      style: const TextStyle(
-                                          color: Colors.black45)))
+                                      style:Theme.of(context).textTheme.headline1))
                             ],
                           ),
                         );
@@ -187,7 +187,7 @@ class _CommentInfoState extends State<CommentInfo> {
                         children: <TextSpan>[
                           TextSpan(
                             text: widget.commentInfo.whoCommentInfo!.userName,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            style: Theme.of(context).textTheme.bodyText1,
                           ),
                           const TextSpan(
                             text: '  ',
@@ -213,7 +213,7 @@ class _CommentInfoState extends State<CommentInfo> {
                                 },
                             ),
                           TextSpan(
-                            style: const TextStyle(color: Colors.black),
+                            style: TextStyle(color:Theme.of(context).focusColor),
                             text:
                                 " ${widget.isThatReply ? hashTageOfUserName.split(" ")[1] : hashTageOfUserName}",
                           )
@@ -227,7 +227,7 @@ class _CommentInfoState extends State<CommentInfo> {
                       Text(
                           DateOfNow.commentsDateOfNow(
                               widget.commentInfo.datePublished),
-                          style: const TextStyle(color: Colors.grey)),
+                          style: Theme.of(context).textTheme.headline1),
                       if (widget.commentInfo.likes.isNotEmpty)
                         Padding(
                           padding: const EdgeInsetsDirectional.only(start: 20.0),
@@ -241,7 +241,7 @@ class _CommentInfoState extends State<CommentInfo> {
                             },
                             child: Text(
                               "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like.tr() : StringsManager.likes.tr()}",
-                              style: const TextStyle(color: Colors.grey),
+                              style:  Theme.of(context).textTheme.headline1,
                             ),
                           ),
                         ),
@@ -267,7 +267,7 @@ class _CommentInfoState extends State<CommentInfo> {
                         },
                         child: Text(
                           StringsManager.reply.tr(),
-                          style: const TextStyle(color: Colors.grey),
+                          style: Theme.of(context).textTheme.headline1,
                         ),
                       ),
                     ],

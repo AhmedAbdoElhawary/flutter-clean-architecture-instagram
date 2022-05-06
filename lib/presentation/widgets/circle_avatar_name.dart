@@ -19,7 +19,7 @@ class NameOfCircleAvatar extends StatelessWidget {
         circleAvatarName,
         maxLines: 1,
         style:
-            isForStoriesLine ? getNormalStyle(fontSize: 12) : getMediumStyle(),
+            isForStoriesLine ? getNormalStyle(fontSize: 12,color: Theme.of(context).focusColor) : getMediumStyle(color: Theme.of(context).focusColor),
         overflow: TextOverflow.ellipsis,
         softWrap: false,
       ),
