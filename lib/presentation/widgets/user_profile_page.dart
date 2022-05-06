@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
 import 'package:instegram/presentation/pages/chatting_page.dart';
+import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
 import 'package:instegram/presentation/widgets/recommendation_people.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
@@ -63,12 +66,9 @@ class _ProfilePageState extends State<UserProfilePage> {
           );
         } else if (state is CubitGetUserInfoFailed) {
           ToastShow.toastStateError(state);
-          return  Text(StringsManager.somethingWrong.tr());
+          return  Text(StringsManager.somethingWrong.tr(),style:  Theme.of(context).textTheme.bodyText1,);
         } else {
-          return const Center(
-            child: CircularProgressIndicator(
-                strokeWidth: 1, color: Colors.black54),
-          );
+          return const ThineCircularProgress();
         }
       },
     );
@@ -77,13 +77,13 @@ class _ProfilePageState extends State<UserProfilePage> {
   AppBar appBar(String userName) {
     return AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
-        title: Text(userName),
+        backgroundColor:  Theme.of(context).primaryColor,
+        title: Text(userName,style:  Theme.of(context).textTheme.bodyText1),
         actions: [
           IconButton(
             icon: SvgPicture.asset(
               IconsAssets.menuHorizontalIcon,
-              color: Colors.black,
+              color:Theme.of(context).focusColor,
               height: 22.5,
             ),
             onPressed: () => bottomSheetOfAdd(),
@@ -99,7 +99,7 @@ class _ProfilePageState extends State<UserProfilePage> {
         return Container(
           width: double.infinity,
           decoration: const BoxDecoration(
-            color: Colors.white,
+            color: ColorManager.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
           ),
           child: listOfAddPost(),
@@ -116,7 +116,7 @@ class _ProfilePageState extends State<UserProfilePage> {
       children: <Widget>[
         SvgPicture.asset(
           IconsAssets.minusIcon,
-          color: Colors.black54,
+          color:Theme.of(context).disabledColor,
           height: 40,
         ),
         const Divider(),
@@ -148,7 +148,7 @@ class _ProfilePageState extends State<UserProfilePage> {
   }
 
   Text textOfBottomSheet(String text) {
-    return Text(text, style: const TextStyle(fontSize: 15));
+    return Text(text, style:getNormalStyle(fontSize: 15,color:  Theme.of(context).focusColor));
   }
 
   List<Widget> widgetsAboveTapBars(
@@ -236,22 +236,22 @@ class _ProfilePageState extends State<UserProfilePage> {
     return Container(
       height: 35.0,
       decoration: BoxDecoration(
-        color: isThatFollower ? Colors.white : Colors.blue,
+        color: isThatFollower ?  Theme.of(context).primaryColor : ColorManager.blue,
         border:
-            Border.all(color: Colors.black26, width: isThatFollower ? 1.0 : 0),
+            Border.all(color: ColorManager.black26, width: isThatFollower ? 1.0 : 0),
         borderRadius: BorderRadius.circular(6.0),
       ),
       child: Center(
         child: isItLoading
             ? CircularProgressIndicator(
-                color: isThatFollower ? Colors.black : Colors.white,
+                color: isThatFollower ?  Theme.of(context).focusColor :  Theme.of(context).primaryColor,
                 strokeWidth: 1,
               )
             : Text(
                 text,
                 style: TextStyle(
                     fontSize: 17.0,
-                    color: isThatFollower ? Colors.black : Colors.white,
+                    color: isThatFollower ? Theme.of(context).focusColor: ColorManager.white,
                     fontWeight: FontWeight.w500),
               ),
       ),
