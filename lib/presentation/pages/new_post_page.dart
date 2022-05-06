@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/core/utility/injector.dart';
@@ -40,7 +41,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return BlocProvider<PostCubit>(
       create: (context) => injector<PostCubit>(),
       child: Scaffold(
-        backgroundColor: ColorManager.white,
+        backgroundColor:  Theme.of(context).primaryColor,
         appBar: appBar(context),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +92,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     // });
                   },
                   activeTrackColor: ColorManager.blue,
-                  activeColor: ColorManager.white,
+                  activeColor: Theme.of(context).primaryColor,
                 ),
               ],
             ),
@@ -105,14 +106,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return Padding(
         padding: const EdgeInsetsDirectional.only(
             start: 7, end: 7, bottom: 10, top: 10),
-        child: Text(text, style: const TextStyle(fontSize: 16.5)));
+        child: Text(text, style: getNormalStyle(fontSize: 16.5,color: Theme.of(context).focusColor),));
   }
 
   AppBar appBar(BuildContext context) {
     return AppBar(
         elevation: 0,
-        backgroundColor: ColorManager.white,
-        title: Text(StringsManager.newPost.tr()),
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text(StringsManager.newPost.tr(),style: getNormalStyle(color: Theme.of(context).focusColor),),
         actions: actionsWidgets(context));
   }
 

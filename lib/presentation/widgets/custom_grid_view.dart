@@ -49,7 +49,7 @@ class _CustomGridViewState extends State<CustomGridView> {
               return StaggeredTile.count(1, num);
             },
           )
-        : Center(child: Text(StringsManager.noPosts.tr()));
+        : Center(child: Text(StringsManager.noPosts.tr(),style:  Theme.of(context).textTheme.bodyText1,));
   }
 
   Widget createGridTileWidget(
@@ -135,7 +135,7 @@ class _CustomGridViewState extends State<CustomGridView> {
               bodyHeight: 370,
             ),
             const SizedBox(width: 7),
-            Text(postInfo.publisherInfo!.name, style: getNormalStyle()),
+            Text(postInfo.publisherInfo!.name, style: Theme.of(context).textTheme.bodyText1),
           ],
         ),
       );
@@ -149,23 +149,23 @@ class _CustomGridViewState extends State<CustomGridView> {
           children: [
             GestureDetector(
               onPanStart: (d) {},
-              child: const Icon(
+              child:  Icon(
                 Icons.favorite_border,
-                color: ColorManager.black,
+                color: Theme.of(context).focusColor,
               ),
             ),
             GestureDetector(
               onVerticalDragStart: (d) {},
-              child: const Icon(
+              child:  Icon(
                 Icons.chat_bubble_outline,
-                color: ColorManager.black,
+                color: Theme.of(context).focusColor,
               ),
             ),
             GestureDetector(
               onTertiaryLongPress: () {},
-              child: const Icon(
+              child:  Icon(
                 Icons.send,
-                color: ColorManager.black,
+                color: Theme.of(context).focusColor,
               ),
             ),
           ],

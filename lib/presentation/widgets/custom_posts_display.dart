@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/widgets/custom_app_bar.dart';
-import 'package:instegram/presentation/widgets/post_list_view.dart';
 
 class CustomPostsDisplay extends StatelessWidget {
   final Post postClickedInfo;
@@ -25,6 +24,6 @@ class CustomPostsDisplay extends StatelessWidget {
           },
           separatorBuilder: (context, index) => const Divider(),
         ),
-        appBar: customAppBar());
+        appBar: customAppBar(context));
   }
 }

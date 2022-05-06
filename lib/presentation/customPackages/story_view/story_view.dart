@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/presentation/customPackages/story_view/story_image.dart';
 import 'package:instegram/presentation/customPackages/story_view/story_video.dart';
 import 'package:instegram/presentation/customPackages/story_view/sory_controller.dart';
@@ -133,13 +134,13 @@ class StoryItem {
                     bottom: 24,
                   ),
                   padding: const EdgeInsetsDirectional.only(start: 24,end: 24,bottom: 8,top: 8),
-                  color: caption != null ? Colors.black54 : Colors.transparent,
+                  color: caption != null ? ColorManager.black54 : ColorManager.transparent,
                   child: caption != null
                       ? Text(
                     caption,
                     style: const TextStyle(
                       fontSize: 15,
-                      color: Colors.white,
+                      color: ColorManager.white,
                     ),
                     textAlign: TextAlign.center,
                   )
@@ -173,9 +174,9 @@ class StoryItem {
       ClipRRect(
         key: key,
         child: Container(
-          color: Colors.grey[100],
+          color: ColorManager.lightGrey,
           child: Container(
-            color: Colors.black,
+            color: ColorManager.black,
             child: Stack(
               children: <Widget>[
                 StoryImage.url(
@@ -224,7 +225,7 @@ class StoryItem {
     return StoryItem(
         Container(
           key: key,
-          color: Colors.black,
+          color: ColorManager.black,
           child: Stack(
             children: <Widget>[
               StoryVideo.url(
@@ -240,11 +241,11 @@ class StoryItem {
                     margin: const EdgeInsetsDirectional.only(bottom: 24),
                     padding: const EdgeInsetsDirectional.only(start: 24,end: 24,bottom: 8,top: 8),
                     color:
-                    caption != null ? Colors.black54 : Colors.transparent,
+                    caption != null ? ColorManager.black54 : ColorManager.transparent,
                     child: caption != null
                         ? Text(
                       caption,
-                      style: const TextStyle(fontSize: 15, color: Colors.white),
+                      style: const TextStyle(fontSize: 15, color: ColorManager.white),
                       textAlign: TextAlign.center,
                     )
                         : const SizedBox(),
@@ -272,7 +273,7 @@ class StoryItem {
     return StoryItem(
         Container(
           key: key,
-          color: Colors.black,
+          color: ColorManager.black,
           child: Stack(
             children: <Widget>[
               Center(

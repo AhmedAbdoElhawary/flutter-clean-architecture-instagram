@@ -8,7 +8,7 @@ class ShopPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Text(StringsManager.underWork.tr()),),
+      body: Center(child: Text(StringsManager.underWork.tr(),style: Theme.of(context).textTheme.bodyText1),),
     );
   }
 }

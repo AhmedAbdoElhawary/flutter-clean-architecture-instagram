@@ -10,6 +10,7 @@ import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
+import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 
 class SearchAboutUserPage extends StatefulWidget {
   SearchAboutUserPage({Key? key}) : super(key: key);
@@ -70,25 +71,25 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
 
                   return ListTile(
                     title: Text(stateUsersInfo[index].userName,
-                        style: getNormalStyle(fontSize: 15)),
+                        style: getNormalStyle(fontSize: 15,color: Theme.of(context).focusColor)),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(stateUsersInfo[index].name,
                             style: getNormalStyle(
-                                fontSize: 13, color: ColorManager.grey)),
+                                fontSize: 13,color: Theme.of(context).disabledColor)),
                         if (stateUsersInfo[index]
                             .followerPeople
                             .contains(myPersonalId)) ...[
                           Text(StringsManager.youFollowHim.tr(),
                               style: getNormalStyle(
-                                  fontSize: 10, color: ColorManager.grey)),
+                                  fontSize: 10, color: Theme.of(context).disabledColor)),
                         ] else if (stateUsersInfo[index]
                             .followedPeople
                             .contains(myPersonalId)) ...[
                           Text(StringsManager.followers.tr(),
                               style: getNormalStyle(
-                                  fontSize: 10, color: ColorManager.grey)),
+                                  fontSize: 10,color: Theme.of(context).disabledColor)),
                         ],
                       ],
                     ),
@@ -122,9 +123,5 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
     );
   }
 
-  Center buildCircularProgress() => const Center(
-          child: CircularProgressIndicator(
-        color: ColorManager.black54,
-        strokeWidth: 1.3,
-      ));
+  Widget buildCircularProgress() => const ThineCircularProgress();
 }

@@ -12,6 +12,7 @@ import 'package:instegram/data/models/story.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instegram/presentation/widgets/custom_elevated_button.dart';
 
 class NewStoryPage extends StatefulWidget {
   final File storyImage;
@@ -31,7 +32,7 @@ class _NewStoryPageState extends State<NewStoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).focusColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -51,8 +52,7 @@ class _NewStoryPageState extends State<NewStoryPage> {
 
   Widget listOfAddPost() {
     return SingleChildScrollView(
-      keyboardDismissBehavior:
-      ScrollViewKeyboardDismissBehavior.onDrag,
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -61,8 +61,9 @@ class _NewStoryPageState extends State<NewStoryPage> {
             color: ColorManager.black87,
             height: 40,
           ),
-           Text(StringsManager.create.tr(),
-              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
+          Text(StringsManager.create.tr(),
+              style:
+                  const TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
           const Divider(),
           Padding(
             padding: const EdgeInsetsDirectional.only(bottom: 8.0),
@@ -74,33 +75,12 @@ class _NewStoryPageState extends State<NewStoryPage> {
 
               return Container(
                 margin: const EdgeInsetsDirectional.all(3.0),
-                child: ElevatedButton(
-                    style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
-                            const EdgeInsetsDirectional.only(start: 140,end: 140)),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            isItDone
-                                ? Colors.blue
-                                : const Color.fromARGB(255, 127, 193, 255))),
-                    onPressed: () =>
-                        createPost(personalInfo!, userCubit, builderContext),
-                    child: isItDone
-                        ? Padding(
-                            padding: const EdgeInsetsDirectional.all(3.0),
-                            child: Text(
-                              StringsManager.share.tr(),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          )
-                        : const Padding(
-                            padding: EdgeInsetsDirectional.all(3.0),
-                            child: ClipOval(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 3,
-                              ),
-                            ),
-                          )),
+                child: CustomElevatedButton(
+                  onPressed: () =>
+                      createPost(personalInfo!, userCubit, builderContext),
+                  isItDone: isItDone,
+                  nameOfButton: StringsManager.share.tr(),
+                ),
               );
             }),
           ),
@@ -109,29 +89,29 @@ class _NewStoryPageState extends State<NewStoryPage> {
     );
   }
 
-  createPost(UserPersonalInfo personalInfo, FirestoreUserInfoCubit userCubit,
-      BuildContext builder2context) {
+  Future<void> createPost(UserPersonalInfo personalInfo,
+      FirestoreUserInfoCubit userCubit, BuildContext builder2context) async {
     if (isItDone) {
       Story storyInfo = addStoryInfo(personalInfo);
       setState(() {
         isItDone = false;
       });
-      WidgetsBinding.instance!.addPostFrameCallback((_) async {
-        StoryCubit storyCubit =
-            BlocProvider.of<StoryCubit>(builder2context, listen: false);
+      StoryCubit storyCubit =
+          BlocProvider.of<StoryCubit>(builder2context, listen: false);
 
-        await storyCubit
-            .createStory(storyInfo, widget.storyImage)
-            .then((_) async {
-          if (storyCubit.storyId != '') {
-            await userCubit.updateStoriesPostsInfo(
-                userId: personalInfo.userId, storyId: storyCubit.storyId);
+      await storyCubit
+          .createStory(storyInfo, widget.storyImage)
+          .then((_) async {
+        if (storyCubit.storyId != '') {
+          await userCubit.updateStoriesPostsInfo(
+              userId: personalInfo.userId, storyId: storyCubit.storyId);
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
             setState(() {
               isItDone = true;
               Navigator.maybePop(context);
             });
-          }
-        });
+          });
+        }
       });
     }
   }

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
@@ -93,8 +95,8 @@ class _ProfilePageState extends State<ProfilePage> {
         } else {
           return Transform.scale(
               scale: 0.1,
-              child: const CircularProgressIndicator(
-                  strokeWidth: 20, color: Colors.black54));
+              child:  CircularProgressIndicator(
+                  strokeWidth: 20, color: Theme.of(context).disabledColor));
         }
       },
     );
@@ -140,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Tab(
             icon: SvgPicture.asset(
           IconsAssets.videoIcon,
-          color: Colors.black,
+          color: Theme.of(context).focusColor,
           height: 22.5,
         )),
         const Tab(
@@ -163,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(userInfo.name,
-                style: const TextStyle(fontWeight: FontWeight.bold)),
+                style:Theme.of(context).textTheme.headline2),
             ReadMore(userInfo.bio, 4),
             const SizedBox(height: 10),
             Row(
@@ -217,9 +219,8 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             children: [
               Text("${usersInfo.length}",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 17)),
-              Text(text, style: const TextStyle(fontSize: 15))
+                  style:getBoldStyle(color: Theme.of(context).focusColor, fontSize: 17)),
+              Text(text, style: getNormalStyle(color: Theme.of(context).focusColor,fontSize: 15))
             ],
           ),
         );

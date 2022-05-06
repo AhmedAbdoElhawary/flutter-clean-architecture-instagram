@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/core/utility/injector.dart';
@@ -11,6 +12,7 @@ import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/co
 import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
 import 'package:instegram/presentation/widgets/comment_box.dart';
 import 'package:instegram/presentation/widgets/commentator.dart';
+import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:instegram/presentation/widgets/smart_refresher.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
 
@@ -44,8 +46,8 @@ Future<void>loadData()async{
       return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: ColorManager.white,
-          title: Text(StringsManager.comments.tr()),
+          backgroundColor:  Theme.of(context).primaryColor,
+          title: Text(StringsManager.comments.tr(),style: getNormalStyle(color: Theme.of(context).focusColor)),
         ),
         body: Column(
           children: [
@@ -76,12 +78,9 @@ Future<void>loadData()async{
                             state.commentsOfThePost, myPersonalInfo!);
                       } else if (state is CubitCommentsInfoFailed) {
                         ToastShow.toastStateError(state);
-                        return Text(StringsManager.somethingWrong.tr());
+                        return Text(StringsManager.somethingWrong.tr(),style: getNormalStyle(color: Theme.of(context).focusColor));
                       } else {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                              strokeWidth: 1, color: ColorManager.black54),
-                        );
+                        return const ThineCircularProgress();
                       }
                     }),
               ),
@@ -133,9 +132,9 @@ Future<void>loadData()async{
           )
         : Center(
             child: Text(StringsManager.noComments.tr(),
-                style: const TextStyle(
+                style:getBoldStyle(
                     fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    color:Theme.of(context).focusColor,
                     fontStyle: FontStyle.italic)),
           );
   }
@@ -159,7 +158,7 @@ Future<void>loadData()async{
                       child: Text(
                           "${StringsManager.replyingTo.tr()} ${selectedCommentInfo!.whoCommentInfo!.userName}",
                           style:
-                              const TextStyle(color: ColorManager.black54)),
+                          getNormalStyle(color: Theme.of(context).disabledColor)),
                     ),
                     GestureDetector(
                         onTap: () {
@@ -196,7 +195,7 @@ Future<void>loadData()async{
 
   Container customDivider() => Container(
       margin: const EdgeInsetsDirectional.only(bottom: 8),
-      color: Colors.grey,
+      color: ColorManager.grey,
       width: double.infinity,
       height: 0.2);
 }

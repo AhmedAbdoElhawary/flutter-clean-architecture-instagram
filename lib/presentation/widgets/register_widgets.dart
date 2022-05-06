@@ -6,6 +6,7 @@ import 'package:instegram/core/app_prefs.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/core/utility/injector.dart';
 import 'package:instegram/presentation/pages/sign_up_page.dart';
 import '../widgets/custom_text_field.dart';
@@ -57,7 +58,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
             children: [
               SvgPicture.asset(
                 IconsAssets.instagramLogo,
-                color: ColorManager.black,
+                color:Theme.of(context).focusColor,
                 height: 50,
               ),
               const SizedBox(height: 30),
@@ -86,7 +87,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
                   onPressed: () {},
                   child: Text(
                     StringsManager.loginWithFacebook.tr(),
-                    style: const TextStyle(color: ColorManager.blue),
+                    style: getNormalStyle(color: ColorManager.blue),
                   ))
             ],
           ),
@@ -103,7 +104,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
           widget.isThatLogIn
               ? StringsManager.noAccount.tr()
               : StringsManager.haveAccount.tr(),
-          style: const TextStyle(fontSize: 13, color: ColorManager.grey),
+          style: getNormalStyle(fontSize: 13, color: Theme.of(context).bottomAppBarColor),
         ),
         login(context),
       ],
@@ -128,8 +129,8 @@ class _SignUpPageState extends State<RegisterWidgets> {
       widget.isThatLogIn
           ? StringsManager.signUp.tr()
           : StringsManager.logIn.tr(),
-      style: const TextStyle(
-          fontSize: 13, color: ColorManager.black, fontWeight: FontWeight.bold),
+      style: getBoldStyle(
+          fontSize: 13, color:Theme.of(context).focusColor),
     );
   }
 }

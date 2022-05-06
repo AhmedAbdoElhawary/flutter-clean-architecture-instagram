@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/pages/play_this_video.dart';
 import 'package:instegram/presentation/widgets/fade_in_image.dart';
@@ -14,11 +15,11 @@ class PictureViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor:Theme.of(context).focusColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.white,
+        backgroundColor: ColorManager.transparent,
+        foregroundColor: Theme.of(context).primaryColor,
       ),
       extendBodyBehindAppBar: true,
       body: InteractiveViewer(

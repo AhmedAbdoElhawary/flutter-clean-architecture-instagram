@@ -7,11 +7,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/data/models/massage.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart';
 import 'package:instegram/presentation/widgets/audio_recorder_view.dart';
+import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:instegram/presentation/widgets/fade_in_image.dart';
 import 'package:instegram/presentation/widgets/record_view.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
@@ -123,11 +125,7 @@ class _ChattingPageState extends State<ChattingPage> {
         });
   }
 
-  Center buildCircularProgress() => const Center(
-          child: CircularProgressIndicator(
-        color: ColorManager.black54,
-        strokeWidth: 1.3,
-      ));
+  Widget buildCircularProgress() =>  const ThineCircularProgress();
 
   Column buildUserInfo(BuildContext context) {
     return Column(
@@ -156,10 +154,10 @@ class _ChattingPageState extends State<ChattingPage> {
           Align(
               alignment: AlignmentDirectional.center,
               child: Padding(
-                padding: const EdgeInsetsDirectional.only(bottom: 15,top: 15),
+                padding: const EdgeInsetsDirectional.only(bottom: 15, top: 15),
                 child: Text(
                   theDate,
-                  style: const TextStyle(color: ColorManager.black54),
+                  style: getNormalStyle(color: Theme.of(context).hoverColor),
                 ),
               )),
         const SizedBox(height: 5),
@@ -205,9 +203,7 @@ class _ChattingPageState extends State<ChattingPage> {
           : AlignmentDirectional.centerStart,
       child: Container(
         decoration: BoxDecoration(
-            color: isThatMine
-                ? ColorManager.darkBlue
-                : ColorManager.lightGrey,
+            color: isThatMine ? ColorManager.darkBlue : ColorManager.lightGrey,
             borderRadius: BorderRadiusDirectional.only(
               bottomStart: Radius.circular(isThatMine ? 20 : 0),
               bottomEnd: Radius.circular(isThatMine ? 0 : 20),
@@ -216,13 +212,16 @@ class _ChattingPageState extends State<ChattingPage> {
             )),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         padding: imageUrl.isEmpty
-            ? const EdgeInsetsDirectional.only(start: 10,end: 10,bottom: 8,top: 8)
+            ? const EdgeInsetsDirectional.only(
+                start: 10, end: 10, bottom: 8, top: 8)
             : const EdgeInsetsDirectional.all(0),
         child: massage.isNotEmpty
             ? Text(
                 massage,
-                style:
-                    TextStyle(color: isThatMine ? ColorManager.white : ColorManager.black),
+                style: getNormalStyle(
+                    color: isThatMine
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).focusColor),
               )
             : (massageInfo.isThatImage
                 ? SizedBox(
@@ -256,50 +255,47 @@ class _ChattingPageState extends State<ChattingPage> {
 
   Widget fieldOfMassage() {
     return SingleChildScrollView(
-      keyboardDismissBehavior:
-      ScrollViewKeyboardDismissBehavior.onDrag,
-      child:unSend? deleteTheMassage(): Container(
-        decoration: BoxDecoration(
-            color: ColorManager.lightGrey, borderRadius: BorderRadius.circular(35)),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        height: 50,
-        child: Padding(
-          padding: const EdgeInsetsDirectional.only(start: 10,end: 10),
-          child: Builder(builder: (context) {
-            MassageCubit massageCubit = MassageCubit.get(context);
-            return rowOfTextField(massageCubit);
-          }),
-        ),
-      ),
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      child: unSend
+          ? deleteTheMassage()
+          : Container(
+              decoration: BoxDecoration(
+                  color: ColorManager.lightGrey,
+                  borderRadius: BorderRadius.circular(35)),
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              height: 50,
+              child: Padding(
+                padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
+                child: Builder(builder: (context) {
+                  MassageCubit massageCubit = MassageCubit.get(context);
+                  return rowOfTextField(massageCubit);
+                }),
+              ),
+            ),
     );
   }
 
   Container deleteTheMassage() {
     return Container(
-        height: 60,
-        color: ColorManager.lowOpacityGrey,
-        child: Padding(
-          padding:
-          const EdgeInsetsDirectional.only(start: 80,end: 80),
-          child: Row(
-              mainAxisAlignment:
-              MainAxisAlignment.spaceBetween,
-              children: [
-                 Text(StringsManager.reply.tr(),
-                    style:const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15)),
-                GestureDetector(
-                    onTap: () {
-                      // massageCubit.
-                    },
-                    child:  Text(StringsManager.unSend.tr(),
-                        style:const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15))),
-              ]),
-        ),
-      );
+      height: 60,
+      color: ColorManager.lowOpacityGrey,
+      child: Padding(
+        padding: const EdgeInsetsDirectional.only(start: 80, end: 80),
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(StringsManager.reply.tr(),
+              style: getBoldStyle(
+                  color: Theme.of(context).focusColor, fontSize: 15)),
+          GestureDetector(
+              onTap: () {
+                // massageCubit.
+              },
+              child: Text(StringsManager.unSend.tr(),
+                  style: getBoldStyle(
+                      color: Theme.of(context).focusColor, fontSize: 15))),
+        ]),
+      ),
+    );
   }
 
   Row rowOfTextField(MassageCubit massageCubit) {
@@ -346,12 +342,12 @@ class _ChattingPageState extends State<ChattingPage> {
           ToastShow.toast(StringsManager.noImageSelected.tr());
         }
       },
-      child: const CircleAvatar(
+      child: CircleAvatar(
           backgroundColor: ColorManager.darkBlue,
           child: ClipOval(
               child: Icon(
             Icons.camera_alt,
-            color: ColorManager.white,
+            color: Theme.of(context).primaryColor,
           )),
           radius: 20),
     );
@@ -363,9 +359,9 @@ class _ChattingPageState extends State<ChattingPage> {
         keyboardType: TextInputType.multiline,
         cursorColor: ColorManager.teal,
         maxLines: null,
-        decoration:  InputDecoration.collapsed(
+        decoration: InputDecoration.collapsed(
             hintText: StringsManager.massage.tr(),
-            hintStyle:const TextStyle(color: ColorManager.black26)),
+            hintStyle: const TextStyle(color: ColorManager.black26)),
         autofocus: false,
         controller: _textController,
         cursorWidth: 1.5,
@@ -390,11 +386,11 @@ class _ChattingPageState extends State<ChattingPage> {
       },
       child: Text(
         StringsManager.send.tr(),
-        style: TextStyle(
-            color: _textController.text.isNotEmpty
-                ? const Color.fromARGB(255, 33, 150, 243)
-                : const Color.fromARGB(255, 147, 198, 246),
-            fontWeight: FontWeight.w500),
+        style: getMediumStyle(
+          color: _textController.text.isNotEmpty
+              ? const Color.fromARGB(255, 33, 150, 243)
+              : const Color.fromARGB(255, 147, 198, 246),
+        ),
       ),
     );
   }
@@ -465,14 +461,14 @@ class _ChattingPageState extends State<ChattingPage> {
       children: [
         Text(
           widget.userInfo.userName,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+          style: TextStyle(color:  Theme.of(context).focusColor,fontSize: 14, fontWeight: FontWeight.w300),
         ),
         const SizedBox(
           width: 10,
         ),
-        const Text(
+        Text(
           "Instagram",
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+          style: TextStyle(color:  Theme.of(context).focusColor,fontSize: 14, fontWeight: FontWeight.w300),
         ),
       ],
     );
@@ -481,7 +477,7 @@ class _ChattingPageState extends State<ChattingPage> {
   Text nameOfUser() {
     return Text(
       widget.userInfo.name,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+      style: TextStyle(color:  Theme.of(context).focusColor,fontSize: 16, fontWeight: FontWeight.w400),
     );
   }
 
@@ -491,14 +487,14 @@ class _ChattingPageState extends State<ChattingPage> {
       children: [
         Text(
           "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr()}",
-          style: const TextStyle(fontSize: 13, color: Colors.grey),
+          style:  TextStyle(color:  Theme.of(context).bottomAppBarColor,fontSize: 13),
         ),
         const SizedBox(
           width: 15,
         ),
         Text(
           "${widget.userInfo.posts.length} ${StringsManager.posts.tr()}",
-          style: const TextStyle(fontSize: 13, color: Colors.grey),
+          style: TextStyle(fontSize: 13, color:  Theme.of(context).bottomAppBarColor),
         ),
       ],
     );
@@ -517,8 +513,9 @@ class _ChattingPageState extends State<ChattingPage> {
           maintainState: false,
         ));
       },
-      child:  Text(StringsManager.viewProfile.tr(),
-          style:const TextStyle(color: Colors.black, fontWeight: FontWeight.normal)),
+      child: Text(StringsManager.viewProfile.tr(),
+          style: TextStyle(
+              color:  Theme.of(context).focusColor, fontWeight: FontWeight.normal)),
     );
   }
 
@@ -538,7 +535,7 @@ class _ChattingPageState extends State<ChattingPage> {
           ),
           Text(
             widget.userInfo.name,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+            style: TextStyle(color: Theme.of(context).focusColor,fontSize: 16, fontWeight: FontWeight.normal),
           )
         ],
       ),

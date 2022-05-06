@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/core/utility/injector.dart';
@@ -50,7 +51,7 @@ class _StoryPageState extends State<StoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: ColorManager.black,
       body: SafeArea(
         child: InstagramStorySwipe(
           controller: controller,

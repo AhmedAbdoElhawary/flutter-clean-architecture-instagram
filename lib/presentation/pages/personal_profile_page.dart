@@ -10,9 +10,11 @@ import 'package:instegram/core/app_prefs.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/core/utility/injector.dart';
 import 'package:instegram/presentation/pages/new_post_page.dart';
 import 'package:instegram/presentation/pages/story_config.dart';
+import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
 import 'package:instegram/presentation/widgets/recommendation_people.dart';
 import 'package:instegram/presentation/widgets/smart_refresher.dart';
@@ -88,12 +90,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           );
         } else if (state is CubitGetUserInfoFailed) {
           ToastShow.toastStateError(state);
-          return Text(StringsManager.noPosts.tr());
+          return Text(StringsManager.noPosts.tr(),style: Theme.of(context).textTheme.bodyText1);
         } else {
-          return const Center(
-            child: CircularProgressIndicator(
-                strokeWidth: 1, color: ColorManager.black54),
-          );
+          return const ThineCircularProgress();
         }
       },
     );
@@ -102,13 +101,13 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   AppBar appBar(String userName) {
     return AppBar(
         elevation: 0,
-        backgroundColor: ColorManager.white,
-        title: Text(userName),
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text(userName,style: Theme.of(context).textTheme.bodyText1),
         actions: [
           IconButton(
             icon: SvgPicture.asset(
               IconsAssets.addIcon,
-              color: ColorManager.black,
+              color:  Theme.of(context).focusColor,
               height: 22.5,
             ),
             onPressed: () => bottomSheetOfAdd(),
@@ -139,7 +138,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       return IconButton(
         icon: SvgPicture.asset(
           IconsAssets.menuIcon,
-          color: ColorManager.black,
+          color:  Theme.of(context).focusColor,
           height: 30,
         ),
         onPressed: () async {
@@ -179,16 +178,16 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           child: Container(
             height: 35.0,
             decoration: BoxDecoration(
-              color: ColorManager.white,
+              color:  Theme.of(context).primaryColor,
               border: Border.all(color: ColorManager.black26, width: 1.0),
               borderRadius: BorderRadius.circular(6.0),
             ),
             child: Center(
               child: Text(
                 StringsManager.editProfile.tr(),
-                style: const TextStyle(
+                style:  TextStyle(
                     fontSize: 17.0,
-                    color: ColorManager.black,
+                    color: Theme.of(context).focusColor,
                     fontWeight: FontWeight.w500),
               ),
             ),
@@ -203,9 +202,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          decoration: const BoxDecoration(
-            color: ColorManager.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+          decoration:  BoxDecoration(
+            color:  Theme.of(context).primaryColor,
+            borderRadius:const BorderRadius.vertical(top: Radius.circular(25.0)),
           ),
           child: listOfAddPost(),
         );
@@ -222,7 +221,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         children: <Widget>[
           SvgPicture.asset(
             IconsAssets.minusIcon,
-            color: ColorManager.black87,
+            color: Theme.of(context).dialogBackgroundColor,
             height: 40,
           ),
           Text(StringsManager.create.tr(),
@@ -361,14 +360,14 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         text != StringsManager.post.tr()
             ? SvgPicture.asset(
                 nameOfPath,
-                color: ColorManager.black87,
+                color: Theme.of(context).dialogBackgroundColor,
                 height: 25,
               )
             : const Icon(Icons.grid_on_sharp),
         const SizedBox(width: 15),
         Text(
           text,
-          style: const TextStyle(fontSize: 15),
+          style:getNormalStyle(color: Theme.of(context).focusColor,fontSize: 15),
         )
       ]),
     );

@@ -91,9 +91,9 @@ class _CircleAvatarOfProfileImageState
                     user: state.userInfo,
                     storiesOwnersInfo: [state.userInfo]);
               } else {
-                return const Scaffold(
+                return Scaffold(
                     body: Center(
-                  child: CustomCircularProgress(ColorManager.black),
+                  child: CustomCircularProgress(Theme.of(context).focusColor),
                 ));
               }
             },
@@ -142,7 +142,7 @@ class _CircleAvatarOfProfileImageState
                 radius: widget.bodyHeight < 900
                     ? widget.bodyHeight * .0525
                     : widget.bodyHeight * .0505,
-                backgroundColor: Colors.transparent,
+                backgroundColor: ColorManager.transparent,
               ),
             ),
           ],

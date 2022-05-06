@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/data/models/comment.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
@@ -107,7 +108,7 @@ class _CommentBoxState extends State<CommentBox> {
                     },
                     child: Text(
                       StringsManager.post.tr(),
-                      style: TextStyle(
+                      style: getNormalStyle(
                           color: widget.textController.text.isNotEmpty
                               ? ColorManager.blue
                               : ColorManager.lightBlue),
@@ -154,7 +155,7 @@ class _CommentBoxState extends State<CommentBox> {
       },
       child: Text(
         emoji,
-        style: const TextStyle(fontSize: 24),
+        style:getNormalStyle(fontSize: 24,color: Theme.of(context).focusColor),
       ),
     );
   }

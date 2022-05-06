@@ -96,6 +96,8 @@ dependencies:
   video_compress: ^3.1.0
   file_selector: ^0.8.4+1
   video_thumbnail: ^0.5.0
+  flutter_native_splash: ^2.1.6
+
 
 
 

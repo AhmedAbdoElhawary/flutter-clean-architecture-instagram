@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
@@ -13,6 +14,7 @@ import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_
 import 'package:instegram/presentation/pages/story_config.dart';
 import 'package:instegram/presentation/widgets/add_comment.dart';
 import 'package:instegram/presentation/widgets/custom_app_bar.dart';
+import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:instegram/presentation/widgets/post_list_view.dart';
 import 'package:instegram/presentation/widgets/smart_refresher.dart';
 import 'package:instegram/presentation/widgets/stroy_page.dart';
@@ -99,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
       rebuild = false;
     }
     return Scaffold(
-      appBar: customAppBar(),
+      appBar: customAppBar(context),
       body: SmarterRefresh(
         onRefreshData: getData,
         child: blocBuilder(bodyHeight),
@@ -141,13 +143,46 @@ class _HomeScreenState extends State<HomeScreen> {
               : emptyMassage();
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
-          return Center(child: Text(StringsManager.noPosts.tr()));
+          return Center(child: Text(StringsManager.noPosts.tr(),style: getNormalStyle(color: Theme.of(context).focusColor),));
         } else {
           return circularProgress();
         }
       },
     );
   }
+  //
+  // Widget inViewNotifier(CubitMyPersonalPostsLoaded state, double bodyHeight) {
+  //   ValueNotifier<bool> inView = ValueNotifier(false);
+  //   return InViewNotifierList(
+  //     initialInViewIds: const ['0'],
+  //     // shrinkWrap: true,
+  //     // primary: false,
+  //     // physics: const NeverScrollableScrollPhysics(),
+  //     isInViewPortCondition:
+  //         (double deltaTop, double deltaBottom, double vpHeight) {
+  //       return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
+  //     },
+  //     itemCount: state.postsInfo.length,
+  //     builder: (BuildContext context, int index) {
+  //       return Container(
+  //         width: double.infinity,
+  //         margin: const EdgeInsetsDirectional.only(bottom: .5, top: .5),
+  //         child: LayoutBuilder(
+  //           builder: (BuildContext context, BoxConstraints constraints) {
+  //             return InViewNotifierWidget(
+  //               id: '$index',
+  //               builder: (_, bool isInView, __) {
+  //                 if (isInView) {}
+  //                 Post postInfo = state.postsInfo[index];
+  //                 return columnOfWidgets(bodyHeight, postInfo,index,isInView);
+  //               },
+  //             );
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   Widget inView(CubitMyPersonalPostsLoaded state, double bodyHeight) {
     return SingleChildScrollView(
@@ -195,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Container customDivider() => Container(
       margin: const EdgeInsetsDirectional.only(bottom: 8),
-      color: Colors.grey,
+      color: ColorManager.grey,
       width: double.infinity,
       height: 0.3);
 
@@ -216,20 +251,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Center circularProgress() {
-    return const Center(
-      child: CircularProgressIndicator(
-          strokeWidth: 1.5, color: ColorManager.black54),
-    );
+  Widget circularProgress() {
+    return const ThineCircularProgress();
   }
 
   Widget emptyMassage() {
     return Center(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Text(StringsManager.noPosts),
-        Text(StringsManager.tryAddPost),
+      children: [
+        Text(StringsManager.noPosts,style: getNormalStyle(color: Theme.of(context).focusColor),),
+        Text(StringsManager.tryAddPost,style: getNormalStyle(color: Theme.of(context).focusColor),),
       ],
     ));
   }
@@ -326,7 +358,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         } else if (state is CubitStoryFailed) {
           ToastShow.toastStateError(state);
-          return Center(child: Text(StringsManager.somethingWrong.tr()));
+          return Center(child: Text(StringsManager.somethingWrong.tr(),style: getNormalStyle(color: Theme.of(context).focusColor),));
         } else {
           return Container();
         }
@@ -361,14 +393,14 @@ class _HomeScreenState extends State<HomeScreen> {
             nameOfCircle: StringsManager.yourStory.tr(),
           ),
         ),
-        const Positioned(
+         Positioned(
             top: 40,
             left: 40,
             right: 5,
             child: CircleAvatar(
                 radius: 9.5,
-                backgroundColor: ColorManager.white,
-                child: CircleAvatar(
+                backgroundColor: Theme.of(context).primaryColor,
+                child: const CircleAvatar(
                     radius: 10,
                     backgroundColor: ColorManager.blue,
                     child: Icon(

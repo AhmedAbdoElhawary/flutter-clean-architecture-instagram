@@ -34,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
         tabBar: CupertinoTabBar(
-            backgroundColor: ColorManager.white,
+            backgroundColor: Theme.of(context).primaryColor,
             height: 40,
             items: [
               navigationBarItem("house_white.svg"),
@@ -108,6 +108,7 @@ class _MainScreenState extends State<MainScreen> {
       icon: SvgPicture.asset(
         "assets/icons/$fileName",
         height: 25,
+        color:  Theme.of(context).focusColor,
       ),
     );
   }

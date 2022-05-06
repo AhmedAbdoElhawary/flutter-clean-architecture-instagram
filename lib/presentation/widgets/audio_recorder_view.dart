@@ -80,8 +80,8 @@ class _RecorderViewState extends State<RecorderView> {
       case RecordingState.nSet:
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(StringsManager.allowRecordingFromSettings),
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+          content: Text(StringsManager.allowRecordingFromSettings,style: Theme.of(context).textTheme.bodyText1),
         ));
         break;
     }
@@ -119,8 +119,8 @@ class _RecorderViewState extends State<RecorderView> {
       _recordIcon = SvgPicture.asset("assets/icons/microphone_black.svg", height: 25);
     } else {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text(StringsManager.allowRecordingFromSettings),
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+        content: Text(StringsManager.allowRecordingFromSettings,style: Theme.of(context).textTheme.bodyText1),
       ));
     }
   }

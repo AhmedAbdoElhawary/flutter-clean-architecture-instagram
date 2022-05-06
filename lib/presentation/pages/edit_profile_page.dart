@@ -81,22 +81,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
         }
 
         return Scaffold(
-          backgroundColor: ColorManager.white,
+          backgroundColor: Theme.of(context).primaryColor,
           appBar: AppBar(
               elevation: 0,
-              backgroundColor: ColorManager.white,
+              backgroundColor:  Theme.of(context).primaryColor,
               leading: IconButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
                   icon: SvgPicture.asset(
                     IconsAssets.cancelIcon,
-                    color: ColorManager.black,
+                    color: Theme.of(context).focusColor,
                     height: 27,
                   )),
               title: Text(
                 StringsManager.editProfile.tr(),
-                style: getMediumStyle(fontSize: 20),
+                style: getMediumStyle(color:Theme.of(context).focusColor,fontSize: 20),
               ),
               actions: actionsWidgets(getUserState, updateUserCubit)),
           body: Column(
@@ -202,7 +202,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           },
           child: Text(
             StringsManager.changeProfilePhoto.tr(),
-            style: const TextStyle(fontSize: 18, color: ColorManager.blue),
+            style:  getNormalStyle(fontSize: 18, color:Theme.of(context).focusColor),
           ),
         )),
         textFormField(widget.nameController, StringsManager.name.tr()),
@@ -221,7 +221,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           onTap: () {},
           child: Text(
             StringsManager.personalInformationSettings.tr(),
-            style: const TextStyle(fontSize: 18, color: ColorManager.blue),
+            style:  getNormalStyle(fontSize: 18, color: ColorManager.blue),
           ),
         ),
         const SizedBox(height: 8),
@@ -246,14 +246,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
       child: CircleAvatar(
         child: ClipOval(
           child: isImageUpload
-              ? const CircularProgressIndicator()
+              ?  const ThineCircularProgress()
               : (widget.userInfo.profileImageUrl.isEmpty
-                  ? const Icon(Icons.person, color: ColorManager.white)
+                  ? Icon(Icons.person, color: Theme.of(context).primaryColor)
                   : CustomFadeInImage(
                       imageUrl: widget.userInfo.profileImageUrl)),
         ),
         radius: 50,
-        backgroundColor: ColorManager.black,
+        backgroundColor:  Theme.of(context).focusColor,
       ),
     );
   }
