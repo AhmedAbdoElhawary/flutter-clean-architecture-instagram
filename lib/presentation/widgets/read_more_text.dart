@@ -1,6 +1,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:readmore/readmore.dart';
 
@@ -13,12 +14,12 @@ class ReadMore extends StatelessWidget{
       return ReadMoreText(
         text,
         trimLines: timeLines,
-        colorClickableText: Colors.grey,
+        colorClickableText: ColorManager.grey,
         trimMode: TrimMode.Line,
         trimCollapsedText: StringsManager.more.tr(),
         trimExpandedText: StringsManager.less.tr(),
-        style: const TextStyle(color: Colors.black),
-        moreStyle: const TextStyle(fontSize: 14, color: Colors.grey),
+        style: TextStyle(color: Theme.of(context).focusColor),
+        moreStyle: const TextStyle(fontSize: 14, color: ColorManager.grey),
       );
   }
 

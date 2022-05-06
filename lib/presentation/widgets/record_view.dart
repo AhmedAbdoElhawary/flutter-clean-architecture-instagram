@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 
 class RecordView extends StatefulWidget {
@@ -26,7 +27,7 @@ class _RecordViewState extends State<RecordView> {
   @override
   Widget build(BuildContext context) {
     return widget.record.isEmpty
-        ? const Center(child: Text(StringsManager.noRecordsYet))
+        ?  Center(child: Text(StringsManager.noRecordsYet,style: Theme.of(context).textTheme.bodyText1,))
         : Row(
             children: [
               GestureDetector(
@@ -39,19 +40,19 @@ class _RecordViewState extends State<RecordView> {
               Expanded(
                 child: ProgressBar(
                   timeLabelLocation: TimeLabelLocation.none,
-                  thumbColor: Colors.white,
+                  thumbColor: ColorManager.white,
                   total: Duration(microseconds: _totalDuration ?? 0),
                   barHeight: 3,
                   thumbRadius: 6.0,
                   baseBarColor: const Color.fromARGB(79, 255, 255, 255),
-                  progressBarColor: Colors.white,
+                  progressBarColor: ColorManager.white,
                   progress: Duration(microseconds: _currentDuration ?? 0),
                 ),
               ),
               const SizedBox(width: 15),
               if (_totalDuration != null && _currentDuration != null)
                 Text(getReformatDate(),
-                    style: const TextStyle(color: Colors.white)),
+                    style:Theme.of(context).textTheme.bodyText1),
             ],
           );
   }
@@ -71,7 +72,7 @@ class _RecordViewState extends State<RecordView> {
     return "${datesSeparated[0]}:${datesSeparated[1]}";
   }
 
-  Icon buildIcon(IconData icon) => Icon(icon, color: Colors.white, size: 30);
+  Icon buildIcon(IconData icon) => Icon(icon, color: ColorManager.white, size: 30);
 
   Future<void> _onPlay({required String filePath}) async {
     if (!_isPlaying) {

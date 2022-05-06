@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 
 class OrText extends StatelessWidget{
   const OrText({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class OrText extends StatelessWidget{
             )),
         Text(
           StringsManager.or.tr(),
-          style:const TextStyle(color: ColorManager.black54, fontWeight: FontWeight.bold),
+          style:getBoldStyle(color:  Theme.of(context).disabledColor),
         ),
         const  Expanded(
             child: Divider(

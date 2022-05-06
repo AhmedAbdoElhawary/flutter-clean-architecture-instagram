@@ -7,6 +7,7 @@ import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
@@ -168,7 +169,7 @@ class _ImageListState extends State<ImageList> {
                     child: Text(
                       DateOfNow.chattingDateOfNow(
                           postInfo.datePublished, postInfo.datePublished),
-                      style: const TextStyle(color: Colors.black26),
+                      style: getNormalStyle(color: Theme.of(context).cardColor),
                     ),
                   ),
                 ],
@@ -274,7 +275,7 @@ class _ImageListState extends State<ImageList> {
       },
       child: Text(
         "${StringsManager.viewAll.tr()} $commentsLength ${commentsLength > 1 ? StringsManager.comments.tr() : StringsManager.comment.tr()}",
-        style: const TextStyle(color: Colors.grey),
+        style:Theme.of(context).textTheme.headline1,
       ),
     );
   }
@@ -292,8 +293,7 @@ class _ImageListState extends State<ImageList> {
       child: Text(
           '$likes ${likes > 1 ? StringsManager.likes.tr() : StringsManager.like.tr()}',
           textAlign: TextAlign.left,
-          style: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold)),
+          style:Theme.of(context).textTheme.headline2),
     );
   }
 
