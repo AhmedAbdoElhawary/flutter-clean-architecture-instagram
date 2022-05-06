@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:instegram/presentation/widgets/show_me_the_users.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
 import '../cubit/firestoreUserInfoCubit/users_info_cubit.dart';
@@ -33,21 +35,21 @@ class _FollowersAndFollowingsInfoPageState
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: ColorManager.white,
+          backgroundColor: Theme.of(context).primaryColor,
           bottom: TabBar(
             unselectedLabelColor: ColorManager.grey,
-            indicatorColor: ColorManager.black,
+            indicatorColor: Theme.of(context).focusColor,
             indicatorWeight: 1,
             tabs: [
               Tab(
-                  icon: Text(
+                  icon: buildText(context,
                       "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr()}")),
               Tab(
-                  icon: Text(
+                  icon: buildText(context,
                       "${widget.userInfo.followedPeople.length} ${StringsManager.following.tr()}")),
             ],
           ),
-          title: Text(widget.userInfo.userName),
+          title: buildText(context, widget.userInfo.userName),
         ),
         body: BlocBuilder(
           bloc: BlocProvider.of<UsersInfoCubit>(context)
@@ -75,7 +77,6 @@ class _FollowersAndFollowingsInfoPageState
                     userInfo: widget.userInfo,
                     rebuildVariable: rebuild,
                     showSearchBar: true,
-
                   ),
                   ShowMeTheUsers(
                     usersInfo: state.followersAndFollowingsInfo.followingsInfo,
@@ -91,15 +92,17 @@ class _FollowersAndFollowingsInfoPageState
               ToastShow.toastStateError(state);
               return Text(StringsManager.somethingWrong.tr());
             } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                    strokeWidth: 1, color: ColorManager.black54),
-              );
+              return const ThineCircularProgress();
             }
           },
         ),
       ),
     );
+  }
+
+  Text buildText(BuildContext context, String text) {
+    return Text(text,
+        style: getNormalStyle(color: Theme.of(context).focusColor));
   }
 
   void rebuild(bool rebuild) {

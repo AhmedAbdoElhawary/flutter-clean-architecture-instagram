@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
+import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
 
 class MassagesPage extends StatelessWidget {
@@ -13,7 +15,7 @@ class MassagesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorManager.white,
+        backgroundColor:  Theme.of(context).primaryColor,
         actions: [
           IconButton(
               onPressed: () {},
@@ -30,9 +32,9 @@ class MassagesPage extends StatelessWidget {
            return ListView.separated(
                itemBuilder: (context, index) {
                  return ListTile(
-                   title: const Text(StringsManager.theName),
-                   leading: const CircleAvatar(
-                       child: Icon(Icons.person, color: ColorManager.white, size: 50),
+                   title: Text(StringsManager.theName,style: getNormalStyle(color: Theme.of(context).focusColor),),
+                   leading: CircleAvatar(
+                       child: Icon(Icons.person, color:  Theme.of(context).primaryColor, size: 50),
                        radius: 30),
                    onTap: () {
 
@@ -44,12 +46,9 @@ class MassagesPage extends StatelessWidget {
                const Divider());
          }else if(state is CubitGettingSpecificUsersFailed){
            ToastShow.toastStateError(state);
-           return const Text(StringsManager.somethingWrong);
+           return Text(StringsManager.somethingWrong,style: getNormalStyle(color: Theme.of(context).focusColor),);
          } else {
-           return const Center(
-             child: CircularProgressIndicator(
-                 strokeWidth: 1, color: ColorManager.black54),
-           );
+           return const ThineCircularProgress();
          }
 
        },
