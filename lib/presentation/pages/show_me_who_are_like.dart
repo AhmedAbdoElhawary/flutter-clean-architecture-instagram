@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:instegram/presentation/widgets/show_me_the_users.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
 import '../cubit/firestoreUserInfoCubit/users_info_cubit.dart';
@@ -27,8 +29,8 @@ class _UsersWhoLikesOnPostPageState extends State<UsersWhoLikesOnPostPage> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.white,
-          title: Text(StringsManager.likes.tr()),
+          backgroundColor:  Theme.of(context).primaryColor,
+          title: Text(StringsManager.likes.tr(),style: Theme.of(context).textTheme.bodyText1),
         ),
         body: BlocBuilder(
           bloc: BlocProvider.of<UsersInfoCubit>(context)
@@ -56,12 +58,9 @@ class _UsersWhoLikesOnPostPageState extends State<UsersWhoLikesOnPostPage> {
             }
             if (state is CubitGettingSpecificUsersFailed) {
               ToastShow.toastStateError(state);
-              return  Text(StringsManager.somethingWrong.tr());
+              return  Text(StringsManager.somethingWrong.tr(),style: Theme.of(context).textTheme.bodyText1);
             } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                    strokeWidth: 1, color: Colors.black54),
-              );
+              return const ThineCircularProgress();
             }
           },
         ),

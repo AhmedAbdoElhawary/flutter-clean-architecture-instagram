@@ -17,6 +17,7 @@ import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/pages/comments_page.dart';
 import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
+import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:instegram/presentation/widgets/fade_in_image.dart';
 import 'package:instegram/presentation/widgets/reel_video_play.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
@@ -61,13 +62,10 @@ class VideosPageState extends State<VideosPage> {
           return Center(
               child: Text(
             StringsManager.noPosts.tr(),
-            style: const TextStyle(color: ColorManager.black, fontSize: 20),
+            style: TextStyle(color: Theme.of(context).focusColor, fontSize: 20),
           ));
         } else {
-          return const Center(
-            child: CircularProgressIndicator(
-                strokeWidth: 1.5, color: ColorManager.black54),
-          );
+          return const ThineCircularProgress();
         }
       },
     );
@@ -95,7 +93,7 @@ class VideosPageState extends State<VideosPage> {
     );
   }
 
-  AppBar appBar() => AppBar(backgroundColor: Colors.transparent, actions: [
+  AppBar appBar() => AppBar(backgroundColor: ColorManager.transparent, actions: [
         IconButton(
           onPressed: () async {
             final ImagePicker _picker = ImagePicker();
@@ -109,7 +107,7 @@ class VideosPageState extends State<VideosPage> {
               ToastShow.toast(StringsManager.noImageSelected.tr());
             }
           },
-          icon: const Icon(Icons.camera_alt, size: 30, color: Colors.white),
+          icon: const Icon(Icons.camera_alt, size: 30, color: ColorManager.white),
         )
       ]);
 
@@ -131,7 +129,7 @@ class VideosPageState extends State<VideosPage> {
                     onTap: () => goToUserProfile(personalInfo!),
                     child: CircleAvatar(
                       radius: 18,
-                      backgroundColor: Colors.white,
+                      backgroundColor: ColorManager.white,
                       child: ClipOval(
                           child: CustomFadeInImage(
                               imageUrl: personalInfo!.profileImageUrl)),
@@ -144,7 +142,7 @@ class VideosPageState extends State<VideosPage> {
                       onTap: () => goToUserProfile(personalInfo),
                       child: Text(
                         personalInfo.name,
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: ColorManager.white),
                       )),
                   const SizedBox(
                     width: 10,
@@ -199,12 +197,12 @@ class VideosPageState extends State<VideosPage> {
             start: 5, end: 5, bottom: 2, top: 2),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            border: Border.all(color: Colors.white, width: 1)),
+            border: Border.all(color: ColorManager.white, width: 1)),
         child: Text(
           personalInfo.followedPeople.contains(myPersonalId)
               ? StringsManager.following.tr()
               : StringsManager.follow.tr(),
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: ColorManager.white),
         ));
   }
 
@@ -224,14 +222,14 @@ class VideosPageState extends State<VideosPage> {
               buildSizedBox(),
               Text(
                 "${postInfo.value.comments.length}",
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: ColorManager.white),
               ),
               sizedBox(),
               GestureDetector(
                 onTap: () {},
                 child: SvgPicture.asset(
                   IconsAssets.send1Icon,
-                  color: Colors.white,
+                  color: ColorManager.white,
                   height: 25,
                 ),
               ),
@@ -240,7 +238,7 @@ class VideosPageState extends State<VideosPage> {
                 onTap: () {},
                 child: SvgPicture.asset(
                   IconsAssets.menuHorizontalIcon,
-                  color: Colors.white,
+                  color: ColorManager.white,
                   height: 25,
                 ),
               ),
@@ -261,7 +259,7 @@ class VideosPageState extends State<VideosPage> {
       },
       child: SvgPicture.asset(
         IconsAssets.commentIcon,
-        color: Colors.white,
+        color: ColorManager.white,
         height: 35,
       ),
     );
@@ -278,7 +276,7 @@ class VideosPageState extends State<VideosPage> {
       },
       child: Text(
         "${postInfo.value.likes.length}",
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(color: ColorManager.white),
       ),
     );
   }
@@ -292,12 +290,12 @@ class VideosPageState extends State<VideosPage> {
           child: !isLiked
               ? const Icon(
                   Icons.favorite_border,
-                  color: Colors.white,
+                  color: ColorManager.white,
                   size: 32,
                 )
               : const Icon(
                   Icons.favorite,
-                  color: Colors.red,
+                  color: ColorManager.red,
                   size: 32,
                 ),
           onTap: () {
