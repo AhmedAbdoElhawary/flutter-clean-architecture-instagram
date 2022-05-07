@@ -14,10 +14,10 @@ import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/core/utility/injector.dart';
 import 'package:instegram/presentation/pages/new_post_page.dart';
 import 'package:instegram/presentation/pages/story_config.dart';
+import 'package:instegram/presentation/widgets/bottom_sheet.dart';
 import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
 import 'package:instegram/presentation/widgets/recommendation_people.dart';
-import 'package:instegram/presentation/widgets/smart_refresher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
@@ -44,7 +44,6 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   bool rebuildUserInfo = false;
   Size imageSize = const Size(0.00, 0.00);
   final SharedPreferences sharePrefs = injector<SharedPreferences>();
-  final AppPrefMode _appMode = injector<AppPrefMode>();
 
   @override
   Widget build(BuildContext context) {
@@ -73,20 +72,21 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       },
       builder: (context, state) {
         if (state is CubitMyPersonalInfoLoaded) {
-          return SmarterRefresh(
-            onRefreshData: () async {
-              return setState(() {});
-            },
-            child: Scaffold(
-              appBar: appBar(state.userPersonalInfo.userName),
-              body: ProfilePage(
-                isThatMyPersonalId: true,
-                userId: state.userPersonalInfo.userId,
-                userInfo: state.userPersonalInfo,
-                widgetsAboveTapBars:
-                    widgetsAboveTapBars(state.userPersonalInfo),
-              ),
+          return
+              // SmarterRefresh(
+              // onRefreshData: () async {
+              //   return setState(() {});
+              // },
+              // child:
+              Scaffold(
+            appBar: appBar(state.userPersonalInfo.userName),
+            body: ProfilePage(
+              isThatMyPersonalId: true,
+              userId: state.userPersonalInfo.userId,
+              userInfo: state.userPersonalInfo,
+              widgetsAboveTapBars: widgetsAboveTapBars(state.userPersonalInfo),
             ),
+            // ),
           );
         } else if (state is CubitGetUserInfoFailed) {
           ToastShow.toastStateError(state);
@@ -103,7 +103,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     return AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text(userName, style: Theme.of(context).textTheme.bodyText1),
+        title: Text(userName,
+            style: getMediumStyle(
+                color: Theme.of(context).focusColor, fontSize: 20)),
         actions: [
           IconButton(
             icon: SvgPicture.asset(
@@ -126,42 +128,14 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   }
 
   Future<void> bottomSheet({bool createNewData = true}) {
-    return showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).splashColor,
-            borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(25.0)),
-          ),
-          child: listOfAddPost(createNewData: createNewData),
-        );
-      },
-    );
-  }
-
-  Widget listOfAddPost({required bool createNewData}) {
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          SvgPicture.asset(
-            IconsAssets.minusIcon,
-            color: Theme.of(context).highlightColor,
-            height: 30,
-          ),
-          Text(StringsManager.create.tr(),
-              style: getBoldStyle(
-                  color: Theme.of(context).focusColor, fontSize: 17)),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 20.0),
-            child: createNewData ? columnOfCreateData() : columnOfThemeData(),
-          ),
-        ],
+    return CustomBottomSheet.bottomSheet(
+      context,
+      headIcon: Text(StringsManager.create.tr(),
+          style:
+              getBoldStyle(color: Theme.of(context).focusColor, fontSize: 17)),
+      bodyText: Padding(
+        padding: const EdgeInsetsDirectional.only(start: 20.0),
+        child: createNewData ? columnOfCreateData() : columnOfThemeData(),
       ),
     );
   }
@@ -170,17 +144,13 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     return Column(
       children: [
         createNewPost(),
-        if (_appMode.getAppModeString() == 'light')
-          const Divider(indent: 40, endIndent: 15, color: ColorManager.grey),
+        customDivider(),
         createNewVideo(),
-        if (_appMode.getAppModeString() == 'light')
-          const Divider(indent: 40, endIndent: 15, color: ColorManager.grey),
+        customDivider(),
         createNewStory(),
-        if (_appMode.getAppModeString() == 'light')
-          const Divider(indent: 40, endIndent: 15, color: ColorManager.grey),
+        customDivider(),
         createNewLive(),
-        if (_appMode.getAppModeString() == 'light')
-          const Divider(indent: 40, endIndent: 15, color: ColorManager.grey),
+        customDivider(),
         Container(
           height: 50,
         )
@@ -188,18 +158,18 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     );
   }
 
+  Divider customDivider() =>
+      const Divider(indent: 40, endIndent: 15, color: ColorManager.grey);
+
   Column columnOfThemeData() {
     return Column(
       children: [
         changeLanguage(),
-        if (_appMode.getAppModeString() == 'light')
-          const Divider(indent: 40, endIndent: 15, color: ColorManager.grey),
+        customDivider(),
         changeMode(),
-        if (_appMode.getAppModeString() == 'light')
-          const Divider(indent: 40, endIndent: 15, color: ColorManager.grey),
+        customDivider(),
         logOut(),
-        if (_appMode.getAppModeString() == 'light')
-          const Divider(indent: 40, endIndent: 15, color: ColorManager.grey),
+        customDivider(),
         Container(
           height: 50,
         )

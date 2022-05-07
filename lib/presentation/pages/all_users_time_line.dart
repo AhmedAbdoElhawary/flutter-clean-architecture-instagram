@@ -7,7 +7,6 @@ import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instegram/presentation/pages/search_about_user.dart';
 import 'package:instegram/presentation/widgets/custom_grid_view.dart';
-import 'package:instegram/presentation/widgets/smart_refresher.dart';
 import 'package:instegram/presentation/widgets/toast_show.dart';
 
 class AllUsersTimeLinePage extends StatefulWidget {
@@ -89,13 +88,16 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
       },
       builder: (context, state) {
         if (state is CubitAllPostsLoaded) {
-          return SmarterRefresh(
-            onRefreshData: getData,
-            child: SingleChildScrollView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              child: CustomGridView(
-                  postsInfo: state.allPostInfo, userId: widget.userId),
-            ),
+          return
+              // SmarterRefresh(
+              // onRefreshData: getData,
+              // child:
+              SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: CustomGridView(
+              isThatProfile: false,
+                postsInfo: state.allPostInfo, userId: widget.userId),
+            // ),
           );
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);

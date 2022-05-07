@@ -15,6 +15,7 @@ import 'package:instegram/presentation/pages/story_config.dart';
 import 'package:instegram/presentation/widgets/add_comment.dart';
 import 'package:instegram/presentation/widgets/custom_app_bar.dart';
 import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
+import 'package:instegram/presentation/widgets/gradient_icon.dart';
 import 'package:instegram/presentation/widgets/post_list_view.dart';
 import 'package:instegram/presentation/widgets/smart_refresher.dart';
 import 'package:instegram/presentation/widgets/stroy_page.dart';
@@ -33,19 +34,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool rebuild = true;
-  bool loadingPosts = true;
-  bool reLoadData = false;
-  UserPersonalInfo? personalInfo;
+  // final ValueNotifier<FocusNode> _showCommentBox = ValueNotifier(FocusNode());
   final TextEditingController _textController = TextEditingController();
-  Post? selectedPostInfo;
-  bool isItMoved = false;
+  ValueNotifier<bool> isThatEndOfList = ValueNotifier(false);
   ScrollController scrollController = ScrollController();
-  int? centerItemIndex;
-  final ValueNotifier<FocusNode> _showCommentBox = ValueNotifier(FocusNode());
 
-  Future<void> getData() async {
-    reLoadData = false;
+  UserPersonalInfo? personalInfo;
+  bool loadingPosts = true;
+  ValueNotifier<bool> reLoadData = ValueNotifier(false);
+  Post? selectedPostInfo;
+  int? centerItemIndex;
+  bool rebuild = true;
+  List postsIds = [];
+  ValueNotifier<List<Post>> postsInfo = ValueNotifier([]);
+
+  Future<void> getData(int index) async {
+    reLoadData.value = false;
     FirestoreUserInfoCubit userCubit =
         BlocProvider.of<FirestoreUserInfoCubit>(context, listen: false);
     await userCubit.getUserInfo(widget.userId);
@@ -60,29 +64,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
     List usersPostsIds = usersPostsCubit.usersPostsInfo;
 
-    List postsIds = usersPostsIds + personalInfo!.posts;
+    postsIds = usersPostsIds + personalInfo!.posts;
+
+    // if (index == 0) postsIds.shuffle();
 
     PostCubit postCubit = PostCubit.get(context);
     await postCubit
-        .getPostsInfo(postsIds: postsIds, isThatForMyPosts: true)
+        .getPostsInfo(
+            postsIds: postsIds,
+            isThatForMyPosts: true,
+            lengthOfCurrentList: index)
         .then((value) {
       Future.delayed(Duration.zero, () {
         setState(() {});
       });
-      reLoadData = true;
+      reLoadData.value = true;
     });
   }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _showCommentBox.value.dispose();
-    super.dispose();
-  }
+  //
+  // @override
+  // void dispose() {
+  //   _showCommentBox.value.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -90,18 +94,17 @@ class _HomeScreenState extends State<HomeScreen> {
     final bodyHeight = mediaQuery.size.height -
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
-    if (centerItemIndex == null) {
-      centerItemIndex = ((bodyHeight / 2) / bodyHeight).floor();
-      print('center item = $centerItemIndex');
-    }
+    centerItemIndex ??= ((bodyHeight / 2) / bodyHeight).floor();
     if (rebuild) {
-      getData();
+      getData(0);
       rebuild = false;
     }
     return Scaffold(
-      appBar: customAppBar(context),
+      appBar: CustomAppBar.basicAppBar(context),
       body: SmarterRefresh(
         onRefreshData: getData,
+        postsIds: postsIds,
+        isThatEndOfList: isThatEndOfList,
         child: blocBuilder(bodyHeight),
       ),
       bottomSheet: addComment(),
@@ -111,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget? addComment() {
     return selectedPostInfo != null
         ? AddComment(
-            showCommentBox: _showCommentBox,
+            // showCommentBox: _showCommentBox,
             postsInfo: selectedPostInfo!,
             textController: _textController,
           )
@@ -121,8 +124,12 @@ class _HomeScreenState extends State<HomeScreen> {
   BlocBuilder<PostCubit, PostState> blocBuilder(double bodyHeight) {
     return BlocBuilder<PostCubit, PostState>(
       buildWhen: (previous, current) {
-        if (reLoadData && current is CubitMyPersonalPostsLoaded) {
-          reLoadData = false;
+        if (reLoadData.value && current is CubitMyPersonalPostsLoaded) {
+          reLoadData.value = false;
+          return true;
+        }
+        if (reLoadData.value) {
+          reLoadData.value = false;
           return true;
         }
 
@@ -136,8 +143,9 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       builder: (BuildContext context, PostState state) {
         if (state is CubitMyPersonalPostsLoaded) {
-          return state.postsInfo.isNotEmpty
-              ? inView(state, bodyHeight)
+          postsInfo.value = state.postsInfo;
+          return postsInfo.value.isNotEmpty
+              ? inView(bodyHeight)
               : emptyMassage();
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
@@ -152,51 +160,22 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-  //
-  // Widget inViewNotifier(CubitMyPersonalPostsLoaded state, double bodyHeight) {
-  //   ValueNotifier<bool> inView = ValueNotifier(false);
-  //   return InViewNotifierList(
-  //     initialInViewIds: const ['0'],
-  //     // shrinkWrap: true,
-  //     // primary: false,
-  //     // physics: const NeverScrollableScrollPhysics(),
-  //     isInViewPortCondition:
-  //         (double deltaTop, double deltaBottom, double vpHeight) {
-  //       return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
-  //     },
-  //     itemCount: state.postsInfo.length,
-  //     builder: (BuildContext context, int index) {
-  //       return Container(
-  //         width: double.infinity,
-  //         margin: const EdgeInsetsDirectional.only(bottom: .5, top: .5),
-  //         child: LayoutBuilder(
-  //           builder: (BuildContext context, BoxConstraints constraints) {
-  //             return InViewNotifierWidget(
-  //               id: '$index',
-  //               builder: (_, bool isInView, __) {
-  //                 if (isInView) {}
-  //                 Post postInfo = state.postsInfo[index];
-  //                 return columnOfWidgets(bodyHeight, postInfo,index,isInView);
-  //               },
-  //             );
-  //           },
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
-  Widget inView(CubitMyPersonalPostsLoaded state, double bodyHeight) {
+  Widget inView(double bodyHeight) {
     return SingleChildScrollView(
       child: NotificationListener(
         child: ListView.builder(
           shrinkWrap: true,
-          // physics: const NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
+          primary: false,
           controller: scrollController,
-          itemCount: state.postsInfo.length,
+          itemCount: postsInfo.value.length,
           itemBuilder: (ctx, index) {
-            return columnOfWidgets(bodyHeight, state.postsInfo[index], index,
-                index == centerItemIndex);
+            return columnOfWidgets(
+              bodyHeight,
+              index,
+              index == centerItemIndex,
+            );
           },
         ),
         onNotification: (_) {
@@ -214,8 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget columnOfWidgets(
-      double bodyHeight, Post postInfo, int index, bool playTheVideo) {
+  Widget columnOfWidgets(double bodyHeight, int index, bool playTheVideo) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -223,9 +201,15 @@ class _HomeScreenState extends State<HomeScreen> {
           storiesLines(bodyHeight),
           customDivider(),
         ] else ...[
-          const Divider(),
+          Divider(
+              color: Theme.of(context).toggleableActiveColor, thickness: .15),
         ],
-        posts(postInfo, bodyHeight, playTheVideo),
+        posts(index, bodyHeight, playTheVideo),
+        if (isThatEndOfList.value && index == postsIds.length - 1) ...[
+          Divider(
+              color: Theme.of(context).toggleableActiveColor, thickness: .15),
+          const GradientIcon(),
+        ]
       ],
     );
   }
@@ -236,21 +220,20 @@ class _HomeScreenState extends State<HomeScreen> {
       width: double.infinity,
       height: 0.3);
 
-  selectPost(Post selectedPost) {
-    setState(() {
-      _showCommentBox.value.requestFocus();
-      selectedPostInfo = selectedPost;
-    });
-  }
+  // selectPost(Post selectedPost) {
+  //   setState(() {
+  //     // _showCommentBox.value.requestFocus();
+  //     selectedPostInfo = selectedPost;
+  //   });
+  // }
 
-  Widget posts(Post postInfo, double bodyHeight, bool playTheVideo) {
+  Widget posts(int index, double bodyHeight, bool playTheVideo) {
     return ImageList(
-      postInfo: postInfo,
-      selectedPostInfo: selectPost,
-      bodyHeight: bodyHeight,
-      textController: _textController,
-      playTheVideo: playTheVideo,
-    );
+        postInfo: postsInfo.value[index],
+        postsInfo: postsInfo,
+        bodyHeight: bodyHeight,
+        playTheVideo: playTheVideo,
+        reLoadData: reLoadData,);
   }
 
   Widget circularProgress() {
@@ -283,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context) => NewStoryPage(storyImage: photo),
           maintainState: false));
       setState(() {
-        reLoadData = true;
+        reLoadData.value = true;
       });
     }
   }
@@ -296,8 +279,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ..getStoriesInfo(
             usersIds: usersStoriesIds, myPersonalInfo: personalInfo!),
       buildWhen: (previous, current) {
-        if (reLoadData && current is CubitStoriesInfoLoaded) {
-          reLoadData = false;
+        if (reLoadData.value && current is CubitStoriesInfoLoaded) {
+          reLoadData.value = false;
           return true;
         }
 
@@ -397,7 +380,7 @@ class _HomeScreenState extends State<HomeScreen> {
         GestureDetector(
           onTap: () async {
             await createNewStory();
-            await getData();
+            await getData(0);
             WidgetsBinding.instance!.addPostFrameCallback((_) {
               setState(() {});
             });
@@ -405,7 +388,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: CircleAvatarOfProfileImage(
             userInfo: personalInfo!,
             bodyHeight: bodyHeight,
-            moveTextMore:true,
+            moveTextMore: true,
             thisForStoriesLine: true,
             nameOfCircle: StringsManager.yourStory.tr(),
           ),
