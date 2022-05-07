@@ -39,6 +39,7 @@ class _SignUpPageState extends State<SignUpPage> {
       customTextButton: customTextButton(),
       emailController: emailController,
       passwordController: passwordController,
+      isThatLogIn: false,
     );
   }
 

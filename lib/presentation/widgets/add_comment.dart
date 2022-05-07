@@ -68,7 +68,6 @@ class _CommentBoxState extends State<AddComment>
 
   @override
   Widget build(BuildContext context) {
-    print("222222222222222222222222222  ${widget.postsInfo.postUid}");
 
     return Visibility(
       visible: visibility,

@@ -60,35 +60,38 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                   userId: userInfo.userId,
                 )));
       },
-      child: Row(children: [
-        Hero(
-          tag: hash,
-          child: CircleAvatarOfProfileImage(
-            bodyHeight: 600,
-            hashTag: hash,
-            userInfo: userInfo,
+      child: Padding(
+        padding: const EdgeInsetsDirectional.only(end: 15.0, start: 15),
+        child: Row(children: [
+          Hero(
+            tag: hash,
+            child: CircleAvatarOfProfileImage(
+              bodyHeight: 600,
+              hashTag: hash,
+              userInfo: userInfo,
+            ),
           ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                userInfo.userName,
-                style:  Theme.of(context).textTheme.headline2,
-              ),
-              const SizedBox(height: 5),
-              Text(
-                userInfo.name,
-                style: Theme.of(context).textTheme.headline1,
-              )
-            ],
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  userInfo.userName,
+                  style: Theme.of(context).textTheme.headline2,
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  userInfo.name,
+                  style: Theme.of(context).textTheme.headline1,
+                )
+              ],
+            ),
           ),
-        ),
-        followButton(userInfo, isThatFollower),
-      ]),
+          followButton(userInfo, isThatFollower),
+        ]),
+      ),
     );
   }
 
@@ -100,42 +103,36 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
             if (myPersonalId == userInfo.userId) {
               return Container();
             } else {
-              return Padding(
-                padding: const EdgeInsetsDirectional.only(end: 15.0),
-                child: InkWell(
-                    onTap: () async {
-                      widget.rebuildVariable(false);
+              return GestureDetector(
+                  onTap: () async {
+                    widget.rebuildVariable(false);
 
-                      if (userInfo.followerPeople.contains(myPersonalId)) {
-                        BlocProvider.of<FollowCubit>(followContext)
-                            .removeThisFollower(
-                                followingUserId: userInfo.userId,
-                                myPersonalId: myPersonalId);
-                        // TODO it's not prefect (not listing in all behind pages when you push to several pages) try to solve it
-                        // TODO here ============================================================================================
-                        if (widget.userInfo != null) {
-                          if (myPersonalId == widget.userInfo!.userId) {
-                            setState(() {
-                              if (isThatFollower) {
-                                widget.userInfo!.followerPeople
-                                    .remove(userInfo.userId);
-                              } else {
-                                widget.userInfo!.followedPeople
-                                    .remove(userInfo.userId);
-                              }
-                            });
-                          }
+                    if (userInfo.followerPeople.contains(myPersonalId)) {
+                      BlocProvider.of<FollowCubit>(followContext)
+                          .removeThisFollower(
+                              followingUserId: userInfo.userId,
+                              myPersonalId: myPersonalId);
+                      if (widget.userInfo != null &&
+                          myPersonalId == userInfo.userId) {
+                        // setState(() {
+                        if (isThatFollower) {
+                          userInfo.followerPeople
+                              .remove(userInfo.userId);
+                        } else {
+                          userInfo.followedPeople
+                              .remove(userInfo.userId);
                         }
-                      } else {
-                        BlocProvider.of<FollowCubit>(followContext)
-                            .followThisUser(
-                                followingUserId: userInfo.userId,
-                                myPersonalId: myPersonalId);
+                        // });
                       }
-                      widget.rebuildVariable(true);
-                    },
-                    child: whichContainerOfText(stateOfFollow, userInfo)),
-              );
+                    } else {
+                      BlocProvider.of<FollowCubit>(followContext)
+                          .followThisUser(
+                              followingUserId: userInfo.userId,
+                              myPersonalId: myPersonalId);
+                    }
+                    widget.rebuildVariable(true);
+                  },
+                  child: whichContainerOfText(stateOfFollow, userInfo));
             }
           }),
         );
@@ -145,8 +142,6 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
 
   Widget whichContainerOfText(
       FollowState stateOfFollow, UserPersonalInfo userInfo) {
-    bool isFollowLoading = stateOfFollow is CubitFollowThisUserLoading;
-
     if (stateOfFollow is CubitFollowThisUserFailed) {
       ToastShow.toastStateError(stateOfFollow);
     }
@@ -154,38 +149,35 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
         ? containerOfFollowText(
             text: StringsManager.follow.tr(),
             isThatFollower: false,
-            isItLoading: isFollowLoading)
+          )
         : containerOfFollowText(
             text: StringsManager.following.tr(),
             isThatFollower: true,
-            isItLoading: isFollowLoading);
+          );
   }
 
   Container containerOfFollowText(
-      {required String text,
-      required bool isThatFollower,
-      required bool isItLoading}) {
+      {required String text, required bool isThatFollower}) {
     return Container(
       height: 35.0,
       decoration: BoxDecoration(
-        color: isThatFollower ?  Theme.of(context).primaryColor : ColorManager.blue,
-        border:
-            Border.all(color: Theme.of(context).cardColor, width: isThatFollower ? 1.0 : 0),
+        color:
+            isThatFollower ? Theme.of(context).primaryColor : ColorManager.blue,
+        border: Border.all(
+            color: Theme.of(context).cardColor,
+            width: isThatFollower ? 1.0 : 0),
         borderRadius: BorderRadius.circular(6.0),
       ),
       child: Center(
-        child: isItLoading
-            ? CircularProgressIndicator(
-                color: isThatFollower ? Theme.of(context).focusColor :Theme.of(context).primaryColor,
-                strokeWidth: 1,
-              )
-            : Text(
-                text,
-                style: TextStyle(
-                    fontSize: 17.0,
-                    color: isThatFollower ? Theme.of(context).focusColor : ColorManager.white,
-                    fontWeight: FontWeight.w500),
-              ),
+        child: Text(
+          text,
+          style: TextStyle(
+              fontSize: 17.0,
+              color: isThatFollower
+                  ? Theme.of(context).focusColor
+                  : ColorManager.white,
+              fontWeight: FontWeight.w500),
+        ),
       ),
     );
   }

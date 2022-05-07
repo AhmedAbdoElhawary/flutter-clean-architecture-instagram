@@ -42,7 +42,7 @@ class _ProfilePageState extends State<UserProfilePage> {
           ? (BlocProvider.of<FirestoreUserInfoCubit>(context)
             ..getUserFromUserName(widget.userName))
           : (BlocProvider.of<FirestoreUserInfoCubit>(context)
-            ..getUserInfo(widget.userId, false)),
+            ..getUserInfo(widget.userId,isThatMyPersonalId: false)),
       buildWhen: (previous, current) {
         if (previous != current && current is CubitUserLoaded) {
           return true;
@@ -66,7 +66,10 @@ class _ProfilePageState extends State<UserProfilePage> {
           );
         } else if (state is CubitGetUserInfoFailed) {
           ToastShow.toastStateError(state);
-          return  Text(StringsManager.somethingWrong.tr(),style:  Theme.of(context).textTheme.bodyText1,);
+          return Text(
+            StringsManager.somethingWrong.tr(),
+            style: Theme.of(context).textTheme.bodyText1,
+          );
         } else {
           return const ThineCircularProgress();
         }
@@ -77,13 +80,14 @@ class _ProfilePageState extends State<UserProfilePage> {
   AppBar appBar(String userName) {
     return AppBar(
         elevation: 0,
-        backgroundColor:  Theme.of(context).primaryColor,
-        title: Text(userName,style:  Theme.of(context).textTheme.bodyText1),
+        iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text(userName, style: Theme.of(context).textTheme.bodyText1),
         actions: [
           IconButton(
             icon: SvgPicture.asset(
               IconsAssets.menuHorizontalIcon,
-              color:Theme.of(context).focusColor,
+              color: Theme.of(context).focusColor,
               height: 22.5,
             ),
             onPressed: () => bottomSheetOfAdd(),
@@ -98,9 +102,10 @@ class _ProfilePageState extends State<UserProfilePage> {
       builder: (BuildContext context) {
         return Container(
           width: double.infinity,
-          decoration: const BoxDecoration(
-            color: ColorManager.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(25.0)),
           ),
           child: listOfAddPost(),
         );
@@ -116,7 +121,7 @@ class _ProfilePageState extends State<UserProfilePage> {
       children: <Widget>[
         SvgPicture.asset(
           IconsAssets.minusIcon,
-          color:Theme.of(context).disabledColor,
+          color: Theme.of(context).disabledColor,
           height: 40,
         ),
         const Divider(),
@@ -148,7 +153,9 @@ class _ProfilePageState extends State<UserProfilePage> {
   }
 
   Text textOfBottomSheet(String text) {
-    return Text(text, style:getNormalStyle(fontSize: 15,color:  Theme.of(context).focusColor));
+    return Text(text,
+        style:
+            getNormalStyle(fontSize: 15, color: Theme.of(context).focusColor));
   }
 
   List<Widget> widgetsAboveTapBars(
@@ -202,7 +209,9 @@ class _ProfilePageState extends State<UserProfilePage> {
     }
     return !userInfo.followerPeople.contains(myPersonalId)
         ? containerOfFollowText(
-            text: StringsManager.follow.tr(), isThatFollower: false, isItLoading: isFollowLoading)
+            text: StringsManager.follow.tr(),
+            isThatFollower: false,
+            isItLoading: isFollowLoading)
         : containerOfFollowText(
             text: StringsManager.following.tr(),
             isThatFollower: true,
@@ -224,7 +233,9 @@ class _ProfilePageState extends State<UserProfilePage> {
           ));
         },
         child: containerOfFollowText(
-            text: StringsManager.massage.tr(), isThatFollower: true, isItLoading: false),
+            text: StringsManager.massage.tr(),
+            isThatFollower: true,
+            isItLoading: false),
       ),
     );
   }
@@ -236,22 +247,28 @@ class _ProfilePageState extends State<UserProfilePage> {
     return Container(
       height: 35.0,
       decoration: BoxDecoration(
-        color: isThatFollower ?  Theme.of(context).primaryColor : ColorManager.blue,
-        border:
-            Border.all(color: ColorManager.black26, width: isThatFollower ? 1.0 : 0),
+        color:
+            isThatFollower ? Theme.of(context).primaryColor : ColorManager.blue,
+        border: Border.all(
+            color: Theme.of(context).cardColor,
+            width: isThatFollower ? 1.0 : 0),
         borderRadius: BorderRadius.circular(6.0),
       ),
       child: Center(
         child: isItLoading
             ? CircularProgressIndicator(
-                color: isThatFollower ?  Theme.of(context).focusColor :  Theme.of(context).primaryColor,
+                color: isThatFollower
+                    ? Theme.of(context).focusColor
+                    : Theme.of(context).primaryColor,
                 strokeWidth: 1,
               )
             : Text(
                 text,
                 style: TextStyle(
                     fontSize: 17.0,
-                    color: isThatFollower ? Theme.of(context).focusColor: ColorManager.white,
+                    color: isThatFollower
+                        ? Theme.of(context).focusColor
+                        : ColorManager.white,
                     fontWeight: FontWeight.w500),
               ),
       ),

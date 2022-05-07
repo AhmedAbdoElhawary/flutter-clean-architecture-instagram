@@ -44,6 +44,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   bool rebuildUserInfo = false;
   Size imageSize = const Size(0.00, 0.00);
   final SharedPreferences sharePrefs = injector<SharedPreferences>();
+  final AppPrefMode _appMode = injector<AppPrefMode>();
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           ? (BlocProvider.of<FirestoreUserInfoCubit>(context)
             ..getUserFromUserName(widget.userName))
           : (BlocProvider.of<FirestoreUserInfoCubit>(context)
-            ..getUserInfo(widget.personalId, true)),
+            ..getUserInfo(widget.personalId)),
       buildWhen: (previous, current) {
         if (previous != current && current is CubitMyPersonalInfoLoaded) {
           return true;
@@ -73,10 +74,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       builder: (context, state) {
         if (state is CubitMyPersonalInfoLoaded) {
           return SmarterRefresh(
-              onRefreshData: () async {
-                return setState(() {});
-              },
-
+            onRefreshData: () async {
+              return setState(() {});
+            },
             child: Scaffold(
               appBar: appBar(state.userPersonalInfo.userName),
               body: ProfilePage(
@@ -90,7 +90,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           );
         } else if (state is CubitGetUserInfoFailed) {
           ToastShow.toastStateError(state);
-          return Text(StringsManager.noPosts.tr(),style: Theme.of(context).textTheme.bodyText1);
+          return Text(StringsManager.noPosts.tr(),
+              style: Theme.of(context).textTheme.bodyText1);
         } else {
           return const ThineCircularProgress();
         }
@@ -102,22 +103,137 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     return AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text(userName,style: Theme.of(context).textTheme.bodyText1),
+        title: Text(userName, style: Theme.of(context).textTheme.bodyText1),
         actions: [
           IconButton(
             icon: SvgPicture.asset(
               IconsAssets.addIcon,
-              color:  Theme.of(context).focusColor,
+              color: Theme.of(context).focusColor,
               height: 22.5,
             ),
-            onPressed: () => bottomSheetOfAdd(),
+            onPressed: () => bottomSheet(),
           ),
-          exitButton(),
+          IconButton(
+            icon: SvgPicture.asset(
+              IconsAssets.menuIcon,
+              color: Theme.of(context).focusColor,
+              height: 30,
+            ),
+            onPressed: () async => bottomSheet(createNewData: false),
+          ),
           const SizedBox(width: 5)
         ]);
   }
 
-  Widget exitButton() {
+  Future<void> bottomSheet({bool createNewData = true}) {
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).splashColor,
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(25.0)),
+          ),
+          child: listOfAddPost(createNewData: createNewData),
+        );
+      },
+    );
+  }
+
+  Widget listOfAddPost({required bool createNewData}) {
+    return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SvgPicture.asset(
+            IconsAssets.minusIcon,
+            color: Theme.of(context).highlightColor,
+            height: 30,
+          ),
+          Text(StringsManager.create.tr(),
+              style: getBoldStyle(
+                  color: Theme.of(context).focusColor, fontSize: 17)),
+          const Divider(),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 20.0),
+            child: createNewData ? columnOfCreateData() : columnOfThemeData(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Column columnOfCreateData() {
+    return Column(
+      children: [
+        createNewPost(),
+        if (_appMode.getAppModeString() == 'light')
+          const Divider(indent: 40, endIndent: 15, color: ColorManager.grey),
+        createNewVideo(),
+        if (_appMode.getAppModeString() == 'light')
+          const Divider(indent: 40, endIndent: 15, color: ColorManager.grey),
+        createNewStory(),
+        if (_appMode.getAppModeString() == 'light')
+          const Divider(indent: 40, endIndent: 15, color: ColorManager.grey),
+        createNewLive(),
+        if (_appMode.getAppModeString() == 'light')
+          const Divider(indent: 40, endIndent: 15, color: ColorManager.grey),
+        Container(
+          height: 50,
+        )
+      ],
+    );
+  }
+
+  Column columnOfThemeData() {
+    return Column(
+      children: [
+        changeLanguage(),
+        if (_appMode.getAppModeString() == 'light')
+          const Divider(indent: 40, endIndent: 15, color: ColorManager.grey),
+        changeMode(),
+        if (_appMode.getAppModeString() == 'light')
+          const Divider(indent: 40, endIndent: 15, color: ColorManager.grey),
+        logOut(),
+        if (_appMode.getAppModeString() == 'light')
+          const Divider(indent: 40, endIndent: 15, color: ColorManager.grey),
+        Container(
+          height: 50,
+        )
+      ],
+    );
+  }
+
+  GestureDetector changeLanguage() {
+    final AppPreferences _appPreferences = injector<AppPreferences>();
+
+    return GestureDetector(
+      onTap: () {
+        _appPreferences.changeAppLanguage();
+        Phoenix.rebirth(context);
+      },
+      child: createSizedBox(StringsManager.changeLanguage.tr(),
+          icon: Icons.language_rounded),
+    );
+  }
+
+  GestureDetector changeMode() {
+    final AppPrefMode _appPreferencesMode = injector<AppPrefMode>();
+
+    return GestureDetector(
+      onTap: () {
+        _appPreferencesMode.changeAppMode();
+        Phoenix.rebirth(context);
+      },
+      child: createSizedBox(StringsManager.changeMode.tr(),
+          icon: Icons.brightness_4_outlined),
+    );
+  }
+
+  Widget logOut() {
     return BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState>(
         builder: (context, state) {
       FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
@@ -135,13 +251,11 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       } else if (state is CubitAuthFailed) {
         ToastShow.toastStateError(state);
       }
-      return IconButton(
-        icon: SvgPicture.asset(
-          IconsAssets.menuIcon,
-          color:  Theme.of(context).focusColor,
-          height: 30,
-        ),
-        onPressed: () async {
+      return GestureDetector(
+        child: createSizedBox(StringsManager.logOut.tr(),
+            icon: Icons.logout_rounded),
+        onTap: () async {
+          sharePrefs.clear();
           authCubit.signOut();
         },
       );
@@ -178,14 +292,15 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           child: Container(
             height: 35.0,
             decoration: BoxDecoration(
-              color:  Theme.of(context).primaryColor,
-              border: Border.all(color: ColorManager.black26, width: 1.0),
+              color: Theme.of(context).primaryColor,
+              border:
+                  Border.all(color: Theme.of(context).cardColor, width: 1.0),
               borderRadius: BorderRadius.circular(6.0),
             ),
             child: Center(
               child: Text(
                 StringsManager.editProfile.tr(),
-                style:  TextStyle(
+                style: TextStyle(
                     fontSize: 17.0,
                     color: Theme.of(context).focusColor,
                     fontWeight: FontWeight.w500),
@@ -197,70 +312,11 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     );
   }
 
-  Future<void> bottomSheetOfAdd() {
-    return showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          decoration:  BoxDecoration(
-            color:  Theme.of(context).primaryColor,
-            borderRadius:const BorderRadius.vertical(top: Radius.circular(25.0)),
-          ),
-          child: listOfAddPost(),
-        );
-      },
-    );
-  }
-
-  Widget listOfAddPost() {
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          SvgPicture.asset(
-            IconsAssets.minusIcon,
-            color: Theme.of(context).dialogBackgroundColor,
-            height: 40,
-          ),
-          Text(StringsManager.create.tr(),
-              style:
-                  const TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 20.0),
-            child: Column(
-              children: [
-                createNewPost(),
-                const Divider(indent: 40, endIndent: 15),
-                createNewVideo(),
-                const Divider(indent: 40, endIndent: 15),
-                createNewStory(),
-                const Divider(indent: 40, endIndent: 15),
-                createNewLive(),
-                const Divider(indent: 40, endIndent: 15),
-                Container(
-                  height: 50,
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   GestureDetector createNewLive() {
-    final AppPreferences _appPreferences = injector<AppPreferences>();
-
     return GestureDetector(
-      onTap: () {
-        _appPreferences.changeAppLanguage();
-        Phoenix.rebirth(context);
-      },
-      child: createSizedBox(
-          StringsManager.live.tr(), IconsAssets.instagramHighlightStoryIcon),
+      onTap: () {},
+      child: createSizedBox(StringsManager.live.tr(),
+          nameOfPath: IconsAssets.instagramHighlightStoryIcon),
     );
   }
 
@@ -281,8 +337,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             });
           }
         },
-        child: createSizedBox(
-            StringsManager.story.tr(), IconsAssets.addInstagramStoryIcon));
+        child: createSizedBox(StringsManager.story.tr(),
+            nameOfPath: IconsAssets.addInstagramStoryIcon));
   }
 
   GestureDetector createNewVideo() {
@@ -306,7 +362,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             });
           }
         },
-        child: createSizedBox(StringsManager.reel.tr(), IconsAssets.videoIcon));
+        child: createSizedBox(StringsManager.reel.tr(),
+            nameOfPath: IconsAssets.videoIcon));
   }
 
   void _getImageDimension(File photo) {
@@ -318,8 +375,6 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           setState(() {
             imageSize =
                 Size(myImage.width.toDouble(), myImage.height.toDouble());
-            print(
-                "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC ${imageSize.aspectRatio}");
           });
         },
       ),
@@ -338,8 +393,6 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             await Navigator.of(context, rootNavigator: true)
                 .push(CupertinoPageRoute(
                     builder: (context) {
-                      print(
-                          "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ${imageSize.height}");
                       return CreatePostPage(
                           selectedFile: photo,
                           aspectRatio: imageSize.aspectRatio);
@@ -350,24 +403,26 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             });
           }
         },
-        child: createSizedBox(StringsManager.post.tr(), IconsAssets.gridIcon));
+        child: createSizedBox(StringsManager.post.tr()));
   }
 
-  SizedBox createSizedBox(String text, String nameOfPath) {
+  SizedBox createSizedBox(String text,
+      {String nameOfPath = '', IconData icon = Icons.grid_on_rounded}) {
     return SizedBox(
       height: 40,
       child: Row(children: [
-        text != StringsManager.post.tr()
+        nameOfPath.isNotEmpty
             ? SvgPicture.asset(
                 nameOfPath,
                 color: Theme.of(context).dialogBackgroundColor,
                 height: 25,
               )
-            : const Icon(Icons.grid_on_sharp),
+            : Icon(icon, color: Theme.of(context).focusColor),
         const SizedBox(width: 15),
         Text(
           text,
-          style:getNormalStyle(color: Theme.of(context).focusColor,fontSize: 15),
+          style:
+              getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
         )
       ]),
     );

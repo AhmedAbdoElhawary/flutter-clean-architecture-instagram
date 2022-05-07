@@ -32,7 +32,7 @@ class _GetMyPersonalIdState extends State<GetMyPersonalId> {
     return Builder(builder: (context) {
       return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
         bloc: FirestoreUserInfoCubit.get(context)
-          ..getUserInfo(widget.myPersonalId, true),
+          ..getUserInfo(widget.myPersonalId),
         builder: (context, userState) {
           WidgetsBinding.instance!.addPostFrameCallback((_) async {
             if (userState is CubitMyPersonalInfoLoaded) {
@@ -46,7 +46,7 @@ class _GetMyPersonalIdState extends State<GetMyPersonalId> {
               ToastShow.toastStateError(userState);
             }
           });
-          return Container(color: ColorManager.white,);
+          return Container(color: Theme.of(context).primaryColor,);
         },
       );
     });

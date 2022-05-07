@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
   BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState> blocBuilder(
       FirestoreUserInfoCubit getUserCubit) {
     return BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState>(
-      buildWhen: (previous, current) => buildBlocWhen(previous, current),
+      buildWhen: (previous, current) => true,
       builder: (context, authState) =>
           buildBlocBuilder(context, authState, getUserCubit),
     );
@@ -71,38 +71,29 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         isUserIdReady = true;
       });
+
       ToastShow.toastStateError(authState);
     }
     return loginButton(authCubit);
   }
 
-  buildBlocWhen(previous, current) {
-    if (previous != current && isUserIdReady) {
-      return true;
-    }
-    if (previous != current && current is CubitAuthConfirmed) {
-      return true;
-    }
-    return false;
-  }
-
   onAuthConfirmed(
       FirestoreUserInfoCubit getUserCubit, FirebaseAuthCubit authCubit) {
-    getUserCubit.getUserInfo(authCubit.user!.uid, true);
-    String userId = authCubit.user!.uid;
-
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) async{
+      await getUserCubit.getUserInfo(authCubit.user!.uid);
+      String userId = authCubit.user!.uid;
       setState(() {
         isUserIdReady = true;
       });
-    });
     if (!isHeMovedToHome) {
       myPersonalId = userId;
-      widget.sharePrefs.setString("myPersonalId", userId);
+      await widget.sharePrefs.setString("myPersonalId", userId);
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => MainScreen(userId)));
+          .push(MaterialPageRoute(builder: (context) => MainScreen(myPersonalId)));
     }
     isHeMovedToHome = true;
+    });
+
   }
 
   CustomElevatedButton loginButton(FirebaseAuthCubit authCubit) {

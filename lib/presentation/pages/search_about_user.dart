@@ -37,18 +37,23 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
+        iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+        backgroundColor: Theme.of(context).primaryColor,
         title: Container(
           width: double.infinity,
           height: 35,
           decoration: BoxDecoration(
-              color: ColorManager.veryLowOpacityGrey,
+              color:Theme.of(context).shadowColor,
               borderRadius: BorderRadius.circular(10)),
           child: TextFormField(
-            controller: _textController,
+            style:Theme.of(context).textTheme.bodyText1,
+            controller: _textController,textAlign:TextAlign.start ,
             onChanged: (_) => setState(() {}),
-            decoration:  InputDecoration(
-              contentPadding:const EdgeInsetsDirectional.all(7.0) ,
-                hintText: StringsManager.search.tr(), border: InputBorder.none),
+            decoration: InputDecoration(
+                contentPadding: const EdgeInsetsDirectional.all(12.5),
+                hintText: StringsManager.search.tr(),
+                hintStyle: Theme.of(context).textTheme.headline1 ,
+                border: InputBorder.none),
           ),
         ),
       ),
@@ -71,25 +76,29 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
 
                   return ListTile(
                     title: Text(stateUsersInfo[index].userName,
-                        style: getNormalStyle(fontSize: 15,color: Theme.of(context).focusColor)),
+                        style: getNormalStyle(
+                            fontSize: 15, color: Theme.of(context).focusColor)),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(stateUsersInfo[index].name,
                             style: getNormalStyle(
-                                fontSize: 13,color: Theme.of(context).disabledColor)),
+                                fontSize: 13,
+                                color: Theme.of(context).disabledColor)),
                         if (stateUsersInfo[index]
                             .followerPeople
                             .contains(myPersonalId)) ...[
                           Text(StringsManager.youFollowHim.tr(),
                               style: getNormalStyle(
-                                  fontSize: 10, color: Theme.of(context).disabledColor)),
+                                  fontSize: 10,
+                                  color: Theme.of(context).disabledColor)),
                         ] else if (stateUsersInfo[index]
                             .followedPeople
                             .contains(myPersonalId)) ...[
                           Text(StringsManager.followers.tr(),
                               style: getNormalStyle(
-                                  fontSize: 10,color: Theme.of(context).disabledColor)),
+                                  fontSize: 10,
+                                  color: Theme.of(context).disabledColor)),
                         ],
                       ],
                     ),

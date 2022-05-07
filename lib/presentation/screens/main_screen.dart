@@ -52,7 +52,7 @@ class _MainScreenState extends State<MainScreen> {
                       radius: 14,
                       backgroundImage:
                           userImage.isNotEmpty ? NetworkImage(userImage) : null,
-                      backgroundColor: ColorManager.lowOpacityGrey,
+                      backgroundColor:Theme.of(context).hintColor,
                       child: userImage.isEmpty
                           ? const Icon(Icons.person, color: ColorManager.white)
                           : null);

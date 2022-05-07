@@ -49,8 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget defaultTabController(double bodyHeight) {
     return DefaultTabController(
       length: 3,
-      child:
-          NestedScrollView(
+      child: NestedScrollView(
         headerSliverBuilder: (_, __) {
           return [
             SliverList(
@@ -95,7 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
         } else {
           return Transform.scale(
               scale: 0.1,
-              child:  CircularProgressIndicator(
+              child: CircularProgressIndicator(
                   strokeWidth: 20, color: Theme.of(context).disabledColor));
         }
       },
@@ -120,16 +119,10 @@ class _ProfilePageState extends State<ProfilePage> {
     return Expanded(
       child: TabBarView(
         children: [
-          CustomGridView(
-            postsInfo: imagesPostsInfo,
-            userId: widget.userId,
-          ),
+          CustomGridView(postsInfo: imagesPostsInfo, userId: widget.userId),
           CustomVideosGridView(
               postsInfo: videosPostsInfo, userId: widget.userId),
-          CustomGridView(
-            postsInfo: imagesPostsInfo,
-            userId: widget.userId,
-          ),
+          CustomGridView(postsInfo: imagesPostsInfo, userId: widget.userId),
         ],
       ),
     );
@@ -138,16 +131,19 @@ class _ProfilePageState extends State<ProfilePage> {
   TabBar tabBarIcons() {
     return TabBar(
       tabs: [
-        const Tab(icon: Icon(Icons.grid_on_sharp)),
+        const Tab(
+            icon: Icon(
+          Icons.grid_on_rounded,
+        )),
         Tab(
             icon: SvgPicture.asset(
           IconsAssets.videoIcon,
-          color: Theme.of(context).focusColor,
+          color: Theme.of(context).highlightColor,
           height: 22.5,
         )),
         const Tab(
             icon: Icon(
-          Icons.play_arrow_outlined,
+          Icons.play_arrow_rounded,
           size: 38,
         )),
       ],
@@ -164,8 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(userInfo.name,
-                style:Theme.of(context).textTheme.headline2),
+            Text(userInfo.name, style: Theme.of(context).textTheme.headline2),
             ReadMore(userInfo.bio, 4),
             const SizedBox(height: 10),
             Row(
@@ -210,7 +205,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           usersInfo == userInfo.followerPeople ? 0 : 1)));
 
               BlocProvider.of<FirestoreUserInfoCubit>(context)
-                  .getUserInfo(userInfo.userId, widget.isThatMyPersonalId);
+                  .getUserInfo(userInfo.userId, isThatMyPersonalId:widget.isThatMyPersonalId);
               setState(() {
                 reBuild = true;
               });
@@ -219,8 +214,11 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             children: [
               Text("${usersInfo.length}",
-                  style:getBoldStyle(color: Theme.of(context).focusColor, fontSize: 17)),
-              Text(text, style: getNormalStyle(color: Theme.of(context).focusColor,fontSize: 15))
+                  style: getBoldStyle(
+                      color: Theme.of(context).focusColor, fontSize: 17)),
+              Text(text,
+                  style: getNormalStyle(
+                      color: Theme.of(context).focusColor, fontSize: 15))
             ],
           ),
         );

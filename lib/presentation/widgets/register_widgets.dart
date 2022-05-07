@@ -32,13 +32,13 @@ class RegisterWidgets extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<RegisterWidgets> {
-  final AppPreferences _appPreferences = injector<AppPreferences>();
-
-  @override
-  void didChangeDependencies() {
-    _appPreferences.getLocal().then((local) => {context.setLocale(local)});
-    super.didChangeDependencies();
-  }
+  // final AppPreferences _appPreferences = injector<AppPreferences>();
+  //
+  // @override
+  // void didChangeDependencies() {
+  //   _appPreferences.getLocal().then((local) => {context.setLocale(local)});
+  //   super.didChangeDependencies();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
 
   Scaffold buildScaffold(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.white,
+      backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
         child: Center(
             child: SingleChildScrollView(

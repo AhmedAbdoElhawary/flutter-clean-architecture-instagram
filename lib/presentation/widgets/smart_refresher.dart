@@ -60,6 +60,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
         enablePullUp: true,
         controller: _refreshController,
         scrollDirection: Axis.vertical,
+
         onRefresh: () async {
           await Future.delayed(const Duration(milliseconds: 2000));
           widget.onRefreshData().whenComplete(() {
@@ -117,10 +118,10 @@ class _SmarterRefreshState extends State<SmarterRefresh>
               child: FadeTransition(
                 opacity: _scaleController,
                 child: ScaleTransition(
-                  child:   const CircularProgressIndicator(
+                  child:  CircularProgressIndicator(
                     strokeWidth: 1.5,
                     color: ColorManager.black38,
-                    backgroundColor: ColorManager.black12,
+                    backgroundColor: Theme.of(context).dividerColor,
                   ),
                   scale: _scaleController,
                 ),

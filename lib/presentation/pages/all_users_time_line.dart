@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
@@ -13,7 +12,8 @@ import 'package:instegram/presentation/widgets/toast_show.dart';
 
 class AllUsersTimeLinePage extends StatefulWidget {
   final String userId;
-  const AllUsersTimeLinePage({required this.userId, Key? key}) : super(key: key);
+  const AllUsersTimeLinePage({required this.userId, Key? key})
+      : super(key: key);
 
   @override
   State<AllUsersTimeLinePage> createState() => _AllUsersTimeLinePageState();
@@ -33,24 +33,26 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
   AppBar searchAppBar(BuildContext context) {
     return AppBar(
       toolbarHeight: 50,
+      iconTheme: IconThemeData(color: Theme.of(context).focusColor),
       title: Container(
         width: double.infinity,
         height: 35,
         decoration: BoxDecoration(
-            color: ColorManager.veryLowOpacityGrey,
+            color: Theme.of(context).shadowColor,
             borderRadius: BorderRadius.circular(10)),
         child: Center(
           child: TextField(
-            onTap: (){
+            onTap: () {
               Navigator.of(context).push(CupertinoPageRoute(
                   builder: (context) => SearchAboutUserPage()));
             },
             readOnly: true,
             decoration: InputDecoration(
-                contentPadding:const EdgeInsetsDirectional.all(7.0) ,
-                prefixIcon:
-                Icon(Icons.search_rounded, color:  Theme.of(context).focusColor),
+                contentPadding: const EdgeInsetsDirectional.all(2.0),
+                prefixIcon: Icon(Icons.search_rounded,
+                    color: Theme.of(context).focusColor),
                 hintText: StringsManager.search.tr(),
+                hintStyle: Theme.of(context).textTheme.headline1,
                 border: InputBorder.none),
           ),
         ),
@@ -61,7 +63,7 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
   OutlineInputBorder outlineInputBorder() {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(5.0),
-      borderSide: const BorderSide(color: ColorManager.black12, width: 1.0),
+      borderSide: BorderSide(color: Theme.of(context).dividerColor, width: 1.0),
     );
   }
 
@@ -100,7 +102,8 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
           return Center(
               child: Text(
             StringsManager.noPosts.tr(),
-                  style: getNormalStyle(color: Theme.of(context).focusColor,fontSize: 20),
+            style: getNormalStyle(
+                color: Theme.of(context).focusColor, fontSize: 20),
           ));
         } else {
           return Center(

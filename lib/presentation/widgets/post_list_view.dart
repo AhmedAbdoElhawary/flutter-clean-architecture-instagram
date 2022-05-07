@@ -3,12 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instegram/core/app_prefs.dart';
 import 'package:instegram/core/globall.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/core/utility/constant.dart';
+import 'package:instegram/core/utility/injector.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instegram/presentation/pages/comments_page.dart';
@@ -46,11 +48,12 @@ class _ImageListState extends State<ImageList> {
   bool isSaved = false;
   late Size imageSize = const Size(0.0, 0.0);
   late Widget videoStatusAnimation;
-
+  String currentLanguage = 'en';
   @override
   void initState() {
     super.initState();
     videoStatusAnimation = Container();
+    getLanguage();
   }
 
   @override
@@ -63,6 +66,11 @@ class _ImageListState extends State<ImageList> {
       postInfo: widget.postInfo,
       bodyHeight: bodyHeight,
     );
+  }
+
+  getLanguage() async {
+    AppPreferences _appPreferences = injector<AppPreferences>();
+    currentLanguage = await _appPreferences.getAppLanguage();
   }
 
   pushToProfilePage(Post postInfo) =>
@@ -136,11 +144,13 @@ class _ImageListState extends State<ImageList> {
                   padding: const EdgeInsetsDirectional.only(end: 12.0),
                   child: GestureDetector(
                     child: isSaved
-                        ? const Icon(
+                        ? Icon(
                             Icons.bookmark_border,
+                            color: Theme.of(context).focusColor,
                           )
-                        : const Icon(
+                        : Icon(
                             Icons.bookmark,
+                            color: Theme.of(context).focusColor,
                           ),
                     onTap: () {
                       setState(() {
@@ -159,8 +169,13 @@ class _ImageListState extends State<ImageList> {
                 children: [
                   if (postInfo.likes.isNotEmpty) numberOfLikes(postInfo),
                   const SizedBox(height: 5),
-                  ReadMore(
-                      "${postInfo.publisherInfo!.name} ${postInfo.caption}", 2),
+                  if(currentLanguage=='en')...[
+                    ReadMore(
+                        "${postInfo.publisherInfo!.name} ${postInfo.caption}", 2),
+                  ]else...[
+                    ReadMore(
+                        "${postInfo.caption} ${postInfo.publisherInfo!.name}", 2),
+                  ],
                   const SizedBox(height: 8),
                   if (postInfo.comments.isNotEmpty) numberOfComment(postInfo),
                   buildCommentBox(bodyHeight),
@@ -196,14 +211,15 @@ class _ImageListState extends State<ImageList> {
             ),
             Expanded(
               child: TextFormField(
-                keyboardType: TextInputType.multiline,
+                style: Theme.of(context).textTheme.bodyText1,
                 cursorColor: ColorManager.teal,
+                keyboardType: TextInputType.multiline,
                 maxLines: null,
                 readOnly: true,
                 decoration: InputDecoration.collapsed(
                     hintText: StringsManager.addComment.tr(),
-                    hintStyle: const TextStyle(
-                        color: ColorManager.black26, fontSize: 14)),
+                    hintStyle: TextStyle(
+                        color: Theme.of(context).cardColor, fontSize: 14)),
                 autofocus: false,
                 controller: TextEditingController(),
                 onTap: () {
@@ -240,8 +256,9 @@ class _ImageListState extends State<ImageList> {
     bool isLiked = postInfo.likes.contains(myPersonalId);
     return GestureDetector(
       child: !isLiked
-          ? const Icon(
+          ? Icon(
               Icons.favorite_border,
+              color: Theme.of(context).focusColor,
             )
           : const Icon(
               Icons.favorite,
@@ -275,7 +292,7 @@ class _ImageListState extends State<ImageList> {
       },
       child: Text(
         "${StringsManager.viewAll.tr()} $commentsLength ${commentsLength > 1 ? StringsManager.comments.tr() : StringsManager.comment.tr()}",
-        style:Theme.of(context).textTheme.headline1,
+        style: Theme.of(context).textTheme.headline1,
       ),
     );
   }
@@ -293,23 +310,23 @@ class _ImageListState extends State<ImageList> {
       child: Text(
           '$likes ${likes > 1 ? StringsManager.likes.tr() : StringsManager.like.tr()}',
           textAlign: TextAlign.left,
-          style:Theme.of(context).textTheme.headline2),
+          style: Theme.of(context).textTheme.headline2),
     );
   }
 
   SvgPicture iconsOfImagePost(String path, {bool lowHeight = false}) {
     return SvgPicture.asset(
       path,
-      color: Colors.black,
-      height: lowHeight ? 22 : 25,
+      color: Theme.of(context).focusColor,
+      height: lowHeight ? 22 : 28,
     );
   }
 
   Icon lovePopAnimation() {
-    return  const Icon(
+    return Icon(
       Icons.favorite,
       size: 100,
-      color: ColorManager.white,
+      color: Theme.of(context).primaryColor,
     );
   }
 
@@ -356,14 +373,15 @@ class _ImageListState extends State<ImageList> {
       ],
     );
   }
+
   IconButton menuButton() {
     return IconButton(
       icon: SvgPicture.asset(
         IconsAssets.menuHorizontalIcon,
-        color: Colors.black,
+        color: Theme.of(context).focusColor,
         height: 23,
       ),
-      color: Colors.black,
+      color: Theme.of(context).focusColor,
       onPressed: () {},
     );
   }

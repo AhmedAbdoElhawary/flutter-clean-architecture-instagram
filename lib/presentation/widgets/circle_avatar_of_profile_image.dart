@@ -16,9 +16,12 @@ class CircleAvatarOfProfileImage extends StatefulWidget {
   final UserPersonalInfo userInfo;
   final String nameOfCircle;
   final String hashTag;
+  final bool moveTextMore;
+
   const CircleAvatarOfProfileImage({
     required this.userInfo,
     required this.bodyHeight,
+    this.moveTextMore = false,
     this.hashTag = "",
     this.nameOfCircle = "",
     this.thisForStoriesLine = false,
@@ -56,6 +59,8 @@ class _CircleAvatarOfProfileImageState
           buildStack(profileImage, context),
           if (widget.thisForStoriesLine) ...[
             SizedBox(height: widget.bodyHeight * 0.004),
+            if (widget.moveTextMore)
+              SizedBox(height: widget.bodyHeight * 0.015),
             NameOfCircleAvatar(
                 widget.nameOfCircle.isEmpty
                     ? widget.userInfo.name
@@ -150,7 +155,7 @@ class _CircleAvatarOfProfileImageState
             radius: widget.bodyHeight < 900
                 ? widget.bodyHeight * .05
                 : widget.bodyHeight * .0485,
-            backgroundColor: ColorManager.white,
+            backgroundColor: Theme.of(context).primaryColor,
           ),
         ],
         CircleAvatar(
@@ -160,7 +165,7 @@ class _CircleAvatarOfProfileImageState
           child: profileImage.isEmpty
               ? Icon(
                   Icons.person,
-                  color: ColorManager.white,
+                  color: Theme.of(context).primaryColor,
                   size: widget.bodyHeight * 0.07,
                 )
               : null,

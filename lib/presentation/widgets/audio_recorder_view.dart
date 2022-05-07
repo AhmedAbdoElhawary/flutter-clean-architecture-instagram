@@ -5,24 +5,23 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter_audio_recorder2/flutter_audio_recorder2.dart';
 import 'dart:io';
 
-class RecorderView extends StatefulWidget {
-  final Function onSaved;
-
-  const RecorderView({Key? key, required this.onSaved}) : super(key: key);
-  @override
-  _RecorderViewState createState() => _RecorderViewState();
-}
-
 enum RecordingState {
   nSet,
   set,
   recording,
   stopped,
 }
-  SvgPicture microphoneIcon() => SvgPicture.asset("assets/icons/microphone.svg", height: 25);
+
+class RecorderView extends StatefulWidget {
+  final Function onSaved;
+  SvgPicture icon;
+  RecorderView({Key? key, required this.onSaved, required this.icon})
+      : super(key: key);
+  @override
+  _RecorderViewState createState() => _RecorderViewState();
+}
 
 class _RecorderViewState extends State<RecorderView> {
-  Widget _recordIcon = microphoneIcon();
   RecordingState _recordingState = RecordingState.nSet;
 
   late FlutterAudioRecorder2 audioRecorder;
@@ -34,11 +33,9 @@ class _RecorderViewState extends State<RecorderView> {
     FlutterAudioRecorder2.hasPermissions.then((hasPermission) {
       if (hasPermission!) {
         _recordingState = RecordingState.set;
-        _recordIcon = microphoneIcon();
       }
     });
   }
-
 
   @override
   void dispose() {
@@ -57,7 +54,7 @@ class _RecorderViewState extends State<RecorderView> {
         await _onRecordButtonPressed();
         setState(() {});
       },
-      child:_recordIcon ,
+      child: widget.icon,
     );
   }
 
@@ -70,7 +67,8 @@ class _RecorderViewState extends State<RecorderView> {
       case RecordingState.recording:
         await _stopRecording();
         _recordingState = RecordingState.stopped;
-        _recordIcon = SvgPicture.asset("assets/icons/microphone.svg", height: 25);
+        widget.icon = SvgPicture.asset("assets/icons/microphone.svg",
+            height: 25, color: Theme.of(context).focusColor);
         break;
 
       case RecordingState.stopped:
@@ -80,8 +78,9 @@ class _RecorderViewState extends State<RecorderView> {
       case RecordingState.nSet:
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
-        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-          content: Text(StringsManager.allowRecordingFromSettings,style: Theme.of(context).textTheme.bodyText1),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(StringsManager.allowRecordingFromSettings,
+              style: Theme.of(context).textTheme.bodyText1),
         ));
         break;
     }
@@ -116,11 +115,16 @@ class _RecorderViewState extends State<RecorderView> {
 
       await _startRecording();
       _recordingState = RecordingState.recording;
-      _recordIcon = SvgPicture.asset("assets/icons/microphone_black.svg", height: 25);
+      widget.icon = SvgPicture.asset(
+        "assets/icons/microphone_black.svg",
+        height: 25,
+        color: Theme.of(context).focusColor,
+      );
     } else {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-        content: Text(StringsManager.allowRecordingFromSettings,style: Theme.of(context).textTheme.bodyText1),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(StringsManager.allowRecordingFromSettings,
+            style: Theme.of(context).textTheme.bodyText1),
       ));
     }
   }

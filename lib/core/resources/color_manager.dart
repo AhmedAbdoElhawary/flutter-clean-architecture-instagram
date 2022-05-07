@@ -12,7 +12,9 @@ class ColorManager {
   static const Color black54 = Color(0x8a000000);
   static const Color black26 = Color(0x42000000);
   static const Color black12 = Color(0x0000001F);
+  static const Color white1 = Color(0x25ffffff);
 
+  static const Color darkGray = Color(0xff282828);
   static const Color black45 = Colors.black45;
   static const Color black38 = Colors.black38;
 

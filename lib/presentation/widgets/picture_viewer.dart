@@ -15,9 +15,9 @@ class PictureViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:Theme.of(context).focusColor,
+      backgroundColor:Theme.of(context).primaryColor,
       appBar: AppBar(
-        elevation: 0,
+        elevation: 0,iconTheme:IconThemeData(color: Theme.of(context).focusColor) ,
         backgroundColor: ColorManager.transparent,
         foregroundColor: Theme.of(context).primaryColor,
       ),
