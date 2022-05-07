@@ -104,12 +104,12 @@ class _CustomGridViewState extends State<CustomGridView> {
             _createPhotoTitle(postInfo),
             postInfo.isThatImage
                 ? Container(
-                    color: ColorManager.white,
+                    color: Theme.of(context).primaryColor,
                     width: double.infinity,
                     child: CustomFadeInImage(
                         imageUrl: postInfo.postUrl, boxFit: BoxFit.fitWidth))
                 : Container(
-                    color: ColorManager.white,
+                    color: Theme.of(context).primaryColor,
                     width: double.infinity,
                     height: bodyHeight - 200,
                     child: PlayThisVideo(
@@ -127,7 +127,7 @@ class _CustomGridViewState extends State<CustomGridView> {
         padding: const EdgeInsetsDirectional.only(bottom: 5,top: 5,end: 10,start: 10),
         height: 55,
         width: double.infinity,
-        color: ColorManager.white,
+        color: Theme.of(context).splashColor,
         child: Row(
           children: [
             CircleAvatarOfProfileImage(
@@ -143,7 +143,7 @@ class _CustomGridViewState extends State<CustomGridView> {
   Widget _createActionBar() => Container(
         height: 50,
         padding: const EdgeInsetsDirectional.only(bottom: 5,top: 5),
-        color: ColorManager.white,
+        color:Theme.of(context).splashColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
