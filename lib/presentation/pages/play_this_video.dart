@@ -65,7 +65,9 @@ class _PlayThisVideoState extends State<PlayThisVideo> {
           return AspectRatio(
               aspectRatio: 0.65, child: VideoPlayer(_controller));
         } else {
-          return Container(color: ColorManager.lowOpacityGrey);
+          return AspectRatio(
+              aspectRatio: 0.65,
+              child: Container(color: ColorManager.lowOpacityGrey));
         }
       },
     );

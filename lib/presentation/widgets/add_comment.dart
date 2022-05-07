@@ -5,7 +5,7 @@ import 'package:instegram/presentation/widgets/comment_box.dart';
 class AddComment extends StatefulWidget {
   const AddComment({
     Key? key,
-    required this.showCommentBox,
+    // required this.showCommentBox,
     required this.postsInfo,
     required this.textController,
 
@@ -13,7 +13,7 @@ class AddComment extends StatefulWidget {
   }) : super(key: key);
 
   final Post postsInfo;
-  final ValueNotifier<FocusNode> showCommentBox;
+  // final ValueNotifier<FocusNode> showCommentBox;
   final TextEditingController textController;
   @override
   _CommentBoxState createState() => _CommentBoxState();
@@ -49,16 +49,16 @@ class _CommentBoxState extends State<AddComment>
         });
       }
     });
-    widget.showCommentBox.addListener(_showHideCommentBox);
+    // widget.showCommentBox.addListener(_showHideCommentBox);
   }
-
-  void _showHideCommentBox() {
-    if (widget.showCommentBox.value.hasFocus) {
-      _controller.forward();
-    } else {
-      _controller.reverse();
-    }
-  }
+  //
+  // void _showHideCommentBox() {
+  //   if (widget.showCommentBox.value.hasFocus) {
+  //     _controller.forward();
+  //   } else {
+  //     _controller.reverse();
+  //   }
+  // }
 
   @override
   void dispose() {
