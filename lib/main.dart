@@ -11,12 +11,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   final SharedPreferences sharePrefs= await SharedPreferences.getInstance();
-
+  await Firebase.initializeApp();
+  await initializeDependencies();
   runApp(EasyLocalization(
       child: Phoenix(child: MyApp(sharePrefs:sharePrefs)),
       supportedLocales: const [arabicLocal, englishLocal],
       path: assetPathLocalisations));
-  await Firebase.initializeApp();
 
-  await initializeDependencies();
 }

@@ -60,7 +60,7 @@ class _CommentInfoState extends State<CommentInfo> {
                     padding: const EdgeInsetsDirectional.only(start: 50.0),
                     child: Row(
                       children: [
-                        Container(color: ColorManager.black12, height: 1, width: 40),
+                        Container(color:Theme.of(context).dividerColor, height: 1, width: 40),
                         const SizedBox(width: 10),
                         Expanded(
                             child: GestureDetector(
@@ -130,7 +130,7 @@ class _CommentInfoState extends State<CommentInfo> {
                           child: Row(
                             children: [
                               Container(
-                                  color: ColorManager.black12, height: 1, width: 40),
+                                  color: Theme.of(context).dividerColor, height: 1, width: 40),
                               const SizedBox(width: 10),
                               Expanded(
                                   child: Text(StringsManager.loading.tr(),
@@ -195,8 +195,8 @@ class _CommentInfoState extends State<CommentInfo> {
                           if (widget.isThatReply)
                             TextSpan(
                               text: hashTageOfUserName.split(" ")[0],
-                              style: const TextStyle(
-                                  color: Color.fromARGB(232, 20, 44, 116)),
+                              style:  getNormalStyle(
+                                  color: ColorManager.lightBlue),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () async {
                                   List<String> hashTagName =

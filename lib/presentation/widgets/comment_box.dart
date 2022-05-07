@@ -67,10 +67,12 @@ class _CommentBoxState extends State<CommentBox> {
                 child: TextFormField(
                   keyboardType: TextInputType.multiline,
                   cursorColor: ColorManager.teal,
+
+                  style:Theme.of(context).textTheme.bodyText1,
                   maxLines: null,
                   decoration: InputDecoration.collapsed(
                       hintText: StringsManager.addComment.tr(),
-                      hintStyle: const TextStyle(color: ColorManager.black26)),
+                      hintStyle: TextStyle(color: Theme.of(context).cardColor)),
                   autofocus: false,
                   controller: widget.textController,
                   onChanged: (e) => setState(() {}),
@@ -144,6 +146,7 @@ class _CommentBoxState extends State<CommentBox> {
       color: Colors.grey,
       width: double.infinity,
       height: 0.2);
+
   Widget textOfEmoji(String emoji) {
     return GestureDetector(
       onTap: () {
