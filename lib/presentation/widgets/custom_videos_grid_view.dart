@@ -1,13 +1,11 @@
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/pages/play_this_video.dart';
 import 'package:instegram/presentation/widgets/animated_dialog.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
-import 'package:instegram/presentation/widgets/custom_posts_display.dart';
 
 // ignore: must_be_immutable
 class CustomVideosGridView extends StatefulWidget {

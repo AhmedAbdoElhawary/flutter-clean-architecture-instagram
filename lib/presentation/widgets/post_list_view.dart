@@ -12,11 +12,13 @@ import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/core/utility/injector.dart';
 import 'package:instegram/data/models/post.dart';
+import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
 import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instegram/presentation/pages/comments_page.dart';
 import 'package:instegram/presentation/pages/play_this_video.dart';
 import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
 import 'package:instegram/presentation/pages/which_profile_page.dart';
+import 'package:instegram/presentation/widgets/bottom_sheet.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_name.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
 import 'package:instegram/presentation/widgets/fade_animation.dart';
@@ -27,16 +29,21 @@ import 'package:instegram/presentation/widgets/read_more_text.dart';
 class ImageList extends StatefulWidget {
   final Post postInfo;
   final bool playTheVideo;
-  final TextEditingController textController;
-  final ValueChanged<Post> selectedPostInfo;
+  final ValueNotifier<bool> reLoadData;
+
+  // final TextEditingController textController;
+  // final ValueChanged<Post> selectedPostInfo;
+  final ValueNotifier<List<Post>> postsInfo;
   final double bodyHeight;
 
   const ImageList({
     Key? key,
     required this.postInfo,
-    required this.selectedPostInfo,
-    required this.textController,
+    required this.reLoadData,
+    // required this.selectedPostInfo,
+    // required this.textController,
     required this.playTheVideo,
+    required this.postsInfo,
     required this.bodyHeight,
   }) : super(key: key);
 
@@ -45,6 +52,8 @@ class ImageList extends StatefulWidget {
 }
 
 class _ImageListState extends State<ImageList> {
+  final TextEditingController textController = TextEditingController();
+  ValueChanged<Post>? selectedPostInfo;
   bool isSaved = false;
   late Size imageSize = const Size(0.0, 0.0);
   late Widget videoStatusAnimation;
@@ -89,24 +98,24 @@ class _ImageListState extends State<ImageList> {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 10.0),
-                  child: CircleAvatarOfProfileImage(
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatarOfProfileImage(
                     bodyHeight: bodyHeight * .5,
                     userInfo: postInfo.publisherInfo!,
                   ),
-                ),
-                const SizedBox(width: 5),
-                Expanded(
-                    child: InkWell(
-                        onTap: () => pushToProfilePage(postInfo),
-                        child: NameOfCircleAvatar(
-                            postInfo.publisherInfo!.name, false))),
-                menuButton()
-              ],
+                  const SizedBox(width: 5),
+                  Expanded(
+                      child: InkWell(
+                          onTap: () => pushToProfilePage(postInfo),
+                          child: NameOfCircleAvatar(
+                              postInfo.publisherInfo!.name, false))),
+                  menuButton()
+                ],
+              ),
             ),
             imageOfPost(postInfo),
             Padding(
@@ -169,12 +178,14 @@ class _ImageListState extends State<ImageList> {
                 children: [
                   if (postInfo.likes.isNotEmpty) numberOfLikes(postInfo),
                   const SizedBox(height: 5),
-                  if(currentLanguage=='en')...[
+                  if (currentLanguage == 'en') ...[
                     ReadMore(
-                        "${postInfo.publisherInfo!.name} ${postInfo.caption}", 2),
-                  ]else...[
+                        "${postInfo.publisherInfo!.name} ${postInfo.caption}",
+                        2),
+                  ] else ...[
                     ReadMore(
-                        "${postInfo.caption} ${postInfo.publisherInfo!.name}", 2),
+                        "${postInfo.caption} ${postInfo.publisherInfo!.name}",
+                        2),
                   ],
                   const SizedBox(height: 8),
                   if (postInfo.comments.isNotEmpty) numberOfComment(postInfo),
@@ -198,7 +209,7 @@ class _ImageListState extends State<ImageList> {
     return Column(
       children: [
         Row(
-          crossAxisAlignment: widget.textController.text.length < 70
+          crossAxisAlignment: textController.text.length < 70
               ? CrossAxisAlignment.center
               : CrossAxisAlignment.end,
           children: [
@@ -224,14 +235,16 @@ class _ImageListState extends State<ImageList> {
                 controller: TextEditingController(),
                 onTap: () {
                   // setState(() {
-                  widget.selectedPostInfo(widget.postInfo);
+                  if (selectedPostInfo != null) {
+                    selectedPostInfo!(widget.postInfo);
+                  }
                 },
               ),
             ),
             GestureDetector(
               onTap: () {
                 setState(() {
-                  widget.textController.text = '❤';
+                  textController.text = '❤';
                 });
               },
               child: const Text('❤'),
@@ -240,7 +253,7 @@ class _ImageListState extends State<ImageList> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  widget.textController.text = '🙌';
+                  textController.text = '🙌';
                 });
               },
               child: const Text('🙌'),
@@ -374,15 +387,114 @@ class _ImageListState extends State<ImageList> {
     );
   }
 
-  IconButton menuButton() {
-    return IconButton(
-      icon: SvgPicture.asset(
+  Widget menuButton() {
+    return GestureDetector(
+      child: SvgPicture.asset(
         IconsAssets.menuHorizontalIcon,
         color: Theme.of(context).focusColor,
         height: 23,
       ),
-      color: Theme.of(context).focusColor,
-      onPressed: () {},
+      onTap: () async => bottomSheet(),
     );
+  }
+
+  Future<void> bottomSheet() async {
+    return CustomBottomSheet.bottomSheet(
+      context,
+      headIcon: shareThisPost(),
+      bodyText: widget.postInfo.publisherId == myPersonalId
+          ? ordersOfMyPost()
+          : ordersOfOtherUser(),
+    );
+  }
+
+  GestureDetector shareThisPost() {
+    return GestureDetector(
+      child: Column(
+        children: [
+          SvgPicture.asset(
+            IconsAssets.shareCircle,
+            height: 50,
+            color: Theme.of(context).focusColor,
+          ),
+          const SizedBox(height: 10),
+          buildText(StringsManager.share.tr()),
+        ],
+      ),
+      onTap: () {},
+    );
+  }
+
+  Widget ordersOfMyPost() {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 10),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+              onTap: () {}, child: textOfOrders(StringsManager.archive.tr())),
+          GestureDetector(
+              onTap: () {}, child: textOfOrders(StringsManager.delete.tr())),
+          GestureDetector(
+              onTap: () {}, child: textOfOrders(StringsManager.edit.tr())),
+          GestureDetector(
+              onTap: () {},
+              child: textOfOrders(StringsManager.hideLikeCount.tr())),
+          GestureDetector(
+              onTap: () {},
+              child: textOfOrders(StringsManager.turnOffCommenting.tr())),
+          Container(height: 10)
+        ],
+      ),
+    );
+  }
+
+  Widget ordersOfOtherUser() {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 10),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+              onTap: () {}, child: textOfOrders(StringsManager.hide.tr())),
+          Builder(builder: (context) {
+            FollowCubit followCubit = BlocProvider.of<FollowCubit>(context);
+            return GestureDetector(
+                onTap: () {
+                  followCubit.removeThisFollower(
+                      followingUserId: widget.postInfo.publisherId,
+                      myPersonalId: myPersonalId);
+                  setState(() {
+                    widget.reLoadData.value=true;
+                    print("remove done");
+
+                    widget.postsInfo.value.remove(widget.postInfo);
+                  });
+                },
+                child: textOfOrders(StringsManager.unfollow.tr()));
+          }),
+          Container(height: 10)
+        ],
+      ),
+    );
+  }
+
+  Widget textOfOrders(String text) {
+    return SizedBox(
+      height: 40,
+      child: Row(
+        children: [
+          buildText(text),
+        ],
+      ),
+    );
+  }
+
+  Widget buildText(String text) {
+    return Text(text,
+        style:
+            getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15));
   }
 }
