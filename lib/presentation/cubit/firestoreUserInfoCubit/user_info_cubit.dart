@@ -33,7 +33,7 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
   static FirestoreUserInfoCubit get(BuildContext context) =>
       BlocProvider.of(context);
 
-  Future<void> getUserInfo(String userId, bool isThatMyPersonalId) async {
+  Future<void> getUserInfo(String userId, {bool isThatMyPersonalId=true}) async {
     emit(CubitUserLoading());
     await _getUserInfoUseCase.call(params: userId).then((userInfo) {
       if (isThatMyPersonalId) {

@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     reLoadData = false;
     FirestoreUserInfoCubit userCubit =
         BlocProvider.of<FirestoreUserInfoCubit>(context, listen: false);
-    await userCubit.getUserInfo(widget.userId, true);
+    await userCubit.getUserInfo(widget.userId);
     personalInfo = userCubit.myPersonalInfo;
 
     List usersIds = personalInfo!.followedPeople + personalInfo!.followerPeople;
@@ -92,8 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
     if (centerItemIndex == null) {
-      centerItemIndex =
-          ((bodyHeight / 2) / bodyHeight).floor();
+      centerItemIndex = ((bodyHeight / 2) / bodyHeight).floor();
       print('center item = $centerItemIndex');
     }
     if (rebuild) {
@@ -143,7 +142,11 @@ class _HomeScreenState extends State<HomeScreen> {
               : emptyMassage();
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
-          return Center(child: Text(StringsManager.noPosts.tr(),style: getNormalStyle(color: Theme.of(context).focusColor),));
+          return Center(
+              child: Text(
+            StringsManager.noPosts.tr(),
+            style: getNormalStyle(color: Theme.of(context).focusColor),
+          ));
         } else {
           return circularProgress();
         }
@@ -260,8 +263,14 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(StringsManager.noPosts,style: getNormalStyle(color: Theme.of(context).focusColor),),
-        Text(StringsManager.tryAddPost,style: getNormalStyle(color: Theme.of(context).focusColor),),
+        Text(
+          StringsManager.noPosts,
+          style: getNormalStyle(color: Theme.of(context).focusColor),
+        ),
+        Text(
+          StringsManager.tryAddPost,
+          style: getNormalStyle(color: Theme.of(context).focusColor),
+        ),
       ],
     ));
   }
@@ -314,15 +323,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (personalInfo!.stories.isEmpty)
+                    if (personalInfo!.stories.isEmpty) ...[
                       myOwnStory(context, storiesOwnersInfo, bodyHeight),
+                      const SizedBox(width: 12),
+                    ],
                     ListView.separated(
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: storiesOwnersInfo.length,
                       separatorBuilder: (BuildContext context, int index) =>
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 12),
                       itemBuilder: (BuildContext context, int index) {
                         UserPersonalInfo publisherInfo =
                             storiesOwnersInfo[index];
@@ -343,7 +354,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               userInfo: publisherInfo,
                               bodyHeight: bodyHeight * 1.1,
                               thisForStoriesLine: true,
-                              nameOfCircle: index == 0
+                              nameOfCircle: index == 0 &&
+                                      publisherInfo.userId ==
+                                          personalInfo!.userId
                                   ? StringsManager.yourStory.tr()
                                   : "",
                             ),
@@ -358,7 +371,11 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         } else if (state is CubitStoryFailed) {
           ToastShow.toastStateError(state);
-          return Center(child: Text(StringsManager.somethingWrong.tr(),style: getNormalStyle(color: Theme.of(context).focusColor),));
+          return Center(
+              child: Text(
+            StringsManager.somethingWrong.tr(),
+            style: getNormalStyle(color: Theme.of(context).focusColor),
+          ));
         } else {
           return Container();
         }
@@ -389,11 +406,12 @@ class _HomeScreenState extends State<HomeScreen> {
           child: CircleAvatarOfProfileImage(
             userInfo: personalInfo!,
             bodyHeight: bodyHeight,
+            moveTextMore:true,
             thisForStoriesLine: true,
             nameOfCircle: StringsManager.yourStory.tr(),
           ),
         ),
-         Positioned(
+        Positioned(
             top: 40,
             left: 40,
             right: 5,

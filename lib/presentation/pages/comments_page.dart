@@ -31,11 +31,11 @@ class _CommentsPageState extends State<CommentsPage> {
   bool addReply = false;
   bool rebuild = false;
 
-Future<void>loadData()async{
-  setState(() {
-    rebuild=true;
-  });
-}
+  Future<void> loadData() async {
+    setState(() {
+      rebuild = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +46,10 @@ Future<void>loadData()async{
       return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor:  Theme.of(context).primaryColor,
-          title: Text(StringsManager.comments.tr(),style: getNormalStyle(color: Theme.of(context).focusColor)),
+          iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+          backgroundColor: Theme.of(context).primaryColor,
+          title: Text(StringsManager.comments.tr(),
+              style: getNormalStyle(color: Theme.of(context).focusColor)),
         ),
         body: Column(
           children: [
@@ -62,8 +64,8 @@ Future<void>loadData()async{
                           (current is CubitCommentsInfoLoaded)) {
                         return true;
                       }
-                      if(rebuild){
-                        rebuild=false;
+                      if (rebuild) {
+                        rebuild = false;
                         return true;
                       }
 
@@ -72,13 +74,15 @@ Future<void>loadData()async{
                     builder: (context, state) {
                       if (state is CubitCommentsInfoLoaded) {
                         // List<Comment> a=state.commentsOfThePost.map((e) => ).toList();
-                        state.commentsOfThePost.sort(
-                            (a, b) => b.datePublished.compareTo(a.datePublished));
+                        state.commentsOfThePost.sort((a, b) =>
+                            b.datePublished.compareTo(a.datePublished));
                         return buildListView(
                             state.commentsOfThePost, myPersonalInfo!);
                       } else if (state is CubitCommentsInfoFailed) {
                         ToastShow.toastStateError(state);
-                        return Text(StringsManager.somethingWrong.tr(),style: getNormalStyle(color: Theme.of(context).focusColor));
+                        return Text(StringsManager.somethingWrong.tr(),
+                            style: getNormalStyle(
+                                color: Theme.of(context).focusColor));
                       } else {
                         return const ThineCircularProgress();
                       }
@@ -132,9 +136,9 @@ Future<void>loadData()async{
           )
         : Center(
             child: Text(StringsManager.noComments.tr(),
-                style:getBoldStyle(
+                style: getBoldStyle(
                     fontSize: 20,
-                    color:Theme.of(context).focusColor,
+                    color: Theme.of(context).focusColor,
                     fontStyle: FontStyle.italic)),
           );
   }
@@ -157,8 +161,8 @@ Future<void>loadData()async{
                     Expanded(
                       child: Text(
                           "${StringsManager.replyingTo.tr()} ${selectedCommentInfo!.whoCommentInfo!.userName}",
-                          style:
-                          getNormalStyle(color: Theme.of(context).disabledColor)),
+                          style: getNormalStyle(
+                              color: Theme.of(context).disabledColor)),
                     ),
                     GestureDetector(
                         onTap: () {
@@ -167,7 +171,11 @@ Future<void>loadData()async{
                             _textController.text = '';
                           });
                         },
-                        child: const Icon(Icons.close, size: 18)),
+                        child: Icon(
+                          Icons.close,
+                          size: 18,
+                          color: Theme.of(context).focusColor,
+                        )),
                   ],
                 ),
               ),
@@ -176,7 +184,6 @@ Future<void>loadData()async{
         ],
         customDivider(),
         CommentBox(
-
           postId: widget.postId,
           selectedCommentInfo: selectedCommentInfo,
           textController: _textController,

@@ -15,7 +15,6 @@ class FirebaseAuthentication {
     UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     final user = result.user!;
-
     return user;
   }
 

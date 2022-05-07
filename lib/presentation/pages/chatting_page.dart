@@ -125,7 +125,7 @@ class _ChattingPageState extends State<ChattingPage> {
         });
   }
 
-  Widget buildCircularProgress() =>  const ThineCircularProgress();
+  Widget buildCircularProgress() => const ThineCircularProgress();
 
   Column buildUserInfo(BuildContext context) {
     return Column(
@@ -184,6 +184,7 @@ class _ChattingPageState extends State<ChattingPage> {
                   child: SvgPicture.asset(
                     "assets/icons/paper_plane_right.svg",
                     height: 15,
+                    color: Theme.of(context).focusColor,
                   ),
                 )),
           ],
@@ -203,7 +204,9 @@ class _ChattingPageState extends State<ChattingPage> {
           : AlignmentDirectional.centerStart,
       child: Container(
         decoration: BoxDecoration(
-            color: isThatMine ? ColorManager.darkBlue : ColorManager.lightGrey,
+            color: isThatMine
+                ? ColorManager.blue
+                : Theme.of(context).selectedRowColor,
             borderRadius: BorderRadiusDirectional.only(
               bottomStart: Radius.circular(isThatMine ? 20 : 0),
               bottomEnd: Radius.circular(isThatMine ? 0 : 20),
@@ -216,13 +219,7 @@ class _ChattingPageState extends State<ChattingPage> {
                 start: 10, end: 10, bottom: 8, top: 8)
             : const EdgeInsetsDirectional.all(0),
         child: massage.isNotEmpty
-            ? Text(
-                massage,
-                style: getNormalStyle(
-                    color: isThatMine
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).focusColor),
-              )
+            ? Text(massage, style: Theme.of(context).textTheme.bodyText1)
             : (massageInfo.isThatImage
                 ? SizedBox(
                     width: 90,
@@ -234,7 +231,7 @@ class _ChattingPageState extends State<ChattingPage> {
                         : Image.asset(imageUrl, fit: BoxFit.cover))
                 : SizedBox(
                     child: RecordView(
-                    record: recordedUrl.isEmpty ? records : recordedUrl,
+                    record: recordedUrl.isEmpty ? records : recordedUrl,isThatMine:isThatMine,
                   ))),
       ),
     );
@@ -260,7 +257,7 @@ class _ChattingPageState extends State<ChattingPage> {
           ? deleteTheMassage()
           : Container(
               decoration: BoxDecoration(
-                  color: ColorManager.lightGrey,
+                  color: Theme.of(context).selectedRowColor,
                   borderRadius: BorderRadius.circular(35)),
               clipBehavior: Clip.antiAliasWithSaveLayer,
               height: 50,
@@ -310,7 +307,13 @@ class _ChattingPageState extends State<ChattingPage> {
           Row(
             children: [
               const SizedBox(width: 10),
-              RecorderView(onSaved: _onRecordComplete),
+              RecorderView(
+                  onSaved: _onRecordComplete,
+                  icon: SvgPicture.asset(
+                    "assets/icons/microphone.svg",
+                    height: 25,
+                    color: Theme.of(context).focusColor,
+                  )),
               const SizedBox(width: 10),
               pickPhoto(massageCubit),
               const SizedBox(width: 10),
@@ -321,8 +324,8 @@ class _ChattingPageState extends State<ChattingPage> {
     );
   }
 
-  InkWell pickImageFromCamera(MassageCubit massageCubit) {
-    return InkWell(
+  GestureDetector pickImageFromCamera(MassageCubit massageCubit) {
+    return GestureDetector(
       onTap: () async {
         final ImagePicker _picker = ImagePicker();
         final XFile? pickedFile =
@@ -347,21 +350,22 @@ class _ChattingPageState extends State<ChattingPage> {
           child: ClipOval(
               child: Icon(
             Icons.camera_alt,
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).focusColor,
           )),
-          radius: 20),
+          radius: 18),
     );
   }
 
   Expanded massageTextField() {
     return Expanded(
       child: TextFormField(
+        style: Theme.of(context).textTheme.bodyText1,
         keyboardType: TextInputType.multiline,
         cursorColor: ColorManager.teal,
         maxLines: null,
         decoration: InputDecoration.collapsed(
-            hintText: StringsManager.massage.tr(),
-            hintStyle: const TextStyle(color: ColorManager.black26)),
+            hintText: StringsManager.massageP.tr(),
+            hintStyle: TextStyle(color: Theme.of(context).cardColor)),
         autofocus: false,
         controller: _textController,
         cursorWidth: 1.5,
@@ -401,6 +405,7 @@ class _ChattingPageState extends State<ChattingPage> {
       child: SvgPicture.asset(
         "assets/icons/sticker.svg",
         height: 25,
+        color: Theme.of(context).focusColor,
       ),
     );
   }
@@ -431,7 +436,8 @@ class _ChattingPageState extends State<ChattingPage> {
       },
       child: SvgPicture.asset(
         "assets/icons/gallery.svg",
-        height: 25,
+        height: 23,
+        color: Theme.of(context).focusColor,
       ),
     );
   }
@@ -461,14 +467,20 @@ class _ChattingPageState extends State<ChattingPage> {
       children: [
         Text(
           widget.userInfo.userName,
-          style: TextStyle(color:  Theme.of(context).focusColor,fontSize: 14, fontWeight: FontWeight.w300),
+          style: TextStyle(
+              color: Theme.of(context).focusColor,
+              fontSize: 14,
+              fontWeight: FontWeight.w300),
         ),
         const SizedBox(
           width: 10,
         ),
         Text(
           "Instagram",
-          style: TextStyle(color:  Theme.of(context).focusColor,fontSize: 14, fontWeight: FontWeight.w300),
+          style: TextStyle(
+              color: Theme.of(context).focusColor,
+              fontSize: 14,
+              fontWeight: FontWeight.w300),
         ),
       ],
     );
@@ -477,7 +489,10 @@ class _ChattingPageState extends State<ChattingPage> {
   Text nameOfUser() {
     return Text(
       widget.userInfo.name,
-      style: TextStyle(color:  Theme.of(context).focusColor,fontSize: 16, fontWeight: FontWeight.w400),
+      style: TextStyle(
+          color: Theme.of(context).focusColor,
+          fontSize: 16,
+          fontWeight: FontWeight.w400),
     );
   }
 
@@ -487,14 +502,16 @@ class _ChattingPageState extends State<ChattingPage> {
       children: [
         Text(
           "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr()}",
-          style:  TextStyle(color:  Theme.of(context).bottomAppBarColor,fontSize: 13),
+          style: TextStyle(
+              color: Theme.of(context).bottomAppBarColor, fontSize: 13),
         ),
         const SizedBox(
           width: 15,
         ),
         Text(
           "${widget.userInfo.posts.length} ${StringsManager.posts.tr()}",
-          style: TextStyle(fontSize: 13, color:  Theme.of(context).bottomAppBarColor),
+          style: TextStyle(
+              fontSize: 13, color: Theme.of(context).bottomAppBarColor),
         ),
       ],
     );
@@ -515,13 +532,15 @@ class _ChattingPageState extends State<ChattingPage> {
       },
       child: Text(StringsManager.viewProfile.tr(),
           style: TextStyle(
-              color:  Theme.of(context).focusColor, fontWeight: FontWeight.normal)),
+              color: Theme.of(context).focusColor,
+              fontWeight: FontWeight.normal)),
     );
   }
 
   AppBar appBar() {
     return AppBar(
-      backgroundColor: Colors.white,
+      iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+      backgroundColor: Theme.of(context).primaryColor,
       title: Row(
         children: [
           CircleAvatar(
@@ -535,7 +554,10 @@ class _ChattingPageState extends State<ChattingPage> {
           ),
           Text(
             widget.userInfo.name,
-            style: TextStyle(color: Theme.of(context).focusColor,fontSize: 16, fontWeight: FontWeight.normal),
+            style: TextStyle(
+                color: Theme.of(context).focusColor,
+                fontSize: 16,
+                fontWeight: FontWeight.normal),
           )
         ],
       ),
@@ -543,6 +565,7 @@ class _ChattingPageState extends State<ChattingPage> {
         SvgPicture.asset(
           "assets/icons/phone.svg",
           height: 27,
+          color: Theme.of(context).focusColor,
         ),
         const SizedBox(
           width: 20,
@@ -550,6 +573,7 @@ class _ChattingPageState extends State<ChattingPage> {
         SvgPicture.asset(
           "assets/icons/video_point.svg",
           height: 25,
+          color: Theme.of(context).focusColor,
         ),
         const SizedBox(
           width: 15,

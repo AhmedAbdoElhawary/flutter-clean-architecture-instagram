@@ -83,8 +83,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         return Scaffold(
           backgroundColor: Theme.of(context).primaryColor,
           appBar: AppBar(
+              iconTheme: IconThemeData(color: Theme.of(context).focusColor),
               elevation: 0,
-              backgroundColor:  Theme.of(context).primaryColor,
+              backgroundColor: Theme.of(context).primaryColor,
               leading: IconButton(
                   onPressed: () {
                     Navigator.pop(context);
@@ -96,7 +97,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   )),
               title: Text(
                 StringsManager.editProfile.tr(),
-                style: getMediumStyle(color:Theme.of(context).focusColor,fontSize: 20),
+                style: getMediumStyle(
+                    color: Theme.of(context).focusColor, fontSize: 20),
               ),
               actions: actionsWidgets(getUserState, updateUserCubit)),
           body: Column(
@@ -202,7 +204,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
           },
           child: Text(
             StringsManager.changeProfilePhoto.tr(),
-            style:  getNormalStyle(fontSize: 18, color:Theme.of(context).focusColor),
+            style: getNormalStyle(
+                fontSize: 18, color: Theme.of(context).focusColor),
           ),
         )),
         textFormField(widget.nameController, StringsManager.name.tr()),
@@ -221,7 +224,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           onTap: () {},
           child: Text(
             StringsManager.personalInformationSettings.tr(),
-            style:  getNormalStyle(fontSize: 18, color: ColorManager.blue),
+            style: getNormalStyle(fontSize: 18, color: ColorManager.blue),
           ),
         ),
         const SizedBox(height: 8),
@@ -246,23 +249,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
       child: CircleAvatar(
         child: ClipOval(
           child: isImageUpload
-              ?  const ThineCircularProgress()
+              ? const ThineCircularProgress()
               : (widget.userInfo.profileImageUrl.isEmpty
                   ? Icon(Icons.person, color: Theme.of(context).primaryColor)
                   : CustomFadeInImage(
                       imageUrl: widget.userInfo.profileImageUrl)),
         ),
         radius: 50,
-        backgroundColor:  Theme.of(context).focusColor,
+        backgroundColor: Theme.of(context).focusColor,
       ),
     );
   }
 
   TextFormField textFormField(TextEditingController controller, String text) {
     return TextFormField(
-      controller: controller,
       cursorColor: ColorManager.teal,
-      style: const TextStyle(fontSize: 15),
+      controller: controller,
+      style: getNormalStyle( color:Theme.of(context).focusColor,fontSize: 15),
       decoration: InputDecoration(
         labelText: text,
       ),
