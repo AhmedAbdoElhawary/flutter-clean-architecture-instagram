@@ -138,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Tab(
             icon: SvgPicture.asset(
           IconsAssets.videoIcon,
-          color: Theme.of(context).highlightColor,
+          color: Theme.of(context).errorColor,
           height: 22.5,
         )),
         const Tab(
@@ -195,7 +195,7 @@ class _ProfilePageState extends State<ProfilePage> {
       List usersInfo, String text, UserPersonalInfo userInfo) {
     return Expanded(
       child: Builder(builder: (builderContext) {
-        return InkWell(
+        return GestureDetector(
           onTap: () async {
             if (text != StringsManager.posts.tr()) {
               await Navigator.of(context).push(CupertinoPageRoute(
@@ -214,8 +214,8 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             children: [
               Text("${usersInfo.length}",
-                  style: getBoldStyle(
-                      color: Theme.of(context).focusColor, fontSize: 17)),
+                  style: getMediumStyle(
+                      color: Theme.of(context).focusColor, fontSize: 20)),
               Text(text,
                   style: getNormalStyle(
                       color: Theme.of(context).focusColor, fontSize: 15))

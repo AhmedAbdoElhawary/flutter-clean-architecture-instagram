@@ -16,11 +16,11 @@ class IconsAssets {
   static const String heartIcon = "$iconPath/heart.svg";
   static const String warningIcon = "$iconPath/warning.svg";
   static const String addLikeLoadingIcon = "$iconPath/add.svg";
-
+  static const String noMoreData = "$iconPath/check-circle.svg";
+  static const String shareCircle = "$iconPath/share-circle.svg";
 
   static const String addInstagramStoryIcon =
       "$iconPath/add-instagram-story.svg";
   static const String instagramHighlightStoryIcon =
       "$iconPath/instagram-highlight-story.svg";
-
 }

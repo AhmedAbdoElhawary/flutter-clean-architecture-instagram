@@ -1,16 +1,23 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
+import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SmarterRefresh extends StatefulWidget {
   final Widget child;
-  final AsyncValueGetter<void> onRefreshData;
+  final List postsIds;
+  final ValueNotifier<bool> isThatEndOfList;
+  final AsyncValueSetter<int> onRefreshData;
   const SmarterRefresh(
       {required this.onRefreshData,
       required this.child,
+      required this.isThatEndOfList,
+      required this.postsIds,
       Key? key})
       : super(key: key);
 
@@ -23,6 +30,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
   late AnimationController _aniController, _scaleController;
   late AnimationController _footerController;
   final RefreshController _refreshController = RefreshController();
+  List ids = [];
   @override
   void initState() {
     _aniController = AnimationController(
@@ -60,18 +68,31 @@ class _SmarterRefreshState extends State<SmarterRefresh>
         enablePullUp: true,
         controller: _refreshController,
         scrollDirection: Axis.vertical,
-
         onRefresh: () async {
-          await Future.delayed(const Duration(milliseconds: 2000));
-          widget.onRefreshData().whenComplete(() {
+          widget.onRefreshData(0).whenComplete(() {
             _refreshController.refreshCompleted();
+            _refreshController.loadComplete();
+            widget.isThatEndOfList.value = false;
+            ids = widget.postsIds;
             setState(() {});
           });
         },
         onLoading: () async {
-          await Future.delayed(const Duration(milliseconds: 1000));
-          setState(() {});
-          _refreshController.loadComplete();
+          if (!widget.isThatEndOfList.value) {
+            widget.onRefreshData(widget.postsIds.length).whenComplete(() {
+              _refreshController.loadComplete();
+              if (ids.length == widget.postsIds.length) {
+                _refreshController.loadNoData();
+                widget.isThatEndOfList.value = true;
+              } else {
+                ids = widget.postsIds;
+              }
+              setState(() {});
+            });
+          } else {
+            _refreshController.loadComplete();
+            _refreshController.loadNoData();
+          }
         },
         child: widget.child,
         footer: CustomFooter(
@@ -87,14 +108,15 @@ class _SmarterRefreshState extends State<SmarterRefresh>
             Widget child;
             switch (mode) {
               case LoadStatus.failed:
-                child = Text(StringsManager.clickRetry.tr());
+                child = Text(StringsManager.clickRetry.tr(),
+                    style: Theme.of(context).textTheme.bodyText1);
                 break;
               case LoadStatus.noMore:
-                child =  Text(StringsManager.noMoreData.tr());
+                //TODO herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+                child = Container();
                 break;
               default:
-                child = const CircularProgressIndicator(
-                    strokeWidth: 1.5, color: ColorManager.white);
+                child = const ThineCircularProgress();
                 break;
             }
             return SizedBox(
@@ -113,12 +135,13 @@ class _SmarterRefreshState extends State<SmarterRefresh>
               _scaleController.value = offset / 100.0;
             }
           },
-          builder: (__, _) {
+          builder: (context, mode) {
             return Container(
+              color: Theme.of(context).backgroundColor,
               child: FadeTransition(
                 opacity: _scaleController,
                 child: ScaleTransition(
-                  child:  CircularProgressIndicator(
+                  child: CircularProgressIndicator(
                     strokeWidth: 1.5,
                     color: ColorManager.black38,
                     backgroundColor: Theme.of(context).dividerColor,
@@ -133,4 +156,33 @@ class _SmarterRefreshState extends State<SmarterRefresh>
       ),
     );
   }
+
+  Widget noMoreData(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  ColorManager.blackRed,
+                  ColorManager.redAccent,
+                  ColorManager.yellow,
+                ],
+              ),
+            ),
+            child: SvgPicture.asset(IconsAssets.noMoreData,
+                color: ColorManager.transparent),
+          ),
+        ],
+      ),
+    );
+  }
+  // Widget noMoreData(BuildContext context) {
+  //   return Text(StringsManager.noMoreData.tr(),
+  //       style: Theme.of(context).textTheme.bodyText1);
+  // }
 }

@@ -3,22 +3,25 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/data/models/post.dart';
 import 'package:instegram/presentation/pages/play_this_video.dart';
 import 'package:instegram/presentation/widgets/animated_dialog.dart';
 import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
-import 'package:instegram/presentation/widgets/custom_posts_display.dart';
 import 'package:instegram/presentation/widgets/fade_in_image.dart';
+import 'package:instegram/presentation/widgets/custom_posts_dispaly.dart';
 
 // ignore: must_be_immutable
 class CustomGridView extends StatefulWidget {
   List<Post> postsInfo;
   final String userId;
+  final bool isThatProfile;
 
-  CustomGridView({required this.userId, required this.postsInfo, Key? key})
+  CustomGridView(
+      {required this.userId,
+      required this.postsInfo,
+      this.isThatProfile = true,
+      Key? key})
       : super(key: key);
 
   @override
@@ -32,7 +35,7 @@ class _CustomGridViewState extends State<CustomGridView> {
   Widget build(BuildContext context) {
     return widget.postsInfo.isNotEmpty
         ? StaggeredGridView.countBuilder(
-            padding: const EdgeInsetsDirectional.only(bottom: 1.5,top: 1.5),
+            padding: const EdgeInsetsDirectional.only(bottom: 1.5, top: 1.5),
             crossAxisSpacing: 1.5,
             mainAxisSpacing: 1.5,
             crossAxisCount: 3,
@@ -49,7 +52,11 @@ class _CustomGridViewState extends State<CustomGridView> {
               return StaggeredTile.count(1, num);
             },
           )
-        : Center(child: Text(StringsManager.noPosts.tr(),style:  Theme.of(context).textTheme.bodyText1,));
+        : Center(
+            child: Text(
+            StringsManager.noPosts.tr(),
+            style: Theme.of(context).textTheme.bodyText1,
+          ));
   }
 
   Widget createGridTileWidget(
@@ -57,13 +64,15 @@ class _CustomGridViewState extends State<CustomGridView> {
       Builder(
         builder: (context) => GestureDetector(
           onTap: () {
-            List<Post> w = postsInfo;
-            w.removeWhere((value) => value.postUid == postClickedInfo.postUid);
-            w.insert(0, postClickedInfo);
-
+            List<Post> customPostsInfo = postsInfo;
+            customPostsInfo.removeWhere(
+                (value) => value.postUid == postClickedInfo.postUid);
+            customPostsInfo.insert(0, postClickedInfo);
             Navigator.of(context).push(CupertinoPageRoute(
               builder: (context) => CustomPostsDisplay(
-                  postClickedInfo: postClickedInfo, postsInfo: w, index: index),
+                postsInfo: postsInfo,
+                isThatProfile: widget.isThatProfile,
+              ),
             ));
           },
           onLongPress: () {
@@ -74,9 +83,7 @@ class _CustomGridViewState extends State<CustomGridView> {
           child: postClickedInfo.isThatImage
               ? CustomFadeInImage(
                   imageUrl: postClickedInfo.postUrl, boxFit: BoxFit.cover)
-              : PlayThisVideo(videoUrl: postClickedInfo.postUrl,
-              play: false
-                  ),
+              : PlayThisVideo(videoUrl: postClickedInfo.postUrl, play: false),
         ),
       );
 
@@ -95,7 +102,7 @@ class _CustomGridViewState extends State<CustomGridView> {
     double bodyHeight = MediaQuery.of(context).size.height;
 
     return Container(
-      padding: const EdgeInsetsDirectional.only(start: 10,end: 10),
+      padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16.0),
         child: Column(
@@ -112,10 +119,8 @@ class _CustomGridViewState extends State<CustomGridView> {
                     color: Theme.of(context).primaryColor,
                     width: double.infinity,
                     height: bodyHeight - 200,
-                    child: PlayThisVideo(
-                      videoUrl: postInfo.postUrl,
-                        play: true
-                    )),
+                    child:
+                        PlayThisVideo(videoUrl: postInfo.postUrl, play: true)),
             _createActionBar(),
           ],
         ),
@@ -124,7 +129,8 @@ class _CustomGridViewState extends State<CustomGridView> {
   }
 
   Widget _createPhotoTitle(Post postInfo) => Container(
-        padding: const EdgeInsetsDirectional.only(bottom: 5,top: 5,end: 10,start: 10),
+        padding: const EdgeInsetsDirectional.only(
+            bottom: 5, top: 5, end: 10, start: 10),
         height: 55,
         width: double.infinity,
         color: Theme.of(context).splashColor,
@@ -135,35 +141,36 @@ class _CustomGridViewState extends State<CustomGridView> {
               bodyHeight: 370,
             ),
             const SizedBox(width: 7),
-            Text(postInfo.publisherInfo!.name, style: Theme.of(context).textTheme.bodyText1),
+            Text(postInfo.publisherInfo!.name,
+                style: Theme.of(context).textTheme.bodyText1),
           ],
         ),
       );
 
   Widget _createActionBar() => Container(
         height: 50,
-        padding: const EdgeInsetsDirectional.only(bottom: 5,top: 5),
-        color:Theme.of(context).splashColor,
+        padding: const EdgeInsetsDirectional.only(bottom: 5, top: 5),
+        color: Theme.of(context).splashColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             GestureDetector(
               onPanStart: (d) {},
-              child:  Icon(
+              child: Icon(
                 Icons.favorite_border,
                 color: Theme.of(context).focusColor,
               ),
             ),
             GestureDetector(
               onVerticalDragStart: (d) {},
-              child:  Icon(
+              child: Icon(
                 Icons.chat_bubble_outline,
                 color: Theme.of(context).focusColor,
               ),
             ),
             GestureDetector(
               onTertiaryLongPress: () {},
-              child:  Icon(
+              child: Icon(
                 Icons.send,
                 color: Theme.of(context).focusColor,
               ),

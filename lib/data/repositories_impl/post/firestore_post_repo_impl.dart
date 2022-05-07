@@ -21,9 +21,9 @@ class FirestorePostRepositoryImpl implements FirestorePostRepository {
   }
 
   @override
-  Future<List<Post>> getPostsInfo(List<dynamic> postId) async {
+  Future<List<Post>> getPostsInfo({required List<dynamic> postsIds,required int lengthOfCurrentList}) async {
     try {
-      return await FirestorePost.getPostsInfo(postId);
+      return await FirestorePost.getPostsInfo(postsIds:postsIds,lengthOfCurrentList: lengthOfCurrentList);
     } catch (e) {
       return Future.error(e.toString());
     }

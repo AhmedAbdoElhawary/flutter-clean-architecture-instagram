@@ -45,6 +45,15 @@ class StringsManager {
   static const String newPost = "newPost";
   static const String loading = "loading";
   static const String password = "password";
+
+  static const String hide = "hide";
+  static const String unfollow = "unfollow";
+  static const String delete = "delete";
+  static const String edit = "edit";
+  static const String hideLikeCount = "hideLikeCount";
+  static const String turnOffCommenting = "turnOffCommenting";
+  static const String archive = "archive";
+
   static const String viewProfile = "viewProfile";
   static const String viewAll = "viewAll";
 
@@ -67,13 +76,17 @@ class StringsManager {
   static const String youFollowHim = "youFollowHim";
 
   static const String allowRecordingFromSettings = 'allowRecordingFromSettings';
+  static const String allCaughtUp = "allCaughtUp";
 
+  static const String noMorePostToday = "noMorePostToday";
   static const String noPosts = "noPosts";
   static const String tryAddPost = "tryAddPost";
 
   static const String noAccount = "noAccount";
   static const String haveAccount = "haveAccount";
   static const String tagPeople = "tagPeople";
+  static const String explore = "explore";
+
   static const String addLocation = "addLocation";
   static const String confirmPassword = "confirmPassword";
   static const String alsoPostTo = "alsoPostTo";

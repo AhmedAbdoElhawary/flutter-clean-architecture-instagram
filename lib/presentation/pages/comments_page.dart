@@ -54,40 +54,40 @@ class _CommentsPageState extends State<CommentsPage> {
         body: Column(
           children: [
             Expanded(
-              child: SmarterRefresh(
-                onRefreshData: loadData,
-                child: BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
-                    bloc: BlocProvider.of<CommentsInfoCubit>(context)
-                      ..getSpecificComments(postId: widget.postId),
-                    buildWhen: (previous, current) {
-                      if (previous != current &&
-                          (current is CubitCommentsInfoLoaded)) {
-                        return true;
-                      }
-                      if (rebuild) {
-                        rebuild = false;
-                        return true;
-                      }
+              // child: SmarterRefresh(
+              //   onRefreshData: loadData,
+              child: BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
+                  bloc: BlocProvider.of<CommentsInfoCubit>(context)
+                    ..getSpecificComments(postId: widget.postId),
+                  buildWhen: (previous, current) {
+                    if (previous != current &&
+                        (current is CubitCommentsInfoLoaded)) {
+                      return true;
+                    }
+                    if (rebuild) {
+                      rebuild = false;
+                      return true;
+                    }
 
-                      return false;
-                    },
-                    builder: (context, state) {
-                      if (state is CubitCommentsInfoLoaded) {
-                        // List<Comment> a=state.commentsOfThePost.map((e) => ).toList();
-                        state.commentsOfThePost.sort((a, b) =>
-                            b.datePublished.compareTo(a.datePublished));
-                        return buildListView(
-                            state.commentsOfThePost, myPersonalInfo!);
-                      } else if (state is CubitCommentsInfoFailed) {
-                        ToastShow.toastStateError(state);
-                        return Text(StringsManager.somethingWrong.tr(),
-                            style: getNormalStyle(
-                                color: Theme.of(context).focusColor));
-                      } else {
-                        return const ThineCircularProgress();
-                      }
-                    }),
-              ),
+                    return false;
+                  },
+                  builder: (context, state) {
+                    if (state is CubitCommentsInfoLoaded) {
+                      // List<Comment> a=state.commentsOfThePost.map((e) => ).toList();
+                      state.commentsOfThePost.sort(
+                          (a, b) => b.datePublished.compareTo(a.datePublished));
+                      return buildListView(
+                          state.commentsOfThePost, myPersonalInfo!);
+                    } else if (state is CubitCommentsInfoFailed) {
+                      ToastShow.toastStateError(state);
+                      return Text(StringsManager.somethingWrong.tr(),
+                          style: getNormalStyle(
+                              color: Theme.of(context).focusColor));
+                    } else {
+                      return const ThineCircularProgress();
+                    }
+                  }),
+              // ),
             ),
             commentBox(myPersonalInfo!),
           ],
