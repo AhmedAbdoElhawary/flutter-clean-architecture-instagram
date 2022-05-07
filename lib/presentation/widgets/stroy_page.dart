@@ -251,6 +251,7 @@ class _StoryWidgetState extends State<StoryWidget> {
                                         child: TextFormField(
                                           keyboardType: TextInputType.multiline,
                                           cursorColor: Colors.teal,
+                                          style:Theme.of(context).textTheme.bodyText1,
                                           onTap: () {
                                             setState(() {
                                               controller.pause();

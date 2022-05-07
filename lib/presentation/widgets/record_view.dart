@@ -6,10 +6,9 @@ import 'package:instegram/core/resources/strings_manager.dart';
 
 class RecordView extends StatefulWidget {
   final String record;
-  const RecordView({
-    Key? key,
-    required this.record,
-  }) : super(key: key);
+  final bool isThatMine;
+  const RecordView({Key? key, required this.record, required this.isThatMine})
+      : super(key: key);
 
   @override
   _RecordViewState createState() => _RecordViewState();
@@ -27,7 +26,11 @@ class _RecordViewState extends State<RecordView> {
   @override
   Widget build(BuildContext context) {
     return widget.record.isEmpty
-        ?  Center(child: Text(StringsManager.noRecordsYet,style: Theme.of(context).textTheme.bodyText1,))
+        ? Center(
+            child: Text(
+            StringsManager.noRecordsYet,
+            style: Theme.of(context).textTheme.bodyText1,
+          ))
         : Row(
             children: [
               GestureDetector(
@@ -40,19 +43,19 @@ class _RecordViewState extends State<RecordView> {
               Expanded(
                 child: ProgressBar(
                   timeLabelLocation: TimeLabelLocation.none,
-                  thumbColor: ColorManager.white,
+                  thumbColor: Theme.of(context).focusColor,
                   total: Duration(microseconds: _totalDuration ?? 0),
                   barHeight: 3,
                   thumbRadius: 6.0,
                   baseBarColor: const Color.fromARGB(79, 255, 255, 255),
-                  progressBarColor: ColorManager.white,
+                  progressBarColor: Theme.of(context).focusColor,
                   progress: Duration(microseconds: _currentDuration ?? 0),
                 ),
               ),
               const SizedBox(width: 15),
               if (_totalDuration != null && _currentDuration != null)
                 Text(getReformatDate(),
-                    style:Theme.of(context).textTheme.bodyText1),
+                    style: Theme.of(context).textTheme.bodyText1),
             ],
           );
   }
@@ -72,7 +75,10 @@ class _RecordViewState extends State<RecordView> {
     return "${datesSeparated[0]}:${datesSeparated[1]}";
   }
 
-  Icon buildIcon(IconData icon) => Icon(icon, color: ColorManager.white, size: 30);
+  Icon buildIcon(IconData icon) => Icon(icon,
+      color:
+          widget.isThatMine ? Theme.of(context).focusColor : ColorManager.blue,
+      size: 30);
 
   Future<void> _onPlay({required String filePath}) async {
     if (!_isPlaying) {

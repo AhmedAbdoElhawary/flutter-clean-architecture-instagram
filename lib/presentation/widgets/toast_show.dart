@@ -19,6 +19,7 @@ class ToastShow {
     } catch (e) {
       error = state.error;
     }
+    print("=====================> ${error} !!!!!!the error!!!!!!!");
     ToastShow.toast(error);
   }
 }
