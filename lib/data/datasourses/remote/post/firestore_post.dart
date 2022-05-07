@@ -21,9 +21,18 @@ class FirestorePost {
     return postRef.id;
   }
 
-  static Future<List<Post>> getPostsInfo(List<dynamic> postsIds) async {
+  static Future<List<Post>> getPostsInfo(
+      {required List<dynamic> postsIds,
+      required int lengthOfCurrentList}) async {
     List<Post> postsInfo = [];
-    for (int i = 0; i < postsIds.length; i++) {
+    int lengthOfOriginPost = postsIds.length;
+    int lengthOfData = lengthOfOriginPost > 5 ? 5 : lengthOfOriginPost;
+    if (lengthOfCurrentList != 0) {
+      int addMoreData = lengthOfCurrentList + 5;
+      lengthOfData =
+          addMoreData < lengthOfOriginPost ? addMoreData : lengthOfOriginPost;
+    }
+    for (int i = 0; i < lengthOfData; i++) {
       DocumentSnapshot<Map<String, dynamic>> snap =
           await _fireStorePostCollection.doc(postsIds[i]).get();
       if (snap.exists) {
@@ -42,7 +51,7 @@ class FirestorePost {
   static Future<List<dynamic>> getCommentsOfPost(
       {required String postId}) async {
     DocumentSnapshot<Map<String, dynamic>> snap =
-    await _fireStorePostCollection.doc(postId).get();
+        await _fireStorePostCollection.doc(postId).get();
     if (snap.exists) {
       Post postReformat = Post.fromSnap(docSnap: snap);
       return postReformat.comments;

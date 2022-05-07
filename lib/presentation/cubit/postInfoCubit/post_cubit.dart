@@ -12,7 +12,7 @@ class PostCubit extends Cubit<PostState> {
   final GetPostsInfoUseCase _getPostsInfoUseCase;
   final GetAllPostsInfoUseCase _getAllPostInfoUseCase;
 
-  String postId='';
+  String postId = '';
   List<Post>? myPostsInfo;
   List<Post>? userPostsInfo;
 
@@ -33,15 +33,18 @@ class PostCubit extends Cubit<PostState> {
       emit(CubitPostLoaded(postId));
       return postId;
     }).catchError((e) {
-
       emit(CubitPostFailed(e));
     });
   }
 
   Future<void> getPostsInfo(
-      {required List<dynamic> postsIds, required bool isThatForMyPosts}) async {
+      {required List<dynamic> postsIds,
+      required bool isThatForMyPosts,
+      int lengthOfCurrentList = 0}) async {
     emit(CubitPostLoading());
-    await _getPostsInfoUseCase.call(params: postsIds).then((postsInfo) {
+    await _getPostsInfoUseCase
+        .call(paramsOne: postsIds, paramsTwo: lengthOfCurrentList)
+        .then((postsInfo) {
       if (isThatForMyPosts) {
         myPostsInfo = postsInfo;
         emit(CubitMyPersonalPostsLoaded(postsInfo));
@@ -50,7 +53,6 @@ class PostCubit extends Cubit<PostState> {
         emit(CubitPostsInfoLoaded(postsInfo));
       }
     }).catchError((e) {
-
       emit(CubitPostFailed(e));
     });
   }
