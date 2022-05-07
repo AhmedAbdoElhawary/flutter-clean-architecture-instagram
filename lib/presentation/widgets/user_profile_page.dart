@@ -3,13 +3,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/core/resources/styles_manager.dart';
 import 'package:instegram/presentation/cubit/followCubit/follow_cubit.dart';
 import 'package:instegram/presentation/pages/chatting_page.dart';
+import 'package:instegram/presentation/widgets/bottom_sheet.dart';
+import 'package:instegram/presentation/widgets/custom_app_bar.dart';
 import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
 import 'package:instegram/presentation/widgets/profile_page.dart';
 import 'package:instegram/presentation/widgets/recommendation_people.dart';
@@ -42,7 +42,7 @@ class _ProfilePageState extends State<UserProfilePage> {
           ? (BlocProvider.of<FirestoreUserInfoCubit>(context)
             ..getUserFromUserName(widget.userName))
           : (BlocProvider.of<FirestoreUserInfoCubit>(context)
-            ..getUserInfo(widget.userId,isThatMyPersonalId: false)),
+            ..getUserInfo(widget.userId, isThatMyPersonalId: false)),
       buildWhen: (previous, current) {
         if (previous != current && current is CubitUserLoaded) {
           return true;
@@ -55,7 +55,8 @@ class _ProfilePageState extends State<UserProfilePage> {
       builder: (context, state) {
         if (state is CubitUserLoaded) {
           return Scaffold(
-            appBar: appBar(state.userPersonalInfo.userName),
+            appBar: CustomAppBar.menuOfUserAppBar(
+                context, state.userPersonalInfo.userName, bottomSheetOfAdd),
             body: ProfilePage(
               isThatMyPersonalId: false,
               userId: widget.userId,
@@ -77,78 +78,37 @@ class _ProfilePageState extends State<UserProfilePage> {
     );
   }
 
-  AppBar appBar(String userName) {
-    return AppBar(
-        elevation: 0,
-        iconTheme: IconThemeData(color: Theme.of(context).focusColor),
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text(userName, style: Theme.of(context).textTheme.bodyText1),
-        actions: [
-          IconButton(
-            icon: SvgPicture.asset(
-              IconsAssets.menuHorizontalIcon,
-              color: Theme.of(context).focusColor,
-              height: 22.5,
-            ),
-            onPressed: () => bottomSheetOfAdd(),
-          ),
-          const SizedBox(width: 5)
-        ]);
-  }
-
   Future<void> bottomSheetOfAdd() {
-    return showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(25.0)),
-          ),
-          child: listOfAddPost(),
-        );
-      },
+    return CustomBottomSheet.bottomSheet(
+      context,
+      headIcon: Container(),
+      bodyText: buildPadding(),
     );
   }
 
-  Column listOfAddPost() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        SvgPicture.asset(
-          IconsAssets.minusIcon,
-          color: Theme.of(context).disabledColor,
-          height: 40,
-        ),
-        const Divider(),
-        Padding(
-          padding: const EdgeInsetsDirectional.only(start: 15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              textOfBottomSheet(StringsManager.report.tr()),
-              const SizedBox(height: 15),
-              textOfBottomSheet(StringsManager.block.tr()),
-              const SizedBox(height: 15),
-              textOfBottomSheet(StringsManager.aboutThisAccount.tr()),
-              const SizedBox(height: 15),
-              textOfBottomSheet(StringsManager.restrict.tr()),
-              const SizedBox(height: 15),
-              textOfBottomSheet(StringsManager.hideYourStory.tr()),
-              const SizedBox(height: 15),
-              textOfBottomSheet(StringsManager.copyProfileURL.tr()),
-              const SizedBox(height: 15),
-              textOfBottomSheet(StringsManager.shareThisProfile.tr()),
-              const SizedBox(height: 15),
-            ],
-          ),
-        ),
-      ],
+  Padding buildPadding() {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 15.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          textOfBottomSheet(StringsManager.report.tr()),
+          const SizedBox(height: 15),
+          textOfBottomSheet(StringsManager.block.tr()),
+          const SizedBox(height: 15),
+          textOfBottomSheet(StringsManager.aboutThisAccount.tr()),
+          const SizedBox(height: 15),
+          textOfBottomSheet(StringsManager.restrict.tr()),
+          const SizedBox(height: 15),
+          textOfBottomSheet(StringsManager.hideYourStory.tr()),
+          const SizedBox(height: 15),
+          textOfBottomSheet(StringsManager.copyProfileURL.tr()),
+          const SizedBox(height: 15),
+          textOfBottomSheet(StringsManager.shareThisProfile.tr()),
+          const SizedBox(height: 15),
+        ],
+      ),
     );
   }
 
