@@ -41,7 +41,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return BlocProvider<PostCubit>(
       create: (context) => injector<PostCubit>(),
       child: Scaffold(
-        backgroundColor:  Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         appBar: appBar(context),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,11 +64,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     child: TextFormField(
                       controller: captionController,
                       cursorColor: ColorManager.teal,
-                      style: const TextStyle(fontSize: 15),
+                      style: getNormalStyle( color:Theme.of(context).focusColor,fontSize: 15),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: StringsManager.writeACaption.tr(),
-                        hintStyle: const TextStyle(color: ColorManager.black26),
+                        hintStyle:
+                            TextStyle(color: Theme.of(context).cardColor),
                       ),
                     ),
                   ),
@@ -106,14 +107,22 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return Padding(
         padding: const EdgeInsetsDirectional.only(
             start: 7, end: 7, bottom: 10, top: 10),
-        child: Text(text, style: getNormalStyle(fontSize: 16.5,color: Theme.of(context).focusColor),));
+        child: Text(
+          text,
+          style: getNormalStyle(
+              fontSize: 16.5, color: Theme.of(context).focusColor),
+        ));
   }
 
   AppBar appBar(BuildContext context) {
     return AppBar(
         elevation: 0,
+        iconTheme: IconThemeData(color: Theme.of(context).focusColor),
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text(StringsManager.newPost.tr(),style: getNormalStyle(color: Theme.of(context).focusColor),),
+        title: Text(
+          StringsManager.newPost.tr(),
+          style: getNormalStyle(color: Theme.of(context).focusColor),
+        ),
         actions: actionsWidgets(context));
   }
 
