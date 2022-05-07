@@ -39,6 +39,7 @@ class StringsManager {
   static const String yourStory = "yourStory";
 
   static const String massage = "massage";
+  static const String massageP = "massageP";
   static const String replies = "replies";
   static const String theName = "theName"; //7
   static const String newPost = "newPost";
@@ -57,12 +58,15 @@ class StringsManager {
   static const String facebook = "facebook";
   static const String sendMassage = "sendMassage";
 
+  static const String changeLanguage = "changeLanguage";
+  static const String logOut = "logOut";
+
+  static const String changeMode = "changeMode";
+
   static const String passwordWrong = "passwordWrong";
   static const String youFollowHim = "youFollowHim";
 
-
-  static const String allowRecordingFromSettings =
-      'allowRecordingFromSettings';
+  static const String allowRecordingFromSettings = 'allowRecordingFromSettings';
 
   static const String noPosts = "noPosts";
   static const String tryAddPost = "tryAddPost";
@@ -80,8 +84,7 @@ class StringsManager {
   static const String noMoreData = "noMoreData";
   static const String clickRetry = "clickRetry";
   static const String underWork = "underWork";
-  static const String phoneOrEmailOrUserName =
-      "phoneOrEmailOrUserName";
+  static const String phoneOrEmailOrUserName = "phoneOrEmailOrUserName";
   static const String loginWithFacebook = "loginWithFacebook";
   static const String comments = "comments";
   static const String comment = "comment";
