@@ -78,6 +78,8 @@ Future<void> initializeDependencies() async {
   // app prefs instance
   injector.registerSingleton<AppPreferences>(AppPreferences(injector()));
 
+  injector.registerSingleton<AppPrefMode>(AppPrefMode(injector()));
+
   // Repository
 
   // Post

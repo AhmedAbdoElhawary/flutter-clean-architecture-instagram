@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/font_manager.dart';
 import 'package:instegram/core/resources/styles_manager.dart';
-//  Theme.of(context).dialogBackgroundColor
+//  Theme.of(context).selectedRowColor
 class AppTheme {
   static ThemeData get light {
     return ThemeData(
@@ -19,13 +19,16 @@ class AppTheme {
         indicatorColor: ColorManager.black38,
         cardColor: ColorManager.black26,
         dividerColor: ColorManager.black12,
+        selectedRowColor:  ColorManager.lightGrey,
         scaffoldBackgroundColor: ColorManager.white,
+        highlightColor:  ColorManager.black,
         canvasColor: ColorManager.transparent,
         splashColor: ColorManager.white,
         appBarTheme: AppBarTheme(
           elevation: 0,
           color: ColorManager.white,
           shadowColor: ColorManager.lowOpacityGrey,
+            iconTheme:const IconThemeData(color: ColorManager.black),
           titleTextStyle:
               getNormalStyle(fontSize: FontSize.s16, color: ColorManager.black),
         ),
@@ -41,20 +44,25 @@ class AppTheme {
       primaryColor: ColorManager.black,
       primaryColorLight: ColorManager.black87,
       primarySwatch: Colors.grey,
-      hintColor: ColorManager.black26,
-      shadowColor: ColorManager.black12,
+      hintColor: ColorManager.darkGray,
+      shadowColor: ColorManager.white1,
       focusColor: ColorManager.white,
       dialogBackgroundColor: ColorManager.white,
       hoverColor: ColorManager.grey,
       indicatorColor: ColorManager.grey,
       cardColor: ColorManager.grey,
       dividerColor: ColorManager.grey,
+      highlightColor:  ColorManager.grey,
+
+      selectedRowColor:  ColorManager.darkGray,
+      disabledColor: ColorManager.white,
+
       scaffoldBackgroundColor: ColorManager.black,
       canvasColor: ColorManager.transparent,
-      splashColor: ColorManager.black,
+      splashColor: ColorManager.darkGray,
       appBarTheme: AppBarTheme(
         elevation: 0,
-        // backgroundColor:ColorManager.black ,
+        iconTheme:const IconThemeData(color: ColorManager.white),
         color: ColorManager.black,
         shadowColor: ColorManager.lowOpacityGrey,
         titleTextStyle:
