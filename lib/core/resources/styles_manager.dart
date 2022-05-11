@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 
 import 'font_manager.dart';
 
@@ -38,21 +38,21 @@ TextStyle getLightStyle(
 
 TextStyle getNormalStyle(
     {double fontSize = FontSize.s0,
-      required Color color,
+    required Color color,
     FontStyle fontStyle = FontStyle.normal}) {
   return _whichTextStyle(fontSize, FontWeightManager.regular, color, fontStyle);
 }
 
 TextStyle getMediumStyle(
     {double fontSize = FontSize.s0,
-      required Color color,
+    required Color color,
     FontStyle fontStyle = FontStyle.normal}) {
   return _whichTextStyle(fontSize, FontWeightManager.medium, color, fontStyle);
 }
 
 TextStyle getBoldStyle(
     {double fontSize = FontSize.s0,
-      required Color color,
+    required Color color,
     FontStyle fontStyle = FontStyle.normal}) {
   return _whichTextStyle(fontSize, FontWeightManager.bold, color, fontStyle);
 }

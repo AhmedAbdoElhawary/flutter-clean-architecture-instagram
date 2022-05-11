@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/font_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/font_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
 
 class AppTheme {
   static ThemeData get light {
@@ -40,7 +40,6 @@ class AppTheme {
           headline1: getNormalStyle(color: ColorManager.grey, fontSize: 15),
           headline2: getBoldStyle(color: ColorManager.black, fontSize: 15),
           headline3: getMediumStyle(color: ColorManager.black, fontSize: 15),
-
         ));
   }
 
@@ -80,7 +79,6 @@ class AppTheme {
         headline1: getNormalStyle(color: ColorManager.grey, fontSize: 15),
         headline2: getBoldStyle(color: ColorManager.white, fontSize: 15),
         headline3: getMediumStyle(color: ColorManager.white, fontSize: 15),
-
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:instegram/core/functions/compress_image.dart';
+import 'package:instagram/core/functions/compress_image.dart';
 
 Future<File?> imageCameraPicker() async {
   final ImagePicker _picker = ImagePicker();
