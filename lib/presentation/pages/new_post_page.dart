@@ -2,16 +2,16 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/functions/date_of_now.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
-import 'package:instegram/data/models/post.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/core/utility/injector.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
-import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
+import 'package:instagram/core/functions/date_of_now.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/data/models/post.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
+import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
 
 class CreatePostPage extends StatefulWidget {
   final File selectedFile;
@@ -64,7 +64,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     child: TextFormField(
                       controller: captionController,
                       cursorColor: ColorManager.teal,
-                      style: getNormalStyle( color:Theme.of(context).focusColor,fontSize: 15),
+                      style: getNormalStyle(
+                          color: Theme.of(context).focusColor, fontSize: 15),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: StringsManager.writeACaption.tr(),

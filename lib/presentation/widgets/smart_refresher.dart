@@ -2,10 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instegram/core/resources/assets_manager.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
+import 'package:instagram/core/resources/assets_manager.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SmarterRefresh extends StatefulWidget {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:instagram/core/resources/color_manager.dart';
 
 class RecommendationPeople extends StatelessWidget {
   const RecommendationPeople({Key? key}) : super(key: key);

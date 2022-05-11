@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instegram/core/functions/date_of_now.dart';
-import 'package:instegram/core/resources/assets_manager.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/utility/constant.dart';
-import 'package:instegram/core/utility/injector.dart';
-import 'package:instegram/data/models/story.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/presentation/customPackages/story_view/sory_controller.dart';
-import 'package:instegram/presentation/customPackages/story_view/story_view.dart';
-import 'package:instegram/presentation/customPackages/story_view/utils.dart';
-import 'package:instegram/presentation/widgets/instagram_story_swipe.dart';
+import 'package:instagram/core/functions/date_of_now.dart';
+import 'package:instagram/core/resources/assets_manager.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/data/models/story.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/presentation/customPackages/story_view/sory_controller.dart';
+import 'package:instagram/presentation/customPackages/story_view/story_view.dart';
+import 'package:instagram/presentation/customPackages/story_view/utils.dart';
+import 'package:instagram/presentation/widgets/instagram_story_swipe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StoryPage extends StatefulWidget {
@@ -32,7 +32,6 @@ class StoryPage extends StatefulWidget {
 
 class _StoryPageState extends State<StoryPage> {
   late PageController controller;
-
 
   @override
   void initState() {
@@ -251,14 +250,15 @@ class _StoryWidgetState extends State<StoryWidget> {
                                         child: TextFormField(
                                           keyboardType: TextInputType.multiline,
                                           cursorColor: Colors.teal,
-                                          style:Theme.of(context).textTheme.bodyText1,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
                                           onTap: () {
                                             setState(() {
                                               controller.pause();
                                             });
                                           },
                                           showCursor: true,
-
                                           maxLines: null,
                                           decoration:
                                               const InputDecoration.collapsed(
@@ -269,7 +269,6 @@ class _StoryWidgetState extends State<StoryWidget> {
                                                       color: Colors.grey)),
                                           autofocus: false,
                                           cursorWidth: 1.5,
-                                         
                                         ),
                                       ),
                                     ),
@@ -318,7 +317,8 @@ class ProfileWidget extends StatelessWidget {
   Widget build(BuildContext context) => Material(
         type: MaterialType.transparency,
         child: Container(
-          margin: const EdgeInsetsDirectional.only(start: 16,end: 16,top: 20,bottom: 20),
+          margin: const EdgeInsetsDirectional.only(
+              start: 16, end: 16, top: 20, bottom: 20),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

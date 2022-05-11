@@ -1,14 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/presentation/widgets/toast_show.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/presentation/widgets/toast_show.dart';
 import '../cubit/followCubit/follow_cubit.dart';
 import 'circle_avatar_of_profile_image.dart';
-import 'package:instegram/core/utility/constant.dart';
-import 'package:instegram/presentation/pages/which_profile_page.dart';
+import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/presentation/pages/which_profile_page.dart';
 
 class ShowMeTheUsers extends StatefulWidget {
   final List<UserPersonalInfo> usersInfo;
@@ -116,11 +116,9 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                           myPersonalId == userInfo.userId) {
                         // setState(() {
                         if (isThatFollower) {
-                          userInfo.followerPeople
-                              .remove(userInfo.userId);
+                          userInfo.followerPeople.remove(userInfo.userId);
                         } else {
-                          userInfo.followedPeople
-                              .remove(userInfo.userId);
+                          userInfo.followedPeople.remove(userInfo.userId);
                         }
                         // });
                       }

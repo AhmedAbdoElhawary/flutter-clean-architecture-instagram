@@ -2,13 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:instegram/core/app_prefs.dart';
-import 'package:instegram/core/resources/assets_manager.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
-import 'package:instegram/core/utility/injector.dart';
-import 'package:instegram/presentation/pages/sign_up_page.dart';
+import 'package:instagram/core/app_prefs.dart';
+import 'package:instagram/core/resources/assets_manager.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/presentation/pages/sign_up_page.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/or_text.dart';
 
@@ -58,7 +58,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
             children: [
               SvgPicture.asset(
                 IconsAssets.instagramLogo,
-                color:Theme.of(context).focusColor,
+                color: Theme.of(context).focusColor,
                 height: 50,
               ),
               const SizedBox(height: 30),
@@ -104,7 +104,8 @@ class _SignUpPageState extends State<RegisterWidgets> {
           widget.isThatLogIn
               ? StringsManager.noAccount.tr()
               : StringsManager.haveAccount.tr(),
-          style: getNormalStyle(fontSize: 13, color: Theme.of(context).bottomAppBarColor),
+          style: getNormalStyle(
+              fontSize: 13, color: Theme.of(context).bottomAppBarColor),
         ),
         login(context),
       ],
@@ -129,8 +130,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
       widget.isThatLogIn
           ? StringsManager.signUp.tr()
           : StringsManager.logIn.tr(),
-      style: getBoldStyle(
-          fontSize: 13, color:Theme.of(context).focusColor),
+      style: getBoldStyle(fontSize: 13, color: Theme.of(context).focusColor),
     );
   }
 }

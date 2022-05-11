@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
-import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
-import 'package:instegram/presentation/widgets/toast_show.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
+import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/toast_show.dart';
 
 class MassagesPage extends StatelessWidget {
   final String userId;
