@@ -1,13 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/app_prefs.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/domain/entities/unregistered_user.dart';
-import 'package:instegram/core/utility/injector.dart';
-import 'package:instegram/presentation/screens/main_screen.dart';
-import 'package:instegram/presentation/widgets/custom_elevated_button.dart';
-import 'package:instegram/presentation/widgets/register_widgets.dart';
+import 'package:instagram/core/app_prefs.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/domain/entities/unregistered_user.dart';
+import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/presentation/screens/main_screen.dart';
+import 'package:instagram/presentation/widgets/custom_elevated_button.dart';
+import 'package:instagram/presentation/widgets/register_widgets.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
@@ -32,6 +32,7 @@ class _SignUpPageState extends State<SignUpPage> {
     _appPreferences.getLocal().then((local) => {context.setLocale(local)});
     super.didChangeDependencies();
   }
+
   @override
   Widget build(BuildContext context) {
     return RegisterWidgets(

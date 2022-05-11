@@ -1,6 +1,6 @@
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
-// import 'package:instegram/core/resources/color_manager.dart';
+// import 'package:instagram/core/resources/color_manager.dart';
 //
 // class SearchAppBar extends StatefulWidget {
 //   const SearchAppBar({Key? key}) : super(key: key);

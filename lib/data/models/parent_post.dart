@@ -1,4 +1,4 @@
-import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
 
 class ParentPost {
   String datePublished;

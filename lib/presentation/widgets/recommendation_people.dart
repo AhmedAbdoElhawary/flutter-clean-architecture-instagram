@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:instegram/core/resources/color_manager.dart';
 
-class RecommendationPeople extends StatelessWidget{
+class RecommendationPeople extends StatelessWidget {
   const RecommendationPeople({Key? key}) : super(key: key);
 
   @override
@@ -23,5 +22,4 @@ class RecommendationPeople extends StatelessWidget{
       ),
     );
   }
-
 }

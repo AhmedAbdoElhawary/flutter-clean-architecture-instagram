@@ -3,20 +3,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/functions/date_of_now.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
-import 'package:instegram/core/utility/constant.dart';
-import 'package:instegram/data/models/comment.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comment_likes/comment_likes_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/replyLikes/reply_likes_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
-import 'package:instegram/presentation/pages/show_me_who_are_like.dart';
-import 'package:instegram/presentation/pages/which_profile_page.dart';
-import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
-import 'package:instegram/presentation/widgets/toast_show.dart';
+import 'package:instagram/core/functions/date_of_now.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/data/models/comment.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comment_likes/comment_likes_cubit.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/replyLikes/reply_likes_cubit.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
+import 'package:instagram/presentation/pages/show_me_who_are_like.dart';
+import 'package:instagram/presentation/pages/which_profile_page.dart';
+import 'package:instagram/presentation/widgets/circle_avatar_of_profile_image.dart';
+import 'package:instagram/presentation/widgets/toast_show.dart';
 
 class CommentInfo extends StatefulWidget {
   final Comment commentInfo;
@@ -60,7 +60,10 @@ class _CommentInfoState extends State<CommentInfo> {
                     padding: const EdgeInsetsDirectional.only(start: 50.0),
                     child: Row(
                       children: [
-                        Container(color:Theme.of(context).dividerColor, height: 1, width: 40),
+                        Container(
+                            color: Theme.of(context).dividerColor,
+                            height: 1,
+                            width: 40),
                         const SizedBox(width: 10),
                         Expanded(
                             child: GestureDetector(
@@ -73,7 +76,8 @@ class _CommentInfoState extends State<CommentInfo> {
                                 child: Text(
                                     "${StringsManager.view.tr()} ${widget.commentInfo.replies!.length} ${StringsManager.more.tr()} ${widget.commentInfo.replies!.length > 1 ? StringsManager.replies.tr() : StringsManager.reply.tr()}",
                                     style: getNormalStyle(
-                                        color: Theme.of(context).indicatorColor))))
+                                        color:
+                                            Theme.of(context).indicatorColor))))
                       ],
                     ),
                   )
@@ -95,7 +99,8 @@ class _CommentInfoState extends State<CommentInfo> {
                             BlocProvider.of<ReplyInfoCubit>(context)
                                 .repliesOnComment;
                         return Padding(
-                          padding: const EdgeInsetsDirectional.only(start: 40.0),
+                          padding:
+                              const EdgeInsetsDirectional.only(start: 40.0),
                           child: ListView.separated(
                               keyboardDismissBehavior:
                                   ScrollViewKeyboardDismissBehavior.onDrag,
@@ -123,18 +128,24 @@ class _CommentInfoState extends State<CommentInfo> {
                         );
                       } else if (state is CubitReplyInfoFailed) {
                         ToastShow.toastStateError(state);
-                        return Text(state.toString(),style: Theme.of(context).textTheme.bodyText1);
+                        return Text(state.toString(),
+                            style: Theme.of(context).textTheme.bodyText1);
                       } else {
                         return Padding(
-                          padding: const EdgeInsetsDirectional.only(start: 50.0),
+                          padding:
+                              const EdgeInsetsDirectional.only(start: 50.0),
                           child: Row(
                             children: [
                               Container(
-                                  color: Theme.of(context).dividerColor, height: 1, width: 40),
+                                  color: Theme.of(context).dividerColor,
+                                  height: 1,
+                                  width: 40),
                               const SizedBox(width: 10),
                               Expanded(
                                   child: Text(StringsManager.loading.tr(),
-                                      style:Theme.of(context).textTheme.headline1))
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline1))
                             ],
                           ),
                         );
@@ -195,8 +206,8 @@ class _CommentInfoState extends State<CommentInfo> {
                           if (widget.isThatReply)
                             TextSpan(
                               text: hashTageOfUserName.split(" ")[0],
-                              style:  getNormalStyle(
-                                  color: ColorManager.lightBlue),
+                              style:
+                                  getNormalStyle(color: ColorManager.lightBlue),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () async {
                                   List<String> hashTagName =
@@ -213,7 +224,8 @@ class _CommentInfoState extends State<CommentInfo> {
                                 },
                             ),
                           TextSpan(
-                            style: TextStyle(color:Theme.of(context).focusColor),
+                            style:
+                                TextStyle(color: Theme.of(context).focusColor),
                             text:
                                 " ${widget.isThatReply ? hashTageOfUserName.split(" ")[1] : hashTageOfUserName}",
                           )
@@ -230,7 +242,8 @@ class _CommentInfoState extends State<CommentInfo> {
                           style: Theme.of(context).textTheme.headline1),
                       if (widget.commentInfo.likes.isNotEmpty)
                         Padding(
-                          padding: const EdgeInsetsDirectional.only(start: 20.0),
+                          padding:
+                              const EdgeInsetsDirectional.only(start: 20.0),
                           child: InkWell(
                             onTap: () {
                               Navigator.of(context).push(CupertinoPageRoute(
@@ -241,7 +254,7 @@ class _CommentInfoState extends State<CommentInfo> {
                             },
                             child: Text(
                               "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like.tr() : StringsManager.likes.tr()}",
-                              style:  Theme.of(context).textTheme.headline1,
+                              style: Theme.of(context).textTheme.headline1,
                             ),
                           ),
                         ),

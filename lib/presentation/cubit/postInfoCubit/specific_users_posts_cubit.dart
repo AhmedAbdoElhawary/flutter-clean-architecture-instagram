@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/domain/usecases/postUseCase/getPostInfo/get_specific_users_posts.dart';
+import 'package:instagram/domain/usecases/postUseCase/getPostInfo/get_specific_users_posts.dart';
 
 part 'specific_users_posts_state.dart';
 
@@ -24,7 +24,7 @@ class SpecificUsersPostsCubit extends Cubit<SpecificUsersPostsState> {
       usersPostsInfo = specificPostsInfo;
       emit(SpecificUsersPostsLoaded(specificPostsInfo));
     }).catchError((e) {
-      usersPostsInfo=[];
+      usersPostsInfo = [];
       emit(SpecificUsersPostsFailed(e.toString()));
     });
   }

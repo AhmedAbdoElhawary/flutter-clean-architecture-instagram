@@ -1,15 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/functions/date_of_now.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
-import 'package:instegram/data/models/comment.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
-import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
+import 'package:instagram/core/functions/date_of_now.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/data/models/comment.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
+import 'package:instagram/presentation/widgets/circle_avatar_of_profile_image.dart';
 
 class CommentBox extends StatefulWidget {
   final TextEditingController textController;
@@ -22,7 +22,7 @@ class CommentBox extends StatefulWidget {
       required this.textController,
       required this.userPersonalInfo,
       required this.makeSelectedCommentNullable,
-        required this.postId,
+      required this.postId,
       this.selectedCommentInfo})
       : super(key: key);
 
@@ -50,7 +50,7 @@ class _CommentBoxState extends State<CommentBox> {
         ),
         const Divider(),
         Padding(
-          padding: const EdgeInsetsDirectional.only(start: 8,end: 8),
+          padding: const EdgeInsetsDirectional.only(start: 8, end: 8),
           child: Row(
             crossAxisAlignment: widget.textController.text.length < 70
                 ? CrossAxisAlignment.center
@@ -67,8 +67,7 @@ class _CommentBoxState extends State<CommentBox> {
                 child: TextFormField(
                   keyboardType: TextInputType.multiline,
                   cursorColor: ColorManager.teal,
-
-                  style:Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyText1,
                   maxLines: null,
                   decoration: InputDecoration.collapsed(
                       hintText: StringsManager.addComment.tr(),
@@ -158,7 +157,8 @@ class _CommentBoxState extends State<CommentBox> {
       },
       child: Text(
         emoji,
-        style:getNormalStyle(fontSize: 24,color: Theme.of(context).focusColor),
+        style:
+            getNormalStyle(fontSize: 24, color: Theme.of(context).focusColor),
       ),
     );
   }

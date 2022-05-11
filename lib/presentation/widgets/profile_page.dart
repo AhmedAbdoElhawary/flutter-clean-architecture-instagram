@@ -3,16 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:instegram/core/resources/assets_manager.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
-import 'package:instegram/data/models/post.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
-import 'package:instegram/presentation/pages/followers_and_followings_info_page.dart';
-import 'package:instegram/presentation/widgets/custom_grid_view.dart';
-import 'package:instegram/presentation/widgets/custom_videos_grid_view.dart';
+import 'package:instagram/core/resources/assets_manager.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/data/models/post.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
+import 'package:instagram/presentation/pages/followers_and_followings_info_page.dart';
+import 'package:instagram/presentation/widgets/custom_grid_view.dart';
+import 'package:instagram/presentation/widgets/custom_videos_grid_view.dart';
 import '../../data/models/user_personal_info.dart';
 import 'circle_avatar_of_profile_image.dart';
 import 'read_more_text.dart';
@@ -204,8 +204,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       initialIndex:
                           usersInfo == userInfo.followerPeople ? 0 : 1)));
 
-              BlocProvider.of<FirestoreUserInfoCubit>(context)
-                  .getUserInfo(userInfo.userId, isThatMyPersonalId:widget.isThatMyPersonalId);
+              BlocProvider.of<FirestoreUserInfoCubit>(context).getUserInfo(
+                  userInfo.userId,
+                  isThatMyPersonalId: widget.isThatMyPersonalId);
               setState(() {
                 reBuild = true;
               });

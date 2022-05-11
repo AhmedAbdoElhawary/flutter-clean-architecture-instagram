@@ -1,12 +1,12 @@
 import 'package:dashed_circle/dashed_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/utility/injector.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/presentation/cubit/StoryCubit/story_cubit.dart';
-import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
-import 'package:instegram/presentation/widgets/stroy_page.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
+import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/stroy_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'circle_avatar_name.dart';
@@ -245,7 +245,6 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
             turns: reverse as Animation<double>,
             child: CircleAvatar(
               radius: widget.bodyHeight * .0510,
-
               backgroundColor: ColorManager.transparent,
             ),
           ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/data/models/post.dart';
-import 'package:instegram/presentation/pages/play_this_video.dart';
-import 'package:instegram/presentation/widgets/fade_in_image.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/data/models/post.dart';
+import 'package:instagram/presentation/pages/play_this_video.dart';
+import 'package:instagram/presentation/widgets/fade_in_image.dart';
 
 class PictureViewer extends StatelessWidget {
   final Post postInfo;
@@ -15,9 +15,10 @@ class PictureViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        elevation: 0,iconTheme:IconThemeData(color: Theme.of(context).focusColor) ,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Theme.of(context).focusColor),
         backgroundColor: ColorManager.transparent,
         foregroundColor: Theme.of(context).primaryColor,
       ),
@@ -36,7 +37,8 @@ class PictureViewer extends StatelessWidget {
                       imageUrl: postInfo.postUrl,
                     ),
                   )
-                : PlayThisVideo(videoUrl: postInfo.postUrl, play: true,dispose: false),
+                : PlayThisVideo(
+                    videoUrl: postInfo.postUrl, play: true, dispose: false),
           ),
         ),
       ),

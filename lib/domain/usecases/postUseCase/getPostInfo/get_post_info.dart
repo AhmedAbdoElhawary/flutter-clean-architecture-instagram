@@ -1,5 +1,5 @@
-import 'package:instegram/data/models/post.dart';
-import 'package:instegram/domain/repositories/post/post_repository.dart';
+import 'package:instagram/data/models/post.dart';
+import 'package:instagram/domain/repositories/post/post_repository.dart';
 import '../../../../core/usecase/usecase.dart';
 
 class GetPostsInfoUseCase

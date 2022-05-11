@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:instegram/data/models/post.dart';
-import 'package:instegram/presentation/widgets/comment_box.dart';
+import 'package:instagram/data/models/post.dart';
+import 'package:instagram/presentation/widgets/comment_box.dart';
 
 class AddComment extends StatefulWidget {
   const AddComment({
@@ -8,8 +8,6 @@ class AddComment extends StatefulWidget {
     // required this.showCommentBox,
     required this.postsInfo,
     required this.textController,
-
-
   }) : super(key: key);
 
   final Post postsInfo;
@@ -68,7 +66,6 @@ class _CommentBoxState extends State<AddComment>
 
   @override
   Widget build(BuildContext context) {
-
     return Visibility(
       visible: visibility,
       child: FadeTransition(
@@ -76,10 +73,10 @@ class _CommentBoxState extends State<AddComment>
         child: Builder(builder: (context) {
           return Align(
             alignment: Alignment.bottomCenter,
-            child:  CommentBox(
+            child: CommentBox(
               postId: widget.postsInfo.postUid,
-              textController:  widget.textController,
-            userPersonalInfo:  widget.postsInfo.publisherInfo!,
+              textController: widget.textController,
+              userPersonalInfo: widget.postsInfo.publisherInfo!,
               makeSelectedCommentNullable: () {
                 setState(() {
                   widget.textController.text = '';

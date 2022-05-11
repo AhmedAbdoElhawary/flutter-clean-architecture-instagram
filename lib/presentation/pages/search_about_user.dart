@@ -2,15 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
-import 'package:instegram/core/utility/constant.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
-import 'package:instegram/presentation/pages/which_profile_page.dart';
-import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
-import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
+import 'package:instagram/presentation/pages/which_profile_page.dart';
+import 'package:instagram/presentation/widgets/circle_avatar_of_profile_image.dart';
+import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
 
 class SearchAboutUserPage extends StatefulWidget {
   SearchAboutUserPage({Key? key}) : super(key: key);
@@ -43,16 +43,17 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
           width: double.infinity,
           height: 35,
           decoration: BoxDecoration(
-              color:Theme.of(context).shadowColor,
+              color: Theme.of(context).shadowColor,
               borderRadius: BorderRadius.circular(10)),
           child: TextFormField(
-            style:Theme.of(context).textTheme.bodyText1,
-            controller: _textController,textAlign:TextAlign.start ,
+            style: Theme.of(context).textTheme.bodyText1,
+            controller: _textController,
+            textAlign: TextAlign.start,
             onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
                 contentPadding: const EdgeInsetsDirectional.all(12.5),
                 hintText: StringsManager.search.tr(),
-                hintStyle: Theme.of(context).textTheme.headline1 ,
+                hintStyle: Theme.of(context).textTheme.headline1,
                 border: InputBorder.none),
           ),
         ),

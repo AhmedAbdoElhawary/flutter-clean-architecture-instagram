@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/data/models/massage.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/data/models/massage.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
 import '../../../core/utility/constant.dart';
 
 class FirestoreUser {
@@ -159,7 +159,7 @@ class FirestoreUser {
 
   static Stream<List<UserPersonalInfo>> searchAboutUser(
       {required String name}) {
-   name= name.toLowerCase();
+    name = name.toLowerCase();
     Stream<QuerySnapshot<Map<String, dynamic>>> snapSearch =
         _fireStoreUserCollection
             .where("charactersOfName", arrayContains: name)

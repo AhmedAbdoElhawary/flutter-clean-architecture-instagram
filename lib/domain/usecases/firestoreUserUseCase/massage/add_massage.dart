@@ -1,6 +1,6 @@
-import 'package:instegram/core/usecase/usecase.dart';
-import 'package:instegram/data/models/massage.dart';
-import 'package:instegram/domain/repositories/user_repository.dart';
+import 'package:instagram/core/usecase/usecase.dart';
+import 'package:instagram/data/models/massage.dart';
+import 'package:instagram/domain/repositories/user_repository.dart';
 
 class AddMassageUseCase
     implements UseCaseThreeParams<Massage, Massage, String, String> {

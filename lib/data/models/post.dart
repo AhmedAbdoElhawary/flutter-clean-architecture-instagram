@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instegram/data/models/parent_post.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_post.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
 
 class Post extends ParentPost {
   String postUrl;

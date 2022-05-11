@@ -1,6 +1,6 @@
-import 'package:instegram/core/usecase/usecase.dart';
-import 'package:instegram/data/models/massage.dart';
-import 'package:instegram/domain/repositories/user_repository.dart';
+import 'package:instagram/core/usecase/usecase.dart';
+import 'package:instagram/data/models/massage.dart';
+import 'package:instagram/domain/repositories/user_repository.dart';
 
 class GetMassagesUseCase implements StreamUseCase<List<Massage>, String> {
   final FirestoreUserRepository _addPostToUserRepository;

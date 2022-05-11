@@ -1,13 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
-import 'package:instegram/presentation/widgets/show_me_the_users.dart';
-import 'package:instegram/presentation/widgets/toast_show.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/show_me_the_users.dart';
+import 'package:instagram/presentation/widgets/toast_show.dart';
 import '../cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 
 class FollowersAndFollowingsInfoPage extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:instegram/domain/entities/registered_user.dart';
+import 'package:instagram/domain/entities/registered_user.dart';
 import '../entities/unregistered_user.dart';
 
 abstract class FirebaseAuthRepository {

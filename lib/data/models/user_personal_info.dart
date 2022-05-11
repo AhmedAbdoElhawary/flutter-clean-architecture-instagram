@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:instegram/data/models/story.dart';
+import 'package:instagram/data/models/story.dart';
 
 class UserPersonalInfo extends Equatable {
   String bio;

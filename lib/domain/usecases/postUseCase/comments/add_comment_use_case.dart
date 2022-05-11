@@ -1,6 +1,6 @@
-import 'package:instegram/core/usecase/usecase.dart';
-import 'package:instegram/data/models/comment.dart';
-import 'package:instegram/domain/repositories/post/comment/comment_repository.dart';
+import 'package:instagram/core/usecase/usecase.dart';
+import 'package:instagram/data/models/comment.dart';
+import 'package:instagram/domain/repositories/post/comment/comment_repository.dart';
 
 class AddCommentUseCase implements UseCase<Comment, Comment> {
   final FirestoreCommentRepository _addCommentRepository;

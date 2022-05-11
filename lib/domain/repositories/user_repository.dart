@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:instegram/data/models/massage.dart';
-import 'package:instegram/data/models/specific_users_info.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/massage.dart';
+import 'package:instagram/data/models/specific_users_info.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
 
 abstract class FirestoreUserRepository {
   Future<void> addNewUser(UserPersonalInfo newUserInfo);
@@ -37,5 +37,4 @@ abstract class FirestoreUserRepository {
 
   Stream<List<Massage>> getMassages({required String receiverId});
   Stream<List<UserPersonalInfo>> searchAboutUser({required String name});
-
 }

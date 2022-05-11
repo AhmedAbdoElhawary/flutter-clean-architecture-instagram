@@ -3,23 +3,23 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/functions/image_picker.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
-import 'package:instegram/data/models/post.dart';
-import 'package:instegram/presentation/cubit/StoryCubit/story_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
-import 'package:instegram/presentation/pages/story_config.dart';
-import 'package:instegram/presentation/widgets/add_comment.dart';
-import 'package:instegram/presentation/widgets/custom_app_bar.dart';
-import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
-import 'package:instegram/presentation/widgets/gradient_icon.dart';
-import 'package:instegram/presentation/widgets/post_list_view.dart';
-import 'package:instegram/presentation/widgets/smart_refresher.dart';
-import 'package:instegram/presentation/widgets/stroy_page.dart';
-import 'package:instegram/presentation/widgets/toast_show.dart';
+import 'package:instagram/core/functions/image_picker.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/data/models/post.dart';
+import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
+import 'package:instagram/presentation/pages/story_config.dart';
+import 'package:instagram/presentation/widgets/add_comment.dart';
+import 'package:instagram/presentation/widgets/custom_app_bar.dart';
+import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/gradient_icon.dart';
+import 'package:instagram/presentation/widgets/post_list_view.dart';
+import 'package:instagram/presentation/widgets/smart_refresher.dart';
+import 'package:instagram/presentation/widgets/stroy_page.dart';
+import 'package:instagram/presentation/widgets/toast_show.dart';
 import '../../data/models/user_personal_info.dart';
 import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../widgets/circle_avatar_of_profile_image.dart';
@@ -229,17 +229,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget posts(int index, double bodyHeight, bool playTheVideo) {
     return ImageList(
-        postInfo: postsInfo.value[index],
-        postsInfo: postsInfo,
-        bodyHeight: bodyHeight,
-        playTheVideo: playTheVideo,
-        reLoadData: reloadTheData,);
+      postInfo: postsInfo.value[index],
+      postsInfo: postsInfo,
+      bodyHeight: bodyHeight,
+      playTheVideo: playTheVideo,
+      reLoadData: reloadTheData,
+    );
   }
-reloadTheData(){
+
+  reloadTheData() {
     setState(() {
-      reLoadData.value=true;
+      reLoadData.value = true;
     });
-}
+  }
+
   Widget circularProgress() {
     return const ThineCircularProgress();
   }

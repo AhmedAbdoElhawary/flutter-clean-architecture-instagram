@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/data/models/massage.dart';
-import 'package:instegram/domain/usecases/firestoreUserUseCase/massage/get_massages.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart';
+import 'package:instagram/data/models/massage.dart';
+import 'package:instagram/domain/usecases/firestoreUserUseCase/massage/get_massages.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart';
 
 part 'massage_event.dart';
 part 'massage_state.dart';
@@ -34,7 +34,8 @@ class MassageBloc extends Bloc<MassageEvent, MassageBlocState> {
         );
   }
 
-  Stream<MassageBlocState> _mapUpdateMassagesToState(UpdateMassages event) async* {
+  Stream<MassageBlocState> _mapUpdateMassagesToState(
+      UpdateMassages event) async* {
     yield MassageBlocLoaded(massages: event.massages);
   }
 }

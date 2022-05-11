@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instegram/core/resources/assets_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
+import 'package:instagram/core/resources/assets_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
 
 class CustomAppBar {
   static AppBar basicAppBar(BuildContext context) {

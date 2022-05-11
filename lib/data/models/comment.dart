@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+
 class Comment {
   String datePublished;
   String theComment;
@@ -21,13 +22,12 @@ class Comment {
     required this.postId,
     this.whoCommentInfo,
     required this.likes,
-
-    this.parentCommentId='',
-
-     this.replies,
+    this.parentCommentId = '',
+    this.replies,
   });
 
-  static Comment fromSnapComment(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  static Comment fromSnapComment(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return Comment(
       datePublished: snapshot["datePublished"],
       theComment: snapshot["theComment"],
@@ -40,14 +40,14 @@ class Comment {
   }
 
   Map<String, dynamic> toMapComment() => {
-    'datePublished': datePublished,
-    "theComment": theComment,
-    "commentUid": commentUid,
-    "postId": postId,
-    "whoCommentId": whoCommentId,
-    'likes': likes,
-    "replies": replies,
-  };
+        'datePublished': datePublished,
+        "theComment": theComment,
+        "commentUid": commentUid,
+        "postId": postId,
+        "whoCommentId": whoCommentId,
+        'likes': likes,
+        "replies": replies,
+      };
 
   static Comment fromSnapReply(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -59,18 +59,16 @@ class Comment {
       parentCommentId: snapshot["parentCommentId"],
       postId: snapshot['postId'],
       likes: snapshot['likes'],
-
     );
   }
 
   Map<String, dynamic> toMapReply() => {
-    'whoReplyId': whoCommentId,
-    "datePublished": datePublished,
-    "theReply": theComment,
-    "parentCommentId": parentCommentId,
-    'postId': postId,
-    "replyUid": commentUid,
-    'likes': likes,
-  };
+        'whoReplyId': whoCommentId,
+        "datePublished": datePublished,
+        "theReply": theComment,
+        "parentCommentId": parentCommentId,
+        'postId': postId,
+        "replyUid": commentUid,
+        'likes': likes,
+      };
 }
-

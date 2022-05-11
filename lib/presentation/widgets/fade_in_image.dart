@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
 
 class CustomFadeInImage extends StatefulWidget {
   final String imageUrl;
@@ -56,7 +56,7 @@ class _CustomFadeInImageState extends State<CustomFadeInImage> {
         return SizedBox(
           width: double.infinity,
           height: widget.aspectRatio,
-          child:const Icon(Icons.warning_amber_rounded,size: 50),
+          child: const Icon(Icons.warning_amber_rounded, size: 50),
         );
       },
     );

@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/data/datasourses/remote/firestore_user_info.dart';
-import 'package:instegram/data/models/comment.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/data/datasourses/remote/firestore_user_info.dart';
+import 'package:instagram/data/models/comment.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
 
 class FirestoreReply {
   static final _fireStoreReplyCollection =

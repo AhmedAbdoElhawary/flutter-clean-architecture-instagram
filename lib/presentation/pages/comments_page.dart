@@ -1,20 +1,20 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
-import 'package:instegram/data/models/comment.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/core/utility/injector.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
-import 'package:instegram/presentation/widgets/comment_box.dart';
-import 'package:instegram/presentation/widgets/commentator.dart';
-import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
-import 'package:instegram/presentation/widgets/smart_refresher.dart';
-import 'package:instegram/presentation/widgets/toast_show.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/data/models/comment.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
+import 'package:instagram/presentation/widgets/comment_box.dart';
+import 'package:instagram/presentation/widgets/commentator.dart';
+import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/smart_refresher.dart';
+import 'package:instagram/presentation/widgets/toast_show.dart';
 
 class CommentsPage extends StatefulWidget {
   final String postId;
