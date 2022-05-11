@@ -1,6 +1,6 @@
-import 'package:instegram/core/usecase/usecase.dart';
-import 'package:instegram/data/models/comment.dart';
-import 'package:instegram/domain/repositories/post/comment/reply_repository.dart';
+import 'package:instagram/core/usecase/usecase.dart';
+import 'package:instagram/data/models/comment.dart';
+import 'package:instagram/domain/repositories/post/comment/reply_repository.dart';
 
 class ReplyOnThisCommentUseCase implements UseCase<Comment, Comment> {
   final FirestoreReplyRepository _replayOnThisCommentRepository;

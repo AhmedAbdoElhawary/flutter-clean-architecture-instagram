@@ -1,16 +1,15 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/data/models/massage.dart';
-import 'package:instegram/domain/usecases/firestoreUserUseCase/massage/add_massage.dart';
+import 'package:instagram/data/models/massage.dart';
+import 'package:instagram/domain/usecases/firestoreUserUseCase/massage/add_massage.dart';
 
 part 'massage_state.dart';
 
 class MassageCubit extends Cubit<MassageState> {
   final AddMassageUseCase _addMassageUseCase;
   List<Massage> massagesInfo = [];
-  MassageCubit(this._addMassageUseCase)
-      : super(MassageInitial());
+  MassageCubit(this._addMassageUseCase) : super(MassageInitial());
 
   static MassageCubit get(BuildContext context) => BlocProvider.of(context);
 
