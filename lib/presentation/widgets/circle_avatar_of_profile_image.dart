@@ -1,3 +1,4 @@
+import 'package:dashed_circle/dashed_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instegram/core/resources/color_manager.dart';
@@ -33,13 +34,61 @@ class CircleAvatarOfProfileImage extends StatefulWidget {
       _CircleAvatarOfProfileImageState();
 }
 
-class _CircleAvatarOfProfileImageState
-    extends State<CircleAvatarOfProfileImage> {
+class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
+    with SingleTickerProviderStateMixin {
   final SharedPreferences _sharePrefs = injector<SharedPreferences>();
 
+  late Animation gap;
+  late Animation base;
+  late Animation reverse;
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 3));
+    base = CurvedAnimation(parent: controller, curve: Curves.bounceInOut);
+    reverse =
+        Tween<double>(begin: 0.0, end: -1.0).animate(base as Animation<double>);
+    gap = Tween<double>(begin: 3.0, end: 0.0).animate(base as Animation<double>)
+      ..addListener(() {
+        setState(() {});
+      });
+    controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  List<Color> colorList = [
+    ColorManager.red,
+    ColorManager.redAccent,
+    ColorManager.yellow
+  ];
+  List<Alignment> alignmentList = [
+    Alignment.bottomLeft,
+    Alignment.bottomRight,
+    Alignment.topLeft,
+  ];
+  int index = 0;
+  Color bottomColor = ColorManager.red;
+  Color topColor = ColorManager.yellow;
+  Alignment begin = Alignment.bottomLeft;
+  Alignment end = Alignment.topRight;
   @override
   Widget build(BuildContext context) {
     String profileImage = widget.userInfo.profileImageUrl;
+    if (controller.isCompleted) {
+      Future.delayed(const Duration(milliseconds: 5), () {
+        setState(() {
+          topColor = ColorManager.red;
+        });
+      });
+    }
 
     return SizedBox(
       height: widget.bodyHeight * 0.14,
@@ -130,26 +179,11 @@ class _CircleAvatarOfProfileImageState
               backgroundColor: ColorManager.lowOpacityGrey,
             ),
           ] else ...[
-            Container(
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                    ColorManager.blackRed,
-                    ColorManager.redAccent,
-                    ColorManager.yellow,
-                  ],
-                ),
-              ),
-              child: CircleAvatar(
-                radius: widget.bodyHeight < 900
-                    ? widget.bodyHeight * .0525
-                    : widget.bodyHeight * .0505,
-                backgroundColor: ColorManager.transparent,
-              ),
-            ),
+            if (!controller.isCompleted && widget.thisForStoriesLine) ...[
+              rotationContainer(),
+            ] else ...[
+              colorfulContainer(),
+            ],
           ],
           CircleAvatar(
             radius: widget.bodyHeight < 900
@@ -172,6 +206,51 @@ class _CircleAvatarOfProfileImageState
           radius: widget.bodyHeight * .046,
         ),
       ],
+    );
+  }
+
+  AnimatedContainer colorfulContainer() {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 550),
+      onEnd: () {
+        setState(() {
+          index = index + 1;
+          bottomColor = colorList[index % colorList.length];
+          topColor = colorList[(index + 1) % colorList.length];
+        });
+      },
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+              begin: begin, end: end, colors: [bottomColor, topColor])),
+      child: CircleAvatar(
+        radius: widget.bodyHeight < 900
+            ? widget.bodyHeight * .0525
+            : widget.bodyHeight * .0505,
+        backgroundColor: ColorManager.transparent,
+      ),
+    );
+  }
+
+  Container rotationContainer() {
+    return Container(
+      alignment: Alignment.center,
+      child: RotationTransition(
+        turns: base as Animation<double>,
+        child: DashedCircle(
+          gapSize: gap.value,
+          dashes: 40,
+          color: ColorManager.red,
+          child: RotationTransition(
+            turns: reverse as Animation<double>,
+            child: CircleAvatar(
+              radius: widget.bodyHeight * .0510,
+
+              backgroundColor: ColorManager.transparent,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

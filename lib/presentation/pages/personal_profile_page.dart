@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:instegram/core/app_prefs.dart';
+import 'package:instegram/core/functions/image_picker.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
@@ -25,7 +25,6 @@ import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../widgets/toast_show.dart';
 import 'edit_profile_page.dart';
 import 'dart:io';
-
 import 'login_page.dart';
 
 class PersonalProfilePage extends StatefulWidget {
@@ -293,14 +292,11 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   GestureDetector createNewStory() {
     return GestureDetector(
         onTap: () async {
-          final ImagePicker _picker = ImagePicker();
-          final XFile? image =
-              await _picker.pickImage(source: ImageSource.camera);
-          if (image != null) {
-            File photo = File(image.path);
+          File? pickImage = await imageCameraPicker();
+          if (pickImage != null) {
             await Navigator.of(context, rootNavigator: true).push(
                 CupertinoPageRoute(
-                    builder: (context) => NewStoryPage(storyImage: photo),
+                    builder: (context) => NewStoryPage(storyImage: pickImage),
                     maintainState: false));
             setState(() {
               rebuildUserInfo = true;
@@ -314,16 +310,13 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   GestureDetector createNewVideo() {
     return GestureDetector(
         onTap: () async {
-          final ImagePicker _picker = ImagePicker();
-          final XFile? video =
-              await _picker.pickVideo(source: ImageSource.camera);
-          if (video != null) {
-            File videoFile = File(video.path);
-            _getImageDimension(videoFile);
+          File? pickVideo = await videoCameraPicker();
+          if (pickVideo != null) {
+            _getImageDimension(pickVideo);
             await Navigator.of(context, rootNavigator: true).push(
                 CupertinoPageRoute(
                     builder: (context) => CreatePostPage(
-                        selectedFile: videoFile,
+                        selectedFile: pickVideo,
                         isThatImage: false,
                         aspectRatio: imageSize.aspectRatio),
                     maintainState: false));
@@ -354,17 +347,15 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   GestureDetector createNewPost() {
     return GestureDetector(
         onTap: () async {
-          final ImagePicker _picker = ImagePicker();
-          final XFile? image =
-              await _picker.pickImage(source: ImageSource.gallery);
-          if (image != null) {
-            File photo = File(image.path);
-            _getImageDimension(photo);
+          File? pickImage = await imageGalleryPicker();
+
+          if (pickImage != null) {
+            _getImageDimension(pickImage);
             await Navigator.of(context, rootNavigator: true)
                 .push(CupertinoPageRoute(
                     builder: (context) {
                       return CreatePostPage(
-                          selectedFile: photo,
+                          selectedFile: pickImage,
                           aspectRatio: imageSize.aspectRatio);
                     },
                     maintainState: false));
