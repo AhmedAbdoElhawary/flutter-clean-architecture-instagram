@@ -26,7 +26,8 @@ class ColorManager {
   static const Color redAccent = Colors.redAccent;
   static const Color red = Color(0xffe61f34);
   static const Color blackRed = Color.fromARGB(255, 182, 14, 14);
-  static const Color yellow = Color.fromARGB(255, 243, 252, 3);
+  static const Color yellow = Color.fromARGB(255, 252, 219, 3);
+  static const Color orange = Color.fromARGB(255, 170, 115, 33);
 
   static const Color transparent = Colors.transparent;
 }

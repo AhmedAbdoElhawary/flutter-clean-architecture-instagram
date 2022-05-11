@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:instegram/core/functions/date_of_now.dart';
+import 'package:instegram/core/functions/image_picker.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/core/resources/styles_manager.dart';
+import 'package:instegram/core/utility/constant.dart';
 import 'package:instegram/data/models/massage.dart';
 import 'package:instegram/data/models/user_personal_info.dart';
 import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart';
@@ -20,8 +22,6 @@ import 'package:instegram/presentation/widgets/toast_show.dart';
 import 'package:instegram/presentation/widgets/user_profile_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import '../../core/utility/constant.dart';
-import '../../core/globall.dart';
 
 class ChattingPage extends StatefulWidget {
   final UserPersonalInfo userInfo;
@@ -93,26 +93,26 @@ class _ChattingPageState extends State<ChattingPage> {
                   Expanded(
                     child: globalMassagesInfo.isNotEmpty
                         ? ScrollablePositionedList.separated(
-                            itemScrollController: itemScrollController,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  if (index == 0) buildUserInfo(context),
-                                  // if (index > 0)
-                                  buildTheMassage(
-                                      globalMassagesInfo[index],
-                                      globalMassagesInfo[
-                                              index != 0 ? index - 1 : 0]
-                                          .datePublished),
-                                  if (index == globalMassagesInfo.length - 1)
-                                    const SizedBox(height: 10),
-                                ],
-                              );
-                            },
-                            itemCount: globalMassagesInfo.length,
-                            separatorBuilder:
-                                (BuildContext context, int index) =>
-                                    const SizedBox(height: 5))
+                        itemScrollController: itemScrollController,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              if (index == 0) buildUserInfo(context),
+                              // if (index > 0)
+                              buildTheMassage(
+                                  globalMassagesInfo[index],
+                                  globalMassagesInfo[
+                                  index != 0 ? index - 1 : 0]
+                                      .datePublished),
+                              if (index == globalMassagesInfo.length - 1)
+                                const SizedBox(height: 10),
+                            ],
+                          );
+                        },
+                        itemCount: globalMassagesInfo.length,
+                        separatorBuilder:
+                            (BuildContext context, int index) =>
+                        const SizedBox(height: 5))
                         : buildUserInfo(context),
                   ),
                   if (!unSend) fieldOfMassage(),
@@ -216,23 +216,23 @@ class _ChattingPageState extends State<ChattingPage> {
         clipBehavior: Clip.antiAliasWithSaveLayer,
         padding: imageUrl.isEmpty
             ? const EdgeInsetsDirectional.only(
-                start: 10, end: 10, bottom: 8, top: 8)
+            start: 10, end: 10, bottom: 8, top: 8)
             : const EdgeInsetsDirectional.all(0),
         child: massage.isNotEmpty
             ? Text(massage, style: Theme.of(context).textTheme.bodyText1)
             : (massageInfo.isThatImage
-                ? SizedBox(
-                    width: 90,
-                    height: 150,
-                    child: massageInfo.massageUid.isNotEmpty
-                        ? CustomFadeInImage(
-                            imageUrl: imageUrl,
-                          )
-                        : Image.asset(imageUrl, fit: BoxFit.cover))
-                : SizedBox(
-                    child: RecordView(
-                    record: recordedUrl.isEmpty ? records : recordedUrl,isThatMine:isThatMine,
-                  ))),
+            ? SizedBox(
+            width: 90,
+            height: 150,
+            child: massageInfo.massageUid.isNotEmpty
+                ? CustomFadeInImage(
+              imageUrl: imageUrl,
+            )
+                : Image.asset(imageUrl, fit: BoxFit.cover))
+            : SizedBox(
+            child: RecordView(
+              record: recordedUrl.isEmpty ? records : recordedUrl,isThatMine:isThatMine,
+            ))),
       ),
     );
   }
@@ -256,19 +256,19 @@ class _ChattingPageState extends State<ChattingPage> {
       child: unSend
           ? deleteTheMassage()
           : Container(
-              decoration: BoxDecoration(
-                  color: Theme.of(context).selectedRowColor,
-                  borderRadius: BorderRadius.circular(35)),
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              height: 50,
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
-                child: Builder(builder: (context) {
-                  MassageCubit massageCubit = MassageCubit.get(context);
-                  return rowOfTextField(massageCubit);
-                }),
-              ),
-            ),
+        decoration: BoxDecoration(
+            color: Theme.of(context).selectedRowColor,
+            borderRadius: BorderRadius.circular(35)),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        height: 50,
+        child: Padding(
+          padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
+          child: Builder(builder: (context) {
+            MassageCubit massageCubit = MassageCubit.get(context);
+            return rowOfTextField(massageCubit);
+          }),
+        ),
+      ),
     );
   }
 
@@ -279,7 +279,7 @@ class _ChattingPageState extends State<ChattingPage> {
       child: Padding(
         padding: const EdgeInsetsDirectional.only(start: 80, end: 80),
         child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(StringsManager.reply.tr(),
               style: getBoldStyle(
                   color: Theme.of(context).focusColor, fontSize: 15)),
@@ -327,20 +327,18 @@ class _ChattingPageState extends State<ChattingPage> {
   GestureDetector pickImageFromCamera(MassageCubit massageCubit) {
     return GestureDetector(
       onTap: () async {
-        final ImagePicker _picker = ImagePicker();
-        final XFile? pickedFile =
-            await _picker.pickImage(source: ImageSource.camera);
-        if (pickedFile != null) {
+        File? pickImage = await imageCameraPicker();
+        if (pickImage != null) {
           WidgetsBinding.instance!.addPostFrameCallback((_) {
             setState(() {
               isMassageLoaded = true;
               newMassageInfo = newMassage(isThatImage: true);
-              newMassageInfo!.imageUrl = pickedFile.path;
+              newMassageInfo!.imageUrl = pickImage.path;
             });
           });
           massageCubit.sendMassage(
               massageInfo: newMassage(isThatImage: true),
-              pathOfPhoto: pickedFile.path);
+              pathOfPhoto: pickImage.path);
         } else {
           ToastShow.toast(StringsManager.noImageSelected.tr());
         }
@@ -349,9 +347,9 @@ class _ChattingPageState extends State<ChattingPage> {
           backgroundColor: ColorManager.darkBlue,
           child: ClipOval(
               child: Icon(
-            Icons.camera_alt,
-            color: Theme.of(context).focusColor,
-          )),
+                Icons.camera_alt,
+                color: Theme.of(context).focusColor,
+              )),
           radius: 18),
     );
   }
@@ -413,20 +411,18 @@ class _ChattingPageState extends State<ChattingPage> {
   GestureDetector pickPhoto(MassageCubit massageCubit) {
     return GestureDetector(
       onTap: () async {
-        final ImagePicker _picker = ImagePicker();
-        final XFile? pickedFile =
-            await _picker.pickImage(source: ImageSource.gallery);
-        if (pickedFile != null) {
+        File? pickImage = await imageGalleryPicker();
+        if (pickImage != null) {
           WidgetsBinding.instance!.addPostFrameCallback((_) {
             setState(() {
               isMassageLoaded = true;
               newMassageInfo = newMassage(isThatImage: true);
-              newMassageInfo!.imageUrl = pickedFile.path;
+              newMassageInfo!.imageUrl = pickImage.path;
             });
           });
           massageCubit.sendMassage(
               massageInfo: newMassage(isThatImage: true),
-              pathOfPhoto: pickedFile.path);
+              pathOfPhoto: pickImage.path);
           // setState(() {
           //   isImageUpload = true;
           // });
@@ -456,8 +452,8 @@ class _ChattingPageState extends State<ChattingPage> {
     return CircleAvatar(
         child: ClipOval(
             child: CustomFadeInImage(
-          imageUrl: widget.userInfo.profileImageUrl,
-        )),
+              imageUrl: widget.userInfo.profileImageUrl,
+            )),
         radius: 45);
   }
 
@@ -546,8 +542,8 @@ class _ChattingPageState extends State<ChattingPage> {
           CircleAvatar(
               child: ClipOval(
                   child: CustomFadeInImage(
-                imageUrl: widget.userInfo.profileImageUrl,
-              )),
+                    imageUrl: widget.userInfo.profileImageUrl,
+                  )),
               radius: 17),
           const SizedBox(
             width: 15,
