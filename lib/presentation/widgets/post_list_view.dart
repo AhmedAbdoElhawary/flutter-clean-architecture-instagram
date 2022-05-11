@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instegram/core/app_prefs.dart';
-import 'package:instegram/core/globall.dart';
+import 'package:instegram/core/functions/date_of_now.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
@@ -29,7 +29,7 @@ import 'package:instegram/presentation/widgets/read_more_text.dart';
 class ImageList extends StatefulWidget {
   final Post postInfo;
   final bool playTheVideo;
-  final ValueNotifier<bool> reLoadData;
+  final VoidCallback reLoadData;
 
   // final TextEditingController textController;
   // final ValueChanged<Post> selectedPostInfo;
@@ -462,12 +462,12 @@ class _ImageListState extends State<ImageList> {
           Builder(builder: (context) {
             FollowCubit followCubit = BlocProvider.of<FollowCubit>(context);
             return GestureDetector(
-                onTap: () {
-                  followCubit.removeThisFollower(
+                onTap: () async {
+                  await followCubit.removeThisFollower(
                       followingUserId: widget.postInfo.publisherId,
                       myPersonalId: myPersonalId);
                   setState(() {
-                    widget.reLoadData.value=true;
+                    widget.reLoadData();
                     print("remove done");
 
                     widget.postsInfo.value.remove(widget.postInfo);
