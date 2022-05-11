@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:instegram/core/utility/constant.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instegram/presentation/pages/personal_profile_page.dart';
-import 'package:instegram/presentation/widgets/user_profile_page.dart';
+import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/pages/personal_profile_page.dart';
+import 'package:instagram/presentation/widgets/user_profile_page.dart';
 
 class WhichProfilePage extends StatelessWidget {
   final String userId;
@@ -17,23 +17,21 @@ class WhichProfilePage extends StatelessWidget {
       return userId == myPersonalId
           ? PersonalProfilePage(personalId: userId)
           : UserProfilePage(userId: userId);
-    }
-    else{
+    } else {
       return Builder(builder: (context) {
         UserPersonalInfo? myPersonalInfo =
             FirestoreUserInfoCubit.get(context).myPersonalInfo;
 
         return userName == myPersonalInfo!.userName
             ? PersonalProfilePage(
-          userName: userName,
-          personalId: userId,
-        )
+                userName: userName,
+                personalId: userId,
+              )
             : UserProfilePage(
-          userName: userName,
-          userId: userId,
-        );
+                userName: userName,
+                userId: userId,
+              );
       });
     }
-
   }
 }

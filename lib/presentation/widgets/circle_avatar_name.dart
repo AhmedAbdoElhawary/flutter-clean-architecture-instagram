@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
 
 class NameOfCircleAvatar extends StatelessWidget {
   final String circleAvatarName;
@@ -18,8 +18,9 @@ class NameOfCircleAvatar extends StatelessWidget {
       child: Text(
         circleAvatarName,
         maxLines: 1,
-        style:
-            isForStoriesLine ? getNormalStyle(fontSize: 12,color: Theme.of(context).focusColor) : getMediumStyle(color: Theme.of(context).focusColor),
+        style: isForStoriesLine
+            ? getNormalStyle(fontSize: 12, color: Theme.of(context).focusColor)
+            : getMediumStyle(color: Theme.of(context).focusColor),
         overflow: TextOverflow.ellipsis,
         softWrap: false,
       ),
