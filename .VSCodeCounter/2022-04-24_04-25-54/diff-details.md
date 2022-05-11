@@ -29,7 +29,7 @@ Total : 107 files,  1675 codes, 505 comments, 176 blanks, all 2356 lines
 | [assets/icons/video_point.svg](/assets/icons/video_point.svg) | XML | 1 | 0 | 0 | 1 |
 | [lib/config/routes/app_routes.dart](/lib/config/routes/app_routes.dart) | Dart | 1 | 1 | 0 | 2 |
 | [lib/core/constant.dart](/lib/core/constant.dart) | Dart | -1 | 0 | 0 | -1 |
-| [lib/core/globall.dart](/lib/core/globall.dart) | Dart | 51 | 38 | 10 | 99 |
+| [lib/core/globall.dart](/lib/core/functions/date_of_now.dart) | Dart | 51 | 38 | 10 | 99 |
 | [lib/core/resources/assets_manager.dart](/lib/core/resources/assets_manager.dart) | Dart | 20 | 0 | 5 | 25 |
 | [lib/core/resources/color_manager.dart](/lib/core/resources/color_manager.dart) | Dart | 14 | 0 | 2 | 16 |
 | [lib/core/resources/font_manager.dart](/lib/core/resources/font_manager.dart) | Dart | 20 | 0 | 4 | 24 |

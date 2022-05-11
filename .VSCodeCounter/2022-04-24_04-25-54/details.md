@@ -84,7 +84,7 @@ Total : 247 files,  9782 codes, 1017 comments, 1334 blanks, all 12133 lines
 | [lib/config/routes/app_routes.dart](/lib/config/routes/app_routes.dart) | Dart | 26 | 7 | 3 | 36 |
 | [lib/config/themes/app_theme.dart](/lib/config/themes/app_theme.dart) | Dart | 14 | 0 | 2 | 16 |
 | [lib/core/definition.md](/lib/core/definition.md) | Markdown | 1 | 0 | 0 | 1 |
-| [lib/core/globall.dart](/lib/core/globall.dart) | Dart | 61 | 38 | 11 | 110 |
+| [lib/core/globall.dart](/lib/core/functions/date_of_now.dart) | Dart | 61 | 38 | 11 | 110 |
 | [lib/core/resources/assets_manager.dart](/lib/core/resources/assets_manager.dart) | Dart | 20 | 0 | 5 | 25 |
 | [lib/core/resources/color_manager.dart](/lib/core/resources/color_manager.dart) | Dart | 14 | 0 | 2 | 16 |
 | [lib/core/resources/font_manager.dart](/lib/core/resources/font_manager.dart) | Dart | 20 | 0 | 4 | 24 |
