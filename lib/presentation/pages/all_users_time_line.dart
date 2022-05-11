@@ -2,12 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/post_cubit.dart';
-import 'package:instegram/presentation/pages/search_about_user.dart';
-import 'package:instegram/presentation/widgets/custom_grid_view.dart';
-import 'package:instegram/presentation/widgets/toast_show.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
+import 'package:instagram/presentation/pages/search_about_user.dart';
+import 'package:instagram/presentation/widgets/custom_grid_view.dart';
+import 'package:instagram/presentation/widgets/toast_show.dart';
 
 class AllUsersTimeLinePage extends StatefulWidget {
   final String userId;
@@ -95,8 +95,9 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
               SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: CustomGridView(
-              isThatProfile: false,
-                postsInfo: state.allPostInfo, userId: widget.userId),
+                isThatProfile: false,
+                postsInfo: state.allPostInfo,
+                userId: widget.userId),
             // ),
           );
         } else if (state is CubitPostFailed) {

@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/domain/usecases/postUseCase/likes/put_like_on_this_post.dart';
-import 'package:instegram/domain/usecases/postUseCase/likes/remove_the_like_on_this_post.dart';
+import 'package:instagram/domain/usecases/postUseCase/likes/put_like_on_this_post.dart';
+import 'package:instagram/domain/usecases/postUseCase/likes/remove_the_like_on_this_post.dart';
 
 part 'post_likes_state.dart';
 

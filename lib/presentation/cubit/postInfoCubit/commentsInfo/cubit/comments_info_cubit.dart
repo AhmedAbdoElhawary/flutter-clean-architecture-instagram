@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/data/models/comment.dart';
-import 'package:instegram/domain/usecases/postUseCase/comments/add_comment_use_case.dart';
-import 'package:instegram/domain/usecases/postUseCase/comments/getComment/get_all_comment.dart';
+import 'package:instagram/data/models/comment.dart';
+import 'package:instagram/domain/usecases/postUseCase/comments/add_comment_use_case.dart';
+import 'package:instagram/domain/usecases/postUseCase/comments/getComment/get_all_comment.dart';
 
 part 'comments_info_state.dart';
 

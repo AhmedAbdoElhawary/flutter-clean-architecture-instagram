@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/data/models/post.dart';
-import 'package:instegram/domain/usecases/postUseCase/getPostInfo/get_all_posts.dart';
-import 'package:instegram/domain/usecases/postUseCase/getPostInfo/get_post_info.dart';
+import 'package:instagram/data/models/post.dart';
+import 'package:instagram/domain/usecases/postUseCase/getPostInfo/get_all_posts.dart';
+import 'package:instagram/domain/usecases/postUseCase/getPostInfo/get_post_info.dart';
 import '../../../domain/usecases/postUseCase/create_post.dart';
 part 'post_state.dart';
 

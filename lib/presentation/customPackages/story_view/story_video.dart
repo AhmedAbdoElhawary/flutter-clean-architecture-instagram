@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/presentation/customPackages/story_view/sory_controller.dart';
-import 'package:instegram/presentation/customPackages/story_view/utils.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/presentation/customPackages/story_view/sory_controller.dart';
+import 'package:instagram/presentation/customPackages/story_view/utils.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoLoader {
@@ -48,8 +48,8 @@ class StoryVideo extends StatefulWidget {
 
   static StoryVideo url(String url,
       {StoryController? controller,
-        Map<String, dynamic>? requestHeaders,
-        Key? key}) {
+      Map<String, dynamic>? requestHeaders,
+      Key? key}) {
     return StoryVideo(
       VideoLoader(url, requestHeaders: requestHeaders),
       storyController: controller,
@@ -89,12 +89,12 @@ class StoryVideoState extends State<StoryVideo> {
         if (widget.storyController != null) {
           _streamSubscription =
               widget.storyController!.playbackNotifier.listen((playbackState) {
-                if (playbackState == PlaybackState.pause) {
-                  playerController!.pause();
-                } else {
-                  playerController!.play();
-                }
-              });
+            if (playbackState == PlaybackState.pause) {
+              playerController!.pause();
+            } else {
+              playerController!.play();
+            }
+          });
         }
       } else {
         setState(() {});
@@ -115,22 +115,23 @@ class StoryVideoState extends State<StoryVideo> {
 
     return widget.videoLoader.state == LoadState.loading
         ? Center(
-      child: SizedBox(
-        width: 70,
-        height: 70,
-        child: CircularProgressIndicator(
-          valueColor:  AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-          strokeWidth: 3,
-        ),
-      ),
-    )
+            child: SizedBox(
+              width: 70,
+              height: 70,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).primaryColor),
+                strokeWidth: 3,
+              ),
+            ),
+          )
         : const Center(
-        child:  Text(
-          "Media failed to load.",
-          style: TextStyle(
-            color: ColorManager.white,
-          ),
-        ));
+            child: Text(
+            "Media failed to load.",
+            style: TextStyle(
+              color: ColorManager.white,
+            ),
+          ));
   }
 
   @override

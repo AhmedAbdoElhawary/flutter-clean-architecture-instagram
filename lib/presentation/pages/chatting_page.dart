@@ -4,22 +4,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:instegram/core/functions/date_of_now.dart';
-import 'package:instegram/core/functions/image_picker.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
-import 'package:instegram/core/utility/constant.dart';
-import 'package:instegram/data/models/massage.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart';
-import 'package:instegram/presentation/widgets/audio_recorder_view.dart';
-import 'package:instegram/presentation/widgets/custom_circular_progress.dart';
-import 'package:instegram/presentation/widgets/fade_in_image.dart';
-import 'package:instegram/presentation/widgets/record_view.dart';
-import 'package:instegram/presentation/widgets/toast_show.dart';
-import 'package:instegram/presentation/widgets/user_profile_page.dart';
+import 'package:instagram/core/functions/date_of_now.dart';
+import 'package:instagram/core/functions/image_picker.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/data/models/massage.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart';
+import 'package:instagram/presentation/widgets/audio_recorder_view.dart';
+import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/fade_in_image.dart';
+import 'package:instagram/presentation/widgets/record_view.dart';
+import 'package:instagram/presentation/widgets/toast_show.dart';
+import 'package:instagram/presentation/widgets/user_profile_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -93,26 +93,26 @@ class _ChattingPageState extends State<ChattingPage> {
                   Expanded(
                     child: globalMassagesInfo.isNotEmpty
                         ? ScrollablePositionedList.separated(
-                        itemScrollController: itemScrollController,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              if (index == 0) buildUserInfo(context),
-                              // if (index > 0)
-                              buildTheMassage(
-                                  globalMassagesInfo[index],
-                                  globalMassagesInfo[
-                                  index != 0 ? index - 1 : 0]
-                                      .datePublished),
-                              if (index == globalMassagesInfo.length - 1)
-                                const SizedBox(height: 10),
-                            ],
-                          );
-                        },
-                        itemCount: globalMassagesInfo.length,
-                        separatorBuilder:
-                            (BuildContext context, int index) =>
-                        const SizedBox(height: 5))
+                            itemScrollController: itemScrollController,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  if (index == 0) buildUserInfo(context),
+                                  // if (index > 0)
+                                  buildTheMassage(
+                                      globalMassagesInfo[index],
+                                      globalMassagesInfo[
+                                              index != 0 ? index - 1 : 0]
+                                          .datePublished),
+                                  if (index == globalMassagesInfo.length - 1)
+                                    const SizedBox(height: 10),
+                                ],
+                              );
+                            },
+                            itemCount: globalMassagesInfo.length,
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const SizedBox(height: 5))
                         : buildUserInfo(context),
                   ),
                   if (!unSend) fieldOfMassage(),
@@ -216,23 +216,24 @@ class _ChattingPageState extends State<ChattingPage> {
         clipBehavior: Clip.antiAliasWithSaveLayer,
         padding: imageUrl.isEmpty
             ? const EdgeInsetsDirectional.only(
-            start: 10, end: 10, bottom: 8, top: 8)
+                start: 10, end: 10, bottom: 8, top: 8)
             : const EdgeInsetsDirectional.all(0),
         child: massage.isNotEmpty
             ? Text(massage, style: Theme.of(context).textTheme.bodyText1)
             : (massageInfo.isThatImage
-            ? SizedBox(
-            width: 90,
-            height: 150,
-            child: massageInfo.massageUid.isNotEmpty
-                ? CustomFadeInImage(
-              imageUrl: imageUrl,
-            )
-                : Image.asset(imageUrl, fit: BoxFit.cover))
-            : SizedBox(
-            child: RecordView(
-              record: recordedUrl.isEmpty ? records : recordedUrl,isThatMine:isThatMine,
-            ))),
+                ? SizedBox(
+                    width: 90,
+                    height: 150,
+                    child: massageInfo.massageUid.isNotEmpty
+                        ? CustomFadeInImage(
+                            imageUrl: imageUrl,
+                          )
+                        : Image.asset(imageUrl, fit: BoxFit.cover))
+                : SizedBox(
+                    child: RecordView(
+                    record: recordedUrl.isEmpty ? records : recordedUrl,
+                    isThatMine: isThatMine,
+                  ))),
       ),
     );
   }
@@ -256,19 +257,19 @@ class _ChattingPageState extends State<ChattingPage> {
       child: unSend
           ? deleteTheMassage()
           : Container(
-        decoration: BoxDecoration(
-            color: Theme.of(context).selectedRowColor,
-            borderRadius: BorderRadius.circular(35)),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        height: 50,
-        child: Padding(
-          padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
-          child: Builder(builder: (context) {
-            MassageCubit massageCubit = MassageCubit.get(context);
-            return rowOfTextField(massageCubit);
-          }),
-        ),
-      ),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).selectedRowColor,
+                  borderRadius: BorderRadius.circular(35)),
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              height: 50,
+              child: Padding(
+                padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
+                child: Builder(builder: (context) {
+                  MassageCubit massageCubit = MassageCubit.get(context);
+                  return rowOfTextField(massageCubit);
+                }),
+              ),
+            ),
     );
   }
 
@@ -279,7 +280,7 @@ class _ChattingPageState extends State<ChattingPage> {
       child: Padding(
         padding: const EdgeInsetsDirectional.only(start: 80, end: 80),
         child:
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(StringsManager.reply.tr(),
               style: getBoldStyle(
                   color: Theme.of(context).focusColor, fontSize: 15)),
@@ -347,9 +348,9 @@ class _ChattingPageState extends State<ChattingPage> {
           backgroundColor: ColorManager.darkBlue,
           child: ClipOval(
               child: Icon(
-                Icons.camera_alt,
-                color: Theme.of(context).focusColor,
-              )),
+            Icons.camera_alt,
+            color: Theme.of(context).focusColor,
+          )),
           radius: 18),
     );
   }
@@ -452,8 +453,8 @@ class _ChattingPageState extends State<ChattingPage> {
     return CircleAvatar(
         child: ClipOval(
             child: CustomFadeInImage(
-              imageUrl: widget.userInfo.profileImageUrl,
-            )),
+          imageUrl: widget.userInfo.profileImageUrl,
+        )),
         radius: 45);
   }
 
@@ -542,8 +543,8 @@ class _ChattingPageState extends State<ChattingPage> {
           CircleAvatar(
               child: ClipOval(
                   child: CustomFadeInImage(
-                    imageUrl: widget.userInfo.profileImageUrl,
-                  )),
+                imageUrl: widget.userInfo.profileImageUrl,
+              )),
               radius: 17),
           const SizedBox(
             width: 15,
