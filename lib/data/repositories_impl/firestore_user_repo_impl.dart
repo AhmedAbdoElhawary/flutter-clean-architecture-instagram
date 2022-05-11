@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:instegram/data/datasourses/remote/firebase_storage.dart';
-import 'package:instegram/data/models/massage.dart';
-import 'package:instegram/data/models/specific_users_info.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
+import 'package:instagram/data/models/massage.dart';
+import 'package:instagram/data/models/specific_users_info.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
 import '../../domain/repositories/user_repository.dart';
 import '../datasourses/remote/firestore_user_info.dart';
 
