@@ -1,4 +1,4 @@
-import 'package:instegram/data/models/comment.dart';
+import 'package:instagram/data/models/comment.dart';
 
 abstract class FirestoreReplyRepository {
   Future<Comment> replyOnThisComment({required Comment replyInfo});
@@ -6,6 +6,5 @@ abstract class FirestoreReplyRepository {
       {required String replyId, required String myPersonalId});
   Future<void> removeLikeOnThisReply(
       {required String replyId, required String myPersonalId});
-  Future<List<Comment>> getSpecificReplies(
-      {required String commentId});
+  Future<List<Comment>> getSpecificReplies({required String commentId});
 }

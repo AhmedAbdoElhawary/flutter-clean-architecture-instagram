@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:instegram/data/datasourses/remote/firebase_storage.dart';
-import 'package:instegram/data/datasourses/remote/post/firestore_post.dart';
-import 'package:instegram/data/datasourses/remote/firestore_user_info.dart';
-import 'package:instegram/data/models/post.dart';
+import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
+import 'package:instagram/data/datasourses/remote/post/firestore_post.dart';
+import 'package:instagram/data/datasourses/remote/firestore_user_info.dart';
+import 'package:instagram/data/models/post.dart';
 import '../../../domain/repositories/post/post_repository.dart';
 
 class FirestorePostRepositoryImpl implements FirestorePostRepository {
@@ -21,9 +21,12 @@ class FirestorePostRepositoryImpl implements FirestorePostRepository {
   }
 
   @override
-  Future<List<Post>> getPostsInfo({required List<dynamic> postsIds,required int lengthOfCurrentList}) async {
+  Future<List<Post>> getPostsInfo(
+      {required List<dynamic> postsIds,
+      required int lengthOfCurrentList}) async {
     try {
-      return await FirestorePost.getPostsInfo(postsIds:postsIds,lengthOfCurrentList: lengthOfCurrentList);
+      return await FirestorePost.getPostsInfo(
+          postsIds: postsIds, lengthOfCurrentList: lengthOfCurrentList);
     } catch (e) {
       return Future.error(e.toString());
     }

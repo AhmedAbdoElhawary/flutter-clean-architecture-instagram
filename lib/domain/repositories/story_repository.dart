@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:instegram/data/models/story.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/story.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
 
 abstract class FirestoreStoryRepository {
   Future<String> createStory({required Story storyInfo, required File photo});
