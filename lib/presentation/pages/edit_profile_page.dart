@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:instegram/core/functions/image_picker.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
@@ -181,13 +181,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
         Center(
             child: InkWell(
           onTap: () async {
-            final ImagePicker _picker = ImagePicker();
-            final pickedFile =
-                await _picker.pickImage(source: ImageSource.gallery);
-
-            if (pickedFile != null) {
+            File? pickImage = await imageGalleryPicker();
+            if (pickImage != null) {
               setState(() {
-                widget._photo = File(pickedFile.path);
+                widget._photo = pickImage;
                 isImageUpload = false;
               });
 
@@ -265,7 +262,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return TextFormField(
       cursorColor: ColorManager.teal,
       controller: controller,
-      style: getNormalStyle( color:Theme.of(context).focusColor,fontSize: 15),
+      style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
       decoration: InputDecoration(
         labelText: text,
       ),

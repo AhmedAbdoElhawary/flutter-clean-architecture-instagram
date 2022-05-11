@@ -119,7 +119,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
       bodyHeight: bodyHeight,
       playTheVideo: playTheVideo,
       postsInfo: ValueNotifier(postsInfo),
-      reLoadData: ValueNotifier(false),
+      reLoadData: (){},
     );
   }
 

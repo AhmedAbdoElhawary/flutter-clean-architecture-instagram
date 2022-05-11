@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:instegram/core/functions/image_picker.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
 import 'package:instegram/core/resources/styles_manager.dart';
@@ -233,9 +233,13 @@ class _HomeScreenState extends State<HomeScreen> {
         postsInfo: postsInfo,
         bodyHeight: bodyHeight,
         playTheVideo: playTheVideo,
-        reLoadData: reLoadData,);
+        reLoadData: reloadTheData,);
   }
-
+reloadTheData(){
+    setState(() {
+      reLoadData.value=true;
+    });
+}
   Widget circularProgress() {
     return const ThineCircularProgress();
   }
@@ -258,12 +262,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   createNewStory() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      File photo = File(image.path);
+    File? pickImage = await imageCameraPicker();
+    if (pickImage != null) {
       await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-          builder: (context) => NewStoryPage(storyImage: photo),
+          builder: (context) => NewStoryPage(storyImage: pickImage),
           maintainState: false));
       setState(() {
         reLoadData.value = true;

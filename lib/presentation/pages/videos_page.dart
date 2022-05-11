@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:instegram/core/functions/image_picker.dart';
 import 'package:instegram/core/resources/assets_manager.dart';
 import 'package:instegram/core/resources/color_manager.dart';
 import 'package:instegram/core/resources/strings_manager.dart';
@@ -78,7 +78,7 @@ class VideosPageState extends State<VideosPage> {
       scrollDirection: Axis.vertical,
       itemCount: videosPostsInfo.length,
       itemBuilder: (context, index) {
-        ValueNotifier<Post> videoInfo=ValueNotifier(videosPostsInfo[index]);
+        ValueNotifier<Post> videoInfo = ValueNotifier(videosPostsInfo[index]);
         return Stack(children: [
           SizedBox(
               height: double.infinity,
@@ -93,21 +93,21 @@ class VideosPageState extends State<VideosPage> {
     );
   }
 
-  AppBar appBar() => AppBar(backgroundColor: ColorManager.transparent, actions: [
+  AppBar appBar() =>
+      AppBar(backgroundColor: ColorManager.transparent, actions: [
         IconButton(
           onPressed: () async {
-            final ImagePicker _picker = ImagePicker();
-            final XFile? pickedFile =
-                await _picker.pickVideo(source: ImageSource.camera);
-            if (pickedFile != null) {
+            File? pickVideo = await videoCameraPicker();
+            if (pickVideo != null) {
               setState(() {
-                videoFile = File(pickedFile.path);
+                videoFile = pickVideo;
               });
             } else {
               ToastShow.toast(StringsManager.noImageSelected.tr());
             }
           },
-          icon: const Icon(Icons.camera_alt, size: 30, color: ColorManager.white),
+          icon:
+              const Icon(Icons.camera_alt, size: 30, color: ColorManager.white),
         )
       ]);
 
@@ -283,37 +283,35 @@ class VideosPageState extends State<VideosPage> {
 
   Widget loveButton(ValueNotifier<Post> postInfo) {
     bool isLiked = postInfo.value.likes.contains(myPersonalId);
-    return Builder(
-      builder: (context) {
-        PostLikesCubit likeCubit=BlocProvider.of<PostLikesCubit>(context);
-        return GestureDetector(
-          child: !isLiked
-              ? const Icon(
-                  Icons.favorite_border,
-                  color: ColorManager.white,
-                  size: 32,
-                )
-              : const Icon(
-                  Icons.favorite,
-                  color: ColorManager.red,
-                  size: 32,
-                ),
-          onTap: () {
-            setState(() {
-              if (isLiked) {
-                likeCubit.removeTheLikeOnThisPost(
-                    postId: postInfo.value.postUid, userId: myPersonalId);
-                postInfo.value.likes.remove(myPersonalId);
-              } else {
-                likeCubit.putLikeOnThisPost(
-                    postId: postInfo.value.postUid, userId: myPersonalId);
-                postInfo.value.likes.add(myPersonalId);
-              }
-            });
-          },
-        );
-      }
-    );
+    return Builder(builder: (context) {
+      PostLikesCubit likeCubit = BlocProvider.of<PostLikesCubit>(context);
+      return GestureDetector(
+        child: !isLiked
+            ? const Icon(
+                Icons.favorite_border,
+                color: ColorManager.white,
+                size: 32,
+              )
+            : const Icon(
+                Icons.favorite,
+                color: ColorManager.red,
+                size: 32,
+              ),
+        onTap: () {
+          setState(() {
+            if (isLiked) {
+              likeCubit.removeTheLikeOnThisPost(
+                  postId: postInfo.value.postUid, userId: myPersonalId);
+              postInfo.value.likes.remove(myPersonalId);
+            } else {
+              likeCubit.putLikeOnThisPost(
+                  postId: postInfo.value.postUid, userId: myPersonalId);
+              postInfo.value.likes.add(myPersonalId);
+            }
+          });
+        },
+      );
+    });
   }
 
   SizedBox buildSizedBox() {
