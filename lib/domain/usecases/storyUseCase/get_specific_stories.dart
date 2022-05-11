@@ -1,6 +1,6 @@
-import 'package:instegram/core/usecase/usecase.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/domain/repositories/story_repository.dart';
+import 'package:instagram/core/usecase/usecase.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/domain/repositories/story_repository.dart';
 
 class GetSpecificStoriesInfoUseCase
     implements UseCase<UserPersonalInfo, UserPersonalInfo> {

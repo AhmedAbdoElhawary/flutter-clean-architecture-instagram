@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/domain/entities/registered_user.dart';
-import 'package:instegram/domain/entities/unregistered_user.dart';
-import 'package:instegram/domain/usecases/authusecase/log_in_auth_usecase.dart';
+import 'package:instagram/domain/entities/registered_user.dart';
+import 'package:instagram/domain/entities/unregistered_user.dart';
+import 'package:instagram/domain/usecases/authusecase/log_in_auth_usecase.dart';
 import '../../../domain/usecases/authUsecase/sign_out_auth_usecase.dart';
 import '../../../domain/usecases/authusecase/sign_up_auth_usecase.dart';
 part 'firebase_auth_state.dart';
