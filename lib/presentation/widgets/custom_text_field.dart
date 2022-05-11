@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/resources/styles_manager.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -17,11 +17,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 20,end: 20),
+      padding: const EdgeInsetsDirectional.only(start: 20, end: 20),
       child: TextFormField(
         controller: widget.controller,
         cursorColor: ColorManager.teal,
-        style: getNormalStyle( color:Theme.of(context).focusColor,fontSize: 15),
+        style:
+            getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
         decoration: InputDecoration(
           hintText: widget.hint,
           hintStyle: TextStyle(color: Theme.of(context).indicatorColor),
@@ -29,7 +30,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
           filled: true,
           focusedBorder: outlineInputBorder(),
           enabledBorder: outlineInputBorder(),
-          contentPadding: const EdgeInsetsDirectional.only(start: 10,end: 10,bottom: 15,top: 15),
+          contentPadding: const EdgeInsetsDirectional.only(
+              start: 10, end: 10, bottom: 15, top: 15),
         ),
       ),
     );

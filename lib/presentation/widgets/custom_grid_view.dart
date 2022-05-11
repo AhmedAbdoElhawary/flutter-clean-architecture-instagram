@@ -3,13 +3,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/data/models/post.dart';
-import 'package:instegram/presentation/pages/play_this_video.dart';
-import 'package:instegram/presentation/widgets/animated_dialog.dart';
-import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
-import 'package:instegram/presentation/widgets/fade_in_image.dart';
-import 'package:instegram/presentation/widgets/custom_posts_dispaly.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/data/models/post.dart';
+import 'package:instagram/presentation/pages/play_this_video.dart';
+import 'package:instagram/presentation/widgets/animated_dialog.dart';
+import 'package:instagram/presentation/widgets/circle_avatar_of_profile_image.dart';
+import 'package:instagram/presentation/widgets/fade_in_image.dart';
+import 'package:instagram/presentation/widgets/custom_posts_dispaly.dart';
 
 // ignore: must_be_immutable
 class CustomGridView extends StatefulWidget {

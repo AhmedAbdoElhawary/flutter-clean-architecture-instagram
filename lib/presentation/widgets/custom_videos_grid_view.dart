@@ -1,11 +1,11 @@
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/data/models/post.dart';
-import 'package:instegram/presentation/pages/play_this_video.dart';
-import 'package:instegram/presentation/widgets/animated_dialog.dart';
-import 'package:instegram/presentation/widgets/circle_avatar_of_profile_image.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/data/models/post.dart';
+import 'package:instagram/presentation/pages/play_this_video.dart';
+import 'package:instagram/presentation/widgets/animated_dialog.dart';
+import 'package:instagram/presentation/widgets/circle_avatar_of_profile_image.dart';
 
 // ignore: must_be_immutable
 class CustomVideosGridView extends StatefulWidget {
@@ -38,7 +38,11 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
             children: widget.postsInfo.map((postInfo) {
               return createGridTileWidget(postInfo);
             }).toList())
-        : Center(child: Text(StringsManager.noPosts.tr(),style:  Theme.of(context).textTheme.bodyText1,));
+        : Center(
+            child: Text(
+            StringsManager.noPosts.tr(),
+            style: Theme.of(context).textTheme.bodyText1,
+          ));
   }
 
   OverlayEntry? _popupDialog;
@@ -51,10 +55,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
             Overlay.of(context)!.insert(_popupDialog!);
           },
           onLongPressEnd: (details) => _popupDialog?.remove(),
-          child: PlayThisVideo(
-            videoUrl: postInfo.postUrl,
-              play: false
-          ),
+          child: PlayThisVideo(videoUrl: postInfo.postUrl, play: false),
         ),
       );
 
@@ -84,10 +85,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
               color: Theme.of(context).primaryColor,
               width: double.infinity,
               height: bodyHeight - 200,
-              child: PlayThisVideo(
-                videoUrl: postInfo.postUrl,
-                  play: true
-              ),
+              child: PlayThisVideo(videoUrl: postInfo.postUrl, play: true),
             ),
             _createActionBar(),
           ],
@@ -101,7 +99,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
             bottom: 5, top: 5, end: 10, start: 10),
         height: 55,
         width: double.infinity,
-        color:Theme.of(context).primaryColor,
+        color: Theme.of(context).primaryColor,
         child: Row(
           children: [
             CircleAvatarOfProfileImage(
@@ -110,7 +108,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
             ),
             const SizedBox(width: 7),
             Text(postInfo.publisherInfo!.name,
-                style:   Theme.of(context).textTheme.bodyText1),
+                style: Theme.of(context).textTheme.bodyText1),
           ],
         ),
       );
@@ -126,7 +124,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
               onPanStart: (d) {},
               child: Icon(
                 Icons.favorite_border,
-                color:Theme.of(context).focusColor,
+                color: Theme.of(context).focusColor,
               ),
             ),
             GestureDetector(

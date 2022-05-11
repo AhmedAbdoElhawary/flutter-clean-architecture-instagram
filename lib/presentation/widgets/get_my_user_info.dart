@@ -1,13 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/app_prefs.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/utility/constant.dart';
-import 'package:instegram/core/utility/injector.dart';
-import 'package:instegram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instegram/presentation/screens/main_screen.dart';
-import 'package:instegram/presentation/widgets/toast_show.dart';
+import 'package:instagram/core/app_prefs.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/screens/main_screen.dart';
+import 'package:instagram/presentation/widgets/toast_show.dart';
 
 class GetMyPersonalId extends StatefulWidget {
   final String myPersonalId;
@@ -27,6 +27,7 @@ class _GetMyPersonalIdState extends State<GetMyPersonalId> {
     _appPreferences.getLocal().then((local) => {context.setLocale(local)});
     super.didChangeDependencies();
   }
+
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
@@ -46,7 +47,9 @@ class _GetMyPersonalIdState extends State<GetMyPersonalId> {
               ToastShow.toastStateError(userState);
             }
           });
-          return Container(color: Theme.of(context).primaryColor,);
+          return Container(
+            color: Theme.of(context).primaryColor,
+          );
         },
       );
     });

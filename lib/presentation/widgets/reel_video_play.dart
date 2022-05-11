@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/core/resources/color_manager.dart';
-import 'package:instegram/core/utility/constant.dart';
-import 'package:instegram/data/models/post.dart';
-import 'package:instegram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
-import 'package:instegram/presentation/widgets/fade_animation.dart';
+import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/data/models/post.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
+import 'package:instagram/presentation/widgets/fade_animation.dart';
 import 'package:video_player/video_player.dart';
 
 class ReelVideoPlay extends StatefulWidget {
@@ -54,7 +54,7 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children:[
+      children: [
         video(),
         Center(child: videoStatusAnimation),
       ],
@@ -64,69 +64,67 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
   Widget video() {
     bool isLiked = widget.videoInfo.value.likes.contains(myPersonalId);
 
-    return Builder(
-      builder: (context) {
-        PostLikesCubit likeCubit=BlocProvider.of<PostLikesCubit>(context);
+    return Builder(builder: (context) {
+      PostLikesCubit likeCubit = BlocProvider.of<PostLikesCubit>(context);
 
-        return GestureDetector(
-            child: FutureBuilder(
-              future: _initializeVideoPlayerFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return VideoPlayer(_controller);
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(color: ColorManager.white),
-                  );
-                }
-              },
-            ),
-            onTap: () {
-              if (!_controller.value.isInitialized) {
-                return;
-              }
-              if (_controller.value.volume == 0) {
-                videoStatusAnimation =
-                    FadeAnimation(child: volumeContainer(Icons.volume_up));
-                _controller.setVolume(1);
+      return GestureDetector(
+          child: FutureBuilder(
+            future: _initializeVideoPlayerFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return VideoPlayer(_controller);
               } else {
-                videoStatusAnimation =
-                    FadeAnimation(child: volumeContainer(Icons.volume_off));
-                _controller.setVolume(0);
+                return const Center(
+                  child: CircularProgressIndicator(color: ColorManager.white),
+                );
               }
             },
-            onDoubleTap: () {
-              // setState(() {
-              //   videoStatusAnimation = FadeAnimation(
-              //       child: popIcon(Icons.favorite, isThatLoveIcon: true));
-              //   if (!isLiked) {
-              //     likeCubit.putLikeOnThisPost(
-              //         postId: widget.videoInfo.value.postUid, userId: myPersonalId);
-              //     widget.videoInfo.value.likes.add(myPersonalId);
-              //   }
-              // });
-
-            },
-            onLongPressStart: (LongPressStartDetails event) {
-              if (!_controller.value.isInitialized) {
-                return;
-              }
-              _controller.pause();
-            },
-            onLongPressEnd: (LongPressEndDetails event) {
-              if (!_controller.value.isInitialized) {
-                return;
-              }
-              _controller.play();
-            });
-      }
-    );
+          ),
+          onTap: () {
+            if (!_controller.value.isInitialized) {
+              return;
+            }
+            if (_controller.value.volume == 0) {
+              videoStatusAnimation =
+                  FadeAnimation(child: volumeContainer(Icons.volume_up));
+              _controller.setVolume(1);
+            } else {
+              videoStatusAnimation =
+                  FadeAnimation(child: volumeContainer(Icons.volume_off));
+              _controller.setVolume(0);
+            }
+          },
+          onDoubleTap: () {
+            // setState(() {
+            //   videoStatusAnimation = FadeAnimation(
+            //       child: popIcon(Icons.favorite, isThatLoveIcon: true));
+            //   if (!isLiked) {
+            //     likeCubit.putLikeOnThisPost(
+            //         postId: widget.videoInfo.value.postUid, userId: myPersonalId);
+            //     widget.videoInfo.value.likes.add(myPersonalId);
+            //   }
+            // });
+          },
+          onLongPressStart: (LongPressStartDetails event) {
+            if (!_controller.value.isInitialized) {
+              return;
+            }
+            _controller.pause();
+          },
+          onLongPressEnd: (LongPressEndDetails event) {
+            if (!_controller.value.isInitialized) {
+              return;
+            }
+            _controller.play();
+          });
+    });
   }
 
   Container volumeContainer(IconData icon) {
     return Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(40), color: ColorManager.black45),
+            borderRadius: BorderRadius.circular(40),
+            color: ColorManager.black45),
         padding: const EdgeInsetsDirectional.all(25),
         child: popIcon(icon));
   }

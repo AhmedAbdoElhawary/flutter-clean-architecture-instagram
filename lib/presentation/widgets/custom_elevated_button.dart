@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:instegram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 
 class CustomElevatedButton extends StatefulWidget {
   final String nameOfButton;
@@ -34,7 +34,7 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
       padding: const EdgeInsetsDirectional.all(3.0),
       child: Text(
         widget.nameOfButton,
-        style:  Theme.of(context).textTheme.bodyText2,
+        style: Theme.of(context).textTheme.bodyText2,
       ),
     );
   }
