@@ -15,7 +15,7 @@ Total : 56 files,  1364 codes, -558 comments, 138 blanks, all 944 lines
 | [lib/config/routes/app_routes.dart](/lib/config/routes/app_routes.dart) | Dart | -4 | 2 | 0 | -2 |
 | [lib/core/globall.dart](/lib/core/functions/date_of_now.dart) | Dart | 10 | 0 | 1 | 11 |
 | [lib/core/usecase/usecase.dart](/lib/core/usecase/usecase.dart) | Dart | 3 | 0 | 0 | 3 |
-| [lib/data/datasourses/remote/firestore_user_info.dart](/lib/data/datasourses/remote/firestore_user_info.dart) | Dart | 49 | 7 | 8 | 64 |
+| [lib/data/datasourses/remote/firestore_user_info.dart](/lib/data/datasourses/remote/user/firestore_user_info.dart) | Dart | 49 | 7 | 8 | 64 |
 | [lib/data/datasourses/remote/post/comment/firestore_comment.dart](/lib/data/datasourses/remote/post/comment/firestore_comment.dart) | Dart | 1 | 0 | 0 | 1 |
 | [lib/data/datasourses/remote/post/firestore_post.dart](/lib/data/datasourses/remote/post/firestore_post.dart) | Dart | -5 | -1 | -2 | -8 |
 | [lib/data/datasourses/remote/post/firestore_reel.dart](/lib/data/datasourses/remote/post/firestore_reel.dart) | Dart | 0 | 19 | 1 | 20 |

@@ -36,7 +36,7 @@ Total : 107 files,  1675 codes, 505 comments, 176 blanks, all 2356 lines
 | [lib/core/resources/strings_manager.dart](/lib/core/resources/strings_manager.dart) | Dart | 52 | 0 | 8 | 60 |
 | [lib/core/resources/styles_manager.dart](/lib/core/resources/styles_manager.dart) | Dart | 50 | 0 | 9 | 59 |
 | [lib/core/utility/constant.dart](/lib/core/utility/constant.dart) | Dart | 1 | 0 | 0 | 1 |
-| [lib/data/datasourses/remote/firestore_user_info.dart](/lib/data/datasourses/remote/firestore_user_info.dart) | Dart | 11 | 1 | -2 | 10 |
+| [lib/data/datasourses/remote/firestore_user_info.dart](/lib/data/datasourses/remote/user/firestore_user_info.dart) | Dart | 11 | 1 | -2 | 10 |
 | [lib/data/datasourses/remote/post/firestore_reel.dart](/lib/data/datasourses/remote/post/firestore_reel.dart) | Dart | 0 | -19 | -1 | -20 |
 | [lib/data/datasourses/remote/story/firestore_story.dart](/lib/data/datasourses/remote/story/firestore_story.dart) | Dart | 42 | 0 | 6 | 48 |
 | [lib/data/models/massage.dart](/lib/data/models/massage.dart) | Dart | 19 | 0 | 1 | 20 |

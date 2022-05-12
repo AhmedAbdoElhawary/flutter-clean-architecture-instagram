@@ -13,7 +13,7 @@ Total : 73 files,  4428 codes, -267 comments, 600 blanks, all 4761 lines
 | :--- | :--- | ---: | ---: | ---: | ---: |
 | [analysis_options.yaml](/analysis_options.yaml) | YAML | 3 | 2 | 0 | 5 |
 | [lib/core/resources/assets_manager.dart](/lib/core/resources/assets_manager.dart) | Dart | 2 | 0 | 0 | 2 |
-| [lib/data/datasourses/remote/firestore_user_info.dart](/lib/data/datasourses/remote/firestore_user_info.dart) | Dart | 3 | -8 | 1 | -4 |
+| [lib/data/datasourses/remote/firestore_user_info.dart](/lib/data/datasourses/remote/user/firestore_user_info.dart) | Dart | 3 | -8 | 1 | -4 |
 | [lib/data/datasourses/remote/post/comment/firestore_comment.dart](/lib/data/datasourses/remote/post/comment/firestore_comment.dart) | Dart | 0 | 0 | -1 | -1 |
 | [lib/data/datasourses/remote/post/firestore_post.dart](/lib/data/datasourses/remote/post/firestore_post.dart) | Dart | -5 | 11 | 2 | 8 |
 | [lib/data/repositories_impl/post/comment/firestore_comment_repo_impl.dart](/lib/data/repositories_impl/post/comment/firestore_comment_repo_impl.dart) | Dart | 5 | 0 | 0 | 5 |
