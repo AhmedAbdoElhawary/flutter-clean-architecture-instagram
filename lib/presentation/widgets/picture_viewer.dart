@@ -4,7 +4,6 @@ import 'package:instagram/presentation/pages/play_this_video.dart';
 import 'package:instagram/presentation/widgets/fade_in_image.dart';
 
 class PictureViewer extends StatelessWidget {
-  // final Post postInfo;
   final String imageUrl;
   final bool isThatImage;
   final double aspectRatio;

@@ -365,7 +365,9 @@ class _ImageListState extends State<ImageList> {
               CupertinoPageRoute(
                 builder: (context) {
                   return PictureViewer(
-                      postInfo: postInfo, imageUrl: postInfo.postUrl);
+                      aspectRatio: postInfo.aspectRatio,
+                      isThatImage: postInfo.isThatImage,
+                      imageUrl: postInfo.postUrl);
                 },
               ),
             );
