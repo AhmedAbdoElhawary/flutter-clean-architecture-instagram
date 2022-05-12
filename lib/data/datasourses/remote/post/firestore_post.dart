@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
-import 'package:instagram/data/datasourses/remote/firestore_user_info.dart';
+import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 

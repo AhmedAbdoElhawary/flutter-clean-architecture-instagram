@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/functions/image_picker.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -171,11 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
           controller: scrollController,
           itemCount: postsInfo.value.length,
           itemBuilder: (ctx, index) {
-            return columnOfWidgets(
-              bodyHeight,
-              index,
-              index == centerItemIndex,
-            );
+            return columnOfWidgets(bodyHeight, index, index == centerItemIndex);
           },
         ),
         onNotification: (_) {
@@ -264,8 +261,10 @@ class _HomeScreenState extends State<HomeScreen> {
     ));
   }
 
-  createNewStory() async {
-    File? pickImage = await imageCameraPicker();
+  createNewStory({bool isThatFromCamera = true}) async {
+    File? pickImage = isThatFromCamera
+        ? await imageCameraPicker()
+        : await imageGalleryPicker();
     if (pickImage != null) {
       await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
           builder: (context) => NewStoryPage(storyImage: pickImage),
@@ -378,41 +377,70 @@ class _HomeScreenState extends State<HomeScreen> {
             StoryPage(user: user, storiesOwnersInfo: storiesOwnersInfo),
       ));
 
-  Stack myOwnStory(BuildContext context,
+  Widget myOwnStory(BuildContext context,
       List<UserPersonalInfo> storiesOwnersInfo, double bodyHeight) {
-    return Stack(
-      children: [
-        GestureDetector(
-          onTap: () async {
-            await createNewStory();
-            await getData(0);
-            WidgetsBinding.instance!.addPostFrameCallback((_) {
-              setState(() {});
-            });
-          },
-          child: CircleAvatarOfProfileImage(
+    return GestureDetector(
+      onTap: () async {
+        showAnimatedDialog(
+            context: context,
+            curve: Curves.easeIn,
+            builder: (context) => AlertDialog(
+                  scrollable: true,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  elevation: 5,
+                  content: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            await createNewStory();
+                            await getData(0);
+                            WidgetsBinding.instance!.addPostFrameCallback((_) {
+                              setState(() {});
+                            });
+                          },
+                          child: Text(StringsManager.fromCamera.tr()),
+                        ),
+                        const SizedBox(height: 15),
+                        GestureDetector(
+                          onTap: () async {
+                            await createNewStory(isThatFromCamera: false);
+                            await getData(0);
+                            WidgetsBinding.instance!.addPostFrameCallback((_) {
+                              setState(() {});
+                            });
+                          },
+                          child: Text(StringsManager.fromGallery.tr()),
+                        ),
+                      ]),
+                ));
+      },
+      child: Stack(
+        children: [
+          CircleAvatarOfProfileImage(
             userInfo: personalInfo!,
             bodyHeight: bodyHeight,
             moveTextMore: true,
             thisForStoriesLine: true,
             nameOfCircle: StringsManager.yourStory.tr(),
           ),
-        ),
-        Positioned(
-            top: 40,
-            left: 40,
-            right: 5,
-            child: CircleAvatar(
-                radius: 9.5,
-                backgroundColor: Theme.of(context).primaryColor,
-                child: const CircleAvatar(
-                    radius: 10,
-                    backgroundColor: ColorManager.blue,
-                    child: Icon(
-                      Icons.add,
-                      size: 15,
-                    )))),
-      ],
+          Positioned(
+              top: 40,
+              left: 40,
+              right: 5,
+              child: CircleAvatar(
+                  radius: 9.5,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: const CircleAvatar(
+                      radius: 10,
+                      backgroundColor: ColorManager.blue,
+                      child: Icon(
+                        Icons.add,
+                        size: 15,
+                      )))),
+        ],
+      ),
     );
   }
 }

@@ -14,6 +14,7 @@ import 'package:instagram/domain/usecases/firestoreUserUseCase/add_story_to_user
 import 'package:instagram/domain/usecases/firestoreUserUseCase/getUserInfo/get_specific_users_usecase.dart';
 import 'package:instagram/domain/usecases/firestoreUserUseCase/getUserInfo/get_user_from_user_name.dart';
 import 'package:instagram/domain/usecases/firestoreUserUseCase/massage/add_massage.dart';
+import 'package:instagram/domain/usecases/firestoreUserUseCase/massage/delete_massage.dart';
 import 'package:instagram/domain/usecases/firestoreUserUseCase/massage/get_massages.dart';
 import 'package:instagram/domain/usecases/firestoreUserUseCase/search_about_user.dart';
 import 'package:instagram/domain/usecases/firestoreUserUseCase/update_user_info.dart';
@@ -151,6 +152,8 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<AddMassageUseCase>(AddMassageUseCase(injector()));
   injector
       .registerSingleton<GetMassagesUseCase>(GetMassagesUseCase(injector()));
+  injector
+      .registerSingleton<DeleteMassageUseCase>(DeleteMassageUseCase(injector()));
   // *
   // *
   // Firestore Post useCases
@@ -240,7 +243,7 @@ Future<void> initializeDependencies() async {
   );
   // massage searchAboutUser
   injector.registerFactory<MassageCubit>(
-    () => MassageCubit(injector()),
+    () => MassageCubit(injector(), injector()),
   );
   injector.registerFactory<MassageBloc>(
     () => MassageBloc(injector()),

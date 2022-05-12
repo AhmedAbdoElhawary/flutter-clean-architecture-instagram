@@ -69,8 +69,10 @@ class _LoginPageState extends State<LoginPage> {
     if (authState is CubitAuthConfirmed) {
       onAuthConfirmed(getUserCubit, authCubit);
     } else if (authState is CubitAuthFailed) {
-      setState(() {
-        isUserIdReady = true;
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        setState(() {
+          isUserIdReady = true;
+        });
       });
 
       ToastShow.toastStateError(authState);
@@ -88,9 +90,13 @@ class _LoginPageState extends State<LoginPage> {
       });
       if (!isHeMovedToHome) {
         myPersonalId = userId;
-        await widget.sharePrefs.setString("myPersonalId", userId);
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => MainScreen(myPersonalId)));
+        if (myPersonalId.isNotEmpty) {
+          await widget.sharePrefs.setString("myPersonalId", myPersonalId);
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => MainScreen(myPersonalId)));
+        } else {
+          ToastShow.toast(StringsManager.somethingWrong.tr());
+        }
       }
       isHeMovedToHome = true;
     });

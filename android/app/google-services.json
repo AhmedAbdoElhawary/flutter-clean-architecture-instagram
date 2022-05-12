@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "989196450351",
+    "firebase_url": "https://el-instagram-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "el-instagram",
     "storage_bucket": "el-instagram.appspot.com"
   },
@@ -9,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:989196450351:android:67245edde41f02313764da",
         "android_client_info": {
-          "package_name": "com.elhawari.instagram"
+          "package_name": "com.example.instegram"
         }
       },
       "oauth_client": [

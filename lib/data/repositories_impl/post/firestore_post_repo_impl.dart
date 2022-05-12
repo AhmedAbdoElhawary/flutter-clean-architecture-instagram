@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
 import 'package:instagram/data/datasourses/remote/post/firestore_post.dart';
-import 'package:instagram/data/datasourses/remote/firestore_user_info.dart';
+import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
 import 'package:instagram/data/models/post.dart';
 import '../../../domain/repositories/post/post_repository.dart';
 

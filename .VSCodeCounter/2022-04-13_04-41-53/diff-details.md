@@ -11,7 +11,7 @@ Total : 24 files,  503 codes, -308 comments, 82 blanks, all 277 lines
 ## Files
 | filename | language | code | comment | blank | total |
 | :--- | :--- | ---: | ---: | ---: | ---: |
-| [lib/data/datasourses/remote/firestore_user_info.dart](/lib/data/datasourses/remote/firestore_user_info.dart) | Dart | -6 | 0 | -1 | -7 |
+| [lib/data/datasourses/remote/firestore_user_info.dart](/lib/data/datasourses/remote/user/firestore_user_info.dart) | Dart | -6 | 0 | -1 | -7 |
 | [lib/data/datasourses/remote/post/comment/firestore_comment.dart](/lib/data/datasourses/remote/post/comment/firestore_comment.dart) | Dart | 18 | 0 | 4 | 22 |
 | [lib/data/datasourses/remote/post/comment/firestore_reply.dart](/lib/data/datasourses/remote/post/comment/firestore_reply.dart) | Dart | 44 | -112 | 9 | -59 |
 | [lib/data/datasourses/remote/post/firestore_post.dart](/lib/data/datasourses/remote/post/firestore_post.dart) | Dart | 0 | 0 | 1 | 1 |

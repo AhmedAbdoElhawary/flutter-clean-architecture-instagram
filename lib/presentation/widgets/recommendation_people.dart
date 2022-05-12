@@ -8,7 +8,6 @@ class RecommendationPeople extends StatelessWidget {
     return InkWell(
       onTap: () {},
       child: Container(
-        //width: 100.0,
         height: 35.0,
         width: 35,
         decoration: BoxDecoration(

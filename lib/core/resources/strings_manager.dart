@@ -16,7 +16,6 @@ class StringsManager {
   static const String reply = "reply";
   static const String unSend = "unSend";
   static const String send = "send";
-
   static const String name = "name"; //7
 
   static const String likes = "likes"; //5
@@ -37,6 +36,9 @@ class StringsManager {
   static const String noRecordsYet = "noRecordsYet";
   static const String userNotExist = "userNotExist";
   static const String yourStory = "yourStory";
+
+  static const String fromCamera = "fromCamera";
+  static const String fromGallery = "fromGallery";
 
   static const String massage = "massage";
   static const String massageP = "massageP";

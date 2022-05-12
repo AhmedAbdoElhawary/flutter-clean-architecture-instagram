@@ -17,6 +17,10 @@ class SendMassageLoaded extends MassageState {
 
 class SendMassageLoading extends MassageState {}
 
+class DeleteMassageLoading extends MassageState {}
+
+class DeleteMassageLoaded extends MassageState {}
+
 class SendMassageFailed extends MassageState {
   final String error;
   const SendMassageFailed(this.error);

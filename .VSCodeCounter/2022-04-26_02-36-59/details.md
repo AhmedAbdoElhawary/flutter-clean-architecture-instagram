@@ -94,7 +94,7 @@ Total : 289 files,  14210 codes, 750 comments, 1934 blanks, all 16894 lines
 | [lib/core/utility/constant.dart](/lib/core/utility/constant.dart) | Dart | 1 | 0 | 0 | 1 |
 | [lib/data/datasourses/remote/firebase_auth.dart](/lib/data/datasourses/remote/firebase_auth.dart) | Dart | 18 | 0 | 6 | 24 |
 | [lib/data/datasourses/remote/firebase_storage.dart](/lib/data/datasourses/remote/firebase_storage.dart) | Dart | 22 | 0 | 3 | 25 |
-| [lib/data/datasourses/remote/firestore_user_info.dart](/lib/data/datasourses/remote/firestore_user_info.dart) | Dart | 143 | 0 | 20 | 163 |
+| [lib/data/datasourses/remote/firestore_user_info.dart](/lib/data/datasourses/remote/user/firestore_user_info.dart) | Dart | 143 | 0 | 20 | 163 |
 | [lib/data/datasourses/remote/post/comment/firestore_comment.dart](/lib/data/datasourses/remote/post/comment/firestore_comment.dart) | Dart | 74 | 0 | 13 | 87 |
 | [lib/data/datasourses/remote/post/comment/firestore_reply.dart](/lib/data/datasourses/remote/post/comment/firestore_reply.dart) | Dart | 51 | 0 | 11 | 62 |
 | [lib/data/datasourses/remote/post/firestore_post.dart](/lib/data/datasourses/remote/post/firestore_post.dart) | Dart | 77 | 11 | 15 | 103 |

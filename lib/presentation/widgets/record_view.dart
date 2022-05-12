@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
 
 class RecordView extends StatefulWidget {
   final String record;
@@ -43,19 +44,28 @@ class _RecordViewState extends State<RecordView> {
               Expanded(
                 child: ProgressBar(
                   timeLabelLocation: TimeLabelLocation.none,
-                  thumbColor: Theme.of(context).focusColor,
+                  thumbColor: widget.isThatMine
+                      ? ColorManager.white
+                      : Theme.of(context).focusColor,
                   total: Duration(microseconds: _totalDuration ?? 0),
                   barHeight: 3,
                   thumbRadius: 6.0,
-                  baseBarColor: const Color.fromARGB(79, 255, 255, 255),
-                  progressBarColor: Theme.of(context).focusColor,
+                  baseBarColor: widget.isThatMine
+                      ? ColorManager.darkWhite
+                      : ColorManager.veryLowOpacityGrey,
+                  progressBarColor: widget.isThatMine
+                      ? ColorManager.white
+                      : Theme.of(context).focusColor,
                   progress: Duration(microseconds: _currentDuration ?? 0),
                 ),
               ),
               const SizedBox(width: 15),
               if (_totalDuration != null && _currentDuration != null)
                 Text(getReformatDate(),
-                    style: Theme.of(context).textTheme.bodyText1),
+                    style: getNormalStyle(
+                        color: widget.isThatMine
+                            ? ColorManager.white
+                            : Theme.of(context).focusColor)),
             ],
           );
   }
@@ -76,8 +86,7 @@ class _RecordViewState extends State<RecordView> {
   }
 
   Icon buildIcon(IconData icon) => Icon(icon,
-      color:
-          widget.isThatMine ? Theme.of(context).focusColor : ColorManager.blue,
+      color: widget.isThatMine ? ColorManager.white : Theme.of(context).focusColor,
       size: 30);
 
   Future<void> _onPlay({required String filePath}) async {

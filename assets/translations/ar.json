@@ -16,7 +16,8 @@
   "name": "إسم",
   "likes": "إعجابات",
   "view": "عرض",
-
+  "fromCamera": "من الكاميرا",
+  "fromGallery": "من المعرض",
   "logIn": "الإنضمام",
   "follow": "متابعه",
   "create": "صنع",

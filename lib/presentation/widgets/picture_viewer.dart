@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/pages/play_this_video.dart';
 import 'package:instagram/presentation/widgets/fade_in_image.dart';
 
 class PictureViewer extends StatelessWidget {
-  final Post postInfo;
   final String imageUrl;
+  final bool isThatImage;
+  final double aspectRatio;
 
-  const PictureViewer(
-      {Key? key, required this.postInfo, required this.imageUrl})
-      : super(key: key);
+  const PictureViewer({
+    Key? key,
+    required this.imageUrl,
+    this.isThatImage = true,
+    this.aspectRatio = 0,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,21 @@ class PictureViewer extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         elevation: 0,
-        iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const CircleAvatar(
+                backgroundColor: ColorManager.black54,
+                child: Icon(Icons.close_rounded),
+              ),
+            ),
+          )
+        ],
+        iconTheme: const IconThemeData(color: ColorManager.transparent),
         backgroundColor: ColorManager.transparent,
         foregroundColor: Theme.of(context).primaryColor,
       ),
@@ -29,16 +46,15 @@ class PictureViewer extends StatelessWidget {
             Navigator.pop(context);
           },
           child: Center(
-            child: postInfo.isThatImage
+            child: isThatImage
                 ? Hero(
-                    tag: postInfo.postUrl,
+                    tag: imageUrl,
                     child: CustomFadeInImage(
-                      aspectRatio: postInfo.aspectRatio,
-                      imageUrl: postInfo.postUrl,
+                      aspectRatio: aspectRatio,
+                      imageUrl: imageUrl,
                     ),
                   )
-                : PlayThisVideo(
-                    videoUrl: postInfo.postUrl, play: true, dispose: false),
+                : PlayThisVideo(videoUrl: imageUrl, play: true, dispose: false),
           ),
         ),
       ),
