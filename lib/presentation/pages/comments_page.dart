@@ -13,7 +13,6 @@ import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/re
 import 'package:instagram/presentation/widgets/comment_box.dart';
 import 'package:instagram/presentation/widgets/commentator.dart';
 import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
-import 'package:instagram/presentation/widgets/smart_refresher.dart';
 import 'package:instagram/presentation/widgets/toast_show.dart';
 
 class CommentsPage extends StatefulWidget {
@@ -172,7 +171,7 @@ class _CommentsPageState extends State<CommentsPage> {
                           });
                         },
                         child: Icon(
-                          Icons.close,
+                          Icons.close_rounded,
                           size: 18,
                           color: Theme.of(context).focusColor,
                         )),
