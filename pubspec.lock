@@ -454,13 +454,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  flutter_audio_recorder2:
-    dependency: "direct main"
-    description:
-      name: flutter_audio_recorder2
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.2"
   flutter_bloc:
     dependency: "direct main"
     description:
