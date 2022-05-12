@@ -294,6 +294,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         onTap: () async {
           File? pickImage = await imageCameraPicker();
           if (pickImage != null) {
+            _getImageDimension(pickImage);
             await Navigator.of(context, rootNavigator: true).push(
                 CupertinoPageRoute(
                     builder: (context) => NewStoryPage(storyImage: pickImage),

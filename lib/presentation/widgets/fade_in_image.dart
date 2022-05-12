@@ -56,7 +56,7 @@ class _CustomFadeInImageState extends State<CustomFadeInImage> {
         return SizedBox(
           width: double.infinity,
           height: widget.aspectRatio,
-          child: const Icon(Icons.warning_amber_rounded, size: 50),
+          child: Icon(Icons.warning_amber_rounded, size: 50,color: Theme.of(context).focusColor),
         );
       },
     );

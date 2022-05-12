@@ -69,11 +69,6 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     ColorManager.redAccent,
     ColorManager.yellow
   ];
-  List<Alignment> alignmentList = [
-    Alignment.bottomLeft,
-    Alignment.bottomRight,
-    Alignment.topLeft,
-  ];
   int index = 0;
   Color bottomColor = ColorManager.red;
   Color topColor = ColorManager.yellow;
