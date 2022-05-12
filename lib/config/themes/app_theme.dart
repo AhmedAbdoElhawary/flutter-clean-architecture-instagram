@@ -46,7 +46,7 @@ class AppTheme {
   static ThemeData get dark {
     return ThemeData(
       primaryColor: ColorManager.black,
-      primaryColorLight: ColorManager.black87,
+      primaryColorLight: ColorManager.black54,
       primarySwatch: Colors.grey,
       hintColor: ColorManager.darkGray,
       shadowColor: ColorManager.darkWhite,
