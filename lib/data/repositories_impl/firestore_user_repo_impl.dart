@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
+import 'package:instagram/data/datasourses/remote/user/massage.dart';
 import 'package:instagram/data/models/massage.dart';
 import 'package:instagram/data/models/specific_users_info.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import '../../domain/repositories/user_repository.dart';
-import '../datasourses/remote/firestore_user_info.dart';
+import '../datasourses/remote/user/firestore_user_info.dart';
 
 class FirebaseUserRepoImpl implements FirestoreUserRepository {
   @override
@@ -149,11 +150,11 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
         massageInfo.recordedUrl = recordedUrl;
       }
 
-      Massage myMassageInfo = await FirestoreUser.sendMassage(
+      Massage myMassageInfo = await FireStoreMassage.sendMassage(
           userId: massageInfo.senderId,
           chatId: massageInfo.receiverId,
           massage: massageInfo);
-      await FirestoreUser.sendMassage(
+      await FireStoreMassage.sendMassage(
           userId: massageInfo.receiverId,
           chatId: massageInfo.senderId,
           massage: massageInfo);
@@ -166,9 +167,26 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
 
   @override
   Stream<List<Massage>> getMassages({required String receiverId}) =>
-      FirestoreUser.getMassages(receiverId: receiverId);
+      FireStoreMassage.getMassages(receiverId: receiverId);
 
   @override
   Stream<List<UserPersonalInfo>> searchAboutUser({required String name}) =>
       FirestoreUser.searchAboutUser(name: name);
+
+  @override
+  Future<void> deleteMassage({required Massage massageInfo}) async {
+    try {
+      await FireStoreMassage.deleteMassage(
+          userId: massageInfo.senderId,
+          chatId: massageInfo.receiverId,
+          massageId: massageInfo.massageUid);
+      if (massageInfo.massage.isEmpty) {
+        String recordedUrl = massageInfo.recordedUrl;
+        await FirebaseStoragePost.deleteImageFromStorage(
+            recordedUrl.isNotEmpty ? recordedUrl : massageInfo.imageUrl);
+      }
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
 }

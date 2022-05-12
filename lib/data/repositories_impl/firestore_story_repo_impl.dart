@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
-import 'package:instagram/data/datasourses/remote/firestore_user_info.dart';
+import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
 import 'package:instagram/data/datasourses/remote/story/firestore_story.dart';
 import 'package:instagram/data/models/story.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
