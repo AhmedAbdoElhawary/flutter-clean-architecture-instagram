@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/massage.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import '../../../core/utility/constant.dart';
+import '../../../../core/utility/constant.dart';
 
 class FirestoreUser {
   static final _fireStoreUserCollection =
@@ -134,28 +134,7 @@ class FirestoreUser {
     return postsInfo;
   }
 
-  static Future<Massage> sendMassage({
-    required String userId,
-    required String chatId,
-    required Massage massage,
-  }) async {
-    CollectionReference<Map<String, dynamic>> _fireMassagesCollection =
-        _fireStoreUserCollection
-            .doc(userId)
-            .collection("chats")
-            .doc(chatId)
-            .collection("massages");
 
-    DocumentReference<Map<String, dynamic>> massageRef =
-        await _fireMassagesCollection.add(massage.toMap());
-
-    massage.massageUid = massageRef.id;
-
-    await _fireMassagesCollection
-        .doc(massageRef.id)
-        .update({"massageUid": massageRef.id});
-    return massage;
-  }
 
   static Stream<List<UserPersonalInfo>> searchAboutUser(
       {required String name}) {
@@ -172,16 +151,5 @@ class FirestoreUser {
         }).toList());
   }
 
-  static Stream<List<Massage>> getMassages({required String receiverId}) {
-    Stream<QuerySnapshot<Map<String, dynamic>>> _snapshotsMassages =
-        _fireStoreUserCollection
-            .doc(myPersonalId)
-            .collection("chats")
-            .doc(receiverId)
-            .collection("massages")
-            .orderBy("datePublished", descending: false)
-            .snapshots();
-    return _snapshotsMassages.map((snapshot) =>
-        snapshot.docs.map((doc) => Massage.fromJson(doc)).toList());
-  }
+
 }
