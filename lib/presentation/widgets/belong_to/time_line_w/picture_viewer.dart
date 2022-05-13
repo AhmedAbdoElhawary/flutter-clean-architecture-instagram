@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/presentation/pages/play_this_video.dart';
-import 'package:instagram/presentation/widgets/fade_in_image.dart';
+import 'package:instagram/presentation/pages/video/play_this_video.dart';
+import 'package:instagram/presentation/widgets/global/image_display.dart';
 
 class PictureViewer extends StatelessWidget {
   final String imageUrl;
@@ -49,7 +49,7 @@ class PictureViewer extends StatelessWidget {
             child: isThatImage
                 ? Hero(
                     tag: imageUrl,
-                    child: CustomFadeInImage(
+                    child: ImageDisplay(
                       aspectRatio: aspectRatio,
                       imageUrl: imageUrl,
                     ),

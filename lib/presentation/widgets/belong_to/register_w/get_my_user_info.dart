@@ -2,12 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/app_prefs.dart';
-import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/screens/main_screen.dart';
-import 'package:instagram/presentation/widgets/toast_show.dart';
+import 'package:instagram/core/functions/toast_show.dart';
 
 class GetMyPersonalId extends StatefulWidget {
   final String myPersonalId;

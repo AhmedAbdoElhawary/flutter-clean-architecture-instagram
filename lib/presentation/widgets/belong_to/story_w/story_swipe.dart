@@ -3,11 +3,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-class InstagramStorySwipe extends StatefulWidget {
+class StorySwipe extends StatefulWidget {
   final List<Widget> children;
   late final PageController controller;
 
-  InstagramStorySwipe({Key? key,
+  StorySwipe({Key? key,
     required this.children,
     required this.controller,
   }) : super(key: key) {
@@ -15,10 +15,10 @@ class InstagramStorySwipe extends StatefulWidget {
   }
 
   @override
-  _InstagramStorySwipeState createState() => _InstagramStorySwipeState();
+  _StorySwipeState createState() => _StorySwipeState();
 }
 
-class _InstagramStorySwipeState extends State<InstagramStorySwipe> {
+class _StorySwipeState extends State<StorySwipe> {
   double currentPageValue = 0.0;
 
   @override

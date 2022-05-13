@@ -5,7 +5,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
-import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/pages/story/stroy_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

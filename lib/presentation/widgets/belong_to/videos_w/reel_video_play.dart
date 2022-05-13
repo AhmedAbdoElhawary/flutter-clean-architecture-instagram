@@ -4,7 +4,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
-import 'package:instagram/presentation/widgets/fade_animation.dart';
+import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
 import 'package:video_player/video_player.dart';
 
 class ReelVideoPlay extends StatefulWidget {

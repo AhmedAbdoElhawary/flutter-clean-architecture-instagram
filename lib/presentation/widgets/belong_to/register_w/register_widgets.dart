@@ -2,15 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
-import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/pages/register/sign_up_page.dart';
-import '../custom_text_field.dart';
-import '../or_text.dart';
+import 'package:instagram/presentation/widgets/belong_to/register_w/or_text.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_text_field.dart';
 
 class RegisterWidgets extends StatefulWidget {
   final TextEditingController emailController;

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 
-class CustomFadeInImage extends StatefulWidget {
+class ImageDisplay extends StatefulWidget {
   final String imageUrl;
   final BoxFit boxFit;
   final bool circularLoading;
   final double aspectRatio;
   final double bodyHeight;
-  const CustomFadeInImage(
+  const ImageDisplay(
       {Key? key,
       required this.imageUrl,
       this.bodyHeight = 0,
@@ -18,10 +18,10 @@ class CustomFadeInImage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<CustomFadeInImage> createState() => _CustomFadeInImageState();
+  State<ImageDisplay> createState() => _ImageDisplayState();
 }
 
-class _CustomFadeInImageState extends State<CustomFadeInImage> {
+class _ImageDisplayState extends State<ImageDisplay> {
   @override
   Widget build(BuildContext context) {
     return widget.aspectRatio <= 0.2

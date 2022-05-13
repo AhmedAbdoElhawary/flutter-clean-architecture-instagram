@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/post.dart';
-import 'package:instagram/presentation/pages/play_this_video.dart';
-import 'package:instagram/presentation/widgets/animated_dialog.dart';
-import 'package:instagram/presentation/widgets/circle_avatar_of_profile_image.dart';
-import 'package:instagram/presentation/widgets/fade_in_image.dart';
-import 'package:instagram/presentation/widgets/custom_posts_dispaly.dart';
+import 'package:instagram/presentation/pages/video/play_this_video.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/animated_dialog.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
+import 'package:instagram/presentation/widgets/global/image_display.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_posts_display.dart';
 
 // ignore: must_be_immutable
 class CustomGridView extends StatefulWidget {
@@ -81,7 +81,7 @@ class _CustomGridViewState extends State<CustomGridView> {
           },
           onLongPressEnd: (details) => _popupDialog?.remove(),
           child: postClickedInfo.isThatImage
-              ? CustomFadeInImage(
+              ? ImageDisplay(
                   imageUrl: postClickedInfo.postUrl, boxFit: BoxFit.cover)
               : PlayThisVideo(videoUrl: postClickedInfo.postUrl, play: false),
         ),
@@ -113,7 +113,7 @@ class _CustomGridViewState extends State<CustomGridView> {
                 ? Container(
                     color: Theme.of(context).primaryColor,
                     width: double.infinity,
-                    child: CustomFadeInImage(
+                    child: ImageDisplay(
                         imageUrl: postInfo.postUrl, boxFit: BoxFit.fitWidth))
                 : Container(
                     color: Theme.of(context).primaryColor,

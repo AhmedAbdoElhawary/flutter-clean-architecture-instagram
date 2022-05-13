@@ -2,10 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/post.dart';
-import 'package:instagram/presentation/widgets/custom_app_bar.dart';
-import 'package:instagram/presentation/widgets/gradient_icon.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line/post_list_view.dart';
-import 'package:instagram/presentation/widgets/smart_refresher.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/post_list_view.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_up_icon.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/smart_refresher.dart';
 
 class CustomPostsDisplay extends StatefulWidget {
   final List<Post> postsInfo;
@@ -107,7 +107,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
         posts(postInfo, bodyHeight, playTheVideo),
         Divider(color: Theme.of(context).toggleableActiveColor, thickness: .15),
         if (isThatEndOfList.value && index == postsInfo.length - 1) ...[
-          const GradientIcon(),
+          const AllCatchUpIcon(),
         ]
       ],
     );

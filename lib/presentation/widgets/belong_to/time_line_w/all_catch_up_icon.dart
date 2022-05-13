@@ -5,8 +5,8 @@ import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 
-class GradientIcon extends StatelessWidget {
-  const GradientIcon({
+class AllCatchUpIcon extends StatelessWidget {
+  const AllCatchUpIcon({
     Key? key,
   }) : super(key: key);
 

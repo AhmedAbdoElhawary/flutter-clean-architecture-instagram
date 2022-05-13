@@ -15,28 +15,27 @@ import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/followCubit/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/pages/comments/comments_page.dart';
-import 'package:instagram/presentation/pages/play_this_video.dart';
-import 'package:instagram/presentation/pages/show_me_who_are_like.dart';
-import 'package:instagram/presentation/widgets/which_profile_page.dart';
-import 'package:instagram/presentation/widgets/bottom_sheet.dart';
-import 'package:instagram/presentation/widgets/circle_avatar_name.dart';
-import 'package:instagram/presentation/widgets/circle_avatar_of_profile_image.dart';
-import 'package:instagram/presentation/widgets/fade_animation.dart';
-import 'package:instagram/presentation/widgets/fade_in_image.dart';
-import 'package:instagram/presentation/widgets/picture_viewer.dart';
-import 'package:instagram/presentation/widgets/read_more_text.dart';
+import 'package:instagram/presentation/pages/video/play_this_video.dart';
+import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_viewer.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
+import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
+import 'package:instagram/presentation/widgets/global/image_display.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_text.dart';
 
-class ImageList extends StatefulWidget {
+class PostImage extends StatefulWidget {
   final Post postInfo;
   final bool playTheVideo;
   final VoidCallback reLoadData;
-
   // final TextEditingController textController;
   // final ValueChanged<Post> selectedPostInfo;
   final ValueNotifier<List<Post>> postsInfo;
   final double bodyHeight;
 
-  const ImageList({
+  const PostImage({
     Key? key,
     required this.postInfo,
     required this.reLoadData,
@@ -48,10 +47,10 @@ class ImageList extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ImageList> createState() => _ImageListState();
+  State<PostImage> createState() => _PostImageState();
 }
 
-class _ImageListState extends State<ImageList> {
+class _PostImageState extends State<PostImage> {
   final TextEditingController textController = TextEditingController();
   ValueChanged<Post>? selectedPostInfo;
   bool isSaved = false;
@@ -375,7 +374,7 @@ class _ImageListState extends State<ImageList> {
           child: postInfo.isThatImage
               ? Hero(
                   tag: postInfo.postUrl,
-                  child: CustomFadeInImage(
+                  child: ImageDisplay(
                     aspectRatio: postInfo.aspectRatio,
                     bodyHeight: widget.bodyHeight,
                     imageUrl: postInfo.postUrl,
@@ -470,8 +469,6 @@ class _ImageListState extends State<ImageList> {
                       myPersonalId: myPersonalId);
                   setState(() {
                     widget.reLoadData();
-                    print("remove done");
-
                     widget.postsInfo.value.remove(widget.postInfo);
                   });
                 },

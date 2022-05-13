@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/presentation/widgets/global/image_display.dart';
 
 class CustomAppBar {
   static AppBar basicAppBar(BuildContext context) {
@@ -40,6 +42,51 @@ class CustomAppBar {
           ),
           onPressed: () {},
         )
+      ],
+    );
+  }
+
+  static AppBar chattingAppBar(UserPersonalInfo userInfo, BuildContext context) {
+    return AppBar(
+      iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+      backgroundColor: Theme.of(context).primaryColor,
+      title: Row(
+        children: [
+          CircleAvatar(
+              child: ClipOval(
+                  child: ImageDisplay(
+                imageUrl: userInfo.profileImageUrl,
+              )),
+              radius: 17),
+          const SizedBox(
+            width: 15,
+          ),
+          Text(
+            userInfo.name,
+            style: TextStyle(
+                color: Theme.of(context).focusColor,
+                fontSize: 16,
+                fontWeight: FontWeight.normal),
+          )
+        ],
+      ),
+      actions: [
+        SvgPicture.asset(
+          "assets/icons/phone.svg",
+          height: 27,
+          color: Theme.of(context).focusColor,
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        SvgPicture.asset(
+          "assets/icons/video_point.svg",
+          height: 25,
+          color: Theme.of(context).focusColor,
+        ),
+        const SizedBox(
+          width: 15,
+        ),
       ],
     );
   }
