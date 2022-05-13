@@ -6,11 +6,11 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
-import 'package:instagram/presentation/pages/all_users_time_line.dart';
-import 'package:instagram/presentation/pages/personal_profile_page.dart';
-import 'package:instagram/presentation/pages/shop_page.dart';
-import 'package:instagram/presentation/pages/videos_page.dart';
-import '../pages/home_page.dart';
+import 'package:instagram/presentation/pages/profile/personal_profile_page.dart';
+import 'package:instagram/presentation/pages/shop/shop_page.dart';
+import 'package:instagram/presentation/pages/time_line/all_user_time_line/all_users_time_line.dart';
+import 'package:instagram/presentation/pages/time_line/my_own_time_line/home_page.dart';
+import 'package:instagram/presentation/pages/video/videos_page.dart';
 
 class MainScreen extends StatefulWidget {
   final String userId;

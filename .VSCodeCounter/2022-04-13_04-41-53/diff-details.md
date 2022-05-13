@@ -31,8 +31,8 @@ Total : 24 files,  503 codes, -308 comments, 82 blanks, all 277 lines
 | [lib/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/replyLikes/reply_likes_state.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/replyLikes/reply_likes_state.dart) | Dart | 13 | -19 | 6 | 0 |
 | [lib/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/reply_info_cubit.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart) | Dart | 39 | -50 | 6 | -5 |
 | [lib/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/reply_info_state.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_state.dart) | Dart | 16 | -23 | 7 | 0 |
-| [lib/presentation/pages/comments_page.dart](/lib/presentation/pages/comments_page.dart) | Dart | 76 | -18 | 4 | 62 |
-| [lib/presentation/widgets/commentator.dart](/lib/presentation/widgets/commentator.dart) | Dart | 121 | 76 | 4 | 201 |
+| [lib/presentation/pages/comments_page.dart](/lib/presentation/pages/comments/comments_page.dart) | Dart | 76 | -18 | 4 | 62 |
+| [lib/presentation/widgets/commentator.dart](/lib/presentation/widgets/belong_to/comments_w/commentator.dart) | Dart | 121 | 76 | 4 | 201 |
 | [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 6 | -6 | 1 | 1 |
 | [lib/presentation/widgets/try.dart](/lib/presentation/widgets/story_page.dart) | Dart | 0 | 52 | 2 | 54 |
 

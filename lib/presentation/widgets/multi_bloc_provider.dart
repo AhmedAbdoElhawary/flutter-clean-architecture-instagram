@@ -20,10 +20,10 @@ import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../cubit/postInfoCubit/post_cubit.dart';
 
 // ignore: must_be_immutable
-class MultiBloc extends StatelessWidget {
+class MultiBlocs extends StatelessWidget {
   Widget materialApp;
 
-  MultiBloc(this.materialApp, {Key? key}) : super(key: key);
+  MultiBlocs(this.materialApp, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
