@@ -9,7 +9,7 @@ import 'package:instagram/data/models/comment.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
-import 'package:instagram/presentation/widgets/circle_avatar_of_profile_image.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 
 class CommentBox extends StatefulWidget {
   final TextEditingController textController;

@@ -13,10 +13,10 @@ import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comment_likes/comment_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/replyLikes/reply_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
-import 'package:instagram/presentation/pages/show_me_who_are_like.dart';
-import 'package:instagram/presentation/pages/which_profile_page.dart';
-import 'package:instagram/presentation/widgets/circle_avatar_of_profile_image.dart';
-import 'package:instagram/presentation/widgets/toast_show.dart';
+import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
+import 'package:instagram/core/functions/toast_show.dart';
 
 class CommentInfo extends StatefulWidget {
   final Comment commentInfo;

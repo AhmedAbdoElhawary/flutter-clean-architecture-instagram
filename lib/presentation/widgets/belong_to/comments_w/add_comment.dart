@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/data/models/post.dart';
-import 'package:instagram/presentation/widgets/comment_box.dart';
+import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.dart';
 
 class AddComment extends StatefulWidget {
   const AddComment({

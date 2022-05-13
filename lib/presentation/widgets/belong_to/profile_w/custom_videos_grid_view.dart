@@ -3,9 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/post.dart';
-import 'package:instagram/presentation/pages/play_this_video.dart';
-import 'package:instagram/presentation/widgets/animated_dialog.dart';
-import 'package:instagram/presentation/widgets/circle_avatar_of_profile_image.dart';
+import 'package:instagram/presentation/pages/video/play_this_video.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/animated_dialog.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 
 // ignore: must_be_immutable
 class CustomVideosGridView extends StatefulWidget {

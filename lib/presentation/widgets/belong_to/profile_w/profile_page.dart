@@ -10,12 +10,12 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
-import 'package:instagram/presentation/pages/followers_info_page.dart';
-import 'package:instagram/presentation/widgets/custom_grid_view.dart';
-import 'package:instagram/presentation/widgets/custom_videos_grid_view.dart';
-import '../../data/models/user_personal_info.dart';
-import 'circle_avatar_of_profile_image.dart';
-import 'read_more_text.dart';
+import 'package:instagram/presentation/pages/profile/followers_info_page.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_grid_view.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_videos_grid_view.dart';
+import '../../../../data/models/user_personal_info.dart';
+import '../../global/circle_avatar_image/circle_avatar_of_profile_image.dart';
+import '../time_line_w/read_more_text.dart';
 
 class ProfilePage extends StatefulWidget {
   String userId;

@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/presentation/widgets/toast_show.dart';
-import '../cubit/followCubit/follow_cubit.dart';
-import 'circle_avatar_of_profile_image.dart';
+import 'package:instagram/core/functions/toast_show.dart';
+import '../../../cubit/followCubit/follow_cubit.dart';
+import '../../global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/presentation/widgets/which_profile_page.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 
 class ShowMeTheUsers extends StatefulWidget {
   final List<UserPersonalInfo> usersInfo;
