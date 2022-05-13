@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 class DateOfNow {
   static String dateOfNow() {
     DateTime now = DateTime.now();
-    print(now);
     return now.toString();
   }
 

@@ -4,7 +4,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/gradient_icon.dart';
-import 'package:instagram/presentation/widgets/post_list_view.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line/post_list_view.dart';
 import 'package:instagram/presentation/widgets/smart_refresher.dart';
 
 class CustomPostsDisplay extends StatefulWidget {
@@ -114,7 +114,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
   }
 
   Widget posts(Post postInfo, double bodyHeight, bool playTheVideo) {
-    return ImageList(
+    return PostImage(
       postInfo: postInfo,
       bodyHeight: bodyHeight,
       playTheVideo: playTheVideo,

@@ -8,7 +8,7 @@ import 'package:instagram/presentation/widgets/toast_show.dart';
 import '../cubit/followCubit/follow_cubit.dart';
 import 'circle_avatar_of_profile_image.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/presentation/pages/which_profile_page.dart';
+import 'package:instagram/presentation/widgets/which_profile_page.dart';
 
 class ShowMeTheUsers extends StatefulWidget {
   final List<UserPersonalInfo> usersInfo;

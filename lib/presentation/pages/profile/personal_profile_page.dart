@@ -12,20 +12,20 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
-import 'package:instagram/presentation/pages/new_post_page.dart';
-import 'package:instagram/presentation/pages/story_config.dart';
-import 'package:instagram/presentation/widgets/bottom_sheet.dart';
-import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
-import 'package:instagram/presentation/widgets/profile_page.dart';
-import 'package:instagram/presentation/widgets/recommendation_people.dart';
+import 'package:instagram/presentation/pages/profile/create_post_page.dart';
+import 'package:instagram/presentation/pages/story/create_story.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_page.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/recommendation_people.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../data/models/user_personal_info.dart';
-import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
-import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import '../widgets/toast_show.dart';
+import '../../../data/models/user_personal_info.dart';
+import '../../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
+import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import '../../../core/functions/toast_show.dart';
 import 'edit_profile_page.dart';
 import 'dart:io';
-import 'login_page.dart';
+import '../register/login_page.dart';
 
 class PersonalProfilePage extends StatefulWidget {
   final String personalId;
@@ -297,7 +297,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             _getImageDimension(pickImage);
             await Navigator.of(context, rootNavigator: true).push(
                 CupertinoPageRoute(
-                    builder: (context) => NewStoryPage(storyImage: pickImage),
+                    builder: (context) => CreateStoryPage(storyImage: pickImage),
                     maintainState: false));
             setState(() {
               rebuildUserInfo = true;

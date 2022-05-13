@@ -16,12 +16,13 @@ import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart';
 import 'package:instagram/presentation/customPackages/audio_recorder/social_media_recoder.dart';
-import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
-import 'package:instagram/presentation/widgets/fade_in_image.dart';
-import 'package:instagram/presentation/widgets/picture_viewer.dart';
-import 'package:instagram/presentation/widgets/record_view.dart';
-import 'package:instagram/presentation/widgets/toast_show.dart';
-import 'package:instagram/presentation/widgets/user_profile_page.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_viewer.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/global/image_display.dart';
+import 'package:instagram/presentation/widgets/belong_to/massages_w/record_view.dart';
+import 'package:instagram/core/functions/toast_show.dart';
+import 'package:instagram/presentation/pages/profile/user_profile_page.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ChattingPage extends StatefulWidget {
@@ -47,6 +48,8 @@ class _ChattingPageState extends State<ChattingPage>
   int temIndex = 0;
   String records = '';
   bool unSend = false;
+  bool appearIcons = true;
+
   Future<void> scrollToLastIndex(BuildContext context) async {
     if (globalMassagesInfo.length > 1) {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
@@ -74,7 +77,7 @@ class _ChattingPageState extends State<ChattingPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
+      appBar: CustomAppBar.chattingAppBar(widget.userInfo, context),
       body: GestureDetector(
           onTap: () {
             setState(() {
@@ -123,7 +126,6 @@ class _ChattingPageState extends State<ChattingPage>
                                   return Column(
                                     children: [
                                       if (index == 0) buildUserInfo(context),
-                                      // if (index > 0)
                                       buildTheMassage(
                                           globalMassagesInfo[index],
                                           globalMassagesInfo[
@@ -278,7 +280,7 @@ class _ChattingPageState extends State<ChattingPage>
                                     },
                                     child: Hero(
                                       tag: imageUrl,
-                                      child: CustomFadeInImage(
+                                      child: ImageDisplay(
                                         imageUrl: imageUrl,
                                       ),
                                     ),
@@ -391,7 +393,6 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  bool appearIcons = true;
   Future<void> showIcons(bool show) async {
     if (show) {
       await Future.delayed(const Duration(milliseconds: 100), () {});
@@ -514,13 +515,13 @@ class _ChattingPageState extends State<ChattingPage>
       visible: appearIcons,
       child: GestureDetector(
         onTap: () {
-          // if (_textController.text.isNotEmpty) {
-          massageCubit.sendMassage(
-            massageInfo: newMassage(),
-          );
-          scrollToLastIndex(context);
-          _textController.text = "";
-          // }
+          if (_textController.text.isNotEmpty) {
+            massageCubit.sendMassage(
+              massageInfo: newMassage(),
+            );
+            scrollToLastIndex(context);
+            _textController.text = "";
+          }
         },
         child: Text(
           StringsManager.send.tr(),
@@ -563,9 +564,6 @@ class _ChattingPageState extends State<ChattingPage>
             massageCubit.sendMassage(
                 massageInfo: newMassage(isThatImage: true),
                 pathOfPhoto: pickImage.path);
-            // setState(() {
-            //   isImageUpload = true;
-            // });
           } else {
             ToastShow.toast(StringsManager.noImageSelected.tr());
           }
@@ -592,7 +590,7 @@ class _ChattingPageState extends State<ChattingPage>
   CircleAvatar circleAvatarOfImage() {
     return CircleAvatar(
         child: ClipOval(
-            child: CustomFadeInImage(
+            child: ImageDisplay(
           imageUrl: widget.userInfo.profileImageUrl,
         )),
         radius: 45);
@@ -671,51 +669,6 @@ class _ChattingPageState extends State<ChattingPage>
           style: TextStyle(
               color: Theme.of(context).focusColor,
               fontWeight: FontWeight.normal)),
-    );
-  }
-
-  AppBar appBar() {
-    return AppBar(
-      iconTheme: IconThemeData(color: Theme.of(context).focusColor),
-      backgroundColor: Theme.of(context).primaryColor,
-      title: Row(
-        children: [
-          CircleAvatar(
-              child: ClipOval(
-                  child: CustomFadeInImage(
-                imageUrl: widget.userInfo.profileImageUrl,
-              )),
-              radius: 17),
-          const SizedBox(
-            width: 15,
-          ),
-          Text(
-            widget.userInfo.name,
-            style: TextStyle(
-                color: Theme.of(context).focusColor,
-                fontSize: 16,
-                fontWeight: FontWeight.normal),
-          )
-        ],
-      ),
-      actions: [
-        SvgPicture.asset(
-          "assets/icons/phone.svg",
-          height: 27,
-          color: Theme.of(context).focusColor,
-        ),
-        const SizedBox(
-          width: 20,
-        ),
-        SvgPicture.asset(
-          "assets/icons/video_point.svg",
-          height: 25,
-          color: Theme.of(context).focusColor,
-        ),
-        const SizedBox(
-          width: 15,
-        ),
-      ],
     );
   }
 }

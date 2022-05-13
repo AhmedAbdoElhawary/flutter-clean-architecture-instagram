@@ -10,10 +10,10 @@ import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
-import 'package:instagram/presentation/widgets/comment_box.dart';
-import 'package:instagram/presentation/widgets/commentator.dart';
-import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
-import 'package:instagram/presentation/widgets/toast_show.dart';
+import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.dart';
+import 'package:instagram/presentation/widgets/belong_to/comments_w/commentator.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
+import 'package:instagram/core/functions/toast_show.dart';
 
 class CommentsPage extends StatefulWidget {
   final String postId;

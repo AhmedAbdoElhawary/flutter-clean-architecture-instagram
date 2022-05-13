@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 
+/// i'm not use it yet!
+
 class ResponsiveLayout extends StatelessWidget {
   final Widget mobileScreenLayout;
   final Widget webScreenLayout;
@@ -17,4 +19,3 @@ class ResponsiveLayout extends StatelessWidget {
         : webScreenLayout;
   }
 }
-

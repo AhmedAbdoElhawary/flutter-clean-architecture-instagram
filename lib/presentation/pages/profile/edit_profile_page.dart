@@ -9,10 +9,10 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
-import 'package:instagram/presentation/widgets/fade_in_image.dart';
-import '../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import '../widgets/toast_show.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/global/image_display.dart';
+import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import '../../../core/functions/toast_show.dart';
 
 // ignore: must_be_immutable
 class EditProfilePage extends StatefulWidget {
@@ -249,7 +249,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ? const ThineCircularProgress()
               : (widget.userInfo.profileImageUrl.isEmpty
                   ? Icon(Icons.person, color: Theme.of(context).primaryColor)
-                  : CustomFadeInImage(
+                  : ImageDisplay(
                       imageUrl: widget.userInfo.profileImageUrl)),
         ),
         radius: 50,

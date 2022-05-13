@@ -5,26 +5,26 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/presentation/widgets/custom_circular_progress.dart';
-import 'package:instagram/presentation/widgets/show_me_the_users.dart';
-import 'package:instagram/presentation/widgets/toast_show.dart';
-import '../cubit/firestoreUserInfoCubit/users_info_cubit.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/show_me_the_users.dart';
+import 'package:instagram/core/functions/toast_show.dart';
+import '../../cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 
-class FollowersAndFollowingsInfoPage extends StatefulWidget {
+class FollowersInfoPage extends StatefulWidget {
   final UserPersonalInfo userInfo;
   final int initialIndex;
 
-  const FollowersAndFollowingsInfoPage(
+  const FollowersInfoPage(
       {Key? key, required this.userInfo, this.initialIndex = 0})
       : super(key: key);
 
   @override
-  State<FollowersAndFollowingsInfoPage> createState() =>
-      _FollowersAndFollowingsInfoPageState();
+  State<FollowersInfoPage> createState() =>
+      _FollowersInfoPageState();
 }
 
-class _FollowersAndFollowingsInfoPageState
-    extends State<FollowersAndFollowingsInfoPage> {
+class _FollowersInfoPageState
+    extends State<FollowersInfoPage> {
   bool rebuildUsersInfo = false;
 
   @override

@@ -10,7 +10,7 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
-import 'package:instagram/presentation/pages/followers_and_followings_info_page.dart';
+import 'package:instagram/presentation/pages/followers_info_page.dart';
 import 'package:instagram/presentation/widgets/custom_grid_view.dart';
 import 'package:instagram/presentation/widgets/custom_videos_grid_view.dart';
 import '../../data/models/user_personal_info.dart';
@@ -199,7 +199,7 @@ class _ProfilePageState extends State<ProfilePage> {
           onTap: () async {
             if (text != StringsManager.posts.tr()) {
               await Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => FollowersAndFollowingsInfoPage(
+                  builder: (context) => FollowersInfoPage(
                       userInfo: userInfo,
                       initialIndex:
                           usersInfo == userInfo.followerPeople ? 0 : 1)));
