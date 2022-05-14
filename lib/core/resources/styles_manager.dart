@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:instagram/core/resources/color_manager.dart';
-
 import 'font_manager.dart';
 
 TextStyle _getTextStyle(
