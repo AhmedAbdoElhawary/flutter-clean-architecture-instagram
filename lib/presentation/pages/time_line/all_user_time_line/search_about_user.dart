@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
@@ -13,7 +12,7 @@ import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 
 class SearchAboutUserPage extends StatefulWidget {
-  SearchAboutUserPage({Key? key}) : super(key: key);
+  const SearchAboutUserPage({Key? key}) : super(key: key);
 
   @override
   State<SearchAboutUserPage> createState() => _SearchAboutUserPageState();
