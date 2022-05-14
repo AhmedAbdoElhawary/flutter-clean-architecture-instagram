@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/models/user_personal_info.dart';
-import '../../../domain/usecases/firestoreUserUsecase/add_new_user_usecase.dart';
+import '../../../domain/use_cases/user/add_new_user_usecase.dart';
 part 'add_new_user_state.dart';
 
 class FirestoreAddNewUserCubit extends Cubit<FirestoreAddNewUserState> {

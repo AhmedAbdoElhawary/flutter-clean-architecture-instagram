@@ -2,12 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/domain/usecases/firestoreUserUseCase/add_post_to_user.dart';
-import 'package:instagram/domain/usecases/firestoreUserUseCase/add_story_to_user.dart';
-import 'package:instagram/domain/usecases/firestoreUserUseCase/getUserInfo/get_user_from_user_name.dart';
-import 'package:instagram/domain/usecases/firestoreUserUseCase/getUserInfo/get_user_info_usecase.dart';
-import 'package:instagram/domain/usecases/firestoreUserUseCase/update_user_info.dart';
-import 'package:instagram/domain/usecases/firestoreUserUseCase/upload_profile_image_usecase.dart';
+import 'package:instagram/domain/use_cases/user/add_post_to_user.dart';
+import 'package:instagram/domain/use_cases/user/add_story_to_user.dart';
+import 'package:instagram/domain/use_cases/user/getUserInfo/get_user_from_user_name.dart';
+import 'package:instagram/domain/use_cases/user/getUserInfo/get_user_info_usecase.dart';
+import 'package:instagram/domain/use_cases/user/update_user_info.dart';
+import 'package:instagram/domain/use_cases/user/upload_profile_image_usecase.dart';
 part 'user_info_state.dart';
 
 class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
