@@ -1,5 +1,5 @@
 import 'dart:io';
-import '../../../core/usecase/usecase.dart';
+import 'package:instagram/core/use_case/use_case.dart';
 import '../../repositories/user_repository.dart';
 
 class UploadProfileImageUseCase
