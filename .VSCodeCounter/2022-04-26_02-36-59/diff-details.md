@@ -82,7 +82,7 @@ Total : 73 files,  4428 codes, -267 comments, 600 blanks, all 4761 lines
 | [lib/presentation/widgets/mmmmmmmmmm/try.dart](/lib/presentation/widgets/mmmmmmmmmm/try.dart) | Dart | 0 | 0 | 1 | 1 |
 | [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 4 | 0 | 1 | 5 |
 | [lib/presentation/widgets/story_page.dart](/lib/presentation/widgets/story_page.dart) | Dart | 230 | 9 | 18 | 257 |
-| [lib/presentation/widgets/try.dart](/lib/presentation/widgets/try.dart) | Dart | 0 | -487 | -1 | -488 |
+| [lib/presentation/widgets/try.dart](/lib/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart) | Dart | 0 | -487 | -1 | -488 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 9 | 0 | -1 | 8 |
 
 [Summary](results.md) / [Details](details.md) / [Diff Summary](diff.md) / Diff Details
