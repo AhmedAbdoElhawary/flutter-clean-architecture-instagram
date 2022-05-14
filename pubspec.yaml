@@ -102,6 +102,10 @@ dependencies:
   permission_handler: ^8.1.6
   dashed_circle: ^0.0.1
   flutter_image_compress: ^1.1.0
+  firebase_messaging: ^11.4.0
+  overlay_support: ^2.0.0
+  just_audio: ^0.9.21
+  audio_service: ^0.18.4
 
 
 

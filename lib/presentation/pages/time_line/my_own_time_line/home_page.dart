@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,23 +13,29 @@ import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
+import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
 import 'package:instagram/presentation/pages/story/create_story.dart';
 import 'package:instagram/presentation/widgets/belong_to/comments_w/add_comment.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/post_list_view.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_up_icon.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/smart_refresher.dart';
 import 'package:instagram/presentation/pages/story/stroy_page.dart';
 import 'package:instagram/core/functions/toast_show.dart';
+import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart';
 import '../../../../data/models/user_personal_info.dart';
 import '../../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../../../widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userId;
+  final Duration throttleDuration;
 
-  const HomeScreen({Key? key, required this.userId}) : super(key: key);
+  const HomeScreen({
+    Key? key,
+    required this.userId,
+    this.throttleDuration = const Duration(milliseconds: 200),
+  }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -38,10 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // final ValueNotifier<FocusNode> _showCommentBox = ValueNotifier(FocusNode());
   final TextEditingController _textController = TextEditingController();
   ValueNotifier<bool> isThatEndOfList = ValueNotifier(false);
-  ScrollController scrollController = ScrollController();
-
   UserPersonalInfo? personalInfo;
-  bool loadingPosts = true;
   ValueNotifier<bool> reLoadData = ValueNotifier(false);
   Post? selectedPostInfo;
   int? centerItemIndex;
@@ -72,9 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
     PostCubit postCubit = PostCubit.get(context);
     await postCubit
         .getPostsInfo(
-            postsIds: postsIds,
-            isThatForMyPosts: true,
-            lengthOfCurrentList: index)
+            postsIds: postsIds, isThatForMyPosts: true, lengthOfCurrentList: 10)
         .then((value) {
       Future.delayed(Duration.zero, () {
         setState(() {});
@@ -82,12 +84,14 @@ class _HomeScreenState extends State<HomeScreen> {
       reLoadData.value = true;
     });
   }
+
   //
   // @override
   // void dispose() {
   //   _showCommentBox.value.dispose();
   //   super.dispose();
   // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,12 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     return Scaffold(
       appBar: CustomAppBar.basicAppBar(context),
-      body: SmarterRefresh(
-        onRefreshData: getData,
-        postsIds: postsIds,
-        isThatEndOfList: isThatEndOfList,
-        child: blocBuilder(bodyHeight),
-      ),
+      body: blocBuilder(bodyHeight),
       bottomSheet: addComment(),
     );
   }
@@ -146,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if (state is CubitMyPersonalPostsLoaded) {
           postsInfo.value = state.postsInfo;
           return postsInfo.value.isNotEmpty
-              ? inView(bodyHeight)
+              ? inViewNotifier(state,bodyHeight)
               : emptyMassage();
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
@@ -161,32 +160,36 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-
-  Widget inView(double bodyHeight) {
-    return SingleChildScrollView(
-      child: NotificationListener(
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          primary: false,
-          controller: scrollController,
-          itemCount: postsInfo.value.length,
-          itemBuilder: (ctx, index) {
-            return columnOfWidgets(bodyHeight, index, index == centerItemIndex);
-          },
-        ),
-        onNotification: (_) {
-          int calculatedIndex =
-              ((scrollController.position.pixels + bodyHeight / 2) / bodyHeight)
-                  .floor();
-          if (calculatedIndex != centerItemIndex) {
-            setState(() {
-              centerItemIndex = calculatedIndex;
-            });
-          }
-          return true;
-        },
-      ),
+  Widget inViewNotifier(CubitMyPersonalPostsLoaded state, double bodyHeight) {
+    return InViewNotifierList(
+      onRefreshData: getData,
+      postsIds: postsIds,
+      isThatEndOfList: isThatEndOfList,
+      onListEndReached: () {
+      },
+      initialInViewIds: const ['0'],
+      isInViewPortCondition:
+          (double deltaTop, double deltaBottom, double vpHeight) {
+        return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
+      },
+      itemCount: state.postsInfo.length,
+      builder: (BuildContext context, int index) {
+        return Container(
+          width: double.infinity,
+          margin: const EdgeInsetsDirectional.only(bottom: .5, top: .5),
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return InViewNotifierWidget(
+                id: '$index',
+                builder: (_, bool isInView, __) {
+                  if (isInView) {}
+                  return columnOfWidgets(bodyHeight, index, isInView);
+                },
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -426,9 +429,9 @@ class _HomeScreenState extends State<HomeScreen> {
             nameOfCircle: StringsManager.yourStory.tr(),
           ),
           Positioned(
-              top: 40,
-              left: 40,
-              right: 5,
+              top: bodyHeight * .058,
+              left: bodyHeight * .058,
+              right: bodyHeight * .012,
               child: CircleAvatar(
                   radius: 9.5,
                   backgroundColor: Theme.of(context).primaryColor,
@@ -437,7 +440,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       backgroundColor: ColorManager.blue,
                       child: Icon(
                         Icons.add,
-                        size: 15,
+                        size: 14,
                       )))),
         ],
       ),
