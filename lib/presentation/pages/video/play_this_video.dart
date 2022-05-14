@@ -23,7 +23,6 @@ class _PlayThisVideoState extends State<PlayThisVideo> {
 
   @override
   void initState() {
-    super.initState();
     _controller = VideoPlayerController.network(widget.videoUrl);
     _initializeVideoPlayerFuture = _controller.initialize().then((_) {
       setState(() {});
@@ -33,6 +32,8 @@ class _PlayThisVideoState extends State<PlayThisVideo> {
       _controller.play();
       _controller.setLooping(true);
     }
+    super.initState();
+
   }
 
   @override
@@ -50,10 +51,10 @@ class _PlayThisVideoState extends State<PlayThisVideo> {
 
   @override
   void dispose() {
-    if (widget.dispose) {
+    // if (widget.dispose) {
       _controller.dispose();
       super.dispose();
-    }
+    // }
   }
 
   @override

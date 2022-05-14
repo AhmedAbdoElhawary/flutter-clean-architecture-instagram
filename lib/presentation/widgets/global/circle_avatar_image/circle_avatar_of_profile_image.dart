@@ -79,8 +79,12 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     String profileImage = widget.userInfo.profileImageUrl;
     if (controller.isCompleted) {
       Future.delayed(const Duration(milliseconds: 5), () {
-        setState(() {
-          topColor = ColorManager.red;
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          if (mounted) {
+            setState(() {
+              topColor = ColorManager.red;
+            });
+          }
         });
       });
     }
