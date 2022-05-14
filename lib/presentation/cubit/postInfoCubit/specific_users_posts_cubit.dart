@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram/domain/usecases/postUseCase/getPostInfo/get_specific_users_posts.dart';
+import 'package:instagram/domain/use_cases/post/getPostInfo/get_specific_users_posts.dart';
 
 part 'specific_users_posts_state.dart';
 
