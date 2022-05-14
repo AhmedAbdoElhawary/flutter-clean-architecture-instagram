@@ -41,7 +41,6 @@ class FireStoreMassage {
     return _snapshotsMassages.map((snapshot) =>
         snapshot.docs.map((doc) => Massage.fromJson(doc)).toList());
   }
-
   static Future<void> deleteMassage(
       {required String userId,
       required String chatId,

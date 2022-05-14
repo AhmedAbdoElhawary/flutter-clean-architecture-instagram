@@ -18,6 +18,7 @@ import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 
+// ignore: must_be_immutable
 class CommentInfo extends StatefulWidget {
   final Comment commentInfo;
   TextEditingController textController;

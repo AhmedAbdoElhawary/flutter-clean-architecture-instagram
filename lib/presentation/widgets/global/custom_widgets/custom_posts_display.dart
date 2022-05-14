@@ -51,10 +51,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
 
-    if (centerItemIndex == null) {
-      centerItemIndex = ((bodyHeight / 2) / bodyHeight).floor();
-      print('center item = $centerItemIndex');
-    }
+    centerItemIndex ??= ((bodyHeight / 2) / bodyHeight).floor();
     return Scaffold(
       appBar: CustomAppBar.oneTitleAppBar(
           context,

@@ -14,7 +14,7 @@ Total : 56 files,  1364 codes, -558 comments, 138 blanks, all 944 lines
 | [android/app/src/main/AndroidManifest.xml](/android/app/src/main/AndroidManifest.xml) | XML | 1 | 0 | 1 | 2 |
 | [lib/config/routes/app_routes.dart](/lib/config/routes/app_routes.dart) | Dart | -4 | 2 | 0 | -2 |
 | [lib/core/globall.dart](/lib/core/functions/date_of_now.dart) | Dart | 10 | 0 | 1 | 11 |
-| [lib/core/usecase/usecase.dart](/lib/core/usecase/usecase.dart) | Dart | 3 | 0 | 0 | 3 |
+| [lib/core/usecase/usecase.dart](/lib/core/use_case/use_case.dart) | Dart | 3 | 0 | 0 | 3 |
 | [lib/data/datasourses/remote/firestore_user_info.dart](/lib/data/datasourses/remote/user/firestore_user_info.dart) | Dart | 49 | 7 | 8 | 64 |
 | [lib/data/datasourses/remote/post/comment/firestore_comment.dart](/lib/data/datasourses/remote/post/comment/firestore_comment.dart) | Dart | 1 | 0 | 0 | 1 |
 | [lib/data/datasourses/remote/post/firestore_post.dart](/lib/data/datasourses/remote/post/firestore_post.dart) | Dart | -5 | -1 | -2 | -8 |
@@ -30,10 +30,10 @@ Total : 56 files,  1364 codes, -558 comments, 138 blanks, all 944 lines
 | [lib/domain/repositories/post/comment/reply_repository.dart](/lib/domain/repositories/post/comment/reply_repository.dart) | Dart | -1 | 0 | 0 | -1 |
 | [lib/domain/repositories/post/post_repository.dart](/lib/domain/repositories/post/post_repository.dart) | Dart | -1 | 0 | 0 | -1 |
 | [lib/domain/repositories/user_repository.dart](/lib/domain/repositories/user_repository.dart) | Dart | 5 | 0 | 1 | 6 |
-| [lib/domain/usecases/firestoreUserUseCase/getUserInfo/get_user_from_user_name.dart](/lib/domain/usecases/firestoreUserUseCase/getUserInfo/get_user_from_user_name.dart) | Dart | 11 | 0 | 4 | 15 |
-| [lib/domain/usecases/firestoreUserUseCase/massage/add_massage.dart](/lib/domain/usecases/firestoreUserUseCase/massage/add_massage.dart) | Dart | 11 | 0 | 4 | 15 |
-| [lib/domain/usecases/firestoreUserUseCase/massage/get_massages.dart](/lib/domain/usecases/firestoreUserUseCase/massage/get_massages.dart) | Dart | 11 | 0 | 4 | 15 |
-| [lib/domain/usecases/firestoreUserUseCase/upload_profile_image_usecase.dart](/lib/domain/usecases/firestoreUserUseCase/upload_profile_image_usecase.dart) | Dart | 5 | -1 | 0 | 4 |
+| [lib/domain/usecases/firestoreUserUseCase/getUserInfo/get_user_from_user_name.dart](/lib/domain/use_cases/user/getUserInfo/get_user_from_user_name.dart) | Dart | 11 | 0 | 4 | 15 |
+| [lib/domain/usecases/firestoreUserUseCase/massage/add_massage.dart](/lib/domain/use_cases/user/massage/add_massage.dart) | Dart | 11 | 0 | 4 | 15 |
+| [lib/domain/usecases/firestoreUserUseCase/massage/get_massages.dart](/lib/domain/use_cases/user/massage/get_massages.dart) | Dart | 11 | 0 | 4 | 15 |
+| [lib/domain/usecases/firestoreUserUseCase/upload_profile_image_usecase.dart](/lib/domain/use_cases/user/upload_profile_image_usecase.dart) | Dart | 5 | -1 | 0 | 4 |
 | [lib/injector.dart](/lib/core/utility/injector.dart) | Dart | 12 | 4 | -1 | 15 |
 | [lib/main.dart](/lib/main.dart) | Dart | 0 | 12 | -1 | 11 |
 | [lib/presentation/cubit/blocObserver/bloc_observer.dart](/lib/presentation/cubit/blocObserver/bloc_observer.dart) | Dart | -30 | 30 | 0 | 0 |

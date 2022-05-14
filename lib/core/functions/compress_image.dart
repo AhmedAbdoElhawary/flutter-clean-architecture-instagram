@@ -13,10 +13,6 @@ Future<File?> compressFile(File file) async {
       outPath,
       quality: file.lengthSync() > 5000000 ? 70 : 50,
     );
-
-    print(file.lengthSync());
-    print(result!.lengthSync());
-
     return result;
   }else{
     return file;

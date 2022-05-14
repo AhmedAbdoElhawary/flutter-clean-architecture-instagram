@@ -22,3 +22,11 @@ class CubitGettingSpecificUsersFailed extends UsersInfoState {
   final String error;
   CubitGettingSpecificUsersFailed(this.error);
 }
+
+class CubitGettingChatUsersInfoLoading extends UsersInfoState {}
+
+class CubitGettingChatUsersInfoLoaded extends UsersInfoState {
+  List<UserPersonalInfo> usersInfo;
+
+  CubitGettingChatUsersInfoLoaded(this.usersInfo);
+}

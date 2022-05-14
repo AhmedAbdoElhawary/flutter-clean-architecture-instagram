@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/data/models/story.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/domain/usecases/storyUseCase/create_story.dart';
-import 'package:instagram/domain/usecases/storyUseCase/delete_story.dart';
-import 'package:instagram/domain/usecases/storyUseCase/get_specific_stories.dart';
-import 'package:instagram/domain/usecases/storyUseCase/get_stories_info.dart';
+import 'package:instagram/domain/use_cases/story/create_story.dart';
+import 'package:instagram/domain/use_cases/story/delete_story.dart';
+import 'package:instagram/domain/use_cases/story/get_specific_stories.dart';
+import 'package:instagram/domain/use_cases/story/get_stories_info.dart';
 
 part 'story_state.dart';
 

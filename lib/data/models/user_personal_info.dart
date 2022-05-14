@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:instagram/data/models/story.dart';
 
+// ignore: must_be_immutable
 class UserPersonalInfo extends Equatable {
   String bio;
   String email;

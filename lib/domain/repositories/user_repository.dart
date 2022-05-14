@@ -38,4 +38,5 @@ abstract class FirestoreUserRepository {
   Stream<List<Massage>> getMassages({required String receiverId});
   Stream<List<UserPersonalInfo>> searchAboutUser({required String name});
   Future<void> deleteMassage({required Massage massageInfo});
+  Future<List<UserPersonalInfo>> getChatUserInfo({required String userId});
 }

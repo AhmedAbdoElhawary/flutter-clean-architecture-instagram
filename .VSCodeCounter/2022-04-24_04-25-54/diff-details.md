@@ -57,10 +57,10 @@ Total : 107 files,  1675 codes, 505 comments, 176 blanks, all 2356 lines
 | [lib/data/repositories_impl/post/firestore_post_repo_impl.dart](/lib/data/repositories_impl/post/firestore_post_repo_impl.dart) | Dart | 65 | 0 | 7 | 72 |
 | [lib/domain/repositories/story_repository.dart](/lib/domain/repositories/story_repository.dart) | Dart | 9 | 0 | 2 | 11 |
 | [lib/domain/repositories/user_repository.dart](/lib/domain/repositories/user_repository.dart) | Dart | 4 | 0 | 0 | 4 |
-| [lib/domain/usecases/firestoreUserUseCase/add_story_to_user.dart](/lib/domain/usecases/firestoreUserUseCase/add_story_to_user.dart) | Dart | 14 | 0 | 4 | 18 |
-| [lib/domain/usecases/firestoreUserUseCase/massage/add_massage.dart](/lib/domain/usecases/firestoreUserUseCase/massage/add_massage.dart) | Dart | 7 | 0 | 0 | 7 |
-| [lib/domain/usecases/storyUseCase/create_story.dart](/lib/domain/usecases/storyUseCase/create_story.dart) | Dart | 13 | 0 | 4 | 17 |
-| [lib/domain/usecases/storyUseCase/get_stories_info.dart](/lib/domain/usecases/storyUseCase/get_stories_info.dart) | Dart | 16 | 0 | 4 | 20 |
+| [lib/domain/usecases/firestoreUserUseCase/add_story_to_user.dart](/lib/domain/use_cases/user/add_story_to_user.dart) | Dart | 14 | 0 | 4 | 18 |
+| [lib/domain/usecases/firestoreUserUseCase/massage/add_massage.dart](/lib/domain/use_cases/user/massage/add_massage.dart) | Dart | 7 | 0 | 0 | 7 |
+| [lib/domain/usecases/storyUseCase/create_story.dart](/lib/domain/use_cases/story/create_story.dart) | Dart | 13 | 0 | 4 | 17 |
+| [lib/domain/usecases/storyUseCase/get_stories_info.dart](/lib/domain/use_cases/story/get_stories_info.dart) | Dart | 16 | 0 | 4 | 20 |
 | [lib/injector.dart](/lib/core/utility/injector.dart) | Dart | 22 | 7 | 2 | 31 |
 | [lib/main.dart](/lib/main.dart) | Dart | -7 | -12 | 0 | -19 |
 | [lib/presentation/cubit/StoryCubit/story_cubit.dart](/lib/presentation/cubit/StoryCubit/story_cubit.dart) | Dart | 37 | 0 | 7 | 44 |

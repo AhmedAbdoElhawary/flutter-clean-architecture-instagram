@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/data/models/massage.dart';
-import 'package:instagram/domain/usecases/firestoreUserUseCase/massage/add_massage.dart';
-import 'package:instagram/domain/usecases/firestoreUserUseCase/massage/delete_massage.dart';
+import 'package:instagram/domain/use_cases/user/massage/add_massage.dart';
+import 'package:instagram/domain/use_cases/user/massage/delete_massage.dart';
 
 part 'massage_state.dart';
 

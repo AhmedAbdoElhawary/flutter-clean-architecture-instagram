@@ -119,8 +119,6 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
     return Story(
       publisherId: personalInfo.userId,
       datePublished: DateOfNow.dateOfNow(),
-      //TODO here
-      // caption: captionController.text,
       caption: "",
       comments: [],
       likes: [],

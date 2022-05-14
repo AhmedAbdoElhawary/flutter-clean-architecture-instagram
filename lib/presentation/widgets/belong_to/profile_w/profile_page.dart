@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
-import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/post.dart';
@@ -17,6 +16,7 @@ import '../../../../data/models/user_personal_info.dart';
 import '../../global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import '../time_line_w/read_more_text.dart';
 
+// ignore: must_be_immutable
 class ProfilePage extends StatefulWidget {
   String userId;
   bool isThatMyPersonalId;

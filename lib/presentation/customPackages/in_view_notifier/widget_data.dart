@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields
+
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_state.dart';
@@ -16,6 +18,7 @@ class WidgetData {
 
 class InheritedInViewWidget extends InheritedWidget {
   final InViewState? inViewState;
+  // ignore: annotate_overrides
   final Widget child;
 
   const InheritedInViewWidget({Key? key, this.inViewState, required this.child})

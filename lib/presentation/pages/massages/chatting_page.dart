@@ -156,7 +156,6 @@ class _ChattingPageState extends State<ChattingPage>
   bool _scrollListener(ScrollNotification scrollInfo) {
     if (scrollInfo.metrics.axis == Axis.vertical) {
       _colorAnimationController.animateTo(scrollInfo.metrics.pixels / 350);
-      print("${scrollInfo.metrics.pixels / 350}");
       return true;
     }
     return false;

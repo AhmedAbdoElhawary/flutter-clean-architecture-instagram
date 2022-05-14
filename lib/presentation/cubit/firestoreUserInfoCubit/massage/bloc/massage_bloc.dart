@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/data/models/massage.dart';
-import 'package:instagram/domain/usecases/firestoreUserUseCase/massage/get_massages.dart';
+import 'package:instagram/domain/use_cases/user/massage/get_massages.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart';
 
 part 'massage_event.dart';

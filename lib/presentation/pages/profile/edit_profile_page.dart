@@ -60,7 +60,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
         return false;
       },
       builder: (context, getUserState) {
-        print("1111111111111111111111");
         FirestoreUserInfoCubit updateUserCubit =
             FirestoreUserInfoCubit.get(context);
 

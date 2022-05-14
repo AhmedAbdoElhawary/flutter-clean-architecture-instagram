@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 
@@ -20,7 +20,9 @@ class ToastShow {
     } catch (e) {
       error = state.error;
     }
-    print("=====================> ${error} !!!!!!the error!!!!!!!");
+    if (kDebugMode) {
+      print("=====================> $error !!!!!!the error in toast show!!!!!!!");
+    }
     ToastShow.toast(error);
   }
 }

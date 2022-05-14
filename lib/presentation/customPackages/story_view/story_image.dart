@@ -31,7 +31,7 @@ class ImageLoader {
 
     fileStream.listen(
       (fileResponse) {
-        if (!(fileResponse is FileInfo)) return;
+        if (fileResponse is! FileInfo) return;
         // the reason for this is that, when the cache manager fetches
         // the image again from network, the provided `onComplete` should
         // not be called again

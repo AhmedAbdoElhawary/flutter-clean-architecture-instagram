@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
-import 'package:instagram/data/models/massage.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import '../../../../core/utility/constant.dart';
 
@@ -46,6 +44,18 @@ class FirestoreUser {
       }
     }
     return usersInfo;
+  }
+
+  static Future<List<String>> getChatUserInfo({required String userId}) async {
+    List<String> allUsersIds = [];
+
+    QuerySnapshot<Map<String, dynamic>> snap =
+        await _fireStoreUserCollection.doc(userId).collection("chats").get();
+    for (int i = 0; i < snap.docs.length; i++) {
+      QueryDocumentSnapshot<Map<String, dynamic>> doc = snap.docs[i];
+      allUsersIds.add(doc.id);
+    }
+    return allUsersIds;
   }
 
   static updateProfileImage(
@@ -134,8 +144,6 @@ class FirestoreUser {
     return postsInfo;
   }
 
-
-
   static Stream<List<UserPersonalInfo>> searchAboutUser(
       {required String name}) {
     name = name.toLowerCase();
@@ -150,6 +158,4 @@ class FirestoreUser {
           return userInfo;
         }).toList());
   }
-
-
 }

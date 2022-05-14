@@ -100,6 +100,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   addNewUser(CubitAuthConfirmed authState, FirestoreAddNewUserCubit userCubit) {
+    // ignore: todo
     // TODO ----> we need to get more details from user in the first to change this view
 
     String name = authState.user.email!.split('@')[0];

@@ -18,9 +18,9 @@ Total : 73 files,  4428 codes, -267 comments, 600 blanks, all 4761 lines
 | [lib/data/datasourses/remote/post/firestore_post.dart](/lib/data/datasourses/remote/post/firestore_post.dart) | Dart | -5 | 11 | 2 | 8 |
 | [lib/data/repositories_impl/post/comment/firestore_comment_repo_impl.dart](/lib/data/repositories_impl/post/comment/firestore_comment_repo_impl.dart) | Dart | 5 | 0 | 0 | 5 |
 | [lib/domain/repositories/post/comment/comment_repository.dart](/lib/domain/repositories/post/comment/comment_repository.dart) | Dart | 3 | 0 | 0 | 3 |
-| [lib/domain/usecases/postUseCase/comments/getComment/get_all_comment.dart](/lib/domain/usecases/postUseCase/comments/getComment/get_all_comment.dart) | Dart | 13 | 0 | 4 | 17 |
-| [lib/domain/usecases/postUseCase/comments/getComment/get_comment.dart](/lib/domain/usecases/postUseCase/comments/getComment/get_comment.dart) | Dart | 11 | 0 | 4 | 15 |
-| [lib/domain/usecases/postUseCase/comments/get_all_comment.dart](/lib/domain/usecases/postUseCase/comments/get_all_comment.dart) | Dart | -11 | 0 | -4 | -15 |
+| [lib/domain/usecases/postUseCase/comments/getComment/get_all_comment.dart](/lib/domain/use_cases/post/comments/getComment/get_all_comment.dart) | Dart | 13 | 0 | 4 | 17 |
+| [lib/domain/usecases/postUseCase/comments/getComment/get_comment.dart](/lib/domain/use_cases/post/comments/getComment/get_comment.dart) | Dart | 11 | 0 | 4 | 15 |
+| [lib/domain/usecases/postUseCase/comments/get_all_comment.dart](/lib/domain/use_cases/post/comments/get_all_comment.dart) | Dart | -11 | 0 | -4 | -15 |
 | [lib/injector.dart](/lib/core/utility/injector.dart) | Dart | 7 | 0 | 1 | 8 |
 | [lib/presentation/cubit/StoryCubit/story_cubit.dart](/lib/presentation/cubit/StoryCubit/story_cubit.dart) | Dart | 4 | 0 | 0 | 4 |
 | [lib/presentation/cubit/bloc/get_comments_bloc.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/bloc/get_comments_bloc.dart) | Dart | 38 | -30 | 4 | 12 |
