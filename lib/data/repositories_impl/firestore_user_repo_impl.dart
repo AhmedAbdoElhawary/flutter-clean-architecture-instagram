@@ -189,4 +189,18 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       return Future.error(e.toString());
     }
   }
+
+  @override
+  Future<List<UserPersonalInfo>> getChatUserInfo(
+      {required String userId}) async {
+    try {
+      List<String> allUsersIds =
+          await FirestoreUser.getChatUserInfo(userId: userId);
+      List<UserPersonalInfo> allUsersInfo =
+          await FirestoreUser.getSpecificUsersInfo(allUsersIds);
+      return allUsersInfo;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
 }

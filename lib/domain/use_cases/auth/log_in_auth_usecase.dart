@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../../core/usecase/usecase.dart';
+import 'package:instagram/core/use_case/use_case.dart';
 import '../../entities/registered_user.dart';
 import '../../repositories/auth_repository.dart';
 

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:instagram/data/models/post.dart';
-import '../../../core/usecase/usecase.dart';
+import 'package:instagram/core/use_case/use_case.dart';
 import '../../repositories/post/post_repository.dart';
 
 class CreatePostUseCase implements UseCaseTwoParams<String, Post, File> {
