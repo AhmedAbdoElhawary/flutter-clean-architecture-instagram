@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:instagram/core/usecase/usecase.dart';
+import 'package:instagram/core/use_case/use_case.dart';
 import 'package:instagram/data/models/story.dart';
 import 'package:instagram/domain/repositories/story_repository.dart';
 
