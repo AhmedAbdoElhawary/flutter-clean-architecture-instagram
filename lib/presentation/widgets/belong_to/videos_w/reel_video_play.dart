@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
-import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
 import 'package:video_player/video_player.dart';
 
@@ -62,10 +59,8 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
   }
 
   Widget video() {
-    bool isLiked = widget.videoInfo.value.likes.contains(myPersonalId);
 
     return Builder(builder: (context) {
-      PostLikesCubit likeCubit = BlocProvider.of<PostLikesCubit>(context);
 
       return GestureDetector(
           child: FutureBuilder(

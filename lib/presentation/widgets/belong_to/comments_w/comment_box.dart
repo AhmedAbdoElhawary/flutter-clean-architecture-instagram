@@ -100,7 +100,6 @@ class _CommentBoxState extends State<CommentBox> {
               ] else ...[
                 BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
                     builder: (context1, state) {
-                  //TODO here we want to make comment loading when he loading
                   return InkWell(
                     onTap: () {
                       if (widget.textController.text.isNotEmpty) {

@@ -112,7 +112,6 @@ class _SmarterRefreshState extends State<SmarterRefresh>
                     style: Theme.of(context).textTheme.bodyText1);
                 break;
               case LoadStatus.noMore:
-                //TODO herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
                 child = Container();
                 break;
               default:
