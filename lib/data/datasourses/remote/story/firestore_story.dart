@@ -45,8 +45,6 @@ class FireStoreStory {
             usersStoriesInfo[i].storiesInfo!.add(postReformat);
             storiesIds.add(postReformat.storyUid);
           }
-        } else {
-          return Future.error(StringsManager.userNotExist.tr());
         }
       }
     }

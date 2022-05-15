@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/data/models/message.dart';
+import 'package:instagram/data/models/sender_info.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import '../../../../core/utility/constant.dart';
 
@@ -37,8 +39,6 @@ class FirestoreUser {
           UserPersonalInfo postReformat =
               UserPersonalInfo.fromDocSnap(docSnap: snap);
           usersInfo.add(postReformat);
-        } else {
-          return Future.error(StringsManager.userNotExist.tr());
         }
         ids.add(usersIds[i]);
       }
@@ -46,16 +46,30 @@ class FirestoreUser {
     return usersInfo;
   }
 
-  static Future<List<String>> getChatUserInfo({required String userId}) async {
-    List<String> allUsersIds = [];
+  static Future<List<SenderInfo>> extractUsersIds(
+      {required List<SenderInfo> usersInfo}) async {
+    for (int i = 0; i < usersInfo.length; i++) {
+      String userId = usersInfo[i].lastMessage.senderId != myPersonalId
+          ? usersInfo[i].lastMessage.senderId
+          : usersInfo[i].lastMessage.receiverId;
+      UserPersonalInfo userInfo = await getUserInfo(userId);
+      usersInfo[i].userInfo = userInfo;
+    }
+    return usersInfo;
+  }
+
+  static Future<List<SenderInfo>> getChatUserInfo(
+      {required String userId}) async {
+    List<SenderInfo> allUsers = [];
 
     QuerySnapshot<Map<String, dynamic>> snap =
         await _fireStoreUserCollection.doc(userId).collection("chats").get();
     for (int i = 0; i < snap.docs.length; i++) {
       QueryDocumentSnapshot<Map<String, dynamic>> doc = snap.docs[i];
-      allUsersIds.add(doc.id);
+      Message messageInfo = Message.fromJson(doc);
+      allUsers.add(SenderInfo(lastMessage: messageInfo));
     }
-    return allUsersIds;
+    return allUsers;
   }
 
   static updateProfileImage(
@@ -91,6 +105,18 @@ class FirestoreUser {
     await _fireStoreUserCollection.doc(userId).update({
       'posts': FieldValue.arrayUnion([postId])
     });
+  }
+
+  static removeUserPost({required String postId}) async {
+    QuerySnapshot<Map<String, dynamic>> document =
+        await _fireStoreUserCollection
+            .where("posts", arrayContains: postId)
+            .get();
+    for (var element in document.docs) {
+      _fireStoreUserCollection.doc(element.id).update({
+        'posts': FieldValue.arrayRemove([postId])
+      });
+    }
   }
 
   static updateUserStories(
@@ -135,8 +161,6 @@ class FirestoreUser {
             await _fireStoreUserCollection.doc(usersIds[i]).get();
         if (snap.exists) {
           postsInfo += snap.get('posts');
-        } else {
-          return Future.error(StringsManager.userNotExist.tr());
         }
         usersIdsUnique.add(usersIds[i]);
       }

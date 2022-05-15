@@ -29,13 +29,14 @@ class Comment {
   static Comment fromSnapComment(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return Comment(
-      datePublished: snapshot["datePublished"],
-      theComment: snapshot["theComment"],
-      commentUid: snapshot["commentUid"],
-      postId: snapshot["postId"],
-      whoCommentId: snapshot["whoCommentId"],
-      likes: snapshot['likes'],
-      replies: snapshot["replies"],
+      datePublished: snapshot.data()!["datePublished"] ?? "",
+      theComment: snapshot.data()!["theComment"] ?? "",
+      commentUid: snapshot.data()!["commentUid"] ?? "",
+      whoCommentId: snapshot.data()!["whoCommentId"] ?? "",
+      parentCommentId: snapshot.data()!["parentCommentId"] ?? "",
+      postId: snapshot.data()!['postId'] ?? "",
+      likes: snapshot.data()!['likes'] ?? [],
+      replies: snapshot.data()!["replies"] ?? [],
     );
   }
 
@@ -52,13 +53,13 @@ class Comment {
   static Comment fromSnapReply(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return Comment(
-      datePublished: snapshot["datePublished"],
-      theComment: snapshot["theReply"],
-      commentUid: snapshot["replyUid"],
-      whoCommentId: snapshot["whoReplyId"],
-      parentCommentId: snapshot["parentCommentId"],
-      postId: snapshot['postId'],
-      likes: snapshot['likes'],
+      datePublished: snapshot.data()!["datePublished"] ?? "",
+      theComment: snapshot.data()!["theReply"] ?? "",
+      commentUid: snapshot.data()!["replyUid"] ?? "",
+      whoCommentId: snapshot.data()!["whoReplyId"] ?? "",
+      parentCommentId: snapshot.data()!["parentCommentId"] ?? "",
+      postId: snapshot.data()!['postId'] ?? "",
+      likes: snapshot.data()!['likes'] ?? [],
     );
   }
 

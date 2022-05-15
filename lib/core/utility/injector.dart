@@ -42,18 +42,18 @@ import 'package:instagram/domain/use_cases/user/getUserInfo/get_followers_and_fo
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_specific_users_usecase.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_user_from_user_name.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_user_info_usecase.dart';
-import 'package:instagram/domain/use_cases/user/massage/add_massage.dart';
-import 'package:instagram/domain/use_cases/user/massage/delete_massage.dart';
-import 'package:instagram/domain/use_cases/user/massage/get_Chat_users_info.dart';
-import 'package:instagram/domain/use_cases/user/massage/get_massages.dart';
+import 'package:instagram/domain/use_cases/user/message/add_message.dart';
+import 'package:instagram/domain/use_cases/user/message/delete_message.dart';
+import 'package:instagram/domain/use_cases/user/message/get_chat_users_info.dart';
+import 'package:instagram/domain/use_cases/user/message/get_messages.dart';
 import 'package:instagram/domain/use_cases/user/search_about_user.dart';
 import 'package:instagram/domain/use_cases/user/update_user_info.dart';
 import 'package:instagram/domain/use_cases/user/upload_profile_image_usecase.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
@@ -146,15 +146,15 @@ Future<void> initializeDependencies() async {
 
   injector.registerSingleton<SearchAboutUserUseCase>(
       SearchAboutUserUseCase(injector()));
-  injector.registerSingleton<GetChatUsersInfoAddMassageUseCase>(
-      GetChatUsersInfoAddMassageUseCase(injector()));
+  injector.registerSingleton<GetChatUsersInfoAddMessageUseCase>(
+      GetChatUsersInfoAddMessageUseCase(injector()));
 
-  // massage use case
-  injector.registerSingleton<AddMassageUseCase>(AddMassageUseCase(injector()));
+  // message use case
+  injector.registerSingleton<AddMessageUseCase>(AddMessageUseCase(injector()));
   injector
-      .registerSingleton<GetMassagesUseCase>(GetMassagesUseCase(injector()));
-  injector.registerSingleton<DeleteMassageUseCase>(
-      DeleteMassageUseCase(injector()));
+      .registerSingleton<GetMessagesUseCase>(GetMessagesUseCase(injector()));
+  injector.registerSingleton<DeleteMessageUseCase>(
+      DeleteMessageUseCase(injector()));
   // *
   // *
   // Firestore Post useCases
@@ -242,12 +242,12 @@ Future<void> initializeDependencies() async {
   injector.registerFactory<SearchAboutUserBloc>(
     () => SearchAboutUserBloc(injector()),
   );
-  // massage searchAboutUser
-  injector.registerFactory<MassageCubit>(
-    () => MassageCubit(injector(), injector()),
+  // message searchAboutUser
+  injector.registerFactory<MessageCubit>(
+    () => MessageCubit(injector(), injector()),
   );
-  injector.registerFactory<MassageBloc>(
-    () => MassageBloc(injector()),
+  injector.registerFactory<MessageBloc>(
+    () => MessageBloc(injector()),
   );
   // *
   // *

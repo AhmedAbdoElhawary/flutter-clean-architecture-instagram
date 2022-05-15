@@ -1,59 +1,72 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/models/massage.dart';
+import 'package:instagram/data/models/message.dart';
 
-class FireStoreMassage {
+class FireStoreMessage {
   static final _fireStoreUserCollection =
       FirebaseFirestore.instance.collection('users');
 
-  static Future<Massage> sendMassage({
+  static Future<Message> sendMessage({
     required String userId,
     required String chatId,
-    required Massage massage,
+    required Message message,
   }) async {
     DocumentReference<Map<String, dynamic>> _fireChatsCollection =
         _fireStoreUserCollection.doc(userId).collection("chats").doc(chatId);
-    _fireChatsCollection.set(massage.toMap());
+    _fireChatsCollection.set(message.toMap());
 
-    CollectionReference<Map<String, dynamic>> _fireMassagesCollection =
-        _fireChatsCollection.collection("massages");
+    CollectionReference<Map<String, dynamic>> _firemessagesCollection =
+        _fireChatsCollection.collection("messages");
 
-    DocumentReference<Map<String, dynamic>> massageRef =
-        await _fireMassagesCollection.add(massage.toMap());
+    DocumentReference<Map<String, dynamic>> messageRef =
+        await _firemessagesCollection.add(message.toMap());
 
-    massage.massageUid = massageRef.id;
+    message.messageUid = messageRef.id;
 
-    await _fireMassagesCollection
-        .doc(massageRef.id)
-        .update({"massageUid": massageRef.id});
-    return massage;
+    await _firemessagesCollection
+        .doc(messageRef.id)
+        .update({"messageUid": messageRef.id});
+    return message;
   }
 
-  static Stream<List<Massage>> getMassages({required String receiverId}) {
-    Stream<QuerySnapshot<Map<String, dynamic>>> _snapshotsMassages =
+  static Future<void> updateLastMessage({
+    required String userId,
+    required String chatId,
+    required Message message,
+  }) async {
+    DocumentReference<Map<String, dynamic>> _fireChatsCollection =
+        _fireStoreUserCollection
+            .doc(myPersonalId)
+            .collection("chats")
+            .doc(chatId != myPersonalId ? chatId : userId);
+    await _fireChatsCollection.set(message.toMap());
+  }
+
+  static Stream<List<Message>> getMessages({required String receiverId}) {
+    Stream<QuerySnapshot<Map<String, dynamic>>> _snapshotsMessages =
         _fireStoreUserCollection
             .doc(myPersonalId)
             .collection("chats")
             .doc(receiverId)
-            .collection("massages")
+            .collection("messages")
             .orderBy("datePublished", descending: false)
             .snapshots();
-    return _snapshotsMassages.map((snapshot) =>
+    return _snapshotsMessages.map((snapshot) =>
         snapshot.docs.map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
-          return Massage.fromJson(doc);
+          return Message.fromJson(doc);
         }).toList());
   }
 
-  static Future<void> deleteMassage(
+  static Future<void> deleteMessage(
       {required String userId,
       required String chatId,
-      required String massageId}) async {
+      required String messageId}) async {
     await _fireStoreUserCollection
         .doc(userId)
         .collection("chats")
         .doc(chatId)
-        .collection("massages")
-        .doc(massageId)
+        .collection("messages")
+        .doc(messageId)
         .delete();
   }
 }

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 // ignore: must_be_immutable
-class message extends Equatable {
+class Message extends Equatable {
   String datePublished;
   String message;
   String receiverId;
@@ -12,7 +12,7 @@ class message extends Equatable {
   String recordedUrl;
   bool isThatImage;
 
-  message({
+  Message({
     required this.datePublished,
     required this.message,
     required this.receiverId,
@@ -23,8 +23,8 @@ class message extends Equatable {
     required this.isThatImage,
   });
 
-  static message fromJson(QueryDocumentSnapshot<Map<String, dynamic>> snap) {
-    return message(
+  static Message fromJson(QueryDocumentSnapshot<Map<String, dynamic>> snap) {
+    return Message(
       datePublished: snap.data()["datePublished"] ?? "",
       message: snap.data()["message"] ?? "",
       receiverId: snap.data()["receiverId"] ?? "",
