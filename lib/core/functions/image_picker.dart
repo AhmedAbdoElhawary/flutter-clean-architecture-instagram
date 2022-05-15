@@ -31,7 +31,7 @@ Future<File?> videoCameraPicker() async {
   final XFile? video = await _picker.pickVideo(source: ImageSource.camera);
   if (video != null) {
     File videoFile = File(video.path);
-    File? compressVideo = await compressFile(videoFile);
+    File? compressVideo = await compressFile(videoFile,isThatImage: false);
     return compressVideo;
   } else {
     return null;
