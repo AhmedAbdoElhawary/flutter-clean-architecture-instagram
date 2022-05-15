@@ -4,23 +4,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:instagram/core/functions/compress_image.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/functions/image_picker.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/models/massage.dart';
+import 'package:instagram/data/models/message.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
 import 'package:instagram/presentation/customPackages/audio_recorder/social_media_recoder.dart';
+import 'package:instagram/presentation/widgets/belong_to/massages_w/record_view.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_viewer.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/widgets/global/image_display.dart';
-import 'package:instagram/presentation/widgets/belong_to/massages_w/record_view.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/presentation/pages/profile/user_profile_page.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -39,23 +38,23 @@ class _ChattingPageState extends State<ChattingPage>
   late Animation _colorTween;
   final TextEditingController _textController = TextEditingController();
   final itemScrollController = ItemScrollController();
-  List<Massage> globalMassagesInfo = [];
-  Massage? newMassageInfo;
-  Massage? deleteThisMassage;
-  bool isDeleteMassageDone = false;
-  bool isMassageLoaded = false;
-  int? indexOfGarbageMassage;
-  int temIndex = 0;
+  List<Message> globalmessagesInfo = [];
+  Message? newmessageInfo;
+  Message? deleteThismessage;
+  bool isDeletemessageDone = false;
+  bool ismessageLoaded = false;
+  int? indexOfGarbagemessage;
+  int itemIndex = 0;
   String records = '';
   bool unSend = false;
   bool appearIcons = true;
 
   Future<void> scrollToLastIndex(BuildContext context) async {
-    if (globalMassagesInfo.length > 1) {
+    if (globalmessagesInfo.length > 1) {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
         setState(() {
           itemScrollController.scrollTo(
-              index: globalMassagesInfo.length - 1,
+              index: globalmessagesInfo.length - 1,
               alignment: 0.2,
               duration: const Duration(milliseconds: 10),
               curve: Curves.easeInOutQuint);
@@ -75,6 +74,12 @@ class _ChattingPageState extends State<ChattingPage>
   }
 
   @override
+  void dispose() {
+    _colorAnimationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar.chattingAppBar(widget.userInfo, context),
@@ -82,42 +87,42 @@ class _ChattingPageState extends State<ChattingPage>
           onTap: () {
             setState(() {
               unSend = false;
-              deleteThisMassage = null;
+              deleteThismessage = null;
             });
           },
           child: buildBody(context)),
     );
   }
 
-  BlocBuilder<MassageBloc, MassageBlocState> buildBody(BuildContext context) {
-    return BlocBuilder<MassageBloc, MassageBlocState>(
-        bloc: BlocProvider.of<MassageBloc>(context)
-          ..add(LoadMassages(widget.userInfo.userId)),
+  BlocBuilder<MessageBloc, MessageBlocState> buildBody(BuildContext context) {
+    return BlocBuilder<MessageBloc, MessageBlocState>(
+        bloc: BlocProvider.of<MessageBloc>(context)
+          ..add(LoadMessages(widget.userInfo.userId)),
         buildWhen: (previous, current) {
-          if (previous != current && (current is MassageBlocLoaded)) {
+          if (previous != current && (current is MessageBlocLoaded)) {
             return true;
           }
           return false;
         },
         builder: (context, state) {
-          if (state is MassageBlocLoaded) {
-            if (state.massages.length >= globalMassagesInfo.length) {
-              globalMassagesInfo = state.massages;
-              if (temIndex < globalMassagesInfo.length - 1) {
-                temIndex = globalMassagesInfo.length - 1;
+          if (state is MessageBlocLoaded) {
+            if (state.messages.length >= globalmessagesInfo.length) {
+              globalmessagesInfo = state.messages;
+              if (itemIndex < globalmessagesInfo.length - 1) {
+                itemIndex = globalmessagesInfo.length - 1;
                 scrollToLastIndex(context);
               }
             }
-            if (newMassageInfo != null && isMassageLoaded) {
-              isMassageLoaded = false;
-              globalMassagesInfo.add(newMassageInfo!);
+            if (newmessageInfo != null && ismessageLoaded) {
+              ismessageLoaded = false;
+              globalmessagesInfo.add(newmessageInfo!);
             }
             return Stack(
               children: [
                 Padding(
                     padding: const EdgeInsetsDirectional.only(
                         end: 10, start: 10, top: 10, bottom: 10),
-                    child: globalMassagesInfo.isNotEmpty
+                    child: globalmessagesInfo.isNotEmpty
                         ? NotificationListener<ScrollNotification>(
                             onNotification: _scrollListener,
                             child: ScrollablePositionedList.separated(
@@ -126,25 +131,25 @@ class _ChattingPageState extends State<ChattingPage>
                                   return Column(
                                     children: [
                                       if (index == 0) buildUserInfo(context),
-                                      buildTheMassage(
-                                          globalMassagesInfo[index],
-                                          globalMassagesInfo[
+                                      buildThemessage(
+                                          globalmessagesInfo[index],
+                                          globalmessagesInfo[
                                                   index != 0 ? index - 1 : 0]
                                               .datePublished,
                                           index),
                                       if (index ==
-                                          globalMassagesInfo.length - 1)
+                                          globalmessagesInfo.length - 1)
                                         const SizedBox(height: 50),
                                     ],
                                   );
                                 },
-                                itemCount: globalMassagesInfo.length,
+                                itemCount: globalmessagesInfo.length,
                                 separatorBuilder:
                                     (BuildContext context, int index) =>
                                         const SizedBox(height: 5)))
                         : buildUserInfo(context)),
                 Align(
-                    alignment: Alignment.bottomCenter, child: fieldOfMassage()),
+                    alignment: Alignment.bottomCenter, child: fieldOfMessage()),
               ],
             );
           } else {
@@ -178,12 +183,12 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Widget buildTheMassage(
-      Massage massageInfo, String previousDateOfMassage, int index) {
+  Widget buildThemessage(
+      Message messageInfo, String previousDateOfmessage, int index) {
     bool isThatMine = false;
-    if (massageInfo.senderId == myPersonalId) isThatMine = true;
+    if (messageInfo.senderId == myPersonalId) isThatMine = true;
     String theDate = DateOfNow.chattingDateOfNow(
-        massageInfo.datePublished, previousDateOfMassage);
+        messageInfo.datePublished, previousDateOfmessage);
     return Column(
       children: [
         if (theDate.isNotEmpty)
@@ -205,17 +210,17 @@ class _ChattingPageState extends State<ChattingPage>
               child: GestureDetector(
                 onLongPress: () {
                   setState(() {
-                    deleteThisMassage = massageInfo;
-                    indexOfGarbageMassage = index;
+                    deleteThismessage = messageInfo;
+                    indexOfGarbagemessage = index;
                     unSend = true;
                   });
                 },
-                child: buildMassage(isThatMine, massageInfo),
+                child: buildmessage(isThatMine, messageInfo),
               ),
             ),
             if (!isThatMine) const SizedBox(width: 100),
             Visibility(
-                visible: massageInfo.massageUid.isEmpty,
+                visible: messageInfo.messageUid.isEmpty,
                 child: Padding(
                   padding: const EdgeInsetsDirectional.only(start: 5.0),
                   child: SvgPicture.asset(
@@ -230,10 +235,10 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Align buildMassage(bool isThatMine, Massage massageInfo) {
-    String massage = massageInfo.massage;
-    String imageUrl = massageInfo.imageUrl;
-    String recordedUrl = massageInfo.recordedUrl;
+  Align buildmessage(bool isThatMine, Message messageInfo) {
+    String message = messageInfo.message;
+    String imageUrl = messageInfo.imageUrl;
+    String recordedUrl = messageInfo.recordedUrl;
     return Align(
       alignment: isThatMine
           ? AlignmentDirectional.centerEnd
@@ -256,16 +261,16 @@ class _ChattingPageState extends State<ChattingPage>
                     ? const EdgeInsetsDirectional.only(
                         start: 10, end: 10, bottom: 8, top: 8)
                     : const EdgeInsetsDirectional.all(0),
-                child: massage.isNotEmpty
-                    ? Text(massage,
+                child: message.isNotEmpty
+                    ? Text(message,
                         style: isThatMine
                             ? Theme.of(context).textTheme.bodyText2
                             : Theme.of(context).textTheme.bodyText1)
-                    : (massageInfo.isThatImage
+                    : (messageInfo.isThatImage
                         ? SizedBox(
                             width: 90,
                             height: 150,
-                            child: massageInfo.massageUid.isNotEmpty
+                            child: messageInfo.messageUid.isNotEmpty
                                 ? GestureDetector(
                                     onTap: () async {
                                       Navigator.of(context).push(
@@ -284,7 +289,7 @@ class _ChattingPageState extends State<ChattingPage>
                                       ),
                                     ),
                                   )
-                                : Image.file(File(newMassageInfo!.imageUrl),
+                                : Image.file(File(newmessageInfo!.imageUrl),
                                     fit: BoxFit.cover))
                         : SizedBox(
                             child: RecordView(
@@ -297,10 +302,10 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Widget fieldOfMassage() {
+  Widget fieldOfMessage() {
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 0),
-      child: unSend ? deleteTheMassage() : textForm(),
+      duration: const Duration(milliseconds: 500),
+      child: unSend ? deleteTheMessage() : textForm(),
     );
   }
 
@@ -321,34 +326,34 @@ class _ChattingPageState extends State<ChattingPage>
               padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
               margin: const EdgeInsetsDirectional.only(start: 10, end: 10),
               child: Builder(builder: (context) {
-                MassageCubit massageCubit = MassageCubit.get(context);
-                return rowOfTextField(massageCubit);
+                MessageCubit messageCubit = MessageCubit.get(context);
+                return rowOfTextField(messageCubit);
               }),
             ),
           ),
         ],
       );
 
-  Widget deleteTheMassage() {
-    bool isThatMine = deleteThisMassage!.senderId == myPersonalId;
-    return BlocBuilder<MassageCubit, MassageState>(
+  Widget deleteTheMessage() {
+    bool isThatMine = deleteThismessage!.senderId == myPersonalId;
+    return BlocBuilder<MessageCubit, MessageState>(
       buildWhen: (previous, current) {
-        if (previous != current && (current is DeleteMassageLoaded)) {
+        if (previous != current && (current is DeleteMessageLoaded)) {
           return true;
         }
         return false;
       },
       builder: (context, state) {
-        if (deleteThisMassage != null &&
+        if (deleteThismessage != null &&
             unSend &&
-            indexOfGarbageMassage != null &&
-            isDeleteMassageDone) {
+            indexOfGarbagemessage != null &&
+            isDeletemessageDone) {
           WidgetsBinding.instance!.addPostFrameCallback((_) async {
             setState(() {
-              isDeleteMassageDone = false;
+              isDeletemessageDone = false;
               unSend = false;
-              deleteThisMassage = null;
-              globalMassagesInfo.removeAt(indexOfGarbageMassage!);
+              deleteThismessage = null;
+              globalmessagesInfo.removeAt(indexOfGarbagemessage!);
             });
           });
         }
@@ -370,13 +375,22 @@ class _ChattingPageState extends State<ChattingPage>
                   if (isThatMine)
                     GestureDetector(
                         onTap: () async {
-                          if (deleteThisMassage != null) {
+                          if (deleteThismessage != null) {
                             WidgetsBinding.instance!
                                 .addPostFrameCallback((_) async {
                               setState(() {
-                                isDeleteMassageDone = true;
-                                MassageCubit.get(context).deleteMassage(
-                                    massageInfo: deleteThisMassage!);
+                                isDeletemessageDone = true;
+                                Message? replacedMessage;
+                                if (globalmessagesInfo[
+                                            globalmessagesInfo.length - 1]
+                                        .messageUid ==
+                                    deleteThismessage!.messageUid) {
+                                  replacedMessage = globalmessagesInfo[
+                                      globalmessagesInfo.length - 2];
+                                }
+                                MessageCubit.get(context).deleteMessage(
+                                    messageInfo: deleteThismessage!,
+                                    replacedMessage: replacedMessage);
                               });
                             });
                           }
@@ -394,20 +408,20 @@ class _ChattingPageState extends State<ChattingPage>
 
   Future<void> showIcons(bool show) async {
     if (show) {
-      await Future.delayed(const Duration(milliseconds: 100), () {});
+      await Future.delayed(const Duration(milliseconds: 500), () {});
     }
     setState(() {
       appearIcons = show;
     });
   }
 
-  Widget rowOfTextField(MassageCubit massageCubit) {
+  Widget rowOfTextField(MessageCubit messageCubit) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        pickImageFromCamera(massageCubit),
-        massageTextField(),
-        if (_textController.text.isNotEmpty) sendButton(massageCubit),
+        pickImageFromCamera(messageCubit),
+        messageTextField(),
+        if (_textController.text.isNotEmpty) sendButton(messageCubit),
         if (_textController.text.isEmpty)
           Row(
             children: [
@@ -416,17 +430,16 @@ class _ChattingPageState extends State<ChattingPage>
                 showIcons: showIcons,
                 sendRequestFunction: (File soundFile) {
                   WidgetsBinding.instance!.addPostFrameCallback((_) async {
-                    File? compressSoundFile = await compressFile(soundFile);
                     setState(() {
                       records = soundFile.path;
-                      MassageCubit massageCubit = MassageCubit.get(context);
-                      newMassageInfo = newMassage();
-                      isMassageLoaded = true;
+                      MessageCubit messageCubit = MessageCubit.get(context);
+                      newmessageInfo = newmessage();
+                      ismessageLoaded = true;
                       scrollToLastIndex(context);
 
-                      massageCubit.sendMassage(
-                          massageInfo: newMassage(),
-                          pathOfRecorded: compressSoundFile!.path);
+                      messageCubit.sendMessage(
+                          messageInfo: newmessage(),
+                          pathOfRecorded: soundFile.path);
                     });
                   });
                 },
@@ -435,7 +448,7 @@ class _ChattingPageState extends State<ChattingPage>
                 visible: appearIcons,
                 child: Row(
                   children: [
-                    pickPhoto(massageCubit),
+                    pickPhoto(messageCubit),
                     const SizedBox(width: 10),
                     pickSticker(),
                   ],
@@ -447,7 +460,7 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Widget pickImageFromCamera(MassageCubit massageCubit) {
+  Widget pickImageFromCamera(MessageCubit messageCubit) {
     return Visibility(
       visible: appearIcons,
       child: Padding(
@@ -458,14 +471,14 @@ class _ChattingPageState extends State<ChattingPage>
             if (pickImage != null) {
               WidgetsBinding.instance!.addPostFrameCallback((_) {
                 setState(() {
-                  isMassageLoaded = true;
-                  newMassageInfo = newMassage(isThatImage: true);
-                  newMassageInfo!.imageUrl = pickImage.path;
+                  ismessageLoaded = true;
+                  newmessageInfo = newmessage(isThatImage: true);
+                  newmessageInfo!.imageUrl = pickImage.path;
                   scrollToLastIndex(context);
                 });
               });
-              massageCubit.sendMassage(
-                  massageInfo: newMassage(isThatImage: true),
+              messageCubit.sendMessage(
+                  messageInfo: newmessage(isThatImage: true),
                   pathOfPhoto: pickImage.path);
             } else {
               ToastShow.toast(StringsManager.noImageSelected.tr());
@@ -484,7 +497,7 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Widget massageTextField() {
+  Widget messageTextField() {
     return Expanded(
       child: Visibility(
         visible: appearIcons,
@@ -494,7 +507,7 @@ class _ChattingPageState extends State<ChattingPage>
           cursorColor: ColorManager.teal,
           maxLines: null,
           decoration: InputDecoration.collapsed(
-              hintText: StringsManager.massageP.tr(),
+              hintText: StringsManager.messageP.tr(),
               hintStyle: TextStyle(color: Theme.of(context).cardColor)),
           autofocus: false,
           controller: _textController,
@@ -509,14 +522,14 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Widget sendButton(MassageCubit massageCubit) {
+  Widget sendButton(MessageCubit messageCubit) {
     return Visibility(
       visible: appearIcons,
       child: GestureDetector(
         onTap: () {
           if (_textController.text.isNotEmpty) {
-            massageCubit.sendMassage(
-              massageInfo: newMassage(),
+            messageCubit.sendMessage(
+              messageInfo: newmessage(),
             );
             scrollToLastIndex(context);
             _textController.text = "";
@@ -545,7 +558,7 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Widget pickPhoto(MassageCubit massageCubit) {
+  Widget pickPhoto(MessageCubit messageCubit) {
     return Padding(
       padding: const EdgeInsets.only(left: 7.0),
       child: GestureDetector(
@@ -554,14 +567,14 @@ class _ChattingPageState extends State<ChattingPage>
           if (pickImage != null) {
             WidgetsBinding.instance!.addPostFrameCallback((_) {
               setState(() {
-                isMassageLoaded = true;
-                newMassageInfo = newMassage(isThatImage: true);
-                newMassageInfo!.imageUrl = pickImage.path;
+                ismessageLoaded = true;
+                newmessageInfo = newmessage(isThatImage: true);
+                newmessageInfo!.imageUrl = pickImage.path;
                 scrollToLastIndex(context);
               });
             });
-            massageCubit.sendMassage(
-                massageInfo: newMassage(isThatImage: true),
+            messageCubit.sendMessage(
+                messageInfo: newmessage(isThatImage: true),
                 pathOfPhoto: pickImage.path);
           } else {
             ToastShow.toast(StringsManager.noImageSelected.tr());
@@ -576,10 +589,10 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Massage newMassage({bool isThatImage = false}) {
-    return Massage(
+  Message newmessage({bool isThatImage = false}) {
+    return Message(
       datePublished: DateOfNow.dateOfNow(),
-      massage: _textController.text,
+      message: _textController.text,
       senderId: myPersonalId,
       receiverId: widget.userInfo.userId,
       isThatImage: isThatImage,

@@ -2,43 +2,43 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 // ignore: must_be_immutable
-class Massage extends Equatable {
+class message extends Equatable {
   String datePublished;
-  String massage;
+  String message;
   String receiverId;
-  String massageUid;
+  String messageUid;
   String senderId;
   String imageUrl;
   String recordedUrl;
   bool isThatImage;
 
-  Massage({
+  message({
     required this.datePublished,
-    required this.massage,
+    required this.message,
     required this.receiverId,
     required this.senderId,
-    this.massageUid = "",
+    this.messageUid = "",
     this.imageUrl = "",
     this.recordedUrl = "",
     required this.isThatImage,
   });
 
-  static Massage fromJson(DocumentSnapshot snap) {
-    return Massage(
-      datePublished: snap["datePublished"] ?? '',
-      massage: snap["massage"] ?? '',
-      receiverId: snap["receiverId"] ?? '',
-      senderId: snap["senderId"] ?? '',
-      massageUid: snap["massageUid"] ?? '',
-      imageUrl: snap["imageUrl"] ?? '',
-      recordedUrl: snap["recordedUrl"] ?? '',
-      isThatImage: snap["isThatImage"] ?? '',
+  static message fromJson(QueryDocumentSnapshot<Map<String, dynamic>> snap) {
+    return message(
+      datePublished: snap.data()["datePublished"] ?? "",
+      message: snap.data()["message"] ?? "",
+      receiverId: snap.data()["receiverId"] ?? "",
+      senderId: snap.data()["senderId"] ?? "",
+      messageUid: snap.data()["messageUid"] ?? "",
+      imageUrl: snap.data()["imageUrl"] ?? "",
+      recordedUrl: snap.data()["recordedUrl"] ?? "",
+      isThatImage: snap.data()["isThatImage"] ?? false,
     );
   }
 
   Map<String, dynamic> toMap() => {
         "datePublished": datePublished,
-        "massage": massage,
+        "message": message,
         "receiverId": receiverId,
         "senderId": senderId,
         "imageUrl": imageUrl,
@@ -49,11 +49,12 @@ class Massage extends Equatable {
   @override
   List<Object?> get props => [
         datePublished,
-        massage,
+        message,
         receiverId,
-        massageUid,
+        messageUid,
         senderId,
         imageUrl,
-        recordedUrl
+        recordedUrl,
+        isThatImage
       ];
 }

@@ -11,12 +11,12 @@ class FireStoreMassage {
     required String chatId,
     required Massage massage,
   }) async {
+    DocumentReference<Map<String, dynamic>> _fireChatsCollection =
+        _fireStoreUserCollection.doc(userId).collection("chats").doc(chatId);
+    _fireChatsCollection.set(massage.toMap());
+
     CollectionReference<Map<String, dynamic>> _fireMassagesCollection =
-        _fireStoreUserCollection
-            .doc(userId)
-            .collection("chats")
-            .doc(chatId)
-            .collection("massages");
+        _fireChatsCollection.collection("massages");
 
     DocumentReference<Map<String, dynamic>> massageRef =
         await _fireMassagesCollection.add(massage.toMap());
@@ -39,8 +39,11 @@ class FireStoreMassage {
             .orderBy("datePublished", descending: false)
             .snapshots();
     return _snapshotsMassages.map((snapshot) =>
-        snapshot.docs.map((doc) => Massage.fromJson(doc)).toList());
+        snapshot.docs.map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+          return Massage.fromJson(doc);
+        }).toList());
   }
+
   static Future<void> deleteMassage(
       {required String userId,
       required String chatId,
