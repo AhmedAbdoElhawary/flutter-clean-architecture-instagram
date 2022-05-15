@@ -106,6 +106,8 @@ dependencies:
   overlay_support: ^2.0.0
   just_audio: ^0.9.21
   audio_service: ^0.18.4
+  extended_tabs: ^2.3.0
+
 
 
 

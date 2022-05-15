@@ -44,12 +44,12 @@ Total : 56 files,  1364 codes, -558 comments, 138 blanks, all 944 lines
 | lib\domain\usecases | 4 | 38 | -1 | 12 | 49 |
 | lib\domain\usecases\firestoreUserUseCase | 4 | 38 | -1 | 12 | 49 |
 | lib\domain\usecases\firestoreUserUseCase\getUserInfo | 1 | 11 | 0 | 4 | 15 |
-| lib\domain\usecases\firestoreUserUseCase\massage | 2 | 22 | 0 | 8 | 30 |
+| lib\domain\usecases\firestoreUserUseCase\message | 2 | 22 | 0 | 8 | 30 |
 | lib\presentation | 29 | 1,179 | -104 | 112 | 1,187 |
 | lib\presentation\cubit | 7 | 35 | 49 | 15 | 99 |
 | lib\presentation\cubit\blocObserver | 1 | -30 | 30 | 0 | 0 |
 | lib\presentation\cubit\firestoreUserInfoCubit | 4 | 69 | 19 | 15 | 103 |
-| lib\presentation\cubit\firestoreUserInfoCubit\massage | 2 | 49 | 12 | 15 | 76 |
+| lib\presentation\cubit\firestoreUserInfoCubit\message | 2 | 49 | 12 | 15 | 76 |
 | lib\presentation\cubit\postInfoCubit | 2 | -4 | 0 | 0 | -4 |
 | lib\presentation\cubit\postInfoCubit\commentsInfo | 1 | -1 | 0 | 0 | -1 |
 | lib\presentation\cubit\postInfoCubit\commentsInfo\repliesInfo | 1 | -1 | 0 | 0 | -1 |
