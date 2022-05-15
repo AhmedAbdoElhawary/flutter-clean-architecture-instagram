@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/massage/bloc/massage_bloc.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
@@ -64,11 +64,11 @@ class MultiBlocs extends StatelessWidget {
       BlocProvider<ReplyInfoCubit>(
         create: (context) => injector<ReplyInfoCubit>(),
       ),
-      BlocProvider<MassageCubit>(
-        create: (context) => injector<MassageCubit>(),
+      BlocProvider<MessageCubit>(
+        create: (context) => injector<MessageCubit>(),
       ),
-      BlocProvider<MassageBloc>(
-        create: (context) => injector<MassageBloc>(),
+      BlocProvider<MessageBloc>(
+        create: (context) => injector<MessageBloc>(),
       ),
       BlocProvider<StoryCubit>(
         create: (context) => injector<StoryCubit>(),

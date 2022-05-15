@@ -6,6 +6,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/time_line/all_user_time_line/search_about_user.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/smart_refresher.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_grid_view.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 
@@ -20,6 +21,8 @@ class AllUsersTimeLinePage extends StatefulWidget {
 
 class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
   bool rebuildUsersInfo = false;
+  ValueNotifier<bool> isThatEndOfList = ValueNotifier(false);
+
   @override
   Widget build(BuildContext context) {
     rebuildUsersInfo = false;
@@ -66,7 +69,7 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
     );
   }
 
-  Future<void> getData() async {
+  Future<void> getData(int index) async {
     await BlocProvider.of<PostCubit>(context).getAllPostInfo();
     setState(() {
       rebuildUsersInfo = true;
@@ -88,17 +91,17 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
       },
       builder: (context, state) {
         if (state is CubitAllPostsLoaded) {
-          return
-              // SmarterRefresh(
-              // onRefreshData: getData,
-              // child:
-              SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: CustomGridView(
-                isThatProfile: false,
-                postsInfo: state.allPostInfo,
-                userId: widget.userId),
-            // ),
+          return SmarterRefresh(
+            onRefreshData: getData,
+            isThatEndOfList: isThatEndOfList,
+            posts: state.allPostInfo,
+            child: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: CustomGridView(
+                  isThatProfile: false,
+                  postsInfo: state.allPostInfo,
+                  userId: widget.userId),
+            ),
           );
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);

@@ -57,6 +57,7 @@ class _PostImageState extends State<PostImage> {
   late Size imageSize = const Size(0.0, 0.0);
   late Widget videoStatusAnimation;
   String currentLanguage = 'en';
+
   @override
   void initState() {
     super.initState();
@@ -344,45 +345,46 @@ class _PostImageState extends State<PostImage> {
 
   Widget imageOfPost(Post postInfo) {
     bool isLiked = postInfo.likes.contains(myPersonalId);
-
     return Stack(
       children: [
         GestureDetector(
-          onDoubleTap: () {
-            videoStatusAnimation = FadeAnimation(child: lovePopAnimation());
+            onDoubleTap: () {
+              videoStatusAnimation = FadeAnimation(child: lovePopAnimation());
 
-            setState(() {
-              if (!isLiked) {
-                BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
-                    postId: postInfo.postUid, userId: myPersonalId);
-                postInfo.likes.add(myPersonalId);
-              }
-            });
-          },
-          onTap: () async {
-            Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder: (context) {
-                  return PictureViewer(
-                      aspectRatio: postInfo.aspectRatio,
-                      isThatImage: postInfo.isThatImage,
-                      imageUrl: postInfo.postUrl);
-                },
-              ),
-            );
-          },
-          child: postInfo.isThatImage
-              ? Hero(
-                  tag: postInfo.postUrl,
-                  child: ImageDisplay(
-                    aspectRatio: postInfo.aspectRatio,
-                    bodyHeight: widget.bodyHeight,
-                    imageUrl: postInfo.postUrl,
-                  ),
-                )
-              : PlayThisVideo(
-                  videoUrl: postInfo.postUrl, play: widget.playTheVideo),
-        ),
+              setState(() {
+                if (!isLiked) {
+                  BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
+                      postId: postInfo.postUid, userId: myPersonalId);
+                  postInfo.likes.add(myPersonalId);
+                }
+              });
+            },
+            onTap: () async {
+              Navigator.of(context).push(
+                CupertinoPageRoute(
+                  builder: (context) {
+                    return PictureViewer(
+                        aspectRatio: postInfo.aspectRatio,
+                        isThatImage: postInfo.isThatImage,
+                        imageUrl: postInfo.postUrl);
+                  },
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(top:8.0),
+              child: postInfo.isThatImage
+                  ? Hero(
+                      tag: postInfo.postUrl,
+                      child: ImageDisplay(
+                        aspectRatio: postInfo.aspectRatio,
+                        bodyHeight: widget.bodyHeight,
+                        imageUrl: postInfo.postUrl,
+                      ),
+                    )
+                  : PlayThisVideo(
+                      videoUrl: postInfo.postUrl, play: widget.playTheVideo),
+            )),
         Center(child: videoStatusAnimation),
       ],
     );
