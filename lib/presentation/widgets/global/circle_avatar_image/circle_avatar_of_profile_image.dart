@@ -90,7 +90,6 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     }
 
     return SizedBox(
-      height: widget.bodyHeight * 0.14,
       child: widget.thisForStoriesLine
           ? buildColumn(profileImage, context)
           : buildStack(profileImage, context),
@@ -167,7 +166,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
 
   Stack stackOfImage(String profileImage) {
     return Stack(
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       children: [
         if (widget.userInfo.stories.isNotEmpty) ...[
           if (_sharePrefs.getBool(widget.userInfo.userId) != null) ...[

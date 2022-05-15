@@ -20,13 +20,12 @@ class DateOfNow {
             ? (day == 0 ? (hour == 0 ? "${minute}m" : "${hour}h") : "${day}d")
             : "${day != 0 ? day ~/ 7 + week : week}w")
         : ("${year}y");
-
   }
 
   static String chattingDateOfNow(
-      String theDate, String previousDateOfMassage) {
+      String theDate, String previousDateOfmessage) {
     DateTime theActualDate = DateTime.parse(theDate);
-    DateTime thePreviousDate = DateTime.parse(previousDateOfMassage);
+    DateTime thePreviousDate = DateTime.parse(previousDateOfmessage);
     DateTime now = DateTime.now();
 
     String dateOfToday = DateFormat(" h:m a").format(theActualDate);
@@ -49,6 +48,7 @@ class DateOfNow {
         : theDateOTime;
   }
 }
+
 List _splitTheDate(String theDate) {
   List dateDetails;
   if (theDate.split("/").length > 2) {

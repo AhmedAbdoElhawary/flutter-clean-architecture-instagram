@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/post.dart';
+import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
+import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/post_list_view.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_up_icon.dart';
@@ -60,7 +62,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
               : StringsManager.explore.tr()),
       body: SmarterRefresh(
         onRefreshData: getData,
-        postsIds: postsInfo,
+        posts: postsInfo,
         isThatEndOfList: isThatEndOfList,
         child: inView(bodyHeight),
       ),
@@ -93,6 +95,39 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
           return true;
         },
       ),
+    );
+  }
+
+  Widget inViewNotifier(double bodyHeight) {
+    return InViewNotifierList(
+      onRefreshData: getData,
+      postsIds: postsInfo,
+      isThatEndOfList: isThatEndOfList,
+      onListEndReached: () {},
+      initialInViewIds: const ['0'],
+      isInViewPortCondition:
+          (double deltaTop, double deltaBottom, double vpHeight) {
+        return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
+      },
+      itemCount: postsInfo.length,
+      builder: (BuildContext context, int index) {
+        return Container(
+          width: double.infinity,
+          margin: const EdgeInsetsDirectional.only(bottom: .5, top: .5),
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return InViewNotifierWidget(
+                id: '$index',
+                builder: (_, bool isInView, __) {
+                  if (isInView) {}
+                  return columnOfWidgets(
+                      bodyHeight, postsInfo[index], index, isInView);
+                },
+              );
+            },
+          ),
+        );
+      },
     );
   }
 

@@ -47,7 +47,7 @@ Total : 107 files,  1675 codes, 505 comments, 176 blanks, all 2356 lines
 | lib\domain\repositories | 2 | 13 | 0 | 2 | 15 |
 | lib\domain\usecases | 4 | 50 | 0 | 12 | 62 |
 | lib\domain\usecases\firestoreUserUseCase | 2 | 21 | 0 | 4 | 25 |
-| lib\domain\usecases\firestoreUserUseCase\massage | 1 | 7 | 0 | 0 | 7 |
+| lib\domain\usecases\firestoreUserUseCase\message | 1 | 7 | 0 | 0 | 7 |
 | lib\domain\usecases\storyUseCase | 2 | 29 | 0 | 8 | 37 |
 | lib\presentation | 54 | 1,166 | 489 | 109 | 1,764 |
 | lib\presentation\cubit | 16 | 147 | 26 | 35 | 208 |
@@ -55,9 +55,9 @@ Total : 107 files,  1675 codes, 505 comments, 176 blanks, all 2356 lines
 | lib\presentation\cubit\bloc | 3 | 0 | 73 | 3 | 76 |
 | lib\presentation\cubit\blocObserver | 1 | -3 | -30 | -5 | -38 |
 | lib\presentation\cubit\firestoreUserInfoCubit | 9 | 87 | -17 | 22 | 92 |
-| lib\presentation\cubit\firestoreUserInfoCubit\massage | 7 | 68 | -10 | 19 | 77 |
-| lib\presentation\cubit\firestoreUserInfoCubit\massage\bloc | 3 | 67 | 0 | 21 | 88 |
-| lib\presentation\cubit\firestoreUserInfoCubit\massage\cubit | 2 | 50 | 2 | 13 | 65 |
+| lib\presentation\cubit\firestoreUserInfoCubit\message | 7 | 68 | -10 | 19 | 77 |
+| lib\presentation\cubit\firestoreUserInfoCubit\message\bloc | 3 | 67 | 0 | 21 | 88 |
+| lib\presentation\cubit\firestoreUserInfoCubit\message\cubit | 2 | 50 | 2 | 13 | 65 |
 | lib\presentation\cubit\postInfoCubit | 1 | 0 | 0 | -1 | -1 |
 | lib\presentation\pages | 16 | 391 | -27 | -3 | 361 |
 | lib\presentation\screens | 1 | 13 | 0 | -1 | 12 |

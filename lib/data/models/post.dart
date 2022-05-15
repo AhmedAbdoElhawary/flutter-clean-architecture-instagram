@@ -26,20 +26,20 @@ class Post extends ParentPost {
             caption: caption,
             publisherInfo: publisherInfo);
 
-  static Post fromSnap(
-      {QueryDocumentSnapshot<Map<String, dynamic>>? querySnap,
-      DocumentSnapshot<Map<String, dynamic>>? docSnap}) {
-    dynamic snap = querySnap ?? docSnap;
+  static Post fromQuery(
+      {DocumentSnapshot<Map<String, dynamic>>? query,
+      QueryDocumentSnapshot<Map<String, dynamic>>? doc}) {
+    dynamic snap = query ?? doc;
     return Post(
-      caption: snap["caption"],
-      datePublished: snap["datePublished"],
-      publisherId: snap["publisherId"],
-      likes: snap["likes"],
-      comments: snap["comments"],
-      postUid: snap["postUid"],
-      aspectRatio: snap["aspectRatio"],
-      postUrl: snap["postUrl"],
-      isThatImage: snap["isThatImage"],
+      caption: snap.data()!["caption"] ?? "",
+      datePublished: snap.data()!["datePublished"] ?? "",
+      publisherId: snap.data()!["publisherId"] ?? "",
+      likes: snap.data()!["likes"] ?? [],
+      comments: snap.data()!["comments"] ?? [],
+      postUid: snap.data()!["postUid"] ?? "",
+      aspectRatio: snap.data()!["aspectRatio"] ?? 0.0,
+      postUrl: snap.data()!["postUrl"] ?? "",
+      isThatImage: snap.data()!["isThatImage"] ?? true,
     );
   }
 

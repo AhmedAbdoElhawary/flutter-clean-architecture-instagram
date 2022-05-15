@@ -82,7 +82,7 @@ Total : 207 files,  8107 codes, 512 comments, 1158 blanks, all 9777 lines
 | [lib/data/datasourses/remote/post/firestore_post.dart](/lib/data/datasourses/remote/post/firestore_post.dart) | Dart | 82 | 0 | 13 | 95 |
 | [lib/data/datasourses/remote/post/firestore_reel.dart](/lib/data/datasourses/remote/post/firestore_reel.dart) | Dart | 0 | 19 | 1 | 20 |
 | [lib/data/models/comment.dart](/lib/data/models/comment.dart) | Dart | 65 | 0 | 12 | 77 |
-| [lib/data/models/massage.dart](/lib/data/models/massage.dart) | Dart | 34 | 0 | 5 | 39 |
+| [lib/data/models/message.dart](/lib/data/models/message.dart) | Dart | 34 | 0 | 5 | 39 |
 | [lib/data/models/post.dart](/lib/data/models/post.dart) | Dart | 49 | 0 | 5 | 54 |
 | [lib/data/models/specific_users_info.dart](/lib/data/models/specific_users_info.dart) | Dart | 9 | 0 | 3 | 12 |
 | [lib/data/models/user_personal_info.dart](/lib/data/models/user_personal_info.dart) | Dart | 51 | 0 | 5 | 56 |
@@ -112,8 +112,8 @@ Total : 207 files,  8107 codes, 512 comments, 1158 blanks, all 9777 lines
 | [lib/domain/usecases/firestoreUserUseCase/getUserInfo/get_specific_users_usecase.dart](/lib/domain/use_cases/user/getUserInfo/get_specific_users_usecase.dart) | Dart | 12 | 0 | 4 | 16 |
 | [lib/domain/usecases/firestoreUserUseCase/getUserInfo/get_user_from_user_name.dart](/lib/domain/use_cases/user/getUserInfo/get_user_from_user_name.dart) | Dart | 11 | 0 | 4 | 15 |
 | [lib/domain/usecases/firestoreUserUseCase/getUserInfo/get_user_info_usecase.dart](/lib/domain/use_cases/user/getUserInfo/get_user_info_usecase.dart) | Dart | 11 | 0 | 4 | 15 |
-| [lib/domain/usecases/firestoreUserUseCase/massage/add_massage.dart](/lib/domain/use_cases/user/massage/add_massage.dart) | Dart | 11 | 0 | 4 | 15 |
-| [lib/domain/usecases/firestoreUserUseCase/massage/get_massages.dart](/lib/domain/use_cases/user/massage/get_massages.dart) | Dart | 11 | 0 | 4 | 15 |
+| [lib/domain/usecases/firestoreUserUseCase/message/add_message.dart](/lib/domain/use_cases/user/message/add_message.dart) | Dart | 11 | 0 | 4 | 15 |
+| [lib/domain/usecases/firestoreUserUseCase/message/get_messages.dart](/lib/domain/use_cases/user/message/get_messages.dart) | Dart | 11 | 0 | 4 | 15 |
 | [lib/domain/usecases/firestoreUserUseCase/update_user_info.dart](/lib/domain/use_cases/user/update_user_info.dart) | Dart | 11 | 0 | 4 | 15 |
 | [lib/domain/usecases/firestoreUserUseCase/upload_profile_image_usecase.dart](/lib/domain/use_cases/user/upload_profile_image_usecase.dart) | Dart | 16 | 0 | 4 | 20 |
 | [lib/domain/usecases/followUseCase/follow_this_user.dart](/lib/domain/use_cases/follow/follow_this_user.dart) | Dart | 10 | 0 | 4 | 14 |
@@ -139,8 +139,8 @@ Total : 207 files,  8107 codes, 512 comments, 1158 blanks, all 9777 lines
 | [lib/presentation/cubit/firebaseAuthCubit/firebase_auth_state.dart](/lib/presentation/cubit/firebaseAuthCubit/firebase_auth_state.dart) | Dart | 13 | 0 | 9 | 22 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart) | Dart | 19 | 0 | 5 | 24 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/add_new_user_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/add_new_user_state.dart) | Dart | 9 | 0 | 6 | 15 |
-| [lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_cubit.dart) | Dart | 28 | 10 | 7 | 45 |
-| [lib/presentation/cubit/firestoreUserInfoCubit/massage/massage_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/massage/cubit/massage_state.dart) | Dart | 21 | 2 | 8 | 31 |
+| [lib/presentation/cubit/firestoreUserInfoCubit/message/message_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart) | Dart | 28 | 10 | 7 | 45 |
+| [lib/presentation/cubit/firestoreUserInfoCubit/message/message_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_state.dart) | Dart | 21 | 2 | 8 | 31 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart) | Dart | 96 | 1 | 10 | 107 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/user_info_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/user_info_state.dart) | Dart | 17 | 6 | 9 | 32 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart) | Dart | 35 | 0 | 6 | 41 |
@@ -166,7 +166,7 @@ Total : 207 files,  8107 codes, 512 comments, 1158 blanks, all 9777 lines
 | [lib/presentation/pages/followers_and_followings_info_page.dart](/lib/presentation/pages/profile/followers_info_page.dart) | Dart | 100 | 0 | 8 | 108 |
 | [lib/presentation/pages/home_page.dart](/lib/presentation/pages/time_line/my_own_time_line/home_page.dart) | Dart | 144 | 0 | 22 | 166 |
 | [lib/presentation/pages/login_page.dart](/lib/presentation/pages/register/login_page.dart) | Dart | 165 | 0 | 12 | 177 |
-| [lib/presentation/pages/massages_page.dart](/lib/presentation/pages/massages/massages_page.dart) | Dart | 52 | 2 | 6 | 60 |
+| [lib/presentation/pages/messages_page.dart](/lib/presentation/pages/messages/messages_page.dart) | Dart | 52 | 2 | 6 | 60 |
 | [lib/presentation/pages/new_post_page.dart](/lib/presentation/pages/profile/create_post_page.dart) | Dart | 151 | 3 | 16 | 170 |
 | [lib/presentation/pages/personal_profile_page.dart](/lib/presentation/pages/profile/personal_profile_page.dart) | Dart | 273 | 0 | 16 | 289 |
 | [lib/presentation/pages/play_this_video.dart](/lib/presentation/pages/video/play_this_video.dart) | Dart | 38 | 0 | 10 | 48 |
@@ -174,7 +174,7 @@ Total : 207 files,  8107 codes, 512 comments, 1158 blanks, all 9777 lines
 | [lib/presentation/pages/shop_page.dart](/lib/presentation/pages/shop/shop_page.dart) | Dart | 10 | 0 | 3 | 13 |
 | [lib/presentation/pages/show_me_who_are_like.dart](/lib/presentation/pages/profile/show_me_who_are_like.dart) | Dart | 69 | 0 | 7 | 76 |
 | [lib/presentation/pages/sign_up_page.dart](/lib/presentation/pages/register/sign_up_page.dart) | Dart | 165 | 11 | 13 | 189 |
-| [lib/presentation/pages/texting_page.dart](/lib/presentation/pages/massages/chatting_page.dart) | Dart | 357 | 13 | 23 | 393 |
+| [lib/presentation/pages/texting_page.dart](/lib/presentation/pages/messages/chatting_page.dart) | Dart | 357 | 13 | 23 | 393 |
 | [lib/presentation/pages/ttry.dart](/lib/presentation/pages/ttry.dart) | Dart | 133 | 11 | 22 | 166 |
 | [lib/presentation/pages/videos_page.dart](/lib/presentation/pages/video/videos_page.dart) | Dart | 202 | 14 | 12 | 228 |
 | [lib/presentation/pages/which_profile_page.dart](/lib/presentation/widgets/belong_to/profile_w/which_profile_page.dart) | Dart | 35 | 0 | 5 | 40 |

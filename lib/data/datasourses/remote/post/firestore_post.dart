@@ -23,6 +23,7 @@ class FirestorePost {
 
   static Future<List<Post>> getPostsInfo(
       {required List<dynamic> postsIds,
+      required String userId,
       required int lengthOfCurrentList}) async {
     List<Post> postsInfo = [];
     int lengthOfOriginPost = postsIds.length;
@@ -36,13 +37,13 @@ class FirestorePost {
       DocumentSnapshot<Map<String, dynamic>> snap =
           await _fireStorePostCollection.doc(postsIds[i]).get();
       if (snap.exists) {
-        Post postReformat = Post.fromSnap(docSnap: snap);
+        Post postReformat = Post.fromQuery(query: snap);
         UserPersonalInfo publisherInfo =
             await FirestoreUser.getUserInfo(postReformat.publisherId);
         postReformat.publisherInfo = publisherInfo;
         postsInfo.add(postReformat);
       } else {
-        return Future.error(StringsManager.userNotExist.tr());
+        FirestoreUser.removeUserPost(postId: postsIds[i]);
       }
     }
     return postsInfo;
@@ -53,7 +54,7 @@ class FirestorePost {
     DocumentSnapshot<Map<String, dynamic>> snap =
         await _fireStorePostCollection.doc(postId).get();
     if (snap.exists) {
-      Post postReformat = Post.fromSnap(docSnap: snap);
+      Post postReformat = Post.fromQuery(query: snap);
       return postReformat.comments;
     } else {
       return Future.error(StringsManager.userNotExist.tr());
@@ -67,7 +68,7 @@ class FirestorePost {
 
     for (int i = 0; i < snap.docs.length; i++) {
       QueryDocumentSnapshot<Map<String, dynamic>> doc = snap.docs[i];
-      Post postReformat = Post.fromSnap(querySnap: doc);
+      Post postReformat = Post.fromQuery(doc: doc);
       UserPersonalInfo publisherInfo =
           await FirestoreUser.getUserInfo(postReformat.publisherId);
       postReformat.publisherInfo = publisherInfo;

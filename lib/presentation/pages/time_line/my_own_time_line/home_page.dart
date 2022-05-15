@@ -9,6 +9,7 @@ import 'package:instagram/core/functions/image_picker.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
@@ -76,7 +77,10 @@ class _HomeScreenState extends State<HomeScreen> {
     PostCubit postCubit = PostCubit.get(context);
     await postCubit
         .getPostsInfo(
-            postsIds: postsIds, isThatForMyPosts: true, lengthOfCurrentList: 10)
+            userId: myPersonalId,
+            postsIds: postsIds,
+            isThatForMyPosts: true,
+            lengthOfCurrentList: index)
         .then((value) {
       Future.delayed(Duration.zero, () {
         setState(() {});
@@ -91,7 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
   //   _showCommentBox.value.dispose();
   //   super.dispose();
   // }
-
 
   @override
   Widget build(BuildContext context) {
@@ -145,8 +148,8 @@ class _HomeScreenState extends State<HomeScreen> {
         if (state is CubitMyPersonalPostsLoaded) {
           postsInfo.value = state.postsInfo;
           return postsInfo.value.isNotEmpty
-              ? inViewNotifier(state,bodyHeight)
-              : emptyMassage();
+              ? inViewNotifier(state, bodyHeight)
+              : emptymessage();
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
           return Center(
@@ -160,13 +163,13 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+
   Widget inViewNotifier(CubitMyPersonalPostsLoaded state, double bodyHeight) {
     return InViewNotifierList(
       onRefreshData: getData,
       postsIds: postsIds,
       isThatEndOfList: isThatEndOfList,
-      onListEndReached: () {
-      },
+      onListEndReached: () {},
       initialInViewIds: const ['0'],
       isInViewPortCondition:
           (double deltaTop, double deltaBottom, double vpHeight) {
@@ -247,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return const ThineCircularProgress();
   }
 
-  Widget emptyMassage() {
+  Widget emptymessage() {
     return Center(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,

@@ -168,12 +168,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
           await userCubit.updateUserPostsInfo(
               userId: personalInfo.userId, postId: postCubit.postId);
           await postCubit.getPostsInfo(
-              postsIds: personalInfo.posts, isThatForMyPosts: true);
+              userId: personalInfo.userId,
+              postsIds: personalInfo.posts,
+              isThatForMyPosts: true);
           setState(() {
             isItDone = true;
           });
-          // Navigator.maybePop(context);
-
         }
       });
 

@@ -6,8 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/followCubit/follow_cubit.dart';
-import 'package:instagram/presentation/pages/massages/chatting_page.dart';
+import 'package:instagram/presentation/pages/messages/chatting_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
@@ -36,6 +38,17 @@ class _ProfilePageState extends State<UserProfilePage> {
     return scaffold();
   }
 
+  Future<void> getData() async {
+    widget.userName.isNotEmpty
+        ? (await BlocProvider.of<FirestoreUserInfoCubit>(context)
+            .getUserFromUserName(widget.userName))
+        : (await BlocProvider.of<FirestoreUserInfoCubit>(context)
+            .getUserInfo(widget.userId, isThatMyPersonalId: false));
+    setState(() {
+      rebuildUserInfo = true;
+    });
+  }
+
   Widget scaffold() {
     return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
       bloc: widget.userName.isNotEmpty
@@ -60,6 +73,7 @@ class _ProfilePageState extends State<UserProfilePage> {
             body: ProfilePage(
               isThatMyPersonalId: false,
               userId: widget.userId,
+              getData: getData,
               userInfo: state.userPersonalInfo,
               widgetsAboveTapBars:
                   widgetsAboveTapBars(state.userPersonalInfo, state),
@@ -123,7 +137,7 @@ class _ProfilePageState extends State<UserProfilePage> {
     return [
       followButton(userInfo, userInfoState),
       const SizedBox(width: 5),
-      massageButton(userInfo),
+      messageButton(userInfo),
       const SizedBox(width: 5),
       const RecommendationPeople(),
       const SizedBox(width: 10),
@@ -178,7 +192,7 @@ class _ProfilePageState extends State<UserProfilePage> {
             isItLoading: isFollowLoading);
   }
 
-  Expanded massageButton(UserPersonalInfo userInfo) {
+  Expanded messageButton(UserPersonalInfo userInfo) {
     return Expanded(
       child: GestureDetector(
         onTap: () async {
@@ -186,14 +200,17 @@ class _ProfilePageState extends State<UserProfilePage> {
             context,
             rootNavigator: true,
           ).push(CupertinoPageRoute(
-            builder: (context) => ChattingPage(
-              userInfo: userInfo,
+            builder: (context) => BlocProvider<MessageBloc>(
+              create: (context) => injector<MessageBloc>(),
+              child: ChattingPage(
+                userInfo: userInfo,
+              ),
             ),
             maintainState: false,
           ));
         },
         child: containerOfFollowText(
-            text: StringsManager.massage.tr(),
+            text: StringsManager.message.tr(),
             isThatFollower: true,
             isItLoading: false),
       ),

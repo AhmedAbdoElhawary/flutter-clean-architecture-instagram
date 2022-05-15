@@ -40,8 +40,8 @@ class StringsManager {
   static const String fromCamera = "fromCamera";
   static const String fromGallery = "fromGallery";
 
-  static const String massage = "massage";
-  static const String massageP = "massageP";
+  static const String message = "message";
+  static const String messageP = "messageP";
   static const String replies = "replies";
   static const String theName = "theName"; //7
   static const String newPost = "newPost";
@@ -67,7 +67,7 @@ class StringsManager {
   static const String following = "following";
 
   static const String facebook = "facebook";
-  static const String sendMassage = "sendMassage";
+  static const String sendmessage = "sendmessage";
 
   static const String changeLanguage = "changeLanguage";
   static const String logOut = "logOut";

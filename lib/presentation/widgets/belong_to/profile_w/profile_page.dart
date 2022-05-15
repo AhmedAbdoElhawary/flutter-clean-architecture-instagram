@@ -1,9 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/post.dart';
@@ -22,11 +24,13 @@ class ProfilePage extends StatefulWidget {
   bool isThatMyPersonalId;
   UserPersonalInfo userInfo;
   List<Widget> widgetsAboveTapBars;
+  final AsyncCallback getData;
   ProfilePage(
       {required this.widgetsAboveTapBars,
       required this.isThatMyPersonalId,
       required this.userInfo,
       required this.userId,
+      required this.getData,
       Key? key})
       : super(key: key);
 
@@ -36,6 +40,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool reBuild = false;
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +70,22 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // getData() async {
+  //   await PostCubit.get(context).getPostsInfo(
+  //       userId: widget.userInfo.userId,
+  //       postsIds: widget.userInfo.posts,
+  //       isThatForMyPosts: widget.isThatMyPersonalId);
+  //   setState(() {
+  //     loading = false;
+  //     reBuild = true;
+  //   });
+  // }
+
   Widget tapBar() {
     return BlocBuilder<PostCubit, PostState>(
       bloc: PostCubit.get(context)
         ..getPostsInfo(
+            userId: widget.userInfo.userId,
             postsIds: widget.userInfo.posts,
             isThatForMyPosts: widget.isThatMyPersonalId),
       buildWhen: (previous, current) {
@@ -153,18 +170,36 @@ class _ProfilePageState extends State<ProfilePage> {
   List<Widget> listOfWidgetsAboveTapBars(
       UserPersonalInfo userInfo, double bodyHeight) {
     return [
-      personalPhotoAndNumberInfo(userInfo, bodyHeight),
-      Padding(
-        padding: const EdgeInsetsDirectional.only(start: 15.0),
+      GestureDetector(
+        onVerticalDragStart: (e) async {
+          setState(() {
+            loading = true;
+          });
+          await widget.getData();
+        },
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(userInfo.name, style: Theme.of(context).textTheme.headline2),
-            ReadMore(userInfo.bio, 4),
-            const SizedBox(height: 10),
-            Row(
-              children: widget.widgetsAboveTapBars,
+            AnimatedSwitcher(
+
+                duration: const Duration(seconds: 1),
+              switchInCurve: Curves.easeIn,
+                child: loading ? customDragLoading(bodyHeight) : Container()),
+            personalPhotoAndNumberInfo(userInfo, bodyHeight),
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 15.0, top: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(userInfo.name,
+                      style: Theme.of(context).textTheme.headline2),
+                  ReadMore(userInfo.bio, 4),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: widget.widgetsAboveTapBars,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -172,58 +207,90 @@ class _ProfilePageState extends State<ProfilePage> {
     ];
   }
 
-  Row personalPhotoAndNumberInfo(UserPersonalInfo userInfo, double bodyHeight) {
-    String hash = "${userInfo.userId.hashCode}personal";
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      Hero(
-        tag: hash,
-        child: Padding(
-          padding: const EdgeInsetsDirectional.only(start: 15.0),
-          child: CircleAvatarOfProfileImage(
-              bodyHeight: bodyHeight * 1.45, userInfo: userInfo, hashTag: hash),
+  Container customDragLoading(double bodyHeight) {
+    return Container(
+      height: bodyHeight * .09,
+      width: double.infinity,
+      color: Theme.of(context).backgroundColor,
+      child: Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 1.5,
+          color: ColorManager.black38,
+          backgroundColor: Theme.of(context).dividerColor,
         ),
       ),
-      personalNumbersInfo(userInfo.posts, StringsManager.posts.tr(), userInfo),
-      personalNumbersInfo(
-          userInfo.followerPeople, StringsManager.followers.tr(), userInfo),
-      personalNumbersInfo(
-          userInfo.followedPeople, StringsManager.following.tr(), userInfo),
-    ]);
+    );
   }
 
-  Expanded personalNumbersInfo(
-      List usersInfo, String text, UserPersonalInfo userInfo) {
-    return Expanded(
-      child: Builder(builder: (builderContext) {
-        return GestureDetector(
-          onTap: () async {
-            if (text != StringsManager.posts.tr()) {
-              await Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => FollowersInfoPage(
-                      userInfo: userInfo,
-                      initialIndex:
-                          usersInfo == userInfo.followerPeople ? 0 : 1)));
-
-              BlocProvider.of<FirestoreUserInfoCubit>(context).getUserInfo(
-                  userInfo.userId,
-                  isThatMyPersonalId: widget.isThatMyPersonalId);
-              setState(() {
-                reBuild = true;
-              });
-            }
-          },
-          child: Column(
-            children: [
-              Text("${usersInfo.length}",
-                  style: getMediumStyle(
-                      color: Theme.of(context).focusColor, fontSize: 20)),
-              Text(text,
-                  style: getNormalStyle(
-                      color: Theme.of(context).focusColor, fontSize: 15))
-            ],
+  Row personalPhotoAndNumberInfo(UserPersonalInfo userInfo, double bodyHeight) {
+    String hash = "${userInfo.userId.hashCode}personal";
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Hero(
+            tag: hash,
+            child: Padding(
+              padding: const EdgeInsetsDirectional.only(start: 15.0, top: 10),
+              child: CircleAvatarOfProfileImage(
+                  bodyHeight: bodyHeight * 1.45,
+                  userInfo: userInfo,
+                  hashTag: hash),
+            ),
           ),
-        );
-      }),
-    );
+          Expanded(
+            child: Column(
+              children: [
+                Container(height: bodyHeight * .055),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    personalNumbersInfo(
+                        userInfo.posts, StringsManager.posts.tr(), userInfo),
+                    personalNumbersInfo(userInfo.followerPeople,
+                        StringsManager.followers.tr(), userInfo),
+                    personalNumbersInfo(userInfo.followedPeople,
+                        StringsManager.following.tr(), userInfo),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ]);
+  }
+
+  Widget personalNumbersInfo(
+      List usersInfo, String text, UserPersonalInfo userInfo) {
+    return Builder(builder: (builderContext) {
+      return GestureDetector(
+        onTap: () async {
+          if (text != StringsManager.posts.tr()) {
+            await Navigator.of(context).push(CupertinoPageRoute(
+                builder: (context) => FollowersInfoPage(
+                    userInfo: userInfo,
+                    initialIndex:
+                        usersInfo == userInfo.followerPeople ? 0 : 1)));
+
+            BlocProvider.of<FirestoreUserInfoCubit>(context).getUserInfo(
+                userInfo.userId,
+                isThatMyPersonalId: widget.isThatMyPersonalId);
+            setState(() {
+              reBuild = true;
+            });
+          }
+        },
+        child: Column(
+          children: [
+            Text("${usersInfo.length}",
+                style: getMediumStyle(
+                    color: Theme.of(context).focusColor, fontSize: 20)),
+            Text(text,
+                style: getNormalStyle(
+                    color: Theme.of(context).focusColor, fontSize: 15))
+          ],
+        ),
+      );
+    });
   }
 }

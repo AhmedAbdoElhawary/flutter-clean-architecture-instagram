@@ -1,5 +1,6 @@
 import 'dart:io';
-import 'package:instagram/data/models/massage.dart';
+import 'package:instagram/data/models/message.dart';
+import 'package:instagram/data/models/sender_info.dart';
 import 'package:instagram/data/models/specific_users_info.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 
@@ -30,13 +31,14 @@ abstract class FirestoreUserRepository {
 
   Future<void> removeThisFollower(String followingUserId, String myPersonalId);
 
-  Future<Massage> sendMassage(
-      {required Massage massageInfo,
+  Future<Message> sendmessage(
+      {required Message messageInfo,
       required String pathOfPhoto,
       required String pathOfRecorded});
 
-  Stream<List<Massage>> getMassages({required String receiverId});
+  Stream<List<Message>> getmessages({required String receiverId});
   Stream<List<UserPersonalInfo>> searchAboutUser({required String name});
-  Future<void> deleteMassage({required Massage massageInfo});
-  Future<List<UserPersonalInfo>> getChatUserInfo({required String userId});
+  Future<void> deletemessage(
+      {required Message messageInfo, Message? replacedMessage});
+  Future<List<SenderInfo>> getChatUserInfo({required String userId});
 }

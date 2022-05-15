@@ -156,6 +156,12 @@ class _CustomGridViewState extends State<CustomGridView> {
           children: [
             GestureDetector(
               onPanStart: (d) {},
+              onForcePressStart: (e){
+                e.pressure;
+              },
+              onLongPressUp: (){
+              },
+
               child: Icon(
                 Icons.favorite_border,
                 color: Theme.of(context).focusColor,

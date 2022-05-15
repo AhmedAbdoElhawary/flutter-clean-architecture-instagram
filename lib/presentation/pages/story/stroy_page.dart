@@ -263,7 +263,7 @@ class _StoryWidgetState extends State<StoryWidget> {
                                           decoration:
                                               const InputDecoration.collapsed(
                                                   hintText: StringsManager
-                                                      .sendMassage,
+                                                      .sendmessage,
                                                   border: InputBorder.none,
                                                   hintStyle: TextStyle(
                                                       color: Colors.grey)),

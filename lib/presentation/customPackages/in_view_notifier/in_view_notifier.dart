@@ -108,7 +108,7 @@ class _InViewNotifierState extends State<InViewNotifier> {
       child: NotificationListener<ScrollNotification>(
         child: SmarterRefresh(
             onRefreshData: widget.onRefreshData,
-            postsIds:widget. postsIds,
+            posts:widget. postsIds,
             isThatEndOfList:widget. isThatEndOfList,
             child: widget.child),
         onNotification: (ScrollNotification notification) {

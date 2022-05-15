@@ -316,6 +316,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.4"
+  extended_tabs:
+    dependency: "direct main"
+    description:
+      name: extended_tabs
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.3.0"
   fading_edge_scrollview:
     dependency: transitive
     description:
