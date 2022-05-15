@@ -10,14 +10,14 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SmarterRefresh extends StatefulWidget {
   final Widget child;
-  final List postsIds;
+  final List posts;
   final ValueNotifier<bool> isThatEndOfList;
   final AsyncValueSetter<int> onRefreshData;
   const SmarterRefresh(
       {required this.onRefreshData,
       required this.child,
       required this.isThatEndOfList,
-      required this.postsIds,
+      required this.posts,
       Key? key})
       : super(key: key);
 
@@ -73,19 +73,19 @@ class _SmarterRefreshState extends State<SmarterRefresh>
             _refreshController.refreshCompleted();
             _refreshController.loadComplete();
             widget.isThatEndOfList.value = false;
-            ids = widget.postsIds;
+            ids = widget.posts;
             setState(() {});
           });
         },
         onLoading: () async {
           if (!widget.isThatEndOfList.value) {
-            widget.onRefreshData(widget.postsIds.length).whenComplete(() {
+            widget.onRefreshData(widget.posts.length).whenComplete(() {
               _refreshController.loadComplete();
-              if (ids.length == widget.postsIds.length) {
+              if (ids.length == widget.posts.length) {
                 _refreshController.loadNoData();
                 widget.isThatEndOfList.value = true;
               } else {
-                ids = widget.postsIds;
+                ids = widget.posts;
               }
               setState(() {});
             });

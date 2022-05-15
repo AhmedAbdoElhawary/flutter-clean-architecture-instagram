@@ -8,7 +8,6 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/message.dart';
 import 'package:instagram/data/models/sender_info.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instagram/presentation/pages/messages/chatting_page.dart';
@@ -16,8 +15,8 @@ import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 
-class messagesPage extends StatelessWidget {
-  const messagesPage({Key? key}) : super(key: key);
+class MessagesPage extends StatelessWidget {
+  const MessagesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +84,8 @@ class messagesPage extends StatelessWidget {
                         context,
                         rootNavigator: true,
                       ).push(CupertinoPageRoute(
-                        builder: (context) => BlocProvider<messageBloc>(
-                          create: (context) => injector<messageBloc>(),
+                        builder: (context) => BlocProvider<MessageBloc>(
+                          create: (context) => injector<MessageBloc>(),
                           child: ChattingPage(
                             userInfo: usersInfo[index].userInfo!,
                           ),

@@ -15,7 +15,7 @@ import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
 import 'package:instagram/presentation/customPackages/audio_recorder/social_media_recoder.dart';
-import 'package:instagram/presentation/widgets/belong_to/massages_w/record_view.dart';
+import 'package:instagram/presentation/widgets/belong_to/messages_w/record_view.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_viewer.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';

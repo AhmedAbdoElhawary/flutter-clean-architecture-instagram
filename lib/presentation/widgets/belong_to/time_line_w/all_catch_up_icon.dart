@@ -15,6 +15,7 @@ class AllCatchUpIcon extends StatelessWidget {
     const double size = 60;
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         ShaderMask(
           child: SizedBox(

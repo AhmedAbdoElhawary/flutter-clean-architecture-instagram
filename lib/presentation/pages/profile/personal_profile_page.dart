@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_svg/svg.dart';
@@ -49,6 +50,17 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     return scaffold();
   }
 
+  Future<void>getData() async {
+    widget.userName.isNotEmpty
+        ? (await BlocProvider.of<FirestoreUserInfoCubit>(context)
+            .getUserFromUserName(widget.userName))
+        : (await BlocProvider.of<FirestoreUserInfoCubit>(context)
+            .getUserInfo(widget.personalId));
+    setState(() {
+      rebuildUserInfo=true;
+    });
+  }
+
   Widget scaffold() {
     return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
       bloc: widget.userName.isNotEmpty
@@ -71,21 +83,15 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       },
       builder: (context, state) {
         if (state is CubitMyPersonalInfoLoaded) {
-          return
-              // SmarterRefresh(
-              // onRefreshData: () async {
-              //   return setState(() {});
-              // },
-              // child:
-              Scaffold(
+          return Scaffold(
             appBar: appBar(state.userPersonalInfo.userName),
             body: ProfilePage(
               isThatMyPersonalId: true,
+              getData: getData,
               userId: state.userPersonalInfo.userId,
               userInfo: state.userPersonalInfo,
               widgetsAboveTapBars: widgetsAboveTapBars(state.userPersonalInfo),
             ),
-            // ),
           );
         } else if (state is CubitGetUserInfoFailed) {
           ToastShow.toastStateError(state);
@@ -142,11 +148,11 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Column columnOfCreateData() {
     return Column(
       children: [
-        createNewPost(),
+        createPost(),
         customDivider(),
         createNewVideo(),
         customDivider(),
-        createNewStory(),
+        createStory(),
         customDivider(),
         createNewLive(),
         customDivider(),
@@ -207,6 +213,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         builder: (context, state) {
       FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
       if (state is CubitAuthSignOut) {
+        Navigator.maybePop(context);
         WidgetsBinding.instance!.addPostFrameCallback((_) async {
           Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
             CupertinoPageRoute(
@@ -245,6 +252,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       child: Builder(builder: (buildContext) {
         return InkWell(
           onTap: () async {
+            Navigator.maybePop(context);
             Future.delayed(Duration.zero, () async {
               UserPersonalInfo result =
                   await Navigator.of(context, rootNavigator: true).push(
@@ -289,28 +297,71 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     );
   }
 
-  GestureDetector createNewStory() {
+  GestureDetector createStory() {
     return GestureDetector(
-        onTap: () async {
-          File? pickImage = await imageCameraPicker();
-          if (pickImage != null) {
-            _getImageDimension(pickImage);
-            await Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(
-                    builder: (context) => CreateStoryPage(storyImage: pickImage),
-                    maintainState: false));
-            setState(() {
-              rebuildUserInfo = true;
-            });
-          }
-        },
+        onTap: () async => showDialog(createNewStory),
         child: createSizedBox(StringsManager.story.tr(),
             nameOfPath: IconsAssets.addInstagramStoryIcon));
+  }
+
+  showDialog(ValueChanged<bool> method) async {
+    showAnimatedDialog(
+        context: context,
+        curve: Curves.easeIn,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+              scrollable: true,
+              backgroundColor: Theme.of(context).primaryColor,
+              elevation: 5,
+              content: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        Navigator.maybePop(context);
+                        method(true);
+                        WidgetsBinding.instance!.addPostFrameCallback((_) {
+                          setState(() {});
+                        });
+                      },
+                      child: Text(StringsManager.fromCamera.tr()),
+                    ),
+                    const SizedBox(height: 15),
+                    GestureDetector(
+                      onTap: () async {
+                        Navigator.maybePop(context);
+                        method(false);
+                        WidgetsBinding.instance!.addPostFrameCallback((_) {
+                          setState(() {});
+                        });
+                      },
+                      child: Text(StringsManager.fromGallery.tr()),
+                    ),
+                  ]),
+            ));
+  }
+
+  createNewStory(bool isThatFromCamera) async {
+    Navigator.maybePop(context);
+    File? pickImage = isThatFromCamera
+        ? await imageCameraPicker()
+        : await imageGalleryPicker();
+    if (pickImage != null) {
+      _getImageDimension(pickImage);
+      await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+          builder: (context) => CreateStoryPage(storyImage: pickImage),
+          maintainState: false));
+      setState(() {
+        rebuildUserInfo = true;
+      });
+    }
   }
 
   GestureDetector createNewVideo() {
     return GestureDetector(
         onTap: () async {
+          Navigator.maybePop(context);
           File? pickVideo = await videoCameraPicker();
           if (pickVideo != null) {
             _getImageDimension(pickVideo);
@@ -345,26 +396,28 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     );
   }
 
-  GestureDetector createNewPost() {
-    return GestureDetector(
-        onTap: () async {
-          File? pickImage = await imageGalleryPicker();
+  createNewPost(bool isThatFromCamera) async {
+    Navigator.maybePop(context);
+    File? pickImage = isThatFromCamera
+        ? await imageCameraPicker()
+        : await imageGalleryPicker();
+    if (pickImage != null) {
+      _getImageDimension(pickImage);
+      await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+          builder: (context) {
+            return CreatePostPage(
+                selectedFile: pickImage, aspectRatio: imageSize.aspectRatio);
+          },
+          maintainState: false));
+      setState(() {
+        rebuildUserInfo = true;
+      });
+    }
+  }
 
-          if (pickImage != null) {
-            _getImageDimension(pickImage);
-            await Navigator.of(context, rootNavigator: true)
-                .push(CupertinoPageRoute(
-                    builder: (context) {
-                      return CreatePostPage(
-                          selectedFile: pickImage,
-                          aspectRatio: imageSize.aspectRatio);
-                    },
-                    maintainState: false));
-            setState(() {
-              rebuildUserInfo = true;
-            });
-          }
-        },
+  GestureDetector createPost() {
+    return GestureDetector(
+        onTap: () => showDialog(createNewPost),
         child: createSizedBox(StringsManager.post.tr()));
   }
 
