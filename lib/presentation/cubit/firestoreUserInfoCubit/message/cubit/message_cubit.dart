@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/data/models/message.dart';
-import 'package:instagram/domain/use_cases/user/massage/add_message.dart';
-import 'package:instagram/domain/use_cases/user/massage/delete_message.dart';
+import 'package:instagram/domain/use_cases/user/message/add_message.dart';
+import 'package:instagram/domain/use_cases/user/message/delete_message.dart';
 
 part 'message_state.dart';
 

@@ -26,7 +26,7 @@ class CubitGettingSpecificUsersFailed extends UsersInfoState {
 class CubitGettingChatUsersInfoLoading extends UsersInfoState {}
 
 class CubitGettingChatUsersInfoLoaded extends UsersInfoState {
-  List<UserPersonalInfo> usersInfo;
+  List<SenderInfo> usersInfo;
 
   CubitGettingChatUsersInfoLoaded(this.usersInfo);
 }

@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
-import 'package:instagram/data/datasourses/remote/user/massage.dart';
-import 'package:instagram/data/models/massage.dart';
+import 'package:instagram/data/datasourses/remote/user/message.dart';
+import 'package:instagram/data/models/message.dart';
+import 'package:instagram/data/models/sender_info.dart';
 import 'package:instagram/data/models/specific_users_info.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import '../../domain/repositories/user_repository.dart';
@@ -134,56 +135,58 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Future<Massage> sendMassage(
-      {required Massage massageInfo,
+  Future<Message> sendmessage(
+      {required Message messageInfo,
       required String pathOfPhoto,
       required String pathOfRecorded}) async {
     try {
       if (pathOfPhoto.isNotEmpty) {
         String imageUrl = await FirebaseStoragePost.uploadFile(
-            File(pathOfPhoto), "massagesFiles");
-        massageInfo.imageUrl = imageUrl;
+            File(pathOfPhoto), "messagesFiles");
+        messageInfo.imageUrl = imageUrl;
       }
       if (pathOfRecorded.isNotEmpty) {
         String recordedUrl = await FirebaseStoragePost.uploadFile(
-            File(pathOfRecorded), "massagesFiles");
-        massageInfo.recordedUrl = recordedUrl;
+            File(pathOfRecorded), "messagesFiles");
+        messageInfo.recordedUrl = recordedUrl;
       }
 
-      Massage myMassageInfo = await FireStoreMassage.sendMassage(
-          userId: massageInfo.senderId,
-          chatId: massageInfo.receiverId,
-          massage: massageInfo);
-      await FireStoreMassage.sendMassage(
-          userId: massageInfo.receiverId,
-          chatId: massageInfo.senderId,
-          massage: massageInfo);
+      Message mymessageInfo = await FireStoreMessage.sendMessage(
+          userId: messageInfo.senderId,
+          chatId: messageInfo.receiverId,
+          message: messageInfo);
+      await FireStoreMessage.sendMessage(
+          userId: messageInfo.receiverId,
+          chatId: messageInfo.senderId,
+          message: messageInfo);
 
-      return myMassageInfo;
+      return mymessageInfo;
     } catch (e) {
       return Future.error(e.toString());
     }
   }
 
   @override
-  Stream<List<Massage>> getMassages({required String receiverId}) =>
-      FireStoreMassage.getMassages(receiverId: receiverId);
+  Stream<List<Message>> getmessages({required String receiverId}) =>
+      FireStoreMessage.getMessages(receiverId: receiverId);
 
   @override
   Stream<List<UserPersonalInfo>> searchAboutUser({required String name}) =>
       FirestoreUser.searchAboutUser(name: name);
 
   @override
-  Future<void> deleteMassage({required Massage massageInfo}) async {
+  Future<void> deletemessage(
+      {required Message messageInfo, Message? replacedMessage}) async {
     try {
-      await FireStoreMassage.deleteMassage(
-          userId: massageInfo.senderId,
-          chatId: massageInfo.receiverId,
-          massageId: massageInfo.massageUid);
-      if (massageInfo.massage.isEmpty) {
-        String recordedUrl = massageInfo.recordedUrl;
-        await FirebaseStoragePost.deleteImageFromStorage(
-            recordedUrl.isNotEmpty ? recordedUrl : massageInfo.imageUrl);
+      await FireStoreMessage.deleteMessage(
+          userId: messageInfo.senderId,
+          chatId: messageInfo.receiverId,
+          messageId: messageInfo.messageUid);
+      if (replacedMessage != null) {
+        await FireStoreMessage.updateLastMessage(
+            userId: messageInfo.receiverId,
+            chatId: messageInfo.senderId,
+            message: replacedMessage);
       }
     } catch (e) {
       return Future.error(e.toString());
@@ -191,13 +194,12 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Future<List<UserPersonalInfo>> getChatUserInfo(
-      {required String userId}) async {
+  Future<List<SenderInfo>> getChatUserInfo({required String userId}) async {
     try {
-      List<String> allUsersIds =
+      List<SenderInfo> allUsersIds =
           await FirestoreUser.getChatUserInfo(userId: userId);
-      List<UserPersonalInfo> allUsersInfo =
-          await FirestoreUser.getSpecificUsersInfo(allUsersIds);
+      List<SenderInfo> allUsersInfo =
+          await FirestoreUser.extractUsersIds(usersInfo: allUsersIds);
       return allUsersInfo;
     } catch (e) {
       return Future.error(e.toString());
