@@ -27,7 +27,9 @@ class FirestorePostRepositoryImpl implements FirestorePostRepository {
       required int lengthOfCurrentList}) async {
     try {
       return await FirestorePost.getPostsInfo(
-          postsIds: postsIds,userId:userId, lengthOfCurrentList: lengthOfCurrentList);
+          postsIds: postsIds,
+          userId: userId,
+          lengthOfCurrentList: lengthOfCurrentList);
     } catch (e) {
       return Future.error(e.toString());
     }
@@ -68,6 +70,24 @@ class FirestorePostRepositoryImpl implements FirestorePostRepository {
     try {
       return await FirestorePost.removeTheLikeOnThisPost(
           postId: postId, userId: userId);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  @override
+  Future<void> deletePost({required Post postInfo}) async {
+    try {
+      await FirestorePost.deletePost(postInfo: postInfo);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  @override
+  Future<Post> updatePost({required Post postInfo}) async {
+    try {
+      return await FirestorePost.updatePost(postInfo: postInfo);
     } catch (e) {
       return Future.error(e.toString());
     }
