@@ -8,19 +8,21 @@ import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/animated_dialog.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
-import 'package:instagram/presentation/widgets/global/image_display.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_posts_display.dart';
 
 // ignore: must_be_immutable
 class CustomGridView extends StatefulWidget {
-  List<Post> postsInfo;
-  final String userId;
+  Post postClickedInfo;
+  final List<Post> postsInfo;
   final bool isThatProfile;
+  final int index;
 
   CustomGridView(
-      {required this.userId,
+      {required this.index,
       required this.postsInfo,
       this.isThatProfile = true,
+      required this.postClickedInfo,
       Key? key})
       : super(key: key);
 
@@ -33,57 +35,32 @@ class _CustomGridViewState extends State<CustomGridView> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.postsInfo.isNotEmpty
-        ? StaggeredGridView.countBuilder(
-            padding: const EdgeInsetsDirectional.only(bottom: 1.5, top: 1.5),
-            crossAxisSpacing: 1.5,
-            mainAxisSpacing: 1.5,
-            crossAxisCount: 3,
-            primary: false,
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: widget.postsInfo.length,
-            itemBuilder: (context, index) {
-              return createGridTileWidget(
-                  widget.postsInfo[index], widget.postsInfo, index);
-            },
-            staggeredTileBuilder: (index) {
-              double num = widget.postsInfo[index].isThatImage ? 1 : 2;
-              return StaggeredTile.count(1, num);
-            },
-          )
-        : Center(
-            child: Text(
-            StringsManager.noPosts.tr(),
-            style: Theme.of(context).textTheme.bodyText1,
-          ));
+    return createGridTileWidget();
   }
 
-  Widget createGridTileWidget(
-          Post postClickedInfo, List<Post> postsInfo, int index) =>
-      Builder(
+  Widget createGridTileWidget() => Builder(
         builder: (context) => GestureDetector(
           onTap: () {
-            List<Post> customPostsInfo = postsInfo;
+            List<Post> customPostsInfo = widget.postsInfo;
             customPostsInfo.removeWhere(
-                (value) => value.postUid == postClickedInfo.postUid);
-            customPostsInfo.insert(0, postClickedInfo);
+                (value) => value.postUid == widget.postClickedInfo.postUid);
+            customPostsInfo.insert(0, widget.postClickedInfo);
             Navigator.of(context).push(CupertinoPageRoute(
               builder: (context) => CustomPostsDisplay(
-                postsInfo: postsInfo,
+                postsInfo: widget.postsInfo,
                 isThatProfile: widget.isThatProfile,
               ),
             ));
           },
           onLongPress: () {
-            _popupDialog = _createPopupDialog(postClickedInfo);
+            _popupDialog = _createPopupDialog(widget.postClickedInfo);
             Overlay.of(context)!.insert(_popupDialog!);
           },
           onLongPressEnd: (details) => _popupDialog?.remove(),
-          child: postClickedInfo.isThatImage
+          child: widget.postClickedInfo.isThatImage
               ? ImageDisplay(
-                  imageUrl: postClickedInfo.postUrl, boxFit: BoxFit.cover)
-              : PlayThisVideo(videoUrl: postClickedInfo.postUrl, play: false),
+                  imageUrl: widget.postClickedInfo.postUrl, boxFit: BoxFit.cover)
+              : PlayThisVideo(videoUrl: widget.postClickedInfo.postUrl, play: false),
         ),
       );
 
@@ -156,12 +133,10 @@ class _CustomGridViewState extends State<CustomGridView> {
           children: [
             GestureDetector(
               onPanStart: (d) {},
-              onForcePressStart: (e){
+              onForcePressStart: (e) {
                 e.pressure;
               },
-              onLongPressUp: (){
-              },
-
+              onLongPressUp: () {},
               child: Icon(
                 Icons.favorite_border,
                 color: Theme.of(context).focusColor,
