@@ -34,7 +34,7 @@ class _GetMyPersonalIdState extends State<GetMyPersonalId> {
         bloc: FirestoreUserInfoCubit.get(context)
           ..getUserInfo(widget.myPersonalId),
         builder: (context, userState) {
-          WidgetsBinding.instance!.addPostFrameCallback((_) async {
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
             if (userState is CubitMyPersonalInfoLoaded) {
               if (!isHeMovedToHome) {
                 myPersonalId = widget.myPersonalId;

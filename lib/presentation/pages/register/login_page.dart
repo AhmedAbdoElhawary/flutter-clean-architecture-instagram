@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
     if (authState is CubitAuthConfirmed) {
       onAuthConfirmed(getUserCubit, authCubit);
     } else if (authState is CubitAuthFailed) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         setState(() {
           isUserIdReady = true;
         });
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
 
   onAuthConfirmed(
       FirestoreUserInfoCubit getUserCubit, FirebaseAuthCubit authCubit) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       await getUserCubit.getUserInfo(authCubit.user!.uid);
       String userId = authCubit.user!.uid;
       setState(() {

@@ -99,8 +99,8 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
       initialInViewIds: const ['0'],
       isInViewPortCondition:
           (double deltaTop, double deltaBottom, double viewPortDimension) {
-        return deltaTop < (0.5 * viewPortDimension) &&
-            deltaBottom > (0.7 * viewPortDimension);
+        return deltaTop < (0.6 * viewPortDimension) &&
+            deltaBottom > (0.1 * viewPortDimension);
       },
     );
   }

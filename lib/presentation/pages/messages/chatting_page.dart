@@ -51,7 +51,7 @@ class _ChattingPageState extends State<ChattingPage>
 
   Future<void> scrollToLastIndex(BuildContext context) async {
     if (globalmessagesInfo.length > 1) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         setState(() {
           itemScrollController.scrollTo(
               index: globalmessagesInfo.length - 1,
@@ -348,7 +348,7 @@ class _ChattingPageState extends State<ChattingPage>
             unSend &&
             indexOfGarbagemessage != null &&
             isDeletemessageDone) {
-          WidgetsBinding.instance!.addPostFrameCallback((_) async {
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
             setState(() {
               isDeletemessageDone = false;
               unSend = false;
@@ -376,7 +376,7 @@ class _ChattingPageState extends State<ChattingPage>
                     GestureDetector(
                         onTap: () async {
                           if (deleteThismessage != null) {
-                            WidgetsBinding.instance!
+                            WidgetsBinding.instance
                                 .addPostFrameCallback((_) async {
                               setState(() {
                                 isDeletemessageDone = true;
@@ -429,7 +429,7 @@ class _ChattingPageState extends State<ChattingPage>
               SocialMediaRecorder(
                 showIcons: showIcons,
                 sendRequestFunction: (File soundFile) {
-                  WidgetsBinding.instance!.addPostFrameCallback((_) async {
+                  WidgetsBinding.instance.addPostFrameCallback((_) async {
                     setState(() {
                       records = soundFile.path;
                       MessageCubit messageCubit = MessageCubit.get(context);
@@ -469,7 +469,7 @@ class _ChattingPageState extends State<ChattingPage>
           onTap: () async {
             File? pickImage = await imageCameraPicker();
             if (pickImage != null) {
-              WidgetsBinding.instance!.addPostFrameCallback((_) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
                 setState(() {
                   ismessageLoaded = true;
                   newmessageInfo = newmessage(isThatImage: true);
@@ -565,7 +565,7 @@ class _ChattingPageState extends State<ChattingPage>
         onTap: () async {
           File? pickImage = await imageGalleryPicker();
           if (pickImage != null) {
-            WidgetsBinding.instance!.addPostFrameCallback((_) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
               setState(() {
                 ismessageLoaded = true;
                 newmessageInfo = newmessage(isThatImage: true);

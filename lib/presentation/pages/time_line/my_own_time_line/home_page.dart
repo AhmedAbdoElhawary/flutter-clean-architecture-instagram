@@ -400,7 +400,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () async {
                             await createNewStory();
                             await getData(0);
-                            WidgetsBinding.instance!.addPostFrameCallback((_) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
                               setState(() {});
                             });
                           },
@@ -411,7 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () async {
                             await createNewStory(isThatFromCamera: false);
                             await getData(0);
-                            WidgetsBinding.instance!.addPostFrameCallback((_) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
                               setState(() {});
                             });
                           },
