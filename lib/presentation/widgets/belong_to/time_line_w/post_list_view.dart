@@ -23,7 +23,7 @@ import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_vie
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
-import 'package:instagram/presentation/widgets/global/image_display.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_text.dart';
 
 class PostImage extends StatefulWidget {

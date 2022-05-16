@@ -1,9 +1,6 @@
 import 'dart:ui';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/animated_dialog.dart';
@@ -12,25 +9,27 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_imag
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_posts_display.dart';
 
 // ignore: must_be_immutable
-class CustomGridView extends StatefulWidget {
+class CustomGridViewDisplay extends StatefulWidget {
   Post postClickedInfo;
   final List<Post> postsInfo;
   final bool isThatProfile;
   final int index;
+  final bool playThisVideo;
 
-  CustomGridView(
+  CustomGridViewDisplay(
       {required this.index,
       required this.postsInfo,
       this.isThatProfile = true,
+      this.playThisVideo = false,
       required this.postClickedInfo,
       Key? key})
       : super(key: key);
 
   @override
-  State<CustomGridView> createState() => _CustomGridViewState();
+  State<CustomGridViewDisplay> createState() => _CustomGridViewDisplayState();
 }
 
-class _CustomGridViewState extends State<CustomGridView> {
+class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   OverlayEntry? _popupDialog;
 
   @override
@@ -59,8 +58,10 @@ class _CustomGridViewState extends State<CustomGridView> {
           onLongPressEnd: (details) => _popupDialog?.remove(),
           child: widget.postClickedInfo.isThatImage
               ? ImageDisplay(
-                  imageUrl: widget.postClickedInfo.postUrl, boxFit: BoxFit.cover)
-              : PlayThisVideo(videoUrl: widget.postClickedInfo.postUrl, play: false),
+                  imageUrl: widget.postClickedInfo.postUrl,
+                  boxFit: BoxFit.cover)
+              : PlayThisVideo(
+                  videoUrl: widget.postClickedInfo.postUrl, play: widget.playThisVideo),
         ),
       );
 

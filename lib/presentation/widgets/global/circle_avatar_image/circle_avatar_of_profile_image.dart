@@ -166,7 +166,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
 
   Stack stackOfImage(String profileImage) {
     return Stack(
-      alignment: Alignment.topCenter,
+      alignment: Alignment.center,
       children: [
         if (widget.userInfo.stories.isNotEmpty) ...[
           if (_sharePrefs.getBool(widget.userInfo.userId) != null) ...[
