@@ -56,7 +56,7 @@ Total : 56 files,  1364 codes, -558 comments, 138 blanks, all 944 lines
 | [lib/presentation/pages/videos_page.dart](/lib/presentation/pages/video/videos_page.dart) | Dart | 192 | 14 | 9 | 215 |
 | [lib/presentation/pages/which_profile_page.dart](/lib/presentation/widgets/belong_to/profile_w/which_profile_page.dart) | Dart | 21 | 0 | 2 | 23 |
 | [lib/presentation/widgets/commentator.dart](/lib/presentation/widgets/belong_to/comments_w/commentator.dart) | Dart | 12 | -165 | -4 | -157 |
-| [lib/presentation/widgets/custom_grid_view.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view.dart) | Dart | 36 | 9 | 3 | 48 |
+| [lib/presentation/widgets/custom_grid_view.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart) | Dart | 36 | 9 | 3 | 48 |
 | [lib/presentation/widgets/custom_videos_grid_view.dart](/lib/presentation/widgets/belong_to/profile_w/custom_videos_grid_view.dart) | Dart | 138 | 1 | 12 | 151 |
 | [lib/presentation/widgets/fade_animation.dart](/lib/presentation/widgets/global/aimation/fade_animation.dart) | Dart | 50 | 0 | 10 | 60 |
 | [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 4 | 0 | -1 | 3 |
