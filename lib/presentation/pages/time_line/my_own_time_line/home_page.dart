@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
           postsInfo.value = state.postsInfo;
           return postsInfo.value.isNotEmpty
               ? inViewNotifier(state, bodyHeight)
-              : emptymessage();
+              : emptyMessage();
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);
           return Center(
@@ -169,7 +169,6 @@ class _HomeScreenState extends State<HomeScreen> {
       onRefreshData: getData,
       postsIds: postsIds,
       isThatEndOfList: isThatEndOfList,
-      onListEndReached: () {},
       initialInViewIds: const ['0'],
       isInViewPortCondition:
           (double deltaTop, double deltaBottom, double vpHeight) {
@@ -185,7 +184,6 @@ class _HomeScreenState extends State<HomeScreen> {
               return InViewNotifierWidget(
                 id: '$index',
                 builder: (_, bool isInView, __) {
-                  if (isInView) {}
                   return columnOfWidgets(bodyHeight, index, isInView);
                 },
               );
@@ -250,17 +248,17 @@ class _HomeScreenState extends State<HomeScreen> {
     return const ThineCircularProgress();
   }
 
-  Widget emptymessage() {
+  Widget emptyMessage() {
     return Center(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          StringsManager.noPosts,
+          StringsManager.noPosts.tr(),
           style: getNormalStyle(color: Theme.of(context).focusColor),
         ),
         Text(
-          StringsManager.tryAddPost,
+          StringsManager.tryAddPost.tr(),
           style: getNormalStyle(color: Theme.of(context).focusColor),
         ),
       ],
