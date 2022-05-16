@@ -213,7 +213,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         builder: (context, state) {
       FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
       if (state is CubitAuthSignOut) {
-        WidgetsBinding.instance!.addPostFrameCallback((_) async {
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
           sharePrefs.clear();
           Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
             CupertinoPageRoute(
@@ -320,7 +320,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
                       onTap: () async {
                         Navigator.maybePop(context);
                         method(true);
-                        WidgetsBinding.instance!.addPostFrameCallback((_) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
                           setState(() {});
                         });
                       },
@@ -332,7 +332,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
                       onTap: () async {
                         Navigator.maybePop(context);
                         method(false);
-                        WidgetsBinding.instance!.addPostFrameCallback((_) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
                           setState(() {});
                         });
                       },

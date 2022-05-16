@@ -104,7 +104,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
         if (storyCubit.storyId != '') {
           await userCubit.updateStoriesPostsInfo(
               userId: personalInfo.userId, storyId: storyCubit.storyId);
-          WidgetsBinding.instance!.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             setState(() {
               isItDone = true;
               Navigator.maybePop(context);

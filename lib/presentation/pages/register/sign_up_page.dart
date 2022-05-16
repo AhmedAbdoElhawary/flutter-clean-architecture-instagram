@@ -80,7 +80,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   moveToMain(CubitAuthConfirmed authState) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => MainScreen(authState.user.uid)),

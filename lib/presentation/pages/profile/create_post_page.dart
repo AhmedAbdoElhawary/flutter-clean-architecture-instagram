@@ -159,7 +159,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     setState(() {
       isItDone = false;
     });
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       PostCubit postCubit =
           BlocProvider.of<PostCubit>(builder2context, listen: false);
 
