@@ -44,7 +44,10 @@ class PostCubit extends Cubit<PostState> {
       int lengthOfCurrentList = 0}) async {
     emit(CubitPostLoading());
     await _getPostsInfoUseCase
-        .call(paramsOne: postsIds, paramsTwo:userId,paramsThree: lengthOfCurrentList)
+        .call(
+            paramsOne: postsIds,
+            paramsTwo: userId,
+            paramsThree: lengthOfCurrentList)
         .then((postsInfo) {
       if (isThatForMyPosts) {
         myPostsInfo = postsInfo;

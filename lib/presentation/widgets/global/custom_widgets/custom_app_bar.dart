@@ -9,7 +9,7 @@ import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instagram/presentation/pages/messages/messages_page.dart';
-import 'package:instagram/presentation/widgets/global/image_display.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
 
 class CustomAppBar {
   static AppBar basicAppBar(BuildContext context) {

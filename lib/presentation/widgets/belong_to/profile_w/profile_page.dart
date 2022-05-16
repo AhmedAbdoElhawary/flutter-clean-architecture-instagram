@@ -12,7 +12,7 @@ import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/profile/followers_info_page.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_grid_view.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_grid_view.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_videos_grid_view.dart';
 import '../../../../data/models/user_personal_info.dart';
 import '../../global/circle_avatar_image/circle_avatar_of_profile_image.dart';
@@ -136,10 +136,10 @@ class _ProfilePageState extends State<ProfilePage> {
     return Expanded(
       child: TabBarView(
         children: [
-          CustomGridView(postsInfo: imagesPostsInfo, userId: widget.userId),
+          ProfileGridView(postsInfo: imagesPostsInfo, userId: widget.userId),
           CustomVideosGridView(
               postsInfo: videosPostsInfo, userId: widget.userId),
-          CustomGridView(postsInfo: imagesPostsInfo, userId: widget.userId),
+          ProfileGridView(postsInfo: imagesPostsInfo, userId: widget.userId),
         ],
       ),
     );
@@ -180,9 +180,8 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           children: [
             AnimatedSwitcher(
-
                 duration: const Duration(seconds: 1),
-              switchInCurve: Curves.easeIn,
+                switchInCurve: Curves.easeIn,
                 child: loading ? customDragLoading(bodyHeight) : Container()),
             personalPhotoAndNumberInfo(userInfo, bodyHeight),
             Padding(

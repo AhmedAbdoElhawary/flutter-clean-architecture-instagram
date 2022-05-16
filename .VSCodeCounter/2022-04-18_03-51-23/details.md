@@ -185,7 +185,7 @@ Total : 207 files,  8107 codes, 512 comments, 1158 blanks, all 9777 lines
 | [lib/presentation/widgets/commentator.dart](/lib/presentation/widgets/belong_to/comments_w/commentator.dart) | Dart | 300 | 1 | 10 | 311 |
 | [lib/presentation/widgets/custom_app_bar.dart](/lib/presentation/widgets/global/custom_widgets/custom_app_bar.dart) | Dart | 38 | 0 | 2 | 40 |
 | [lib/presentation/widgets/custom_circular_progress.dart](/lib/presentation/widgets/global/custom_widgets/custom_circular_progress.dart) | Dart | 20 | 0 | 3 | 23 |
-| [lib/presentation/widgets/custom_grid_view.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view.dart) | Dart | 152 | 9 | 12 | 173 |
+| [lib/presentation/widgets/custom_grid_view.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart) | Dart | 152 | 9 | 12 | 173 |
 | [lib/presentation/widgets/custom_posts_display.dart](/lib/presentation/widgets/custom_posts_display.dart) | Dart | 16 | 0 | 4 | 20 |
 | [lib/presentation/widgets/custom_text_field.dart](/lib/presentation/widgets/global/custom_widgets/custom_text_field.dart) | Dart | 37 | 0 | 3 | 40 |
 | [lib/presentation/widgets/custom_videos_grid_view.dart](/lib/presentation/widgets/belong_to/profile_w/custom_videos_grid_view.dart) | Dart | 138 | 1 | 12 | 151 |

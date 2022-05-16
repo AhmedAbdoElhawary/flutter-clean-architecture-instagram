@@ -220,12 +220,12 @@ Total : 247 files,  9782 codes, 1017 comments, 1334 blanks, all 12133 lines
 | [lib/presentation/widgets/create_post.dart](/lib/presentation/widgets/create_post.dart) | Dart | 0 | 44 | 1 | 45 |
 | [lib/presentation/widgets/custom_app_bar.dart](/lib/presentation/widgets/global/custom_widgets/custom_app_bar.dart) | Dart | 39 | 0 | 2 | 41 |
 | [lib/presentation/widgets/custom_circular_progress.dart](/lib/presentation/widgets/global/custom_widgets/custom_circular_progress.dart) | Dart | 20 | 0 | 3 | 23 |
-| [lib/presentation/widgets/custom_grid_view.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view.dart) | Dart | 150 | 3 | 12 | 165 |
+| [lib/presentation/widgets/custom_grid_view.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart) | Dart | 150 | 3 | 12 | 165 |
 | [lib/presentation/widgets/custom_posts_display.dart](/lib/presentation/widgets/custom_posts_display.dart) | Dart | 17 | 1 | 4 | 22 |
 | [lib/presentation/widgets/custom_text_field.dart](/lib/presentation/widgets/global/custom_widgets/custom_text_field.dart) | Dart | 37 | 0 | 3 | 40 |
 | [lib/presentation/widgets/custom_videos_grid_view.dart](/lib/presentation/widgets/belong_to/profile_w/custom_videos_grid_view.dart) | Dart | 138 | 3 | 12 | 153 |
 | [lib/presentation/widgets/fade_animation.dart](/lib/presentation/widgets/global/aimation/fade_animation.dart) | Dart | 50 | 0 | 10 | 60 |
-| [lib/presentation/widgets/fade_in_image.dart](/lib/presentation/widgets/global/image_display.dart) | Dart | 43 | 0 | 4 | 47 |
+| [lib/presentation/widgets/fade_in_image.dart](/lib/presentation/widgets/global/custom_widgets/custom_image_display.dart) | Dart | 43 | 0 | 4 | 47 |
 | [lib/presentation/widgets/instagram_story_swipe.dart](/lib/presentation/widgets/belong_to/story_w/story_swipe.dart) | Dart | 86 | 0 | 15 | 101 |
 | [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 73 | 1 | 4 | 78 |
 | [lib/presentation/widgets/or_text.dart](/lib/presentation/widgets/belong_to/register_w/or_text.dart) | Dart | 27 | 0 | 3 | 30 |

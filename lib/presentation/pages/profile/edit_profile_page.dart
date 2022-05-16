@@ -10,7 +10,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
-import 'package:instagram/presentation/widgets/global/image_display.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
 import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../../../core/functions/toast_show.dart';
 

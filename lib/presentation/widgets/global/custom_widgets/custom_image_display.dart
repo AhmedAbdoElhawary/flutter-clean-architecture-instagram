@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 
 class ImageDisplay extends StatefulWidget {
   final String imageUrl;
@@ -46,7 +45,7 @@ class _ImageDisplayState extends State<ImageDisplay> {
         }
         return Center(
           child: widget.circularLoading
-              ? buildCircularProgress(widget.aspectRatio)
+              ? loadingWidget(widget.aspectRatio)
               : const CircleAvatar(
                   radius: 15, backgroundColor: ColorManager.lowOpacityGrey),
         );
@@ -62,7 +61,7 @@ class _ImageDisplayState extends State<ImageDisplay> {
     );
   }
 
-  Widget buildCircularProgress(double aspectRatio) {
+  Widget loadingWidget(double aspectRatio) {
     return aspectRatio == 0
         ? buildSizedBox()
         : AspectRatio(
@@ -71,10 +70,10 @@ class _ImageDisplayState extends State<ImageDisplay> {
           );
   }
 
-  SizedBox buildSizedBox() {
-    return const SizedBox(
+  Widget buildSizedBox() {
+    return  Container(
       width: double.infinity,
-      child: ThineCircularProgress(),
+      color: ColorManager.black26,
     );
   }
 }

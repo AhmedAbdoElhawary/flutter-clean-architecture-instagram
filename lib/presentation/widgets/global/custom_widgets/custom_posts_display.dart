@@ -37,6 +37,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
   }
 
   Future<void> getData(int index) async {
+    await Future.delayed(const Duration(seconds: 1));
     if (widget.postsInfo.length > index + 5) {
       postsInfo += widget.postsInfo.sublist(index, index + 5);
     } else {
@@ -60,41 +61,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
           widget.isThatProfile
               ? StringsManager.posts.tr()
               : StringsManager.explore.tr()),
-      body: SmarterRefresh(
-        onRefreshData: getData,
-        posts: postsInfo,
-        isThatEndOfList: isThatEndOfList,
-        child: inView(bodyHeight),
-      ),
-    );
-  }
-
-  Widget inView(double bodyHeight) {
-    return SingleChildScrollView(
-      child: NotificationListener(
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          primary: false,
-          controller: scrollController,
-          itemCount: postsInfo.length,
-          itemBuilder: (ctx, index) {
-            return columnOfWidgets(
-                bodyHeight, postsInfo[index], index, index == centerItemIndex);
-          },
-        ),
-        onNotification: (_) {
-          int calculatedIndex =
-              ((scrollController.position.pixels + bodyHeight / 2) / bodyHeight)
-                  .floor();
-          if (calculatedIndex != centerItemIndex) {
-            setState(() {
-              centerItemIndex = calculatedIndex;
-            });
-          }
-          return true;
-        },
-      ),
+      body: inViewNotifier(bodyHeight),
     );
   }
 
@@ -119,7 +86,6 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
               return InViewNotifierWidget(
                 id: '$index',
                 builder: (_, bool isInView, __) {
-                  if (isInView) {}
                   return columnOfWidgets(
                       bodyHeight, postsInfo[index], index, isInView);
                 },

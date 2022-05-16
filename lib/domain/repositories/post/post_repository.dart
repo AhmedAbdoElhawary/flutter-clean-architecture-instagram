@@ -13,4 +13,6 @@ abstract class FirestorePostRepository {
       {required String postId, required String userId});
   Future<void> removeTheLikeOnThisPost(
       {required String postId, required String userId});
+  Future<void> deletePost({required Post postInfo});
+  Future<Post> updatePost({required Post postInfo});
 }

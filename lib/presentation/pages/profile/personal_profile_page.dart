@@ -50,14 +50,14 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     return scaffold();
   }
 
-  Future<void>getData() async {
+  Future<void> getData() async {
     widget.userName.isNotEmpty
         ? (await BlocProvider.of<FirestoreUserInfoCubit>(context)
             .getUserFromUserName(widget.userName))
         : (await BlocProvider.of<FirestoreUserInfoCubit>(context)
             .getUserInfo(widget.personalId));
     setState(() {
-      rebuildUserInfo=true;
+      rebuildUserInfo = true;
     });
   }
 
@@ -213,8 +213,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         builder: (context, state) {
       FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
       if (state is CubitAuthSignOut) {
-        Navigator.maybePop(context);
         WidgetsBinding.instance!.addPostFrameCallback((_) async {
+          sharePrefs.clear();
           Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
             CupertinoPageRoute(
                 builder: (_) => LoginPage(sharePrefs: sharePrefs),
@@ -231,7 +231,6 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         child: createSizedBox(StringsManager.logOut.tr(),
             icon: Icons.logout_rounded),
         onTap: () async {
-          sharePrefs.clear();
           authCubit.signOut();
         },
       );
@@ -325,7 +324,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
                           setState(() {});
                         });
                       },
-                      child: Text(StringsManager.fromCamera.tr()),
+                      child: Text(StringsManager.fromCamera.tr(),
+                          style: Theme.of(context).textTheme.bodyText1),
                     ),
                     const SizedBox(height: 15),
                     GestureDetector(
@@ -336,7 +336,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
                           setState(() {});
                         });
                       },
-                      child: Text(StringsManager.fromGallery.tr()),
+                      child: Text(StringsManager.fromGallery.tr(),
+                          style: Theme.of(context).textTheme.bodyText1),
                     ),
                   ]),
             ));

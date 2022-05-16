@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/time_line/all_user_time_line/search_about_user.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/smart_refresher.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_grid_view.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_time_line_grid_view.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 
 class AllUsersTimeLinePage extends StatefulWidget {
@@ -22,6 +22,7 @@ class AllUsersTimeLinePage extends StatefulWidget {
 class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
   bool rebuildUsersInfo = false;
   ValueNotifier<bool> isThatEndOfList = ValueNotifier(false);
+  final ValueNotifier<bool> reloadData=ValueNotifier(true);
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +74,7 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
     await BlocProvider.of<PostCubit>(context).getAllPostInfo();
     setState(() {
       rebuildUsersInfo = true;
+      reloadData.value=true;
     });
   }
 
@@ -91,17 +93,23 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
       },
       builder: (context, state) {
         if (state is CubitAllPostsLoaded) {
-          return SmarterRefresh(
+          List<Post> imagePosts = [];
+          List<Post> videoPosts = [];
+
+          for (Post element in state.allPostInfo) {
+            element.isThatImage == true
+                ? imagePosts.add(element)
+                : videoPosts.add(element);
+          }
+
+          return AllTimeLineGridView(
             onRefreshData: getData,
+            postsImagesInfo: imagePosts,
+            postsVideosInfo: videoPosts,
             isThatEndOfList: isThatEndOfList,
-            posts: state.allPostInfo,
-            child: SingleChildScrollView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              child: CustomGridView(
-                  isThatProfile: false,
-                  postsInfo: state.allPostInfo,
-                  userId: widget.userId),
-            ),
+            reloadData: reloadData,
+            isThatProfile: false,
+            allPostsInfo: state.allPostInfo,
           );
         } else if (state is CubitPostFailed) {
           ToastShow.toastStateError(state);

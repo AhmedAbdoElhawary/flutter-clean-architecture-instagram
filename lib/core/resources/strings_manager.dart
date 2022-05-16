@@ -67,7 +67,7 @@ class StringsManager {
   static const String following = "following";
 
   static const String facebook = "facebook";
-  static const String sendmessage = "sendmessage";
+  static const String sendMessage = "sendMessage";
 
   static const String changeLanguage = "changeLanguage";
   static const String logOut = "logOut";

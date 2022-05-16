@@ -225,12 +225,12 @@ Total : 289 files,  14210 codes, 750 comments, 1934 blanks, all 16894 lines
 | [lib/presentation/widgets/commentator.dart](/lib/presentation/widgets/belong_to/comments_w/commentator.dart) | Dart | 308 | 3 | 12 | 323 |
 | [lib/presentation/widgets/custom_app_bar.dart](/lib/presentation/widgets/global/custom_widgets/custom_app_bar.dart) | Dart | 39 | 0 | 2 | 41 |
 | [lib/presentation/widgets/custom_circular_progress.dart](/lib/presentation/widgets/global/custom_widgets/custom_circular_progress.dart) | Dart | 20 | 0 | 3 | 23 |
-| [lib/presentation/widgets/custom_grid_view.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view.dart) | Dart | 157 | 3 | 13 | 173 |
+| [lib/presentation/widgets/custom_grid_view.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart) | Dart | 157 | 3 | 13 | 173 |
 | [lib/presentation/widgets/custom_posts_display.dart](/lib/presentation/widgets/custom_posts_display.dart) | Dart | 29 | 1 | 4 | 34 |
 | [lib/presentation/widgets/custom_text_field.dart](/lib/presentation/widgets/global/custom_widgets/custom_text_field.dart) | Dart | 37 | 0 | 3 | 40 |
 | [lib/presentation/widgets/custom_videos_grid_view.dart](/lib/presentation/widgets/belong_to/profile_w/custom_videos_grid_view.dart) | Dart | 135 | 3 | 12 | 150 |
 | [lib/presentation/widgets/fade_animation.dart](/lib/presentation/widgets/global/aimation/fade_animation.dart) | Dart | 50 | 0 | 10 | 60 |
-| [lib/presentation/widgets/fade_in_image.dart](/lib/presentation/widgets/global/image_display.dart) | Dart | 46 | 0 | 5 | 51 |
+| [lib/presentation/widgets/fade_in_image.dart](/lib/presentation/widgets/global/custom_widgets/custom_image_display.dart) | Dart | 46 | 0 | 5 | 51 |
 | [lib/presentation/widgets/instagram_story_swipe.dart](/lib/presentation/widgets/belong_to/story_w/story_swipe.dart) | Dart | 84 | 0 | 14 | 98 |
 | [lib/presentation/widgets/mmmmmmmmmm/lib/app/app.dart](/lib/presentation/widgets/mmmmmmmmmm/lib/app/app.dart) | Dart | 5 | 0 | 1 | 6 |
 | [lib/presentation/widgets/mmmmmmmmmm/lib/app/navigation/custom_rect_tween.dart](/lib/presentation/widgets/mmmmmmmmmm/lib/app/navigation/custom_rect_tween.dart) | Dart | 19 | 6 | 4 | 29 |

@@ -7,8 +7,6 @@ import 'package:instagram/presentation/widgets/belong_to/time_line_w/smart_refre
 import 'package:flutter/foundation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-
-
 class InViewNotifier extends StatefulWidget {
   ///The String list of ids of the child widgets that should be initialized as inView
   ///when the list view is built for the first time.
@@ -55,6 +53,7 @@ class InViewNotifier extends StatefulWidget {
   @override
   _InViewNotifierState createState() => _InViewNotifierState();
 }
+
 class _InViewNotifierState extends State<InViewNotifier> {
   InViewState? _inViewState;
   StreamController<ScrollNotification>? _streamController;
@@ -108,8 +107,8 @@ class _InViewNotifierState extends State<InViewNotifier> {
       child: NotificationListener<ScrollNotification>(
         child: SmarterRefresh(
             onRefreshData: widget.onRefreshData,
-            posts:widget. postsIds,
-            isThatEndOfList:widget. isThatEndOfList,
+            posts: widget.postsIds,
+            isThatEndOfList: widget.isThatEndOfList,
             child: widget.child),
         onNotification: (ScrollNotification notification) {
           late bool isScrollDirection;
@@ -156,7 +155,7 @@ class _InViewNotifierState extends State<InViewNotifier> {
 }
 
 typedef IsInViewPortCondition = bool Function(
-    double deltaTop,
-    double deltaBottom,
-    double viewPortDimension,
-    );
+  double deltaTop,
+  double deltaBottom,
+  double viewPortDimension,
+);

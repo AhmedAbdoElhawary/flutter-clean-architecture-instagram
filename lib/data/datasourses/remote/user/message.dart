@@ -15,15 +15,15 @@ class FireStoreMessage {
         _fireStoreUserCollection.doc(userId).collection("chats").doc(chatId);
     _fireChatsCollection.set(message.toMap());
 
-    CollectionReference<Map<String, dynamic>> _firemessagesCollection =
+    CollectionReference<Map<String, dynamic>> _fireMessagesCollection =
         _fireChatsCollection.collection("messages");
 
     DocumentReference<Map<String, dynamic>> messageRef =
-        await _firemessagesCollection.add(message.toMap());
+        await _fireMessagesCollection.add(message.toMap());
 
     message.messageUid = messageRef.id;
 
-    await _firemessagesCollection
+    await _fireMessagesCollection
         .doc(messageRef.id)
         .update({"messageUid": messageRef.id});
     return message;

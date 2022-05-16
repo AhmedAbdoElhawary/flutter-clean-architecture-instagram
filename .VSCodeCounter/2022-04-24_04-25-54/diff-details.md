@@ -102,10 +102,10 @@ Total : 107 files,  1675 codes, 505 comments, 176 blanks, all 2356 lines
 | [lib/presentation/widgets/commentator.dart](/lib/presentation/widgets/belong_to/comments_w/commentator.dart) | Dart | -1 | 0 | 0 | -1 |
 | [lib/presentation/widgets/create_post.dart](/lib/presentation/widgets/create_post.dart) | Dart | 0 | 44 | 1 | 45 |
 | [lib/presentation/widgets/custom_app_bar.dart](/lib/presentation/widgets/global/custom_widgets/custom_app_bar.dart) | Dart | 1 | 0 | 0 | 1 |
-| [lib/presentation/widgets/custom_grid_view.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view.dart) | Dart | -2 | -6 | 0 | -8 |
+| [lib/presentation/widgets/custom_grid_view.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart) | Dart | -2 | -6 | 0 | -8 |
 | [lib/presentation/widgets/custom_posts_display.dart](/lib/presentation/widgets/custom_posts_display.dart) | Dart | 1 | 1 | 0 | 2 |
 | [lib/presentation/widgets/custom_videos_grid_view.dart](/lib/presentation/widgets/belong_to/profile_w/custom_videos_grid_view.dart) | Dart | 0 | 2 | 0 | 2 |
-| [lib/presentation/widgets/fade_in_image.dart](/lib/presentation/widgets/global/image_display.dart) | Dart | 43 | 0 | 4 | 47 |
+| [lib/presentation/widgets/fade_in_image.dart](/lib/presentation/widgets/global/custom_widgets/custom_image_display.dart) | Dart | 43 | 0 | 4 | 47 |
 | [lib/presentation/widgets/instagram_story_swipe.dart](/lib/presentation/widgets/belong_to/story_w/story_swipe.dart) | Dart | 86 | 0 | 15 | 101 |
 | [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 8 | 0 | 0 | 8 |
 | [lib/presentation/widgets/post_list_saved.dart](/lib/presentation/widgets/post_list_saved.dart) | Dart | 216 | 8 | 12 | 236 |
