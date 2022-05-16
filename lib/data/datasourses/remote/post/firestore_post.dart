@@ -21,6 +21,20 @@ class FirestorePost {
     return postRef.id;
   }
 
+  static Future<void> deletePost({required Post postInfo}) async {
+    await _fireStorePostCollection.doc(postInfo.postUid).delete();
+    await FirestoreUser.removeUserPost(postId: postInfo.postUid);
+  }
+
+  static Future<Post> updatePost({required Post postInfo}) async {
+    await _fireStorePostCollection
+        .doc(postInfo.postUid)
+        .update({'caption': postInfo.caption});
+    DocumentSnapshot<Map<String, dynamic>> snap =
+        await _fireStorePostCollection.doc(postInfo.postUid).get();
+    return Post.fromQuery(query: snap);
+  }
+
   static Future<List<Post>> getPostsInfo(
       {required List<dynamic> postsIds,
       required String userId,
@@ -33,7 +47,10 @@ class FirestorePost {
       lengthOfData =
           addMoreData < lengthOfOriginPost ? addMoreData : lengthOfOriginPost;
     }
-    for (int i = 0; i < lengthOfData; i++) {
+    int condition =
+        lengthOfCurrentList == 0 ? lengthOfOriginPost : lengthOfData;
+
+    for (int i = 0; i < condition; i++) {
       DocumentSnapshot<Map<String, dynamic>> snap =
           await _fireStorePostCollection.doc(postsIds[i]).get();
       if (snap.exists) {
