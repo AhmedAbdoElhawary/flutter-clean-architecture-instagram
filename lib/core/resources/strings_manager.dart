@@ -112,5 +112,7 @@ class StringsManager {
   static const String copyProfileURL = "copyProfileURL";
   static const String shareThisProfile = "shareThisProfile";
   static const String editProfile = "editProfile";
+  static const String editInfo = "editInfo";
+
   static const String changeProfilePhoto = "changeProfilePhoto";
 }

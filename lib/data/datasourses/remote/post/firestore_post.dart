@@ -48,7 +48,7 @@ class FirestorePost {
           addMoreData < lengthOfOriginPost ? addMoreData : lengthOfOriginPost;
     }
     int condition =
-        lengthOfCurrentList == 0 ? lengthOfOriginPost : lengthOfData;
+        lengthOfCurrentList == -1 ? lengthOfOriginPost : lengthOfData;
 
     for (int i = 0; i < condition; i++) {
       DocumentSnapshot<Map<String, dynamic>> snap =

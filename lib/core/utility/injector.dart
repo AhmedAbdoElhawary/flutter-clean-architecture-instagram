@@ -26,11 +26,13 @@ import 'package:instagram/domain/use_cases/post/comments/replies/likes/put_like_
 import 'package:instagram/domain/use_cases/post/comments/replies/likes/remove_like_on_this_reply.dart';
 import 'package:instagram/domain/use_cases/post/comments/replies/reply_on_this_comment.dart';
 import 'package:instagram/domain/use_cases/post/create_post.dart';
-import 'package:instagram/domain/use_cases/post/getPostInfo/get_all_posts.dart';
-import 'package:instagram/domain/use_cases/post/getPostInfo/get_post_info.dart';
-import 'package:instagram/domain/use_cases/post/getPostInfo/get_specific_users_posts.dart';
+import 'package:instagram/domain/use_cases/post/delete/delete_post.dart';
+import 'package:instagram/domain/use_cases/post/get/get_all_posts.dart';
+import 'package:instagram/domain/use_cases/post/get/get_post_info.dart';
+import 'package:instagram/domain/use_cases/post/get/get_specific_users_posts.dart';
 import 'package:instagram/domain/use_cases/post/likes/put_like_on_this_post.dart';
 import 'package:instagram/domain/use_cases/post/likes/remove_the_like_on_this_post.dart';
+import 'package:instagram/domain/use_cases/post/update/update_post.dart';
 import 'package:instagram/domain/use_cases/story/create_story.dart';
 import 'package:instagram/domain/use_cases/story/delete_story.dart';
 import 'package:instagram/domain/use_cases/story/get_specific_stories.dart';
@@ -176,6 +178,10 @@ Future<void> initializeDependencies() async {
 
   injector.registerSingleton<GetSpecificStoriesInfoUseCase>(
       GetSpecificStoriesInfoUseCase(injector()));
+
+  injector.registerSingleton<DeletePostUseCase>(DeletePostUseCase(injector()));
+
+  injector.registerSingleton<UpdatePostUseCase>(UpdatePostUseCase(injector()));
   //Firestore Comment UseCase
   injector.registerSingleton<GetSpecificCommentsUseCase>(
       GetSpecificCommentsUseCase(injector()));
@@ -284,7 +290,7 @@ Future<void> initializeDependencies() async {
 
   // post Blocs
   injector.registerFactory<PostCubit>(
-    () => PostCubit(injector(), injector(), injector()),
+    () => PostCubit(injector(), injector(), injector(), injector(), injector()),
   );
   injector.registerFactory<SpecificUsersPostsCubit>(
     () => SpecificUsersPostsCubit(injector()),
