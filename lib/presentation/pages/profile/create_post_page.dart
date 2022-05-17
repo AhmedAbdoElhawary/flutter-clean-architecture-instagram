@@ -143,7 +143,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     onPressed: () =>
                         createPost(personalInfo!, userCubit, builder2context),
                     icon: const Icon(
-                      Icons.check,
+                      Icons.check_rounded,
                       size: 30,
                       color: ColorManager.blue,
                     ));

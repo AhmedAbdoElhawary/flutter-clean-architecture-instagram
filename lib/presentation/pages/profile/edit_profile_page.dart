@@ -149,7 +149,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 });
               },
               icon: const Icon(
-                Icons.check,
+                Icons.check_rounded,
                 size: 30,
                 color: ColorManager.blue,
               ))
