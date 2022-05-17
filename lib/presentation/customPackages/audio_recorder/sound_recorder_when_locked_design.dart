@@ -57,7 +57,7 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
                     child: Container(
                       color: recordIconWhenLockBackGroundColor,
                       child:const Padding(
-                        padding:  EdgeInsets.all(4.0),
+                        padding:  EdgeInsetsDirectional.all(4.0),
                         child: Icon(
                           Icons.send,
                           textDirection: TextDirection.ltr,
@@ -78,7 +78,7 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
                     showIcons(true);
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsetsDirectional.all(8.0),
                     child: Text(
                       cancelText ?? "",
                       maxLines: 1,

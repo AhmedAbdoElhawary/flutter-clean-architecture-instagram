@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 
@@ -21,20 +23,24 @@ class ImageDisplay extends StatefulWidget {
 }
 
 class _ImageDisplayState extends State<ImageDisplay> {
+  int a=0;
   @override
   Widget build(BuildContext context) {
-    return widget.aspectRatio <= 0.2
-        ? buildImage()
+    return
+        widget.aspectRatio <= 0.2
+          ?
+        buildImage()
         : AspectRatio(
             aspectRatio: widget.aspectRatio < .5
                 ? widget.aspectRatio / widget.aspectRatio / widget.aspectRatio
                 : widget.aspectRatio,
             child: buildImage(),
-          );
+          )
+        ;
   }
 
-  Widget buildImage() {
-    return Image.network(
+  Image buildImage() {
+    Image image= Image.network(
       widget.imageUrl,
       fit: widget.boxFit,
       width: double.infinity,
@@ -55,10 +61,19 @@ class _ImageDisplayState extends State<ImageDisplay> {
         return SizedBox(
           width: double.infinity,
           height: widget.aspectRatio,
-          child: Icon(Icons.warning_amber_rounded, size: 50,color: Theme.of(context).focusColor),
+          child: Icon(Icons.warning_amber_rounded,
+              size: 50, color: Theme.of(context).focusColor),
         );
       },
     );
+    final c = Completer<ImageInfo>();
+    image.image
+        .resolve(const ImageConfiguration())
+        .addListener(ImageStreamListener((ImageInfo i, bool _) {
+      c.complete(i);
+      print("====================================================================================> ${i.image.height}");
+    }));
+    return image;
   }
 
   Widget loadingWidget(double aspectRatio) {
@@ -71,7 +86,7 @@ class _ImageDisplayState extends State<ImageDisplay> {
   }
 
   Widget buildSizedBox() {
-    return  Container(
+    return Container(
       width: double.infinity,
       color: ColorManager.black26,
     );

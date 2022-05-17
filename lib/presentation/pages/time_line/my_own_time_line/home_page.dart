@@ -234,6 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
       postsInfo: postsInfo,
       bodyHeight: bodyHeight,
       playTheVideo: playTheVideo,
+      indexOfPost: index,
       reLoadData: reloadTheData,
     );
   }

@@ -151,9 +151,9 @@ Total : 289 files,  14210 codes, 750 comments, 1934 blanks, all 16894 lines
 | [lib/domain/usecases/postUseCase/comments/replies/likes/remove_like_on_this_reply.dart](/lib/domain/use_cases/post/comments/replies/likes/remove_like_on_this_reply.dart) | Dart | 13 | 0 | 4 | 17 |
 | [lib/domain/usecases/postUseCase/comments/replies/reply_on_this_comment.dart](/lib/domain/use_cases/post/comments/replies/reply_on_this_comment.dart) | Dart | 12 | 0 | 4 | 16 |
 | [lib/domain/usecases/postUseCase/create_post.dart](/lib/domain/use_cases/post/create_post.dart) | Dart | 13 | 0 | 4 | 17 |
-| [lib/domain/usecases/postUseCase/getPostInfo/get_all_posts.dart](/lib/domain/use_cases/post/getPostInfo/get_all_posts.dart) | Dart | 11 | 0 | 4 | 15 |
-| [lib/domain/usecases/postUseCase/getPostInfo/get_post_info.dart](/lib/domain/use_cases/post/getPostInfo/get_post_info.dart) | Dart | 11 | 0 | 4 | 15 |
-| [lib/domain/usecases/postUseCase/getPostInfo/get_specific_users_posts.dart](/lib/domain/use_cases/post/getPostInfo/get_specific_users_posts.dart) | Dart | 10 | 0 | 4 | 14 |
+| [lib/domain/usecases/postUseCase/getPostInfo/get_all_posts.dart](/lib/domain/use_cases/post/get/get_all_posts.dart) | Dart | 11 | 0 | 4 | 15 |
+| [lib/domain/usecases/postUseCase/getPostInfo/get_post_info.dart](/lib/domain/use_cases/post/get/get_post_info.dart) | Dart | 11 | 0 | 4 | 15 |
+| [lib/domain/usecases/postUseCase/getPostInfo/get_specific_users_posts.dart](/lib/domain/use_cases/post/get/get_specific_users_posts.dart) | Dart | 10 | 0 | 4 | 14 |
 | [lib/domain/usecases/postUseCase/likes/put_like_on_this_post.dart](/lib/domain/use_cases/post/likes/put_like_on_this_post.dart) | Dart | 12 | 0 | 4 | 16 |
 | [lib/domain/usecases/postUseCase/likes/remove_the_like_on_this_post.dart](/lib/domain/use_cases/post/likes/remove_the_like_on_this_post.dart) | Dart | 12 | 0 | 4 | 16 |
 | [lib/domain/usecases/storyUseCase/create_story.dart](/lib/domain/use_cases/story/create_story.dart) | Dart | 13 | 0 | 4 | 17 |

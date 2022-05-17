@@ -21,6 +21,8 @@ class ColorManager {
 
   static const Color teal = Color(0xFF009688);
   static const Color blue = Color(0xFF2196F3);
+  static const Color green = Colors.green;
+
   static const Color darkBlue = Color.fromARGB(255, 4, 113, 238);
   static const Color lightBlue = Color(0xFF7FC1FF);
   static const Color redAccent = Colors.redAccent;

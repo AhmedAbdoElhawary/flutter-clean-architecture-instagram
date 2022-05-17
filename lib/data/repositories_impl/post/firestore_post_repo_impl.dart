@@ -79,6 +79,7 @@ class FirestorePostRepositoryImpl implements FirestorePostRepository {
   Future<void> deletePost({required Post postInfo}) async {
     try {
       await FirestorePost.deletePost(postInfo: postInfo);
+      await FirebaseStoragePost.deleteImageFromStorage(postInfo.postUrl);
     } catch (e) {
       return Future.error(e.toString());
     }

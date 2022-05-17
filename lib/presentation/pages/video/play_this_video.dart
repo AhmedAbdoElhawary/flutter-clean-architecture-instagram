@@ -6,10 +6,12 @@ class PlayThisVideo extends StatefulWidget {
   final String videoUrl;
   final bool play;
   final bool dispose;
+  final bool withoutSound;
 
   const PlayThisVideo(
       {Key? key,
       required this.videoUrl,
+      this.withoutSound = false,
       required this.play,
       this.dispose = true})
       : super(key: key);
@@ -31,9 +33,11 @@ class _PlayThisVideoState extends State<PlayThisVideo> {
     if (widget.play) {
       _controller.play();
       _controller.setLooping(true);
+      if (widget.withoutSound) {
+        _controller.setVolume(0);
+      }
     }
     super.initState();
-
   }
 
   @override
@@ -42,6 +46,9 @@ class _PlayThisVideoState extends State<PlayThisVideo> {
       if (widget.play) {
         _controller.play();
         _controller.setLooping(true);
+        if (widget.withoutSound) {
+          _controller.setVolume(0);
+        }
       } else {
         _controller.pause();
       }
@@ -52,8 +59,8 @@ class _PlayThisVideoState extends State<PlayThisVideo> {
   @override
   void dispose() {
     // if (widget.dispose) {
-      _controller.dispose();
-      super.dispose();
+    _controller.dispose();
+    super.dispose();
     // }
   }
 

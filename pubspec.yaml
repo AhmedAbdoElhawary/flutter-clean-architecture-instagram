@@ -67,7 +67,7 @@ dependencies:
   pull_to_refresh: ^2.0.0
   flutter_spinkit: ^5.1.0
   detectable_text_field: ^2.0.3
-  scrollable_positioned_list: ^0.2.3
+  scrollable_positioned_list: ^0.3.2
   video_player: ^2.3.0
   responsive_builder: ^0.4.2
   font_awesome_flutter: ^10.1.0
