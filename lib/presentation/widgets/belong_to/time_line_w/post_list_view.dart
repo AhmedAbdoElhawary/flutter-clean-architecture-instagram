@@ -14,7 +14,9 @@ import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/followCubit/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/comments/comments_page.dart';
+import 'package:instagram/presentation/pages/profile/update_post_info.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
@@ -30,8 +32,7 @@ class PostImage extends StatefulWidget {
   final Post postInfo;
   final bool playTheVideo;
   final VoidCallback reLoadData;
-  // final TextEditingController textController;
-  // final ValueChanged<Post> selectedPostInfo;
+  final int indexOfPost;
   final ValueNotifier<List<Post>> postsInfo;
   final double bodyHeight;
 
@@ -39,8 +40,7 @@ class PostImage extends StatefulWidget {
     Key? key,
     required this.postInfo,
     required this.reLoadData,
-    // required this.selectedPostInfo,
-    // required this.textController,
+    required this.indexOfPost,
     required this.playTheVideo,
     required this.postsInfo,
     required this.bodyHeight,
@@ -372,7 +372,7 @@ class _PostImageState extends State<PostImage> {
               );
             },
             child: Padding(
-              padding: const EdgeInsets.only(top:8.0),
+              padding: const EdgeInsetsDirectional.only(top: 8.0),
               child: postInfo.isThatImage
                   ? Hero(
                       tag: postInfo.postUrl,
@@ -437,10 +437,8 @@ class _PostImageState extends State<PostImage> {
         children: [
           GestureDetector(
               onTap: () {}, child: textOfOrders(StringsManager.archive.tr())),
-          GestureDetector(
-              onTap: () {}, child: textOfOrders(StringsManager.delete.tr())),
-          GestureDetector(
-              onTap: () {}, child: textOfOrders(StringsManager.edit.tr())),
+          deletePost(),
+          editPost(),
           GestureDetector(
               onTap: () {},
               child: textOfOrders(StringsManager.hideLikeCount.tr())),
@@ -451,6 +449,35 @@ class _PostImageState extends State<PostImage> {
         ],
       ),
     );
+  }
+
+  BlocBuilder<PostCubit, PostState> deletePost() {
+    return BlocBuilder<PostCubit, PostState>(builder: (context, state) {
+      return GestureDetector(
+          onTap: () async {
+            Navigator.maybePop(context);
+            await PostCubit.get(context)
+                .deletePostInfo(postInfo: widget.postInfo);
+            widget.postsInfo.value.removeAt(widget.indexOfPost);
+          },
+          child: textOfOrders(StringsManager.delete.tr()));
+    });
+  }
+
+  BlocBuilder<PostCubit, PostState> editPost() {
+    return BlocBuilder<PostCubit, PostState>(builder: (context, state) {
+      return GestureDetector(
+          onTap: () async {
+            Navigator.maybePop(context);
+            await Navigator.of(context, rootNavigator: true)
+                .push(MaterialPageRoute(
+              maintainState: false,
+              builder: (context) =>
+                  UpdatePostInfo(oldPostInfo: widget.postInfo),
+            ));
+          },
+          child: textOfOrders(StringsManager.edit.tr()));
+    });
   }
 
   Widget ordersOfOtherUser() {

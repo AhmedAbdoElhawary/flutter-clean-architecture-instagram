@@ -7,7 +7,6 @@ import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_n
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/post_list_view.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_up_icon.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/smart_refresher.dart';
 
 class CustomPostsDisplay extends StatefulWidget {
   final List<Post> postsInfo;
@@ -102,7 +101,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        posts(postInfo, bodyHeight, playTheVideo),
+        posts(index, postInfo, bodyHeight, playTheVideo),
         Divider(color: Theme.of(context).toggleableActiveColor, thickness: .15),
         if (isThatEndOfList.value && index == postsInfo.length - 1) ...[
           const AllCatchUpIcon(),
@@ -111,10 +110,11 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
     );
   }
 
-  Widget posts(Post postInfo, double bodyHeight, bool playTheVideo) {
+  Widget posts(int index, Post postInfo, double bodyHeight, bool playTheVideo) {
     return PostImage(
       postInfo: postInfo,
       bodyHeight: bodyHeight,
+      indexOfPost: index,
       playTheVideo: playTheVideo,
       postsInfo: ValueNotifier(postsInfo),
       reLoadData: () {},

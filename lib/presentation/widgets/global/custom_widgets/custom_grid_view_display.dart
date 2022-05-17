@@ -61,7 +61,10 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
                   imageUrl: widget.postClickedInfo.postUrl,
                   boxFit: BoxFit.cover)
               : PlayThisVideo(
-                  videoUrl: widget.postClickedInfo.postUrl, play: widget.playThisVideo),
+                  videoUrl: widget.postClickedInfo.postUrl,
+                  play: widget.playThisVideo,
+                  withoutSound: true,
+                ),
         ),
       );
 
