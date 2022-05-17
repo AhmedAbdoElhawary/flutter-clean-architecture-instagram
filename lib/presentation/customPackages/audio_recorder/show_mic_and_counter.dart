@@ -40,9 +40,9 @@ class ShowMicWithText extends StatelessWidget {
                 width: isButtonPressed ? 40 : 24,
                 height: isButtonPressed ? 40 : 24,
                 child: Container(
-                  color: (isButtonPressed) ? Colors.blue : Colors.transparent,
+                  color: (isButtonPressed) ? ColorManager.blue : ColorManager.transparent,
                   child: Padding(
-                    padding: EdgeInsets.all(isButtonPressed ? 8.0 : 0),
+                    padding: EdgeInsetsDirectional.all(isButtonPressed ? 8.0 : 0),
                     child: SvgPicture.asset(
                       "assets/icons/microphone.svg",
                       color: (isButtonPressed)
@@ -58,7 +58,7 @@ class ShowMicWithText extends StatelessWidget {
         if (shouldShowText)
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8),
+              padding: const EdgeInsetsDirectional.only(start: 8, end: 8),
               child: DefaultTextStyle(
                 overflow: TextOverflow.clip,
                 maxLines: 1,
@@ -71,7 +71,7 @@ class ShowMicWithText extends StatelessWidget {
                       slideToCancelText ?? "",
                       textStyle: colorizeTextStyle,
                       colors: [
-                        Colors.black,
+                        ColorManager.black,
                         Colors.grey.shade200,
                         Theme.of(context).focusColor,
                       ],
