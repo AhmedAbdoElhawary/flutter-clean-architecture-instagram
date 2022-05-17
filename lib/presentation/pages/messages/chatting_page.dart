@@ -464,7 +464,7 @@ class _ChattingPageState extends State<ChattingPage>
     return Visibility(
       visible: appearIcons,
       child: Padding(
-        padding: const EdgeInsets.only(right: 10.0),
+        padding: const EdgeInsetsDirectional.only(end: 10.0),
         child: GestureDetector(
           onTap: () async {
             File? pickImage = await imageCameraPicker();
@@ -560,7 +560,7 @@ class _ChattingPageState extends State<ChattingPage>
 
   Widget pickPhoto(MessageCubit messageCubit) {
     return Padding(
-      padding: const EdgeInsets.only(left: 7.0),
+      padding: const EdgeInsetsDirectional.only(start: 7.0),
       child: GestureDetector(
         onTap: () async {
           File? pickImage = await imageGalleryPicker();
