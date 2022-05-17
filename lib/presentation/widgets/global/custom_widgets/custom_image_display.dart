@@ -23,24 +23,20 @@ class ImageDisplay extends StatefulWidget {
 }
 
 class _ImageDisplayState extends State<ImageDisplay> {
-  int a=0;
   @override
   Widget build(BuildContext context) {
-    return
-        widget.aspectRatio <= 0.2
-          ?
-        buildImage()
+    return widget.aspectRatio <= 0.2
+        ? buildImage()
         : AspectRatio(
             aspectRatio: widget.aspectRatio < .5
                 ? widget.aspectRatio / widget.aspectRatio / widget.aspectRatio
                 : widget.aspectRatio,
             child: buildImage(),
-          )
-        ;
+          );
   }
 
   Image buildImage() {
-    Image image= Image.network(
+    Image image = Image.network(
       widget.imageUrl,
       fit: widget.boxFit,
       width: double.infinity,
@@ -66,13 +62,6 @@ class _ImageDisplayState extends State<ImageDisplay> {
         );
       },
     );
-    final c = Completer<ImageInfo>();
-    image.image
-        .resolve(const ImageConfiguration())
-        .addListener(ImageStreamListener((ImageInfo i, bool _) {
-      c.complete(i);
-      print("====================================================================================> ${i.image.height}");
-    }));
     return image;
   }
 
