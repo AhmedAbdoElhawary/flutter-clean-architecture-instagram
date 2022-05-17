@@ -61,7 +61,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                 )));
       },
       child: Padding(
-        padding: const EdgeInsetsDirectional.only(end: 15.0, start: 15),
+        padding: const EdgeInsetsDirectional.only(end: 10, start: 10, top: 10),
         child: Row(children: [
           Hero(
             tag: hash,
