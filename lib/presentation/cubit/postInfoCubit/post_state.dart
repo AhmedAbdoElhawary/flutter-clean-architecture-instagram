@@ -6,6 +6,18 @@ class CubitInitial extends PostState {}
 
 class CubitPostLoading extends PostState {}
 
+class CubitUpdatePostLoading extends PostState {}
+
+class CubitUpdatePostLoaded extends PostState {
+  Post postUpdatedInfo;
+
+  CubitUpdatePostLoaded(this.postUpdatedInfo);
+}
+
+class CubitDeletePostLoading extends PostState {}
+
+class CubitDeletePostLoaded extends PostState {}
+
 class CubitPostLoaded extends PostState {
   String postId;
 
