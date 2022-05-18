@@ -24,10 +24,10 @@ class StoryCubit extends Cubit<StoryState> {
 
   static StoryCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future<void> createStory(Story storyInfo, File photo) async {
+  Future<void> createStory(Story storyInfo, File file) async {
     emit(CubitStoryLoading());
     await _createStoryUseCase
-        .call(paramsOne: storyInfo, paramsTwo: photo)
+        .call(paramsOne: storyInfo, paramsTwo: file)
         .then((storyId) {
       this.storyId = storyId;
       emit(CubitStoryLoaded(storyId));

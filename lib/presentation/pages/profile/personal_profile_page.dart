@@ -150,7 +150,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       children: [
         createPost(),
         customDivider(),
-        createNewVideo(),
+        createVideo(),
         customDivider(),
         createStory(),
         customDivider(),
@@ -303,6 +303,13 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             nameOfPath: IconsAssets.addInstagramStoryIcon));
   }
 
+  GestureDetector createVideo() {
+    return GestureDetector(
+        onTap: () async => showDialog(createNewVideo),
+        child: createSizedBox(StringsManager.reel.tr(),
+            nameOfPath: IconsAssets.videoIcon));
+  }
+
   showDialog(ValueChanged<bool> method) async {
     showAnimatedDialog(
         context: context,
@@ -359,27 +366,23 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     }
   }
 
-  GestureDetector createNewVideo() {
-    return GestureDetector(
-        onTap: () async {
-          Navigator.maybePop(context);
-          File? pickVideo = await videoCameraPicker();
-          if (pickVideo != null) {
-            _getImageDimension(pickVideo);
-            await Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(
-                    builder: (context) => CreatePostPage(
-                        selectedFile: pickVideo,
-                        isThatImage: false,
-                        aspectRatio: imageSize.aspectRatio),
-                    maintainState: false));
-            setState(() {
-              rebuildUserInfo = true;
-            });
-          }
-        },
-        child: createSizedBox(StringsManager.reel.tr(),
-            nameOfPath: IconsAssets.videoIcon));
+  createNewVideo(bool isThatFromCamera) async {
+    Navigator.maybePop(context);
+    File? pickVideo = isThatFromCamera
+        ? await videoCameraPicker()
+        : await videoGalleryPicker();
+    if (pickVideo != null) {
+      _getImageDimension(pickVideo);
+      await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+          builder: (context) => CreatePostPage(
+              selectedFile: pickVideo,
+              isThatImage: false,
+              aspectRatio: imageSize.aspectRatio),
+          maintainState: false));
+      setState(() {
+        rebuildUserInfo = true;
+      });
+    }
   }
 
   void _getImageDimension(File photo) {

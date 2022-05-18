@@ -16,15 +16,13 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circ
 class CreatePostPage extends StatefulWidget {
   final File selectedFile;
   final bool isThatImage;
-  final bool isThatStory;
   final double aspectRatio;
-  const CreatePostPage(
-      {Key? key,
-      required this.selectedFile,
-      required this.aspectRatio,
-      this.isThatImage = true,
-      this.isThatStory = false})
-      : super(key: key);
+  const CreatePostPage({
+    Key? key,
+    required this.selectedFile,
+    required this.aspectRatio,
+    this.isThatImage = true,
+  }) : super(key: key);
 
   @override
   State<CreatePostPage> createState() => _CreatePostPageState();
