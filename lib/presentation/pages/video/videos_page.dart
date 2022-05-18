@@ -18,7 +18,6 @@ import 'package:instagram/presentation/pages/comments/comments_page.dart';
 import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
 import 'package:instagram/presentation/widgets/belong_to/videos_w/reel_video_play.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 
@@ -36,6 +35,7 @@ class VideosPage extends StatefulWidget {
 class VideosPageState extends State<VideosPage> {
   File? videoFile;
   bool rebuildUserInfo = false;
+  bool? isFollowed;
 
   @override
   Widget build(BuildContext context) {
@@ -130,9 +130,8 @@ class VideosPageState extends State<VideosPage> {
                     child: CircleAvatar(
                       radius: 18,
                       backgroundColor: ColorManager.white,
-                      child: ClipOval(
-                          child: ImageDisplay(
-                              imageUrl: personalInfo!.profileImageUrl)),
+                      backgroundImage:
+                          NetworkImage(personalInfo!.profileImageUrl),
                     ),
                   ),
                   const SizedBox(
@@ -178,12 +177,13 @@ class VideosPageState extends State<VideosPage> {
             BlocProvider.of<FollowCubit>(context).removeThisFollower(
                 followingUserId: personalInfo.userId,
                 myPersonalId: myPersonalId);
+            isFollowed = false;
           } else {
             BlocProvider.of<FollowCubit>(context).followThisUser(
                 followingUserId: personalInfo.userId,
                 myPersonalId: myPersonalId);
+            isFollowed = true;
           }
-
           setState(() {
             rebuildUserInfo = true;
           });
@@ -199,7 +199,9 @@ class VideosPageState extends State<VideosPage> {
             borderRadius: BorderRadius.circular(5),
             border: Border.all(color: ColorManager.white, width: 1)),
         child: Text(
-          personalInfo.followedPeople.contains(myPersonalId)
+          (isFollowed == null &&
+                      personalInfo.followerPeople.contains(myPersonalId)) ||
+                  (isFollowed != null && isFollowed!)
               ? StringsManager.following.tr()
               : StringsManager.follow.tr(),
           style: const TextStyle(color: ColorManager.white),

@@ -9,10 +9,10 @@ import 'package:instagram/domain/repositories/story_repository.dart';
 class FirestoreStoryRepositoryImpl implements FirestoreStoryRepository {
   @override
   Future<String> createStory(
-      {required Story storyInfo, required File photo}) async {
+      {required Story storyInfo, required File file}) async {
     try {
       String postUrl =
-          await FirebaseStoragePost.uploadFile(photo, 'postsImage');
+          await FirebaseStoragePost.uploadFile(file, 'postsImage');
       storyInfo.storyUrl = postUrl;
       String postUid = await FireStoreStory.createStory(storyInfo);
       return postUid;

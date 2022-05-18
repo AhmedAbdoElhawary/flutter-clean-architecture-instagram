@@ -11,6 +11,6 @@ class CreateStoryUseCase implements UseCaseTwoParams<String, Story, File> {
   @override
   Future<String> call({required Story paramsOne, required File paramsTwo}) {
     return _createStoryRepository.createStory(
-        storyInfo: paramsOne, photo: paramsTwo);
+        storyInfo: paramsOne, file: paramsTwo);
   }
 }
