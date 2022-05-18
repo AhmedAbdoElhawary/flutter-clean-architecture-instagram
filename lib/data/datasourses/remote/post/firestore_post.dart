@@ -42,7 +42,7 @@ class FirestorePost {
     List<Post> postsInfo = [];
     int lengthOfOriginPost = postsIds.length;
     int lengthOfData = lengthOfOriginPost > 5 ? 5 : lengthOfOriginPost;
-    if (lengthOfCurrentList != 0) {
+    if (lengthOfCurrentList != -1) {
       int addMoreData = lengthOfCurrentList + 5;
       lengthOfData =
           addMoreData < lengthOfOriginPost ? addMoreData : lengthOfOriginPost;

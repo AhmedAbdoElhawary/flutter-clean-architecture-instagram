@@ -108,6 +108,7 @@ dependencies:
   audio_service: ^0.18.4
   extended_tabs: ^2.3.0
   shimmer: ^2.0.0
+  like_button: ^2.0.4
 
 
 

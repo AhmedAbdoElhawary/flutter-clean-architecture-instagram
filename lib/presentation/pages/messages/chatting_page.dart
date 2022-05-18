@@ -433,15 +433,15 @@ class _ChattingPageState extends State<ChattingPage>
                     setState(() {
                       records = soundFile.path;
                       MessageCubit messageCubit = MessageCubit.get(context);
-                      newmessageInfo = newmessage();
+                      newmessageInfo = newMessage();
                       ismessageLoaded = true;
-                      scrollToLastIndex(context);
-
                       messageCubit.sendMessage(
-                          messageInfo: newmessage(),
+                          messageInfo: newMessage(),
                           pathOfRecorded: soundFile.path);
                     });
                   });
+                  scrollToLastIndex(context);
+
                 },
               ),
               Visibility(
@@ -472,14 +472,15 @@ class _ChattingPageState extends State<ChattingPage>
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 setState(() {
                   ismessageLoaded = true;
-                  newmessageInfo = newmessage(isThatImage: true);
+                  newmessageInfo = newMessage(isThatImage: true);
                   newmessageInfo!.imageUrl = pickImage.path;
-                  scrollToLastIndex(context);
                 });
               });
               messageCubit.sendMessage(
-                  messageInfo: newmessage(isThatImage: true),
+                  messageInfo: newMessage(isThatImage: true),
                   pathOfPhoto: pickImage.path);
+              scrollToLastIndex(context);
+
             } else {
               ToastShow.toast(StringsManager.noImageSelected.tr());
             }
@@ -529,7 +530,7 @@ class _ChattingPageState extends State<ChattingPage>
         onTap: () {
           if (_textController.text.isNotEmpty) {
             messageCubit.sendMessage(
-              messageInfo: newmessage(),
+              messageInfo: newMessage(),
             );
             scrollToLastIndex(context);
             _textController.text = "";
@@ -568,14 +569,15 @@ class _ChattingPageState extends State<ChattingPage>
             WidgetsBinding.instance.addPostFrameCallback((_) {
               setState(() {
                 ismessageLoaded = true;
-                newmessageInfo = newmessage(isThatImage: true);
+                newmessageInfo = newMessage(isThatImage: true);
                 newmessageInfo!.imageUrl = pickImage.path;
-                scrollToLastIndex(context);
               });
             });
             messageCubit.sendMessage(
-                messageInfo: newmessage(isThatImage: true),
+                messageInfo: newMessage(isThatImage: true),
                 pathOfPhoto: pickImage.path);
+            scrollToLastIndex(context);
+
           } else {
             ToastShow.toast(StringsManager.noImageSelected.tr());
           }
@@ -589,7 +591,7 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Message newmessage({bool isThatImage = false}) {
+  Message newMessage({bool isThatImage = false}) {
     return Message(
       datePublished: DateOfNow.dateOfNow(),
       message: _textController.text,

@@ -89,17 +89,6 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
               _controller.setVolume(0);
             }
           },
-          onDoubleTap: () {
-            // setState(() {
-            //   videoStatusAnimation = FadeAnimation(
-            //       child: popIcon(Icons.favorite, isThatLoveIcon: true));
-            //   if (!isLiked) {
-            //     likeCubit.putLikeOnThisPost(
-            //         postId: widget.videoInfo.value.postUid, userId: myPersonalId);
-            //     widget.videoInfo.value.likes.add(myPersonalId);
-            //   }
-            // });
-          },
           onLongPressStart: (LongPressStartDetails event) {
             if (!_controller.value.isInitialized) {
               return;
