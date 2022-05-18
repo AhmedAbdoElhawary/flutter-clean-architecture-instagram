@@ -819,6 +819,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.7"
+  like_button:
+    dependency: "direct main"
+    description:
+      name: like_button
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.4"
   lint:
     dependency: transitive
     description:

@@ -27,6 +27,7 @@ import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle
 import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_text.dart';
+import 'package:like_button/like_button.dart';
 
 class PostImage extends StatefulWidget {
   final Post postInfo;
@@ -120,14 +121,14 @@ class _PostImageState extends State<PostImage> {
             imageOfPost(postInfo),
             Padding(
               padding: const EdgeInsetsDirectional.only(
-                  start: 12.0, top: 10, bottom: 8),
+                  start: 8, top: 10, bottom: 8),
               child: Row(children: [
                 Expanded(
                     child: Row(
                   children: [
                     loveButton(postInfo),
                     Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 15.0),
+                      padding: const EdgeInsetsDirectional.only(start: 5),
                       child: GestureDetector(
                         child: iconsOfImagePost(IconsAssets.commentIcon),
                         onTap: () {
@@ -267,17 +268,22 @@ class _PostImageState extends State<PostImage> {
 
   Widget loveButton(Post postInfo) {
     bool isLiked = postInfo.likes.contains(myPersonalId);
-    return GestureDetector(
-      child: !isLiked
-          ? Icon(
-              Icons.favorite_border,
-              color: Theme.of(context).focusColor,
-            )
-          : const Icon(
-              Icons.favorite,
-              color: Colors.red,
-            ),
-      onTap: () {
+    return LikeButton(
+      isLiked: isLiked,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      likeBuilder: (isLiked) {
+        return !isLiked
+            ? Icon(
+                Icons.favorite_border,
+                color: Theme.of(context).focusColor,
+              )
+            : const Icon(
+                Icons.favorite,
+                color: Colors.red,
+              );
+      },
+      onTap: (isLiked) async {
         setState(() {
           if (isLiked) {
             BlocProvider.of<PostLikesCubit>(context).removeTheLikeOnThisPost(
@@ -289,6 +295,8 @@ class _PostImageState extends State<PostImage> {
             postInfo.likes.add(myPersonalId);
           }
         });
+
+        return !isLiked;
       },
     );
   }
@@ -335,10 +343,10 @@ class _PostImageState extends State<PostImage> {
     );
   }
 
-  Icon lovePopAnimation() {
+  Widget lovePopAnimation() {
     return Icon(
       Icons.favorite,
-      size: 100,
+      size: 150,
       color: Theme.of(context).primaryColor,
     );
   }
@@ -346,11 +354,11 @@ class _PostImageState extends State<PostImage> {
   Widget imageOfPost(Post postInfo) {
     bool isLiked = postInfo.likes.contains(myPersonalId);
     return Stack(
+      alignment: Alignment.center,
       children: [
         GestureDetector(
             onDoubleTap: () {
               videoStatusAnimation = FadeAnimation(child: lovePopAnimation());
-
               setState(() {
                 if (!isLiked) {
                   BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
