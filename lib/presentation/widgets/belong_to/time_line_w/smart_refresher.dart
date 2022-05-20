@@ -7,13 +7,12 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 class SmarterRefresh extends StatefulWidget {
   final Widget child;
   final List posts;
   final ValueNotifier<bool> isThatEndOfList;
   final AsyncValueSetter<int> onRefreshData;
-  const SmarterRefresh(
+   SmarterRefresh(
       {required this.onRefreshData,
       required this.child,
       required this.isThatEndOfList,
@@ -30,7 +29,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
   late AnimationController _aniController, _scaleController;
   late AnimationController _footerController;
   final RefreshController _refreshController = RefreshController();
-  List ids = [];
+  int lengthOfPosts=5;
   @override
   void initState() {
     _aniController = AnimationController(
@@ -73,19 +72,20 @@ class _SmarterRefreshState extends State<SmarterRefresh>
             _refreshController.refreshCompleted();
             _refreshController.loadComplete();
             widget.isThatEndOfList.value = false;
-            ids = widget.posts;
+            lengthOfPosts = 5;
             setState(() {});
           });
         },
         onLoading: () async {
           if (!widget.isThatEndOfList.value) {
-            widget.onRefreshData(widget.posts.length).whenComplete(() {
+            widget.onRefreshData( lengthOfPosts).whenComplete(() {
               _refreshController.loadComplete();
-              if (ids.length == widget.posts.length) {
+              if ( lengthOfPosts >= widget.posts.length) {
                 _refreshController.loadNoData();
                 widget.isThatEndOfList.value = true;
+
               } else {
-                ids = widget.posts;
+                lengthOfPosts += 5;
               }
               setState(() {});
             });
