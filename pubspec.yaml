@@ -156,9 +156,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/3d_caractars/gif/
-    - assets/3d_caractars/pictures_for_posts/
-    - assets/3d_caractars/caractars/
     - assets/icons/
     - assets/splash_gif/
     - assets/translations/
