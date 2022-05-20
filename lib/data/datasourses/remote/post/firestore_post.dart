@@ -40,16 +40,15 @@ class FirestorePost {
       required String userId,
       required int lengthOfCurrentList}) async {
     List<Post> postsInfo = [];
-    int lengthOfOriginPost = postsIds.length;
-    int lengthOfData = lengthOfOriginPost > 5 ? 5 : lengthOfOriginPost;
+    int condition = postsIds.length;
     if (lengthOfCurrentList != -1) {
+      int lengthOfOriginPost = postsIds.length;
+      int lengthOfData = lengthOfOriginPost > 5 ? 5 : lengthOfOriginPost;
       int addMoreData = lengthOfCurrentList + 5;
       lengthOfData =
           addMoreData < lengthOfOriginPost ? addMoreData : lengthOfOriginPost;
+      condition = lengthOfData;
     }
-    int condition =
-        lengthOfCurrentList == -1 ? lengthOfOriginPost : lengthOfData;
-
     for (int i = 0; i < condition; i++) {
       DocumentSnapshot<Map<String, dynamic>> snap =
           await _fireStorePostCollection.doc(postsIds[i]).get();
