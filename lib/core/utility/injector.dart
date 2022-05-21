@@ -111,7 +111,7 @@ Future<void> initializeDependencies() async {
     FirestoreStoryRepositoryImpl(),
   );
   // *
-  // todo ==============================================================================================>
+  /// ==============================================================================================>
 
   // Firebase auth useCases
   injector.registerSingleton<LogInAuthUseCase>(LogInAuthUseCase(injector()));
@@ -226,7 +226,7 @@ Future<void> initializeDependencies() async {
       .registerSingleton<DeleteStoryUseCase>(DeleteStoryUseCase(injector()));
 
   // *
-  // todo ==============================================================================================>
+  /// ==============================================================================================>
 
   // auth Blocs
   injector.registerFactory<FirebaseAuthCubit>(

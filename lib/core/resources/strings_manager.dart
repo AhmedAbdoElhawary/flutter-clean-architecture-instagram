@@ -1,7 +1,7 @@
 class StringsManager {
   static const String or = "or";
 
-  static const String less = "less"; //4
+  static const String less = "less";
   static const String reel = "reel";
   static const String like = "like";
   static const String post = "post";
@@ -16,16 +16,16 @@ class StringsManager {
   static const String reply = "reply";
   static const String unSend = "unSend";
   static const String send = "send";
-  static const String name = "name"; //7
+  static const String name = "name";
 
-  static const String likes = "likes"; //5
+  static const String likes = "likes";
   static const String logIn = "logIn";
 
   static const String follow = "follow";
   static const String create = "create";
   static const String search = "search";
 
-  static const String signUp = "signUp"; //6
+  static const String signUp = "signUp";
   static const String report = "report";
   static const String username = "username";
   static const String pronouns = "pronouns";
@@ -34,6 +34,9 @@ class StringsManager {
   static const String personalInformationSettings =
       "personalInformationSettings";
   static const String noRecordsYet = "noRecordsYet";
+  static const String recordedSent = "recordedSent";
+  static const String photoSent = "photoSent";
+
   static const String userNotExist = "userNotExist";
   static const String yourStory = "yourStory";
 
@@ -43,7 +46,7 @@ class StringsManager {
   static const String message = "message";
   static const String messageP = "messageP";
   static const String replies = "replies";
-  static const String theName = "theName"; //7
+  static const String theName = "theName";
   static const String newPost = "newPost";
   static const String loading = "loading";
   static const String password = "password";
@@ -59,10 +62,10 @@ class StringsManager {
   static const String viewProfile = "viewProfile";
   static const String viewAll = "viewAll";
 
-  static const String restrict = "restrict"; //8
+  static const String restrict = "restrict";
   static const String share = "share";
 
-  static const String followers = "followers"; //9
+  static const String followers = "followers";
   static const String follower = "follower";
   static const String following = "following";
 
@@ -72,7 +75,7 @@ class StringsManager {
   static const String changeLanguage = "changeLanguage";
   static const String logOut = "logOut";
 
-  static const String changeMode = "changeMode";
+  static const String changeTheme = "changeTheme";
 
   static const String passwordWrong = "passwordWrong";
   static const String youFollowHim = "youFollowHim";
