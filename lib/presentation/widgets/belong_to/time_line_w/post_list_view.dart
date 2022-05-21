@@ -22,12 +22,14 @@ import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_viewer.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/points_scroll_bar.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_text.dart';
 import 'package:like_button/like_button.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class PostImage extends StatefulWidget {
   final Post postInfo;
@@ -51,19 +53,25 @@ class PostImage extends StatefulWidget {
   State<PostImage> createState() => _PostImageState();
 }
 
-class _PostImageState extends State<PostImage> {
+class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
   final TextEditingController textController = TextEditingController();
   ValueChanged<Post>? selectedPostInfo;
   bool isSaved = false;
   late Size imageSize = const Size(0.0, 0.0);
   late Widget videoStatusAnimation;
   String currentLanguage = 'en';
+  int initPosition = 0;
+  late TabController controller;
 
   @override
   void initState() {
-    super.initState();
+    controller = TabController(
+        vsync: this,
+        length: widget.postInfo.imagesUrls.length,
+        initialIndex: 0);
     videoStatusAnimation = Container();
     getLanguage();
+    super.initState();
   }
 
   @override
@@ -97,7 +105,7 @@ class _PostImageState extends State<PostImage> {
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+          // mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
               padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
@@ -122,9 +130,8 @@ class _PostImageState extends State<PostImage> {
             Padding(
               padding: const EdgeInsetsDirectional.only(
                   start: 8, top: 10, bottom: 8),
-              child: Row(children: [
-                Expanded(
-                    child: Row(
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     loveButton(postInfo),
                     Padding(
@@ -142,34 +149,40 @@ class _PostImageState extends State<PostImage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 15.0),
+                      padding: const EdgeInsetsDirectional.only(start: 5.0),
                       child: GestureDetector(
                         child: iconsOfImagePost(IconsAssets.send1Icon,
                             lowHeight: true),
                       ),
                     ),
-                  ],
-                )),
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(end: 12.0),
-                  child: GestureDetector(
-                    child: isSaved
-                        ? Icon(
-                            Icons.bookmark_border,
-                            color: Theme.of(context).focusColor,
-                          )
-                        : Icon(
-                            Icons.bookmark,
-                            color: Theme.of(context).focusColor,
-                          ),
-                    onTap: () {
-                      setState(() {
-                        isSaved = isSaved ? false : true;
-                      });
-                    },
-                  ),
-                ),
-              ]),
+                    const Spacer(),
+                    if (postInfo.imagesUrls.isNotEmpty)
+                      PointsScrollBar(
+                        photoCount: postInfo.imagesUrls.length,
+                        activePhotoIndex: initPosition,
+                      ),
+                    const Spacer(),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(end: 12.0),
+                      child: GestureDetector(
+                        child: isSaved
+                            ? Icon(
+                                Icons.bookmark_border,
+                                color: Theme.of(context).focusColor,
+                              )
+                            : Icon(
+                                Icons.bookmark,
+                                color: Theme.of(context).focusColor,
+                              ),
+                        onTap: () {
+                          setState(() {
+                            isSaved = isSaved ? false : true;
+                          });
+                        },
+                      ),
+                    ),
+                  ]),
             ),
             Padding(
               padding: const EdgeInsetsDirectional.only(start: 11.5),
@@ -353,8 +366,10 @@ class _PostImageState extends State<PostImage> {
 
   Widget imageOfPost(Post postInfo) {
     bool isLiked = postInfo.likes.contains(myPersonalId);
-    return Stack(
-      alignment: Alignment.center,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         GestureDetector(
             onDoubleTap: () {
@@ -374,7 +389,9 @@ class _PostImageState extends State<PostImage> {
                     return PictureViewer(
                         aspectRatio: postInfo.aspectRatio,
                         isThatImage: postInfo.isThatImage,
-                        imageUrl: postInfo.postUrl);
+                        imageUrl: postInfo.postUrl.isNotEmpty
+                            ? postInfo.postUrl
+                            : postInfo.imagesUrls[initPosition]);
                   },
                 ),
               );
@@ -382,19 +399,45 @@ class _PostImageState extends State<PostImage> {
             child: Padding(
               padding: const EdgeInsetsDirectional.only(top: 8.0),
               child: postInfo.isThatImage
-                  ? Hero(
-                      tag: postInfo.postUrl,
-                      child: ImageDisplay(
-                        aspectRatio: postInfo.aspectRatio,
-                        bodyHeight: widget.bodyHeight,
-                        imageUrl: postInfo.postUrl,
-                      ),
-                    )
+                  ? (postInfo.imagesUrls.length > 1
+                      ? imagesSlider(postInfo.imagesUrls)
+                      : Hero(
+                          tag: postInfo.postUrl,
+                          child: ImageDisplay(
+                            aspectRatio: postInfo.aspectRatio,
+                            bodyHeight: widget.bodyHeight,
+                            imageUrl: postInfo.postUrl,
+                          ),
+                        ))
                   : PlayThisVideo(
                       videoUrl: postInfo.postUrl, play: widget.playTheVideo),
             )),
         Center(child: videoStatusAnimation),
       ],
+    );
+  }
+
+  void _updateImageIndex(int index, _) {
+    setState(() => initPosition = index);
+  }
+
+  Widget imagesSlider(List<dynamic> imagesUrls) {
+    return CarouselSlider(
+      items: imagesUrls.map((url) {
+        return Hero(
+          tag: url,
+          child: Image.network(
+            url,
+            fit: BoxFit.fitWidth,
+            width: MediaQuery.of(context).size.width,
+          ),
+        );
+      }).toList(),
+      options: CarouselOptions(
+        viewportFraction: 1.0,
+        enableInfiniteScroll: false,
+        onPageChanged: _updateImageIndex,
+      ),
     );
   }
 
