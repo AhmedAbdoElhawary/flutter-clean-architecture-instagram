@@ -58,10 +58,8 @@ class _PlayThisVideoState extends State<PlayThisVideo> {
 
   @override
   void dispose() {
-    // if (widget.dispose) {
     _controller.dispose();
     super.dispose();
-    // }
   }
 
   @override

@@ -30,14 +30,6 @@ class RegisterWidgets extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<RegisterWidgets> {
-  // final AppPreferences _appPreferences = injector<AppPreferences>();
-  //
-  // @override
-  // void didChangeDependencies() {
-  //   _appPreferences.getLocal().then((local) => {context.setLocale(local)});
-  //   super.didChangeDependencies();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return buildScaffold(context);
@@ -69,11 +61,9 @@ class _SignUpPageState extends State<RegisterWidgets> {
                   controller: widget.passwordController),
               if (!widget.isThatLogIn) ...[
                 const SizedBox(height: 15),
-                //---------------------------------------------
                 CustomTextField(
                     hint: StringsManager.confirmPassword.tr(),
                     controller: widget.confirmPasswordController),
-                //---------------------------------------------
               ],
               const SizedBox(height: 15),
               widget.customTextButton,
@@ -105,12 +95,12 @@ class _SignUpPageState extends State<RegisterWidgets> {
           style: getNormalStyle(
               fontSize: 13, color: ColorManager.grey),
         ),
-        login(context),
+        register(context),
       ],
     );
   }
 
-  InkWell login(BuildContext context) {
+  InkWell register(BuildContext context) {
     return InkWell(
         onTap: () {
           if (widget.isThatLogIn) {
@@ -120,10 +110,10 @@ class _SignUpPageState extends State<RegisterWidgets> {
             Navigator.pop(context);
           }
         },
-        child: loginText());
+        child: registerText());
   }
 
-  Text loginText() {
+  Text registerText() {
     return Text(
       widget.isThatLogIn
           ? StringsManager.signUp.tr()

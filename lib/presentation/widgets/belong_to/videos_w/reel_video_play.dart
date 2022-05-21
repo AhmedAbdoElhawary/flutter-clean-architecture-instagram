@@ -39,7 +39,6 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
       _controller.pause();
       super.didUpdateWidget(oldWidget);
     }
-    // super.dispose();
   }
 
   @override
