@@ -14,12 +14,14 @@ import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle
 class CommentBox extends StatefulWidget {
   final TextEditingController textController;
   final Comment? selectedCommentInfo;
+  final FocusNode? focusNode;
   final VoidCallback makeSelectedCommentNullable;
   final UserPersonalInfo userPersonalInfo;
   final String postId;
   const CommentBox(
       {Key? key,
       required this.textController,
+      this.focusNode,
       required this.userPersonalInfo,
       required this.makeSelectedCommentNullable,
       required this.postId,
@@ -34,6 +36,7 @@ class _CommentBoxState extends State<CommentBox> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -67,6 +70,9 @@ class _CommentBoxState extends State<CommentBox> {
                 child: TextFormField(
                   keyboardType: TextInputType.multiline,
                   cursorColor: ColorManager.teal,
+                  focusNode:
+                      widget.focusNode == null ? null : FocusNode()
+                        ?..requestFocus(),
                   style: Theme.of(context).textTheme.bodyText1,
                   maxLines: null,
                   decoration: InputDecoration.collapsed(

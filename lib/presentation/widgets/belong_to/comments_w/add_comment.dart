@@ -5,13 +5,16 @@ import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.
 class AddComment extends StatefulWidget {
   const AddComment({
     Key? key,
-    // required this.showCommentBox,
+    required this.showCommentBox,
+    required this.focusNode,
     required this.postsInfo,
     required this.textController,
   }) : super(key: key);
 
   final Post postsInfo;
-  // final ValueNotifier<FocusNode> showCommentBox;
+  final FocusNode focusNode;
+
+  final ValueNotifier<bool> showCommentBox;
   final TextEditingController textController;
   @override
   _CommentBoxState createState() => _CommentBoxState();
@@ -47,16 +50,16 @@ class _CommentBoxState extends State<AddComment>
         });
       }
     });
-    // widget.showCommentBox.addListener(_showHideCommentBox);
+    widget.showCommentBox.addListener(_showHideCommentBox);
   }
-  //
-  // void _showHideCommentBox() {
-  //   if (widget.showCommentBox.value.hasFocus) {
-  //     _controller.forward();
-  //   } else {
-  //     _controller.reverse();
-  //   }
-  // }
+
+  void _showHideCommentBox() {
+    if (widget.showCommentBox.value) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+  }
 
   @override
   void dispose() {
@@ -77,6 +80,7 @@ class _CommentBoxState extends State<AddComment>
               postId: widget.postsInfo.postUid,
               textController: widget.textController,
               userPersonalInfo: widget.postsInfo.publisherInfo!,
+              focusNode: widget.focusNode,
               makeSelectedCommentNullable: () {
                 setState(() {
                   widget.textController.text = '';
