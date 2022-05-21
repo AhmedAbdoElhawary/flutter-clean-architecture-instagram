@@ -12,7 +12,7 @@ class SmarterRefresh extends StatefulWidget {
   final List posts;
   final ValueNotifier<bool> isThatEndOfList;
   final AsyncValueSetter<int> onRefreshData;
-   SmarterRefresh(
+   const SmarterRefresh(
       {required this.onRefreshData,
       required this.child,
       required this.isThatEndOfList,
