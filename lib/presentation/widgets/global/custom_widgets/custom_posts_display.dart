@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
@@ -102,7 +103,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
       mainAxisSize: MainAxisSize.min,
       children: [
         posts(index, postInfo, bodyHeight, playTheVideo),
-        Divider(color: Theme.of(context).toggleableActiveColor, thickness: .15),
+        const Divider(color: ColorManager.lightGrey, thickness: .15),
         if (isThatEndOfList.value && index == postsInfo.length - 1) ...[
           const AllCatchUpIcon(),
         ]

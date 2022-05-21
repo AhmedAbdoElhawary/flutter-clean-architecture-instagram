@@ -15,12 +15,13 @@ import 'package:instagram/presentation/cubit/followCubit/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/comments/comments_page.dart';
-import 'package:instagram/presentation/pages/profile/update_post_info.dart';
+import 'package:instagram/presentation/pages/time_line/my_own_time_line/update_post_info.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
 import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_slider.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_viewer.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/points_scroll_bar.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
@@ -29,7 +30,6 @@ import 'package:instagram/presentation/widgets/global/aimation/fade_animation.da
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_text.dart';
 import 'package:like_button/like_button.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 class PostImage extends StatefulWidget {
   final Post postInfo;
@@ -99,7 +99,6 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
-          // mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
               padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
@@ -411,7 +410,10 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
               padding: const EdgeInsetsDirectional.only(top: 8.0),
               child: postInfo.isThatImage
                   ? (postInfo.imagesUrls.length > 1
-                      ? imagesSlider(postInfo.imagesUrls)
+                      ? ImageSlider(
+                          imagesUrls: postInfo.imagesUrls,
+                          updateImageIndex: _updateImageIndex,
+                        )
                       : Hero(
                           tag: postInfo.postUrl,
                           child: ImageDisplay(
@@ -430,26 +432,6 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
 
   void _updateImageIndex(int index, _) {
     setState(() => initPosition = index);
-  }
-
-  Widget imagesSlider(List<dynamic> imagesUrls) {
-    return CarouselSlider(
-      items: imagesUrls.map((url) {
-        return Hero(
-          tag: url,
-          child: Image.network(
-            url,
-            fit: BoxFit.fitWidth,
-            width: MediaQuery.of(context).size.width,
-          ),
-        );
-      }).toList(),
-      options: CarouselOptions(
-        viewportFraction: 1.0,
-        enableInfiniteScroll: false,
-        onPageChanged: _updateImageIndex,
-      ),
-    );
   }
 
   Widget menuButton() {
