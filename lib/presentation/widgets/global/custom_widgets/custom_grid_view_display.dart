@@ -58,7 +58,9 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
           onLongPressEnd: (details) => _popupDialog?.remove(),
           child: widget.postClickedInfo.isThatImage
               ? ImageDisplay(
-                  imageUrl: widget.postClickedInfo.postUrl,
+                  imageUrl: widget.postClickedInfo.postUrl.isNotEmpty
+                      ? widget.postClickedInfo.postUrl
+                      : widget.postClickedInfo.imagesUrls[0],
                   boxFit: BoxFit.cover)
               : PlayThisVideo(
                   videoUrl: widget.postClickedInfo.postUrl,
@@ -95,7 +97,10 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
                     color: Theme.of(context).primaryColor,
                     width: double.infinity,
                     child: ImageDisplay(
-                        imageUrl: postInfo.postUrl, boxFit: BoxFit.fitWidth))
+                        imageUrl: postInfo.postUrl.isNotEmpty
+                            ? postInfo.postUrl
+                            : postInfo.imagesUrls[0],
+                        boxFit: BoxFit.fitWidth))
                 : Container(
                     color: Theme.of(context).primaryColor,
                     width: double.infinity,

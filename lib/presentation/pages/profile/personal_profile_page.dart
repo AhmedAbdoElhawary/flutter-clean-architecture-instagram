@@ -43,6 +43,8 @@ class PersonalProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<PersonalProfilePage> {
   bool rebuildUserInfo = false;
   Size imageSize = const Size(0.00, 0.00);
+  List<Size> imagesSize = [];
+
   final SharedPreferences sharePrefs = injector<SharedPreferences>();
 
   @override
@@ -385,7 +387,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     }
   }
 
-  void _getImageDimension(File photo) {
+  Future<void> _getImageDimension(File photo) async {
     Image image = Image.file(photo);
     image.image.resolve(const ImageConfiguration()).addListener(
       ImageStreamListener(
@@ -400,17 +402,24 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     );
   }
 
+  // TODO ---- handling this function and dimension of image ----
   createNewPost(bool isThatFromCamera) async {
     Navigator.maybePop(context);
-    File? pickImage = isThatFromCamera
-        ? await imageCameraPicker()
-        : await imageGalleryPicker();
-    if (pickImage != null) {
-      _getImageDimension(pickImage);
+    List<File>? pickImages;
+    if (isThatFromCamera) {
+      File? file = await imageCameraPicker();
+      if (file != null) pickImages = [file];
+    } else {
+      pickImages = await multiImageGalleryPicker();
+    }
+    if (pickImages != null) {
+      await _getImageDimension(pickImages[0]);
       await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
           builder: (context) {
             return CreatePostPage(
-                selectedFile: pickImage, aspectRatio: imageSize.aspectRatio);
+                selectedFile: pickImages![0],
+                multiSelectedFiles: pickImages,
+                aspectRatio: imageSize.aspectRatio);
           },
           maintainState: false));
       setState(() {

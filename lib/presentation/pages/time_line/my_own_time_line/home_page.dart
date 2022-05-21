@@ -43,7 +43,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // final ValueNotifier<FocusNode> _showCommentBox = ValueNotifier(FocusNode());
   final TextEditingController _textController = TextEditingController();
   ValueNotifier<bool> isThatEndOfList = ValueNotifier(false);
   UserPersonalInfo? personalInfo;
@@ -70,9 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     List usersPostsIds = usersPostsCubit.usersPostsInfo;
 
-    postsIds = usersPostsIds + personalInfo!.posts;
-
-    // if (index == 0) postsIds.shuffle();
+    postsIds = personalInfo!.posts + usersPostsIds;
 
     PostCubit postCubit = PostCubit.get(context);
     await postCubit
@@ -88,13 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
       reLoadData.value = true;
     });
   }
-
-  //
-  // @override
-  // void dispose() {
-  //   _showCommentBox.value.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +107,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget? addComment() {
     return selectedPostInfo != null
         ? AddComment(
-            // showCommentBox: _showCommentBox,
             postsInfo: selectedPostInfo!,
             textController: _textController,
           )
@@ -220,13 +209,6 @@ class _HomeScreenState extends State<HomeScreen> {
       color: ColorManager.grey,
       width: double.infinity,
       height: 0.3);
-
-  // selectPost(Post selectedPost) {
-  //   setState(() {
-  //     // _showCommentBox.value.requestFocus();
-  //     selectedPostInfo = selectedPost;
-  //   });
-  // }
 
   Widget posts(int index, double bodyHeight, bool playTheVideo) {
     return PostImage(

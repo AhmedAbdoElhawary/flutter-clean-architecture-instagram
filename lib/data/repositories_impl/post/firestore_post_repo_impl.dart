@@ -8,11 +8,19 @@ import '../../../domain/repositories/post/post_repository.dart';
 class FirestorePostRepositoryImpl implements FirestorePostRepository {
   @override
   Future<String> createPost(
-      {required Post postInfo, required File photo}) async {
+      {required Post postInfo, required List<File> files}) async {
     try {
-      String postUrl =
-          await FirebaseStoragePost.uploadFile(photo, 'postsImage');
-      postInfo.postUrl = postUrl;
+      if (files.length == 1) {
+        String postUrl =
+            await FirebaseStoragePost.uploadFile(files[0], 'postsImage');
+        postInfo.postUrl = postUrl;
+      } else {
+        for (int i = 0; i < files.length; i++) {
+          String postUrl =
+              await FirebaseStoragePost.uploadFile(files[i], 'postsImage');
+          postInfo.imagesUrls.add(postUrl);
+        }
+      }
       String postUid = await FirestorePost.createPost(postInfo);
       return postUid;
     } catch (e) {

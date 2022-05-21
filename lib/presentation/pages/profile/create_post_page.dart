@@ -15,13 +15,15 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circ
 
 class CreatePostPage extends StatefulWidget {
   final File selectedFile;
+  final List<File>? multiSelectedFiles;
   final bool isThatImage;
   final double aspectRatio;
   const CreatePostPage({
-    Key? key,
     required this.selectedFile,
     required this.aspectRatio,
     this.isThatImage = true,
+    this.multiSelectedFiles,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -160,8 +162,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       PostCubit postCubit =
           BlocProvider.of<PostCubit>(builder2context, listen: false);
-
-      await postCubit.createPost(postInfo, widget.selectedFile).then((_) async {
+      List<File>? selectedFiles =
+          widget.multiSelectedFiles ?? [widget.selectedFile];
+      await postCubit.createPost(postInfo, selectedFiles).then((_) async {
         if (postCubit.postId != '') {
           await userCubit.updateUserPostsInfo(
               userId: personalInfo.userId, postId: postCubit.postId);
@@ -185,6 +188,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       publisherId: personalInfo.userId,
       datePublished: DateOfNow.dateOfNow(),
       caption: captionController.text,
+      imagesUrls: [],
       comments: [],
       likes: [],
       isThatImage: widget.isThatImage,

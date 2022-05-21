@@ -109,7 +109,7 @@ dependencies:
   extended_tabs: ^2.3.0
   shimmer: ^2.0.0
   like_button: ^2.0.4
-
+#  photo_view: ^0.13.0
 
 
 
