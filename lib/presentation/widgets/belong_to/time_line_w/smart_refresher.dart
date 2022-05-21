@@ -180,8 +180,4 @@ class _SmarterRefreshState extends State<SmarterRefresh>
       ),
     );
   }
-  // Widget noMoreData(BuildContext context) {
-  //   return Text(StringsManager.noMoreData.tr(),
-  //       style: Theme.of(context).textTheme.bodyText1);
-  // }
 }

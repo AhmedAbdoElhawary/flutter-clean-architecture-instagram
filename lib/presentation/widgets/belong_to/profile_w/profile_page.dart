@@ -70,17 +70,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  // getData() async {
-  //   await PostCubit.get(context).getPostsInfo(
-  //       userId: widget.userInfo.userId,
-  //       postsIds: widget.userInfo.posts,
-  //       isThatForMyPosts: widget.isThatMyPersonalId);
-  //   setState(() {
-  //     loading = false;
-  //     reBuild = true;
-  //   });
-  // }
-
   Widget tapBar() {
     return BlocBuilder<PostCubit, PostState>(
       bloc: PostCubit.get(context)
