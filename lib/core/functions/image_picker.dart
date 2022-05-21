@@ -4,7 +4,8 @@ import 'package:instagram/core/functions/compress_image.dart';
 
 Future<File?> imageCameraPicker() async {
   final ImagePicker _picker = ImagePicker();
-  final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+  final XFile? image = await _picker.pickImage(
+      source: ImageSource.camera, maxWidth: double.infinity, maxHeight: 300);
   if (image != null) {
     File photo = File(image.path);
     File? compressPhoto = await compressImage(photo);
@@ -16,7 +17,8 @@ Future<File?> imageCameraPicker() async {
 
 Future<File?> imageGalleryPicker() async {
   final ImagePicker _picker = ImagePicker();
-  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  final XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery, maxWidth: double.infinity, maxHeight: 300);
   if (image != null) {
     File photo = File(image.path);
     File? compressPhoto = await compressImage(photo);
@@ -28,7 +30,8 @@ Future<File?> imageGalleryPicker() async {
 
 Future<List<File>?> multiImageGalleryPicker() async {
   final ImagePicker _picker = ImagePicker();
-  final List<XFile>? images = await _picker.pickMultiImage();
+  final List<XFile>? images =
+      await _picker.pickMultiImage(maxHeight: 300, maxWidth: double.infinity);
   List<File>? compressImages;
   if (images != null) {
     compressImages = [];

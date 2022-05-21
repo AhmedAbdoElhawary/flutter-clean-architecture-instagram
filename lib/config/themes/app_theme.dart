@@ -11,20 +11,20 @@ class AppTheme {
         primarySwatch: Colors.grey,
         hintColor: ColorManager.lowOpacityGrey,
         shadowColor: ColorManager.veryLowOpacityGrey,
-        bottomAppBarColor: ColorManager.darkWhite,
+        bottomAppBarColor: ColorManager.black26,
         focusColor: ColorManager.black,
         disabledColor: ColorManager.black54,
         dialogBackgroundColor: ColorManager.black87,
         hoverColor: ColorManager.black45,
         indicatorColor: ColorManager.black38,
-        cardColor: ColorManager.black26,
         dividerColor: ColorManager.black12,
         backgroundColor: ColorManager.lightBlack,
         selectedRowColor: ColorManager.lightGrey,
-        toggleableActiveColor: ColorManager.lightGrey,
+        toggleableActiveColor: ColorManager.darkWhite,
         scaffoldBackgroundColor: ColorManager.white,
+
         errorColor: ColorManager.black,
-        canvasColor: ColorManager.transparent,
+        canvasColor: ColorManager.lightGrey,
         splashColor: ColorManager.white,
         appBarTheme: AppBarTheme(
           elevation: 0,
@@ -40,6 +40,7 @@ class AppTheme {
           headline1: getNormalStyle(color: ColorManager.grey, fontSize: 15),
           headline2: getBoldStyle(color: ColorManager.black, fontSize: 15),
           headline3: getMediumStyle(color: ColorManager.black, fontSize: 15),
+
         ));
   }
 
@@ -54,16 +55,15 @@ class AppTheme {
       dialogBackgroundColor: ColorManager.white,
       hoverColor: ColorManager.grey,
       indicatorColor: ColorManager.grey,
-      cardColor: ColorManager.grey,
       dividerColor: ColorManager.grey,
-      bottomAppBarColor: ColorManager.black54,
-      toggleableActiveColor: ColorManager.lightGrey,
+      bottomAppBarColor: ColorManager.grey,
+      toggleableActiveColor: ColorManager.black54,
       backgroundColor: ColorManager.darkGray,
       selectedRowColor: ColorManager.darkGray,
       errorColor: ColorManager.grey,
       disabledColor: ColorManager.white,
       scaffoldBackgroundColor: ColorManager.black,
-      canvasColor: ColorManager.transparent,
+      canvasColor: ColorManager.darkGray,
       splashColor: ColorManager.darkGray,
       appBarTheme: AppBarTheme(
         elevation: 0,

@@ -125,7 +125,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                   ],
                 ),
               ),
-              imageOfPost(widget.oldPostInfo, bodyHeight),
+              ...imageOfPost(widget.oldPostInfo, bodyHeight),
               Padding(
                 padding: const EdgeInsetsDirectional.only(start: 12.0, end: 12),
                 child: TextFormField(
@@ -141,8 +141,8 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                     enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: ColorManager.blue),
                     ),
-                    hintStyle: TextStyle(
-                        color: Theme.of(context).bottomAppBarColor),
+                    hintStyle:
+                        TextStyle(color: Theme.of(context).bottomAppBarColor),
                   ),
                 ),
               ),
@@ -160,38 +160,43 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
     setState(() => initPosition = index);
   }
 
-  Widget imageOfPost(Post postInfo, double bodyHeight) {
+  List<Widget> imageOfPost(Post postInfo, double bodyHeight) {
     String postUrl =
         postInfo.postUrl.isNotEmpty ? postInfo.postUrl : postInfo.imagesUrls[0];
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        GestureDetector(
-          child: Padding(
-            padding: const EdgeInsetsDirectional.only(top: 8.0),
-            child: postInfo.isThatImage
-                ? (postInfo.imagesUrls.length > 1
-                    ? ImageSlider(
-                        imagesUrls: postInfo.imagesUrls,
-                        updateImageIndex: _updateImageIndex,
-                      )
-                    : Hero(
-                        tag: postUrl,
-                        child: ImageDisplay(
-                          aspectRatio: 0,
-                          bodyHeight: bodyHeight,
-                          imageUrl: postUrl,
-                        ),
-                      ))
-                : PlayThisVideo(videoUrl: postInfo.postUrl, play: false),
-          ),
+    return [
+      GestureDetector(
+        child: Padding(
+          padding: const EdgeInsetsDirectional.only(top: 8.0),
+          child: postInfo.isThatImage
+              ? (postInfo.imagesUrls.length > 1
+                  ? ImageSlider(
+                      imagesUrls: postInfo.imagesUrls,
+                      updateImageIndex: _updateImageIndex,
+                    )
+                  : Hero(
+                      tag: postUrl,
+                      child: ImageDisplay(
+                        aspectRatio: 0,
+                        bodyHeight: bodyHeight,
+                        imageUrl: postUrl,
+                      ),
+                    ))
+              : PlayThisVideo(videoUrl: postInfo.postUrl, play: false),
         ),
-        PointsScrollBar(
-          photoCount: postInfo.imagesUrls.length,
-          activePhotoIndex: initPosition,
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 10.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            PointsScrollBar(
+              photoCount: postInfo.imagesUrls.length,
+              activePhotoIndex: initPosition,
+            ),
+          ],
         ),
-      ],
-    );
+      ),
+    ];
   }
 }

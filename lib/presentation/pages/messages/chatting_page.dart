@@ -321,7 +321,7 @@ class _ChattingPageState extends State<ChattingPage>
             alignment: Alignment.bottomCenter,
             child: Container(
               decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColorLight,
+                  color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(35)),
               height: 50,
               padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
@@ -360,7 +360,7 @@ class _ChattingPageState extends State<ChattingPage>
         }
         return Container(
           height: 45,
-          color: Theme.of(context).primaryColorLight,
+          color: Theme.of(context).primaryColor,
           width: double.infinity,
           child: Padding(
             padding: const EdgeInsetsDirectional.only(start: 80, end: 80),
@@ -508,7 +508,7 @@ class _ChattingPageState extends State<ChattingPage>
           maxLines: null,
           decoration: InputDecoration.collapsed(
               hintText: StringsManager.messageP.tr(),
-              hintStyle: TextStyle(color: Theme.of(context).bottomAppBarColor)),
+              hintStyle: const TextStyle(color: ColorManager.grey)),
           autofocus: false,
           controller: _textController,
           cursorWidth: 1.5,
@@ -651,7 +651,7 @@ class _ChattingPageState extends State<ChattingPage>
         Text(
           "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr()}",
           style: TextStyle(
-              color: Theme.of(context).bottomAppBarColor, fontSize: 13),
+              color: Theme.of(context).toggleableActiveColor, fontSize: 13),
         ),
         const SizedBox(
           width: 15,
@@ -659,7 +659,7 @@ class _ChattingPageState extends State<ChattingPage>
         Text(
           "${widget.userInfo.posts.length} ${StringsManager.posts.tr()}",
           style: TextStyle(
-              fontSize: 13, color: Theme.of(context).bottomAppBarColor),
+              fontSize: 13, color: Theme.of(context).toggleableActiveColor),
         ),
       ],
     );

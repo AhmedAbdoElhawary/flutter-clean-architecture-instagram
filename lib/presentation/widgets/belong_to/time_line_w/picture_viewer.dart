@@ -28,14 +28,12 @@ class PictureViewer extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
               },
-              child: const CircleAvatar(
-                backgroundColor: ColorManager.black54,
-                child: Icon(Icons.close_rounded),
-              ),
+              child: Icon(Icons.close_outlined,
+                  size: 30, color: Theme.of(context).focusColor),
             ),
           )
         ],
-        iconTheme: const IconThemeData(color: ColorManager.transparent),
+        iconTheme: IconThemeData(color: Theme.of(context).focusColor),
         backgroundColor: ColorManager.transparent,
         foregroundColor: Theme.of(context).primaryColor,
       ),

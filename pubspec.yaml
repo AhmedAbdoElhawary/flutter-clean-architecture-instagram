@@ -79,7 +79,7 @@ dependencies:
   flutter_image_compress: ^1.1.0
   like_button: ^2.0.4
   photo_manager: ^2.1.1
-
+  photofilters: ^3.0.1
 
 
 

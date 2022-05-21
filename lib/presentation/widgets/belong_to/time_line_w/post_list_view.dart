@@ -202,7 +202,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
                     child: Text(
                       DateOfNow.chattingDateOfNow(
                           postInfo.datePublished, postInfo.datePublished),
-                      style: getNormalStyle(color: Theme.of(context).cardColor),
+                      style: getNormalStyle(color: Theme.of(context).bottomAppBarColor),
                     ),
                   ),
                 ],
@@ -260,7 +260,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
               child: Text(
                 StringsManager.addComment.tr(),
                 style:
-                    TextStyle(color: Theme.of(context).cardColor, fontSize: 14),
+                    TextStyle(color: Theme.of(context).bottomAppBarColor, fontSize: 14),
               ),
             ),
           ),
