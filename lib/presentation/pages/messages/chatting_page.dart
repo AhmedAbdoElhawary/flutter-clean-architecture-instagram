@@ -38,23 +38,23 @@ class _ChattingPageState extends State<ChattingPage>
   late Animation _colorTween;
   final TextEditingController _textController = TextEditingController();
   final itemScrollController = ItemScrollController();
-  List<Message> globalmessagesInfo = [];
-  Message? newmessageInfo;
-  Message? deleteThismessage;
-  bool isDeletemessageDone = false;
-  bool ismessageLoaded = false;
-  int? indexOfGarbagemessage;
+  List<Message> globalMessagesInfo = [];
+  Message? newMessageInfo;
+  Message? deleteThisMessage;
+  bool isDeleteMessageDone = false;
+  bool isMessageLoaded = false;
+  int? indexOfGarbageMessage;
   int itemIndex = 0;
   String records = '';
   bool unSend = false;
   bool appearIcons = true;
 
   Future<void> scrollToLastIndex(BuildContext context) async {
-    if (globalmessagesInfo.length > 1) {
+    if (globalMessagesInfo.length > 1) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         setState(() {
           itemScrollController.scrollTo(
-              index: globalmessagesInfo.length - 1,
+              index: globalMessagesInfo.length - 1,
               alignment: 0.2,
               duration: const Duration(milliseconds: 10),
               curve: Curves.easeInOutQuint);
@@ -87,7 +87,7 @@ class _ChattingPageState extends State<ChattingPage>
           onTap: () {
             setState(() {
               unSend = false;
-              deleteThismessage = null;
+              deleteThisMessage = null;
             });
           },
           child: buildBody(context)),
@@ -106,23 +106,23 @@ class _ChattingPageState extends State<ChattingPage>
         },
         builder: (context, state) {
           if (state is MessageBlocLoaded) {
-            if (state.messages.length >= globalmessagesInfo.length) {
-              globalmessagesInfo = state.messages;
-              if (itemIndex < globalmessagesInfo.length - 1) {
-                itemIndex = globalmessagesInfo.length - 1;
+            if (state.messages.length >= globalMessagesInfo.length) {
+              globalMessagesInfo = state.messages;
+              if (itemIndex < globalMessagesInfo.length - 1) {
+                itemIndex = globalMessagesInfo.length - 1;
                 scrollToLastIndex(context);
               }
             }
-            if (newmessageInfo != null && ismessageLoaded) {
-              ismessageLoaded = false;
-              globalmessagesInfo.add(newmessageInfo!);
+            if (newMessageInfo != null && isMessageLoaded) {
+              isMessageLoaded = false;
+              globalMessagesInfo.add(newMessageInfo!);
             }
             return Stack(
               children: [
                 Padding(
                     padding: const EdgeInsetsDirectional.only(
                         end: 10, start: 10, top: 10, bottom: 10),
-                    child: globalmessagesInfo.isNotEmpty
+                    child: globalMessagesInfo.isNotEmpty
                         ? NotificationListener<ScrollNotification>(
                             onNotification: _scrollListener,
                             child: ScrollablePositionedList.separated(
@@ -132,18 +132,18 @@ class _ChattingPageState extends State<ChattingPage>
                                     children: [
                                       if (index == 0) buildUserInfo(context),
                                       buildThemessage(
-                                          globalmessagesInfo[index],
-                                          globalmessagesInfo[
+                                          globalMessagesInfo[index],
+                                          globalMessagesInfo[
                                                   index != 0 ? index - 1 : 0]
                                               .datePublished,
                                           index),
                                       if (index ==
-                                          globalmessagesInfo.length - 1)
+                                          globalMessagesInfo.length - 1)
                                         const SizedBox(height: 50),
                                     ],
                                   );
                                 },
-                                itemCount: globalmessagesInfo.length,
+                                itemCount: globalMessagesInfo.length,
                                 separatorBuilder:
                                     (BuildContext context, int index) =>
                                         const SizedBox(height: 5)))
@@ -210,8 +210,8 @@ class _ChattingPageState extends State<ChattingPage>
               child: GestureDetector(
                 onLongPress: () {
                   setState(() {
-                    deleteThismessage = messageInfo;
-                    indexOfGarbagemessage = index;
+                    deleteThisMessage = messageInfo;
+                    indexOfGarbageMessage = index;
                     unSend = true;
                   });
                 },
@@ -289,7 +289,7 @@ class _ChattingPageState extends State<ChattingPage>
                                       ),
                                     ),
                                   )
-                                : Image.file(File(newmessageInfo!.imageUrl),
+                                : Image.file(File(newMessageInfo!.imageUrl),
                                     fit: BoxFit.cover))
                         : SizedBox(
                             child: RecordView(
@@ -335,7 +335,7 @@ class _ChattingPageState extends State<ChattingPage>
       );
 
   Widget deleteTheMessage() {
-    bool isThatMine = deleteThismessage!.senderId == myPersonalId;
+    bool isThatMine = deleteThisMessage!.senderId == myPersonalId;
     return BlocBuilder<MessageCubit, MessageState>(
       buildWhen: (previous, current) {
         if (previous != current && (current is DeleteMessageLoaded)) {
@@ -344,16 +344,16 @@ class _ChattingPageState extends State<ChattingPage>
         return false;
       },
       builder: (context, state) {
-        if (deleteThismessage != null &&
+        if (deleteThisMessage != null &&
             unSend &&
-            indexOfGarbagemessage != null &&
-            isDeletemessageDone) {
+            indexOfGarbageMessage != null &&
+            isDeleteMessageDone) {
           WidgetsBinding.instance.addPostFrameCallback((_) async {
             setState(() {
-              isDeletemessageDone = false;
+              isDeleteMessageDone = false;
               unSend = false;
-              deleteThismessage = null;
-              globalmessagesInfo.removeAt(indexOfGarbagemessage!);
+              deleteThisMessage = null;
+              globalMessagesInfo.removeAt(indexOfGarbageMessage!);
             });
           });
         }
@@ -375,21 +375,21 @@ class _ChattingPageState extends State<ChattingPage>
                   if (isThatMine)
                     GestureDetector(
                         onTap: () async {
-                          if (deleteThismessage != null) {
+                          if (deleteThisMessage != null) {
                             WidgetsBinding.instance
                                 .addPostFrameCallback((_) async {
                               setState(() {
-                                isDeletemessageDone = true;
+                                isDeleteMessageDone = true;
                                 Message? replacedMessage;
-                                if (globalmessagesInfo[
-                                            globalmessagesInfo.length - 1]
+                                if (globalMessagesInfo[
+                                            globalMessagesInfo.length - 1]
                                         .messageUid ==
-                                    deleteThismessage!.messageUid) {
-                                  replacedMessage = globalmessagesInfo[
-                                      globalmessagesInfo.length - 2];
+                                    deleteThisMessage!.messageUid) {
+                                  replacedMessage = globalMessagesInfo[
+                                      globalMessagesInfo.length - 2];
                                 }
                                 MessageCubit.get(context).deleteMessage(
-                                    messageInfo: deleteThismessage!,
+                                    messageInfo: deleteThisMessage!,
                                     replacedMessage: replacedMessage);
                               });
                             });
@@ -433,8 +433,8 @@ class _ChattingPageState extends State<ChattingPage>
                     setState(() {
                       records = soundFile.path;
                       MessageCubit messageCubit = MessageCubit.get(context);
-                      newmessageInfo = newMessage();
-                      ismessageLoaded = true;
+                      newMessageInfo = newMessage();
+                      isMessageLoaded = true;
                       messageCubit.sendMessage(
                           messageInfo: newMessage(),
                           pathOfRecorded: soundFile.path);
@@ -471,9 +471,9 @@ class _ChattingPageState extends State<ChattingPage>
             if (pickImage != null) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 setState(() {
-                  ismessageLoaded = true;
-                  newmessageInfo = newMessage(isThatImage: true);
-                  newmessageInfo!.imageUrl = pickImage.path;
+                  isMessageLoaded = true;
+                  newMessageInfo = newMessage(isThatImage: true);
+                  newMessageInfo!.imageUrl = pickImage.path;
                 });
               });
               messageCubit.sendMessage(
@@ -568,9 +568,9 @@ class _ChattingPageState extends State<ChattingPage>
           if (pickImage != null) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               setState(() {
-                ismessageLoaded = true;
-                newmessageInfo = newMessage(isThatImage: true);
-                newmessageInfo!.imageUrl = pickImage.path;
+                isMessageLoaded = true;
+                newMessageInfo = newMessage(isThatImage: true);
+                newMessageInfo!.imageUrl = pickImage.path;
               });
             });
             messageCubit.sendMessage(

@@ -402,6 +402,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     );
   }
 
+  // ignore: todo
   // TODO ---- handling this function and dimension of image ----
   createNewPost(bool isThatFromCamera) async {
     Navigator.maybePop(context);
