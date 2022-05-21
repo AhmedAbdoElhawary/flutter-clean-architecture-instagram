@@ -249,7 +249,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
               : (widget.userInfo.profileImageUrl.isEmpty
                   ? Icon(Icons.person, color: Theme.of(context).primaryColor)
                   : ImageDisplay(
-                      imageUrl: widget.userInfo.profileImageUrl)),
+                      imageUrl: widget.userInfo.profileImageUrl,
+                      boxFit: BoxFit.cover,
+                    )),
         ),
         radius: 50,
         backgroundColor: Theme.of(context).focusColor,
@@ -264,6 +266,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
       decoration: InputDecoration(
         labelText: text,
+        labelStyle: getNormalStyle(color: ColorManager.grey),
       ),
     );
   }

@@ -70,7 +70,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         border: InputBorder.none,
                         hintText: StringsManager.writeACaption.tr(),
                         hintStyle:
-                            TextStyle(color: Theme.of(context).cardColor),
+                            TextStyle(color: Theme.of(context).bottomAppBarColor),
                       ),
                     ),
                   ),
@@ -89,9 +89,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 Switch(
                   value: isSwitched,
                   onChanged: (value) {
-                    // setState(() {
                     isSwitched = value;
-                    // });
                   },
                   activeTrackColor: ColorManager.blue,
                   activeColor: Theme.of(context).primaryColor,

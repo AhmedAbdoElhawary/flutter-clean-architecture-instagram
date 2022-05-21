@@ -114,13 +114,11 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                               myPersonalId: myPersonalId);
                       if (widget.userInfo != null &&
                           myPersonalId == userInfo.userId) {
-                        // setState(() {
                         if (isThatFollower) {
                           userInfo.followerPeople.remove(userInfo.userId);
                         } else {
                           userInfo.followedPeople.remove(userInfo.userId);
                         }
-                        // });
                       }
                     } else {
                       BlocProvider.of<FollowCubit>(followContext)
@@ -162,7 +160,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
         color:
             isThatFollower ? Theme.of(context).primaryColor : ColorManager.blue,
         border: Border.all(
-            color: Theme.of(context).cardColor,
+            color: Theme.of(context).bottomAppBarColor,
             width: isThatFollower ? 1.0 : 0),
         borderRadius: BorderRadius.circular(6.0),
       ),

@@ -70,14 +70,14 @@ class _CommentBoxState extends State<CommentBox> {
                 child: TextFormField(
                   keyboardType: TextInputType.multiline,
                   cursorColor: ColorManager.teal,
-                  focusNode:
-                      widget.focusNode == null ? null : FocusNode()
-                        ?..requestFocus(),
+                  focusNode: widget.focusNode == null ? null : FocusNode()
+                    ?..requestFocus(),
                   style: Theme.of(context).textTheme.bodyText1,
                   maxLines: null,
                   decoration: InputDecoration.collapsed(
                       hintText: StringsManager.addComment.tr(),
-                      hintStyle: TextStyle(color: Theme.of(context).cardColor)),
+                      hintStyle: TextStyle(
+                          color: Theme.of(context).bottomAppBarColor)),
                   autofocus: false,
                   controller: widget.textController,
                   onChanged: (e) => setState(() {}),

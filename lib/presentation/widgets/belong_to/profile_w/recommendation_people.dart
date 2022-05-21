@@ -11,12 +11,13 @@ class RecommendationPeople extends StatelessWidget {
         height: 35.0,
         width: 35,
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          border: Border.all(color: Theme.of(context).dividerColor, width: 1.0),
+          color: Theme.of(context).dividerColor,
+          border: Border.all(color: Theme.of(context).bottomAppBarColor, width: 1.0),
           borderRadius: BorderRadius.circular(6.0),
         ),
-        child: const Center(
-          child: Icon(Icons.person_add_outlined),
+        child: Center(
+          child: Icon(Icons.person_add_outlined,
+              color: Theme.of(context).focusColor),
         ),
       ),
     );

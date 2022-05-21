@@ -93,7 +93,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
               ? StringsManager.noAccount.tr()
               : StringsManager.haveAccount.tr(),
           style: getNormalStyle(
-              fontSize: 13, color: ColorManager.grey),
+              fontSize: 13, color: Theme.of(context).toggleableActiveColor),
         ),
         register(context),
       ],
