@@ -153,6 +153,8 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
       ));
 
   Widget imageOfPost(Post postInfo, double bodyHeight) {
+    String postUrl =
+        postInfo.postUrl.isNotEmpty ? postInfo.postUrl : postInfo.imagesUrls[0];
     return Stack(
       children: [
         GestureDetector(
@@ -160,11 +162,11 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
           padding: const EdgeInsetsDirectional.only(top: 8.0),
           child: postInfo.isThatImage
               ? Hero(
-                  tag: postInfo.postUrl,
+                  tag: postUrl,
                   child: ImageDisplay(
                     aspectRatio: 0,
                     bodyHeight: bodyHeight,
-                    imageUrl: postInfo.postUrl,
+                    imageUrl: postUrl,
                   ),
                 )
               : PlayThisVideo(videoUrl: postInfo.postUrl, play: false),
