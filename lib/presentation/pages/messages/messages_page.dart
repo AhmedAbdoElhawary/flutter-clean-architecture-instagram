@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
@@ -60,15 +62,18 @@ class MessagesPage extends StatelessWidget {
                           child: Text(
                               theLastMessage.message.isEmpty
                                   ? (theLastMessage.imageUrl.isEmpty
-                                      ? "recorded sent"
-                                      : "photo sent")
+                                      ? StringsManager.recordedSent.tr()
+                                      : StringsManager.photoSent.tr())
                                   : theLastMessage.message,
                               overflow: TextOverflow.ellipsis,
-                              maxLines: 1),
+                              maxLines: 1,
+                              style: getNormalStyle(color: ColorManager.grey)),
                         ),
                         const SizedBox(width: 5),
-                        Text(DateOfNow.commentsDateOfNow(
-                            theLastMessage.datePublished)),
+                        Text(
+                            DateOfNow.commentsDateOfNow(
+                                theLastMessage.datePublished),
+                            style: getNormalStyle(color: ColorManager.grey)),
                       ],
                     ),
                     leading: Hero(

@@ -131,7 +131,7 @@ class _ChattingPageState extends State<ChattingPage>
                                   return Column(
                                     children: [
                                       if (index == 0) buildUserInfo(context),
-                                      buildThemessage(
+                                      buildTheMessage(
                                           globalMessagesInfo[index],
                                           globalMessagesInfo[
                                                   index != 0 ? index - 1 : 0]
@@ -183,12 +183,12 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Widget buildThemessage(
-      Message messageInfo, String previousDateOfmessage, int index) {
+  Widget buildTheMessage(
+      Message messageInfo, String previousDateOfMessage, int index) {
     bool isThatMine = false;
     if (messageInfo.senderId == myPersonalId) isThatMine = true;
     String theDate = DateOfNow.chattingDateOfNow(
-        messageInfo.datePublished, previousDateOfmessage);
+        messageInfo.datePublished, previousDateOfMessage);
     return Column(
       children: [
         if (theDate.isNotEmpty)
@@ -215,7 +215,7 @@ class _ChattingPageState extends State<ChattingPage>
                     unSend = true;
                   });
                 },
-                child: buildmessage(isThatMine, messageInfo),
+                child: buildMessage(isThatMine, messageInfo),
               ),
             ),
             if (!isThatMine) const SizedBox(width: 100),
@@ -235,7 +235,7 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Align buildmessage(bool isThatMine, Message messageInfo) {
+  Align buildMessage(bool isThatMine, Message messageInfo) {
     String message = messageInfo.message;
     String imageUrl = messageInfo.imageUrl;
     String recordedUrl = messageInfo.recordedUrl;
@@ -264,8 +264,9 @@ class _ChattingPageState extends State<ChattingPage>
                 child: message.isNotEmpty
                     ? Text(message,
                         style: isThatMine
-                            ? Theme.of(context).textTheme.bodyText2
-                            : Theme.of(context).textTheme.bodyText1)
+                            ? getNormalStyle(color: ColorManager.white)
+                            : getNormalStyle(
+                                color: Theme.of(context).focusColor))
                     : (messageInfo.isThatImage
                         ? SizedBox(
                             width: 90,
@@ -286,6 +287,7 @@ class _ChattingPageState extends State<ChattingPage>
                                       tag: imageUrl,
                                       child: ImageDisplay(
                                         imageUrl: imageUrl,
+                                        boxFit: BoxFit.cover,
                                       ),
                                     ),
                                   )
@@ -321,7 +323,6 @@ class _ChattingPageState extends State<ChattingPage>
               decoration: BoxDecoration(
                   color: Theme.of(context).primaryColorLight,
                   borderRadius: BorderRadius.circular(35)),
-              // clipBehavior: Clip.antiAliasWithSaveLayer,
               height: 50,
               padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
               margin: const EdgeInsetsDirectional.only(start: 10, end: 10),
@@ -441,7 +442,6 @@ class _ChattingPageState extends State<ChattingPage>
                     });
                   });
                   scrollToLastIndex(context);
-
                 },
               ),
               Visibility(
@@ -480,7 +480,6 @@ class _ChattingPageState extends State<ChattingPage>
                   messageInfo: newMessage(isThatImage: true),
                   pathOfPhoto: pickImage.path);
               scrollToLastIndex(context);
-
             } else {
               ToastShow.toast(StringsManager.noImageSelected.tr());
             }
@@ -509,7 +508,7 @@ class _ChattingPageState extends State<ChattingPage>
           maxLines: null,
           decoration: InputDecoration.collapsed(
               hintText: StringsManager.messageP.tr(),
-              hintStyle: TextStyle(color: Theme.of(context).cardColor)),
+              hintStyle: TextStyle(color: Theme.of(context).bottomAppBarColor)),
           autofocus: false,
           controller: _textController,
           cursorWidth: 1.5,
@@ -577,7 +576,6 @@ class _ChattingPageState extends State<ChattingPage>
                 messageInfo: newMessage(isThatImage: true),
                 pathOfPhoto: pickImage.path);
             scrollToLastIndex(context);
-
           } else {
             ToastShow.toast(StringsManager.noImageSelected.tr());
           }
@@ -606,6 +604,7 @@ class _ChattingPageState extends State<ChattingPage>
         child: ClipOval(
             child: ImageDisplay(
           imageUrl: widget.userInfo.profileImageUrl,
+          boxFit: BoxFit.cover,
         )),
         radius: 45);
   }
