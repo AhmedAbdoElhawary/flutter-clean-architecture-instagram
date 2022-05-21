@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
-import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
@@ -19,6 +18,7 @@ import 'package:instagram/presentation/pages/comments/comments_page.dart';
 import 'package:instagram/presentation/pages/profile/update_post_info.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
+import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_viewer.dart';
@@ -61,14 +61,8 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
   late Widget videoStatusAnimation;
   String currentLanguage = 'en';
   int initPosition = 0;
-  late TabController controller;
-
   @override
   void initState() {
-    controller = TabController(
-        vsync: this,
-        length: widget.postInfo.imagesUrls.length,
-        initialIndex: 0);
     videoStatusAnimation = Container();
     getLanguage();
     super.initState();
@@ -149,7 +143,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 5.0),
+                      padding: const EdgeInsetsDirectional.only(start: 15.0),
                       child: GestureDetector(
                         child: iconsOfImagePost(IconsAssets.send1Icon,
                             lowHeight: true),
@@ -219,63 +213,80 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
     );
   }
 
+  void _showAddCommentModal() {
+    double media = MediaQuery.of(context).viewInsets.bottom;
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: Theme.of(context).primaryColor,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: media),
+            child: CommentBox(
+              postId: widget.postInfo.postUid,
+              textController: textController,
+              focusNode: FocusNode(),
+              userPersonalInfo: widget.postInfo.publisherInfo!,
+              makeSelectedCommentNullable: () {
+                widget.postInfo.comments.add(" ");
+                setState(() {
+                  textController.text = '';
+                });
+                Navigator.maybePop(context);
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget buildCommentBox(double bodyHeight) {
-    return Column(
-      children: [
-        Row(
-          crossAxisAlignment: textController.text.length < 70
-              ? CrossAxisAlignment.center
-              : CrossAxisAlignment.end,
-          children: [
-            CircleAvatarOfProfileImage(
-              userInfo: widget.postInfo.publisherInfo!,
-              bodyHeight: bodyHeight * .5,
-            ),
-            const SizedBox(
-              width: 12.0,
-            ),
-            Expanded(
-              child: TextFormField(
-                style: Theme.of(context).textTheme.bodyText1,
-                cursorColor: ColorManager.teal,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                readOnly: true,
-                decoration: InputDecoration.collapsed(
-                    hintText: StringsManager.addComment.tr(),
-                    hintStyle: TextStyle(
-                        color: Theme.of(context).cardColor, fontSize: 14)),
-                autofocus: false,
-                controller: TextEditingController(),
-                onTap: () {
-                  // setState(() {
-                  if (selectedPostInfo != null) {
-                    selectedPostInfo!(widget.postInfo);
-                  }
-                },
+    return GestureDetector(
+      onTap: _showAddCommentModal,
+      child: Row(
+        crossAxisAlignment: textController.text.length < 70
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.end,
+        children: [
+          CircleAvatarOfProfileImage(
+            userInfo: widget.postInfo.publisherInfo!,
+            bodyHeight: bodyHeight * .5,
+          ),
+          const SizedBox(
+            width: 12.0,
+          ),
+          Expanded(
+            child: GestureDetector(
+              child: Text(
+                StringsManager.addComment.tr(),
+                style:
+                    TextStyle(color: Theme.of(context).cardColor, fontSize: 14),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  textController.text = '❤';
-                });
-              },
-              child: const Text('❤'),
-            ),
-            const SizedBox(width: 8),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  textController.text = '🙌';
-                });
-              },
-              child: const Text('🙌'),
-            ),
-            const SizedBox(width: 8),
-          ],
-        ),
-      ],
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                textController.text = '❤';
+              });
+              _showAddCommentModal();
+            },
+            child: const Text('❤'),
+          ),
+          const SizedBox(width: 8),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                textController.text = '🙌';
+              });
+              _showAddCommentModal();
+            },
+            child: const Text('🙌'),
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
     );
   }
 

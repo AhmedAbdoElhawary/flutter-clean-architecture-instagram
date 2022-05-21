@@ -43,7 +43,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController _textController = TextEditingController();
   ValueNotifier<bool> isThatEndOfList = ValueNotifier(false);
   UserPersonalInfo? personalInfo;
   ValueNotifier<bool> reLoadData = ValueNotifier(false);
@@ -100,19 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: CustomAppBar.basicAppBar(context),
       body: blocBuilder(bodyHeight),
-      bottomSheet: addComment(),
     );
   }
-
-  Widget? addComment() {
-    return selectedPostInfo != null
-        ? AddComment(
-            postsInfo: selectedPostInfo!,
-            textController: _textController,
-          )
-        : null;
-  }
-
   BlocBuilder<PostCubit, PostState> blocBuilder(double bodyHeight) {
     return BlocBuilder<PostCubit, PostState>(
       buildWhen: (previous, current) {
