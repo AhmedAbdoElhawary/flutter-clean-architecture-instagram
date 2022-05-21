@@ -227,7 +227,7 @@ class _ProfilePageState extends State<UserProfilePage> {
         color:
             isThatFollower ? Theme.of(context).primaryColor : ColorManager.blue,
         border: Border.all(
-            color: Theme.of(context).cardColor,
+            color: Theme.of(context).bottomAppBarColor,
             width: isThatFollower ? 1.0 : 0),
         borderRadius: BorderRadius.circular(6.0),
       ),

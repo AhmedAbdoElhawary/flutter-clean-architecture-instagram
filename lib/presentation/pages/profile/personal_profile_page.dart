@@ -205,7 +205,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         _appPreferencesMode.changeAppMode();
         Phoenix.rebirth(context);
       },
-      child: createSizedBox(StringsManager.changeMode.tr(),
+      child: createSizedBox(StringsManager.changeTheme.tr(),
           icon: Icons.brightness_4_outlined),
     );
   }
@@ -255,24 +255,26 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           onTap: () async {
             Navigator.maybePop(context);
             Future.delayed(Duration.zero, () async {
-              UserPersonalInfo result =
+              UserPersonalInfo? result =
                   await Navigator.of(context, rootNavigator: true).push(
                       CupertinoPageRoute(
                           builder: (context) => EditProfilePage(userInfo),
                           maintainState: false));
-              setState(() {
-                rebuildUserInfo = true;
-
-                userInfo = result;
-              });
+              if (result != null) {
+                setState(() {
+                  rebuildUserInfo = true;
+                  userInfo = result;
+                });
+              }
             });
           },
           child: Container(
             height: 35.0,
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              border:
-                  Border.all(color: Theme.of(context).cardColor, width: 1.0),
+              color: Theme.of(context).dividerColor,
+              border: Border.all(
+                  color: Theme.of(context).bottomAppBarColor,
+                  width: 1.0),
               borderRadius: BorderRadius.circular(6.0),
             ),
             child: Center(

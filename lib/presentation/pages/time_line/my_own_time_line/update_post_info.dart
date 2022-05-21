@@ -11,6 +11,8 @@ import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_slider.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/points_scroll_bar.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
@@ -30,6 +32,7 @@ class UpdatePostInfo extends StatefulWidget {
 class _UpdatePostInfoState extends State<UpdatePostInfo> {
   TextEditingController controller = TextEditingController();
   bool moveAway = false;
+  int initPosition = 0;
 
   @override
   void initState() {
@@ -138,7 +141,8 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                     enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: ColorManager.blue),
                     ),
-                    hintStyle: TextStyle(color: Theme.of(context).cardColor),
+                    hintStyle: TextStyle(
+                        color: Theme.of(context).bottomAppBarColor),
                   ),
                 ),
               ),
@@ -152,25 +156,41 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
         builder: (context) => WhichProfilePage(userId: postInfo.publisherId),
       ));
 
+  void _updateImageIndex(int index, _) {
+    setState(() => initPosition = index);
+  }
+
   Widget imageOfPost(Post postInfo, double bodyHeight) {
     String postUrl =
         postInfo.postUrl.isNotEmpty ? postInfo.postUrl : postInfo.imagesUrls[0];
-    return Stack(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         GestureDetector(
-            child: Padding(
-          padding: const EdgeInsetsDirectional.only(top: 8.0),
-          child: postInfo.isThatImage
-              ? Hero(
-                  tag: postUrl,
-                  child: ImageDisplay(
-                    aspectRatio: 0,
-                    bodyHeight: bodyHeight,
-                    imageUrl: postUrl,
-                  ),
-                )
-              : PlayThisVideo(videoUrl: postInfo.postUrl, play: false),
-        )),
+          child: Padding(
+            padding: const EdgeInsetsDirectional.only(top: 8.0),
+            child: postInfo.isThatImage
+                ? (postInfo.imagesUrls.length > 1
+                    ? ImageSlider(
+                        imagesUrls: postInfo.imagesUrls,
+                        updateImageIndex: _updateImageIndex,
+                      )
+                    : Hero(
+                        tag: postUrl,
+                        child: ImageDisplay(
+                          aspectRatio: 0,
+                          bodyHeight: bodyHeight,
+                          imageUrl: postUrl,
+                        ),
+                      ))
+                : PlayThisVideo(videoUrl: postInfo.postUrl, play: false),
+          ),
+        ),
+        PointsScrollBar(
+          photoCount: postInfo.imagesUrls.length,
+          activePhotoIndex: initPosition,
+        ),
       ],
     );
   }

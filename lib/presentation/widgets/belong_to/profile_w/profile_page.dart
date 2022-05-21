@@ -65,7 +65,6 @@ class _ProfilePageState extends State<ProfilePage> {
           ];
         },
         body: tapBar(),
-        // ),
       ),
     );
   }

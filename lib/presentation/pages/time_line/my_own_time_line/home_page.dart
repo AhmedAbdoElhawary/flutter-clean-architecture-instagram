@@ -100,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: blocBuilder(bodyHeight),
     );
   }
+
   BlocBuilder<PostCubit, PostState> blocBuilder(double bodyHeight) {
     return BlocBuilder<PostCubit, PostState>(
       buildWhen: (previous, current) {
@@ -178,17 +179,19 @@ class _HomeScreenState extends State<HomeScreen> {
           storiesLines(bodyHeight),
           customDivider(),
         ] else ...[
-          Divider(
-              color: Theme.of(context).toggleableActiveColor, thickness: .15),
+          divider(),
         ],
         posts(index, bodyHeight, playTheVideo),
         if (isThatEndOfList.value && index == postsIds.length - 1) ...[
-          Divider(
-              color: Theme.of(context).toggleableActiveColor, thickness: .15),
+          divider(),
           const AllCatchUpIcon(),
         ]
       ],
     );
+  }
+
+  Divider divider() {
+    return const Divider(color: ColorManager.lightGrey, thickness: .15);
   }
 
   Container customDivider() => Container(
