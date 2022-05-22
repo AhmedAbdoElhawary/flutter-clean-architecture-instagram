@@ -10,7 +10,6 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
 import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../../../core/functions/toast_show.dart';
 
@@ -243,16 +242,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return InkWell(
       onTap: () async {},
       child: CircleAvatar(
+        backgroundImage:
+            !isImageUpload && widget.userInfo.profileImageUrl.isNotEmpty
+                ? NetworkImage(widget.userInfo.profileImageUrl)
+                : null,
         child: ClipOval(
-          child: isImageUpload
-              ? const ThineCircularProgress()
-              : (widget.userInfo.profileImageUrl.isEmpty
-                  ? Icon(Icons.person, color: Theme.of(context).primaryColor)
-                  : ImageDisplay(
-                      imageUrl: widget.userInfo.profileImageUrl,
-                      boxFit: BoxFit.cover,
-                    )),
-        ),
+            child: isImageUpload
+                ? const ThineCircularProgress()
+                : Icon(Icons.person, color: Theme.of(context).primaryColor)),
         radius: 50,
         backgroundColor: Theme.of(context).focusColor,
       ),

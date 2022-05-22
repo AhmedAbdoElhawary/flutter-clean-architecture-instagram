@@ -11,7 +11,7 @@ class RecommendationPeople extends StatelessWidget {
         height: 35.0,
         width: 35,
         decoration: BoxDecoration(
-          color: Theme.of(context).dividerColor,
+          color: Theme.of(context).primaryColor,
           border: Border.all(color: Theme.of(context).bottomAppBarColor, width: 1.0),
           borderRadius: BorderRadius.circular(6.0),
         ),
