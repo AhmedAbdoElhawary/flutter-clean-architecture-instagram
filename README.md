@@ -1,14 +1,14 @@
 # flutter-clean-architecture-instagram
 
-instagram clone with clean architecture using flutter and firebase as ( frontend & backend )
+Instagram clone with clean architecture using flutter and firebase as ( frontend & backend )
 
 ## Note 
 
-This repository is still under development and I will continue to add more features to it.
+This repository is still under development & I will continue to add more features to it.
 
 ## Features
 
-* Supported
+* Support
   * Arabic & English language
   * Dark & Light theme 
 
