@@ -35,9 +35,7 @@ This repository and documentation are still under development.
   * View all users posts (images & videos)
   * Change screen from grid layout to timeline layout
 
-  
-* Search for user 
- * Search based on usernames
+* Search for user based on username
 
 * Video Screen 
   * It displays videos with almost post features
