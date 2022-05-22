@@ -323,7 +323,7 @@ Total : 319 files,  1357 codes, -96 comments, 36 blanks, all 1297 lines
 | [lib/presentation/widgets/smart_refresher.dart](/lib/presentation/widgets/smart_refresher.dart) | Dart | -127 | 0 | -6 | -133 |
 | [lib/presentation/widgets/story_page.dart](/lib/presentation/widgets/story_page.dart) | Dart | -296 | -9 | -28 | -333 |
 | [lib/presentation/widgets/toast_show.dart](/lib/presentation/widgets/toast_show.dart) | Dart | -22 | 0 | -1 | -23 |
-| [lib/presentation/widgets/try.dart](/lib/presentation/widgets/try.dart) | Dart | 947 | 23 | 110 | 1,080 |
+| [lib/presentation/widgets/try.dart](/lib/presentation/widgets/custom_gallery_display.dart) | Dart | 947 | 23 | 110 | 1,080 |
 | [lib/presentation/widgets/user_profile_page.dart](/lib/presentation/widgets/user_profile_page.dart) | Dart | -241 | -1 | -16 | -258 |
 | [lib/responsive_layout.dart](/lib/responsive_layout.dart) | Dart | 0 | 1 | 0 | 1 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 25 | 0 | 0 | 25 |
