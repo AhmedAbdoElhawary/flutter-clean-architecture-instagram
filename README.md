@@ -6,12 +6,6 @@ Instagram with clean architecture using flutter and firebase as ( frontend & bac
 
 This repository and documentation are still under development.
 
-## Contact
-
-You will find me on 
-
-<a href="https://www.linkedin.com/in/ahmedabdoelhawary/"><img src="https://user-images.githubusercontent.com/35039342/55471530-94b34280-5627-11e9-8c0e-6fe86a8406d6.png" width="60"></a>
-
 ## Features
 
 * Support
@@ -145,6 +139,13 @@ Double check install instructions for both
 3. Make required changes and commit (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
 5. Create new Pull Request
+
+
+## Contact
+
+You will find me on 
+
+<a href="https://www.linkedin.com/in/ahmedabdoelhawary/"><img src="https://user-images.githubusercontent.com/35039342/55471530-94b34280-5627-11e9-8c0e-6fe86a8406d6.png" width="60"></a>
 
 
 ## License & copyright
