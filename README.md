@@ -8,6 +8,10 @@ This repository is still under development and I will continue to add more featu
 
 ## Features
 
+* Supported
+  * Arabic & English language
+  * Dark & Light theme 
+
 * Post features
   * Support images & videos 
   * Support multi images in one post
@@ -28,9 +32,12 @@ This repository is still under development and I will continue to add more featu
   * Loading more posts (it displays 10 by 10 posts)
 
 * All Timelines Screen
-  *
+  * View all users posts (images & videos)
+  * Change screen from grid layout to timeline layout
+
   
 * Search for user 
+ * Search based on usernames
 
 * Video Screen 
   * It displays videos with almost post features
@@ -39,12 +46,15 @@ This repository is still under development and I will continue to add more featu
 * Profile Screen
   * Follow / Unfollow Users
   * Display images & videos in a separated view
-  * Change posts view from grid layout to timeline layout
+  * Change screen from grid layout to timeline layout
   * Edit profile info
   
 * Chat Screen
   * Chat with any user
-  * Share images while chatting
+  * Support
+    * Text
+    * Image (gallery & camera)
+    * Voice
 
 ## License & copyright
 
