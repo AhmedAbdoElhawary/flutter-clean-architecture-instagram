@@ -35,7 +35,7 @@ class CustomAppBar {
           icon: SvgPicture.asset(
             IconsAssets.heartIcon,
             color: Theme.of(context).focusColor,
-            height: 22.5,
+            height: 27,
           ),
           onPressed: () {},
         ),

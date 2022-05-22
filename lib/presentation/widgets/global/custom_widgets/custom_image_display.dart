@@ -7,13 +7,14 @@ class ImageDisplay extends StatefulWidget {
   final bool circularLoading;
   final double aspectRatio;
   final double bodyHeight;
+
   const ImageDisplay(
       {Key? key,
       required this.imageUrl,
       this.bodyHeight = 0,
       this.aspectRatio = 0,
       this.circularLoading = true,
-      this.boxFit = BoxFit.fitWidth})
+      this.boxFit = BoxFit.cover})
       : super(key: key);
 
   @override
@@ -23,7 +24,14 @@ class ImageDisplay extends StatefulWidget {
 class _ImageDisplayState extends State<ImageDisplay> {
   @override
   Widget build(BuildContext context) {
-    return buildImage();
+    return widget.aspectRatio <= 0.2
+        ? buildImage()
+        : AspectRatio(
+            aspectRatio: widget.aspectRatio < .5
+                ? widget.aspectRatio / widget.aspectRatio / widget.aspectRatio
+                : widget.aspectRatio,
+            child: buildImage(),
+          );
   }
 
   Image buildImage() {
@@ -57,13 +65,17 @@ class _ImageDisplayState extends State<ImageDisplay> {
   }
 
   Widget loadingWidget(double aspectRatio) {
-    return buildSizedBox();
+    return aspectRatio == 0
+        ? buildSizedBox()
+        : AspectRatio(
+            aspectRatio: aspectRatio,
+            child: buildSizedBox(),
+          );
   }
 
   Widget buildSizedBox() {
     return Container(
       width: double.infinity,
-      height: 300,
       color: ColorManager.black26,
     );
   }

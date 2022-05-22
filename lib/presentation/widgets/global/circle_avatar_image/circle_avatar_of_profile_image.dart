@@ -1,4 +1,3 @@
-import 'package:dashed_circle/dashed_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -8,7 +7,6 @@ import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/pages/story/stroy_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'circle_avatar_name.dart';
 
 class CircleAvatarOfProfileImage extends StatefulWidget {
@@ -37,58 +35,14 @@ class CircleAvatarOfProfileImage extends StatefulWidget {
 class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     with SingleTickerProviderStateMixin {
   final SharedPreferences _sharePrefs = injector<SharedPreferences>();
+  Color topColor = ColorManager.red;
+  Color bottomColor = ColorManager.yellow;
 
-  late Animation gap;
-  late Animation base;
-  late Animation reverse;
-  late AnimationController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 3));
-    base = CurvedAnimation(parent: controller, curve: Curves.bounceInOut);
-    reverse =
-        Tween<double>(begin: 0.0, end: -1.0).animate(base as Animation<double>);
-    gap = Tween<double>(begin: 3.0, end: 0.0).animate(base as Animation<double>)
-      ..addListener(() {
-        setState(() {});
-      });
-    controller.forward();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  List<Color> colorList = [
-    ColorManager.red,
-    ColorManager.redAccent,
-    ColorManager.yellow
-  ];
-  int index = 0;
-  Color bottomColor = ColorManager.red;
-  Color topColor = ColorManager.yellow;
   Alignment begin = Alignment.bottomLeft;
   Alignment end = Alignment.topRight;
   @override
   Widget build(BuildContext context) {
     String profileImage = widget.userInfo.profileImageUrl;
-    if (controller.isCompleted) {
-      Future.delayed(const Duration(milliseconds: 5), () {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) {
-            setState(() {
-              topColor = ColorManager.red;
-            });
-          }
-        });
-      });
-    }
-
     return SizedBox(
       child: widget.thisForStoriesLine
           ? buildColumn(profileImage, context)
@@ -165,58 +119,56 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
   }
 
   Stack stackOfImage(String profileImage) {
+    bool isStorySeen = _sharePrefs.getBool(widget.userInfo.userId) != null;
+    bool hasStory = widget.userInfo.stories.isNotEmpty;
     return Stack(
       alignment: Alignment.center,
       children: [
-        if (widget.userInfo.stories.isNotEmpty) ...[
-          if (_sharePrefs.getBool(widget.userInfo.userId) != null) ...[
-            CircleAvatar(
-              radius: widget.bodyHeight < 900
-                  ? widget.bodyHeight * .052
-                  : widget.bodyHeight * .0505,
-              backgroundColor: ColorManager.lowOpacityGrey,
-            ),
-          ] else ...[
-            if (!controller.isCompleted && widget.thisForStoriesLine) ...[
-              rotationContainer(),
-            ] else ...[
-              colorfulContainer(),
-            ],
-          ],
-          CircleAvatar(
-            radius: widget.bodyHeight < 900
-                ? widget.bodyHeight * .05
-                : widget.bodyHeight * .0485,
-            backgroundColor: Theme.of(context).primaryColor,
-          ),
+        if (hasStory) ...[
+          isStorySeen ? unColorfulContainer() : colorfulContainer(),
+          customSpacer()
         ],
-        CircleAvatar(
-          backgroundColor: ColorManager.lowOpacityGrey,
-          backgroundImage:
-              profileImage.isNotEmpty ? NetworkImage(profileImage) : null,
-          child: profileImage.isEmpty
-              ? Icon(
-                  Icons.person,
-                  color: Theme.of(context).primaryColor,
-                  size: widget.bodyHeight * 0.07,
-                )
-              : null,
-          radius: widget.bodyHeight * .046,
-        ),
+        imageOfUser(profileImage)
       ],
     );
   }
 
-  AnimatedContainer colorfulContainer() {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 550),
-      onEnd: () {
-        setState(() {
-          index = index + 1;
-          bottomColor = colorList[index % colorList.length];
-          topColor = colorList[(index + 1) % colorList.length];
-        });
-      },
+  CircleAvatar unColorfulContainer() {
+    return CircleAvatar(
+      radius: widget.bodyHeight < 900
+          ? widget.bodyHeight * .052
+          : widget.bodyHeight * .0505,
+      backgroundColor: ColorManager.lowOpacityGrey,
+    );
+  }
+
+  CircleAvatar customSpacer() {
+    return CircleAvatar(
+      radius: widget.bodyHeight < 900
+          ? widget.bodyHeight * .05
+          : widget.bodyHeight * .0485,
+      backgroundColor: Theme.of(context).primaryColor,
+    );
+  }
+
+  Widget imageOfUser(String profileImage) {
+    return CircleAvatar(
+      backgroundColor: ColorManager.lowOpacityGrey,
+      backgroundImage:
+          profileImage.isNotEmpty ? NetworkImage(profileImage) : null,
+      child: profileImage.isEmpty
+          ? Icon(
+              Icons.person,
+              color: Theme.of(context).primaryColor,
+              size: widget.bodyHeight * 0.07,
+            )
+          : null,
+      radius: widget.bodyHeight * .046,
+    );
+  }
+
+  Container colorfulContainer() {
+    return Container(
       decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: LinearGradient(
@@ -226,27 +178,6 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
             ? widget.bodyHeight * .0525
             : widget.bodyHeight * .0505,
         backgroundColor: ColorManager.transparent,
-      ),
-    );
-  }
-
-  Container rotationContainer() {
-    return Container(
-      alignment: Alignment.center,
-      child: RotationTransition(
-        turns: base as Animation<double>,
-        child: DashedCircle(
-          gapSize: gap.value,
-          dashes: 40,
-          color: ColorManager.red,
-          child: RotationTransition(
-            turns: reverse as Animation<double>,
-            child: CircleAvatar(
-              radius: widget.bodyHeight * .0510,
-              backgroundColor: ColorManager.transparent,
-            ),
-          ),
-        ),
       ),
     );
   }
