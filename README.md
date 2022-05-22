@@ -29,7 +29,7 @@ This repository and documentation are still under development.
 * My Timelines Screen
   * Custom posts & stories feed based on followers & followings
   * Refresh the posts info
-  * Loading more posts (it displays 10 by 10 posts)
+  * Loading more posts (it displays 5 by 5 posts)
 
 * All Timelines Screen
   * View all users posts (images & videos)
