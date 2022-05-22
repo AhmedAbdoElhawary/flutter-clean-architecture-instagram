@@ -25,7 +25,7 @@ class CustomAppBar {
       actions: [
         IconButton(
           icon: SvgPicture.asset(
-            IconsAssets.addIcon,
+            IconsAssets.add2Icon,
             color: Theme.of(context).focusColor,
             height: 22.5,
           ),
@@ -33,15 +33,15 @@ class CustomAppBar {
         ),
         IconButton(
           icon: SvgPicture.asset(
-            IconsAssets.heartIcon,
+            IconsAssets.favorite,
             color: Theme.of(context).focusColor,
-            height: 22.5,
+            height: 30,
           ),
           onPressed: () {},
         ),
         IconButton(
           icon: SvgPicture.asset(
-            IconsAssets.send1Icon,
+            IconsAssets.message,
             color: Theme.of(context).focusColor,
             height: 22.5,
           ),

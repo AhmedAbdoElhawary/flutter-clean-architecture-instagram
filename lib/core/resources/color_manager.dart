@@ -24,6 +24,7 @@ class ColorManager {
   static const Color green = Colors.green;
 
   static const Color darkBlue = Color.fromARGB(255, 4, 113, 238);
+  static const Color purple =Colors.purple;
   static const Color lightBlue = Color(0xFF7FC1FF);
   static const Color redAccent = Colors.redAccent;
   static const Color red = Color(0xffe61f34);

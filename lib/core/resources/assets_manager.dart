@@ -9,6 +9,7 @@ class IconsAssets {
   static const String commentIcon = "$iconPath/comment.svg";
   static const String instagramLogo = "$iconPath/logo_instagram.svg";
   static const String addIcon = "$iconPath/add.svg";
+  static const String add2Icon = "$iconPath/add-2.svg";
   static const String minusIcon = "$iconPath/minus.svg";
   static const String gridIcon = "$iconPath/grid.svg";
   static const String videoIcon = "$iconPath/video.svg";
@@ -19,6 +20,11 @@ class IconsAssets {
   static const String noMoreData = "$iconPath/check-circle.svg";
   static const String shareCircle = "$iconPath/share-circle.svg";
   static const String point = "$iconPath/circle.svg";
+  static const String message = "$iconPath/messenger.svg";
+  static const String favorite = "$iconPath/favorite.svg";
+  static const String plus = "$iconPath/plus.svg";
+
+
 
   static const String addInstagramStoryIcon =
       "$iconPath/add-instagram-story.svg";

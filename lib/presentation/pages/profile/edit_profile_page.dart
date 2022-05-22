@@ -31,7 +31,7 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  bool isImageUpload = false;
+  bool isImageUpload = true;
   bool reBuild = false;
 
   @override
@@ -70,9 +70,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
             if (mounted) {
               setState(() {
                 widget.userInfo = getUserState.userPersonalInfo;
-                if (isImageUpload) {
-                  Navigator.of(context).maybePop(widget.userInfo);
-                }
               });
             }
           });
@@ -186,12 +183,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 isImageUpload = false;
               });
 
-              await updateUserCubit.uploadProfileImage(
-                  photo: widget._photo!,
-                  userId: widget.userInfo.userId,
-                  previousImageUrl: widget.userInfo.profileImageUrl);
-              setState(() {
-                isImageUpload = true;
+              await updateUserCubit
+                  .uploadProfileImage(
+                      photo: widget._photo!,
+                      userId: widget.userInfo.userId,
+                      previousImageUrl: widget.userInfo.profileImageUrl)
+                  .whenComplete(() {
+                Future.delayed(Duration.zero, () {
+                  Navigator.of(context).maybePop(widget.userInfo);
+                  isImageUpload = true;
+                });
               });
             } else {
               ToastShow.toast(StringsManager.noImageSelected.tr());
@@ -199,8 +200,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           },
           child: Text(
             StringsManager.changeProfilePhoto.tr(),
-            style: getNormalStyle(
-                fontSize: 18, color: Theme.of(context).focusColor),
+            style: getNormalStyle(fontSize: 18, color: ColorManager.blue),
           ),
         )),
         textFormField(widget.nameController, StringsManager.name.tr()),
@@ -239,17 +239,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   InkWell studentCircleAvatarImage() {
+    bool hasUserPhoto = widget.userInfo.profileImageUrl.isNotEmpty;
     return InkWell(
       onTap: () async {},
       child: CircleAvatar(
-        backgroundImage:
-            !isImageUpload && widget.userInfo.profileImageUrl.isNotEmpty
-                ? NetworkImage(widget.userInfo.profileImageUrl)
-                : null,
+        backgroundImage: isImageUpload && hasUserPhoto
+            ? NetworkImage(widget.userInfo.profileImageUrl)
+            : null,
         child: ClipOval(
-            child: isImageUpload
+            child: !isImageUpload
                 ? const ThineCircularProgress()
-                : Icon(Icons.person, color: Theme.of(context).primaryColor)),
+                : (!hasUserPhoto
+                    ? Icon(Icons.person, color: Theme.of(context).primaryColor)
+                    : null)),
         radius: 50,
         backgroundColor: Theme.of(context).focusColor,
       ),
