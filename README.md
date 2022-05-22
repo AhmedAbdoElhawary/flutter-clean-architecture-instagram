@@ -120,4 +120,4 @@ Double check install instructions for both
 
 Copyright (c) 2022 Ahmed Abdo
 
-Licensed under the [MIT License](LICENSE).
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](LICENSE)
