@@ -38,7 +38,7 @@ This repository and documentation are still under development.
 * Search for user based on username
 
 * Video Screen 
-  * It displays videos with almost post features
+  * It displays all users videos with almost post features
   * Control of sound & play
   
 * Profile Screen
