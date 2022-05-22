@@ -4,7 +4,7 @@ Instagram clone with clean architecture using flutter and firebase as ( frontend
 
 ## Note 
 
-This repository is still under development & I will continue to add more features to it.
+This repository and documentation are still under development.
 
 ## Features
 
