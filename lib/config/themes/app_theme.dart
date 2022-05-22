@@ -22,9 +22,8 @@ class AppTheme {
         selectedRowColor: ColorManager.lightGrey,
         toggleableActiveColor: ColorManager.darkWhite,
         scaffoldBackgroundColor: ColorManager.white,
-
         errorColor: ColorManager.black,
-        canvasColor: ColorManager.lightGrey,
+        canvasColor: ColorManager.transparent,
         splashColor: ColorManager.white,
         appBarTheme: AppBarTheme(
           elevation: 0,
@@ -40,6 +39,7 @@ class AppTheme {
           headline1: getNormalStyle(color: ColorManager.grey, fontSize: 15),
           headline2: getBoldStyle(color: ColorManager.black, fontSize: 15),
           headline3: getMediumStyle(color: ColorManager.black, fontSize: 15),
+          headline6: getNormalStyle(color: ColorManager.lightGrey),
 
         ));
   }
@@ -63,7 +63,7 @@ class AppTheme {
       errorColor: ColorManager.grey,
       disabledColor: ColorManager.white,
       scaffoldBackgroundColor: ColorManager.black,
-      canvasColor: ColorManager.darkGray,
+      canvasColor: ColorManager.transparent,
       splashColor: ColorManager.darkGray,
       appBarTheme: AppBarTheme(
         elevation: 0,
@@ -79,6 +79,8 @@ class AppTheme {
         headline1: getNormalStyle(color: ColorManager.grey, fontSize: 15),
         headline2: getBoldStyle(color: ColorManager.white, fontSize: 15),
         headline3: getMediumStyle(color: ColorManager.white, fontSize: 15),
+        headline6: getNormalStyle(color: ColorManager.darkGray),
+
       ),
     );
   }

@@ -32,6 +32,8 @@ analyzer:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  flutter:
+    sdk: flutter
   bloc: ^7.0.3
   cloud_firestore: ^3.1.10
   cloud_firestore_web: ^2.6.10
@@ -41,8 +43,6 @@ dependencies:
   firebase_storage: ^10.2.9
   firebase_storage_web: ^3.2.10
   firebase_analytics: ^5.0.6
-  flutter:
-    sdk: flutter
   flutter_bloc: ^7.0.1
   flutter_svg: ^1.0.3
   readmore: ^2.1.0

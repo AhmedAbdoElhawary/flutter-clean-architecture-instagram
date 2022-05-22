@@ -271,7 +271,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           child: Container(
             height: 35.0,
             decoration: BoxDecoration(
-              color: Theme.of(context).dividerColor,
+              color: Theme.of(context).primaryColor,
               border: Border.all(
                   color: Theme.of(context).bottomAppBarColor,
                   width: 1.0),
