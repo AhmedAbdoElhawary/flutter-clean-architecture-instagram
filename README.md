@@ -1,6 +1,6 @@
 # flutter-clean-architecture-instagram
 
-Instagram clone with clean architecture using flutter and firebase as ( frontend & backend )
+Instagram with clean architecture using flutter and firebase as ( frontend & backend )
 
 ## Note 
 
