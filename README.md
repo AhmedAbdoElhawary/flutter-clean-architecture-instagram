@@ -117,6 +117,26 @@ Double check install instructions for both
      -  https://pub.dartlang.org/packages/cloud_firestore
 
 
+# What's Next?
+ - [ ] Notificaitons for likes, comments, follows, etc
+ - [ ] Caching of Profiles, Images, Etc.
+ - [ ] Calling video and voice in chat
+ - [ ] Add stickers on chat
+ - [ ] Send post to chats
+ - [ ] control in dimension of selected image & video from gallery
+ - [ ] Filters support for images
+ - [ ] Improve display loading of posts when open the app
+ - [ ] Like & comment on story
+ - [ ] Delete the story
+ - [ ] Turn off commenting of a post
+ - [ ] Hide Like count of a post
+ - [ ] Archive a post
+ - [ ] share post
+ - [ ] Live support
+ - [ ] Make like, comment and share of animation container post touchy when longPressed on post
+ - [ ] Clean-up more code
+
+
 ## How to Contribute
 1. Fork the the project
 2. Create your feature branch (git checkout -b my-new-feature)
