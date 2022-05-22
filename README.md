@@ -134,7 +134,9 @@ Double check install instructions for both
  - [ ] share post
  - [ ] Live support
  - [ ] Make like, comment and share of animation container post touchy when longPressed on post
+ - [ ] Create store screens
  - [ ] Clean-up more code
+
 
 
 ## How to Contribute
