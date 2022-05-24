@@ -53,7 +53,8 @@ This repository and "documentation" are still under development.
     * Text
     * Image (gallery & camera)
     * Voice
-
+## SnapShots
+* soon
 ## Getting started
 
 #### 1. [Setup Flutter](https://flutter.io/setup/)
