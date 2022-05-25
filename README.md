@@ -4,7 +4,7 @@ Instagram with clean architecture using flutter and firebase as ( frontend & bac
 
 ## Note 
 
-This repository and "documentation" are still under development.
+This repository and documentation are still under development.
 
 ## Features
 
