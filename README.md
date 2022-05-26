@@ -119,6 +119,7 @@ Double check install instructions for both
  - [ ] Add stickers on chat
  - [ ] Send post to chats
  - [ ] control in dimension of selected image & video from gallery
+ - [x] Custom gallery display
  - [ ] Filters support for images
  - [ ] Improve display loading of posts when open the app
  - [ ] Like & comment on story
