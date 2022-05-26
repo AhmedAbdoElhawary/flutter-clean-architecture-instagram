@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
+import 'package:instagram/presentation/pages/profile/custom_gallery_page/gallery_page.dart';
 import 'package:instagram/presentation/pages/story/create_story.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
@@ -355,37 +357,46 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   createNewStory(bool isThatFromCamera) async {
     Navigator.maybePop(context);
-    File? pickImage = isThatFromCamera
-        ? await imageCameraPicker()
-        : await imageGalleryPicker();
-    if (pickImage != null) {
-      _getImageDimension(pickImage);
-      await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-          builder: (context) => CreateStoryPage(storyImage: pickImage),
+    final List<CameraDescription> cameras = await availableCameras();
+    File selectedImage=await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+        builder: (context) {
+          return CustomGalleryDisplay(
+            cameras: cameras,
+          );
+        },
+        maintainState: false));
+
+    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+          builder: (context) => CreateStoryPage(storyImage: selectedImage),
           maintainState: false));
       setState(() {
         rebuildUserInfo = true;
       });
-    }
   }
 
   createNewVideo(bool isThatFromCamera) async {
     Navigator.maybePop(context);
-    File? pickVideo = isThatFromCamera
-        ? await videoCameraPicker()
-        : await videoGalleryPicker();
-    if (pickVideo != null) {
-      _getImageDimension(pickVideo);
-      await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-          builder: (context) => CreatePostPage(
-              selectedFile: pickVideo,
-              isThatImage: false,
-              aspectRatio: imageSize.aspectRatio),
-          maintainState: false));
-      setState(() {
-        rebuildUserInfo = true;
-      });
-    }
+    final List<CameraDescription> cameras = await availableCameras();
+   File selectedImage=await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+        builder: (context) {
+          return CustomGalleryDisplay(
+            cameras: cameras,
+          );
+        },
+        maintainState: false));
+    var decodedImage = await decodeImageFromList(selectedImage.readAsBytesSync());
+    print(decodedImage.width);
+    print(decodedImage.height);
+
+    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+        builder: (context) => CreatePostPage(
+            selectedFile: selectedImage,
+            isThatImage: false,
+            aspectRatio: decodedImage.width/decodedImage.height),
+        maintainState: false));
+    setState(() {
+      rebuildUserInfo = true;
+    });
   }
 
   Future<void> _getImageDimension(File photo) async {
@@ -403,31 +414,33 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     );
   }
 
-  // ignore: todo
-  // TODO ---- handling this function and dimension of image ----
   createNewPost(bool isThatFromCamera) async {
     Navigator.maybePop(context);
-    List<File>? pickImages;
-    if (isThatFromCamera) {
-      File? file = await imageCameraPicker();
-      if (file != null) pickImages = [file];
-    } else {
-      pickImages = await multiImageGalleryPicker();
-    }
-    if (pickImages != null) {
-      await _getImageDimension(pickImages[0]);
-      await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-          builder: (context) {
-            return CreatePostPage(
-                selectedFile: pickImages![0],
-                multiSelectedFiles: pickImages,
-                aspectRatio: imageSize.aspectRatio);
-          },
-          maintainState: false));
-      setState(() {
-        rebuildUserInfo = true;
-      });
-    }
+    final List<CameraDescription> cameras = await availableCameras();
+    File selectedImage= await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+        builder: (context) {
+          return CustomGalleryDisplay(
+            cameras: cameras,
+          );
+        },
+        maintainState: false));
+
+    var decodedImage = await decodeImageFromList(selectedImage.readAsBytesSync());
+    print(decodedImage.width);
+    print(decodedImage.height);
+
+    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+        builder: (context) => CreatePostPage(
+            selectedFile: selectedImage,
+            isThatImage: false,
+            aspectRatio: decodedImage.width/decodedImage.height),
+        maintainState: false));
+    setState(() {
+      rebuildUserInfo = true;
+    });
+    setState(() {
+      rebuildUserInfo = true;
+    });
   }
 
   GestureDetector createPost() {
