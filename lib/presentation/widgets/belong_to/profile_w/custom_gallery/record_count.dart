@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
-class CountPage extends StatefulWidget {
+class RecordCount extends StatefulWidget {
   final ValueNotifier<bool> startVideoCount;
   final ValueNotifier<bool> makeProgressRed;
   final ValueNotifier<bool> clearVideoRecord;
 
-  const CountPage({
+  const RecordCount({
     Key? key,
     required this.startVideoCount,
     required this.makeProgressRed,
@@ -14,10 +14,10 @@ class CountPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  CountPageState createState() => CountPageState();
+  RecordCountState createState() => RecordCountState();
 }
 
-class CountPageState extends State<CountPage> with TickerProviderStateMixin {
+class RecordCountState extends State<RecordCount> with TickerProviderStateMixin {
   late AnimationController controller;
   double opacityLevel = 1.0;
   bool isPlaying = false;
@@ -63,7 +63,7 @@ class CountPageState extends State<CountPage> with TickerProviderStateMixin {
   }
 
   @override
-  void didUpdateWidget(CountPage oldWidget) {
+  void didUpdateWidget(RecordCount oldWidget) {
     if (widget.startVideoCount.value) {
       controller.forward(from: controller.value == 1.0 ? 0 : controller.value);
       setState(() {
