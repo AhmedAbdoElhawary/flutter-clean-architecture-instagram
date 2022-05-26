@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 
@@ -34,34 +35,31 @@ class _ImageDisplayState extends State<ImageDisplay> {
           );
   }
 
-  Image buildImage() {
-    Image image = Image.network(
-      widget.imageUrl,
-      fit: widget.boxFit,
+  Widget buildImage() {
+    return CachedNetworkImage(
+      imageUrl: widget.imageUrl,
       width: double.infinity,
-      loadingBuilder: (BuildContext context, Widget child,
-          ImageChunkEvent? loadingProgress) {
-        if (loadingProgress == null) {
-          return child;
-        }
-        return Center(
-          child: widget.circularLoading
-              ? loadingWidget(widget.aspectRatio)
-              : const CircleAvatar(
-                  radius: 15, backgroundColor: ColorManager.lowOpacityGrey),
-        );
-      },
-      errorBuilder:
-          (BuildContext context, Object exception, StackTrace? stackTrace) {
-        return SizedBox(
-          width: double.infinity,
-          height: widget.aspectRatio,
-          child: Icon(Icons.warning_amber_rounded,
-              size: 50, color: Theme.of(context).focusColor),
-        );
-      },
+      imageBuilder: (context, imageProvider) => Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: imageProvider,
+            fit: widget.boxFit,
+           ),
+        ),
+      ),
+      placeholder: (context, url) => Center(
+        child: widget.circularLoading
+            ? loadingWidget(widget.aspectRatio)
+            : const CircleAvatar(
+                radius: 15, backgroundColor: ColorManager.lowOpacityGrey),
+      ),
+      errorWidget: (context, url, error) => SizedBox(
+        width: double.infinity,
+        height: widget.aspectRatio,
+        child: Icon(Icons.warning_amber_rounded,
+            size: 50, color: Theme.of(context).focusColor),
+      ),
     );
-    return image;
   }
 
   Widget loadingWidget(double aspectRatio) {
