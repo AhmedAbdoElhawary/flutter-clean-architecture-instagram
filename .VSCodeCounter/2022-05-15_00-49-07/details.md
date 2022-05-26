@@ -288,7 +288,7 @@ Total : 294 files,  15567 codes, 654 comments, 1970 blanks, all 18191 lines
 | [lib/presentation/widgets/global/custom_widgets/custom_text_field.dart](/lib/presentation/widgets/global/custom_widgets/custom_text_field.dart) | Dart | 42 | 0 | 5 | 47 |
 | [lib/presentation/widgets/global/image_display.dart](/lib/presentation/widgets/global/custom_widgets/custom_image_display.dart) | Dart | 74 | 0 | 7 | 81 |
 | [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 77 | 1 | 4 | 82 |
-| [lib/presentation/widgets/try.dart](/lib/presentation/widgets/custom_gallery_display.dart) | Dart | 947 | 23 | 110 | 1,080 |
+| [lib/presentation/widgets/try.dart](/lib/presentation/widgets/global/custom_widgets/custom_gallery_display.dart) | Dart | 947 | 23 | 110 | 1,080 |
 | [lib/responsive_layout.dart](/lib/responsive_layout.dart) | Dart | 17 | 1 | 4 | 22 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 104 | 57 | 22 | 183 |
 | [test/widget_test.dart](/test/widget_test.dart) | Dart | 12 | 11 | 6 | 29 |
