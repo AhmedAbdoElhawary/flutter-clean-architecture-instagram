@@ -80,7 +80,8 @@ dependencies:
   like_button: ^2.0.4
   photo_manager: ^2.1.1
   photofilters: ^3.0.1
-
+  camera: ^0.9.7
+  flutter_ringtone_player: ^3.0.0
 
 
 
