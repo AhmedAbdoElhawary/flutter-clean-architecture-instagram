@@ -112,7 +112,7 @@ Double check install instructions for both
      -  https://pub.dartlang.org/packages/cloud_firestore
 
 
-# What's Next?
+## What's Next?
  - [ ] Notificaitons for likes, comments, follows, etc
  - [ ] Caching of Profiles, Images, Etc.
  - [ ] Calling video and voice in chat
@@ -131,6 +131,7 @@ Double check install instructions for both
  - [ ] Live support
  - [ ] Make like, comment and share of animation container post touchy when longPressed on post
  - [ ] Create store screens
+ - [ ] Make it stable for web & desktop
  - [ ] Clean-up more code
 
 
