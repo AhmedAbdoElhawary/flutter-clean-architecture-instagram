@@ -1,9 +1,17 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:instagram/presentation/customPackages/crop_image/crop_image.dart';
+import 'package:instagram/presentation/customPackages/crop_image/crop_options.dart';
+import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/pages/profile/custom_gallery_page/camera_page.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+
 import 'package:photo_manager/photo_manager.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 enum SelectedPage { left, center, right }
 
@@ -20,44 +28,49 @@ class CustomGalleryDisplay extends StatefulWidget {
 class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     with TickerProviderStateMixin {
   late TabController tabController = TabController(length: 2, vsync: this);
+  bool neverScrollPhysics = false;
+  ValueNotifier<bool> clearVideoRecord = ValueNotifier(false);
+  ValueNotifier<bool> redDeleteText = ValueNotifier(false);
   SelectedPage selectedPage = SelectedPage.left;
   late Future<void> initializeControllerFuture;
+  final cropKey = GlobalKey<CropState>();
   final List<Widget> _mediaList = [];
   late CameraController controller;
-
   bool showDeleteText = false;
+  bool selectedVideo = false;
   Uint8List? selectedImage;
+  bool shrinkWrap = false;
   Uint8List? firstImage;
-  int currentPage = 0;
-  late int lastPage;
-  bool initial = true;
   int selectedPaged = 0;
+  bool? primary;
+  bool remove = false;
+  bool? stopScrollTab;
+  int currentPage = 0;
+  bool initial = true;
+  late int lastPage;
+  File? _lastCropped;
+
   @override
   void didUpdateWidget(CustomGalleryDisplay oldWidget) {
     super.didUpdateWidget(oldWidget);
   }
 
-  int currentIndex = 0;
-  int previousIndex = 0;
   @override
   void initState() {
-    super.initState();
     controller = CameraController(
       widget.cameras[0],
       ResolutionPreset.high,
       enableAudio: true,
     );
     initializeControllerFuture = controller.initialize();
-    tabController.addListener(() {
-      currentIndex = tabController.index;
-      previousIndex = tabController.previousIndex;
-    });
     _fetchNewMedia();
+    super.initState();
   }
 
   @override
   void dispose() {
     controller.dispose();
+    _lastCropped?.delete();
     super.dispose();
   }
 
@@ -155,9 +168,6 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     );
   }
 
-  ValueNotifier<bool> redDeleteText = ValueNotifier(false);
-  ValueNotifier<bool> clearVideoRecord = ValueNotifier(false);
-
   Widget deleteButton() {
     Color deleteColor = redDeleteText.value ? Colors.red : Colors.black;
 
@@ -199,9 +209,6 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     });
   }
 
-  bool selectedVideo = false;
-  SelectedPage nextRightPage = SelectedPage.center;
-
   moveToVideo() {
     selectedPaged = 2;
     setState(() {
@@ -213,82 +220,47 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     });
   }
 
-  bool enter = false;
-
-  bool? stopScrollTab;
   DefaultTabController defaultTabController() {
     return DefaultTabController(
       length: 2,
-      child: GestureDetector(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: TabBarView(
-                    controller: tabController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      CustomScrollView(
-                        slivers: [
-                          sliverAppBar(),
-                          sliverSelectedImage(),
-                          sliverGridView(),
-                        ],
-                      ),
-                      CustomCameraDisplay(
-                        cameras: widget.cameras,
-                        controller: controller,
-                        initializeControllerFuture: initializeControllerFuture,
-                        replacingTabBar: replacingDeleteWidget,
-                        clearVideoRecord: clearVideoRecord,
-                        redDeleteText: redDeleteText,
-                        moveToVideoScreen: moveToVideo,
-                        selectedVideo: selectedVideo,
-                      ),
-                    ],
-                  ),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: TabBarView(
+                  controller: tabController,
+                  dragStartBehavior: DragStartBehavior.start,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    CustomScrollView(
+                      slivers: [
+                        sliverAppBar(),
+                        sliverSelectedImage(),
+                        sliverGridView(),
+                      ],
+                    ),
+                    CustomCameraDisplay(
+                      cameras: widget.cameras,
+                      controller: controller,
+                      initializeControllerFuture: initializeControllerFuture,
+                      replacingTabBar: replacingDeleteWidget,
+                      clearVideoRecord: clearVideoRecord,
+                      redDeleteText: redDeleteText,
+                      moveToVideoScreen: moveToVideo,
+                      selectedVideo: selectedVideo,
+                    ),
+                  ],
                 ),
-                AnimatedSwitcher(
-                    duration: const Duration(seconds: 1),
-                    switchInCurve: Curves.easeIn,
-                    child: showDeleteText ? deleteButton() : tabBar())
-              ],
-            ),
+              ),
+              AnimatedSwitcher(
+                  duration: const Duration(seconds: 1),
+                  switchInCurve: Curves.easeIn,
+                  child: showDeleteText ? deleteButton() : tabBar())
+            ],
           ),
         ),
-        onHorizontalDragEnd: (e) {
-          if (e.velocity.pixelsPerSecond.dx >= 0) {
-            if (selectedPaged == 2) {
-              centerPage(
-                  isThatVideo: false,
-                  numPage: 1,
-                  selectedPage: SelectedPage.center);
-            } else if (selectedPaged == 1) {
-              centerPage(
-                  isThatVideo: false,
-                  numPage: 0,
-                  selectedPage: SelectedPage.left);
-            }
-          } else {
-            if (selectedPaged == 0) {
-              centerPage(
-                  isThatVideo: false,
-                  numPage: 1,
-                  selectedPage: SelectedPage.center);
-            } else if (selectedPaged == 1) {
-              selectedPaged = 2;
-              setState(() {
-                tabController.animateTo(1);
-                selectedPage = SelectedPage.right;
-                selectedVideo = true;
-                stopScrollTab = true;
-                remove = true;
-              });
-            }
-          }
-        },
       ),
     );
   }
@@ -321,24 +293,52 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                 indicatorColor:
                     !selectedVideo ? Colors.black : Colors.transparent,
                 labelPadding: const EdgeInsets.all(13),
-                tabs: const [
-                  Text("GALLERY",
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-                  Text("PHOTO",
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                tabs: [
+                  GestureDetector(
+                    onTap: () {
+                      centerPage(
+                          isThatVideo: false,
+                          numPage: 0,
+                          selectedPage: SelectedPage.left);
+                    },
+                    child: const Text("GALLERY",
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500)),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      centerPage(
+                          isThatVideo: false,
+                          numPage: 1,
+                          selectedPage: SelectedPage.center);
+                    },
+                    child: const Text("PHOTO",
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500)),
+                  ),
                 ],
               ),
             ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 40),
-              child: Text("VIDEO",
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: selectedVideo ? Colors.black : Colors.grey,
-                      fontWeight: FontWeight.w500)),
+            GestureDetector(
+              onTap: () {
+                selectedPaged = 2;
+                setState(() {
+                  tabController.animateTo(1);
+                  selectedPage = SelectedPage.right;
+                  selectedVideo = true;
+                  stopScrollTab = true;
+                  remove = true;
+                });
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 14.0, horizontal: 40),
+                child: Text("VIDEO",
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: selectedVideo ? Colors.black : Colors.grey,
+                        fontWeight: FontWeight.w500)),
+              ),
             ),
           ],
         ),
@@ -363,7 +363,6 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     );
   }
 
-  bool remove = false;
   SliverAppBar sliverAppBar() {
     return SliverAppBar(
       backgroundColor: Colors.white,
@@ -373,7 +372,9 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
       elevation: 0,
       leading: IconButton(
         icon: const Icon(Icons.clear_rounded, color: Colors.black, size: 30),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).maybePop();
+        },
       ),
       actions: <Widget>[
         IconButton(
@@ -381,15 +382,67 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
               color: Colors.blue, size: 30),
           onPressed: () async {
             Uint8List? image = selectedImage ?? firstImage;
-            Navigator.of(context).maybePop(File.fromRawPath(image!));
+            if (image != null) {
+              final tempDir = await getTemporaryDirectory();
+              File selectedImageFile =
+                  await File('${tempDir.path}/image.png').create();
+              selectedImageFile.writeAsBytesSync(image);
+              File? croppedImage = await cropImage(selectedImageFile);
+              if (croppedImage != null) {
+                var decodedImage =
+                    await decodeImageFromList(croppedImage.readAsBytesSync());
+                await Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(
+                        builder: (context) => CreatePostPage(
+                            selectedFile: croppedImage,
+                            isThatImage: true,
+                            aspectRatio:
+                            decodedImage.width / decodedImage.height),
+                        maintainState: false));
+              } else {}
+            }
           },
         ),
       ],
     );
   }
 
+  Future<File?> cropImage(File imageFile) async {
+    await ImageCrop.requestPermissions();
+    final scale = cropKey.currentState!.scale;
+    final area = cropKey.currentState!.area;
+    if (area == null) {
+      return null;
+    }
+    final sample = await ImageCrop.sampleImage(
+      file: imageFile,
+      preferredSize: (2000 / scale).round(),
+    );
+
+    final File file = await ImageCrop.cropImage(
+      file: sample,
+      area: area,
+    );
+    sample.delete();
+    return file;
+  }
+
+  IOSUiSettings iosUiSettingsLocked() => IOSUiSettings(
+        aspectRatioLockEnabled: false,
+        resetAspectRatioEnabled: false,
+      );
+
+  AndroidUiSettings androidUiSettingsLocked() => AndroidUiSettings(
+        toolbarTitle: 'Crop Image',
+        toolbarColor: Colors.red,
+        toolbarWidgetColor: Colors.white,
+        initAspectRatio: CropAspectRatioPreset.original,
+        lockAspectRatio: false,
+      );
+
   SliverAppBar sliverSelectedImage() {
     return SliverAppBar(
+      automaticallyImplyLeading: false,
       floating: true,
       stretch: true,
       pinned: true,
@@ -400,13 +453,27 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
           ? Container(
               color: Colors.black,
               height: 360,
-              child: Image.memory(
-                selectedImage != null ? selectedImage! : firstImage!,
-                fit: BoxFit.cover,
-              ),
+              width: double.infinity,
+              child: Crop.memory(
+                  selectedImage != null ? selectedImage! : firstImage!,
+                  key: cropKey),
             )
           : Container(),
     );
+  }
+
+  stopScrolling(bool neverScroll) {
+    setState(() {
+      if (neverScroll) {
+        shrinkWrap = true;
+        neverScrollPhysics = true;
+        primary = false;
+      } else {
+        shrinkWrap = false;
+        neverScrollPhysics = false;
+        primary = null;
+      }
+    });
   }
 
   SliverGrid sliverGridView() {

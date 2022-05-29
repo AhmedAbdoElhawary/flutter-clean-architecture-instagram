@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/record_count.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/record_fade_animation.dart';
 
@@ -65,7 +67,9 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.clear_rounded, color: Colors.black, size: 30),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).maybePop();
+          },
         ),
         actions: <Widget>[
           if (widget.selectedVideo)
@@ -77,7 +81,6 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                 onPressed: () async {
                   if (videoRecordFile != null) {
                     Navigator.of(context).maybePop(videoRecordFile!);
-
                   }
                 },
               ),
@@ -101,8 +104,7 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                       onPressed: () {
                         if (widget.cameras.length > 1) {
                           setState(() {
-                            selectedCamera =
-                                selectedCamera == 0 ? 1 : 0;
+                            selectedCamera = selectedCamera == 0 ? 1 : 0;
                             initializeCamera(selectedCamera);
                           });
                         } else {
@@ -125,22 +127,22 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                           currentFlashMode = currentFlashMode == Flash.off
                               ? Flash.auto
                               : (currentFlashMode == Flash.auto
-                                  ? Flash.on
-                                  : Flash.off);
+                              ? Flash.on
+                              : Flash.off);
                         });
                         currentFlashMode == Flash.on
                             ? widget.controller.setFlashMode(FlashMode.torch)
                             : (currentFlashMode == Flash.auto
-                                ? widget.controller.setFlashMode(FlashMode.auto)
-                                : widget.controller
-                                    .setFlashMode(FlashMode.off));
+                            ? widget.controller.setFlashMode(FlashMode.auto)
+                            : widget.controller
+                            .setFlashMode(FlashMode.off));
                       },
                       icon: Icon(
                           currentFlashMode == Flash.on
                               ? Icons.flash_on_rounded
                               : (currentFlashMode == Flash.auto
-                                  ? Icons.flash_auto_rounded
-                                  : Icons.flash_off_rounded),
+                              ? Icons.flash_auto_rounded
+                              : Icons.flash_off_rounded),
                           color: Colors.white),
                     ),
                   ),
@@ -182,9 +184,30 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                                             final image = await widget
                                                 .controller
                                                 .takePicture();
-                                            Navigator.of(context)
-                                                .maybePop(File(image.path));
+                                            File selectedImage =
+                                            File(image.path);
+                                            var decodedImage =
+                                            await decodeImageFromList(
+                                                selectedImage
+                                                    .readAsBytesSync());
+                                            print(decodedImage.width);
+                                            print(decodedImage.height);
 
+                                            await Navigator.of(context,
+                                                rootNavigator: true)
+                                                .push(CupertinoPageRoute(
+                                                builder: (context) =>
+                                                    CreatePostPage(
+                                                        selectedFile:
+                                                        selectedImage,
+                                                        isThatImage: widget
+                                                            .selectedVideo,
+                                                        aspectRatio:
+                                                        decodedImage
+                                                            .width /
+                                                            decodedImage
+                                                                .height),
+                                                maintainState: false));
                                           } catch (e) {
                                             if (kDebugMode) {
                                               print(e);
@@ -212,7 +235,6 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                                         XFile w = await widget.controller
                                             .stopVideoRecording();
                                         videoRecordFile = File(w.path);
-
                                       },
                                       child: CircleAvatar(
                                           backgroundColor: Colors.grey[300],
