@@ -3,20 +3,16 @@ import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instagram/core/app_prefs.dart';
-import 'package:instagram/core/functions/image_picker.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
-import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/pages/profile/custom_gallery_page/gallery_page.dart';
-import 'package:instagram/presentation/pages/story/create_story.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_page.dart';
@@ -27,7 +23,6 @@ import '../../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../../../core/functions/toast_show.dart';
 import 'edit_profile_page.dart';
-import 'dart:io';
 import '../register/login_page.dart';
 
 class PersonalProfilePage extends StatefulWidget {
@@ -57,9 +52,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Future<void> getData() async {
     widget.userName.isNotEmpty
         ? (await BlocProvider.of<FirestoreUserInfoCubit>(context)
-            .getUserFromUserName(widget.userName))
+        .getUserFromUserName(widget.userName))
         : (await BlocProvider.of<FirestoreUserInfoCubit>(context)
-            .getUserInfo(widget.personalId));
+        .getUserInfo(widget.personalId));
     setState(() {
       rebuildUserInfo = true;
     });
@@ -69,9 +64,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
       bloc: widget.userName.isNotEmpty
           ? (BlocProvider.of<FirestoreUserInfoCubit>(context)
-            ..getUserFromUserName(widget.userName))
+        ..getUserFromUserName(widget.userName))
           : (BlocProvider.of<FirestoreUserInfoCubit>(context)
-            ..getUserInfo(widget.personalId)),
+        ..getUserInfo(widget.personalId)),
       buildWhen: (previous, current) {
         if (previous != current && current is CubitMyPersonalInfoLoaded) {
           return true;
@@ -141,7 +136,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       context,
       headIcon: Text(StringsManager.create.tr(),
           style:
-              getBoldStyle(color: Theme.of(context).focusColor, fontSize: 17)),
+          getBoldStyle(color: Theme.of(context).focusColor, fontSize: 17)),
       bodyText: Padding(
         padding: const EdgeInsetsDirectional.only(start: 20.0),
         child: createNewData ? columnOfCreateData() : columnOfThemeData(),
@@ -215,30 +210,30 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Widget logOut() {
     return BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState>(
         builder: (context, state) {
-      FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
-      if (state is CubitAuthSignOut) {
-        WidgetsBinding.instance.addPostFrameCallback((_) async {
-          sharePrefs.clear();
-          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-            CupertinoPageRoute(
-                builder: (_) => LoginPage(sharePrefs: sharePrefs),
-                maintainState: false),
-            (route) => false,
+          FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
+          if (state is CubitAuthSignOut) {
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              sharePrefs.clear();
+              Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                CupertinoPageRoute(
+                    builder: (_) => LoginPage(sharePrefs: sharePrefs),
+                    maintainState: false),
+                    (route) => false,
+              );
+            });
+          } else if (state is CubitAuthConfirming) {
+            ToastShow.toast(StringsManager.loading.tr());
+          } else if (state is CubitAuthFailed) {
+            ToastShow.toastStateError(state);
+          }
+          return GestureDetector(
+            child: createSizedBox(StringsManager.logOut.tr(),
+                icon: Icons.logout_rounded),
+            onTap: () async {
+              authCubit.signOut();
+            },
           );
         });
-      } else if (state is CubitAuthConfirming) {
-        ToastShow.toast(StringsManager.loading.tr());
-      } else if (state is CubitAuthFailed) {
-        ToastShow.toastStateError(state);
-      }
-      return GestureDetector(
-        child: createSizedBox(StringsManager.logOut.tr(),
-            icon: Icons.logout_rounded),
-        onTap: () async {
-          authCubit.signOut();
-        },
-      );
-    });
   }
 
   List<Widget> widgetsAboveTapBars(UserPersonalInfo userInfo) {
@@ -258,10 +253,10 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             Navigator.maybePop(context);
             Future.delayed(Duration.zero, () async {
               UserPersonalInfo? result =
-                  await Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(
-                          builder: (context) => EditProfilePage(userInfo),
-                          maintainState: false));
+              await Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(
+                      builder: (context) => EditProfilePage(userInfo),
+                      maintainState: false));
               if (result != null) {
                 setState(() {
                   rebuildUserInfo = true;
@@ -303,62 +298,22 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   GestureDetector createStory() {
     return GestureDetector(
-        onTap: () async => showDialog(createNewStory),
+        onTap: () async => createNewStory(),
         child: createSizedBox(StringsManager.story.tr(),
             nameOfPath: IconsAssets.addInstagramStoryIcon));
   }
 
   GestureDetector createVideo() {
     return GestureDetector(
-        onTap: () async => showDialog(createNewVideo),
+        onTap: () async => createNewVideo(),
         child: createSizedBox(StringsManager.reel.tr(),
             nameOfPath: IconsAssets.videoIcon));
   }
 
-  showDialog(ValueChanged<bool> method) async {
-    showAnimatedDialog(
-        context: context,
-        curve: Curves.easeIn,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-              scrollable: true,
-              backgroundColor: Theme.of(context).primaryColor,
-              elevation: 5,
-              content: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GestureDetector(
-                      onTap: () async {
-                        Navigator.maybePop(context);
-                        method(true);
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          setState(() {});
-                        });
-                      },
-                      child: Text(StringsManager.fromCamera.tr(),
-                          style: Theme.of(context).textTheme.bodyText1),
-                    ),
-                    const SizedBox(height: 15),
-                    GestureDetector(
-                      onTap: () async {
-                        Navigator.maybePop(context);
-                        method(false);
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          setState(() {});
-                        });
-                      },
-                      child: Text(StringsManager.fromGallery.tr(),
-                          style: Theme.of(context).textTheme.bodyText1),
-                    ),
-                  ]),
-            ));
-  }
-
-  createNewStory(bool isThatFromCamera) async {
+  createNewStory() async {
     Navigator.maybePop(context);
     final List<CameraDescription> cameras = await availableCameras();
-    File selectedImage=await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+    Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
         builder: (context) {
           return CustomGalleryDisplay(
             cameras: cameras,
@@ -366,78 +321,36 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         },
         maintainState: false));
 
-    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-          builder: (context) => CreateStoryPage(storyImage: selectedImage),
-          maintainState: false));
-      setState(() {
-        rebuildUserInfo = true;
-      });
+    setState(() {
+      rebuildUserInfo = true;
+    });
   }
 
-  createNewVideo(bool isThatFromCamera) async {
+  createNewVideo() async {
     Navigator.maybePop(context);
     final List<CameraDescription> cameras = await availableCameras();
-   File selectedImage=await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+    Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
         builder: (context) {
           return CustomGalleryDisplay(
             cameras: cameras,
           );
         },
-        maintainState: false));
-    var decodedImage = await decodeImageFromList(selectedImage.readAsBytesSync());
-    print(decodedImage.width);
-    print(decodedImage.height);
-
-    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-        builder: (context) => CreatePostPage(
-            selectedFile: selectedImage,
-            isThatImage: false,
-            aspectRatio: decodedImage.width/decodedImage.height),
         maintainState: false));
     setState(() {
       rebuildUserInfo = true;
     });
   }
 
-  Future<void> _getImageDimension(File photo) async {
-    Image image = Image.file(photo);
-    image.image.resolve(const ImageConfiguration()).addListener(
-      ImageStreamListener(
-        (ImageInfo image, bool synchronousCall) {
-          var myImage = image.image;
-          setState(() {
-            imageSize =
-                Size(myImage.width.toDouble(), myImage.height.toDouble());
-          });
-        },
-      ),
-    );
-  }
-
-  createNewPost(bool isThatFromCamera) async {
+  createNewPost() async {
     Navigator.maybePop(context);
     final List<CameraDescription> cameras = await availableCameras();
-    File selectedImage= await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+    Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
         builder: (context) {
           return CustomGalleryDisplay(
             cameras: cameras,
           );
         },
         maintainState: false));
-
-    var decodedImage = await decodeImageFromList(selectedImage.readAsBytesSync());
-    print(decodedImage.width);
-    print(decodedImage.height);
-
-    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-        builder: (context) => CreatePostPage(
-            selectedFile: selectedImage,
-            isThatImage: false,
-            aspectRatio: decodedImage.width/decodedImage.height),
-        maintainState: false));
-    setState(() {
-      rebuildUserInfo = true;
-    });
     setState(() {
       rebuildUserInfo = true;
     });
@@ -445,7 +358,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   GestureDetector createPost() {
     return GestureDetector(
-        onTap: () => showDialog(createNewPost),
+        onTap: () => createNewPost(),
         child: createSizedBox(StringsManager.post.tr()));
   }
 
@@ -456,16 +369,16 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       child: Row(children: [
         nameOfPath.isNotEmpty
             ? SvgPicture.asset(
-                nameOfPath,
-                color: Theme.of(context).dialogBackgroundColor,
-                height: 25,
-              )
+          nameOfPath,
+          color: Theme.of(context).dialogBackgroundColor,
+          height: 25,
+        )
             : Icon(icon, color: Theme.of(context).focusColor),
         const SizedBox(width: 15),
         Text(
           text,
           style:
-              getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
+          getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
         )
       ]),
     );
