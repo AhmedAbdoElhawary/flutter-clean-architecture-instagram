@@ -99,7 +99,9 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
                 PaletteGenerator.fromImageProvider(MemoryImage(image),
                     size: const Size(200, 100));
             backgroundColor.then((value) {
-              color = value.lightMutedColor!.color;
+              setState((){
+                color = value.darkMutedColor!.color;
+              });
             });
             return Container(
               color: Colors.grey,
