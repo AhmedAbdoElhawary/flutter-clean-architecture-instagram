@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:instagram/core/functions/compress_image.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/presentation/customPackages/crop_image/crop_image.dart';
 import 'package:instagram/presentation/customPackages/crop_image/crop_options.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
@@ -197,8 +199,8 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                     color: deleteColor, size: 15),
               Text(
                   isThatDeleteText
-                      ? "DELETE"
-                      : "The limit is 10 photo or videos.",
+                      ? StringsManager.delete.tr()
+                      : StringsManager.limitOfPhotos.tr(),
                   style: TextStyle(
                       fontSize: 14,
                       color: deleteColor,
@@ -317,8 +319,8 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                           numPage: 0,
                           selectedPage: SelectedPage.left);
                     },
-                    child: const Text("GALLERY",
-                        style: TextStyle(
+                    child:  Text(StringsManager.gallery.tr(),
+                        style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w500)),
                   ),
                   GestureDetector(
@@ -328,8 +330,8 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                           numPage: 1,
                           selectedPage: SelectedPage.center);
                     },
-                    child: const Text("PHOTO",
-                        style: TextStyle(
+                    child:  Text(StringsManager.photo.tr(),
+                        style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w500)),
                   ),
                 ],
@@ -349,7 +351,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 14.0, horizontal: 40),
-                child: Text("VIDEO",
+                child: Text(StringsManager.video.tr(),
                     style: TextStyle(
                         fontSize: 14,
                         color: selectedVideo
@@ -378,7 +380,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
               child: Container(
                   height: 2,
                   width: 120,
-                  color: Theme.of(context).primaryColor)),
+                  color: Theme.of(context).focusColor)),
         ),
       ],
     );
