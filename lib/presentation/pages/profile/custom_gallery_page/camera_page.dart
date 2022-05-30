@@ -191,9 +191,6 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                                                 await decodeImageFromList(
                                                     selectedImage
                                                         .readAsBytesSync());
-                                            print(decodedImage.width);
-                                            print(decodedImage.height);
-
                                             await Navigator.of(context,
                                                     rootNavigator: true)
                                                 .push(CupertinoPageRoute(
