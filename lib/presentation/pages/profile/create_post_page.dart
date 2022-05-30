@@ -55,7 +55,23 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     height: 70,
                     width: 70,
                     child: widget.isThatImage
-                        ? Image.file(widget.selectedFile)
+                        ? Stack(
+                            children: [
+                              Image.file(widget.selectedFile),
+                              if (widget.multiSelectedFiles != null)
+                                const Padding(
+                                  padding: EdgeInsets.all(2.0),
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Icon(
+                                      Icons.copy_rounded,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                )
+                            ],
+                          )
                         : const Center(
                             child: Icon(Icons.slow_motion_video_sharp)),
                   ),
@@ -69,8 +85,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: StringsManager.writeACaption.tr(),
-                        hintStyle:
-                            TextStyle(color: Theme.of(context).bottomAppBarColor),
+                        hintStyle: TextStyle(
+                            color: Theme.of(context).bottomAppBarColor),
                       ),
                     ),
                   ),
