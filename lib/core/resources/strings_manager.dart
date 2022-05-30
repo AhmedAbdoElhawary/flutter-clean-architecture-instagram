@@ -25,6 +25,8 @@ class StringsManager {
   static const String create = "create";
   static const String search = "search";
 
+  static const String addToStory = "addToStory";
+
   static const String signUp = "signUp";
   static const String report = "report";
   static const String username = "username";
