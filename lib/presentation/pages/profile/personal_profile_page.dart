@@ -288,23 +288,23 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     );
   }
 
-  GestureDetector createNewLive() {
-    return GestureDetector(
+  Widget createNewLive() {
+    return InkWell(
       onTap: () {},
       child: createSizedBox(StringsManager.live.tr(),
           nameOfPath: IconsAssets.instagramHighlightStoryIcon),
     );
   }
 
-  GestureDetector createStory() {
-    return GestureDetector(
+  Widget createStory() {
+    return InkWell(
         onTap: () async => createNewStory(),
         child: createSizedBox(StringsManager.story.tr(),
             nameOfPath: IconsAssets.addInstagramStoryIcon));
   }
 
-  GestureDetector createVideo() {
-    return GestureDetector(
+  Widget createVideo() {
+    return InkWell(
         onTap: () async => createNewVideo(),
         child: createSizedBox(StringsManager.reel.tr(),
             nameOfPath: IconsAssets.videoIcon));
@@ -356,13 +356,13 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     });
   }
 
-  GestureDetector createPost() {
-    return GestureDetector(
+  Widget createPost() {
+    return InkWell(
         onTap: () => createNewPost(),
         child: createSizedBox(StringsManager.post.tr()));
   }
 
-  SizedBox createSizedBox(String text,
+  Widget createSizedBox(String text,
       {String nameOfPath = '', IconData icon = Icons.grid_on_rounded}) {
     return SizedBox(
       height: 40,
