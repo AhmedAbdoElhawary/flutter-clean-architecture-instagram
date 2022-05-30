@@ -25,6 +25,8 @@ class StringsManager {
   static const String create = "create";
   static const String search = "search";
 
+  static const String addToStory = "addToStory";
+
   static const String signUp = "signUp";
   static const String report = "report";
   static const String username = "username";
@@ -58,9 +60,13 @@ class StringsManager {
   static const String hideLikeCount = "hideLikeCount";
   static const String turnOffCommenting = "turnOffCommenting";
   static const String archive = "archive";
+  static const String limitOfPhotos = "limitOfPhotos";
 
   static const String viewProfile = "viewProfile";
   static const String viewAll = "viewAll";
+  static const String gallery = "gallery";
+  static const String photo = "photo";
+  static const String video = "video";
 
   static const String restrict = "restrict";
   static const String share = "share";

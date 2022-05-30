@@ -15,6 +15,7 @@ import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/screens/main_screen.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateStoryPage extends StatefulWidget {
   final File storyImage;
@@ -111,6 +112,9 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
             setState(() {
               isItDone = true;
             });
+            final SharedPreferences sharePrefs =
+                await SharedPreferences.getInstance();
+            sharePrefs.remove(myPersonalId);
             Navigator.of(context).pushAndRemoveUntil(
               CupertinoPageRoute(builder: (_) => MainScreen(myPersonalId)),
               (route) => false,
