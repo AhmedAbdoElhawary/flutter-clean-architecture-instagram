@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/record_count.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/record_fade_animation.dart';
@@ -76,6 +78,7 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
           if (widget.selectedVideo)
             AnimatedSwitcher(
               duration: const Duration(seconds: 1),
+              switchInCurve: Curves.easeIn,
               child: IconButton(
                 icon: const Icon(Icons.arrow_forward_rounded,
                     color: Colors.blue, size: 30),
@@ -109,10 +112,10 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                             initializeCamera(selectedCamera);
                           });
                         } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text('No secondary camera found'),
-                            duration: Duration(seconds: 2),
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                StringsManager.noSecondaryCameraFound.tr()),
+                            duration: const Duration(seconds: 2),
                           ));
                         }
                       },
@@ -235,7 +238,7 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                                         videoRecordFile = File(w.path);
                                       },
                                       child: CircleAvatar(
-                                          backgroundColor: Colors.grey[300],
+                                          backgroundColor: Colors.grey[400],
                                           radius: 40,
                                           child: CircleAvatar(
                                             radius: 24,
@@ -283,7 +286,7 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
               child: Row(
                 children: [
                   Text(
-                    "Press and hold to record",
+                    StringsManager.pressAndHold.tr(),
                     style: TextStyle(
                         color: Theme.of(context).primaryColor, fontSize: 12),
                   ),
