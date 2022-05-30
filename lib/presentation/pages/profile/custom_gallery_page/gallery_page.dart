@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'dart:math' as math;
 
 enum SelectedPage { left, center, right }
 
@@ -27,27 +28,28 @@ class CustomGalleryDisplay extends StatefulWidget {
 class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     with TickerProviderStateMixin {
   late TabController tabController = TabController(length: 2, vsync: this);
-  bool neverScrollPhysics = false;
   ValueNotifier<bool> clearVideoRecord = ValueNotifier(false);
   ValueNotifier<bool> redDeleteText = ValueNotifier(false);
   SelectedPage selectedPage = SelectedPage.left;
   late Future<void> initializeControllerFuture;
+  List<Uint8List> multiSelectedImage = [];
   final cropKey = GlobalKey<CropState>();
-  final List<FutureBuilder<Uint8List?>> _mediaList = [];
   late CameraController controller;
+  final List<FutureBuilder<Uint8List?>> _mediaList = [];
+  List<Uint8List?> allImages = [];
+  bool neverScrollPhysics = false;
   bool showDeleteText = false;
   bool selectedVideo = false;
   Uint8List? selectedImage;
+  bool expandImage = false;
   bool shrinkWrap = false;
-  List<Uint8List> multiSelectedImage = [];
   int selectedPaged = 0;
-  bool? primary;
   bool remove = false;
   bool? stopScrollTab;
   int currentPage = 0;
   bool initial = true;
   late int lastPage;
-  File? _lastCropped;
+  bool? primary;
 
   @override
   void didUpdateWidget(CustomGalleryDisplay oldWidget) {
@@ -69,7 +71,6 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
   @override
   void dispose() {
     controller.dispose();
-    _lastCropped?.delete();
     super.dispose();
   }
 
@@ -94,9 +95,11 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
       List<FutureBuilder<Uint8List?>> temp = [];
       List<Uint8List?> imageTemp = [];
       for (int i = 0; i < media.length; i++) {
-        FutureBuilder<Uint8List?> value = lowQualityImage(media, i);
-        temp.add(value);
-        Uint8List? image = await value.future;
+        FutureBuilder<Uint8List?> gridViewImage =
+            await lowQualityImage(media, i);
+        Uint8List? image = await highQualityImage(media, i);
+
+        temp.add(gridViewImage);
         imageTemp.add(image);
       }
 
@@ -110,18 +113,20 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     }
   }
 
-  List<Uint8List?> allImages = [];
-
   bool multiSelectionMode = false;
-  FutureBuilder<Uint8List?> lowQualityImage(List<AssetEntity> media, int i) {
-    Map m = {};
+
+  Future<Uint8List?> highQualityImage(List<AssetEntity> media, int i) async {
+    return media[i].thumbnailDataWithSize(const ThumbnailSize(800, 800));
+  }
+
+  Future<FutureBuilder<Uint8List?>> lowQualityImage(
+      List<AssetEntity> media, int i) async {
     FutureBuilder<Uint8List?> futureBuilder = FutureBuilder(
-      future: media[i].thumbnailDataWithSize(const ThumbnailSize(1000, 1000)),
+      future: media[i].thumbnailDataWithSize(const ThumbnailSize(200, 200)),
       builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           Uint8List? image = snapshot.data;
           if (image != null) {
-            m["image"] = image;
             return Container(
               color: Colors.grey,
               child: Stack(
@@ -151,7 +156,6 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
         return Container();
       },
     );
-    m["future"] = futureBuilder;
     return futureBuilder;
   }
 
@@ -484,7 +488,8 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
               width: double.infinity,
               child: Stack(
                 children: [
-                  Crop.memory(selectedImage!, key: cropKey),
+                  Crop.memory(selectedImage!,
+                      key: cropKey, aspectRatio: expandImage ? 6 / 8 : null),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Padding(
@@ -504,7 +509,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                             decoration: BoxDecoration(
                               color: multiSelectionMode
                                   ? Colors.blue
-                                  : const Color.fromARGB(199, 58, 58, 58),
+                                  : const Color.fromARGB(165, 58, 58, 58),
                               border: Border.all(
                                 color: const Color.fromARGB(45, 250, 250, 250),
                               ),
@@ -518,7 +523,32 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                             ))),
                       ),
                     ),
-                  )
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            expandImage = !expandImage;
+                          });
+                        },
+                        child: Container(
+                          height: 35,
+                          width: 35,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(165, 58, 58, 58),
+                            border: Border.all(
+                              color: const Color.fromARGB(45, 250, 250, 250),
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: customArrowsIcon(),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             )
@@ -526,18 +556,37 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     );
   }
 
-  stopScrolling(bool neverScroll) {
-    setState(() {
-      if (neverScroll) {
-        shrinkWrap = true;
-        neverScrollPhysics = true;
-        primary = false;
-      } else {
-        shrinkWrap = false;
-        neverScrollPhysics = false;
-        primary = null;
-      }
-    });
+  Stack customArrowsIcon() {
+    return Stack(children: [
+      Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Align(
+          alignment: Alignment.topRight,
+          child: Transform.rotate(
+            angle: 180 * math.pi / 250,
+            child: const Icon(
+              Icons.arrow_back_ios_rounded,
+              color: Colors.white,
+              size: 12,
+            ),
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Align(
+          alignment: Alignment.bottomLeft,
+          child: Transform.rotate(
+            angle: 180 * math.pi / 255,
+            child: const Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: Colors.white,
+              size: 12,
+            ),
+          ),
+        ),
+      ),
+    ]);
   }
 
   bool selectionImageCheck(Uint8List image, {bool enableCopy = false}) {
