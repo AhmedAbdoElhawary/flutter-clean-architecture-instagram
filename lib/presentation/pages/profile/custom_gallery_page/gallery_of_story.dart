@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:palette_generator/palette_generator.dart';
+import 'package:instagram/presentation/pages/story/create_story.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class CustomStoryGalleryDisplay extends StatefulWidget {
@@ -94,15 +97,6 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
         if (snapshot.connectionState == ConnectionState.done) {
           Uint8List? image = snapshot.data;
           if (image != null) {
-            Color color = Colors.blueGrey;
-            Future<PaletteGenerator> backgroundColor =
-                PaletteGenerator.fromImageProvider(MemoryImage(image),
-                    size: const Size(200, 100));
-            backgroundColor.then((value) {
-              setState((){
-                color = value.darkMutedColor!.color;
-              });
-            });
             return Container(
               color: Colors.grey,
               child: Stack(
@@ -111,18 +105,6 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
                     child: Image.memory(
                       image,
                       fit: BoxFit.cover,
-                    ),
-                  ),
-                  Positioned.fill(child: Container(color: color)),
-                  // Positioned.fill(
-                  //     child: ImageFiltered(
-                  //   imageFilter: ImageFilter.blur(sigmaY: 100, sigmaX: 100,tileMode: TileMode.clamp),
-                  //   child: Container(color: Colors.transparent),
-                  // )),
-                  Positioned.fill(
-                    child: Image.memory(
-                      image,
-                      fit: BoxFit.fitWidth,
                     ),
                   ),
                   if (media[i].type == AssetType.video)
@@ -208,7 +190,24 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
               });
             });
           }
-          return GestureDetector(onTap: () {}, child: mediaList);
+          return GestureDetector(
+              onTap: () async {
+                final tempDir = await getTemporaryDirectory();
+
+                File selectedImageFile =
+                    await File('${tempDir.path}/image.png').create();
+                selectedImageFile.writeAsBytesSync(image);
+                Navigator.of(context, rootNavigator: true)
+                    .push(CupertinoPageRoute(
+                        builder: (context) {
+                          return CreateStoryPage(
+                            isThatImage: true,
+                            storyImage: selectedImageFile,
+                          );
+                        },
+                        maintainState: false));
+              },
+              child: mediaList);
         } else {
           return Container();
         }
