@@ -48,7 +48,6 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
   bool? stopScrollTab;
   int currentPage = 0;
   bool initial = true;
-  File? _lastCropped;
   late int lastPage;
   bool? primary;
 
@@ -72,7 +71,6 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
   @override
   void dispose() {
     controller.dispose();
-    _lastCropped?.delete();
     super.dispose();
   }
 
@@ -589,20 +587,6 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
         ),
       ),
     ]);
-  }
-
-  stopScrolling(bool neverScroll) {
-    setState(() {
-      if (neverScroll) {
-        shrinkWrap = true;
-        neverScrollPhysics = true;
-        primary = false;
-      } else {
-        shrinkWrap = false;
-        neverScrollPhysics = false;
-        primary = null;
-      }
-    });
   }
 
   bool selectionImageCheck(Uint8List image, {bool enableCopy = false}) {
