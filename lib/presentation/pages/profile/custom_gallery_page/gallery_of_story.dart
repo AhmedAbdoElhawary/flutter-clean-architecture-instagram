@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/presentation/pages/story/create_story.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -141,7 +143,7 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
 
   Scaffold defaultTabController() {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: ColorManager.black,
       appBar: appBar(),
       body: gridView(),
     );
@@ -159,14 +161,13 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
         },
       ),
       centerTitle: true,
-      title: const Text(
-        "Add to story",
-        style:
-            TextStyle(color: ColorManager.white, fontWeight: FontWeight.w500),
+      title: Text(
+        StringsManager.addToStory.tr(),
+        style: const TextStyle(
+            color: ColorManager.white, fontWeight: FontWeight.w500),
       ),
       actions: const [
-        Icon(Icons.settings_suggest_rounded,
-            color: ColorManager.white, size: 30),
+        Icon(Icons.settings_rounded, color: ColorManager.white, size: 30),
       ],
     );
   }
