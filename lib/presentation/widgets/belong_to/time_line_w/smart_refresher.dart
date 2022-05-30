@@ -5,14 +5,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 class SmarterRefresh extends StatefulWidget {
   final Widget child;
   final List posts;
   final ValueNotifier<bool> isThatEndOfList;
   final AsyncValueSetter<int> onRefreshData;
-   const SmarterRefresh(
+  const SmarterRefresh(
       {required this.onRefreshData,
       required this.child,
       required this.isThatEndOfList,
@@ -29,7 +29,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
   late AnimationController _aniController, _scaleController;
   late AnimationController _footerController;
   final RefreshController _refreshController = RefreshController();
-  int lengthOfPosts=5;
+  int lengthOfPosts = 5;
   @override
   void initState() {
     _aniController = AnimationController(
@@ -78,12 +78,11 @@ class _SmarterRefreshState extends State<SmarterRefresh>
         },
         onLoading: () async {
           if (!widget.isThatEndOfList.value) {
-            widget.onRefreshData( lengthOfPosts).whenComplete(() {
+            widget.onRefreshData(lengthOfPosts).whenComplete(() {
               _refreshController.loadComplete();
-              if ( lengthOfPosts >= widget.posts.length) {
+              if (lengthOfPosts >= widget.posts.length) {
                 _refreshController.loadNoData();
                 widget.isThatEndOfList.value = true;
-
               } else {
                 lengthOfPosts += 5;
               }
@@ -115,7 +114,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
                 child = Container();
                 break;
               default:
-                child = const ThineCircularProgress();
+                child = circularProgressIndicator(context);
                 break;
             }
             return SizedBox(
@@ -135,24 +134,32 @@ class _SmarterRefreshState extends State<SmarterRefresh>
             }
           },
           builder: (context, mode) {
-            return Container(
-              color: Theme.of(context).backgroundColor,
-              child: FadeTransition(
-                opacity: _scaleController,
-                child: ScaleTransition(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1.5,
-                    color: ColorManager.black38,
-                    backgroundColor: Theme.of(context).dividerColor,
-                  ),
-                  scale: _scaleController,
-                ),
-              ),
-              alignment: Alignment.center,
-            );
+            return customCircleProgress(context);
           },
         ),
       ),
+    );
+  }
+
+  Container customCircleProgress(BuildContext context) {
+    return Container(
+      color: Theme.of(context).backgroundColor,
+      child: FadeTransition(
+        opacity: _scaleController,
+        child: ScaleTransition(
+          child: circularProgressIndicator(context),
+          scale: _scaleController,
+        ),
+      ),
+      alignment: Alignment.center,
+    );
+  }
+
+  CircularProgressIndicator circularProgressIndicator(BuildContext context) {
+    return CircularProgressIndicator(
+      strokeWidth: 1.5,
+      color: ColorManager.black38,
+      backgroundColor: Theme.of(context).dividerColor,
     );
   }
 
