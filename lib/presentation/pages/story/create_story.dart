@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,10 +8,12 @@ import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/story.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/screens/main_screen.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
 
 class CreateStoryPage extends StatefulWidget {
@@ -104,11 +107,14 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
         if (storyCubit.storyId != '') {
           await userCubit.updateStoriesPostsInfo(
               userId: personalInfo.userId, storyId: storyCubit.storyId);
-          WidgetsBinding.instance.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
             setState(() {
               isItDone = true;
-              Navigator.maybePop(context);
             });
+            Navigator.of(context).pushAndRemoveUntil(
+              CupertinoPageRoute(builder: (_) => MainScreen(myPersonalId)),
+              (route) => false,
+            );
           });
         }
       });
