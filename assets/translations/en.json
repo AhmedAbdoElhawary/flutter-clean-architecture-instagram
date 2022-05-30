@@ -26,6 +26,8 @@
   "photo": "PHOTO",
   "video": "VIDEO",
   "pronouns": "Pronouns",
+  "noSecondaryCameraFound": "No secondary camera found",
+  "pressAndHold": "Press and hold to record",
   "website": "Website",
   "search": "Search",
   "comment": "comment",
