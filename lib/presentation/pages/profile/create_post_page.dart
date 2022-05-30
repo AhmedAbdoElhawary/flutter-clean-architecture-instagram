@@ -1,16 +1,19 @@
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
+import 'package:instagram/presentation/screens/main_screen.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 
 class CreatePostPage extends StatefulWidget {
@@ -191,8 +194,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
           });
         }
       });
-
-      Navigator.maybePop(context);
+      Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute(builder: (_) => MainScreen(myPersonalId)),
+        (route) => false,
+      );
     });
   }
 
