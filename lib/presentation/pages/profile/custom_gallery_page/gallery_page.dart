@@ -403,12 +403,12 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
           icon: const Icon(Icons.arrow_forward_rounded,
               color: Colors.blue, size: 30),
           onPressed: () async {
+            final tempDir = await getTemporaryDirectory();
+            File selectedImageFile =
+                await File('${tempDir.path}/image.png').create();
             if (multiSelectedImage.isEmpty) {
               Uint8List? image = selectedImage;
               if (image != null) {
-                final tempDir = await getTemporaryDirectory();
-                File selectedImageFile =
-                    await File('${tempDir.path}/image.png').create();
                 selectedImageFile.writeAsBytesSync(image);
                 File? croppedImage = await cropImage(selectedImageFile);
                 File? finalImage = await compressImage(croppedImage!);
@@ -425,9 +425,6 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
             } else {
               List<File> selectedImages = [];
               for (int i = 0; i < multiSelectedImage.length; i++) {
-                final tempDir = await getTemporaryDirectory();
-                File selectedImageFile =
-                    await File('${tempDir.path}/image.png').create();
                 selectedImageFile.writeAsBytesSync(multiSelectedImage[i]);
                 File? croppedImage = await cropImage(selectedImageFile);
                 File? finalImage = await compressImage(croppedImage!);
