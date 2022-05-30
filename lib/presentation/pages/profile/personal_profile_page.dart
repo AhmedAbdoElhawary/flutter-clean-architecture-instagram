@@ -12,6 +12,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/presentation/pages/profile/custom_gallery_page/gallery_of_story.dart';
 import 'package:instagram/presentation/pages/profile/custom_gallery_page/gallery_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
@@ -52,9 +53,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Future<void> getData() async {
     widget.userName.isNotEmpty
         ? (await BlocProvider.of<FirestoreUserInfoCubit>(context)
-        .getUserFromUserName(widget.userName))
+            .getUserFromUserName(widget.userName))
         : (await BlocProvider.of<FirestoreUserInfoCubit>(context)
-        .getUserInfo(widget.personalId));
+            .getUserInfo(widget.personalId));
     setState(() {
       rebuildUserInfo = true;
     });
@@ -64,9 +65,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
       bloc: widget.userName.isNotEmpty
           ? (BlocProvider.of<FirestoreUserInfoCubit>(context)
-        ..getUserFromUserName(widget.userName))
+            ..getUserFromUserName(widget.userName))
           : (BlocProvider.of<FirestoreUserInfoCubit>(context)
-        ..getUserInfo(widget.personalId)),
+            ..getUserInfo(widget.personalId)),
       buildWhen: (previous, current) {
         if (previous != current && current is CubitMyPersonalInfoLoaded) {
           return true;
@@ -136,7 +137,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       context,
       headIcon: Text(StringsManager.create.tr(),
           style:
-          getBoldStyle(color: Theme.of(context).focusColor, fontSize: 17)),
+              getBoldStyle(color: Theme.of(context).focusColor, fontSize: 17)),
       bodyText: Padding(
         padding: const EdgeInsetsDirectional.only(start: 20.0),
         child: createNewData ? columnOfCreateData() : columnOfThemeData(),
@@ -210,30 +211,30 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Widget logOut() {
     return BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState>(
         builder: (context, state) {
-          FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
-          if (state is CubitAuthSignOut) {
-            WidgetsBinding.instance.addPostFrameCallback((_) async {
-              sharePrefs.clear();
-              Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-                CupertinoPageRoute(
-                    builder: (_) => LoginPage(sharePrefs: sharePrefs),
-                    maintainState: false),
-                    (route) => false,
-              );
-            });
-          } else if (state is CubitAuthConfirming) {
-            ToastShow.toast(StringsManager.loading.tr());
-          } else if (state is CubitAuthFailed) {
-            ToastShow.toastStateError(state);
-          }
-          return GestureDetector(
-            child: createSizedBox(StringsManager.logOut.tr(),
-                icon: Icons.logout_rounded),
-            onTap: () async {
-              authCubit.signOut();
-            },
+      FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
+      if (state is CubitAuthSignOut) {
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          sharePrefs.clear();
+          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+            CupertinoPageRoute(
+                builder: (_) => LoginPage(sharePrefs: sharePrefs),
+                maintainState: false),
+            (route) => false,
           );
         });
+      } else if (state is CubitAuthConfirming) {
+        ToastShow.toast(StringsManager.loading.tr());
+      } else if (state is CubitAuthFailed) {
+        ToastShow.toastStateError(state);
+      }
+      return GestureDetector(
+        child: createSizedBox(StringsManager.logOut.tr(),
+            icon: Icons.logout_rounded),
+        onTap: () async {
+          authCubit.signOut();
+        },
+      );
+    });
   }
 
   List<Widget> widgetsAboveTapBars(UserPersonalInfo userInfo) {
@@ -253,10 +254,10 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             Navigator.maybePop(context);
             Future.delayed(Duration.zero, () async {
               UserPersonalInfo? result =
-              await Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(
-                      builder: (context) => EditProfilePage(userInfo),
-                      maintainState: false));
+                  await Navigator.of(context, rootNavigator: true).push(
+                      CupertinoPageRoute(
+                          builder: (context) => EditProfilePage(userInfo),
+                          maintainState: false));
               if (result != null) {
                 setState(() {
                   rebuildUserInfo = true;
@@ -315,7 +316,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     final List<CameraDescription> cameras = await availableCameras();
     Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
         builder: (context) {
-          return CustomGalleryDisplay(
+          return CustomStoryGalleryDisplay(
             cameras: cameras,
           );
         },
@@ -369,16 +370,16 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       child: Row(children: [
         nameOfPath.isNotEmpty
             ? SvgPicture.asset(
-          nameOfPath,
-          color: Theme.of(context).dialogBackgroundColor,
-          height: 25,
-        )
+                nameOfPath,
+                color: Theme.of(context).dialogBackgroundColor,
+                height: 25,
+              )
             : Icon(icon, color: Theme.of(context).focusColor),
         const SizedBox(width: 15),
         Text(
           text,
           style:
-          getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
+              getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
         )
       ]),
     );
