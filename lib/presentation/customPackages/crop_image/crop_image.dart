@@ -402,10 +402,7 @@ class CropState extends State<Crop> with TickerProviderStateMixin, Drag {
   void _handleScaleStart(ScaleStartDetails details) {
     if (widget.scrollCustomList != null) {
       widget.scrollCustomList!(true);
-      print("start +++++++++++++++++++++++++++++++++ >");
-
     }
-    print("end ++++++fjmvb mbvnmh +++++++++++++++++++++++++++ >");
 
     _activate();
     _settleController.stop(canceled: false);
@@ -452,9 +449,7 @@ class CropState extends State<Crop> with TickerProviderStateMixin, Drag {
   void _handleScaleEnd(ScaleEndDetails details) {
     if (widget.scrollCustomList != null) {
       widget.scrollCustomList!(false);
-      print("end +++++++++++++++++++++++++++++++++ >");
     }
-    print("end ++++++++++++++++++++++++cvm vhmhb nm +++++++++ >");
 
     _deactivate();
     final minimumScale = _minimumScale;

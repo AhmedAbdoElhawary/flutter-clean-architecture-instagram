@@ -63,10 +63,11 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.clear_rounded, color: Colors.black, size: 30),
+          icon: Icon(Icons.clear_rounded,
+              color: Theme.of(context).focusColor, size: 30),
           onPressed: () {
             Navigator.of(context).maybePop();
           },
@@ -127,22 +128,22 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                           currentFlashMode = currentFlashMode == Flash.off
                               ? Flash.auto
                               : (currentFlashMode == Flash.auto
-                              ? Flash.on
-                              : Flash.off);
+                                  ? Flash.on
+                                  : Flash.off);
                         });
                         currentFlashMode == Flash.on
                             ? widget.controller.setFlashMode(FlashMode.torch)
                             : (currentFlashMode == Flash.auto
-                            ? widget.controller.setFlashMode(FlashMode.auto)
-                            : widget.controller
-                            .setFlashMode(FlashMode.off));
+                                ? widget.controller.setFlashMode(FlashMode.auto)
+                                : widget.controller
+                                    .setFlashMode(FlashMode.off));
                       },
                       icon: Icon(
                           currentFlashMode == Flash.on
                               ? Icons.flash_on_rounded
                               : (currentFlashMode == Flash.auto
-                              ? Icons.flash_auto_rounded
-                              : Icons.flash_off_rounded),
+                                  ? Icons.flash_auto_rounded
+                                  : Icons.flash_off_rounded),
                           color: Colors.white),
                     ),
                   ),
@@ -150,7 +151,7 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                       alignment: Alignment.bottomCenter,
                       child: Container(
                         height: 270,
-                        color: Colors.white,
+                        color: Theme.of(context).primaryColor,
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -185,29 +186,26 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                                                 .controller
                                                 .takePicture();
                                             File selectedImage =
-                                            File(image.path);
+                                                File(image.path);
                                             var decodedImage =
-                                            await decodeImageFromList(
-                                                selectedImage
-                                                    .readAsBytesSync());
-                                            print(decodedImage.width);
-                                            print(decodedImage.height);
-
+                                                await decodeImageFromList(
+                                                    selectedImage
+                                                        .readAsBytesSync());
                                             await Navigator.of(context,
-                                                rootNavigator: true)
+                                                    rootNavigator: true)
                                                 .push(CupertinoPageRoute(
-                                                builder: (context) =>
-                                                    CreatePostPage(
-                                                        selectedFile:
-                                                        selectedImage,
-                                                        isThatImage: widget
-                                                            .selectedVideo,
-                                                        aspectRatio:
-                                                        decodedImage
-                                                            .width /
-                                                            decodedImage
-                                                                .height),
-                                                maintainState: false));
+                                                    builder: (context) =>
+                                                        CreatePostPage(
+                                                            selectedFile:
+                                                                selectedImage,
+                                                            isThatImage: widget
+                                                                .selectedVideo,
+                                                            aspectRatio:
+                                                                decodedImage
+                                                                        .width /
+                                                                    decodedImage
+                                                                        .height),
+                                                    maintainState: false));
                                           } catch (e) {
                                             if (kDebugMode) {
                                               print(e);
@@ -239,9 +237,10 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                                       child: CircleAvatar(
                                           backgroundColor: Colors.grey[300],
                                           radius: 40,
-                                          child: const CircleAvatar(
+                                          child: CircleAvatar(
                                             radius: 24,
-                                            backgroundColor: Colors.white,
+                                            backgroundColor:
+                                                Theme.of(context).primaryColor,
                                           )),
                                     ),
                                   ),
@@ -282,10 +281,11 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               child: Row(
-                children: const [
+                children: [
                   Text(
                     "Press and hold to record",
-                    style: TextStyle(color: Colors.white, fontSize: 12),
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor, fontSize: 12),
                   ),
                 ],
               ),

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:instagram/core/functions/compress_image.dart';
 import 'package:instagram/presentation/customPackages/crop_image/crop_image.dart';
 import 'package:instagram/presentation/customPackages/crop_image/crop_options.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
@@ -9,9 +10,7 @@ import 'package:instagram/presentation/pages/profile/custom_gallery_page/camera_
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import 'package:photo_manager/photo_manager.dart';
-import 'package:image_cropper/image_cropper.dart';
 
 enum SelectedPage { left, center, right }
 
@@ -34,13 +33,13 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
   SelectedPage selectedPage = SelectedPage.left;
   late Future<void> initializeControllerFuture;
   final cropKey = GlobalKey<CropState>();
-  final List<Widget> _mediaList = [];
+  final List<FutureBuilder<Uint8List?>> _mediaList = [];
   late CameraController controller;
   bool showDeleteText = false;
   bool selectedVideo = false;
   Uint8List? selectedImage;
   bool shrinkWrap = false;
-  Uint8List? firstImage;
+  List<Uint8List> multiSelectedImage = [];
   int selectedPaged = 0;
   bool? primary;
   bool remove = false;
@@ -92,13 +91,18 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
           await PhotoManager.getAssetPathList(onlyAll: true);
       List<AssetEntity> media =
           await albums[0].getAssetListPaged(page: currentPage, size: 60);
-      List<Widget> temp = [];
-
+      List<FutureBuilder<Uint8List?>> temp = [];
+      List<Uint8List?> imageTemp = [];
       for (int i = 0; i < media.length; i++) {
-        temp.add(lowQualityImage(media, i));
+        FutureBuilder<Uint8List?> value = lowQualityImage(media, i);
+        temp.add(value);
+        Uint8List? image = await value.future;
+        imageTemp.add(image);
       }
+
       setState(() {
         _mediaList.addAll(temp);
+        allImages.addAll(imageTemp);
         currentPage++;
       });
     } else {
@@ -106,49 +110,40 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     }
   }
 
+  List<Uint8List?> allImages = [];
+
+  bool multiSelectionMode = false;
   FutureBuilder<Uint8List?> lowQualityImage(List<AssetEntity> media, int i) {
-    return FutureBuilder(
+    Map m = {};
+    FutureBuilder<Uint8List?> futureBuilder = FutureBuilder(
       future: media[i].thumbnailDataWithSize(const ThumbnailSize(1000, 1000)),
       builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           Uint8List? image = snapshot.data;
           if (image != null) {
-            if (i == 0 && firstImage == null) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                setState(() {
-                  firstImage = image;
-                });
-              });
-            }
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedImage = image;
-                });
-              },
-              child: Container(
-                color: Colors.grey,
-                child: Stack(
-                  children: <Widget>[
-                    Positioned.fill(
-                      child: Image.memory(
-                        image,
-                        fit: BoxFit.cover,
-                      ),
+            m["image"] = image;
+            return Container(
+              color: Colors.grey,
+              child: Stack(
+                children: <Widget>[
+                  Positioned.fill(
+                    child: Image.memory(
+                      image,
+                      fit: BoxFit.cover,
                     ),
-                    if (media[i].type == AssetType.video)
-                      const Align(
-                        alignment: Alignment.bottomRight,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 5, bottom: 5),
-                          child: Icon(
-                            Icons.videocam,
-                            color: Colors.white,
-                          ),
+                  ),
+                  if (media[i].type == AssetType.video)
+                    const Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 5, bottom: 5),
+                        child: Icon(
+                          Icons.videocam,
+                          color: Colors.white,
                         ),
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
             );
           }
@@ -156,6 +151,8 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
         return Container();
       },
     );
+    m["future"] = futureBuilder;
+    return futureBuilder;
   }
 
   @override
@@ -168,8 +165,9 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     );
   }
 
-  Widget deleteButton() {
-    Color deleteColor = redDeleteText.value ? Colors.red : Colors.black;
+  Widget tapBarMessage(bool isThatDeleteText) {
+    Color deleteColor =
+        redDeleteText.value ? Colors.red : Theme.of(context).focusColor;
 
     return Center(
       child: Padding(
@@ -190,8 +188,13 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(Icons.arrow_back_ios_rounded, color: deleteColor, size: 15),
-              Text("DELETE",
+              if (isThatDeleteText)
+                Icon(Icons.arrow_back_ios_rounded,
+                    color: deleteColor, size: 15),
+              Text(
+                  isThatDeleteText
+                      ? "DELETE"
+                      : "The limit is 10 photo or videos.",
                   style: TextStyle(
                       fontSize: 14,
                       color: deleteColor,
@@ -224,7 +227,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor,
         body: SafeArea(
           child: Column(
             children: [
@@ -254,10 +257,17 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                   ],
                 ),
               ),
-              AnimatedSwitcher(
-                  duration: const Duration(seconds: 1),
-                  switchInCurve: Curves.easeIn,
-                  child: showDeleteText ? deleteButton() : tabBar())
+              if (multiSelectedImage.length < 10) ...[
+                Visibility(
+                  visible: !multiSelectionMode,
+                  child: AnimatedSwitcher(
+                      duration: const Duration(seconds: 1),
+                      switchInCurve: Curves.easeIn,
+                      child: showDeleteText ? tapBarMessage(true) : tabBar()),
+                ),
+              ] else ...[
+                tapBarMessage(false)
+              ],
             ],
           ),
         ),
@@ -289,9 +299,11 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
               child: TabBar(
                 controller: tabController,
                 unselectedLabelColor: Colors.grey,
-                labelColor: selectedVideo ? Colors.grey : Colors.black,
-                indicatorColor:
-                    !selectedVideo ? Colors.black : Colors.transparent,
+                labelColor:
+                    selectedVideo ? Colors.grey : Theme.of(context).focusColor,
+                indicatorColor: !selectedVideo
+                    ? Theme.of(context).focusColor
+                    : Colors.transparent,
                 labelPadding: const EdgeInsets.all(13),
                 tabs: [
                   GestureDetector(
@@ -336,7 +348,9 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                 child: Text("VIDEO",
                     style: TextStyle(
                         fontSize: 14,
-                        color: selectedVideo ? Colors.black : Colors.grey,
+                        color: selectedVideo
+                            ? Theme.of(context).focusColor
+                            : Colors.grey,
                         fontWeight: FontWeight.w500)),
               ),
             ),
@@ -357,7 +371,10 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
               left: selectedPage == SelectedPage.left
                   ? 0
                   : (selectedPage == SelectedPage.center ? 120 : 240),
-              child: Container(height: 2, width: 120, color: Colors.black)),
+              child: Container(
+                  height: 2,
+                  width: 120,
+                  color: Theme.of(context).primaryColor)),
         ),
       ],
     );
@@ -365,13 +382,14 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
 
   SliverAppBar sliverAppBar() {
     return SliverAppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).primaryColor,
       floating: true,
       stretch: true,
       snap: true,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.clear_rounded, color: Colors.black, size: 30),
+        icon: Icon(Icons.clear_rounded,
+            color: Theme.of(context).focusColor, size: 30),
         onPressed: () {
           Navigator.of(context).maybePop();
         },
@@ -381,25 +399,48 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
           icon: const Icon(Icons.arrow_forward_rounded,
               color: Colors.blue, size: 30),
           onPressed: () async {
-            Uint8List? image = selectedImage ?? firstImage;
-            if (image != null) {
-              final tempDir = await getTemporaryDirectory();
-              File selectedImageFile =
-                  await File('${tempDir.path}/image.png').create();
-              selectedImageFile.writeAsBytesSync(image);
-              File? croppedImage = await cropImage(selectedImageFile);
-              if (croppedImage != null) {
-                var decodedImage =
-                    await decodeImageFromList(croppedImage.readAsBytesSync());
+            if (multiSelectedImage.isEmpty) {
+              Uint8List? image = selectedImage;
+              if (image != null) {
+                final tempDir = await getTemporaryDirectory();
+                File selectedImageFile =
+                    await File('${tempDir.path}/image.png').create();
+                selectedImageFile.writeAsBytesSync(image);
+                File? croppedImage = await cropImage(selectedImageFile);
+                File? finalImage = await compressImage(croppedImage!);
+                if (finalImage != null) {
+                  await Navigator.of(context, rootNavigator: true).push(
+                      CupertinoPageRoute(
+                          builder: (context) => CreatePostPage(
+                              selectedFile: finalImage,
+                              isThatImage: true,
+                              aspectRatio: 360),
+                          maintainState: false));
+                }
+              }
+            } else {
+              List<File> selectedImages = [];
+              for (int i = 0; i < multiSelectedImage.length; i++) {
+                final tempDir = await getTemporaryDirectory();
+                File selectedImageFile =
+                    await File('${tempDir.path}/image.png').create();
+                selectedImageFile.writeAsBytesSync(multiSelectedImage[i]);
+                File? croppedImage = await cropImage(selectedImageFile);
+                File? finalImage = await compressImage(croppedImage!);
+                if (finalImage != null) {
+                  selectedImages.add(finalImage);
+                }
+              }
+              if (selectedImages.isNotEmpty) {
                 await Navigator.of(context, rootNavigator: true).push(
                     CupertinoPageRoute(
                         builder: (context) => CreatePostPage(
-                            selectedFile: croppedImage,
+                            selectedFile: selectedImages[0],
+                            multiSelectedFiles: selectedImages,
                             isThatImage: true,
-                            aspectRatio:
-                            decodedImage.width / decodedImage.height),
+                            aspectRatio: 360),
                         maintainState: false));
-              } else {}
+              }
             }
           },
         ),
@@ -427,19 +468,6 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     return file;
   }
 
-  IOSUiSettings iosUiSettingsLocked() => IOSUiSettings(
-        aspectRatioLockEnabled: false,
-        resetAspectRatioEnabled: false,
-      );
-
-  AndroidUiSettings androidUiSettingsLocked() => AndroidUiSettings(
-        toolbarTitle: 'Crop Image',
-        toolbarColor: Colors.red,
-        toolbarWidgetColor: Colors.white,
-        initAspectRatio: CropAspectRatioPreset.original,
-        lockAspectRatio: false,
-      );
-
   SliverAppBar sliverSelectedImage() {
     return SliverAppBar(
       automaticallyImplyLeading: false,
@@ -447,16 +475,52 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
       stretch: true,
       pinned: true,
       snap: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).primaryColor,
       expandedHeight: 360,
-      flexibleSpace: firstImage != null
+      flexibleSpace: selectedImage != null
           ? Container(
-              color: Colors.black,
+              color: Theme.of(context).primaryColor,
               height: 360,
               width: double.infinity,
-              child: Crop.memory(
-                  selectedImage != null ? selectedImage! : firstImage!,
-                  key: cropKey),
+              child: Stack(
+                children: [
+                  Crop.memory(selectedImage!, key: cropKey),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            multiSelectionMode = !multiSelectionMode;
+                            if (!multiSelectionMode) {
+                              multiSelectedImage.clear();
+                            }
+                          });
+                        },
+                        child: Container(
+                            height: 35,
+                            width: 35,
+                            decoration: BoxDecoration(
+                              color: multiSelectionMode
+                                  ? Colors.blue
+                                  : const Color.fromARGB(199, 58, 58, 58),
+                              border: Border.all(
+                                color: const Color.fromARGB(45, 250, 250, 250),
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                                child: Icon(
+                              Icons.copy,
+                              color: Colors.white,
+                              size: 17,
+                            ))),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             )
           : Container(),
     );
@@ -476,6 +540,26 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     });
   }
 
+  bool selectionImageCheck(Uint8List image, {bool enableCopy = false}) {
+    if (multiSelectedImage.contains(image) && selectedImage == image) {
+      multiSelectedImage.remove(image);
+      if (multiSelectedImage.isNotEmpty) {
+        selectedImage = multiSelectedImage.last;
+      }
+      return true;
+    } else {
+      if (multiSelectedImage.length < 10) {
+        if (!multiSelectedImage.contains(image)) {
+          multiSelectedImage.add(image);
+        }
+        if (enableCopy) {
+          selectedImage = image;
+        }
+      }
+      return false;
+    }
+  }
+
   SliverGrid sliverGridView() {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -485,10 +569,94 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
       ),
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          return _mediaList[index];
+          FutureBuilder<Uint8List?> mediaList = _mediaList[index];
+          Uint8List? image = allImages[index];
+          if (image != null) {
+            bool imageSelected = multiSelectedImage.contains(image);
+            if (index == 0 && selectedImage == null) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                setState(() {
+                  selectedImage = image;
+                });
+              });
+            }
+            return Stack(
+              children: [
+                gestureDetector(image, index, mediaList),
+                if (selectedImage == image)
+                  GestureDetector(
+                    child: gestureDetector(image, index, blurContainer()),
+                  ),
+                Visibility(
+                  visible: multiSelectionMode,
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                        padding: const EdgeInsets.all(3),
+                        child: Container(
+                          height: 25,
+                          width: 25,
+                          decoration: BoxDecoration(
+                            color: imageSelected
+                                ? Colors.blue
+                                : const Color.fromARGB(115, 222, 222, 222),
+                            border: Border.all(
+                              color: Colors.white,
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: imageSelected
+                              ? Center(
+                                  child: Text(
+                                  "${multiSelectedImage.indexOf(image) + 1}",
+                                  style: const TextStyle(color: Colors.white),
+                                ))
+                              : Container(),
+                        )),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return Container();
+          }
         },
         childCount: _mediaList.length,
       ),
     );
+  }
+
+  Container blurContainer() {
+    return Container(
+      width: double.infinity,
+      color: const Color.fromARGB(184, 234, 234, 234),
+      height: double.maxFinite,
+    );
+  }
+
+  GestureDetector gestureDetector(Uint8List image, int index, Widget child) {
+    return GestureDetector(
+        onTap: () {
+          setState(() {
+            if (multiSelectionMode) {
+              bool close = selectionImageCheck(image);
+              if (close) return;
+            }
+            selectedImage = image;
+          });
+        },
+        onLongPress: () {
+          setState(() {
+            if (!multiSelectionMode) {
+              multiSelectionMode = true;
+            }
+          });
+        },
+        onLongPressUp: () {
+          setState(() {
+            selectionImageCheck(image, enableCopy: true);
+          });
+        },
+        child: child);
   }
 }
