@@ -66,6 +66,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
       enableAudio: true,
     );
     initializeControllerFuture = controller.initialize();
+    isImagesReady = false;
     _fetchNewMedia();
     super.initState();
   }
@@ -86,6 +87,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     return false;
   }
 
+  bool isImagesReady = true;
   _fetchNewMedia() async {
     lastPage = currentPage;
     var result = await PhotoManager.requestPermissionExtend();
@@ -109,6 +111,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
         _mediaList.addAll(temp);
         allImages.addAll(imageTemp);
         currentPage++;
+        isImagesReady = true;
       });
     } else {
       PhotoManager.openSetting();
@@ -167,7 +170,26 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
       onNotification: (ScrollNotification scroll) {
         return _handleScrollEvent(scroll);
       },
-      child: defaultTabController(),
+      child: isImagesReady ? defaultTabController() : loadingWidget(),
+    );
+  }
+
+  Widget loadingWidget() {
+    return Column(
+      children: [
+        Container(color: Colors.grey[200], height: 360, width: double.infinity),
+        GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            crossAxisSpacing: 1.7,
+            mainAxisSpacing: 1.5,
+          ),
+          itemBuilder: (context, index) {
+            return Container(color: Colors.grey[200], width: double.infinity);
+          },
+          itemCount: 8,
+        )
+      ],
     );
   }
 
@@ -319,7 +341,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                           numPage: 0,
                           selectedPage: SelectedPage.left);
                     },
-                    child:  Text(StringsManager.gallery.tr(),
+                    child: Text(StringsManager.gallery.tr(),
                         style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w500)),
                   ),
@@ -330,7 +352,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                           numPage: 1,
                           selectedPage: SelectedPage.center);
                     },
-                    child:  Text(StringsManager.photo.tr(),
+                    child: Text(StringsManager.photo.tr(),
                         style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w500)),
                   ),
@@ -378,9 +400,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                   ? 0
                   : (selectedPage == SelectedPage.center ? 120 : 240),
               child: Container(
-                  height: 2,
-                  width: 120,
-                  color: Theme.of(context).focusColor)),
+                  height: 2, width: 120, color: Theme.of(context).focusColor)),
         ),
       ],
     );
