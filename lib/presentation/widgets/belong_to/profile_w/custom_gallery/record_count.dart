@@ -101,7 +101,7 @@ class RecordCountState extends State<RecordCount>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         LinearProgressIndicator(
-          color: widget.makeProgressRed.value ? Colors.red : Colors.black,
+          color: widget.makeProgressRed.value ? Colors.red : Theme.of(context).focusColor,
           backgroundColor: Colors.transparent,
           value: progress,
           minHeight: 3,
@@ -133,9 +133,10 @@ class RecordCountState extends State<RecordCount>
                   animation: controller,
                   builder: (context, child) => Text(
                     countText,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.normal,
+                      color: Theme.of(context).focusColor,
                     ),
                   ),
                 ),
