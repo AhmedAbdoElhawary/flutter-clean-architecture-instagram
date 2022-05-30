@@ -17,7 +17,8 @@ class RecordCount extends StatefulWidget {
   RecordCountState createState() => RecordCountState();
 }
 
-class RecordCountState extends State<RecordCount> with TickerProviderStateMixin {
+class RecordCountState extends State<RecordCount>
+    with TickerProviderStateMixin {
   late AnimationController controller;
   double opacityLevel = 1.0;
   bool isPlaying = false;
@@ -123,7 +124,7 @@ class RecordCountState extends State<RecordCount> with TickerProviderStateMixin 
                   onEnd: () {
                     if (isPlaying) {
                       setState(
-                              () => opacityLevel = opacityLevel == 0 ? 1.0 : 0.0);
+                          () => opacityLevel = opacityLevel == 0 ? 1.0 : 0.0);
                     }
                   },
                 ),
