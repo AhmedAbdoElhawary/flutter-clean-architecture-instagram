@@ -124,7 +124,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
   bool multiSelectionMode = false;
 
   Future<Uint8List?> highQualityImage(List<AssetEntity> media, int i) async {
-    return media[i].thumbnailDataWithSize(const ThumbnailSize(1000, 1000));
+    return media[i].thumbnailDataWithSize(const ThumbnailSize(1200, 1200));
   }
 
   Future<FutureBuilder<Uint8List?>> lowQualityImage(
@@ -177,43 +177,54 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     );
   }
 
+  AppBar appBar() {
+    return AppBar(
+      backgroundColor: Theme.of(context).primaryColor,
+      elevation: 0,
+      leading: IconButton(
+        icon: Icon(Icons.clear_rounded,
+            color: Theme.of(context).focusColor, size: 30),
+        onPressed: () {
+          Navigator.of(context).maybePop();
+        },
+      ),
+    );
+  }
+
   Widget loadingWidget() {
-    return Shimmer.fromColors(
-      baseColor: Theme.of(context).textTheme.headline5!.color!,
-      highlightColor: Theme.of(context).textTheme.headline6!.color!,
+    return SingleChildScrollView(
       child: Column(
         children: [
-          // Container(
-          //     color: ColorManager.lightDarkGray,
-          //     height: 50,
-          //     width: double.infinity),
-          // const SizedBox(height: 1),
-          Container(
-              color: ColorManager.lightDarkGray,
-              height: 360,
-              width: double.infinity),
-          const SizedBox(height: 1),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            primary: false,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              crossAxisSpacing: 1,
-              mainAxisSpacing: 1,
+          appBar(),
+          Shimmer.fromColors(
+            baseColor: Theme.of(context).textTheme.headline5!.color!,
+            highlightColor: Theme.of(context).textTheme.headline6!.color!,
+            child: Column(
+              children: [
+                Container(
+                    color: ColorManager.lightDarkGray,
+                    height: 360,
+                    width: double.infinity),
+                const SizedBox(height: 1),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  primary: false,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    crossAxisSpacing: 1,
+                    mainAxisSpacing: 1,
+                  ),
+                  itemBuilder: (context, index) {
+                    return Container(
+                        color: ColorManager.lightDarkGray,
+                        width: double.infinity);
+                  },
+                  itemCount: 12,
+                ),
+              ],
             ),
-            itemBuilder: (context, index) {
-              return Container(
-                  color: ColorManager.lightDarkGray,
-                  width: double.infinity);
-            },
-            itemCount: 12,
           ),
-          // const SizedBox(height: 1),
-          // Container(
-          //     color: ColorManager.lightDarkGray,
-          //     height: 50,
-          //     width: double.infinity),
         ],
       ),
     );
@@ -291,17 +302,17 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                   dragStartBehavior: DragStartBehavior.start,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    CustomScrollView(
-                      slivers: [
-                        sliverAppBar(),
-                        if (isImagesReady) ...[
+                    if (isImagesReady) ...[
+                      CustomScrollView(
+                        slivers: [
+                          sliverAppBar(),
                           sliverSelectedImage(),
                           sliverGridView(),
-                        ] else ...[
-                          loadingWidget()
                         ],
-                      ],
-                    ),
+                      ),
+                    ] else ...[
+                      loadingWidget()
+                    ],
                     CustomCameraDisplay(
                       cameras: widget.cameras,
                       controller: controller,

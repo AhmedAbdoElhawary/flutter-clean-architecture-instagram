@@ -94,6 +94,7 @@ class StringsManager {
   static const String noMorePostToday = "noMorePostToday";
   static const String noPosts = "noPosts";
   static const String tryAddPost = "tryAddPost";
+  static const String noVideos = "noVideos";
 
   static const String noAccount = "noAccount";
   static const String haveAccount = "haveAccount";

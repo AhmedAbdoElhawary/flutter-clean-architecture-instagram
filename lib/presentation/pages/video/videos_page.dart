@@ -17,9 +17,9 @@ import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/comments/comments_page.dart';
 import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/widgets/belong_to/videos_w/reel_video_play.dart';
 import 'package:instagram/core/functions/toast_show.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../core/utility/constant.dart';
 
@@ -61,13 +61,51 @@ class VideosPageState extends State<VideosPage> {
           ToastShow.toastStateError(state);
           return Center(
               child: Text(
-            StringsManager.noPosts.tr(),
+            StringsManager.noVideos.tr(),
             style: TextStyle(color: Theme.of(context).focusColor, fontSize: 20),
           ));
         } else {
-          return const ThineCircularProgress();
+        return loadingWidget();
         }
       },
+    );
+  }
+
+  Widget loadingWidget() {
+    return Stack(
+      children: [
+        Shimmer.fromColors(
+          baseColor:  Colors.grey[500]!,
+          highlightColor: ColorManager.shimmerDarkGrey,
+          child: Container(
+            width: double.infinity,
+            height: double.maxFinite,
+            color: ColorManager.lightDarkGray,
+          ),
+        ),
+        Shimmer.fromColors(
+          baseColor:  Colors.grey[600]!,
+          highlightColor: ColorManager.shimmerDarkGrey,
+          child: Padding(
+            padding: const EdgeInsetsDirectional.only(
+                end: 25.0, bottom: 20, start: 15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CircleAvatar(
+                  radius: 20,
+                  backgroundColor: ColorManager.darkGray,
+                ),
+                const SizedBox(height: 5),
+                Container(height: 15, width: 150, color: ColorManager.darkGray),
+                const SizedBox(height: 5),
+                Container(height: 15, width: 200, color: ColorManager.darkGray),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
