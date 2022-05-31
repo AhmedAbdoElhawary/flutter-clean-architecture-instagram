@@ -13,9 +13,13 @@ class ColorManager {
   static const Color black26 = Color(0x42000000);
   static const Color black12 = Color(0x0000001F);
   static const Color darkWhite = Color(0x25ffffff);
+  static const Color shimmerDarkGrey = Color(0xFFAFAFAF);
+  static const Color shimmerLightGrey = Color(0xFFE5E5E5);
 
   static const Color lightBlack = Color(0x19242424);
   static const Color darkGray = Color(0xff282828);
+  static const Color lightDarkGray = Color(0xff696969);
+
   static const Color black45 = Colors.black45;
   static const Color black38 = Colors.black38;
 
