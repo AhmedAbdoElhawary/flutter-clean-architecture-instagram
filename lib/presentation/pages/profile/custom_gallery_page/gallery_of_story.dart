@@ -92,7 +92,7 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
   bool multiSelectionMode = false;
 
   Future<Uint8List?> highQualityImage(List<AssetEntity> media, int i) async {
-    return media[i].thumbnailDataWithSize(const ThumbnailSize(1000, 1000));
+    return media[i].thumbnailDataWithSize(const ThumbnailSize(1500, 1500));
   }
 
   Future<FutureBuilder<Uint8List?>> lowQualityImage(
@@ -225,7 +225,6 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
           return GestureDetector(
               onTap: () async {
                 final tempDir = await getTemporaryDirectory();
-
                 File selectedImageFile =
                     await File('${tempDir.path}/image.png').create();
                 selectedImageFile.writeAsBytesSync(image);
