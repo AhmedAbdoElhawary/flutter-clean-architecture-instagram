@@ -26,11 +26,14 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     controller.addListener(() {
-      stopVideo.value = controller.index == 2 ? true : false;
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        setState(() {
+          stopVideo.value = controller.index == 2 ? true : false;
+        });
+      });
     });
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -71,12 +74,6 @@ class _MainScreenState extends State<MainScreen> {
               ]),
           controller: controller,
           tabBuilder: (context, index) {
-            WidgetsBinding.instance.addPostFrameCallback((_) async {
-              setState(() {
-                stopVideo.value = controller.index == 2 ? true : false;
-              });
-            });
-
             switch (index) {
               case 0:
                 return CupertinoTabView(
@@ -120,7 +117,6 @@ class _MainScreenState extends State<MainScreen> {
           }),
     );
   }
-
   BottomNavigationBarItem navigationBarItem(String fileName) {
     return BottomNavigationBarItem(
       icon: SvgPicture.asset(
