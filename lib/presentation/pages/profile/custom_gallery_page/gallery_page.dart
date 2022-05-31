@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:instagram/core/functions/compress_image.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/presentation/customPackages/crop_image/crop_image.dart';
 import 'package:instagram/presentation/customPackages/crop_image/crop_options.dart';
@@ -14,6 +15,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'dart:math' as math;
+
+import 'package:shimmer/shimmer.dart';
 
 enum SelectedPage { left, center, right }
 
@@ -42,6 +45,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
   bool neverScrollPhysics = false;
   bool showDeleteText = false;
   bool selectedVideo = false;
+  bool isImagesReady = true;
   Uint8List? selectedImage;
   bool expandImage = false;
   bool shrinkWrap = false;
@@ -87,7 +91,6 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     return false;
   }
 
-  bool isImagesReady = true;
   _fetchNewMedia() async {
     lastPage = currentPage;
     var result = await PhotoManager.requestPermissionExtend();
@@ -121,7 +124,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
   bool multiSelectionMode = false;
 
   Future<Uint8List?> highQualityImage(List<AssetEntity> media, int i) async {
-    return media[i].thumbnailDataWithSize(const ThumbnailSize(800, 800));
+    return media[i].thumbnailDataWithSize(const ThumbnailSize(1000, 1000));
   }
 
   Future<FutureBuilder<Uint8List?>> lowQualityImage(
@@ -170,26 +173,49 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
       onNotification: (ScrollNotification scroll) {
         return _handleScrollEvent(scroll);
       },
-      child: isImagesReady ? defaultTabController() : loadingWidget(),
+      child: defaultTabController(),
     );
   }
 
   Widget loadingWidget() {
-    return Column(
-      children: [
-        Container(color: Colors.grey[200], height: 360, width: double.infinity),
-        GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            crossAxisSpacing: 1.7,
-            mainAxisSpacing: 1.5,
+    return Shimmer.fromColors(
+      baseColor: Theme.of(context).textTheme.headline5!.color!,
+      highlightColor: Theme.of(context).textTheme.headline6!.color!,
+      child: Column(
+        children: [
+          // Container(
+          //     color: ColorManager.lightDarkGray,
+          //     height: 50,
+          //     width: double.infinity),
+          // const SizedBox(height: 1),
+          Container(
+              color: ColorManager.lightDarkGray,
+              height: 360,
+              width: double.infinity),
+          const SizedBox(height: 1),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            primary: false,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              crossAxisSpacing: 1,
+              mainAxisSpacing: 1,
+            ),
+            itemBuilder: (context, index) {
+              return Container(
+                  color: ColorManager.lightDarkGray,
+                  width: double.infinity);
+            },
+            itemCount: 12,
           ),
-          itemBuilder: (context, index) {
-            return Container(color: Colors.grey[200], width: double.infinity);
-          },
-          itemCount: 8,
-        )
-      ],
+          // const SizedBox(height: 1),
+          // Container(
+          //     color: ColorManager.lightDarkGray,
+          //     height: 50,
+          //     width: double.infinity),
+        ],
+      ),
     );
   }
 
@@ -268,8 +294,12 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                     CustomScrollView(
                       slivers: [
                         sliverAppBar(),
-                        sliverSelectedImage(),
-                        sliverGridView(),
+                        if (isImagesReady) ...[
+                          sliverSelectedImage(),
+                          sliverGridView(),
+                        ] else ...[
+                          loadingWidget()
+                        ],
                       ],
                     ),
                     CustomCameraDisplay(
