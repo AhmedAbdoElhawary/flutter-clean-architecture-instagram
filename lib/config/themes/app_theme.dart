@@ -39,8 +39,8 @@ class AppTheme {
           headline1: getNormalStyle(color: ColorManager.grey, fontSize: 15),
           headline2: getBoldStyle(color: ColorManager.black, fontSize: 15),
           headline3: getMediumStyle(color: ColorManager.black, fontSize: 15),
-          headline6: getNormalStyle(color: ColorManager.lightGrey),
-
+          headline5: getNormalStyle(color: ColorManager.shimmerLightGrey),
+          headline6: getNormalStyle(color: Colors.white),
         ));
   }
 
@@ -79,8 +79,8 @@ class AppTheme {
         headline1: getNormalStyle(color: ColorManager.grey, fontSize: 15),
         headline2: getBoldStyle(color: ColorManager.white, fontSize: 15),
         headline3: getMediumStyle(color: ColorManager.white, fontSize: 15),
-        headline6: getNormalStyle(color: ColorManager.darkGray),
-
+        headline5: getNormalStyle(color: Colors.grey[500]!),
+        headline6: getNormalStyle(color: ColorManager.shimmerDarkGrey),
       ),
     );
   }

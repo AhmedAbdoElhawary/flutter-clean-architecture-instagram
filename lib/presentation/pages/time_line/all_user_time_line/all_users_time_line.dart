@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/post.dart';
@@ -9,6 +11,7 @@ import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/time_line/all_user_time_line/search_about_user.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_time_line_grid_view.dart';
 import 'package:instagram/core/functions/toast_show.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AllUsersTimeLinePage extends StatefulWidget {
   final String userId;
@@ -22,7 +25,7 @@ class AllUsersTimeLinePage extends StatefulWidget {
 class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
   bool rebuildUsersInfo = false;
   ValueNotifier<bool> isThatEndOfList = ValueNotifier(false);
-  final ValueNotifier<bool> reloadData=ValueNotifier(true);
+  final ValueNotifier<bool> reloadData = ValueNotifier(true);
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +77,7 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
     await BlocProvider.of<PostCubit>(context).getAllPostInfo();
     setState(() {
       rebuildUsersInfo = true;
-      reloadData.value=true;
+      reloadData.value = true;
     });
   }
 
@@ -91,7 +94,7 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
         }
         return false;
       },
-      builder: (context, state) {
+      builder: (BuildContext context, state) {
         if (state is CubitAllPostsLoaded) {
           List<Post> imagePosts = [];
           List<Post> videoPosts = [];
@@ -120,12 +123,30 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
                 color: Theme.of(context).focusColor, fontSize: 20),
           ));
         } else {
-          return Center(
-            child: CircularProgressIndicator(
-                strokeWidth: 1.5, color: Theme.of(context).hoverColor),
-          );
+          return loadingWidget(context);
         }
       },
+    );
+  }
+
+  Widget loadingWidget(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Theme.of(context).textTheme.headline5!.color!,
+      highlightColor: Theme.of(context).textTheme.headline6!.color!,
+      child: StaggeredGridView.countBuilder(
+        crossAxisSpacing: 1.5,
+        mainAxisSpacing: 1.5,
+        crossAxisCount: 3,
+        itemCount: 16,
+        itemBuilder: (_, __) {
+          return Container(
+              color: ColorManager.lightDarkGray, width: double.infinity);
+        },
+        staggeredTileBuilder: (index) {
+          double num = (index == 2 || (index % 11 == 0 && index != 0)) ? 2 : 1;
+          return StaggeredTile.count(1, num);
+        },
+      ),
     );
   }
 }

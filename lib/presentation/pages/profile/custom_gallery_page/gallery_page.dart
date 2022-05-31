@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:instagram/core/functions/compress_image.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/presentation/customPackages/crop_image/crop_image.dart';
 import 'package:instagram/presentation/customPackages/crop_image/crop_options.dart';
@@ -14,6 +15,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'dart:math' as math;
+
+import 'package:shimmer/shimmer.dart';
 
 enum SelectedPage { left, center, right }
 
@@ -42,6 +45,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
   bool neverScrollPhysics = false;
   bool showDeleteText = false;
   bool selectedVideo = false;
+  bool isImagesReady = true;
   Uint8List? selectedImage;
   bool expandImage = false;
   bool shrinkWrap = false;
@@ -66,6 +70,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
       enableAudio: true,
     );
     initializeControllerFuture = controller.initialize();
+    isImagesReady = false;
     _fetchNewMedia();
     super.initState();
   }
@@ -109,6 +114,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
         _mediaList.addAll(temp);
         allImages.addAll(imageTemp);
         currentPage++;
+        isImagesReady = true;
       });
     } else {
       PhotoManager.openSetting();
@@ -118,7 +124,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
   bool multiSelectionMode = false;
 
   Future<Uint8List?> highQualityImage(List<AssetEntity> media, int i) async {
-    return media[i].thumbnailDataWithSize(const ThumbnailSize(800, 800));
+    return media[i].thumbnailDataWithSize(const ThumbnailSize(1000, 1000));
   }
 
   Future<FutureBuilder<Uint8List?>> lowQualityImage(
@@ -168,6 +174,48 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
         return _handleScrollEvent(scroll);
       },
       child: defaultTabController(),
+    );
+  }
+
+  Widget loadingWidget() {
+    return Shimmer.fromColors(
+      baseColor: Theme.of(context).textTheme.headline5!.color!,
+      highlightColor: Theme.of(context).textTheme.headline6!.color!,
+      child: Column(
+        children: [
+          // Container(
+          //     color: ColorManager.lightDarkGray,
+          //     height: 50,
+          //     width: double.infinity),
+          // const SizedBox(height: 1),
+          Container(
+              color: ColorManager.lightDarkGray,
+              height: 360,
+              width: double.infinity),
+          const SizedBox(height: 1),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            primary: false,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              crossAxisSpacing: 1,
+              mainAxisSpacing: 1,
+            ),
+            itemBuilder: (context, index) {
+              return Container(
+                  color: ColorManager.lightDarkGray,
+                  width: double.infinity);
+            },
+            itemCount: 12,
+          ),
+          // const SizedBox(height: 1),
+          // Container(
+          //     color: ColorManager.lightDarkGray,
+          //     height: 50,
+          //     width: double.infinity),
+        ],
+      ),
     );
   }
 
@@ -246,8 +294,12 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                     CustomScrollView(
                       slivers: [
                         sliverAppBar(),
-                        sliverSelectedImage(),
-                        sliverGridView(),
+                        if (isImagesReady) ...[
+                          sliverSelectedImage(),
+                          sliverGridView(),
+                        ] else ...[
+                          loadingWidget()
+                        ],
                       ],
                     ),
                     CustomCameraDisplay(
@@ -319,7 +371,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                           numPage: 0,
                           selectedPage: SelectedPage.left);
                     },
-                    child:  Text(StringsManager.gallery.tr(),
+                    child: Text(StringsManager.gallery.tr(),
                         style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w500)),
                   ),
@@ -330,7 +382,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                           numPage: 1,
                           selectedPage: SelectedPage.center);
                     },
-                    child:  Text(StringsManager.photo.tr(),
+                    child: Text(StringsManager.photo.tr(),
                         style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w500)),
                   ),
@@ -378,9 +430,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                   ? 0
                   : (selectedPage == SelectedPage.center ? 120 : 240),
               child: Container(
-                  height: 2,
-                  width: 120,
-                  color: Theme.of(context).focusColor)),
+                  height: 2, width: 120, color: Theme.of(context).focusColor)),
         ),
       ],
     );

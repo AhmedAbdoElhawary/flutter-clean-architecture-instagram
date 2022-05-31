@@ -9,6 +9,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/presentation/pages/story/create_story.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CustomStoryGalleryDisplay extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -26,6 +27,7 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
   List<Uint8List> multiSelectedImage = [];
   final List<FutureBuilder<Uint8List?>> _mediaList = [];
   List<Uint8List?> allImages = [];
+  bool isImagesReady = true;
   Uint8List? selectedImage;
   int currentPage = 0;
   late int lastPage;
@@ -37,6 +39,7 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
 
   @override
   void initState() {
+    isImagesReady = false;
     _fetchNewMedia();
     super.initState();
   }
@@ -79,6 +82,7 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
         _mediaList.addAll(temp);
         allImages.addAll(imageTemp);
         currentPage++;
+        isImagesReady = true;
       });
     } else {
       PhotoManager.openSetting();
@@ -137,7 +141,34 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
       onNotification: (ScrollNotification scroll) {
         return _handleScrollEvent(scroll);
       },
-      child: defaultTabController(),
+      child:  defaultTabController() ,
+    );
+  }
+
+  Widget loadingWidget() {
+    return SingleChildScrollView(
+      child: Shimmer.fromColors(
+        baseColor:  Colors.grey[500]!,
+        highlightColor: ColorManager.shimmerDarkGrey,
+        child: GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          primary: false,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 1.7,
+            mainAxisSpacing: 1.5,
+            childAspectRatio: .5,
+          ),
+          itemBuilder: (context, index) {
+            return Container(
+                color: ColorManager.lightDarkGray,
+                height: 50,
+                width: double.infinity);
+          },
+          itemCount: 15,
+        ),
+      ),
     );
   }
 
@@ -145,7 +176,7 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
     return Scaffold(
       backgroundColor: ColorManager.black,
       appBar: appBar(),
-      body: gridView(),
+      body:isImagesReady ? gridView():loadingWidget(),
     );
   }
 
