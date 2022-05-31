@@ -14,6 +14,7 @@ import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/profile/followers_info_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_grid_view.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_videos_grid_view.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../data/models/user_personal_info.dart';
 import '../../global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import '../time_line_w/read_more_text.dart';
@@ -97,12 +98,39 @@ class _ProfilePageState extends State<ProfilePage> {
             !widget.isThatMyPersonalId) {
           return columnOfWidgets(state.postsInfo);
         } else {
-          return Transform.scale(
-              scale: 0.1,
-              child: CircularProgressIndicator(
-                  strokeWidth: 20, color: Theme.of(context).disabledColor));
+          return loadingWidget(context);
         }
       },
+    );
+  }
+
+  Widget loadingWidget(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          tabBarIcons(),
+          Shimmer.fromColors(
+            baseColor: Theme.of(context).textTheme.headline5!.color!,
+            highlightColor: Theme.of(context).textTheme.headline6!.color!,
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              primary: false,
+              padding: const EdgeInsetsDirectional.only(bottom: 1.5, top: 1.5),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 1.5,
+                mainAxisSpacing: 1.5,
+              ),
+              itemBuilder: (_, __) {
+                return Container(
+                    color: ColorManager.lightDarkGray, width: double.infinity);
+              },
+              itemCount: 15,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
