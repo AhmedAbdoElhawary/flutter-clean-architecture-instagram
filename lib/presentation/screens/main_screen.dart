@@ -35,7 +35,9 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
         tabBar: CupertinoTabBar(
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: stopVideo.value
+                ? ColorManager.black
+                : Theme.of(context).primaryColor,
             height: 40,
             items: [
               navigationBarItem("house_white.svg"),
@@ -62,7 +64,12 @@ class _MainScreenState extends State<MainScreen> {
             ]),
         controller: controller,
         tabBuilder: (context, index) {
-          stopVideo.value = controller.index == 2 ? true : false;
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            setState(() {
+              stopVideo.value = controller.index == 2 ? true : false;
+            });
+          });
+
           switch (index) {
             case 0:
               return CupertinoTabView(
@@ -111,7 +118,8 @@ class _MainScreenState extends State<MainScreen> {
       icon: SvgPicture.asset(
         "assets/icons/$fileName",
         height: 25,
-        color: Theme.of(context).focusColor,
+        color:
+            stopVideo.value ? ColorManager.white : Theme.of(context).focusColor,
       ),
     );
   }
