@@ -57,13 +57,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.2.1"
-  blur:
-    dependency: "direct main"
-    description:
-      name: blur
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.1.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -644,13 +637,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
-  palette_generator:
-    dependency: "direct main"
-    description:
-      name: palette_generator
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.3"
   path:
     dependency: transitive
     description:
@@ -903,6 +889,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  shimmer:
+    dependency: "direct main"
+    description:
+      name: shimmer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
