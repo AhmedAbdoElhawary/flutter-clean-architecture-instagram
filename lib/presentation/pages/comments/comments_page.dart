@@ -15,26 +15,16 @@ import 'package:instagram/presentation/widgets/belong_to/comments_w/commentator.
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 
-class CommentsPage extends StatefulWidget {
+class CommentsPage extends StatelessWidget {
   final String postId;
 
-  const CommentsPage({Key? key, required this.postId}) : super(key: key);
+  CommentsPage({Key? key, required this.postId}) : super(key: key);
 
-  @override
-  State<CommentsPage> createState() => _CommentsPageState();
-}
-
-class _CommentsPageState extends State<CommentsPage> {
-  final TextEditingController _textController = TextEditingController();
-  Comment? selectedCommentInfo;
-  bool addReply = false;
-  bool rebuild = false;
-
-  Future<void> loadData() async {
-    setState(() {
-      rebuild = true;
-    });
-  }
+  final ValueNotifier<TextEditingController> _textController =
+      ValueNotifier(TextEditingController());
+  final ValueNotifier<Comment?> selectedCommentInfo = ValueNotifier(null);
+  final bool addReply = false;
+  final ValueNotifier<bool> rebuild = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
@@ -43,103 +33,128 @@ class _CommentsPageState extends State<CommentsPage> {
           FirestoreUserInfoCubit.get(context).myPersonalInfo;
 
       return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          iconTheme: IconThemeData(color: Theme.of(context).focusColor),
-          backgroundColor: Theme.of(context).primaryColor,
-          title: Text(StringsManager.comments.tr(),
-              style: getNormalStyle(color: Theme.of(context).focusColor)),
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              // child: SmarterRefresh(
-              //   onRefreshData: loadData,
-              child: BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
-                  bloc: BlocProvider.of<CommentsInfoCubit>(context)
-                    ..getSpecificComments(postId: widget.postId),
-                  buildWhen: (previous, current) {
-                    if (previous != current &&
-                        (current is CubitCommentsInfoLoaded)) {
-                      return true;
-                    }
-                    if (rebuild) {
-                      rebuild = false;
-                      return true;
-                    }
-
-                    return false;
-                  },
-                  builder: (context, state) {
-                    if (state is CubitCommentsInfoLoaded) {
-                      // List<Comment> a=state.commentsOfThePost.map((e) => ).toList();
-                      state.commentsOfThePost.sort(
-                          (a, b) => b.datePublished.compareTo(a.datePublished));
-                      return buildListView(
-                          state.commentsOfThePost, myPersonalInfo!);
-                    } else if (state is CubitCommentsInfoFailed) {
-                      ToastShow.toastStateError(state);
-                      return Text(StringsManager.somethingWrong.tr(),
-                          style: getNormalStyle(
-                              color: Theme.of(context).focusColor));
-                    } else {
-                      return const ThineCircularProgress();
-                    }
-                  }),
-              // ),
-            ),
-            commentBox(myPersonalInfo!),
-          ],
-        ),
+        appBar: appBar(context),
+        body: scaffoldBody(context, myPersonalInfo),
       );
     });
   }
 
-  selectedComment(Comment commentInfo) {
-    setState(() {
-      selectedCommentInfo = commentInfo;
-    });
+  AppBar appBar(BuildContext context) {
+    return AppBar(
+      elevation: 0,
+      iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+      backgroundColor: Theme.of(context).primaryColor,
+      title: Text(StringsManager.comments.tr(),
+          style: getNormalStyle(color: Theme.of(context).focusColor)),
+    );
   }
 
-  Widget buildListView(
-      List<Comment> commentsOfThePost, UserPersonalInfo myPersonalInfo) {
+  Column scaffoldBody(BuildContext context, UserPersonalInfo? myPersonalInfo) {
+    return Column(
+      children: [
+        commentsList(context, myPersonalInfo),
+        commentBox(myPersonalInfo!),
+      ],
+    );
+  }
+
+  Expanded commentsList(
+      BuildContext context, UserPersonalInfo? myPersonalInfo) {
+    return Expanded(
+      child: blocBuilder(context, myPersonalInfo),
+    );
+  }
+
+  Widget blocBuilder(BuildContext context, UserPersonalInfo? myPersonalInfo) {
+    return BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
+      bloc: blocAction(context),
+      buildWhen: buildBlocWhen,
+      builder: (context, state) => buildBloc(context, state, myPersonalInfo),
+    );
+  }
+
+  CommentsInfoCubit blocAction(BuildContext context) =>
+      BlocProvider.of<CommentsInfoCubit>(context)
+        ..getSpecificComments(postId: postId);
+
+  bool buildBlocWhen(CommentsInfoState previous, CommentsInfoState current) =>
+      previous != current && current is CubitCommentsInfoLoaded;
+
+  Widget buildBloc(context, state, UserPersonalInfo? myPersonalInfo) {
+    if (state is CubitCommentsInfoLoaded) {
+      return blocLoaded(context, state, myPersonalInfo);
+    } else if (state is CubitCommentsInfoFailed) {
+      return whenBuildFailed(context, state);
+    } else {
+      return const ThineCircularProgress();
+    }
+  }
+
+  Widget blocLoaded(BuildContext context, CubitCommentsInfoLoaded state,
+      UserPersonalInfo? myPersonalInfo) {
+    state.commentsOfThePost
+        .sort((a, b) => b.datePublished.compareTo(a.datePublished));
+    return buildListView(state.commentsOfThePost, myPersonalInfo!, context);
+  }
+
+  Widget whenBuildFailed(BuildContext context, state) {
+    ToastShow.toastStateError(state);
+    return Text(StringsManager.somethingWrong.tr(),
+        style: getNormalStyle(color: Theme.of(context).focusColor));
+  }
+
+  selectedComment(Comment commentInfo) {
+    selectedCommentInfo.value = commentInfo;
+  }
+
+  Widget buildListView(List<Comment> commentsOfThePost,
+      UserPersonalInfo myPersonalInfo, BuildContext context) {
     Map<int, bool> showMeReplies = {};
     return commentsOfThePost.isNotEmpty
-        ? SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: ListView.separated(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                primary: false,
-                itemBuilder: (context, index) {
-                  showMeReplies[index] = false;
+        ? commentsListView(showMeReplies, commentsOfThePost, myPersonalInfo)
+        : noCommentText(context);
+  }
 
-                  return BlocProvider<ReplyInfoCubit>(
-                    create: (_) => injector<ReplyInfoCubit>(),
-                    child: CommentInfo(
-                      commentInfo: commentsOfThePost[index],
-                      index: index,
-                      showMeReplies: showMeReplies,
-                      textController: _textController,
-                      selectedCommentInfo: selectedComment,
-                      myPersonalInfo: myPersonalInfo,
-                      addReply: addReply,
-                    ),
-                  );
-                },
-                itemCount: commentsOfThePost.length,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(
-                      height: 20,
-                    )),
-          )
-        : Center(
-            child: Text(StringsManager.noComments.tr(),
-                style: getBoldStyle(
-                    fontSize: 20,
-                    color: Theme.of(context).focusColor,
-                    fontStyle: FontStyle.italic)),
+  ListView commentsListView(Map<int, bool> showMeReplies,
+      List<Comment> commentsOfThePost, UserPersonalInfo myPersonalInfo) {
+    return ListView.separated(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, index) {
+          showMeReplies[index] = false;
+          return BlocProvider<ReplyInfoCubit>(
+            create: (_) => injector<ReplyInfoCubit>(),
+            child: ValueListenableBuilder(
+              builder: (context, TextEditingController value, child) {
+                return CommentInfo(
+                  commentInfo: commentsOfThePost[index],
+                  index: index,
+                  showMeReplies: showMeReplies,
+                  textController: value,
+                  selectedCommentInfo: selectedComment,
+                  myPersonalInfo: myPersonalInfo,
+                  addReply: addReply,
+                  rebuildComments: rebuild,
+                );
+              },
+              valueListenable: _textController,
+            ),
           );
+        },
+        itemCount: commentsOfThePost.length,
+        separatorBuilder: (BuildContext context, int index) => const SizedBox(
+              height: 20,
+            ));
+  }
+
+  Center noCommentText(BuildContext context) {
+    return Center(
+      child: Text(StringsManager.noComments.tr(),
+          style: getBoldStyle(
+              fontSize: 20,
+              color: Theme.of(context).focusColor,
+              fontStyle: FontStyle.italic)),
+    );
   }
 
   Widget commentBox(UserPersonalInfo userPersonalInfo) {
@@ -147,8 +162,20 @@ class _CommentsPageState extends State<CommentsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        if (selectedCommentInfo != null) ...[
-          Container(
+        replyingMention(),
+        customDivider(),
+        commentTextField(userPersonalInfo),
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+
+  ValueListenableBuilder<Comment?> replyingMention() {
+    return ValueListenableBuilder(
+      valueListenable: selectedCommentInfo,
+      builder: (context, Comment? value, child) {
+        if (value != null) {
+          return Container(
             width: double.infinity,
             height: 45,
             color: const Color.fromARGB(18, 59, 59, 59),
@@ -159,16 +186,14 @@ class _CommentsPageState extends State<CommentsPage> {
                   children: [
                     Expanded(
                       child: Text(
-                          "${StringsManager.replyingTo.tr()} ${selectedCommentInfo!.whoCommentInfo!.userName}",
+                          "${StringsManager.replyingTo.tr()} ${value.whoCommentInfo!.userName}",
                           style: getNormalStyle(
                               color: Theme.of(context).disabledColor)),
                     ),
                     GestureDetector(
                         onTap: () {
-                          setState(() {
-                            selectedCommentInfo = null;
-                            _textController.text = '';
-                          });
+                          selectedCommentInfo.value = null;
+                          _textController.value.text = '';
                         },
                         child: Icon(
                           Icons.close_rounded,
@@ -179,24 +204,39 @@ class _CommentsPageState extends State<CommentsPage> {
                 ),
               ),
             ),
-          ),
-        ],
-        customDivider(),
-        CommentBox(
-          postId: widget.postId,
-          selectedCommentInfo: selectedCommentInfo,
-          textController: _textController,
-          userPersonalInfo: userPersonalInfo,
-          makeSelectedCommentNullable: () {
-            setState(() {
-              selectedCommentInfo = null;
-              _textController.text = '';
-            });
-          },
-        ),
-        const SizedBox(height: 10),
-      ],
+          );
+        } else {
+          return const SizedBox();
+        }
+      },
     );
+  }
+
+  ValueListenableBuilder<Comment?> commentTextField(
+      UserPersonalInfo userPersonalInfo) {
+    return ValueListenableBuilder(
+      valueListenable: selectedCommentInfo,
+      builder: (context, Comment? commentValue, child) {
+        return ValueListenableBuilder(
+          builder: (context, TextEditingController textValue, child) {
+            return CommentBox(
+              postId: postId,
+              selectedCommentInfo: commentValue,
+              textController: textValue,
+              userPersonalInfo: userPersonalInfo,
+              makeSelectedCommentNullable: makeSelectedCommentNullable,
+            );
+          },
+          valueListenable: _textController,
+        );
+      },
+    );
+  }
+
+  makeSelectedCommentNullable(bool isThatComment) {
+    selectedCommentInfo.value = null;
+    _textController.value.text = '';
+    if (!isThatComment) rebuild.value = true;
   }
 
   Container customDivider() => Container(
