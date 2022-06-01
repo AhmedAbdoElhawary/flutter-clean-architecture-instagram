@@ -34,48 +34,53 @@ class VideosPage extends StatefulWidget {
 
 class VideosPageState extends State<VideosPage> {
   File? videoFile;
-  bool rebuildUserInfo = false;
+  ValueNotifier<bool> rebuildUserInfo = ValueNotifier(false);
   bool? isFollowed;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PostCubit, PostState>(
-      bloc: BlocProvider.of<PostCubit>(context)..getAllPostInfo(),
-      buildWhen: (previous, current) {
-        if (previous != current && current is CubitAllPostsLoaded) {
-          return true;
-        }
-        if (rebuildUserInfo && current is CubitAllPostsLoaded) {
-          return true;
-        }
-        return false;
-      },
-      builder: (context, state) {
-        if (state is CubitAllPostsLoaded) {
-          return Scaffold(
-            extendBodyBehindAppBar: true,
-            appBar: appBar(),
-            body: buildBody(state.allPostInfo),
-          );
-        } else if (state is CubitPostFailed) {
-          ToastShow.toastStateError(state);
-          return Center(
-              child: Text(
-            StringsManager.noVideos.tr(),
-            style: TextStyle(color: Theme.of(context).focusColor, fontSize: 20),
-          ));
-        } else {
-        return loadingWidget();
-        }
-      },
-    );
+    return ValueListenableBuilder(
+        valueListenable: rebuildUserInfo,
+        builder: (context, bool rebuildValue, child) =>
+            BlocBuilder<PostCubit, PostState>(
+              bloc: BlocProvider.of<PostCubit>(context)..getAllPostInfo(),
+              buildWhen: (previous, current) {
+                if (previous != current && current is CubitAllPostsLoaded) {
+                  return true;
+                }
+                if (rebuildValue && current is CubitAllPostsLoaded) {
+                  rebuildUserInfo.value = false;
+                  return true;
+                }
+                return false;
+              },
+              builder: (context, state) {
+                if (state is CubitAllPostsLoaded) {
+                  return Scaffold(
+                    extendBodyBehindAppBar: true,
+                    appBar: appBar(),
+                    body: buildBody(state.allPostInfo),
+                  );
+                } else if (state is CubitPostFailed) {
+                  ToastShow.toastStateError(state);
+                  return Center(
+                      child: Text(
+                    StringsManager.noVideos.tr(),
+                    style: TextStyle(
+                        color: Theme.of(context).focusColor, fontSize: 20),
+                  ));
+                } else {
+                  return loadingWidget();
+                }
+              },
+            ));
   }
 
   Widget loadingWidget() {
     return Stack(
       children: [
         Shimmer.fromColors(
-          baseColor:  Colors.grey[500]!,
+          baseColor: Colors.grey[500]!,
           highlightColor: ColorManager.shimmerDarkGrey,
           child: Container(
             width: double.infinity,
@@ -84,7 +89,7 @@ class VideosPageState extends State<VideosPage> {
           ),
         ),
         Shimmer.fromColors(
-          baseColor:  Colors.grey[600]!,
+          baseColor: Colors.grey[600]!,
           highlightColor: ColorManager.shimmerDarkGrey,
           child: Padding(
             padding: const EdgeInsetsDirectional.only(
@@ -208,9 +213,7 @@ class VideosPageState extends State<VideosPage> {
   GestureDetector followButton(UserPersonalInfo personalInfo) {
     return GestureDetector(
         onTap: () {
-          setState(() {
-            rebuildUserInfo = false;
-          });
+          rebuildUserInfo.value = false;
           if (personalInfo.followerPeople.contains(myPersonalId)) {
             BlocProvider.of<FollowCubit>(context).removeThisFollower(
                 followingUserId: personalInfo.userId,
@@ -222,9 +225,7 @@ class VideosPageState extends State<VideosPage> {
                 myPersonalId: myPersonalId);
             isFollowed = true;
           }
-          setState(() {
-            rebuildUserInfo = true;
-          });
+          rebuildUserInfo.value = true;
         },
         child: followText(personalInfo));
   }
@@ -291,12 +292,9 @@ class VideosPageState extends State<VideosPage> {
   GestureDetector commentButton(Post postInfo) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(
-            context,rootNavigator: true
-        ).push(CupertinoPageRoute(
-            builder: (context) =>
-                CommentsPage(postId: postInfo.postUid),maintainState: false
-        ));
+        Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+            builder: (context) => CommentsPage(postId: postInfo.postUid),
+            maintainState: false));
       },
       child: SvgPicture.asset(
         IconsAssets.commentIcon,
