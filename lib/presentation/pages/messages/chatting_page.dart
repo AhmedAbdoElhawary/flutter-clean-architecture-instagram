@@ -34,32 +34,28 @@ class ChattingPage extends StatefulWidget {
 
 class _ChattingPageState extends State<ChattingPage>
     with TickerProviderStateMixin {
+  final ValueNotifier<List<Message>> globalMessagesInfo = ValueNotifier([]);
+  final ValueNotifier<int?> indexOfGarbageMessage = ValueNotifier(null);
+  final ValueNotifier<Message?> deleteThisMessage = ValueNotifier(null);
+  final ValueNotifier<Message?> newMessageInfo = ValueNotifier(null);
+  final itemScrollController = ValueNotifier(ItemScrollController());
+  final _textController = ValueNotifier(TextEditingController());
+  final isDeleteMessageDone = ValueNotifier(false);
+  final isMessageLoaded = ValueNotifier(false);
+  final appearIcons = ValueNotifier(true);
+  final unSend = ValueNotifier(false);
+  final records = ValueNotifier('');
   late AnimationController _colorAnimationController;
   late Animation _colorTween;
-  final TextEditingController _textController = TextEditingController();
-  final itemScrollController = ItemScrollController();
-  List<Message> globalMessagesInfo = [];
-  Message? newMessageInfo;
-  Message? deleteThisMessage;
-  bool isDeleteMessageDone = false;
-  bool isMessageLoaded = false;
-  int? indexOfGarbageMessage;
   int itemIndex = 0;
-  String records = '';
-  bool unSend = false;
-  bool appearIcons = true;
 
   Future<void> scrollToLastIndex(BuildContext context) async {
-    if (globalMessagesInfo.length > 1) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        setState(() {
-          itemScrollController.scrollTo(
-              index: globalMessagesInfo.length - 1,
-              alignment: 0.2,
-              duration: const Duration(milliseconds: 10),
-              curve: Curves.easeInOutQuint);
-        });
-      });
+    if (globalMessagesInfo.value.length > 1) {
+      itemScrollController.value.scrollTo(
+          index: globalMessagesInfo.value.length - 1,
+          alignment: 0.2,
+          duration: const Duration(milliseconds: 10),
+          curve: Curves.easeInOutQuint);
     }
   }
 
@@ -69,7 +65,6 @@ class _ChattingPageState extends State<ChattingPage>
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _colorTween = ColorTween(begin: Colors.purple, end: Colors.blue)
         .animate(_colorAnimationController);
-
     super.initState();
   }
 
@@ -85,77 +80,98 @@ class _ChattingPageState extends State<ChattingPage>
       appBar: CustomAppBar.chattingAppBar(widget.userInfo, context),
       body: GestureDetector(
           onTap: () {
-            setState(() {
-              unSend = false;
-              deleteThisMessage = null;
-            });
+            unSend.value = false;
+            deleteThisMessage.value = null;
           },
           child: buildBody(context)),
     );
   }
 
-  BlocBuilder<MessageBloc, MessageBlocState> buildBody(BuildContext context) {
-    return BlocBuilder<MessageBloc, MessageBlocState>(
-        bloc: BlocProvider.of<MessageBloc>(context)
-          ..add(LoadMessages(widget.userInfo.userId)),
-        buildWhen: (previous, current) {
-          if (previous != current && (current is MessageBlocLoaded)) {
-            return true;
-          }
-          return false;
-        },
-        builder: (context, state) {
-          if (state is MessageBlocLoaded) {
-            if (state.messages.length >= globalMessagesInfo.length) {
-              globalMessagesInfo = state.messages;
-              if (itemIndex < globalMessagesInfo.length - 1) {
-                itemIndex = globalMessagesInfo.length - 1;
-                scrollToLastIndex(context);
-              }
-            }
-            if (newMessageInfo != null && isMessageLoaded) {
-              isMessageLoaded = false;
-              globalMessagesInfo.add(newMessageInfo!);
-            }
-            return Stack(
-              children: [
-                Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                        end: 10, start: 10, top: 10, bottom: 10),
-                    child: globalMessagesInfo.isNotEmpty
-                        ? NotificationListener<ScrollNotification>(
-                            onNotification: _scrollListener,
-                            child: ScrollablePositionedList.separated(
-                                itemScrollController: itemScrollController,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    children: [
-                                      if (index == 0) buildUserInfo(context),
-                                      buildTheMessage(
-                                          globalMessagesInfo[index],
-                                          globalMessagesInfo[
-                                                  index != 0 ? index - 1 : 0]
-                                              .datePublished,
-                                          index),
-                                      if (index ==
-                                          globalMessagesInfo.length - 1)
-                                        const SizedBox(height: 50),
-                                    ],
-                                  );
-                                },
-                                itemCount: globalMessagesInfo.length,
-                                separatorBuilder:
-                                    (BuildContext context, int index) =>
-                                        const SizedBox(height: 5)))
-                        : buildUserInfo(context)),
-                Align(
-                    alignment: Alignment.bottomCenter, child: fieldOfMessage()),
-              ],
-            );
-          } else {
-            return buildCircularProgress();
-          }
-        });
+  Widget buildBody(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: newMessageInfo,
+      builder: (context, Message? newMessageValue, child) =>
+          ValueListenableBuilder(
+        valueListenable: globalMessagesInfo,
+        builder: (context, List<Message> globalMessagesValue, child) =>
+            ValueListenableBuilder(
+          valueListenable: isMessageLoaded,
+          builder: (context, bool isMessageLoadedValue, child) =>
+              BlocBuilder<MessageBloc, MessageBlocState>(
+                  bloc: BlocProvider.of<MessageBloc>(context)
+                    ..add(LoadMessages(widget.userInfo.userId)),
+                  buildWhen: (previous, current) {
+                    if (previous != current && (current is MessageBlocLoaded)) {
+                      return true;
+                    }
+                    return false;
+                  },
+                  builder: (context, state) {
+                    if (state is MessageBlocLoaded) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (state.messages.length >=
+                            globalMessagesValue.length) {
+                          globalMessagesInfo.value = state.messages;
+                          if (itemIndex < globalMessagesValue.length - 1) {
+                            itemIndex = globalMessagesValue.length - 1;
+                            scrollToLastIndex(context);
+                          }
+                        }
+                        if (newMessageValue != null && isMessageLoadedValue) {
+                          isMessageLoaded.value = false;
+                          globalMessagesInfo.value.add(newMessageValue);
+                        }
+                      });
+                      return buildListOfMassages(globalMessagesValue, context);
+                    } else {
+                      return buildCircularProgress();
+                    }
+                  }),
+        ),
+      ),
+    );
+  }
+
+  Stack buildListOfMassages(
+      List<Message> globalMessagesValue, BuildContext context) {
+    return Stack(
+      children: [
+        Padding(
+            padding: const EdgeInsetsDirectional.only(
+                end: 10, start: 10, top: 10, bottom: 10),
+            child: globalMessagesValue.isNotEmpty
+                ? NotificationListener<ScrollNotification>(
+                    onNotification: _scrollListener,
+                    child: ValueListenableBuilder(
+                      valueListenable: itemScrollController,
+                      builder: (context, ItemScrollController itemScrollValue,
+                              child) =>
+                          ScrollablePositionedList.separated(
+                              itemScrollController: itemScrollValue,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    if (index == 0) buildUserInfo(context),
+                                    buildTheMessage(
+                                        globalMessagesValue[index],
+                                        globalMessagesValue[
+                                                index != 0 ? index - 1 : 0]
+                                            .datePublished,
+                                        index),
+                                    if (index == globalMessagesValue.length - 1)
+                                      const SizedBox(height: 50),
+                                  ],
+                                );
+                              },
+                              itemCount: globalMessagesValue.length,
+                              separatorBuilder:
+                                  (BuildContext context, int index) =>
+                                      const SizedBox(height: 5)),
+                    ))
+                : buildUserInfo(context)),
+        Align(alignment: Alignment.bottomCenter, child: fieldOfMessage()),
+      ],
+    );
   }
 
   bool _scrollListener(ScrollNotification scrollInfo) {
@@ -209,11 +225,9 @@ class _ChattingPageState extends State<ChattingPage>
             Expanded(
               child: GestureDetector(
                 onLongPress: () {
-                  setState(() {
-                    deleteThisMessage = messageInfo;
-                    indexOfGarbageMessage = index;
-                    unSend = true;
-                  });
+                  deleteThisMessage.value = messageInfo;
+                  indexOfGarbageMessage.value = index;
+                  unSend.value = true;
                 },
                 child: buildMessage(isThatMine, messageInfo),
               ),
@@ -291,13 +305,24 @@ class _ChattingPageState extends State<ChattingPage>
                                       ),
                                     ),
                                   )
-                                : Image.file(File(newMessageInfo!.imageUrl),
-                                    fit: BoxFit.cover))
-                        : SizedBox(
-                            child: RecordView(
-                              record:
-                                  recordedUrl.isEmpty ? records : recordedUrl,
-                              isThatMine: isThatMine,
+                                : ValueListenableBuilder(
+                                    valueListenable: newMessageInfo,
+                                    builder: (context, Message? newMessageValue,
+                                            child) =>
+                                        Image.file(
+                                            File(newMessageValue!.imageUrl),
+                                            fit: BoxFit.cover),
+                                  ))
+                        : ValueListenableBuilder(
+                            valueListenable: records,
+                            builder: (context, String recordsValue, child) =>
+                                SizedBox(
+                              child: RecordView(
+                                record: recordedUrl.isEmpty
+                                    ? recordsValue
+                                    : recordedUrl,
+                                isThatMine: isThatMine,
+                              ),
                             ),
                           )),
               )),
@@ -305,9 +330,12 @@ class _ChattingPageState extends State<ChattingPage>
   }
 
   Widget fieldOfMessage() {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 500),
-      child: unSend ? deleteTheMessage() : textForm(),
+    return ValueListenableBuilder(
+      valueListenable: unSend,
+      builder: (context, bool unSendValue, child) => AnimatedSwitcher(
+        duration: const Duration(milliseconds: 500),
+        child: unSendValue ? deleteTheMessage(unSendValue) : textForm(),
+      ),
     );
   }
 
@@ -335,72 +363,81 @@ class _ChattingPageState extends State<ChattingPage>
         ],
       );
 
-  Widget deleteTheMessage() {
-    bool isThatMine = deleteThisMessage!.senderId == myPersonalId;
-    return BlocBuilder<MessageCubit, MessageState>(
-      buildWhen: (previous, current) {
-        if (previous != current && (current is DeleteMessageLoaded)) {
-          return true;
-        }
-        return false;
-      },
-      builder: (context, state) {
-        if (deleteThisMessage != null &&
-            unSend &&
-            indexOfGarbageMessage != null &&
-            isDeleteMessageDone) {
-          WidgetsBinding.instance.addPostFrameCallback((_) async {
-            setState(() {
-              isDeleteMessageDone = false;
-              unSend = false;
-              deleteThisMessage = null;
-              globalMessagesInfo.removeAt(indexOfGarbageMessage!);
-            });
-          });
-        }
-        return Container(
-          height: 45,
-          color: Theme.of(context).primaryColor,
-          width: double.infinity,
-          child: Padding(
-            padding: const EdgeInsetsDirectional.only(start: 80, end: 80),
-            child: Row(
-                mainAxisAlignment: isThatMine
-                    ? MainAxisAlignment.spaceBetween
-                    : MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(StringsManager.reply.tr(),
-                      style: getBoldStyle(
-                          color: Theme.of(context).focusColor, fontSize: 15)),
-                  if (isThatMine)
-                    GestureDetector(
-                        onTap: () async {
-                          if (deleteThisMessage != null) {
-                            WidgetsBinding.instance
-                                .addPostFrameCallback((_) async {
-                              setState(() {
-                                isDeleteMessageDone = true;
-                                Message? replacedMessage;
-                                if (globalMessagesInfo[
-                                            globalMessagesInfo.length - 1]
-                                        .messageUid ==
-                                    deleteThisMessage!.messageUid) {
-                                  replacedMessage = globalMessagesInfo[
-                                      globalMessagesInfo.length - 2];
-                                }
-                                MessageCubit.get(context).deleteMessage(
-                                    messageInfo: deleteThisMessage!,
-                                    replacedMessage: replacedMessage);
-                              });
-                            });
-                          }
-                        },
-                        child: Text(StringsManager.unSend.tr(),
-                            style: getBoldStyle(
-                                color: Theme.of(context).focusColor,
-                                fontSize: 15))),
-                ]),
+  ValueListenableBuilder<Message?> deleteTheMessage(bool unSendValue) {
+    return ValueListenableBuilder(
+      valueListenable: deleteThisMessage,
+      builder: (context, Message? messageValue, child) {
+        bool isThatMine = messageValue!.senderId == myPersonalId;
+        return ValueListenableBuilder(
+          valueListenable: isDeleteMessageDone,
+          builder: (context, bool messageDoneValue, child) =>
+              ValueListenableBuilder(
+            valueListenable: indexOfGarbageMessage,
+            builder: (context, int? indexOfGarbageMessageValue, child) =>
+                BlocBuilder<MessageCubit, MessageState>(
+              buildWhen: (previous, current) {
+                if (previous != current && (current is DeleteMessageLoaded)) {
+                  return true;
+                }
+                return false;
+              },
+              builder: (context, state) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (unSendValue &&
+                      indexOfGarbageMessageValue != null &&
+                      messageDoneValue) {
+                    isDeleteMessageDone.value = false;
+                    unSend.value = false;
+                    deleteThisMessage.value = null;
+                    globalMessagesInfo.value
+                        .removeAt(indexOfGarbageMessageValue);
+                  }
+                });
+
+                return Container(
+                  height: 45,
+                  color: Theme.of(context).primaryColor,
+                  width: double.infinity,
+                  child: Padding(
+                    padding:
+                        const EdgeInsetsDirectional.only(start: 80, end: 80),
+                    child: Row(
+                        mainAxisAlignment: isThatMine
+                            ? MainAxisAlignment.spaceBetween
+                            : MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(StringsManager.reply.tr(),
+                              style: getBoldStyle(
+                                  color: Theme.of(context).focusColor,
+                                  fontSize: 15)),
+                          if (isThatMine)
+                            GestureDetector(
+                                onTap: () async {
+                                  if (deleteThisMessage.value != null) {
+                                    isDeleteMessageDone.value = true;
+                                    Message? replacedMessage;
+                                    if (globalMessagesInfo
+                                            .value.last.messageUid ==
+                                        deleteThisMessage.value!.messageUid) {
+                                      replacedMessage = globalMessagesInfo
+                                              .value[
+                                          globalMessagesInfo.value.length - 2];
+                                    }
+                                    MessageCubit.get(context).deleteMessage(
+                                        messageInfo: deleteThisMessage.value!,
+                                        replacedMessage: replacedMessage);
+                                  }
+                                },
+                                child: Text(StringsManager.unSend.tr(),
+                                    style: getBoldStyle(
+                                        color: Theme.of(context).focusColor,
+                                        fontSize: 15))),
+                        ]),
+                  ),
+                );
+              },
+            ),
           ),
         );
       },
@@ -411,136 +448,151 @@ class _ChattingPageState extends State<ChattingPage>
     if (show) {
       await Future.delayed(const Duration(milliseconds: 500), () {});
     }
-    setState(() {
-      appearIcons = show;
-    });
+    appearIcons.value = show;
   }
 
   Widget rowOfTextField(MessageCubit messageCubit) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        pickImageFromCamera(messageCubit),
-        messageTextField(),
-        if (_textController.text.isNotEmpty) sendButton(messageCubit),
-        if (_textController.text.isEmpty)
-          Row(
-            children: [
-              const SizedBox(width: 10),
-              SocialMediaRecorder(
-                showIcons: showIcons,
-                sendRequestFunction: (File soundFile) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) async {
-                    setState(() {
-                      records = soundFile.path;
-                      MessageCubit messageCubit = MessageCubit.get(context);
-                      newMessageInfo = newMessage();
-                      isMessageLoaded = true;
-                      messageCubit.sendMessage(
-                          messageInfo: newMessage(),
-                          pathOfRecorded: soundFile.path);
-                    });
-                  });
-                  scrollToLastIndex(context);
-                },
-              ),
-              Visibility(
-                visible: appearIcons,
-                child: Row(
+    return ValueListenableBuilder(
+      valueListenable: appearIcons,
+      builder: (context, bool appearIconsValue, child) => Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          pickImageFromCamera(messageCubit),
+          messageTextField(),
+          ValueListenableBuilder(
+            valueListenable: _textController,
+            builder: (context, TextEditingController textValue, child) {
+              if (textValue.text.isNotEmpty) {
+                return sendButton(messageCubit, textValue);
+              } else {
+                return Row(
                   children: [
-                    pickPhoto(messageCubit),
                     const SizedBox(width: 10),
-                    pickSticker(),
+                    SocialMediaRecorder(
+                      showIcons: showIcons,
+                      sendRequestFunction: (File soundFile) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) async {
+                          records.value = soundFile.path;
+                          MessageCubit messageCubit = MessageCubit.get(context);
+                          newMessageInfo.value = newMessage();
+                          isMessageLoaded.value = true;
+                          messageCubit.sendMessage(
+                              messageInfo: newMessage(),
+                              pathOfRecorded: soundFile.path);
+                        });
+                        scrollToLastIndex(context);
+                      },
+                    ),
+                    ValueListenableBuilder(
+                      valueListenable: appearIcons,
+                      builder: (context, bool appearIconsValue, child) =>
+                          Visibility(
+                        visible: appearIconsValue,
+                        child: Row(
+                          children: [
+                            pickPhoto(messageCubit),
+                            const SizedBox(width: 10),
+                            pickSticker(),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
-                ),
-              ),
-            ],
+                );
+              }
+            },
           )
-      ],
+        ],
+      ),
     );
   }
 
   Widget pickImageFromCamera(MessageCubit messageCubit) {
-    return Visibility(
-      visible: appearIcons,
-      child: Padding(
-        padding: const EdgeInsetsDirectional.only(end: 10.0),
-        child: GestureDetector(
-          onTap: () async {
-            File? pickImage = await imageCameraPicker();
-            if (pickImage != null) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                setState(() {
-                  isMessageLoaded = true;
-                  newMessageInfo = newMessage(isThatImage: true);
-                  newMessageInfo!.imageUrl = pickImage.path;
-                });
-              });
-              messageCubit.sendMessage(
-                  messageInfo: newMessage(isThatImage: true),
-                  pathOfPhoto: pickImage.path);
-              scrollToLastIndex(context);
-            } else {
-              ToastShow.toast(StringsManager.noImageSelected.tr());
-            }
-          },
-          child: const CircleAvatar(
-              backgroundColor: ColorManager.darkBlue,
-              child: ClipOval(
-                  child: Icon(
-                Icons.camera_alt,
-                color: ColorManager.white,
-              )),
-              radius: 18),
-        ),
-      ),
-    );
+    return ValueListenableBuilder(
+        valueListenable: appearIcons,
+        builder: (context, bool appearIconsValue, child) => Visibility(
+              visible: appearIconsValue,
+              child: Padding(
+                padding: const EdgeInsetsDirectional.only(end: 10.0),
+                child: GestureDetector(
+                  onTap: () async {
+                    File? pickImage = await imageCameraPicker();
+                    if (pickImage != null) {
+                      isMessageLoaded.value = true;
+                      newMessageInfo.value = newMessage(isThatImage: true);
+                      newMessageInfo.value!.imageUrl = pickImage.path;
+                      messageCubit.sendMessage(
+                          messageInfo: newMessage(isThatImage: true),
+                          pathOfPhoto: pickImage.path);
+                      scrollToLastIndex(context);
+                    } else {
+                      ToastShow.toast(StringsManager.noImageSelected.tr());
+                    }
+                  },
+                  child: const CircleAvatar(
+                      backgroundColor: ColorManager.darkBlue,
+                      child: ClipOval(
+                          child: Icon(
+                        Icons.camera_alt,
+                        color: ColorManager.white,
+                      )),
+                      radius: 18),
+                ),
+              ),
+            ));
   }
 
   Widget messageTextField() {
     return Expanded(
-      child: Visibility(
-        visible: appearIcons,
-        child: TextFormField(
-          style: Theme.of(context).textTheme.bodyText1,
-          keyboardType: TextInputType.multiline,
-          cursorColor: ColorManager.teal,
-          maxLines: null,
-          decoration: InputDecoration.collapsed(
-              hintText: StringsManager.messageP.tr(),
-              hintStyle: const TextStyle(color: ColorManager.grey)),
-          autofocus: false,
-          controller: _textController,
-          cursorWidth: 1.5,
-          onChanged: (e) {
-            setState(() {
-              _textController;
-            });
-          },
+      child: ValueListenableBuilder(
+        valueListenable: appearIcons,
+        builder: (context, bool appearIconsValue, child) => Visibility(
+          visible: appearIconsValue,
+          child: ValueListenableBuilder(
+            valueListenable: _textController,
+            builder: (context, TextEditingController textValue, child) =>
+                TextFormField(
+              style: Theme.of(context).textTheme.bodyText1,
+              keyboardType: TextInputType.multiline,
+              cursorColor: ColorManager.teal,
+              maxLines: null,
+              decoration: InputDecoration.collapsed(
+                  hintText: StringsManager.messageP.tr(),
+                  hintStyle: const TextStyle(color: ColorManager.grey)),
+              autofocus: false,
+              controller: textValue,
+              onChanged: (e) => setState(() {}),
+              cursorWidth: 1.5,
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget sendButton(MessageCubit messageCubit) {
-    return Visibility(
-      visible: appearIcons,
-      child: GestureDetector(
-        onTap: () {
-          if (_textController.text.isNotEmpty) {
-            messageCubit.sendMessage(
-              messageInfo: newMessage(),
-            );
-            scrollToLastIndex(context);
-            _textController.text = "";
-          }
-        },
-        child: Text(
-          StringsManager.send.tr(),
-          style: getMediumStyle(
-            color: _textController.text.isNotEmpty
-                ? const Color.fromARGB(255, 33, 150, 243)
-                : const Color.fromARGB(255, 147, 198, 246),
+  Widget sendButton(
+      MessageCubit messageCubit, TextEditingController textValue) {
+    return ValueListenableBuilder(
+      valueListenable: appearIcons,
+      builder: (context, bool appearIconsValue, child) => Visibility(
+        visible: appearIconsValue,
+        child: GestureDetector(
+          onTap: () {
+            if (_textController.value.text.isNotEmpty) {
+              messageCubit.sendMessage(
+                messageInfo: newMessage(),
+              );
+              scrollToLastIndex(context);
+              _textController.value.text = "";
+            }
+          },
+          child: Text(
+            StringsManager.send.tr(),
+            style: getMediumStyle(
+              color: textValue.text.isNotEmpty
+                  ? const Color.fromARGB(255, 33, 150, 243)
+                  : const Color.fromARGB(255, 147, 198, 246),
+            ),
           ),
         ),
       ),
@@ -565,13 +617,10 @@ class _ChattingPageState extends State<ChattingPage>
         onTap: () async {
           File? pickImage = await imageGalleryPicker();
           if (pickImage != null) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              setState(() {
-                isMessageLoaded = true;
-                newMessageInfo = newMessage(isThatImage: true);
-                newMessageInfo!.imageUrl = pickImage.path;
-              });
-            });
+            isMessageLoaded.value = true;
+            newMessageInfo.value = newMessage(isThatImage: true);
+            newMessageInfo.value!.imageUrl = pickImage.path;
+
             messageCubit.sendMessage(
                 messageInfo: newMessage(isThatImage: true),
                 pathOfPhoto: pickImage.path);
@@ -592,7 +641,7 @@ class _ChattingPageState extends State<ChattingPage>
   Message newMessage({bool isThatImage = false}) {
     return Message(
       datePublished: DateOfNow.dateOfNow(),
-      message: _textController.text,
+      message: _textController.value.text,
       senderId: myPersonalId,
       receiverId: widget.userInfo.userId,
       isThatImage: isThatImage,
