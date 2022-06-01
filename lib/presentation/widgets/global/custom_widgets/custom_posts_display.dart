@@ -23,28 +23,26 @@ class CustomPostsDisplay extends StatefulWidget {
 class _HomeScreenState extends State<CustomPostsDisplay> {
   ScrollController scrollController = ScrollController();
   int? centerItemIndex;
-  List<Post> postsInfo = [];
+  ValueNotifier<List<Post>> postsInfo = ValueNotifier([]);
   ValueNotifier<bool> isThatEndOfList = ValueNotifier(false);
   @override
   void initState() {
     if (widget.postsInfo.length > 5) {
-      postsInfo = widget.postsInfo.sublist(0, 5);
+      postsInfo.value = widget.postsInfo.sublist(0, 5);
     } else {
-      postsInfo = widget.postsInfo;
+      postsInfo.value = widget.postsInfo;
       isThatEndOfList.value = true;
     }
     super.initState();
   }
 
   Future<void> getData(int index) async {
-    await Future.delayed(const Duration(seconds: 1));
     if (widget.postsInfo.length > index + 5) {
-      postsInfo += widget.postsInfo.sublist(index, index + 5);
+      postsInfo.value += widget.postsInfo.sublist(index, index + 5);
     } else {
-      postsInfo = widget.postsInfo;
+      postsInfo.value = widget.postsInfo;
       isThatEndOfList.value = true;
     }
-    setState(() {});
   }
 
   @override
@@ -61,14 +59,24 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
           widget.isThatProfile
               ? StringsManager.posts.tr()
               : StringsManager.explore.tr()),
-      body: inViewNotifier(bodyHeight),
+      body: valueListener(bodyHeight),
     );
   }
 
-  Widget inViewNotifier(double bodyHeight) {
+  Widget valueListener(double bodyHeight) {
+    return ValueListenableBuilder(
+      valueListenable: postsInfo,
+      builder: (context, List<Post> postsValue, child) {
+        return inViewNotifierList(postsValue, bodyHeight);
+      },
+    );
+  }
+
+  InViewNotifierList inViewNotifierList(
+      List<Post> postsValue, double bodyHeight) {
     return InViewNotifierList(
       onRefreshData: getData,
-      postsIds: postsInfo,
+      postsIds: postsValue,
       isThatEndOfList: isThatEndOfList,
       onListEndReached: () {},
       initialInViewIds: const ['0'],
@@ -76,26 +84,32 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
           (double deltaTop, double deltaBottom, double vpHeight) {
         return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
       },
-      itemCount: postsInfo.length,
+      itemCount: postsValue.length,
       builder: (BuildContext context, int index) {
-        return Container(
-          width: double.infinity,
-          margin: const EdgeInsetsDirectional.only(bottom: .5, top: .5),
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              return InViewNotifierWidget(
-                id: '$index',
-                builder: (_, bool isInView, __) {
-                  return columnOfWidgets(
-                      bodyHeight, postsInfo[index], index, isInView);
-                },
-              );
-            },
-          ),
-        );
+        return postInfo(index, bodyHeight, postsValue);
       },
     );
   }
+
+  Container postInfo(int index, double bodyHeight, List<Post> postsValue) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsetsDirectional.only(bottom: .5, top: .5),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return InViewNotifierWidget(
+            id: '$index',
+            builder: (_, bool isInView, __) {
+              return columnOfWidgets(
+                  bodyHeight, postsValue[index], index, isInView);
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  buildInView() {}
 
   Widget columnOfWidgets(
       double bodyHeight, Post postInfo, int index, bool playTheVideo) {
@@ -104,7 +118,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
       children: [
         posts(index, postInfo, bodyHeight, playTheVideo),
         const Divider(color: ColorManager.lightGrey, thickness: .15),
-        if (isThatEndOfList.value && index == postsInfo.length - 1) ...[
+        if (isThatEndOfList.value && index == postsInfo.value.length - 1) ...[
           const AllCatchUpIcon(),
         ]
       ],
@@ -117,7 +131,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
       bodyHeight: bodyHeight,
       indexOfPost: index,
       playTheVideo: playTheVideo,
-      postsInfo: ValueNotifier(postsInfo),
+      postsInfo: postsInfo,
       reLoadData: () {},
     );
   }

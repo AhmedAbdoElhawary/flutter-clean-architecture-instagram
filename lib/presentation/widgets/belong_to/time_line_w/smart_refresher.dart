@@ -28,25 +28,31 @@ class _SmarterRefreshState extends State<SmarterRefresh>
     with TickerProviderStateMixin {
   late AnimationController _aniController, _scaleController;
   late AnimationController _footerController;
-  final RefreshController _refreshController = RefreshController();
-  int lengthOfPosts = 5;
+  final ValueNotifier<RefreshController> _refreshController =
+      ValueNotifier(RefreshController());
+  ValueNotifier<int> lengthOfPosts = ValueNotifier(5);
   @override
   void initState() {
+    init();
+    super.initState();
+  }
+
+  init() {
     _aniController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 2000));
     _scaleController =
         AnimationController(value: 0.0, vsync: this, upperBound: 1.0);
     _footerController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 2000));
-    _refreshController.headerMode!.addListener(() {
-      if (_refreshController.headerStatus == RefreshStatus.idle) {
+    _refreshController.value.headerMode!.addListener(() {
+      if (_refreshController.value.headerStatus == RefreshStatus.idle) {
         _scaleController.value = 0.0;
         _aniController.reset();
-      } else if (_refreshController.headerStatus == RefreshStatus.refreshing) {
+      } else if (_refreshController.value.headerStatus ==
+          RefreshStatus.refreshing) {
         _aniController.repeat();
       }
     });
-    super.initState();
   }
 
   @override
@@ -62,82 +68,101 @@ class _SmarterRefreshState extends State<SmarterRefresh>
   Widget build(BuildContext context) {
     return SizedBox(
       height: double.maxFinite,
-      child: SmartRefresher(
-        enablePullDown: true,
-        enablePullUp: true,
-        controller: _refreshController,
-        scrollDirection: Axis.vertical,
-        onRefresh: () async {
-          widget.onRefreshData(0).whenComplete(() {
-            _refreshController.refreshCompleted();
-            _refreshController.loadComplete();
-            widget.isThatEndOfList.value = false;
-            lengthOfPosts = 5;
-            setState(() {});
-          });
+      child: ValueListenableBuilder(
+        valueListenable: _refreshController,
+        builder: (_, RefreshController value, __) {
+          return smartRefresher(value);
         },
-        onLoading: () async {
-          if (!widget.isThatEndOfList.value) {
-            widget.onRefreshData(lengthOfPosts).whenComplete(() {
-              _refreshController.loadComplete();
-              if (lengthOfPosts >= widget.posts.length) {
-                _refreshController.loadNoData();
-                widget.isThatEndOfList.value = true;
-              } else {
-                lengthOfPosts += 5;
-              }
-              setState(() {});
-            });
-          } else {
-            _refreshController.loadComplete();
-            _refreshController.loadNoData();
-          }
-        },
-        child: widget.child,
-        footer: CustomFooter(
-          onModeChange: (mode) {
-            if (mode == LoadStatus.loading) {
-              _scaleController.value = 0.0;
-              _footerController.repeat();
-            } else {
-              _footerController.reset();
-            }
-          },
-          builder: (context, mode) {
-            Widget child;
-            switch (mode) {
-              case LoadStatus.failed:
-                child = Text(StringsManager.clickRetry.tr(),
-                    style: Theme.of(context).textTheme.bodyText1);
-                break;
-              case LoadStatus.noMore:
-                child = Container();
-                break;
-              default:
-                child = circularProgressIndicator(context);
-                break;
-            }
-            return SizedBox(
-              height: 60,
-              child: Center(
-                child: child,
-              ),
-            );
-          },
-        ),
-        header: CustomHeader(
-          refreshStyle: RefreshStyle.Behind,
-          onOffsetChange: (offset) {
-            if (_refreshController.headerMode!.value !=
-                RefreshStatus.refreshing) {
-              _scaleController.value = offset / 100.0;
-            }
-          },
-          builder: (context, mode) {
-            return customCircleProgress(context);
-          },
-        ),
       ),
+    );
+  }
+
+  SmartRefresher smartRefresher(RefreshController value) {
+    return SmartRefresher(
+      enablePullDown: true,
+      enablePullUp: true,
+      controller: value,
+      scrollDirection: Axis.vertical,
+      onRefresh: onSmarterRefresh,
+      onLoading: onSmarterLoading,
+      child: widget.child,
+      footer: customFooter(),
+      header: customHeader(),
+    );
+  }
+
+  onSmarterRefresh() {
+    widget.onRefreshData(0).whenComplete(() {
+      _refreshController.value.refreshCompleted();
+      _refreshController.value.loadComplete();
+      widget.isThatEndOfList.value = false;
+      lengthOfPosts.value = 5;
+    });
+  }
+
+  onSmarterLoading() {
+    if (!widget.isThatEndOfList.value) {
+      widget.onRefreshData(lengthOfPosts.value).whenComplete(() {
+        _refreshController.value.loadComplete();
+        if (lengthOfPosts.value >= widget.posts.length) {
+          _refreshController.value.loadNoData();
+          widget.isThatEndOfList.value = true;
+        } else {
+          lengthOfPosts.value += 5;
+        }
+      });
+    } else {
+      _refreshController.value.loadComplete();
+      _refreshController.value.loadNoData();
+    }
+  }
+
+  CustomFooter customFooter() {
+    return CustomFooter(
+      onModeChange: (mode) {
+        if (mode == LoadStatus.loading) {
+          _scaleController.value = 0.0;
+          _footerController.repeat();
+        } else {
+          _footerController.reset();
+        }
+      },
+      builder: (context, mode) {
+        Widget child;
+        switch (mode) {
+          case LoadStatus.failed:
+            child = Text(StringsManager.clickRetry.tr(),
+                style: Theme.of(context).textTheme.bodyText1);
+            break;
+          case LoadStatus.noMore:
+            child = Container();
+            break;
+          default:
+            child = circularProgressIndicator(context);
+            break;
+        }
+        return SizedBox(
+          height: 60,
+          child: Center(
+            child: child,
+          ),
+        );
+      },
+    );
+  }
+
+  CustomHeader customHeader() {
+    return CustomHeader(
+      refreshStyle: RefreshStyle.Behind,
+      onOffsetChange: (offset) {
+        if (_refreshController.value.headerMode!.value !=
+            RefreshStatus.refreshing) {
+          _scaleController.value = offset / 100.0;
+        }
+      },
+      builder: (context, mode) {
+        return customCircleProgress(context);
+      },
     );
   }
 

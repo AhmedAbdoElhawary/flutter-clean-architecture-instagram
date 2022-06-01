@@ -29,12 +29,10 @@ import '../../../widgets/global/circle_avatar_image/circle_avatar_of_profile_ima
 
 class HomeScreen extends StatefulWidget {
   final String userId;
-  final Duration throttleDuration;
 
   const HomeScreen({
     Key? key,
     required this.userId,
-    this.throttleDuration = const Duration(milliseconds: 200),
   }) : super(key: key);
 
   @override
@@ -77,9 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
             isThatForMyPosts: true,
             lengthOfCurrentList: index)
         .then((value) {
-      Future.delayed(Duration.zero, () {
-        setState(() {});
-      });
       reLoadData.value = true;
     });
   }
@@ -101,45 +96,49 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  BlocBuilder<PostCubit, PostState> blocBuilder(double bodyHeight) {
-    return BlocBuilder<PostCubit, PostState>(
-      buildWhen: (previous, current) {
-        if (reLoadData.value && current is CubitMyPersonalPostsLoaded) {
-          reLoadData.value = false;
-          return true;
-        }
-        if (reLoadData.value) {
-          reLoadData.value = false;
-          return true;
-        }
+  ValueListenableBuilder<bool> blocBuilder(double bodyHeight) {
+    return ValueListenableBuilder(
+      valueListenable: reLoadData,
+      builder: (context, bool value, child) =>
+          BlocBuilder<PostCubit, PostState>(
+        buildWhen: (previous, current) {
+          if (value && current is CubitMyPersonalPostsLoaded) {
+            reLoadData.value = false;
+            return true;
+          }
+          if (value) {
+            reLoadData.value = false;
+            return true;
+          }
 
-        if (previous != current && current is CubitMyPersonalPostsLoaded) {
-          return true;
-        }
-        if (previous != current && current is CubitPostFailed) {
-          return true;
-        }
-        return false;
-      },
-      builder: (BuildContext context, PostState state) {
-        if (state is CubitMyPersonalPostsLoaded) {
-          state.postsInfo
-              .sort((a, b) => a.datePublished.compareTo(b.datePublished));
-          postsInfo.value = state.postsInfo;
-          return postsInfo.value.isNotEmpty
-              ? inViewNotifier(state, bodyHeight)
-              : emptyMessage();
-        } else if (state is CubitPostFailed) {
-          ToastShow.toastStateError(state);
-          return Center(
-              child: Text(
-            StringsManager.noPosts.tr(),
-            style: getNormalStyle(color: Theme.of(context).focusColor),
-          ));
-        } else {
-          return circularProgress();
-        }
-      },
+          if (previous != current && current is CubitMyPersonalPostsLoaded) {
+            return true;
+          }
+          if (previous != current && current is CubitPostFailed) {
+            return true;
+          }
+          return false;
+        },
+        builder: (BuildContext context, PostState state) {
+          if (state is CubitMyPersonalPostsLoaded) {
+            state.postsInfo
+                .sort((a, b) => a.datePublished.compareTo(b.datePublished));
+            postsInfo.value = state.postsInfo;
+            return postsInfo.value.isNotEmpty
+                ? inViewNotifier(state, bodyHeight)
+                : emptyMessage();
+          } else if (state is CubitPostFailed) {
+            ToastShow.toastStateError(state);
+            return Center(
+                child: Text(
+              StringsManager.noPosts.tr(),
+              style: getNormalStyle(color: Theme.of(context).focusColor),
+            ));
+          } else {
+            return circularProgress();
+          }
+        },
+      ),
     );
   }
 
@@ -214,9 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   reloadTheData() {
-    setState(() {
-      reLoadData.value = true;
-    });
+    reLoadData.value = true;
   }
 
   Widget circularProgress() {
@@ -248,103 +245,106 @@ class _HomeScreenState extends State<HomeScreen> {
       await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
           builder: (context) => CreateStoryPage(storyImage: pickImage),
           maintainState: false));
-      setState(() {
-        reLoadData.value = true;
-      });
+      reLoadData.value = true;
     }
   }
 
   Widget storiesLines(double bodyHeight) {
     List<dynamic> usersStoriesIds =
         personalInfo!.followedPeople + personalInfo!.followerPeople;
-    return BlocBuilder<StoryCubit, StoryState>(
-      bloc: StoryCubit.get(context)
-        ..getStoriesInfo(
-            usersIds: usersStoriesIds, myPersonalInfo: personalInfo!),
-      buildWhen: (previous, current) {
-        if (reLoadData.value && current is CubitStoriesInfoLoaded) {
-          reLoadData.value = false;
-          return true;
-        }
+    return ValueListenableBuilder(
+      valueListenable: reLoadData,
+      builder: (context, bool value, child) =>
+          BlocBuilder<StoryCubit, StoryState>(
+        bloc: StoryCubit.get(context)
+          ..getStoriesInfo(
+              usersIds: usersStoriesIds, myPersonalInfo: personalInfo!),
+        buildWhen: (previous, current) {
+          if (value && current is CubitStoriesInfoLoaded) {
+            reLoadData.value = false;
+            return true;
+          }
 
-        if (previous != current && current is CubitStoriesInfoLoaded) {
-          return true;
-        }
-        if (previous != current && current is CubitStoryFailed) {
-          return true;
-        }
-        return false;
-      },
-      builder: (context, state) {
-        if (state is CubitStoriesInfoLoaded) {
-          List<UserPersonalInfo> storiesOwnersInfo = state.storiesOwnersInfo;
-          return Padding(
-            padding: const EdgeInsetsDirectional.only(start: 10),
-            child: SizedBox(
-              width: double.infinity,
-              height: bodyHeight * 0.155,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (personalInfo!.stories.isEmpty) ...[
-                      myOwnStory(context, storiesOwnersInfo, bodyHeight),
-                      const SizedBox(width: 12),
-                    ],
-                    ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: storiesOwnersInfo.length,
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const SizedBox(width: 12),
-                      itemBuilder: (BuildContext context, int index) {
-                        UserPersonalInfo publisherInfo =
-                            storiesOwnersInfo[index];
-                        return Hero(
-                          tag: "${publisherInfo.userId.hashCode}",
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context, rootNavigator: true)
-                                  .push(MaterialPageRoute(
-                                maintainState: false,
-                                builder: (context) => StoryPage(
-                                    user: publisherInfo,
-                                    hashTag: "${publisherInfo.userId.hashCode}",
-                                    storiesOwnersInfo: storiesOwnersInfo),
-                              ));
-                            },
-                            child: CircleAvatarOfProfileImage(
-                              userInfo: publisherInfo,
-                              bodyHeight: bodyHeight * 1.1,
-                              thisForStoriesLine: true,
-                              nameOfCircle: index == 0 &&
-                                      publisherInfo.userId ==
-                                          personalInfo!.userId
-                                  ? StringsManager.yourStory.tr()
-                                  : "",
+          if (previous != current && current is CubitStoriesInfoLoaded) {
+            return true;
+          }
+          if (previous != current && current is CubitStoryFailed) {
+            return true;
+          }
+          return false;
+        },
+        builder: (context, state) {
+          if (state is CubitStoriesInfoLoaded) {
+            List<UserPersonalInfo> storiesOwnersInfo = state.storiesOwnersInfo;
+            return Padding(
+              padding: const EdgeInsetsDirectional.only(start: 10),
+              child: SizedBox(
+                width: double.infinity,
+                height: bodyHeight * 0.155,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (personalInfo!.stories.isEmpty) ...[
+                        myOwnStory(context, storiesOwnersInfo, bodyHeight),
+                        const SizedBox(width: 12),
+                      ],
+                      ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: storiesOwnersInfo.length,
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const SizedBox(width: 12),
+                        itemBuilder: (BuildContext context, int index) {
+                          UserPersonalInfo publisherInfo =
+                              storiesOwnersInfo[index];
+                          return Hero(
+                            tag: "${publisherInfo.userId.hashCode}",
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context, rootNavigator: true)
+                                    .push(MaterialPageRoute(
+                                  maintainState: false,
+                                  builder: (context) => StoryPage(
+                                      user: publisherInfo,
+                                      hashTag:
+                                          "${publisherInfo.userId.hashCode}",
+                                      storiesOwnersInfo: storiesOwnersInfo),
+                                ));
+                              },
+                              child: CircleAvatarOfProfileImage(
+                                userInfo: publisherInfo,
+                                bodyHeight: bodyHeight * 1.1,
+                                thisForStoriesLine: true,
+                                nameOfCircle: index == 0 &&
+                                        publisherInfo.userId ==
+                                            personalInfo!.userId
+                                    ? StringsManager.yourStory.tr()
+                                    : "",
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        } else if (state is CubitStoryFailed) {
-          ToastShow.toastStateError(state);
-          return Center(
-              child: Text(
-            StringsManager.somethingWrong.tr(),
-            style: getNormalStyle(color: Theme.of(context).focusColor),
-          ));
-        } else {
-          return Container();
-        }
-      },
+            );
+          } else if (state is CubitStoryFailed) {
+            ToastShow.toastStateError(state);
+            return Center(
+                child: Text(
+              StringsManager.somethingWrong.tr(),
+              style: getNormalStyle(color: Theme.of(context).focusColor),
+            ));
+          } else {
+            return Container();
+          }
+        },
+      ),
     );
   }
 
@@ -375,9 +375,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () async {
                             await createNewStory();
                             await getData(0);
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              setState(() {});
-                            });
                           },
                           child: Text(StringsManager.fromCamera.tr()),
                         ),
@@ -386,9 +383,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () async {
                             await createNewStory(isThatFromCamera: false);
                             await getData(0);
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              setState(() {});
-                            });
                           },
                           child: Text(StringsManager.fromGallery.tr()),
                         ),

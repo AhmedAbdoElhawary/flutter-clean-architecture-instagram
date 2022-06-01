@@ -202,15 +202,20 @@ class CropState extends State<Crop> with TickerProviderStateMixin, Drag {
             onScaleStart: _isEnabled ? _handleScaleStart : null,
             onScaleUpdate: _isEnabled ? _handleScaleUpdate : null,
             onScaleEnd: _isEnabled ? _handleScaleEnd : null,
-            child: CustomPaint(
-              painter: _CropPainter(
-                image: _image,
-                ratio: _ratio,
-                view: _view,
-                area: _area,
-                scale: _scale,
-                active: _activeController.value,
-              ),
+            child: AnimatedBuilder(
+              builder: (context, child) {
+                return CustomPaint(
+                  painter: _CropPainter(
+                    image: _image,
+                    ratio: _ratio,
+                    view: _view,
+                    area: _area,
+                    scale: _scale,
+                    active: _activeController.value,
+                  ),
+                );
+              },
+              animation:_activeController ,
             ),
           ),
         ),

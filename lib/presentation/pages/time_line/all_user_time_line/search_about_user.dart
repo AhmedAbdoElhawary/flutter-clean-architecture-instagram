@@ -19,10 +19,11 @@ class SearchAboutUserPage extends StatefulWidget {
 }
 
 class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
-  final TextEditingController _textController = TextEditingController();
+  final ValueNotifier<TextEditingController> _textController =
+      ValueNotifier(TextEditingController());
   @override
   void dispose() {
-    _textController.dispose();
+    _textController.value.dispose();
     super.dispose();
   }
 
@@ -44,22 +45,25 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
           decoration: BoxDecoration(
               color: Theme.of(context).shadowColor,
               borderRadius: BorderRadius.circular(10)),
-          child: TextFormField(
-            style: Theme.of(context).textTheme.bodyText1,
-            controller: _textController,
-            textAlign: TextAlign.start,
-            onChanged: (_) => setState(() {}),
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsetsDirectional.all(12.5),
-                hintText: StringsManager.search.tr(),
-                hintStyle: Theme.of(context).textTheme.headline1,
-                border: InputBorder.none),
+          child: ValueListenableBuilder(
+            valueListenable: _textController,
+            builder: (context, TextEditingController textValue, child) =>
+                TextFormField(
+              style: Theme.of(context).textTheme.bodyText1,
+              controller: textValue,
+              textAlign: TextAlign.start,
+              decoration: InputDecoration(
+                  contentPadding: const EdgeInsetsDirectional.all(12.5),
+                  hintText: StringsManager.search.tr(),
+                  hintStyle: Theme.of(context).textTheme.headline1,
+                  border: InputBorder.none),
+            ),
           ),
         ),
       ),
       body: BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
         bloc: BlocProvider.of<SearchAboutUserBloc>(context)
-          ..add(FindSpecificUser(_textController.text)),
+          ..add(FindSpecificUser(_textController.value.text)),
         buildWhen: (previous, current) {
           if (previous != current && (current is SearchAboutUserBlocLoaded)) {
             return true;

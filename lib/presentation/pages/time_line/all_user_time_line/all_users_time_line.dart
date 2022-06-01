@@ -13,23 +13,16 @@ import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_time_li
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:shimmer/shimmer.dart';
 
-class AllUsersTimeLinePage extends StatefulWidget {
-  final String userId;
-  const AllUsersTimeLinePage({required this.userId, Key? key})
-      : super(key: key);
-
-  @override
-  State<AllUsersTimeLinePage> createState() => _AllUsersTimeLinePageState();
-}
-
-class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
-  bool rebuildUsersInfo = false;
-  ValueNotifier<bool> isThatEndOfList = ValueNotifier(false);
+class AllUsersTimeLinePage extends StatelessWidget {
+  final ValueNotifier<bool> rebuildUsersInfo = ValueNotifier(false);
+  final ValueNotifier<bool> isThatEndOfList = ValueNotifier(false);
   final ValueNotifier<bool> reloadData = ValueNotifier(true);
+
+  AllUsersTimeLinePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    rebuildUsersInfo = false;
+    rebuildUsersInfo.value = false;
     return Scaffold(
       body: blocBuilder(),
       appBar: searchAppBar(context),
@@ -66,66 +59,61 @@ class _AllUsersTimeLinePageState extends State<AllUsersTimeLinePage> {
     );
   }
 
-  OutlineInputBorder outlineInputBorder() {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(5.0),
-      borderSide: BorderSide(color: Theme.of(context).dividerColor, width: 1.0),
-    );
-  }
-
-  Future<void> getData(int index) async {
+  Future<void> getData(BuildContext context, int index) async {
     await BlocProvider.of<PostCubit>(context).getAllPostInfo();
-    setState(() {
-      rebuildUsersInfo = true;
-      reloadData.value = true;
-    });
+    rebuildUsersInfo.value = true;
+    reloadData.value = true;
   }
 
-  BlocBuilder<PostCubit, PostState> blocBuilder() {
-    return BlocBuilder<PostCubit, PostState>(
-      bloc: BlocProvider.of<PostCubit>(context)..getAllPostInfo(),
-      buildWhen: (previous, current) {
-        if (previous != current && current is CubitAllPostsLoaded) {
-          return true;
-        }
-        if (rebuildUsersInfo && current is CubitAllPostsLoaded) {
-          rebuildUsersInfo = false;
-          return true;
-        }
-        return false;
-      },
-      builder: (BuildContext context, state) {
-        if (state is CubitAllPostsLoaded) {
-          List<Post> imagePosts = [];
-          List<Post> videoPosts = [];
-
-          for (Post element in state.allPostInfo) {
-            element.isThatImage == true
-                ? imagePosts.add(element)
-                : videoPosts.add(element);
+  ValueListenableBuilder<bool> blocBuilder() {
+    return ValueListenableBuilder(
+      valueListenable: rebuildUsersInfo,
+      builder: (context, bool value, child) =>
+          BlocBuilder<PostCubit, PostState>(
+        bloc: BlocProvider.of<PostCubit>(context)..getAllPostInfo(),
+        buildWhen: (previous, current) {
+          if (previous != current && current is CubitAllPostsLoaded) {
+            return true;
           }
+          if (value && current is CubitAllPostsLoaded) {
+            rebuildUsersInfo.value = false;
+            return true;
+          }
+          return false;
+        },
+        builder: (BuildContext context, state) {
+          if (state is CubitAllPostsLoaded) {
+            List<Post> imagePosts = [];
+            List<Post> videoPosts = [];
 
-          return AllTimeLineGridView(
-            onRefreshData: getData,
-            postsImagesInfo: imagePosts,
-            postsVideosInfo: videoPosts,
-            isThatEndOfList: isThatEndOfList,
-            reloadData: reloadData,
-            isThatProfile: false,
-            allPostsInfo: state.allPostInfo,
-          );
-        } else if (state is CubitPostFailed) {
-          ToastShow.toastStateError(state);
-          return Center(
-              child: Text(
-            StringsManager.noPosts.tr(),
-            style: getNormalStyle(
-                color: Theme.of(context).focusColor, fontSize: 20),
-          ));
-        } else {
-          return loadingWidget(context);
-        }
-      },
+            for (Post element in state.allPostInfo) {
+              element.isThatImage == true
+                  ? imagePosts.add(element)
+                  : videoPosts.add(element);
+            }
+
+            return AllTimeLineGridView(
+              onRefreshData: (int index) => getData(context, index),
+              postsImagesInfo: imagePosts,
+              postsVideosInfo: videoPosts,
+              isThatEndOfList: isThatEndOfList,
+              reloadData: reloadData,
+              isThatProfile: false,
+              allPostsInfo: state.allPostInfo,
+            );
+          } else if (state is CubitPostFailed) {
+            ToastShow.toastStateError(state);
+            return Center(
+                child: Text(
+              StringsManager.noPosts.tr(),
+              style: getNormalStyle(
+                  color: Theme.of(context).focusColor, fontSize: 20),
+            ));
+          } else {
+            return loadingWidget(context);
+          }
+        },
+      ),
     );
   }
 

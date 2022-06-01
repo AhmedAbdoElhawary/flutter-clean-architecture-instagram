@@ -87,7 +87,7 @@ class _MainScreenState extends State<MainScreen> {
                   case 1:
                     return CupertinoTabView(
                       builder: (context) => CupertinoPageScaffold(
-                          child: AllUsersTimeLinePage(userId: widget.userId)),
+                          child: AllUsersTimeLinePage()),
                     );
                   case 2:
                     return CupertinoTabView(

@@ -28,7 +28,7 @@ class ThineCircularProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: CircularProgressIndicator(
-          strokeWidth: 1, color: Theme.of(context).primaryColor),
+          strokeWidth: 1, color: Theme.of(context).focusColor),
     );
   }
 }

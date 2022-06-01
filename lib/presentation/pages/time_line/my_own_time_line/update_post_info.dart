@@ -31,8 +31,8 @@ class UpdatePostInfo extends StatefulWidget {
 
 class _UpdatePostInfoState extends State<UpdatePostInfo> {
   TextEditingController controller = TextEditingController();
-  bool moveAway = false;
-  int initPosition = 0;
+  ValueNotifier<bool> moveAway = ValueNotifier(false);
+  ValueNotifier<int> initPosition = ValueNotifier(0);
 
   @override
   void initState() {
@@ -71,32 +71,34 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
   }
 
   Widget actionsWidgets() {
-    return BlocBuilder<PostCubit, PostState>(builder: (context, state) {
-      if (state is CubitUpdatePostLoaded && moveAway) {
-        moveAway = false;
-        Navigator.maybePop(context);
-      }
-      return state is CubitUpdatePostLoading
-          ? Transform.scale(
-              scaleY: 1,
-              scaleX: 1.2,
-              child: const CustomCircularProgress(ColorManager.blue))
-          : IconButton(
-              onPressed: () async {
-                Post updatedPostInfo = widget.oldPostInfo;
-                updatedPostInfo.caption = controller.text;
-                await PostCubit.get(context)
-                    .updatePostInfo(postInfo: updatedPostInfo);
-                setState(() {
-                  moveAway = true;
-                });
-              },
-              icon: const Icon(
-                Icons.check_rounded,
-                size: 30,
-                color: ColorManager.blue,
-              ));
-    });
+    return ValueListenableBuilder(
+      valueListenable: moveAway,
+      builder: (context, bool moveValue, child) =>
+          BlocBuilder<PostCubit, PostState>(builder: (context, state) {
+        if (state is CubitUpdatePostLoaded && moveValue) {
+          moveAway.value = false;
+          Navigator.maybePop(context);
+        }
+        return state is CubitUpdatePostLoading
+            ? Transform.scale(
+                scaleY: 1,
+                scaleX: 1.2,
+                child: const CustomCircularProgress(ColorManager.blue))
+            : IconButton(
+                onPressed: () async {
+                  Post updatedPostInfo = widget.oldPostInfo;
+                  updatedPostInfo.caption = controller.text;
+                  await PostCubit.get(context)
+                      .updatePostInfo(postInfo: updatedPostInfo);
+                  moveAway.value = true;
+                },
+                icon: const Icon(
+                  Icons.check_rounded,
+                  size: 30,
+                  color: ColorManager.blue,
+                ));
+      }),
+    );
   }
 
   SizedBox buildSizedBox(double bodyHeight, BuildContext context) {
@@ -157,7 +159,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
       ));
 
   void _updateImageIndex(int index, _) {
-    setState(() => initPosition = index);
+    initPosition.value = index;
   }
 
   List<Widget> imageOfPost(Post postInfo, double bodyHeight) {
@@ -190,9 +192,13 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            PointsScrollBar(
-              photoCount: postInfo.imagesUrls.length,
-              activePhotoIndex: initPosition,
+            ValueListenableBuilder(
+              valueListenable: initPosition,
+              builder: (BuildContext context, int value, Widget? child) =>
+                  PointsScrollBar(
+                photoCount: postInfo.imagesUrls.length,
+                activePhotoIndex: value,
+              ),
             ),
           ],
         ),

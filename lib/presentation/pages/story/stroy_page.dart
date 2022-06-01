@@ -91,9 +91,9 @@ class _StoryWidgetState extends State<StoryWidget> {
 
   bool shownThem = true;
   final storyItems = <StoryItem>[];
-  late StoryController controller;
-  double opacityLevel = 1.0;
-  Story? date;
+  ValueNotifier<StoryController> controller = ValueNotifier(StoryController());
+  ValueNotifier<double> opacityLevel = ValueNotifier(1.0);
+  ValueNotifier<Story?> date = ValueNotifier(null);
 
   void addStoryItems() {
     for (final story in widget.user.storiesInfo!) {
@@ -103,7 +103,7 @@ class _StoryWidgetState extends State<StoryWidget> {
             roundedBottom: false,
             roundedTop: false,
             url: story.storyUrl,
-            controller: controller,
+            controller: controller.value,
             caption: Text(story.caption),
             duration: const Duration(
               milliseconds: 5000,
@@ -128,10 +128,8 @@ class _StoryWidgetState extends State<StoryWidget> {
   @override
   void initState() {
     super.initState();
-
-    controller = StoryController();
     addStoryItems();
-    date = widget.user.storiesInfo![0];
+    date.value = widget.user.storiesInfo![0];
   }
 
   @override
@@ -165,133 +163,136 @@ class _StoryWidgetState extends State<StoryWidget> {
             borderRadius: BorderRadius.circular(10),
             child: GestureDetector(
               onLongPressStart: (e) {
-                setState(() {
-                  controller.pause();
-                  opacityLevel = 0;
-                });
+                  controller.value.pause();
+                  opacityLevel.value = 0;
               },
               onLongPressEnd: (e) {
-                setState(() {
-                  opacityLevel = 1;
-                  controller.play();
-                });
+                  opacityLevel.value = 1;
+                  controller.value.play();
               },
-              child: Stack(
-                alignment: AlignmentDirectional.center,
-                children: <Widget>[
-                  Material(
-                    type: MaterialType.transparency,
-                    child: StoryView(
-                      inline: true,
-                      opacityLevel: opacityLevel,
-                      progressPosition: ProgressPosition.top,
-                      storyItems: storyItems,
-                      controller: controller,
-                      onComplete: handleCompleted,
-                      onVerticalSwipeComplete: (direction) {
-                        if (direction == Direction.down ||
-                            direction == Direction.up) {
-                          Navigator.maybePop(context);
-                        }
-                      },
-                      onStoryShow: (storyItem) {
-                        final index = storyItems.indexOf(storyItem);
-                        final isLastPage = storyItems.length - 1 == index;
-                        if (isLastPage) {
-                          _sharePrefs.setBool(widget.user.userId, true);
-                        }
-                        if (index > 0) {
-                          setState(() {
-                            date = widget.user.storiesInfo![index];
-                          });
-                        }
-                      },
+              child:ValueListenableBuilder(
+                valueListenable: opacityLevel,
+                builder: (context,double opacityLevelValue, child) =>Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: <Widget>[
+                    Material(
+                      type: MaterialType.transparency,
+                      child: ValueListenableBuilder(
+                        valueListenable: controller,
+                        builder: (context, StoryController storyControllerValue,
+                            child) =>
+                            StoryView(
+                              inline: true,
+                              opacityLevel: opacityLevelValue,
+                              progressPosition: ProgressPosition.top,
+                              storyItems: storyItems,
+                              controller: storyControllerValue,
+                              onComplete: handleCompleted,
+                              onVerticalSwipeComplete: (direction) {
+                                if (direction == Direction.down ||
+                                    direction == Direction.up) {
+                                  Navigator.maybePop(context);
+                                }
+                              },
+                              onStoryShow: (storyItem) {
+                                final index = storyItems.indexOf(storyItem);
+                                final isLastPage = storyItems.length - 1 == index;
+                                if (isLastPage) {
+                                  _sharePrefs.setBool(widget.user.userId, true);
+                                }
+                                if (index > 0) {
+                                  date.value = widget.user.storiesInfo![index];
+                                }
+                              },
+                            ),
+                      ),
                     ),
-                  ),
-                  AnimatedOpacity(
-                    opacity: opacityLevel,
-                    duration: const Duration(milliseconds: 250),
-                    child: ProfileWidget(
-                      user: widget.user,
-                      storyInfo: date!,
-                      hashTag: widget.hashTag,
+                    AnimatedOpacity(
+                      opacity: opacityLevelValue,
+                      duration: const Duration(milliseconds: 250),
+                      child: ValueListenableBuilder(
+                        valueListenable: date,
+                        builder: (context, Story? value, child) => ProfileWidget(
+                          user: widget.user,
+                          storyInfo: value!,
+                          hashTag: widget.hashTag,
+                        ),
+                      ),
                     ),
-                  ),
-                  AnimatedOpacity(
-                    opacity: opacityLevel,
-                    duration: const Duration(milliseconds: 250),
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.all(15.0),
-                        child: widget.user.userId == myPersonalId
-                            ? const Icon(
-                                Icons.delete_rounded,
-                                color: Colors.white,
-                                size: 25,
-                              )
-                            : Row(children: [
-                                Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(35),
-                                      border: Border.all(
-                                        color: Colors
-                                            .white, //                   <--- border color
-                                        width: 0.5,
-                                      ),
-                                    ),
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    height: 40,
-                                    child: Padding(
-                                      padding: const EdgeInsetsDirectional.only(
-                                          start: 8.0, end: 20),
-                                      child: Center(
-                                        child: TextFormField(
-                                          keyboardType: TextInputType.multiline,
-                                          cursorColor: Colors.teal,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
-                                          onTap: () {
-                                            setState(() {
-                                              controller.pause();
-                                            });
-                                          },
-                                          showCursor: true,
-                                          maxLines: null,
-                                          decoration:
-                                              const InputDecoration.collapsed(
-                                                  hintText: StringsManager
-                                                      .sendMessage,
-                                                  border: InputBorder.none,
-                                                  hintStyle: TextStyle(
-                                                      color: Colors.grey)),
-                                          autofocus: false,
-                                          cursorWidth: 1.5,
-                                        ),
-                                      ),
+                    AnimatedOpacity(
+                      opacity: opacityLevelValue,
+                      duration: const Duration(milliseconds: 250),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.all(15.0),
+                          child: widget.user.userId == myPersonalId
+                              ? const Icon(
+                            Icons.delete_rounded,
+                            color: Colors.white,
+                            size: 25,
+                          )
+                              : Row(children: [
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(35),
+                                  border: Border.all(
+                                    color: Colors
+                                        .white, //                   <--- border color
+                                    width: 0.5,
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                height: 40,
+                                child: Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                      start: 8.0, end: 20),
+                                  child: Center(
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.multiline,
+                                      cursorColor: Colors.teal,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1,
+                                      onTap: () {
+                                        controller.value.pause();
+                                      },
+                                      showCursor: true,
+                                      maxLines: null,
+                                      decoration:
+                                      const InputDecoration.collapsed(
+                                          hintText: StringsManager
+                                              .sendMessage,
+                                          border: InputBorder.none,
+                                          hintStyle: TextStyle(
+                                              color: Colors.grey)),
+                                      autofocus: false,
+                                      cursorWidth: 1.5,
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 25),
-                                SvgPicture.asset(
-                                  IconsAssets.loveIcon,
-                                  width: .5,
-                                  color: Colors.white,
-                                  height: 25,
-                                ),
-                                const SizedBox(width: 25),
-                                SvgPicture.asset(
-                                  IconsAssets.send2Icon,
-                                  color: Colors.white,
-                                  height: 23,
-                                ),
-                              ]),
+                              ),
+                            ),
+                            const SizedBox(width: 25),
+                            SvgPicture.asset(
+                              IconsAssets.loveIcon,
+                              width: .5,
+                              color: Colors.white,
+                              height: 25,
+                            ),
+                            const SizedBox(width: 25),
+                            SvgPicture.asset(
+                              IconsAssets.send2Icon,
+                              color: Colors.white,
+                              height: 23,
+                            ),
+                          ]),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ) ,
               ),
             ),
           ),

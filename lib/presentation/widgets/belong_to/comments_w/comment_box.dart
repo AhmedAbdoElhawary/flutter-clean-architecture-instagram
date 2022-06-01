@@ -15,7 +15,7 @@ class CommentBox extends StatefulWidget {
   final TextEditingController textController;
   final Comment? selectedCommentInfo;
   final FocusNode? focusNode;
-  final VoidCallback makeSelectedCommentNullable;
+  final ValueChanged<bool> makeSelectedCommentNullable;
   final UserPersonalInfo userPersonalInfo;
   final String postId;
   const CommentBox(
@@ -135,14 +135,16 @@ class _CommentBoxState extends State<CommentBox> {
           BlocProvider.of<CommentsInfoCubit>(context);
       await commentsInfoCubit.addComment(
           commentInfo: newCommentInfo(myPersonalInfo, DateOfNow.dateOfNow()));
+      widget.makeSelectedCommentNullable(true);
+
     } else {
       Comment replyInfo = newReplyInfo(DateOfNow.dateOfNow(),
           widget.selectedCommentInfo!, myPersonalInfo.userId);
-
       await ReplyInfoCubit.get(context)
           .replyOnThisComment(replyInfo: replyInfo);
+      widget.makeSelectedCommentNullable(false);
+
     }
-    widget.makeSelectedCommentNullable();
   }
 
   Container customDivider() => Container(
