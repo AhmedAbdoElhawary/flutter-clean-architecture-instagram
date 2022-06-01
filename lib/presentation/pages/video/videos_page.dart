@@ -292,9 +292,10 @@ class VideosPageState extends State<VideosPage> {
     return GestureDetector(
       onTap: () {
         Navigator.of(
-          context,
+            context,rootNavigator: true
         ).push(CupertinoPageRoute(
-          builder: (context) => CommentsPage(postId: postInfo.postUid),
+            builder: (context) =>
+                CommentsPage(postId: postInfo.postUid),maintainState: false
         ));
       },
       child: SvgPicture.asset(
