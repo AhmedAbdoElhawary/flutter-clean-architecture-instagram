@@ -17,16 +17,15 @@ class ReelVideoPlay extends StatefulWidget {
 }
 
 class _ReelVideoPlayState extends State<ReelVideoPlay> {
-  late Widget videoStatusAnimation;
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
+  final ValueNotifier<Widget> videoStatusAnimation =
+      ValueNotifier(const SizedBox());
 
   @override
   void initState() {
     super.initState();
-    videoStatusAnimation = Container();
     _controller = VideoPlayerController.network(widget.videoInfo.value.postUrl)
-      ..addListener(() => setState(() {}))
       ..setLooping(true)
       ..initialize().then((_) => _controller.play());
     _initializeVideoPlayerFuture = _controller.initialize();
@@ -52,21 +51,26 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
     return Stack(
       children: [
         video(),
-        Center(child: videoStatusAnimation),
+        ValueListenableBuilder(
+          valueListenable: videoStatusAnimation,
+          builder: (context, value, child) =>
+              Center(child: videoStatusAnimation.value),
+        ),
       ],
     );
   }
 
   Widget video() {
-
     return Builder(builder: (context) {
-
       return GestureDetector(
           child: FutureBuilder(
             future: _initializeVideoPlayerFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                return VideoPlayer(_controller);
+                return AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) => VideoPlayer(_controller),
+                );
               } else {
                 return const Center(
                   child: CircularProgressIndicator(color: ColorManager.white),
@@ -79,11 +83,11 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
               return;
             }
             if (_controller.value.volume == 0) {
-              videoStatusAnimation =
+              videoStatusAnimation.value =
                   FadeAnimation(child: volumeContainer(Icons.volume_up));
               _controller.setVolume(1);
             } else {
-              videoStatusAnimation =
+              videoStatusAnimation.value =
                   FadeAnimation(child: volumeContainer(Icons.volume_off));
               _controller.setVolume(0);
             }
@@ -107,7 +111,7 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(40),
-            color: ColorManager.black45),
+            color: ColorManager.black87),
         padding: const EdgeInsetsDirectional.all(25),
         child: popIcon(icon));
   }
