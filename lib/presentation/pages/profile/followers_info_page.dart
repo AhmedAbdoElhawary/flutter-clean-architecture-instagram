@@ -19,13 +19,11 @@ class FollowersInfoPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<FollowersInfoPage> createState() =>
-      _FollowersInfoPageState();
+  State<FollowersInfoPage> createState() => _FollowersInfoPageState();
 }
 
-class _FollowersInfoPageState
-    extends State<FollowersInfoPage> {
-  bool rebuildUsersInfo = false;
+class _FollowersInfoPageState extends State<FollowersInfoPage> {
+  ValueNotifier<bool> rebuildUsersInfo = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
@@ -51,50 +49,39 @@ class _FollowersInfoPageState
           ),
           title: buildText(context, widget.userInfo.userName),
         ),
-        body: BlocBuilder(
-          bloc: BlocProvider.of<UsersInfoCubit>(context)
-            ..getFollowersAndFollowingsInfo(
-                followersIds: widget.userInfo.followerPeople,
-                followingsIds: widget.userInfo.followedPeople),
-          buildWhen: (previous, current) {
-            if (previous != current &&
-                (current is CubitFollowersAndFollowingsLoaded)) {
-              return true;
-            }
-            if (rebuildUsersInfo &&
-                (current is CubitFollowersAndFollowingsLoaded)) {
-              return true;
-            }
-            return false;
-          },
-          builder: (context, state) {
-            if (state is CubitFollowersAndFollowingsLoaded) {
-              return TabBarView(
-                children: [
-                  ShowMeTheUsers(
-                    usersInfo: state.followersAndFollowingsInfo.followersInfo,
-                    isThatFollower: true,
-                    userInfo: widget.userInfo,
-                    rebuildVariable: rebuild,
-                    showSearchBar: true,
-                  ),
-                  ShowMeTheUsers(
-                    usersInfo: state.followersAndFollowingsInfo.followingsInfo,
-                    isThatFollower: false,
-                    userInfo: widget.userInfo,
-                    rebuildVariable: rebuild,
-                    showSearchBar: true,
-                  ),
-                ],
-              );
-            }
-            if (state is CubitGettingSpecificUsersFailed) {
-              ToastShow.toastStateError(state);
-              return Text(StringsManager.somethingWrong.tr());
-            } else {
-              return const ThineCircularProgress();
-            }
-          },
+        body: ValueListenableBuilder(
+          valueListenable: rebuildUsersInfo,
+          builder: (context, bool value, child) => BlocBuilder(
+            bloc: BlocProvider.of<UsersInfoCubit>(context)
+              ..getFollowersAndFollowingsInfo(
+                  followersIds: widget.userInfo.followerPeople,
+                  followingsIds: widget.userInfo.followedPeople),
+            buildWhen: (previous, current) {
+              if (previous != current &&
+                  (current is CubitFollowersAndFollowingsLoaded)) {
+                return true;
+              }
+              if (value && (current is CubitFollowersAndFollowingsLoaded)) {
+                return true;
+              }
+              return false;
+            },
+            builder: (context, state) {
+              if (state is CubitFollowersAndFollowingsLoaded) {
+                return _TapBarView(
+                  rebuild: rebuild,
+                  state: state,
+                  userInfo: widget.userInfo,
+                );
+              }
+              if (state is CubitGettingSpecificUsersFailed) {
+                ToastShow.toastStateError(state);
+                return Text(StringsManager.somethingWrong.tr());
+              } else {
+                return const ThineCircularProgress();
+              }
+            },
+          ),
         ),
       ),
     );
@@ -106,8 +93,41 @@ class _FollowersInfoPageState
   }
 
   void rebuild(bool rebuild) {
-    setState(() {
-      rebuildUsersInfo = rebuild;
-    });
+    rebuildUsersInfo.value = rebuild;
+  }
+}
+
+class _TapBarView extends StatelessWidget {
+  final CubitFollowersAndFollowingsLoaded state;
+  final ValueChanged<bool> rebuild;
+  final UserPersonalInfo userInfo;
+
+  const _TapBarView({
+    Key? key,
+    required this.rebuild,
+    required this.userInfo,
+    required this.state,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TabBarView(
+      children: [
+        ShowMeTheUsers(
+          usersInfo: state.followersAndFollowingsInfo.followersInfo,
+          isThatFollower: true,
+          userInfo: userInfo,
+          rebuildVariable: rebuild,
+          showSearchBar: true,
+        ),
+        ShowMeTheUsers(
+          usersInfo: state.followersAndFollowingsInfo.followingsInfo,
+          isThatFollower: false,
+          userInfo: userInfo,
+          rebuildVariable: rebuild,
+          showSearchBar: true,
+        ),
+      ],
+    );
   }
 }
