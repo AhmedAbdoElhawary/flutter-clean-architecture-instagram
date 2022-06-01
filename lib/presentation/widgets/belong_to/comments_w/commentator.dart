@@ -26,7 +26,7 @@ class CommentInfo extends StatefulWidget {
   UserPersonalInfo myPersonalInfo;
   int index;
   bool isThatReply;
-
+  final ValueNotifier<bool> rebuildComments;
   bool addReply;
   Map<int, bool> showMeReplies;
 
@@ -38,6 +38,7 @@ class CommentInfo extends StatefulWidget {
       this.isThatReply = false,
       required this.myPersonalInfo,
       required this.showMeReplies,
+      required this.rebuildComments,
       required this.addReply,
       required this.textController})
       : super(key: key);
@@ -82,76 +83,86 @@ class _CommentInfoState extends State<CommentInfo> {
                       ],
                     ),
                   )
-                : BlocBuilder<ReplyInfoCubit, ReplyInfoState>(
-                    bloc: BlocProvider.of<ReplyInfoCubit>(context)
-                      ..getRepliesOfThisComment(
-                          commentId: widget.commentInfo.commentUid),
-                    buildWhen: (previous, current) {
-                      if (previous != current &&
-                          (current is CubitReplyInfoLoaded)) {
-                        return true;
-                      }
-
-                      return false;
+                : ValueListenableBuilder(
+                    builder: (context, bool value, child) {
+                      return BlocBuilder<ReplyInfoCubit, ReplyInfoState>(
+                          bloc: BlocProvider.of<ReplyInfoCubit>(context)
+                            ..getRepliesOfThisComment(
+                                commentId: widget.commentInfo.commentUid),
+                          buildWhen: (previous, current) {
+                            if (previous != current &&
+                                (current is CubitReplyInfoLoaded)) {
+                              return true;
+                            }
+                            if (value) {
+                              widget.rebuildComments.value = false;
+                              return true;
+                            }
+                            return false;
+                          },
+                          builder: (context, state) {
+                            if (state is CubitReplyInfoLoaded) {
+                              List<Comment> repliesInfo =
+                                  BlocProvider.of<ReplyInfoCubit>(context)
+                                      .repliesOnComment;
+                              return Padding(
+                                padding: const EdgeInsetsDirectional.only(
+                                    start: 40.0),
+                                child: ListView.separated(
+                                    keyboardDismissBehavior:
+                                        ScrollViewKeyboardDismissBehavior
+                                            .onDrag,
+                                    shrinkWrap: true,
+                                    primary: false,
+                                    itemBuilder: (context, index) {
+                                      return CommentInfo(
+                                        showMeReplies: widget.showMeReplies,
+                                        commentInfo: repliesInfo[index],
+                                        textController: widget.textController,
+                                        rebuildComments: widget.rebuildComments,
+                                        index: index,
+                                        selectedCommentInfo:
+                                            widget.selectedCommentInfo,
+                                        myPersonalInfo: widget.myPersonalInfo,
+                                        addReply: widget.addReply,
+                                        isThatReply: true,
+                                      );
+                                    },
+                                    itemCount: repliesInfo.length,
+                                    separatorBuilder:
+                                        (BuildContext context, int index) =>
+                                            const SizedBox(
+                                              height: 20,
+                                            )),
+                              );
+                            } else if (state is CubitReplyInfoFailed) {
+                              ToastShow.toastStateError(state);
+                              return Text(state.toString(),
+                                  style: Theme.of(context).textTheme.bodyText1);
+                            } else {
+                              return Padding(
+                                padding: const EdgeInsetsDirectional.only(
+                                    start: 50.0),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                        color: Theme.of(context).dividerColor,
+                                        height: 1,
+                                        width: 40),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                        child: Text(StringsManager.loading.tr(),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline1))
+                                  ],
+                                ),
+                              );
+                            }
+                          });
                     },
-                    builder: (context, state) {
-                      if (state is CubitReplyInfoLoaded) {
-                        List<Comment> repliesInfo =
-                            BlocProvider.of<ReplyInfoCubit>(context)
-                                .repliesOnComment;
-                        return Padding(
-                          padding:
-                              const EdgeInsetsDirectional.only(start: 40.0),
-                          child: ListView.separated(
-                              keyboardDismissBehavior:
-                                  ScrollViewKeyboardDismissBehavior.onDrag,
-                              shrinkWrap: true,
-                              primary: false,
-                              itemBuilder: (context, index) {
-                                return CommentInfo(
-                                  showMeReplies: widget.showMeReplies,
-                                  commentInfo: repliesInfo[index],
-                                  textController: widget.textController,
-                                  index: index,
-                                  selectedCommentInfo:
-                                      widget.selectedCommentInfo,
-                                  myPersonalInfo: widget.myPersonalInfo,
-                                  addReply: widget.addReply,
-                                  isThatReply: true,
-                                );
-                              },
-                              itemCount: repliesInfo.length,
-                              separatorBuilder:
-                                  (BuildContext context, int index) =>
-                                      const SizedBox(
-                                        height: 20,
-                                      )),
-                        );
-                      } else if (state is CubitReplyInfoFailed) {
-                        ToastShow.toastStateError(state);
-                        return Text(state.toString(),
-                            style: Theme.of(context).textTheme.bodyText1);
-                      } else {
-                        return Padding(
-                          padding:
-                              const EdgeInsetsDirectional.only(start: 50.0),
-                          child: Row(
-                            children: [
-                              Container(
-                                  color: Theme.of(context).dividerColor,
-                                  height: 1,
-                                  width: 40),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                  child: Text(StringsManager.loading.tr(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline1))
-                            ],
-                          ),
-                        );
-                      }
-                    }),
+                    valueListenable: widget.rebuildComments,
+                  ),
         ],
       ),
     );
