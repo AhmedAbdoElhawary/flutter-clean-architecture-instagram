@@ -109,12 +109,13 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
         temp.add(gridViewImage);
         imageTemp.add(image);
       }
-
-      setState(() {
-        _mediaList.addAll(temp);
-        allImages.addAll(imageTemp);
-        currentPage++;
-        isImagesReady = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        setState(() {
+          _mediaList.addAll(temp);
+          allImages.addAll(imageTemp);
+          currentPage++;
+          isImagesReady = true;
+        });
       });
     } else {
       PhotoManager.openSetting();

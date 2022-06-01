@@ -9,18 +9,26 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'core/utility/injector.dart';
 
 Future<void> main() async {
+  final sharePrefs = await init();
+  Widget myApp = MyApp(sharePrefs: sharePrefs);
+  runApp(easyLocalization(myApp));
+}
 
+EasyLocalization easyLocalization(Widget myApp) {
+  return EasyLocalization(
+      child: Phoenix(child: myApp),
+      supportedLocales: const [arabicLocal, englishLocal],
+      path: assetPathLocalisations);
+}
+
+Future<SharedPreferences> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
-  final SharedPreferences sharePrefs = await SharedPreferences.getInstance();
   await initializeDependencies();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
   ]);
-  runApp(EasyLocalization(
-      child: Phoenix(child: MyApp(sharePrefs: sharePrefs)),
-      supportedLocales: const [arabicLocal, englishLocal],
-      path: assetPathLocalisations));
+  return await SharedPreferences.getInstance();
 }

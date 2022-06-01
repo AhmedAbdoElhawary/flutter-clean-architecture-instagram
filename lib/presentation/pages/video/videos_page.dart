@@ -24,7 +24,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../core/utility/constant.dart';
 
 class VideosPage extends StatefulWidget {
-  final ValueNotifier<bool> stopVideo;
+  final bool stopVideo;
 
   const VideosPage({Key? key, required this.stopVideo}) : super(key: key);
 

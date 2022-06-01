@@ -25,9 +25,6 @@ class _MainScreenState extends State<MainScreen> {
   CupertinoTabController controller = CupertinoTabController();
   @override
   void initState() {
-    controller.addListener(() {
-      stopVideo.value = controller.index == 2 ? true : false;
-    });
     super.initState();
   }
 
@@ -37,97 +34,100 @@ class _MainScreenState extends State<MainScreen> {
       onWillPop: () async {
         return true;
       },
-      child: CupertinoTabScaffold(
-          tabBar: CupertinoTabBar(
-              backgroundColor: stopVideo.value
-                  ? ColorManager.black
-                  : Theme.of(context).primaryColor,
-              height: 40,
-              items: [
-                navigationBarItem("house_white.svg"),
-                navigationBarItem("search.svg"),
-                navigationBarItem("video.svg"),
-                navigationBarItem("shop_white.svg"),
-                BottomNavigationBarItem(
-                  icon: BlocBuilder<FirestoreUserInfoCubit,
-                      FirestoreGetUserInfoState>(builder: (context, state) {
-                    FirestoreUserInfoCubit userCubit =
-                        FirestoreUserInfoCubit.get(context);
-                    String userImage =
-                        userCubit.myPersonalInfo!.profileImageUrl;
+      child: ValueListenableBuilder(
+        valueListenable: stopVideo,
+        builder: (BuildContext context, bool value, __) {
+          return CupertinoTabScaffold(
+              tabBar: CupertinoTabBar(
+                  backgroundColor: value
+                      ? ColorManager.black
+                      : Theme.of(context).primaryColor,
+                  height: 40,
+                  items: [
+                    navigationBarItem("house_white.svg",value),
+                    navigationBarItem("search.svg",value),
+                    navigationBarItem("video.svg",value),
+                    navigationBarItem("shop_white.svg",value),
+                    BottomNavigationBarItem(
+                      icon: BlocBuilder<FirestoreUserInfoCubit,
+                          FirestoreGetUserInfoState>(builder: (context, state) {
+                        FirestoreUserInfoCubit userCubit =
+                            FirestoreUserInfoCubit.get(context);
+                        String userImage =
+                            userCubit.myPersonalInfo!.profileImageUrl;
 
-                    return CircleAvatar(
-                        radius: 14,
-                        backgroundImage: userImage.isNotEmpty
-                            ? NetworkImage(userImage)
-                            : null,
-                        backgroundColor: Theme.of(context).hintColor,
-                        child: userImage.isEmpty
-                            ? const Icon(Icons.person,
-                                color: ColorManager.white)
-                            : null);
-                  }),
-                ),
-              ]),
-          controller: controller,
-          tabBuilder: (context, index) {
-            WidgetsBinding.instance.addPostFrameCallback((_) async {
-              setState(() {
-                stopVideo.value = controller.index == 2 ? true : false;
-              });
-            });
-
-            switch (index) {
-              case 0:
-                return CupertinoTabView(
-                  builder: (context) => CupertinoPageScaffold(
-                      child: BlocProvider<PostCubit>(
-                    create: (context) => injector<PostCubit>(),
-                    child: HomeScreen(userId: widget.userId),
-                  )),
-                );
-              case 1:
-                return CupertinoTabView(
-                  builder: (context) => CupertinoPageScaffold(
-                      child: AllUsersTimeLinePage(userId: widget.userId)),
-                );
-              case 2:
-                return CupertinoTabView(
-                  builder: (context) => CupertinoPageScaffold(
-                    child: BlocProvider<PostCubit>(
-                        create: (context) => injector<PostCubit>(),
-                        child: VideosPage(
-                          stopVideo: stopVideo,
-                        )),
-                  ),
-                );
-              case 3:
-                return CupertinoTabView(
-                  builder: (context) => const CupertinoPageScaffold(
-                    child: ShopPage(),
-                  ),
-                );
-              default:
-                return CupertinoTabView(
-                  builder: (context) => CupertinoPageScaffold(
-                    child: BlocProvider<PostCubit>(
-                      create: (context) => injector<PostCubit>(),
-                      child: PersonalProfilePage(personalId: widget.userId),
+                        return CircleAvatar(
+                            radius: 14,
+                            backgroundImage: userImage.isNotEmpty
+                                ? NetworkImage(userImage)
+                                : null,
+                            backgroundColor: Theme.of(context).hintColor,
+                            child: userImage.isEmpty
+                                ? const Icon(Icons.person,
+                                    color: ColorManager.white)
+                                : null);
+                      }),
                     ),
-                  ),
-                );
-            }
-          }),
+                  ]),
+              controller: controller,
+              tabBuilder: (context, index) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) async {
+                    stopVideo.value = controller.index == 2 ? true : false;
+                  });
+
+                switch (index) {
+                  case 0:
+                    return CupertinoTabView(
+                      builder: (context) => CupertinoPageScaffold(
+                          child: BlocProvider<PostCubit>(
+                        create: (context) => injector<PostCubit>(),
+                        child: HomeScreen(userId: widget.userId),
+                      )),
+                    );
+                  case 1:
+                    return CupertinoTabView(
+                      builder: (context) => CupertinoPageScaffold(
+                          child: AllUsersTimeLinePage(userId: widget.userId)),
+                    );
+                  case 2:
+                    return CupertinoTabView(
+                      builder: (context) => CupertinoPageScaffold(
+                        child: BlocProvider<PostCubit>(
+                            create: (context) => injector<PostCubit>(),
+                            child: VideosPage(
+                              stopVideo: value,
+                            )),
+                      ),
+                    );
+                  case 3:
+                    return CupertinoTabView(
+                      builder: (context) => const CupertinoPageScaffold(
+                        child: ShopPage(),
+                      ),
+                    );
+                  default:
+                    return CupertinoTabView(
+                      builder: (context) => CupertinoPageScaffold(
+                        child: BlocProvider<PostCubit>(
+                          create: (context) => injector<PostCubit>(),
+                          child: PersonalProfilePage(personalId: widget.userId),
+                        ),
+                      ),
+                    );
+                }
+              });
+        },
+      ),
     );
   }
 
-  BottomNavigationBarItem navigationBarItem(String fileName) {
+  BottomNavigationBarItem navigationBarItem(String fileName,bool value) {
     return BottomNavigationBarItem(
       icon: SvgPicture.asset(
         "assets/icons/$fileName",
         height: 25,
         color:
-            stopVideo.value ? ColorManager.white : Theme.of(context).focusColor,
+            value ? ColorManager.white : Theme.of(context).focusColor,
       ),
     );
   }

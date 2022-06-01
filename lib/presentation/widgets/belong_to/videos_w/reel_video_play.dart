@@ -6,7 +6,7 @@ import 'package:video_player/video_player.dart';
 
 class ReelVideoPlay extends StatefulWidget {
   final ValueNotifier<Post> videoInfo;
-  final ValueNotifier<bool> stopVideo;
+  final bool stopVideo;
 
   const ReelVideoPlay(
       {Key? key, required this.videoInfo, required this.stopVideo})
@@ -34,7 +34,7 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
 
   @override
   void didUpdateWidget(covariant ReelVideoPlay oldWidget) {
-    if (!oldWidget.stopVideo.value) {
+    if (!oldWidget.stopVideo) {
       _initializeVideoPlayerFuture = _controller.pause();
       _controller.pause();
       super.didUpdateWidget(oldWidget);

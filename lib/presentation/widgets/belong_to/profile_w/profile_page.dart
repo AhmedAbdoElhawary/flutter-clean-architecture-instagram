@@ -98,13 +98,13 @@ class _ProfilePageState extends State<ProfilePage> {
             !widget.isThatMyPersonalId) {
           return columnOfWidgets(state.postsInfo);
         } else {
-          return loadingWidget(context);
+          return loadingWidget();
         }
       },
     );
   }
 
-  Widget loadingWidget(BuildContext context) {
+  Widget loadingWidget() {
     return SingleChildScrollView(
       child: Column(
         children: [
