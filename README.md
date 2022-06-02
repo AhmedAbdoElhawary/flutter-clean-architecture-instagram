@@ -55,6 +55,8 @@ This repository and documentation are still under development.
     * Voice
 ## SnapShots
 * soon
+* I have some bad user experiences and bugs trying to improve,
+* then, I will publish snapshots of this huge project
 ## Getting started
 
 #### 1. [Setup Flutter](https://flutter.io/setup/)
