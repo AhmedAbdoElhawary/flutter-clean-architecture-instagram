@@ -92,8 +92,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
           widget.isThatLogIn
               ? StringsManager.noAccount.tr()
               : StringsManager.haveAccount.tr(),
-          style: getNormalStyle(
-              fontSize: 13, color: ColorManager.grey),
+          style: getNormalStyle(fontSize: 13, color: ColorManager.grey),
         ),
         const SizedBox(width: 4),
         register(context),

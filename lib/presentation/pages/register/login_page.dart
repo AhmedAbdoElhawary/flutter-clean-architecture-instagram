@@ -24,11 +24,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController emailController = TextEditingController(text: "");
   TextEditingController passwordController = TextEditingController(text: "");
-  bool isHeMovedToHome = false;
-  bool isUserIdReady = true;
+  TextEditingController emailController = TextEditingController(text: "");
   final AppPreferences _appPreferences = injector<AppPreferences>();
+  bool isHeMovedToHome = false;
+  bool isToastShowed = false;
+  bool isUserIdReady = true;
 
   @override
   void didChangeDependencies() {
@@ -68,14 +69,14 @@ class _LoginPageState extends State<LoginPage> {
     FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
     if (authState is CubitAuthConfirmed) {
       onAuthConfirmed(getUserCubit, authCubit);
-    } else if (authState is CubitAuthFailed) {
+    } else if (authState is CubitAuthFailed && !isToastShowed) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         setState(() {
+          isToastShowed = true;
           isUserIdReady = true;
+          ToastShow.toastStateError(authState);
         });
       });
-
-      ToastShow.toastStateError(authState);
     }
     return loginButton(authCubit);
   }
@@ -108,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
       nameOfButton: StringsManager.logIn.tr(),
       onPressed: () async {
         isUserIdReady = false;
+        isToastShowed = false;
         await authCubit.logIn(RegisteredUser(
             email: emailController.text, password: passwordController.text));
       },
