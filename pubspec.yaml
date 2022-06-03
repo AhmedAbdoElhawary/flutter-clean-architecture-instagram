@@ -77,7 +77,6 @@ dependencies:
   permission_handler: ^8.1.6
   photo_manager: ^2.1.1
   photofilters: ^3.0.1
-  #  get: ^4.6.5
   camera: ^0.9.7
   video_player:
   flutter_ringtone_player: ^3.2.0
@@ -90,6 +89,11 @@ dependencies:
   path_provider: ^2.0.9
   provider: ^6.0.2
   shimmer: ^2.0.0
+  get: ^4.6.5
+  get_storage: ^2.0.3
+  blurhash: ^1.0.0
+  octo_image: ^1.0.2
+
 
 
 
