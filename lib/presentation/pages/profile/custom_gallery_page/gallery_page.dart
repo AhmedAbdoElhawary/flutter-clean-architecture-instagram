@@ -133,10 +133,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
         if (snapshot.connectionState == ConnectionState.done) {
           Uint8List? image = snapshot.data;
           if (image != null) {
-            precacheImage(MemoryImage(image), context).then((value) {
-              print(
-                  "done Here !!!!!!!!!!!!!!!!#!@Q@#%@#^#%&^%@#!@%%^%^%^%^%&%&%&!!!!!!!!!!!!!!!!!!!!!!!!!");
-            });
+            precacheImage(MemoryImage(image), context);
             return Container(
               key: GlobalKey(debugLabel: "exist data"),
               color: Colors.grey,
@@ -524,8 +521,6 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
               color: Colors.blue, size: 30),
           onPressed: () async {
             double aspect = expandImage.value ? 6 / 8 : 1.0;
-            print(
-                "aspectRatio here -------------------------------------------------------> $aspect");
             final tempDir = await getTemporaryDirectory();
             File selectedImageFile =
                 await File('${tempDir.path}/image.png').create();
