@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +9,7 @@ import 'package:instagram/presentation/customPackages/crop_image/crop_image.dart
 import 'package:instagram/presentation/customPackages/crop_image/crop_options.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/pages/profile/custom_gallery_page/camera_page.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/fetching_media_gallery.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -38,18 +37,18 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
   ValueNotifier<bool> redDeleteText = ValueNotifier(false);
   ValueNotifier<SelectedPage> selectedPage = ValueNotifier(SelectedPage.left);
   late Future<void> initializeControllerFuture;
-  final ValueNotifier<List<Uint8List>> multiSelectedImage = ValueNotifier([]);
+  final ValueNotifier<List<File>> multiSelectedImage = ValueNotifier([]);
   final cropKey = GlobalKey<CropState>();
   late CameraController controller;
-  final ValueNotifier<List<FutureBuilder<Uint8List?>>> _mediaList =
+  final ValueNotifier<List<FutureBuilder<File?>>> _mediaList =
       ValueNotifier([]);
-  final ValueNotifier<List<Uint8List?>> allImages = ValueNotifier([]);
+  final ValueNotifier<List<File?>> allImages = ValueNotifier([]);
   final neverScrollPhysics = ValueNotifier(false);
   final multiSelectionMode = ValueNotifier(false);
   final showDeleteText = ValueNotifier(false);
   final selectedVideo = ValueNotifier(false);
   final isImagesReady = ValueNotifier(true);
-  final ValueNotifier<Uint8List?> selectedImage = ValueNotifier(null);
+  final ValueNotifier<File?> selectedImage = ValueNotifier(null);
   final expandImage = ValueNotifier(false);
   final shrinkWrap = ValueNotifier(false);
   final selectedPaged = ValueNotifier(0);
@@ -102,15 +101,17 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
           await PhotoManager.getAssetPathList(onlyAll: true);
       List<AssetEntity> media =
           await albums[0].getAssetListPaged(page: currentPage.value, size: 60);
-      List<FutureBuilder<Uint8List?>> temp = [];
-      List<Uint8List?> imageTemp = [];
+      List<FutureBuilder<File?>> temp = [];
+      List<File?> imageTemp = [];
       for (int i = 0; i < media.length; i++) {
-        FutureBuilder<Uint8List?> gridViewImage =
-            await lowQualityImage(media, i);
-        Uint8List? image = await highQualityImage(media, i);
-
-        temp.add(gridViewImage);
-        imageTemp.add(image);
+        await getImageGallery(media, i).then((value) async {
+          temp.add(value);
+          await value.future!.then((File? value) {
+            if (value != null) {
+              imageTemp.add(value);
+            }
+          });
+        });
       }
       _mediaList.value.addAll(temp);
       allImages.value.addAll(imageTemp);
@@ -119,54 +120,6 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     } else {
       PhotoManager.openSetting();
     }
-  }
-
-  Future<Uint8List?> highQualityImage(List<AssetEntity> media, int i) async {
-    return media[i].thumbnailDataWithSize(const ThumbnailSize(1200, 1200));
-  }
-
-  Future<FutureBuilder<Uint8List?>> lowQualityImage(
-      List<AssetEntity> media, int i) async {
-    FutureBuilder<Uint8List?> futureBuilder = FutureBuilder(
-      future: media[i].thumbnailDataWithSize(const ThumbnailSize(200, 200)),
-      builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          Uint8List? image = snapshot.data;
-          if (image != null) {
-            precacheImage(MemoryImage(image), context);
-            return Container(
-              key: GlobalKey(debugLabel: "exist data"),
-              color: Colors.grey,
-              child: Stack(
-                children: <Widget>[
-                  Positioned.fill(
-                    child: Image.memory(
-                      image,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  if (media[i].type == AssetType.video)
-                    const Align(
-                      alignment: Alignment.bottomRight,
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 5, bottom: 5),
-                        child: Icon(
-                          Icons.videocam,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            );
-          }
-        }
-        return Container(
-          key: GlobalKey(debugLabel: "don't exist"),
-        );
-      },
-    );
-    return futureBuilder;
   }
 
   @override
@@ -312,7 +265,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                               return ValueListenableBuilder(
                                 valueListenable: _mediaList,
                                 builder: (context,
-                                        List<FutureBuilder<Uint8List?>>
+                                        List<FutureBuilder<File?>>
                                             mediaListValue,
                                         child) =>
                                     CustomScrollView(
@@ -346,34 +299,27 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                   ),
                 ),
               ),
-              ValueListenableBuilder(
-                  valueListenable: multiSelectedImage,
-                  builder: (context, List<Uint8List> multiSelectedImageValue,
-                      child) {
-                    if (multiSelectedImageValue.length < 10) {
-                      return ValueListenableBuilder(
-                        valueListenable: multiSelectionMode,
-                        builder:
-                            (context, bool multiSelectionModeValue, child) =>
-                                Visibility(
-                          visible: !multiSelectionModeValue,
-                          child: ValueListenableBuilder(
-                            valueListenable: showDeleteText,
-                            builder:
-                                (context, bool showDeleteTextValue, child) =>
-                                    AnimatedSwitcher(
-                                        duration: const Duration(seconds: 1),
-                                        switchInCurve: Curves.easeIn,
-                                        child: showDeleteTextValue
-                                            ? tapBarMessage(true)
-                                            : tabBar()),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return tapBarMessage(false);
-                    }
-                  }),
+              if (multiSelectedImage.value.length < 10) ...[
+                ValueListenableBuilder(
+                  valueListenable: multiSelectionMode,
+                  builder: (context, bool multiSelectionModeValue, child) =>
+                      Visibility(
+                    visible: !multiSelectionModeValue,
+                    child: ValueListenableBuilder(
+                      valueListenable: showDeleteText,
+                      builder: (context, bool showDeleteTextValue, child) =>
+                          AnimatedSwitcher(
+                              duration: const Duration(seconds: 1),
+                              switchInCurve: Curves.easeIn,
+                              child: showDeleteTextValue
+                                  ? tapBarMessage(true)
+                                  : tabBar()),
+                    ),
+                  ),
+                )
+              ] else ...[
+                tapBarMessage(false)
+              ],
             ],
           ),
         ),
@@ -521,14 +467,10 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
               color: Colors.blue, size: 30),
           onPressed: () async {
             double aspect = expandImage.value ? 6 / 8 : 1.0;
-            final tempDir = await getTemporaryDirectory();
-            File selectedImageFile =
-                await File('${tempDir.path}/image.png').create();
             if (multiSelectedImage.value.isEmpty) {
-              Uint8List? image = selectedImage.value;
+              File? image = selectedImage.value;
               if (image != null) {
-                selectedImageFile.writeAsBytesSync(image);
-                File? croppedImage = await cropImage(selectedImageFile);
+                File? croppedImage = await cropImage(image);
                 File? finalImage = await compressImage(croppedImage!);
                 if (finalImage != null) {
                   await Navigator.of(context, rootNavigator: true).push(
@@ -543,8 +485,8 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
             } else {
               List<File> selectedImages = [];
               for (int i = 0; i < multiSelectedImage.value.length; i++) {
-                selectedImageFile.writeAsBytesSync(multiSelectedImage.value[i]);
-                File? croppedImage = await cropImage(selectedImageFile);
+                File? croppedImage =
+                    await cropImage(multiSelectedImage.value[i]);
                 if (croppedImage != null) {
                   selectedImages.add(croppedImage);
                 }
@@ -597,7 +539,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
         expandedHeight: 360,
         flexibleSpace: ValueListenableBuilder(
           valueListenable: selectedImage,
-          builder: (context, Uint8List? selectedImageValue, child) {
+          builder: (context, File? selectedImageValue, child) {
             if (selectedImageValue != null) {
               return showSelectedImage(context, selectedImageValue);
             } else {
@@ -609,8 +551,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
         ));
   }
 
-  Container showSelectedImage(
-      BuildContext context, Uint8List selectedImageValue) {
+  Container showSelectedImage(BuildContext context, File selectedImageValue) {
     return Container(
       key: GlobalKey(debugLabel: "have image"),
       color: Theme.of(context).primaryColor,
@@ -622,7 +563,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
           children: [
             ValueListenableBuilder(
               valueListenable: expandImage,
-              builder: (context, bool expandImageValue, child) => Crop.memory(
+              builder: (context, bool expandImageValue, child) => Crop.file(
                   selectedImageValue,
                   key: cropKey,
                   aspectRatio: expandImageValue ? 6 / 8 : 1.0),
@@ -635,7 +576,9 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                   onTap: () {
                     multiSelectionMode.value = !multiSelectionMode.value;
                     if (!multiSelectionModeValue) {
-                      multiSelectedImage.value.clear();
+                      setState(() {
+                        multiSelectedImage.value.clear();
+                      });
                     }
                   },
                   child: Container(
@@ -721,18 +664,20 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     ]);
   }
 
-  bool selectionImageCheck(Uint8List image, List<Uint8List> multiSelectionValue,
+  bool selectionImageCheck(File image, List<File> multiSelectionValue,
       {bool enableCopy = false}) {
     if (multiSelectionValue.contains(image) && selectedImage.value == image) {
       multiSelectedImage.value.remove(image);
       if (multiSelectionValue.isNotEmpty) {
         selectedImage.value = multiSelectedImage.value.last;
       }
+      setState(() {});
       return true;
     } else {
       if (multiSelectionValue.length < 10) {
         if (!multiSelectionValue.contains(image)) {
           multiSelectedImage.value.add(image);
+          setState(() {});
         }
         if (enableCopy) {
           selectedImage.value = image;
@@ -742,7 +687,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     }
   }
 
-  SliverGrid sliverGridView(List<FutureBuilder<Uint8List?>> mediaListValue) {
+  SliverGrid sliverGridView(List<FutureBuilder<File?>> mediaListValue) {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4,
@@ -753,16 +698,15 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
         (context, index) {
           return ValueListenableBuilder(
             valueListenable: allImages,
-            builder: (context, List<Uint8List?> allImagesValue, child) =>
+            builder: (context, List<File?> allImagesValue, child) =>
                 ValueListenableBuilder(
               valueListenable: multiSelectedImage,
-              builder:
-                  (context, List<Uint8List> multiSelectedImageValue, child) =>
-                      ValueListenableBuilder(
+              builder: (context, List<File> multiSelectedImageValue, child) =>
+                  ValueListenableBuilder(
                 valueListenable: selectedImage,
-                builder: (context, Uint8List? selectedImageValue, child) {
-                  FutureBuilder<Uint8List?> mediaList = mediaListValue[index];
-                  Uint8List? image = allImagesValue[index];
+                builder: (context, File? selectedImageValue, child) {
+                  FutureBuilder<File?> mediaList = mediaListValue[index];
+                  File? image = allImagesValue[index];
                   if (image != null) {
                     bool imageSelected =
                         multiSelectedImageValue.contains(image);
@@ -839,10 +783,10 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     );
   }
 
-  Widget gestureDetector(Uint8List image, int index, Widget childWidget) {
+  Widget gestureDetector(File image, int index, Widget childWidget) {
     return ValueListenableBuilder(
       valueListenable: multiSelectedImage,
-      builder: (context, List<Uint8List> multiSelectionValue, child) =>
+      builder: (context, List<File> multiSelectionValue, child) =>
           ValueListenableBuilder(
         valueListenable: multiSelectionMode,
         builder: (context, bool multiSelectionModeValue, child) =>
