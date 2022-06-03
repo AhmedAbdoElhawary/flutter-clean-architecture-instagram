@@ -150,9 +150,14 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Future<void> bottomSheet({bool createNewData = true}) {
     return CustomBottomSheet.bottomSheet(
       context,
-      headIcon: Text(StringsManager.create.tr(),
-          style:
-              getBoldStyle(color: Theme.of(context).focusColor, fontSize: 17)),
+      headIcon: ValueListenableBuilder(
+          valueListenable: darkTheme,
+          builder: (context, bool themeValue, child) {
+            Color themeOfApp =
+                themeValue ? ColorManager.white : ColorManager.black;
+            return Text(StringsManager.create.tr(),
+                style: getBoldStyle(color: themeOfApp, fontSize: 17));
+          }),
       bodyText: Padding(
         padding: const EdgeInsetsDirectional.only(start: 20.0),
         child: createNewData ? columnOfCreateData() : columnOfThemeData(),
@@ -213,9 +218,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   GestureDetector changeMode() {
     return GestureDetector(
       onTap: () {
-        Get.changeThemeMode(ThemeOfApp().loadThemeFromBox()
-            ? ThemeMode.light
-            : ThemeMode.dark);
+        Get.changeThemeMode(
+            ThemeOfApp().loadThemeFromBox() ? ThemeMode.light : ThemeMode.dark);
         ThemeOfApp().saveThemeToBox(!ThemeOfApp().loadThemeFromBox());
         darkTheme.value = ThemeMode.dark == ThemeOfApp().theme;
       },
