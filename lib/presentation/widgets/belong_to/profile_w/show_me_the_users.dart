@@ -40,6 +40,8 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
               ? ListView.builder(
                   shrinkWrap: true,
                   primary: false,
+                  addAutomaticKeepAlives: false,
+                  addRepaintBoundaries: false,
                   itemBuilder: (context, index) {
                     return containerOfUserInfo(
                         widget.usersInfo[index], widget.isThatFollower);
