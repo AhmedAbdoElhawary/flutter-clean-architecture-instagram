@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -34,6 +35,13 @@ class CircleAvatarOfProfileImage extends StatefulWidget {
 
 class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     with SingleTickerProviderStateMixin {
+  @override
+  void didChangeDependencies() {
+    precacheImage(NetworkImage(widget.userInfo.profileImageUrl), context);
+
+    super.didChangeDependencies();
+  }
+
   final SharedPreferences _sharePrefs = injector<SharedPreferences>();
   Color topColor = ColorManager.red;
   Color bottomColor = ColorManager.yellow;
@@ -154,8 +162,9 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
   Widget imageOfUser(String profileImage) {
     return CircleAvatar(
       backgroundColor: ColorManager.lowOpacityGrey,
-      backgroundImage:
-          profileImage.isNotEmpty ? NetworkImage(profileImage) : null,
+      backgroundImage: profileImage.isNotEmpty
+          ? CachedNetworkImageProvider(profileImage)
+          : null,
       child: profileImage.isEmpty
           ? Icon(
               Icons.person,
