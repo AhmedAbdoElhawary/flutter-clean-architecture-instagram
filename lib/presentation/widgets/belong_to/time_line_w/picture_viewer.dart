@@ -5,12 +5,14 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_imag
 
 class PictureViewer extends StatelessWidget {
   final String imageUrl;
+  final String blurHash;
   final bool isThatImage;
   final double aspectRatio;
 
   const PictureViewer({
     Key? key,
     required this.imageUrl,
+    required this.blurHash,
     this.isThatImage = true,
     this.aspectRatio = 0,
   }) : super(key: key);
@@ -48,6 +50,7 @@ class PictureViewer extends StatelessWidget {
                 ? Hero(
                     tag: imageUrl,
                     child: ImageDisplay(
+                      blurHash:blurHash ,
                       aspectRatio: aspectRatio,
                       imageUrl: imageUrl,
                     ),
