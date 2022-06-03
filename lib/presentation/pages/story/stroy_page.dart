@@ -163,16 +163,16 @@ class _StoryWidgetState extends State<StoryWidget> {
             borderRadius: BorderRadius.circular(10),
             child: GestureDetector(
               onLongPressStart: (e) {
-                  controller.value.pause();
-                  opacityLevel.value = 0;
+                controller.value.pause();
+                opacityLevel.value = 0;
               },
               onLongPressEnd: (e) {
-                  opacityLevel.value = 1;
-                  controller.value.play();
+                opacityLevel.value = 1;
+                controller.value.play();
               },
-              child:ValueListenableBuilder(
+              child: ValueListenableBuilder(
                 valueListenable: opacityLevel,
-                builder: (context,double opacityLevelValue, child) =>Stack(
+                builder: (context, double opacityLevelValue, child) => Stack(
                   alignment: AlignmentDirectional.center,
                   children: <Widget>[
                     Material(
@@ -180,31 +180,31 @@ class _StoryWidgetState extends State<StoryWidget> {
                       child: ValueListenableBuilder(
                         valueListenable: controller,
                         builder: (context, StoryController storyControllerValue,
-                            child) =>
+                                child) =>
                             StoryView(
-                              inline: true,
-                              opacityLevel: opacityLevelValue,
-                              progressPosition: ProgressPosition.top,
-                              storyItems: storyItems,
-                              controller: storyControllerValue,
-                              onComplete: handleCompleted,
-                              onVerticalSwipeComplete: (direction) {
-                                if (direction == Direction.down ||
-                                    direction == Direction.up) {
-                                  Navigator.maybePop(context);
-                                }
-                              },
-                              onStoryShow: (storyItem) {
-                                final index = storyItems.indexOf(storyItem);
-                                final isLastPage = storyItems.length - 1 == index;
-                                if (isLastPage) {
-                                  _sharePrefs.setBool(widget.user.userId, true);
-                                }
-                                if (index > 0) {
-                                  date.value = widget.user.storiesInfo![index];
-                                }
-                              },
-                            ),
+                          inline: true,
+                          opacityLevel: opacityLevelValue,
+                          progressPosition: ProgressPosition.top,
+                          storyItems: storyItems,
+                          controller: storyControllerValue,
+                          onComplete: handleCompleted,
+                          onVerticalSwipeComplete: (direction) {
+                            if (direction == Direction.down ||
+                                direction == Direction.up) {
+                              Navigator.maybePop(context);
+                            }
+                          },
+                          onStoryShow: (storyItem) {
+                            final index = storyItems.indexOf(storyItem);
+                            final isLastPage = storyItems.length - 1 == index;
+                            if (isLastPage) {
+                              _sharePrefs.setBool(widget.user.userId, true);
+                            }
+                            if (index > 0) {
+                              date.value = widget.user.storiesInfo![index];
+                            }
+                          },
+                        ),
                       ),
                     ),
                     AnimatedOpacity(
@@ -212,7 +212,8 @@ class _StoryWidgetState extends State<StoryWidget> {
                       duration: const Duration(milliseconds: 250),
                       child: ValueListenableBuilder(
                         valueListenable: date,
-                        builder: (context, Story? value, child) => ProfileWidget(
+                        builder: (context, Story? value, child) =>
+                            ProfileWidget(
                           user: widget.user,
                           storyInfo: value!,
                           hashTag: widget.hashTag,
@@ -228,71 +229,73 @@ class _StoryWidgetState extends State<StoryWidget> {
                           padding: const EdgeInsetsDirectional.all(15.0),
                           child: widget.user.userId == myPersonalId
                               ? const Icon(
-                            Icons.delete_rounded,
-                            color: Colors.white,
-                            size: 25,
-                          )
+                                  Icons.delete_rounded,
+                                  color: Colors.white,
+                                  size: 25,
+                                )
                               : Row(children: [
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(35),
-                                  border: Border.all(
-                                    color: Colors
-                                        .white, //                   <--- border color
-                                    width: 0.5,
-                                  ),
-                                ),
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                height: 40,
-                                child: Padding(
-                                  padding: const EdgeInsetsDirectional.only(
-                                      start: 8.0, end: 20),
-                                  child: Center(
-                                    child: TextFormField(
-                                      keyboardType: TextInputType.multiline,
-                                      cursorColor: Colors.teal,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1,
-                                      onTap: () {
-                                        controller.value.pause();
-                                      },
-                                      showCursor: true,
-                                      maxLines: null,
-                                      decoration:
-                                      const InputDecoration.collapsed(
-                                          hintText: StringsManager
-                                              .sendMessage,
-                                          border: InputBorder.none,
-                                          hintStyle: TextStyle(
-                                              color: Colors.grey)),
-                                      autofocus: false,
-                                      cursorWidth: 1.5,
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(35),
+                                        border: Border.all(
+                                          color: Colors
+                                              .white, //                   <--- border color
+                                          width: 0.5,
+                                        ),
+                                      ),
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      height: 40,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsetsDirectional.only(
+                                                start: 8.0, end: 20),
+                                        child: Center(
+                                          child: TextFormField(
+                                            keyboardType:
+                                                TextInputType.multiline,
+                                            cursorColor: Colors.teal,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                            onTap: () {
+                                              controller.value.pause();
+                                            },
+                                            showCursor: true,
+                                            maxLines: null,
+                                            decoration:
+                                                const InputDecoration.collapsed(
+                                                    hintText: StringsManager
+                                                        .sendMessage,
+                                                    border: InputBorder.none,
+                                                    hintStyle: TextStyle(
+                                                        color: Colors.grey)),
+                                            autofocus: false,
+                                            cursorWidth: 1.5,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 25),
-                            SvgPicture.asset(
-                              IconsAssets.loveIcon,
-                              width: .5,
-                              color: Colors.white,
-                              height: 25,
-                            ),
-                            const SizedBox(width: 25),
-                            SvgPicture.asset(
-                              IconsAssets.send2Icon,
-                              color: Colors.white,
-                              height: 23,
-                            ),
-                          ]),
+                                  const SizedBox(width: 25),
+                                  SvgPicture.asset(
+                                    IconsAssets.loveIcon,
+                                    width: .5,
+                                    color: Colors.white,
+                                    height: 25,
+                                  ),
+                                  const SizedBox(width: 25),
+                                  SvgPicture.asset(
+                                    IconsAssets.send2Icon,
+                                    color: Colors.white,
+                                    height: 23,
+                                  ),
+                                ]),
                         ),
                       ),
                     ),
                   ],
-                ) ,
+                ),
               ),
             ),
           ),
