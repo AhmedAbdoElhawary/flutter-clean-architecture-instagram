@@ -50,7 +50,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   @override
   void initState() {
-    darkTheme.value = ThemeMode.dark == ThemeService().theme;
+    darkTheme.value = ThemeMode.dark == ThemeOfApp().theme;
     super.initState();
   }
 
@@ -213,11 +213,11 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   GestureDetector changeMode() {
     return GestureDetector(
       onTap: () {
-        Get.changeThemeMode(ThemeService().loadThemeFromBox()
+        Get.changeThemeMode(ThemeOfApp().loadThemeFromBox()
             ? ThemeMode.light
             : ThemeMode.dark);
-        ThemeService().saveThemeToBox(!ThemeService().loadThemeFromBox());
-        darkTheme.value = ThemeMode.dark == ThemeService().theme;
+        ThemeOfApp().saveThemeToBox(!ThemeOfApp().loadThemeFromBox());
+        darkTheme.value = ThemeMode.dark == ThemeOfApp().theme;
       },
       child: createSizedBox(StringsManager.changeTheme.tr(),
           icon: Icons.brightness_4_outlined),

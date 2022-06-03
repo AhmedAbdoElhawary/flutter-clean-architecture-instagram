@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
       title: 'instagram',
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      themeMode: ThemeService().theme,
+      themeMode: ThemeOfApp().theme,
       home: AnimatedSplashScreen(
         centered: true,
         splash: Lottie.asset('assets/splash_gif/instagram.json'),
