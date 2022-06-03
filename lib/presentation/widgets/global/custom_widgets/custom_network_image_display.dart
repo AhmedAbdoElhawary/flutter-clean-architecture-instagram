@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:octo_image/octo_image.dart';
 
-class ImageDisplay extends StatefulWidget {
+class NetworkImageDisplay extends StatefulWidget {
   final String imageUrl;
   final String blurHash;
   final BoxFit boxFit;
@@ -11,7 +11,7 @@ class ImageDisplay extends StatefulWidget {
   final double aspectRatio;
   final double bodyHeight;
 
-  const ImageDisplay(
+  const NetworkImageDisplay(
       {Key? key,
       required this.imageUrl,
       this.blurHash = "",
@@ -22,10 +22,10 @@ class ImageDisplay extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ImageDisplay> createState() => _ImageDisplayState();
+  State<NetworkImageDisplay> createState() => _NetworkImageDisplayState();
 }
 
-class _ImageDisplayState extends State<ImageDisplay> {
+class _NetworkImageDisplayState extends State<NetworkImageDisplay> {
   @override
   void didChangeDependencies() {
     precacheImage(NetworkImage(widget.imageUrl), context);
