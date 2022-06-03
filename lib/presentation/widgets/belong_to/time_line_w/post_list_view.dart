@@ -27,7 +27,7 @@ import 'package:instagram/presentation/widgets/belong_to/time_line_w/points_scro
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_text.dart';
 import 'package:like_button/like_button.dart';
 
@@ -431,7 +431,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
                         )
                       : Hero(
                           tag: postInfo.postUrl,
-                          child: ImageDisplay(
+                          child: NetworkImageDisplay(
                             blurHash: postInfo.blurHash,
                             aspectRatio: postInfo.aspectRatio,
                             bodyHeight: widget.bodyHeight,
