@@ -425,6 +425,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
               child: postInfo.isThatImage
                   ? (postInfo.imagesUrls.length > 1
                       ? ImageSlider(
+                          aspectRatio: postInfo.aspectRatio,
                           imagesUrls: postInfo.imagesUrls,
                           updateImageIndex: _updateImageIndex,
                         )

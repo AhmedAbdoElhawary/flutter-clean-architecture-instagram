@@ -1,13 +1,20 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
 
 class ImageSlider extends StatefulWidget {
   final List<dynamic> imagesUrls;
+  final double aspectRatio;
+  final String blurHash;
+
   final Function(int, CarouselPageChangedReason) updateImageIndex;
-  const ImageSlider(
-      {Key? key, required this.imagesUrls, required this.updateImageIndex})
-      : super(key: key);
+  const ImageSlider({
+    Key? key,
+    required this.imagesUrls,
+    this.blurHash = "",
+    required this.updateImageIndex,
+    required this.aspectRatio,
+  }) : super(key: key);
 
   @override
   State<ImageSlider> createState() => _ImageSliderState();
@@ -16,7 +23,7 @@ class ImageSlider extends StatefulWidget {
 class _ImageSliderState extends State<ImageSlider> {
   @override
   void didChangeDependencies() {
-    widget.imagesUrls.map((url)=> precacheImage(NetworkImage(url), context));
+    widget.imagesUrls.map((url) => precacheImage(NetworkImage(url), context));
     super.didChangeDependencies();
   }
 
@@ -27,16 +34,16 @@ class _ImageSliderState extends State<ImageSlider> {
         precacheImage(NetworkImage(url), context);
         return Hero(
           tag: url,
-          child: CachedNetworkImage(
-            imageUrl: url,
-            fit: BoxFit.cover,
-            width: MediaQuery.of(context).size.width,
-          ),
+          child: ImageDisplay(
+              blurHash: widget.blurHash,
+              imageUrl: url,
+              aspectRatio: widget.aspectRatio),
         );
       }).toList(),
       options: CarouselOptions(
         viewportFraction: 1.0,
         enableInfiniteScroll: false,
+        aspectRatio: widget.aspectRatio,
         onPageChanged: widget.updateImageIndex,
       ),
     );

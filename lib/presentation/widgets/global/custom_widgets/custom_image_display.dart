@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 import 'package:octo_image/octo_image.dart';
 
 class ImageDisplay extends StatefulWidget {
@@ -48,7 +49,7 @@ class _ImageDisplayState extends State<ImageDisplay> {
   OctoImage buildOctoImage({double? height = double.infinity}) {
     return OctoImage(
       image: CachedNetworkImageProvider(widget.imageUrl),
-      errorBuilder: (context, url, error) => buildSizedBox(),
+      errorBuilder: (context, url, error) => buildError(),
       fit: BoxFit.cover,
       height: height,
       width: double.infinity,
@@ -58,7 +59,7 @@ class _ImageDisplayState extends State<ImageDisplay> {
     );
   }
 
-  SizedBox buildSizedBox() {
+  SizedBox buildError() {
     return SizedBox(
       width: double.infinity,
       height: widget.aspectRatio,
@@ -66,14 +67,20 @@ class _ImageDisplayState extends State<ImageDisplay> {
           size: 50, color: Theme.of(context).focusColor),
     );
   }
-
   Widget loadingWidget() {
     double aspectRatio = widget.aspectRatio;
     return aspectRatio == 0
         ? buildSizedBox()
         : AspectRatio(
-            aspectRatio: aspectRatio,
-            child: buildSizedBox(),
-          );
+      aspectRatio: aspectRatio,
+      child: buildSizedBox(),
+    );
+  }
+
+  Widget buildSizedBox() {
+    return Container(
+      width: double.infinity,
+      color: ColorManager.black26,
+    );
   }
 }

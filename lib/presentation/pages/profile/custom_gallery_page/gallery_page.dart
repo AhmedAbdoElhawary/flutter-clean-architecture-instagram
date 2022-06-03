@@ -545,9 +545,8 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
               for (int i = 0; i < multiSelectedImage.value.length; i++) {
                 selectedImageFile.writeAsBytesSync(multiSelectedImage.value[i]);
                 File? croppedImage = await cropImage(selectedImageFile);
-                File? finalImage = await compressImage(croppedImage!);
-                if (finalImage != null) {
-                  selectedImages.add(finalImage);
+                if (croppedImage != null) {
+                  selectedImages.add(croppedImage);
                 }
               }
               if (selectedImages.isNotEmpty) {
@@ -722,17 +721,17 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     ]);
   }
 
-  bool selectionImageCheck(Uint8List image, {bool enableCopy = false}) {
-    if (multiSelectedImage.value.contains(image) &&
-        selectedImage.value == image) {
+  bool selectionImageCheck(Uint8List image, List<Uint8List> multiSelectionValue,
+      {bool enableCopy = false}) {
+    if (multiSelectionValue.contains(image) && selectedImage.value == image) {
       multiSelectedImage.value.remove(image);
-      if (multiSelectedImage.value.isNotEmpty) {
+      if (multiSelectionValue.isNotEmpty) {
         selectedImage.value = multiSelectedImage.value.last;
       }
       return true;
     } else {
-      if (multiSelectedImage.value.length < 10) {
-        if (!multiSelectedImage.value.contains(image)) {
+      if (multiSelectionValue.length < 10) {
+        if (!multiSelectionValue.contains(image)) {
           multiSelectedImage.value.add(image);
         }
         if (enableCopy) {
@@ -840,23 +839,33 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     );
   }
 
-  GestureDetector gestureDetector(Uint8List image, int index, Widget child) {
-    return GestureDetector(
-        onTap: () {
-          if (multiSelectionMode.value) {
-            bool close = selectionImageCheck(image);
-            if (close) return;
-          }
-          selectedImage.value = image;
-        },
-        onLongPress: () {
-          if (!multiSelectionMode.value) {
-            multiSelectionMode.value = true;
-          }
-        },
-        onLongPressUp: () {
-          selectionImageCheck(image, enableCopy: true);
-        },
-        child: child);
+  Widget gestureDetector(Uint8List image, int index, Widget childWidget) {
+    return ValueListenableBuilder(
+      valueListenable: multiSelectedImage,
+      builder: (context, List<Uint8List> multiSelectionValue, child) =>
+          ValueListenableBuilder(
+        valueListenable: multiSelectionMode,
+        builder: (context, bool multiSelectionModeValue, child) =>
+            GestureDetector(
+                onTap: () {
+                  if (multiSelectionModeValue) {
+                    bool close =
+                        selectionImageCheck(image, multiSelectionValue);
+                    if (close) return;
+                  }
+                  selectedImage.value = image;
+                },
+                onLongPress: () {
+                  if (!multiSelectionModeValue) {
+                    multiSelectionMode.value = true;
+                  }
+                },
+                onLongPressUp: () {
+                  selectionImageCheck(image, multiSelectionValue,
+                      enableCopy: true);
+                },
+                child: childWidget),
+      ),
+    );
   }
 }
