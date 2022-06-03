@@ -58,6 +58,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
           onLongPressEnd: (details) => _popupDialog?.remove(),
           child: widget.postClickedInfo.isThatImage
               ? ImageDisplay(
+                  blurHash: widget.postClickedInfo.blurHash,
                   imageUrl: widget.postClickedInfo.postUrl.isNotEmpty
                       ? widget.postClickedInfo.postUrl
                       : widget.postClickedInfo.imagesUrls[0],
@@ -97,6 +98,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
                     color: Theme.of(context).primaryColor,
                     width: double.infinity,
                     child: ImageDisplay(
+                        blurHash: postInfo.blurHash,
                         imageUrl: postInfo.postUrl.isNotEmpty
                             ? postInfo.postUrl
                             : postInfo.imagesUrls[0],
