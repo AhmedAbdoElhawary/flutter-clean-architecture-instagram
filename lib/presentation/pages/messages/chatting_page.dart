@@ -20,7 +20,7 @@ import 'package:instagram/presentation/widgets/belong_to/messages_w/record_view.
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_viewer.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/presentation/pages/profile/user_profile_page.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -301,7 +301,7 @@ class _ChattingPageState extends State<ChattingPage>
                                     },
                                     child: Hero(
                                       tag: imageUrl,
-                                      child: ImageDisplay(
+                                      child: NetworkImageDisplay(
                                         blurHash: messageInfo.blurHash,
                                         imageUrl: imageUrl,
                                         boxFit: BoxFit.cover,
@@ -660,7 +660,7 @@ class _ChattingPageState extends State<ChattingPage>
   CircleAvatar circleAvatarOfImage() {
     return CircleAvatar(
         child: ClipOval(
-            child: ImageDisplay(
+            child: NetworkImageDisplay(
           imageUrl: widget.userInfo.profileImageUrl,
           boxFit: BoxFit.cover,
         )),
