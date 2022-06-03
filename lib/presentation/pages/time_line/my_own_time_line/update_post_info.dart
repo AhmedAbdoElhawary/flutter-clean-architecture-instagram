@@ -16,7 +16,7 @@ import 'package:instagram/presentation/widgets/belong_to/time_line_w/points_scro
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
 class UpdatePostInfo extends StatefulWidget {
   final Post oldPostInfo;
@@ -179,7 +179,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                     )
                   : Hero(
                       tag: postUrl,
-                      child: ImageDisplay(
+                      child: NetworkImageDisplay(
                         blurHash: postInfo.blurHash,
                         bodyHeight: bodyHeight,
                         imageUrl: postUrl,
