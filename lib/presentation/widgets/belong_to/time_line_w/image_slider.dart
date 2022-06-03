@@ -1,7 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-class ImageSlider extends StatelessWidget {
+class ImageSlider extends StatefulWidget {
   final List<dynamic> imagesUrls;
   final Function(int, CarouselPageChangedReason) updateImageIndex;
   const ImageSlider(
@@ -9,14 +10,26 @@ class ImageSlider extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<ImageSlider> createState() => _ImageSliderState();
+}
+
+class _ImageSliderState extends State<ImageSlider> {
+  @override
+  void didChangeDependencies() {
+    widget.imagesUrls.map((url)=> precacheImage(NetworkImage(url), context));
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CarouselSlider(
-      items: imagesUrls.map((url) {
+      items: widget.imagesUrls.map((url) {
+        precacheImage(NetworkImage(url), context);
         return Hero(
           tag: url,
-          child: Image.network(
-            url,
-            fit: BoxFit.fitWidth,
+          child: CachedNetworkImage(
+            imageUrl: url,
+            fit: BoxFit.cover,
             width: MediaQuery.of(context).size.width,
           ),
         );
@@ -24,7 +37,7 @@ class ImageSlider extends StatelessWidget {
       options: CarouselOptions(
         viewportFraction: 1.0,
         enableInfiniteScroll: false,
-        onPageChanged: updateImageIndex,
+        onPageChanged: widget.updateImageIndex,
       ),
     );
   }
