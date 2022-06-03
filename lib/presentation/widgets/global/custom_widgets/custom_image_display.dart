@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram/core/resources/color_manager.dart';
+import 'package:octo_image/octo_image.dart';
 
-class ImageDisplay extends StatelessWidget {
+class ImageDisplay extends StatefulWidget {
   final String imageUrl;
+  final String blurHash;
   final BoxFit boxFit;
   final bool circularLoading;
   final double aspectRatio;
@@ -12,6 +13,7 @@ class ImageDisplay extends StatelessWidget {
   const ImageDisplay(
       {Key? key,
       required this.imageUrl,
+      this.blurHash = "",
       this.bodyHeight = 0,
       this.aspectRatio = 0,
       this.circularLoading = true,
@@ -19,57 +21,59 @@ class ImageDisplay extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<ImageDisplay> createState() => _ImageDisplayState();
+}
+
+class _ImageDisplayState extends State<ImageDisplay> {
+  @override
+  void didChangeDependencies() {
+    precacheImage(NetworkImage(widget.imageUrl), context);
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return aspectRatio <= 0.2
-        ? buildImage()
-        : AspectRatio(
-            aspectRatio: aspectRatio < .5
-                ? aspectRatio / aspectRatio / aspectRatio
-                : aspectRatio,
-            child: buildImage(),
-          );
+    return widget.aspectRatio == 0
+        ? buildOctoImage(height: null)
+        : buildImage();
   }
 
   Widget buildImage() {
-    return CachedNetworkImage(
-      imageUrl: imageUrl,
-      width: double.infinity,
-      imageBuilder: (context, imageProvider) => Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: imageProvider,
-            fit: boxFit,
-          ),
-        ),
-      ),
-      placeholder: (context, url) => Center(
-        child: circularLoading
-            ? loadingWidget(aspectRatio)
-            : const CircleAvatar(
-                radius: 15, backgroundColor: ColorManager.lowOpacityGrey),
-      ),
-      errorWidget: (context, url, error) => SizedBox(
-        width: double.infinity,
-        height: aspectRatio,
-        child: Icon(Icons.warning_amber_rounded,
-            size: 50, color: Theme.of(context).focusColor),
-      ),
+    return AspectRatio(
+      aspectRatio: widget.aspectRatio,
+      child: buildOctoImage(),
     );
   }
 
-  Widget loadingWidget(double aspectRatio) {
+  OctoImage buildOctoImage({double? height = double.infinity}) {
+    return OctoImage(
+      image: CachedNetworkImageProvider(widget.imageUrl),
+      errorBuilder: (context, url, error) => buildSizedBox(),
+      fit: BoxFit.cover,
+      height: height,
+      width: double.infinity,
+      placeholderBuilder: widget.blurHash.isNotEmpty
+          ? OctoPlaceholder.blurHash(widget.blurHash)
+          : (context) => Center(child: loadingWidget()),
+    );
+  }
+
+  SizedBox buildSizedBox() {
+    return SizedBox(
+      width: double.infinity,
+      height: widget.aspectRatio,
+      child: Icon(Icons.warning_amber_rounded,
+          size: 50, color: Theme.of(context).focusColor),
+    );
+  }
+
+  Widget loadingWidget() {
+    double aspectRatio = widget.aspectRatio;
     return aspectRatio == 0
         ? buildSizedBox()
         : AspectRatio(
             aspectRatio: aspectRatio,
             child: buildSizedBox(),
           );
-  }
-
-  Widget buildSizedBox() {
-    return Container(
-      width: double.infinity,
-      color: ColorManager.black26,
-    );
   }
 }

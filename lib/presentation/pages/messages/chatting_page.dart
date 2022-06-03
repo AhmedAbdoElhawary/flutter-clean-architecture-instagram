@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/functions/image_picker.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -292,6 +293,7 @@ class _ChattingPageState extends State<ChattingPage>
                                         CupertinoPageRoute(
                                           builder: (context) {
                                             return PictureViewer(
+                                                blurHash: messageInfo.blurHash,
                                                 imageUrl: imageUrl);
                                           },
                                         ),
@@ -300,6 +302,7 @@ class _ChattingPageState extends State<ChattingPage>
                                     child: Hero(
                                       tag: imageUrl,
                                       child: ImageDisplay(
+                                        blurHash: messageInfo.blurHash,
                                         imageUrl: imageUrl,
                                         boxFit: BoxFit.cover,
                                       ),
@@ -519,10 +522,14 @@ class _ChattingPageState extends State<ChattingPage>
                     File? pickImage = await imageCameraPicker();
                     if (pickImage != null) {
                       isMessageLoaded.value = true;
-                      newMessageInfo.value = newMessage(isThatImage: true);
+                      String blurHash = await blurHashEncode(pickImage);
+
+                      newMessageInfo.value =
+                          newMessage(blurHash: blurHash, isThatImage: true);
                       newMessageInfo.value!.imageUrl = pickImage.path;
                       messageCubit.sendMessage(
-                          messageInfo: newMessage(isThatImage: true),
+                          messageInfo:
+                              newMessage(blurHash: blurHash, isThatImage: true),
                           pathOfPhoto: pickImage.path);
                       scrollToLastIndex(context);
                     } else {
@@ -618,11 +625,12 @@ class _ChattingPageState extends State<ChattingPage>
           File? pickImage = await imageGalleryPicker();
           if (pickImage != null) {
             isMessageLoaded.value = true;
-            newMessageInfo.value = newMessage(isThatImage: true);
+            String blurHash = await blurHashEncode(pickImage);
+            newMessageInfo.value =
+                newMessage(blurHash: blurHash, isThatImage: true);
             newMessageInfo.value!.imageUrl = pickImage.path;
-
             messageCubit.sendMessage(
-                messageInfo: newMessage(isThatImage: true),
+                messageInfo: newMessage(blurHash: blurHash, isThatImage: true),
                 pathOfPhoto: pickImage.path);
             scrollToLastIndex(context);
           } else {
@@ -638,11 +646,12 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Message newMessage({bool isThatImage = false}) {
+  Message newMessage({String blurHash = "", bool isThatImage = false}) {
     return Message(
       datePublished: DateOfNow.dateOfNow(),
       message: _textController.value.text,
       senderId: myPersonalId,
+      blurHash: blurHash,
       receiverId: widget.userInfo.userId,
       isThatImage: isThatImage,
     );

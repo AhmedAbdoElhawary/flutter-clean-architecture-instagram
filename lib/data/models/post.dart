@@ -7,6 +7,7 @@ class Post extends ParentPost {
   List<dynamic> imagesUrls;
   String postUid;
   double aspectRatio;
+  String blurHash;
   Post({
     required String datePublished,
     required String publisherId,
@@ -15,6 +16,7 @@ class Post extends ParentPost {
     this.postUrl = "",
     required this.imagesUrls,
     required this.aspectRatio,
+    required this.blurHash,
     String caption = "",
     required List<dynamic> comments,
     required List<dynamic> likes,
@@ -38,6 +40,7 @@ class Post extends ParentPost {
       publisherId: snap.data()!["publisherId"] ?? "",
       likes: snap.data()!["likes"] ?? [],
       comments: snap.data()!["comments"] ?? [],
+      blurHash: snap.data()!["blurHash"] ?? "",
       imagesUrls: snap.data()!["imagesUrls"] ?? [],
       postUid: snap.data()!["postUid"] ?? "",
       aspectRatio: snap.data()!["aspectRatio"] ?? 0.0,
@@ -53,6 +56,7 @@ class Post extends ParentPost {
         'comments': comments,
         'aspectRatio': aspectRatio,
         'imagesUrls': imagesUrls,
+        'blurHash': blurHash,
         'likes': likes,
         'postUid': postUid,
         "postUrl": postUrl,

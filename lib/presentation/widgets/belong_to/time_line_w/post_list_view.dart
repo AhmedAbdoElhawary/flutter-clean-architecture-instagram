@@ -62,6 +62,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
   late Widget videoStatusAnimation;
   String currentLanguage = 'en';
   ValueNotifier<int> initPosition = ValueNotifier(0);
+
   @override
   void initState() {
     videoStatusAnimation = Container();
@@ -408,6 +409,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
                       valueListenable: initPosition,
                       builder: (context, int positionValue, child) =>
                           PictureViewer(
+                              blurHash: postInfo.blurHash,
                               aspectRatio: postInfo.aspectRatio,
                               isThatImage: postInfo.isThatImage,
                               imageUrl: postInfo.postUrl.isNotEmpty
@@ -429,6 +431,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
                       : Hero(
                           tag: postInfo.postUrl,
                           child: ImageDisplay(
+                            blurHash: postInfo.blurHash,
                             aspectRatio: postInfo.aspectRatio,
                             bodyHeight: widget.bodyHeight,
                             imageUrl: postInfo.postUrl,
@@ -437,7 +440,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
                   : PlayThisVideo(
                       videoUrl: postInfo.postUrl, play: widget.playTheVideo),
             )),
-        Align(alignment: Alignment.center,child: videoStatusAnimation),
+        Align(alignment: Alignment.center, child: videoStatusAnimation),
       ],
     );
   }

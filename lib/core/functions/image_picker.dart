@@ -28,37 +28,9 @@ Future<File?> imageGalleryPicker() async {
   }
 }
 
-Future<List<File>?> multiImageGalleryPicker() async {
-  final ImagePicker _picker = ImagePicker();
-  final List<XFile>? images =
-      await _picker.pickMultiImage(maxHeight: 300, maxWidth: double.infinity);
-  List<File>? compressImages;
-  if (images != null) {
-    compressImages = [];
-    for (int i = 0; i < images.length; i++) {
-      File photo = File(images[i].path);
-      File? compressPhoto = await compressImage(photo);
-      if (compressPhoto != null) compressImages.add(compressPhoto);
-    }
-  }
-  return compressImages;
-}
-
 Future<File?> videoCameraPicker() async {
   final ImagePicker _picker = ImagePicker();
   final XFile? video = await _picker.pickVideo(source: ImageSource.camera);
-  if (video != null) {
-    File videoFile = File(video.path);
-    File? compressV = await compressVideo(videoFile);
-    return compressV;
-  } else {
-    return null;
-  }
-}
-
-Future<File?> videoGalleryPicker() async {
-  final ImagePicker _picker = ImagePicker();
-  final XFile? video = await _picker.pickVideo(source: ImageSource.gallery);
   if (video != null) {
     File videoFile = File(video.path);
     File? compressV = await compressVideo(videoFile);

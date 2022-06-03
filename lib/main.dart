@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:instagram/core/resources/langauge_manager.dart';
 import 'package:instagram/material_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,6 +27,7 @@ Future<SharedPreferences> init() async {
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
   await initializeDependencies();
+  await GetStorage.init();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,

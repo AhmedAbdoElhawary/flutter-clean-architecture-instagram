@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:instagram/config/themes/theme_service.dart';
 import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -39,11 +42,17 @@ class PersonalProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<PersonalProfilePage> {
-  bool rebuildUserInfo = false;
+  final SharedPreferences sharePrefs = injector<SharedPreferences>();
+  final rebuildUserInfo = ValueNotifier(false);
   Size imageSize = const Size(0.00, 0.00);
+  final darkTheme = ValueNotifier(false);
   List<Size> imagesSize = [];
 
-  final SharedPreferences sharePrefs = injector<SharedPreferences>();
+  @override
+  void initState() {
+    darkTheme.value = ThemeMode.dark == ThemeOfApp().theme;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,51 +65,57 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             .getUserFromUserName(widget.userName))
         : (await BlocProvider.of<FirestoreUserInfoCubit>(context)
             .getUserInfo(widget.personalId));
-    setState(() {
-      rebuildUserInfo = true;
-    });
+    rebuildUserInfo.value = true;
   }
 
   Widget scaffold() {
-    return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
-      bloc: widget.userName.isNotEmpty
-          ? (BlocProvider.of<FirestoreUserInfoCubit>(context)
-            ..getUserFromUserName(widget.userName))
-          : (BlocProvider.of<FirestoreUserInfoCubit>(context)
-            ..getUserInfo(widget.personalId)),
-      buildWhen: (previous, current) {
-        if (previous != current && current is CubitMyPersonalInfoLoaded) {
-          return true;
-        }
-        if (previous != current && current is CubitGetUserInfoFailed) {
-          return true;
-        }
-        if (rebuildUserInfo) {
-          rebuildUserInfo = false;
-          return true;
-        }
-        return false;
-      },
-      builder: (context, state) {
-        if (state is CubitMyPersonalInfoLoaded) {
-          return Scaffold(
-            appBar: appBar(state.userPersonalInfo.userName),
-            body: ProfilePage(
-              isThatMyPersonalId: true,
-              getData: getData,
-              userId: state.userPersonalInfo.userId,
-              userInfo: state.userPersonalInfo,
-              widgetsAboveTapBars: widgetsAboveTapBars(state.userPersonalInfo),
-            ),
-          );
-        } else if (state is CubitGetUserInfoFailed) {
-          ToastShow.toastStateError(state);
-          return Text(StringsManager.noPosts.tr(),
-              style: Theme.of(context).textTheme.bodyText1);
-        } else {
-          return const ThineCircularProgress();
-        }
-      },
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: ValueListenableBuilder(
+        valueListenable: rebuildUserInfo,
+        builder: (context, bool rebuildValue, child) =>
+            BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
+          bloc: widget.userName.isNotEmpty
+              ? (BlocProvider.of<FirestoreUserInfoCubit>(context)
+                ..getUserFromUserName(widget.userName))
+              : (BlocProvider.of<FirestoreUserInfoCubit>(context)
+                ..getUserInfo(widget.personalId)),
+          buildWhen: (previous, current) {
+            if (previous != current && current is CubitMyPersonalInfoLoaded) {
+              return true;
+            }
+            if (previous != current && current is CubitGetUserInfoFailed) {
+              return true;
+            }
+            if (rebuildValue) {
+              rebuildUserInfo.value = false;
+              return true;
+            }
+            return false;
+          },
+          builder: (context, state) {
+            if (state is CubitMyPersonalInfoLoaded) {
+              return Scaffold(
+                appBar: appBar(state.userPersonalInfo.userName),
+                body: ProfilePage(
+                  isThatMyPersonalId: true,
+                  getData: getData,
+                  userId: state.userPersonalInfo.userId,
+                  userInfo: state.userPersonalInfo,
+                  widgetsAboveTapBars:
+                      widgetsAboveTapBars(state.userPersonalInfo),
+                ),
+              );
+            } else if (state is CubitGetUserInfoFailed) {
+              ToastShow.toastStateError(state);
+              return Text(StringsManager.noPosts.tr(),
+                  style: Theme.of(context).textTheme.bodyText1);
+            } else {
+              return const ThineCircularProgress();
+            }
+          },
+        ),
+      ),
     );
   }
 
@@ -196,12 +211,13 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   }
 
   GestureDetector changeMode() {
-    final AppPrefMode _appPreferencesMode = injector<AppPrefMode>();
-
     return GestureDetector(
       onTap: () {
-        _appPreferencesMode.changeAppMode();
-        Phoenix.rebirth(context);
+        Get.changeThemeMode(ThemeOfApp().loadThemeFromBox()
+            ? ThemeMode.light
+            : ThemeMode.dark);
+        ThemeOfApp().saveThemeToBox(!ThemeOfApp().loadThemeFromBox());
+        darkTheme.value = ThemeMode.dark == ThemeOfApp().theme;
       },
       child: createSizedBox(StringsManager.changeTheme.tr(),
           icon: Icons.brightness_4_outlined),
@@ -259,10 +275,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
                           builder: (context) => EditProfilePage(userInfo),
                           maintainState: false));
               if (result != null) {
-                setState(() {
-                  rebuildUserInfo = true;
-                  userInfo = result;
-                });
+                rebuildUserInfo.value = true;
+                userInfo = result;
               }
             });
           },
@@ -322,9 +336,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         },
         maintainState: false));
 
-    setState(() {
-      rebuildUserInfo = true;
-    });
+    rebuildUserInfo.value = true;
   }
 
   createNewVideo() async {
@@ -337,9 +349,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           );
         },
         maintainState: false));
-    setState(() {
-      rebuildUserInfo = true;
-    });
+    rebuildUserInfo.value = true;
   }
 
   createNewPost() async {
@@ -352,9 +362,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           );
         },
         maintainState: false));
-    setState(() {
-      rebuildUserInfo = true;
-    });
+    rebuildUserInfo.value = true;
   }
 
   Widget createPost() {
@@ -367,21 +375,27 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       {String nameOfPath = '', IconData icon = Icons.grid_on_rounded}) {
     return SizedBox(
       height: 40,
-      child: Row(children: [
-        nameOfPath.isNotEmpty
-            ? SvgPicture.asset(
-                nameOfPath,
-                color: Theme.of(context).dialogBackgroundColor,
-                height: 25,
-              )
-            : Icon(icon, color: Theme.of(context).focusColor),
-        const SizedBox(width: 15),
-        Text(
-          text,
-          style:
-              getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
-        )
-      ]),
+      child: ValueListenableBuilder(
+        valueListenable: darkTheme,
+        builder: (context, bool themeValue, child) {
+          Color themeOfApp =
+              themeValue ? ColorManager.white : ColorManager.black;
+          return Row(children: [
+            nameOfPath.isNotEmpty
+                ? SvgPicture.asset(
+                    nameOfPath,
+                    color: Theme.of(context).dialogBackgroundColor,
+                    height: 25,
+                  )
+                : Icon(icon, color: themeOfApp),
+            const SizedBox(width: 15),
+            Text(
+              text,
+              style: getNormalStyle(color: themeOfApp, fontSize: 15),
+            )
+          ]);
+        },
+      ),
     );
   }
 }

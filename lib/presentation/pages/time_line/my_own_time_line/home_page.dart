@@ -121,8 +121,6 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         builder: (BuildContext context, PostState state) {
           if (state is CubitMyPersonalPostsLoaded) {
-            state.postsInfo
-                .sort((a, b) => a.datePublished.compareTo(b.datePublished));
             postsInfo.value = state.postsInfo;
             return postsInfo.value.isNotEmpty
                 ? inViewNotifier(state, bodyHeight)
