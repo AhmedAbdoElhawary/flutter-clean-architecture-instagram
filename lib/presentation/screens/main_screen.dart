@@ -31,9 +31,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        return true;
-      },
+      onWillPop: () async => true,
       child: ValueListenableBuilder(
         valueListenable: stopVideo,
         builder: (BuildContext context, bool value, __) {
@@ -44,10 +42,10 @@ class _MainScreenState extends State<MainScreen> {
                       : Theme.of(context).primaryColor,
                   height: 40,
                   items: [
-                    navigationBarItem("house_white.svg",value),
-                    navigationBarItem("search.svg",value),
-                    navigationBarItem("video.svg",value),
-                    navigationBarItem("shop_white.svg",value),
+                    navigationBarItem("house_white.svg", value),
+                    navigationBarItem("search.svg", value),
+                    navigationBarItem("video.svg", value),
+                    navigationBarItem("shop_white.svg", value),
                     BottomNavigationBarItem(
                       icon: BlocBuilder<FirestoreUserInfoCubit,
                           FirestoreGetUserInfoState>(builder: (context, state) {
@@ -71,9 +69,9 @@ class _MainScreenState extends State<MainScreen> {
                   ]),
               controller: controller,
               tabBuilder: (context, index) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) async {
-                    stopVideo.value = controller.index == 2 ? true : false;
-                  });
+                WidgetsBinding.instance.addPostFrameCallback((_) async {
+                  stopVideo.value = controller.index == 2 ? true : false;
+                });
 
                 switch (index) {
                   case 0:
@@ -86,8 +84,8 @@ class _MainScreenState extends State<MainScreen> {
                     );
                   case 1:
                     return CupertinoTabView(
-                      builder: (context) => CupertinoPageScaffold(
-                          child: AllUsersTimeLinePage()),
+                      builder: (context) =>
+                          CupertinoPageScaffold(child: AllUsersTimeLinePage()),
                     );
                   case 2:
                     return CupertinoTabView(
@@ -121,13 +119,12 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  BottomNavigationBarItem navigationBarItem(String fileName,bool value) {
+  BottomNavigationBarItem navigationBarItem(String fileName, bool value) {
     return BottomNavigationBarItem(
       icon: SvgPicture.asset(
         "assets/icons/$fileName",
         height: 25,
-        color:
-            value ? ColorManager.white : Theme.of(context).focusColor,
+        color: value ? ColorManager.white : Theme.of(context).focusColor,
       ),
     );
   }
