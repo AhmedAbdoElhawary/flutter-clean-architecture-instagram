@@ -7,6 +7,7 @@ class Message extends Equatable {
   String message;
   String receiverId;
   String messageUid;
+  String blurHash;
   String senderId;
   String imageUrl;
   String recordedUrl;
@@ -15,6 +16,7 @@ class Message extends Equatable {
   Message({
     required this.datePublished,
     required this.message,
+    required this.blurHash,
     required this.receiverId,
     required this.senderId,
     this.messageUid = "",
@@ -30,6 +32,7 @@ class Message extends Equatable {
       receiverId: snap.data()["receiverId"] ?? "",
       senderId: snap.data()["senderId"] ?? "",
       messageUid: snap.data()["messageUid"] ?? "",
+      blurHash: snap.data()["blurHash"] ?? "",
       imageUrl: snap.data()["imageUrl"] ?? "",
       recordedUrl: snap.data()["recordedUrl"] ?? "",
       isThatImage: snap.data()["isThatImage"] ?? false,
@@ -41,6 +44,7 @@ class Message extends Equatable {
         "message": message,
         "receiverId": receiverId,
         "senderId": senderId,
+        "blurHash": blurHash,
         "imageUrl": imageUrl,
         "recordedUrl": recordedUrl,
         "isThatImage": isThatImage,
@@ -53,6 +57,7 @@ class Message extends Equatable {
         receiverId,
         messageUid,
         senderId,
+        blurHash,
         imageUrl,
         recordedUrl,
         isThatImage
