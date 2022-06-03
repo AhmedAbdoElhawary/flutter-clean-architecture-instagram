@@ -21,10 +21,10 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  TextEditingController emailController = TextEditingController(text: "");
-  TextEditingController passwordController = TextEditingController(text: "");
-  TextEditingController confirmPasswordController =
-      TextEditingController(text: "");
+  final isToastShowed = ValueNotifier(false);
+  final emailController = TextEditingController(text: "");
+  final passwordController = TextEditingController(text: "");
+  final confirmPasswordController = TextEditingController(text: "");
   final AppPreferences _appPreferences = injector<AppPreferences>();
 
   @override
@@ -48,35 +48,33 @@ class _SignUpPageState extends State<SignUpPage> {
     return Builder(builder: (context) {
       FirestoreAddNewUserCubit userCubit =
           FirestoreAddNewUserCubit.get(context);
-      return BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState>(
-        builder: (context, authState) {
-          FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
-          if (authState is CubitAuthConfirmed) {
-            addNewUser(authState, userCubit);
-            moveToMain(authState);
-          } else if (authState is CubitAuthFailed) {
-            authFailed(authState);
-          }
-          return CustomElevatedButton(
-            isItDone: authState is! CubitAuthConfirming,
-            nameOfButton: StringsManager.signUp.tr(),
-            onPressed: () async {
-              await authCubit.signUp(UnRegisteredUser(
-                  email: emailController.text,
-                  password: passwordController.text,
-                  confirmPassword: confirmPasswordController.text));
-            },
-          );
-        },
+      return ValueListenableBuilder(
+        valueListenable: isToastShowed,
+        builder: (context, bool isToastShowedValue, child) =>
+            BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState>(
+          builder: (context, authState) {
+            FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
+            if (authState is CubitAuthConfirmed) {
+              addNewUser(authState, userCubit);
+              moveToMain(authState);
+            } else if (authState is CubitAuthFailed && !isToastShowedValue) {
+              authFailed(authState);
+            }
+            return CustomElevatedButton(
+              isItDone: authState is! CubitAuthConfirming,
+              nameOfButton: StringsManager.signUp.tr(),
+              onPressed: () async {
+                isToastShowed.value = false;
+                await authCubit.signUp(UnRegisteredUser(
+                    email: emailController.text,
+                    password: passwordController.text,
+                    confirmPassword: confirmPasswordController.text));
+              },
+            );
+          },
+        ),
       );
     });
-  }
-
-  Future<void> onPressed(FirebaseAuthCubit authCubit) async {
-    await authCubit.signUp(UnRegisteredUser(
-        email: emailController.text,
-        password: passwordController.text,
-        confirmPassword: confirmPasswordController.text));
   }
 
   moveToMain(CubitAuthConfirmed authState) {
@@ -90,6 +88,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   authFailed(CubitAuthFailed authState) {
+    isToastShowed.value = true;
     String error;
     try {
       error = authState.error.split(RegExp(r']'))[1];
