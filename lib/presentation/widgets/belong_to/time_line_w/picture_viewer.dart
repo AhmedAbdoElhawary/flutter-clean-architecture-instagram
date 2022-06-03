@@ -50,7 +50,7 @@ class PictureViewer extends StatelessWidget {
                 ? Hero(
                     tag: imageUrl,
                     child: ImageDisplay(
-                      blurHash:blurHash ,
+                      blurHash: blurHash,
                       aspectRatio: aspectRatio,
                       imageUrl: imageUrl,
                     ),
