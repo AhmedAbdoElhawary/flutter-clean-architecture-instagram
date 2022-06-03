@@ -61,7 +61,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
         children: <Widget>[
           SvgPicture.asset(
             IconsAssets.minusIcon,
-            color: ColorManager.black87,
+            color: Theme.of(context).focusColor,
             height: 40,
           ),
           Text(StringsManager.create.tr(),
