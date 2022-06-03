@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
 class PictureViewer extends StatelessWidget {
   final String imageUrl;
@@ -49,7 +49,7 @@ class PictureViewer extends StatelessWidget {
             child: isThatImage
                 ? Hero(
                     tag: imageUrl,
-                    child: ImageDisplay(
+                    child: NetworkImageDisplay(
                       blurHash: blurHash,
                       aspectRatio: aspectRatio,
                       imageUrl: imageUrl,
