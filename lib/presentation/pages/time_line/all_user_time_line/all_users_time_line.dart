@@ -23,9 +23,12 @@ class AllUsersTimeLinePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     rebuildUsersInfo.value = false;
-    return Scaffold(
-      body: blocBuilder(),
-      appBar: searchAppBar(context),
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Scaffold(
+        body: blocBuilder(),
+        appBar: searchAppBar(context),
+      ),
     );
   }
 
