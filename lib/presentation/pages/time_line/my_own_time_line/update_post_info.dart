@@ -172,6 +172,8 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
           child: postInfo.isThatImage
               ? (postInfo.imagesUrls.length > 1
                   ? ImageSlider(
+                      aspectRatio: postInfo.aspectRatio,
+                      blurHash: postInfo.blurHash,
                       imagesUrls: postInfo.imagesUrls,
                       updateImageIndex: _updateImageIndex,
                     )
