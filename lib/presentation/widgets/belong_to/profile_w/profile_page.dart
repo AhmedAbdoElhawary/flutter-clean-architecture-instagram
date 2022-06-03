@@ -40,8 +40,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool reBuild = false;
-  bool loading = false;
+  ValueNotifier<bool> reBuild = ValueNotifier(false);
+  ValueNotifier<bool> loading = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
@@ -71,36 +71,41 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget tapBar() {
-    return BlocBuilder<PostCubit, PostState>(
-      bloc: PostCubit.get(context)
-        ..getPostsInfo(
-            userId: widget.userInfo.userId,
-            postsIds: widget.userInfo.posts,
-            isThatForMyPosts: widget.isThatMyPersonalId),
-      buildWhen: (previous, current) {
-        if (reBuild) {
-          reBuild = false;
-          return true;
-        }
-        if (previous != current && current is CubitPostFailed) {
-          return true;
-        }
-        return previous != current &&
-            ((current is CubitMyPersonalPostsLoaded &&
-                    widget.isThatMyPersonalId) ||
-                (current is CubitPostsInfoLoaded &&
-                    !widget.isThatMyPersonalId));
-      },
-      builder: (BuildContext context, PostState state) {
-        if (state is CubitMyPersonalPostsLoaded && widget.isThatMyPersonalId) {
-          return columnOfWidgets(state.postsInfo);
-        } else if (state is CubitPostsInfoLoaded &&
-            !widget.isThatMyPersonalId) {
-          return columnOfWidgets(state.postsInfo);
-        } else {
-          return loadingWidget();
-        }
-      },
+    return ValueListenableBuilder(
+      valueListenable: reBuild,
+      builder: (context, bool reBuildValue, child) =>
+          BlocBuilder<PostCubit, PostState>(
+        bloc: PostCubit.get(context)
+          ..getPostsInfo(
+              userId: widget.userInfo.userId,
+              postsIds: widget.userInfo.posts,
+              isThatForMyPosts: widget.isThatMyPersonalId),
+        buildWhen: (previous, current) {
+          if (reBuildValue) {
+            reBuild.value = false;
+            return true;
+          }
+          if (previous != current && current is CubitPostFailed) {
+            return true;
+          }
+          return previous != current &&
+              ((current is CubitMyPersonalPostsLoaded &&
+                      widget.isThatMyPersonalId) ||
+                  (current is CubitPostsInfoLoaded &&
+                      !widget.isThatMyPersonalId));
+        },
+        builder: (BuildContext context, PostState state) {
+          if (state is CubitMyPersonalPostsLoaded &&
+              widget.isThatMyPersonalId) {
+            return columnOfWidgets(state.postsInfo);
+          } else if (state is CubitPostsInfoLoaded &&
+              !widget.isThatMyPersonalId) {
+            return columnOfWidgets(state.postsInfo);
+          } else {
+            return loadingWidget();
+          }
+        },
+      ),
     );
   }
 
@@ -188,17 +193,20 @@ class _ProfilePageState extends State<ProfilePage> {
     return [
       GestureDetector(
         onVerticalDragStart: (e) async {
-          setState(() {
-            loading = true;
-          });
+          loading.value = true;
           await widget.getData();
         },
         child: Column(
           children: [
-            AnimatedSwitcher(
-                duration: const Duration(seconds: 1),
-                switchInCurve: Curves.easeIn,
-                child: loading ? customDragLoading(bodyHeight) : Container()),
+            ValueListenableBuilder(
+              valueListenable: loading,
+              builder: (context, bool loadingValue, child) => AnimatedSwitcher(
+                  duration: const Duration(seconds: 1),
+                  switchInCurve: Curves.easeIn,
+                  child: loadingValue
+                      ? customDragLoading(bodyHeight)
+                      : Container()),
+            ),
             personalPhotoAndNumberInfo(userInfo, bodyHeight),
             Padding(
               padding: const EdgeInsetsDirectional.only(start: 15.0, top: 10),
@@ -290,9 +298,7 @@ class _ProfilePageState extends State<ProfilePage> {
             BlocProvider.of<FirestoreUserInfoCubit>(context).getUserInfo(
                 userInfo.userId,
                 isThatMyPersonalId: widget.isThatMyPersonalId);
-            setState(() {
-              reBuild = true;
-            });
+            reBuild.value = true;
           }
         },
         child: Column(
