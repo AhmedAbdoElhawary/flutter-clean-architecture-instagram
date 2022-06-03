@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
 class ImageSlider extends StatefulWidget {
   final List<dynamic> imagesUrls;
@@ -34,7 +34,7 @@ class _ImageSliderState extends State<ImageSlider> {
         precacheImage(NetworkImage(url), context);
         return Hero(
           tag: url,
-          child: ImageDisplay(
+          child: NetworkImageDisplay(
               blurHash: widget.blurHash,
               imageUrl: url,
               aspectRatio: widget.aspectRatio),
