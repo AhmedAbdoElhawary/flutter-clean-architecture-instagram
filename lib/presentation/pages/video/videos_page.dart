@@ -39,41 +39,44 @@ class VideosPageState extends State<VideosPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-        valueListenable: rebuildUserInfo,
-        builder: (context, bool rebuildValue, child) =>
-            BlocBuilder<PostCubit, PostState>(
-              bloc: BlocProvider.of<PostCubit>(context)..getAllPostInfo(),
-              buildWhen: (previous, current) {
-                if (previous != current && current is CubitAllPostsLoaded) {
-                  return true;
-                }
-                if (rebuildValue && current is CubitAllPostsLoaded) {
-                  rebuildUserInfo.value = false;
-                  return true;
-                }
-                return false;
-              },
-              builder: (context, state) {
-                if (state is CubitAllPostsLoaded) {
-                  return Scaffold(
-                    extendBodyBehindAppBar: true,
-                    appBar: appBar(),
-                    body: buildBody(state.allPostInfo),
-                  );
-                } else if (state is CubitPostFailed) {
-                  ToastShow.toastStateError(state);
-                  return Center(
-                      child: Text(
-                    StringsManager.noVideos.tr(),
-                    style: TextStyle(
-                        color: Theme.of(context).focusColor, fontSize: 20),
-                  ));
-                } else {
-                  return loadingWidget();
-                }
-              },
-            ));
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: ValueListenableBuilder(
+          valueListenable: rebuildUserInfo,
+          builder: (context, bool rebuildValue, child) =>
+              BlocBuilder<PostCubit, PostState>(
+                bloc: BlocProvider.of<PostCubit>(context)..getAllPostInfo(),
+                buildWhen: (previous, current) {
+                  if (previous != current && current is CubitAllPostsLoaded) {
+                    return true;
+                  }
+                  if (rebuildValue && current is CubitAllPostsLoaded) {
+                    rebuildUserInfo.value = false;
+                    return true;
+                  }
+                  return false;
+                },
+                builder: (context, state) {
+                  if (state is CubitAllPostsLoaded) {
+                    return Scaffold(
+                      extendBodyBehindAppBar: true,
+                      appBar: appBar(),
+                      body: buildBody(state.allPostInfo),
+                    );
+                  } else if (state is CubitPostFailed) {
+                    ToastShow.toastStateError(state);
+                    return Center(
+                        child: Text(
+                      StringsManager.noVideos.tr(),
+                      style: TextStyle(
+                          color: Theme.of(context).focusColor, fontSize: 20),
+                    ));
+                  } else {
+                    return loadingWidget();
+                  }
+                },
+              )),
+    );
   }
 
   Widget loadingWidget() {
