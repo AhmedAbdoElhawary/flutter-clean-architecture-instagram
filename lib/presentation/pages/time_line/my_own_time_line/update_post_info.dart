@@ -178,7 +178,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                   : Hero(
                       tag: postUrl,
                       child: ImageDisplay(
-                        aspectRatio: 0,
+                        blurHash: postInfo.blurHash,
                         bodyHeight: bodyHeight,
                         imageUrl: postUrl,
                       ),
