@@ -120,10 +120,10 @@ Double check install instructions for both
  - [ ] Calling video and voice in chat
  - [ ] Add stickers on chat
  - [ ] Send post to chats
- - [ ] control in dimension of selected image & video from gallery
+ - [x] control in dimension of selected image & video from gallery
  - [x] Custom gallery display
  - [ ] Filters support for images
- - [ ] Improve display loading of posts when open the app
+ - [x] Improve display loading of posts when open the app
  - [ ] Like & comment on story
  - [ ] Delete the story
  - [ ] Turn off commenting of a post
