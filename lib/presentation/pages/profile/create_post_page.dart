@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -35,7 +36,7 @@ class CreatePostPage extends StatefulWidget {
 
 class _CreatePostPageState extends State<CreatePostPage> {
   bool isSwitched = false;
-  bool isItDone = true;
+  final isItDone = ValueNotifier(true);
 
   TextEditingController captionController = TextEditingController(text: "");
 
@@ -152,30 +153,33 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 listen: false);
         UserPersonalInfo? personalInfo = userCubit.myPersonalInfo;
 
-        return Builder(
-          builder: (builder2context) {
-            return !isItDone
-                ? const CustomCircularProgress(ColorManager.blue)
-                : IconButton(
-                    onPressed: () =>
-                        createPost(personalInfo!, userCubit, builder2context),
-                    icon: const Icon(
-                      Icons.check_rounded,
-                      size: 30,
-                      color: ColorManager.blue,
-                    ));
-          },
+        return ValueListenableBuilder(
+          valueListenable: isItDone,
+          builder: (context, bool isItDoneValue, child) => Builder(
+            builder: (builder2context) {
+              return !isItDoneValue
+                  ? const CustomCircularProgress(ColorManager.blue)
+                  : IconButton(
+                      onPressed: () async =>
+                          createPost(personalInfo!, userCubit, builder2context),
+                      icon: const Icon(
+                        Icons.check_rounded,
+                        size: 30,
+                        color: ColorManager.blue,
+                      ));
+            },
+          ),
         );
       })
     ];
   }
 
-  createPost(UserPersonalInfo personalInfo, FirestoreUserInfoCubit userCubit,
-      BuildContext builder2context) {
-    Post postInfo = addPostInfo(personalInfo);
-    setState(() {
-      isItDone = false;
-    });
+  Future<void> createPost(UserPersonalInfo personalInfo,
+      FirestoreUserInfoCubit userCubit, BuildContext builder2context) async {
+    isItDone.value = false;
+    String blurHash = await blurHashEncode(widget.selectedFile);
+    Post postInfo = addPostInfo(personalInfo, blurHash);
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       PostCubit postCubit =
           BlocProvider.of<PostCubit>(builder2context, listen: false);
@@ -189,9 +193,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
               userId: personalInfo.userId,
               postsIds: personalInfo.posts,
               isThatForMyPosts: true);
-          setState(() {
-            isItDone = true;
-          });
+          isItDone.value = true;
         }
       });
       Navigator.of(context).pushAndRemoveUntil(
@@ -201,12 +203,13 @@ class _CreatePostPageState extends State<CreatePostPage> {
     });
   }
 
-  Post addPostInfo(UserPersonalInfo personalInfo) {
+  Post addPostInfo(UserPersonalInfo personalInfo, String blurHash) {
     return Post(
       aspectRatio: widget.aspectRatio,
       publisherId: personalInfo.userId,
       datePublished: DateOfNow.dateOfNow(),
       caption: captionController.text,
+      blurHash: blurHash,
       imagesUrls: [],
       comments: [],
       likes: [],
