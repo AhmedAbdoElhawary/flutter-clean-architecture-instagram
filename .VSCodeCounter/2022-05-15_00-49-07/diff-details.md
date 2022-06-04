@@ -270,7 +270,7 @@ Total : 319 files,  1357 codes, -96 comments, 36 blanks, all 1297 lines
 | [lib/presentation/widgets/global/custom_widgets/custom_grid_view.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart) | Dart | 169 | 1 | 12 | 182 |
 | [lib/presentation/widgets/global/custom_widgets/custom_posts_display.dart](/lib/presentation/widgets/global/custom_widgets/custom_posts_display.dart) | Dart | 113 | 0 | 10 | 123 |
 | [lib/presentation/widgets/global/custom_widgets/custom_text_field.dart](/lib/presentation/widgets/global/custom_widgets/custom_text_field.dart) | Dart | 42 | 0 | 5 | 47 |
-| [lib/presentation/widgets/global/image_display.dart](/lib/presentation/widgets/global/custom_widgets/custom_image_display.dart) | Dart | 74 | 0 | 7 | 81 |
+| [lib/presentation/widgets/global/image_display.dart](/lib/presentation/widgets/global/custom_widgets/custom_network_image_display.dart) | Dart | 74 | 0 | 7 | 81 |
 | [lib/presentation/widgets/instagram_story_swipe.dart](/lib/presentation/widgets/instagram_story_swipe.dart) | Dart | -84 | 0 | -14 | -98 |
 | [lib/presentation/widgets/mmmmmmmmmm/lib/app/app.dart](/lib/presentation/widgets/mmmmmmmmmm/lib/app/app.dart) | Dart | -5 | 0 | -1 | -6 |
 | [lib/presentation/widgets/mmmmmmmmmm/lib/app/navigation/custom_rect_tween.dart](/lib/presentation/widgets/mmmmmmmmmm/lib/app/navigation/custom_rect_tween.dart) | Dart | -19 | -6 | -4 | -29 |

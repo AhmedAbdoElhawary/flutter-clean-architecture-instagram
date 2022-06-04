@@ -5,7 +5,7 @@ import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/animated_dialog.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_image_display.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_posts_display.dart';
 
 // ignore: must_be_immutable
@@ -57,7 +57,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
           },
           onLongPressEnd: (details) => _popupDialog?.remove(),
           child: widget.postClickedInfo.isThatImage
-              ? ImageDisplay(
+              ? NetworkImageDisplay(
                   blurHash: widget.postClickedInfo.blurHash,
                   imageUrl: widget.postClickedInfo.postUrl.isNotEmpty
                       ? widget.postClickedInfo.postUrl
@@ -97,7 +97,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
                 ? Container(
                     color: Theme.of(context).primaryColor,
                     width: double.infinity,
-                    child: ImageDisplay(
+                    child: NetworkImageDisplay(
                         blurHash: postInfo.blurHash,
                         imageUrl: postInfo.postUrl.isNotEmpty
                             ? postInfo.postUrl
