@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,7 +10,6 @@ import 'package:instagram/presentation/customPackages/crop_image/crop_image.dart
 import 'package:instagram/presentation/customPackages/crop_image/crop_options.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/pages/profile/custom_gallery_page/camera_page.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/fetching_media_gallery.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -31,30 +31,27 @@ class CustomGalleryDisplay extends StatefulWidget {
 
 class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     with TickerProviderStateMixin {
-  late ValueNotifier<TabController> tabController =
-      ValueNotifier(TabController(length: 2, vsync: this));
+  late TabController tabController = TabController(length: 2, vsync: this);
   ValueNotifier<bool> clearVideoRecord = ValueNotifier(false);
   ValueNotifier<bool> redDeleteText = ValueNotifier(false);
-  ValueNotifier<SelectedPage> selectedPage = ValueNotifier(SelectedPage.left);
+  SelectedPage selectedPage = SelectedPage.left;
   late Future<void> initializeControllerFuture;
-  final ValueNotifier<List<File>> multiSelectedImage = ValueNotifier([]);
+  List<File> multiSelectedImage = [];
   final cropKey = GlobalKey<CropState>();
   late CameraController controller;
-  final ValueNotifier<List<FutureBuilder<File?>>> _mediaList =
-      ValueNotifier([]);
-  final ValueNotifier<List<File?>> allImages = ValueNotifier([]);
-  final neverScrollPhysics = ValueNotifier(false);
-  final multiSelectionMode = ValueNotifier(false);
-  final showDeleteText = ValueNotifier(false);
-  final selectedVideo = ValueNotifier(false);
-  final isImagesReady = ValueNotifier(true);
-  final ValueNotifier<File?> selectedImage = ValueNotifier(null);
-  final expandImage = ValueNotifier(false);
-  final shrinkWrap = ValueNotifier(false);
-  final selectedPaged = ValueNotifier(0);
-  final remove = ValueNotifier(false);
-  final ValueNotifier<bool?> stopScrollTab = ValueNotifier(null);
-  final currentPage = ValueNotifier(0);
+  final List<FutureBuilder<Uint8List?>> _mediaList = [];
+  List<File?> allImages = [];
+  bool neverScrollPhysics = false;
+  bool showDeleteText = false;
+  bool selectedVideo = false;
+  bool isImagesReady = true;
+  File? selectedImage;
+  bool expandImage = false;
+  bool shrinkWrap = false;
+  int selectedPaged = 0;
+  bool remove = false;
+  bool? stopScrollTab;
+  int currentPage = 0;
   bool initial = true;
   late int lastPage;
   bool? primary;
@@ -72,7 +69,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
       enableAudio: true,
     );
     initializeControllerFuture = controller.initialize();
-    isImagesReady.value = false;
+    isImagesReady = false;
     _fetchNewMedia();
     super.initState();
   }
@@ -83,7 +80,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     super.dispose();
   }
 
-  bool _handleScrollEvent(ScrollNotification scroll, int currentPage) {
+  bool _handleScrollEvent(ScrollNotification scroll) {
     if (scroll.metrics.pixels / scroll.metrics.maxScrollExtent > 0.33) {
       if (currentPage != lastPage) {
         _fetchNewMedia();
@@ -94,45 +91,89 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
   }
 
   _fetchNewMedia() async {
-    lastPage = currentPage.value;
+    lastPage = currentPage;
     var result = await PhotoManager.requestPermissionExtend();
     if (result.isAuth) {
       List<AssetPathEntity> albums =
           await PhotoManager.getAssetPathList(onlyAll: true);
       List<AssetEntity> media =
-          await albums[0].getAssetListPaged(page: currentPage.value, size: 60);
-      List<FutureBuilder<File?>> temp = [];
+          await albums[0].getAssetListPaged(page: currentPage, size: 60);
+      List<FutureBuilder<Uint8List?>> temp = [];
       List<File?> imageTemp = [];
       for (int i = 0; i < media.length; i++) {
-        await getImageGallery(media, i).then((value) async {
-          temp.add(value);
-          await value.future!.then((File? value) {
-            if (value != null) {
-              imageTemp.add(value);
-            }
-          });
-        });
+        FutureBuilder<Uint8List?> gridViewImage =
+            await lowQualityImage(media, i);
+        File? image = await highQualityImage(media, i);
+
+        temp.add(gridViewImage);
+        imageTemp.add(image);
       }
-      _mediaList.value.addAll(temp);
-      allImages.value.addAll(imageTemp);
-      currentPage.value++;
-      isImagesReady.value = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        setState(() {
+          _mediaList.addAll(temp);
+          allImages.addAll(imageTemp);
+          currentPage++;
+          isImagesReady = true;
+        });
+      });
     } else {
       PhotoManager.openSetting();
     }
   }
 
+  bool multiSelectionMode = false;
+
+  Future<File?> highQualityImage(List<AssetEntity> media, int i) async {
+    return media[i].loadFile();
+  }
+
+  Future<FutureBuilder<Uint8List?>> lowQualityImage(
+      List<AssetEntity> media, int i) async {
+    FutureBuilder<Uint8List?> futureBuilder = FutureBuilder(
+      future: media[i].thumbnailDataWithSize(const ThumbnailSize(200, 200)),
+      builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          Uint8List? image = snapshot.data;
+          if (image != null) {
+            return Container(
+              color: Colors.grey,
+              child: Stack(
+                children: <Widget>[
+                  Positioned.fill(
+                    child: Image.memory(
+                      image,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  if (media[i].type == AssetType.video)
+                    const Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 5, bottom: 5),
+                        child: Icon(
+                          Icons.videocam,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          }
+        }
+        return Container();
+      },
+    );
+    return futureBuilder;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: currentPage,
-      builder: (context, int currentPageValue, child) =>
-          NotificationListener<ScrollNotification>(
-        onNotification: (ScrollNotification scroll) {
-          return _handleScrollEvent(scroll, currentPageValue);
-        },
-        child: defaultTabController(),
-      ),
+    return NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification scroll) {
+        return _handleScrollEvent(scroll);
+      },
+      child: defaultTabController(),
     );
   }
 
@@ -198,13 +239,15 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
         padding: const EdgeInsets.all(14.0),
         child: GestureDetector(
           onTap: () {
-            if (!redDeleteText.value) {
-              redDeleteText.value = true;
-            } else {
-              clearVideoRecord.value = true;
-              showDeleteText.value = false;
-              redDeleteText.value = false;
-            }
+            setState(() {
+              if (!redDeleteText.value) {
+                redDeleteText.value = true;
+              } else {
+                clearVideoRecord.value = true;
+                showDeleteText = false;
+                redDeleteText.value = false;
+              }
+            });
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -229,16 +272,20 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
   }
 
   replacingDeleteWidget(bool showDeleteText) {
-    this.showDeleteText.value = showDeleteText;
+    setState(() {
+      this.showDeleteText = showDeleteText;
+    });
   }
 
   moveToVideo() {
-    selectedPaged.value = 2;
-    selectedPage.value = SelectedPage.right;
-    tabController.value.animateTo(1);
-    selectedVideo.value = true;
-    stopScrollTab.value = true;
-    remove.value = true;
+    selectedPaged = 2;
+    setState(() {
+      selectedPage = SelectedPage.right;
+      tabController.animateTo(1);
+      selectedVideo = true;
+      stopScrollTab = true;
+      remove = true;
+    });
   }
 
   DefaultTabController defaultTabController() {
@@ -250,73 +297,43 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
           child: Column(
             children: [
               Expanded(
-                child: ValueListenableBuilder(
-                  valueListenable: tabController,
-                  builder: (context, TabController tabControllerValue, child) =>
-                      TabBarView(
-                    controller: tabControllerValue,
-                    dragStartBehavior: DragStartBehavior.start,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      ValueListenableBuilder(
-                          valueListenable: isImagesReady,
-                          builder: (context, bool isImagesReadyValue, child) {
-                            if (isImagesReadyValue) {
-                              return ValueListenableBuilder(
-                                valueListenable: _mediaList,
-                                builder: (context,
-                                        List<FutureBuilder<File?>>
-                                            mediaListValue,
-                                        child) =>
-                                    CustomScrollView(
-                                  slivers: [
-                                    sliverAppBar(),
-                                    sliverSelectedImage(),
-                                    sliverGridView(mediaListValue),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return loadingWidget();
-                            }
-                          }),
-                      ValueListenableBuilder(
-                        valueListenable: selectedVideo,
-                        builder: (context, bool selectedVideoValue, child) =>
-                            CustomCameraDisplay(
-                          cameras: widget.cameras,
-                          controller: controller,
-                          initializeControllerFuture:
-                              initializeControllerFuture,
-                          replacingTabBar: replacingDeleteWidget,
-                          clearVideoRecord: clearVideoRecord,
-                          redDeleteText: redDeleteText,
-                          moveToVideoScreen: moveToVideo,
-                          selectedVideo: selectedVideoValue,
-                        ),
+                child: TabBarView(
+                  controller: tabController,
+                  dragStartBehavior: DragStartBehavior.start,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    if (isImagesReady) ...[
+                      CustomScrollView(
+                        slivers: [
+                          sliverAppBar(),
+                          sliverSelectedImage(),
+                          sliverGridView(),
+                        ],
                       ),
+                    ] else ...[
+                      loadingWidget()
                     ],
-                  ),
+                    CustomCameraDisplay(
+                      cameras: widget.cameras,
+                      controller: controller,
+                      initializeControllerFuture: initializeControllerFuture,
+                      replacingTabBar: replacingDeleteWidget,
+                      clearVideoRecord: clearVideoRecord,
+                      redDeleteText: redDeleteText,
+                      moveToVideoScreen: moveToVideo,
+                      selectedVideo: selectedVideo,
+                    ),
+                  ],
                 ),
               ),
-              if (multiSelectedImage.value.length < 10) ...[
-                ValueListenableBuilder(
-                  valueListenable: multiSelectionMode,
-                  builder: (context, bool multiSelectionModeValue, child) =>
-                      Visibility(
-                    visible: !multiSelectionModeValue,
-                    child: ValueListenableBuilder(
-                      valueListenable: showDeleteText,
-                      builder: (context, bool showDeleteTextValue, child) =>
-                          AnimatedSwitcher(
-                              duration: const Duration(seconds: 1),
-                              switchInCurve: Curves.easeIn,
-                              child: showDeleteTextValue
-                                  ? tapBarMessage(true)
-                                  : tabBar()),
-                    ),
-                  ),
-                )
+              if (multiSelectedImage.length < 10) ...[
+                Visibility(
+                  visible: !multiSelectionMode,
+                  child: AnimatedSwitcher(
+                      duration: const Duration(seconds: 1),
+                      switchInCurve: Curves.easeIn,
+                      child: showDeleteText ? tapBarMessage(true) : tabBar()),
+                ),
               ] else ...[
                 tapBarMessage(false)
               ],
@@ -331,12 +348,14 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
       {required bool isThatVideo,
       required int numPage,
       required SelectedPage selectedPage}) {
-    selectedPaged.value = numPage;
-    selectedPage = selectedPage;
-    tabController.value.animateTo(numPage);
-    selectedVideo.value = isThatVideo;
-    stopScrollTab.value = isThatVideo;
-    remove.value = isThatVideo;
+    selectedPaged = numPage;
+    setState(() {
+      selectedPage = selectedPage;
+      tabController.animateTo(numPage);
+      selectedVideo = isThatVideo;
+      stopScrollTab = isThatVideo;
+      remove = isThatVideo;
+    });
   }
 
   Widget tabBar() {
@@ -346,102 +365,83 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
         Row(
           children: [
             Expanded(
-              child: ValueListenableBuilder(
-                valueListenable: tabController,
-                builder: (context, TabController tabControllerValue, child) =>
-                    ValueListenableBuilder(
-                  valueListenable: selectedVideo,
-                  builder: (context, bool selectedVideoValue, child) => TabBar(
-                    controller: tabControllerValue,
-                    unselectedLabelColor: Colors.grey,
-                    labelColor: selectedVideoValue
-                        ? Colors.grey
-                        : Theme.of(context).focusColor,
-                    indicatorColor: !selectedVideoValue
-                        ? Theme.of(context).focusColor
-                        : Colors.transparent,
-                    labelPadding: const EdgeInsets.all(13),
-                    tabs: [
-                      GestureDetector(
-                        onTap: () {
-                          centerPage(
-                              isThatVideo: false,
-                              numPage: 0,
-                              selectedPage: SelectedPage.left);
-                        },
-                        child: Text(StringsManager.gallery.tr(),
-                            style: const TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w500)),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          centerPage(
-                              isThatVideo: false,
-                              numPage: 1,
-                              selectedPage: SelectedPage.center);
-                        },
-                        child: Text(StringsManager.photo.tr(),
-                            style: const TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w500)),
-                      ),
-                    ],
+              child: TabBar(
+                controller: tabController,
+                unselectedLabelColor: Colors.grey,
+                labelColor:
+                    selectedVideo ? Colors.grey : Theme.of(context).focusColor,
+                indicatorColor: !selectedVideo
+                    ? Theme.of(context).focusColor
+                    : Colors.transparent,
+                labelPadding: const EdgeInsets.all(13),
+                tabs: [
+                  GestureDetector(
+                    onTap: () {
+                      centerPage(
+                          isThatVideo: false,
+                          numPage: 0,
+                          selectedPage: SelectedPage.left);
+                    },
+                    child: Text(StringsManager.gallery.tr(),
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500)),
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () {
+                      centerPage(
+                          isThatVideo: false,
+                          numPage: 1,
+                          selectedPage: SelectedPage.center);
+                    },
+                    child: Text(StringsManager.photo.tr(),
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500)),
+                  ),
+                ],
               ),
             ),
             GestureDetector(
               onTap: () {
-                selectedPaged.value = 2;
-                tabController.value.animateTo(1);
-                selectedPage.value = SelectedPage.right;
-                selectedVideo.value = true;
-                stopScrollTab.value = true;
-                remove.value = true;
+                selectedPaged = 2;
+                setState(() {
+                  tabController.animateTo(1);
+                  selectedPage = SelectedPage.right;
+                  selectedVideo = true;
+                  stopScrollTab = true;
+                  remove = true;
+                });
               },
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 14.0, horizontal: 40),
-                child: ValueListenableBuilder(
-                  valueListenable: selectedVideo,
-                  builder: (context, bool selectedVideoValue, child) => Text(
-                      StringsManager.video.tr(),
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: selectedVideoValue
-                              ? Theme.of(context).focusColor
-                              : Colors.grey,
-                          fontWeight: FontWeight.w500)),
-                ),
+                child: Text(StringsManager.video.tr(),
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: selectedVideo
+                            ? Theme.of(context).focusColor
+                            : Colors.grey,
+                        fontWeight: FontWeight.w500)),
               ),
             ),
           ],
         ),
-        ValueListenableBuilder(
-          valueListenable: remove,
-          builder: (context, bool removeValue, child) => Visibility(
-            visible: removeValue,
-            child: ValueListenableBuilder(
-              valueListenable: selectedPage,
-              builder: (context, SelectedPage selectedPageValue, child) =>
-                  AnimatedPositioned(
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeIn,
-                      onEnd: () {
-                        if (selectedPageValue != SelectedPage.right) {
-                          remove.value = false;
-                        }
-                      },
-                      left: selectedPageValue == SelectedPage.left
-                          ? 0
-                          : (selectedPageValue == SelectedPage.center
-                              ? 120
-                              : 240),
-                      child: Container(
-                          height: 2,
-                          width: 120,
-                          color: Theme.of(context).focusColor)),
-            ),
-          ),
+        Visibility(
+          visible: remove,
+          child: AnimatedPositioned(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeIn,
+              onEnd: () {
+                if (selectedPage != SelectedPage.right) {
+                  setState(() {
+                    remove = false;
+                  });
+                }
+              },
+              left: selectedPage == SelectedPage.left
+                  ? 0
+                  : (selectedPage == SelectedPage.center ? 120 : 240),
+              child: Container(
+                  height: 2, width: 120, color: Theme.of(context).focusColor)),
         ),
       ],
     );
@@ -466,9 +466,8 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
           icon: const Icon(Icons.arrow_forward_rounded,
               color: Colors.blue, size: 30),
           onPressed: () async {
-            double aspect = expandImage.value ? 6 / 8 : 1.0;
-            if (multiSelectedImage.value.isEmpty) {
-              File? image = selectedImage.value;
+            if (multiSelectedImage.isEmpty) {
+              File? image = selectedImage;
               if (image != null) {
                 File? croppedImage = await cropImage(image);
                 File? finalImage = await compressImage(croppedImage!);
@@ -478,17 +477,17 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                           builder: (context) => CreatePostPage(
                               selectedFile: finalImage,
                               isThatImage: true,
-                              aspectRatio: aspect),
+                              aspectRatio: 360),
                           maintainState: false));
                 }
               }
             } else {
               List<File> selectedImages = [];
-              for (int i = 0; i < multiSelectedImage.value.length; i++) {
-                File? croppedImage =
-                    await cropImage(multiSelectedImage.value[i]);
-                if (croppedImage != null) {
-                  selectedImages.add(croppedImage);
+              for (int i = 0; i < multiSelectedImage.length; i++) {
+                File? croppedImage = await cropImage(multiSelectedImage[i]);
+                File? finalImage = await compressImage(croppedImage!);
+                if (finalImage != null) {
+                  selectedImages.add(finalImage);
                 }
               }
               if (selectedImages.isNotEmpty) {
@@ -498,7 +497,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                             selectedFile: selectedImages[0],
                             multiSelectedFiles: selectedImages,
                             isThatImage: true,
-                            aspectRatio: aspect),
+                            aspectRatio: 360),
                         maintainState: false));
               }
             }
@@ -530,104 +529,85 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
 
   SliverAppBar sliverSelectedImage() {
     return SliverAppBar(
-        automaticallyImplyLeading: false,
-        floating: true,
-        stretch: true,
-        pinned: true,
-        snap: true,
-        backgroundColor: Theme.of(context).primaryColor,
-        expandedHeight: 360,
-        flexibleSpace: ValueListenableBuilder(
-          valueListenable: selectedImage,
-          builder: (context, File? selectedImageValue, child) {
-            if (selectedImageValue != null) {
-              return showSelectedImage(context, selectedImageValue);
-            } else {
-              return Container(
-                key: GlobalKey(debugLabel: "do not have"),
-              );
-            }
-          },
-        ));
-  }
-
-  Container showSelectedImage(BuildContext context, File selectedImageValue) {
-    return Container(
-      key: GlobalKey(debugLabel: "have image"),
-      color: Theme.of(context).primaryColor,
-      height: 360,
-      width: double.infinity,
-      child: ValueListenableBuilder(
-        valueListenable: multiSelectionMode,
-        builder: (context, bool multiSelectionModeValue, child) => Stack(
-          children: [
-            ValueListenableBuilder(
-              valueListenable: expandImage,
-              builder: (context, bool expandImageValue, child) => Crop.file(
-                  selectedImageValue,
-                  key: cropKey,
-                  aspectRatio: expandImageValue ? 6 / 8 : 1.0),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: GestureDetector(
-                  onTap: () {
-                    multiSelectionMode.value = !multiSelectionMode.value;
-                    if (!multiSelectionModeValue) {
-                      setState(() {
-                        multiSelectedImage.value.clear();
-                      });
-                    }
-                  },
-                  child: Container(
-                      height: 35,
-                      width: 35,
-                      decoration: BoxDecoration(
-                        color: multiSelectionModeValue
-                            ? Colors.blue
-                            : const Color.fromARGB(165, 58, 58, 58),
-                        border: Border.all(
-                          color: const Color.fromARGB(45, 250, 250, 250),
-                        ),
-                        shape: BoxShape.circle,
+      automaticallyImplyLeading: false,
+      floating: true,
+      stretch: true,
+      pinned: true,
+      snap: true,
+      backgroundColor: Theme.of(context).primaryColor,
+      expandedHeight: 360,
+      flexibleSpace: selectedImage != null
+          ? Container(
+              color: Theme.of(context).primaryColor,
+              height: 360,
+              width: double.infinity,
+              child: Stack(
+                children: [
+                  Crop.file(selectedImage!,
+                      key: cropKey, aspectRatio: expandImage ? 6 / 8 : null),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            multiSelectionMode = !multiSelectionMode;
+                            if (!multiSelectionMode) {
+                              multiSelectedImage.clear();
+                            }
+                          });
+                        },
+                        child: Container(
+                            height: 35,
+                            width: 35,
+                            decoration: BoxDecoration(
+                              color: multiSelectionMode
+                                  ? Colors.blue
+                                  : const Color.fromARGB(165, 58, 58, 58),
+                              border: Border.all(
+                                color: const Color.fromARGB(45, 250, 250, 250),
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                                child: Icon(
+                              Icons.copy,
+                              color: Colors.white,
+                              size: 17,
+                            ))),
                       ),
-                      child: const Center(
-                          child: Icon(
-                        Icons.copy,
-                        color: Colors.white,
-                        size: 17,
-                      ))),
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: GestureDetector(
-                  onTap: () {
-                    expandImage.value = !expandImage.value;
-                  },
-                  child: Container(
-                    height: 35,
-                    width: 35,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(165, 58, 58, 58),
-                      border: Border.all(
-                        color: const Color.fromARGB(45, 250, 250, 250),
-                      ),
-                      shape: BoxShape.circle,
                     ),
-                    child: customArrowsIcon(),
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            expandImage = !expandImage;
+                          });
+                        },
+                        child: Container(
+                          height: 35,
+                          width: 35,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(165, 58, 58, 58),
+                            border: Border.all(
+                              color: const Color.fromARGB(45, 250, 250, 250),
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: customArrowsIcon(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      ),
+            )
+          : Container(),
     );
   }
 
@@ -664,30 +644,27 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     ]);
   }
 
-  bool selectionImageCheck(File image, List<File> multiSelectionValue,
-      {bool enableCopy = false}) {
-    if (multiSelectionValue.contains(image) && selectedImage.value == image) {
-      multiSelectedImage.value.remove(image);
-      if (multiSelectionValue.isNotEmpty) {
-        selectedImage.value = multiSelectedImage.value.last;
+  bool selectionImageCheck(File image, {bool enableCopy = false}) {
+    if (multiSelectedImage.contains(image) && selectedImage == image) {
+      multiSelectedImage.remove(image);
+      if (multiSelectedImage.isNotEmpty) {
+        selectedImage = multiSelectedImage.last;
       }
-      setState(() {});
       return true;
     } else {
-      if (multiSelectionValue.length < 10) {
-        if (!multiSelectionValue.contains(image)) {
-          multiSelectedImage.value.add(image);
-          setState(() {});
+      if (multiSelectedImage.length < 10) {
+        if (!multiSelectedImage.contains(image)) {
+          multiSelectedImage.add(image);
         }
         if (enableCopy) {
-          selectedImage.value = image;
+          selectedImage = image;
         }
       }
       return false;
     }
   }
 
-  SliverGrid sliverGridView(List<FutureBuilder<File?>> mediaListValue) {
+  SliverGrid sliverGridView() {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4,
@@ -696,81 +673,57 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
       ),
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          return ValueListenableBuilder(
-            valueListenable: allImages,
-            builder: (context, List<File?> allImagesValue, child) =>
-                ValueListenableBuilder(
-              valueListenable: multiSelectedImage,
-              builder: (context, List<File> multiSelectedImageValue, child) =>
-                  ValueListenableBuilder(
-                valueListenable: selectedImage,
-                builder: (context, File? selectedImageValue, child) {
-                  FutureBuilder<File?> mediaList = mediaListValue[index];
-                  File? image = allImagesValue[index];
-                  if (image != null) {
-                    bool imageSelected =
-                        multiSelectedImageValue.contains(image);
-                    if (index == 0 && selectedImageValue == null) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        setState(() {
-                          selectedImage.value = image;
-                        });
-                      });
-                    }
-                    return Stack(
-                      children: [
-                        gestureDetector(image, index, mediaList),
-                        if (selectedImageValue == image)
-                          GestureDetector(
-                            child:
-                                gestureDetector(image, index, blurContainer()),
-                          ),
-                        ValueListenableBuilder(
-                          valueListenable: multiSelectionMode,
-                          builder:
-                              (context, bool multiSelectionModeValue, child) =>
-                                  Visibility(
-                            visible: multiSelectionModeValue,
-                            child: Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                  padding: const EdgeInsets.all(3),
-                                  child: Container(
-                                    height: 25,
-                                    width: 25,
-                                    decoration: BoxDecoration(
-                                      color: imageSelected
-                                          ? Colors.blue
-                                          : const Color.fromARGB(
-                                              115, 222, 222, 222),
-                                      border: Border.all(
-                                        color: Colors.white,
-                                      ),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: imageSelected
-                                        ? Center(
-                                            child: Text(
-                                            "${multiSelectedImageValue.indexOf(image) + 1}",
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ))
-                                        : Container(),
-                                  )),
+          FutureBuilder<Uint8List?> mediaList = _mediaList[index];
+          File? image = allImages[index];
+          if (image != null) {
+            bool imageSelected = multiSelectedImage.contains(image);
+            if (index == 0 && selectedImage == null) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                setState(() {
+                  selectedImage = image;
+                });
+              });
+            }
+            return Stack(
+              children: [
+                gestureDetector(image, index, mediaList),
+                if (selectedImage == image)
+                  gestureDetector(image, index, blurContainer()),
+                Visibility(
+                  visible: multiSelectionMode,
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                        padding: const EdgeInsets.all(3),
+                        child: Container(
+                          height: 25,
+                          width: 25,
+                          decoration: BoxDecoration(
+                            color: imageSelected
+                                ? Colors.blue
+                                : const Color.fromARGB(115, 222, 222, 222),
+                            border: Border.all(
+                              color: Colors.white,
                             ),
+                            shape: BoxShape.circle,
                           ),
-                        ),
-                      ],
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
-            ),
-          );
+                          child: imageSelected
+                              ? Center(
+                                  child: Text(
+                                  "${multiSelectedImage.indexOf(image) + 1}",
+                                  style: const TextStyle(color: Colors.white),
+                                ))
+                              : Container(),
+                        )),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return Container();
+          }
         },
-        childCount: mediaListValue.length,
+        childCount: _mediaList.length,
       ),
     );
   }
@@ -783,33 +736,29 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     );
   }
 
-  Widget gestureDetector(File image, int index, Widget childWidget) {
-    return ValueListenableBuilder(
-      valueListenable: multiSelectedImage,
-      builder: (context, List<File> multiSelectionValue, child) =>
-          ValueListenableBuilder(
-        valueListenable: multiSelectionMode,
-        builder: (context, bool multiSelectionModeValue, child) =>
-            GestureDetector(
-                onTap: () {
-                  if (multiSelectionModeValue) {
-                    bool close =
-                        selectionImageCheck(image, multiSelectionValue);
-                    if (close) return;
-                  }
-                  selectedImage.value = image;
-                },
-                onLongPress: () {
-                  if (!multiSelectionModeValue) {
-                    multiSelectionMode.value = true;
-                  }
-                },
-                onLongPressUp: () {
-                  selectionImageCheck(image, multiSelectionValue,
-                      enableCopy: true);
-                },
-                child: childWidget),
-      ),
-    );
+  GestureDetector gestureDetector(File image, int index, Widget child) {
+    return GestureDetector(
+        onTap: () {
+          setState(() {
+            if (multiSelectionMode) {
+              bool close = selectionImageCheck(image);
+              if (close) return;
+            }
+            selectedImage = image;
+          });
+        },
+        onLongPress: () {
+          setState(() {
+            if (!multiSelectionMode) {
+              multiSelectionMode = true;
+            }
+          });
+        },
+        onLongPressUp: () {
+          setState(() {
+            selectionImageCheck(image, enableCopy: true);
+          });
+        },
+        child: child);
   }
 }
