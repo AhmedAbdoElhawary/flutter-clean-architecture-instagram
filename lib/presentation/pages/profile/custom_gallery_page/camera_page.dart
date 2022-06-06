@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
-import 'package:instagram/presentation/pages/profile/create_post_page.dart';
+import 'package:instagram/presentation/customPackages/crop_image/crop_image.dart';
+import 'package:instagram/presentation/customPackages/crop_image/crop_options.dart';
+import 'package:instagram/presentation/pages/profile/custom_gallery_page/gallery_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/record_count.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/record_fade_animation.dart';
 
@@ -21,10 +22,12 @@ class CustomCameraDisplay extends StatefulWidget {
   final ValueChanged<bool> replacingTabBar;
   final ValueNotifier<bool> clearVideoRecord;
   late Future<void> initializeControllerFuture;
+  final AsyncValueSetter<SelectedImageDetails> moveToPage;
 
   CustomCameraDisplay({
     Key? key,
     required this.cameras,
+    required this.moveToPage,
     required this.controller,
     required this.redDeleteText,
     required this.selectedVideo,
@@ -40,10 +43,11 @@ class CustomCameraDisplay extends StatefulWidget {
 
 class CustomCameraDisplayState extends State<CustomCameraDisplay> {
   ValueNotifier<bool> startVideoCount = ValueNotifier(false);
-  Flash currentFlashMode = Flash.off;
+  final cropKey = GlobalKey<CropState>();
+  Flash currentFlashMode = Flash.auto;
   late Widget videoStatusAnimation;
-  File? videoRecordFile;
   int selectedCamera = 0;
+  File? videoRecordFile;
 
   @override
   void initState() {
@@ -57,7 +61,6 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
       ResolutionPreset.high,
       enableAudio: true,
     );
-
     widget.initializeControllerFuture = widget.controller.initialize();
   }
 
@@ -75,20 +78,38 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
           },
         ),
         actions: <Widget>[
-          if (widget.selectedVideo)
-            AnimatedSwitcher(
-              duration: const Duration(seconds: 1),
-              switchInCurve: Curves.easeIn,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_forward_rounded,
-                    color: Colors.blue, size: 30),
-                onPressed: () async {
-                  if (videoRecordFile != null) {
-                    Navigator.of(context).maybePop(videoRecordFile!);
+          // if (widget.selectedVideo)
+          AnimatedSwitcher(
+            duration: const Duration(seconds: 1),
+            switchInCurve: Curves.easeIn,
+            child: IconButton(
+              icon: const Icon(Icons.arrow_forward_rounded,
+                  color: Colors.blue, size: 30),
+              onPressed: () async {
+                if (videoRecordFile != null) {
+                  SelectedImageDetails details = SelectedImageDetails(
+                    selectedFile:videoRecordFile!,
+                    multiSelectionMode: false,
+                    isThatImage: false,
+                    aspectRatio: 1.0,
+                  );
+                  widget.moveToPage(details);
+                } else {
+                  if (selectedImage != null) {
+                    File? croppedFile = await cropImage(selectedImage!);
+                    if (croppedFile != null) {
+                      SelectedImageDetails details = SelectedImageDetails(
+                        selectedFile: File(croppedFile.path),
+                        multiSelectionMode: false,
+                        aspectRatio: 1.0,
+                      );
+                      widget.moveToPage(details);
+                    }
                   }
-                },
-              ),
+                }
+              },
             ),
+          ),
         ],
       ),
       body: SafeArea(
@@ -102,6 +123,19 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                       width: double.infinity,
                       color: Colors.blue,
                       child: CameraPreview(widget.controller)),
+                  if (selectedImage != null)
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                          color: Theme.of(context).primaryColor,
+                          height: 360,
+                          width: double.infinity,
+                          child: Crop.file(
+                            selectedImage!,
+                            key: cropKey,
+                            alwaysShowGrid: true,
+                          )),
+                    ),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
@@ -119,7 +153,7 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                           ));
                         }
                       },
-                      icon: const Icon(Icons.switch_camera_rounded,
+                      icon: const Icon(Icons.flip_camera_android_rounded,
                           color: Colors.white),
                     ),
                   ),
@@ -179,73 +213,7 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
                                   padding: const EdgeInsets.all(60),
                                   child: Align(
                                     alignment: Alignment.center,
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        if (!widget.selectedVideo) {
-                                          try {
-                                            await widget
-                                                .initializeControllerFuture;
-                                            final image = await widget
-                                                .controller
-                                                .takePicture();
-                                            File selectedImage =
-                                                File(image.path);
-                                            var decodedImage =
-                                                await decodeImageFromList(
-                                                    selectedImage
-                                                        .readAsBytesSync());
-                                            await Navigator.of(context,
-                                                    rootNavigator: true)
-                                                .push(CupertinoPageRoute(
-                                                    builder: (context) =>
-                                                        CreatePostPage(
-                                                            selectedFile:
-                                                                selectedImage,
-                                                            isThatImage: widget
-                                                                .selectedVideo,
-                                                            aspectRatio:
-                                                                decodedImage
-                                                                        .width /
-                                                                    decodedImage
-                                                                        .height),
-                                                    maintainState: false));
-                                          } catch (e) {
-                                            if (kDebugMode) {
-                                              print(e);
-                                            }
-                                          }
-                                        } else {
-                                          setState(() {
-                                            videoStatusAnimation =
-                                                buildFadeAnimation();
-                                          });
-                                        }
-                                      },
-                                      onLongPress: () {
-                                        widget.controller.startVideoRecording();
-                                        widget.moveToVideoScreen();
-                                        setState(() {
-                                          startVideoCount.value = true;
-                                        });
-                                      },
-                                      onLongPressUp: () async {
-                                        setState(() {
-                                          startVideoCount.value = false;
-                                          widget.replacingTabBar(true);
-                                        });
-                                        XFile w = await widget.controller
-                                            .stopVideoRecording();
-                                        videoRecordFile = File(w.path);
-                                      },
-                                      child: CircleAvatar(
-                                          backgroundColor: Colors.grey[400],
-                                          radius: 40,
-                                          child: CircleAvatar(
-                                            radius: 24,
-                                            backgroundColor:
-                                                Theme.of(context).primaryColor,
-                                          )),
-                                    ),
+                                    child: cameraButton(context),
                                   ),
                                 ),
                                 Positioned(
@@ -264,6 +232,73 @@ class CustomCameraDisplayState extends State<CustomCameraDisplay> {
           },
         ),
       ),
+    );
+  }
+
+  Future<File?> cropImage(File imageFile) async {
+    await ImageCrop.requestPermissions();
+    final scale = cropKey.currentState!.scale;
+    final area = cropKey.currentState!.area;
+    if (area == null) {
+      return null;
+    }
+    final sample = await ImageCrop.sampleImage(
+      file: imageFile,
+      preferredSize: (2000 / scale).round(),
+    );
+    final File file = await ImageCrop.cropImage(
+      file: sample,
+      area: area,
+    );
+    sample.delete();
+    return file;
+  }
+
+  File? selectedImage;
+  GestureDetector cameraButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        if (!widget.selectedVideo) {
+          try {
+            await widget.initializeControllerFuture;
+            final image = await widget.controller.takePicture();
+            File selectedImage = File(image.path);
+            setState(() {
+              this.selectedImage = selectedImage;
+            });
+          } catch (e) {
+            if (kDebugMode) {
+              print(e);
+            }
+          }
+        } else {
+          setState(() {
+            videoStatusAnimation = buildFadeAnimation();
+          });
+        }
+      },
+      onLongPress: () {
+        widget.controller.startVideoRecording();
+        widget.moveToVideoScreen();
+        setState(() {
+          startVideoCount.value = true;
+        });
+      },
+      onLongPressUp: () async {
+        setState(() {
+          startVideoCount.value = false;
+          widget.replacingTabBar(true);
+        });
+        XFile w = await widget.controller.stopVideoRecording();
+        videoRecordFile = File(w.path);
+      },
+      child: CircleAvatar(
+          backgroundColor: Colors.grey[400],
+          radius: 40,
+          child: CircleAvatar(
+            radius: 24,
+            backgroundColor: Theme.of(context).primaryColor,
+          )),
     );
   }
 
