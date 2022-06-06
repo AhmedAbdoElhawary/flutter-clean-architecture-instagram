@@ -2,28 +2,44 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:instagram/core/functions/compress_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/presentation/customPackages/crop_image/crop_image.dart';
 import 'package:instagram/presentation/customPackages/crop_image/crop_options.dart';
-import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/pages/profile/custom_gallery_page/camera_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/fetching_media_gallery.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'dart:math' as math;
-
 import 'package:shimmer/shimmer.dart';
 
 enum SelectedPage { left, center, right }
 
+class SelectedImageDetails {
+  File selectedFile;
+  List<File>? selectedFiles;
+  bool isThatImage;
+  double aspectRatio;
+  bool multiSelectionMode;
+  SelectedImageDetails({
+    required this.selectedFile,
+    this.selectedFiles,
+    required this.aspectRatio,
+     this.isThatImage=true,
+    required this.multiSelectionMode,
+  });
+}
+
 class CustomGalleryDisplay extends StatefulWidget {
   final List<CameraDescription> cameras;
-
-  const CustomGalleryDisplay({Key? key, required this.cameras})
-      : super(key: key);
+  final AsyncValueSetter<SelectedImageDetails> moveToPage;
+  const CustomGalleryDisplay({
+    Key? key,
+    required this.cameras,
+    required this.moveToPage,
+  }) : super(key: key);
 
   @override
   CustomGalleryDisplayState createState() => CustomGalleryDisplayState();
@@ -34,27 +50,25 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
   late TabController tabController = TabController(length: 2, vsync: this);
   ValueNotifier<bool> clearVideoRecord = ValueNotifier(false);
   ValueNotifier<bool> redDeleteText = ValueNotifier(false);
+  final List<FutureBuilder<Uint8List?>> _mediaList = [];
   SelectedPage selectedPage = SelectedPage.left;
   late Future<void> initializeControllerFuture;
-  List<File> multiSelectedImage = [];
   final cropKey = GlobalKey<CropState>();
+  List<File> multiSelectedImage = [];
   late CameraController controller;
-  final List<FutureBuilder<Uint8List?>> _mediaList = [];
-  List<File?> allImages = [];
   bool neverScrollPhysics = false;
+  bool multiSelectionMode = false;
   bool showDeleteText = false;
   bool selectedVideo = false;
+  List<File?> allImages = [];
   bool isImagesReady = true;
-  File? selectedImage;
   bool expandImage = false;
-  bool shrinkWrap = false;
   int selectedPaged = 0;
   bool remove = false;
   bool? stopScrollTab;
   int currentPage = 0;
-  bool initial = true;
+  File? selectedImage;
   late int lastPage;
-  bool? primary;
 
   @override
   void didUpdateWidget(CustomGalleryDisplay oldWidget) {
@@ -102,9 +116,8 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
       List<File?> imageTemp = [];
       for (int i = 0; i < media.length; i++) {
         FutureBuilder<Uint8List?> gridViewImage =
-            await lowQualityImage(media, i);
+            await getImageGallery(media, i);
         File? image = await highQualityImage(media, i);
-
         temp.add(gridViewImage);
         imageTemp.add(image);
       }
@@ -119,52 +132,6 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
     } else {
       PhotoManager.openSetting();
     }
-  }
-
-  bool multiSelectionMode = false;
-
-  Future<File?> highQualityImage(List<AssetEntity> media, int i) async {
-    return media[i].loadFile();
-  }
-
-  Future<FutureBuilder<Uint8List?>> lowQualityImage(
-      List<AssetEntity> media, int i) async {
-    FutureBuilder<Uint8List?> futureBuilder = FutureBuilder(
-      future: media[i].thumbnailDataWithSize(const ThumbnailSize(200, 200)),
-      builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          Uint8List? image = snapshot.data;
-          if (image != null) {
-            return Container(
-              color: Colors.grey,
-              child: Stack(
-                children: <Widget>[
-                  Positioned.fill(
-                    child: Image.memory(
-                      image,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  if (media[i].type == AssetType.video)
-                    const Align(
-                      alignment: Alignment.bottomRight,
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 5, bottom: 5),
-                        child: Icon(
-                          Icons.videocam,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            );
-          }
-        }
-        return Container();
-      },
-    );
-    return futureBuilder;
   }
 
   @override
@@ -320,6 +287,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                       replacingTabBar: replacingDeleteWidget,
                       clearVideoRecord: clearVideoRecord,
                       redDeleteText: redDeleteText,
+                      moveToPage: widget.moveToPage,
                       moveToVideoScreen: moveToVideo,
                       selectedVideo: selectedVideo,
                     ),
@@ -466,39 +434,35 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
           icon: const Icon(Icons.arrow_forward_rounded,
               color: Colors.blue, size: 30),
           onPressed: () async {
+            double aspect = expandImage ? 6 / 8 : 1.0;
             if (multiSelectedImage.isEmpty) {
               File? image = selectedImage;
               if (image != null) {
                 File? croppedImage = await cropImage(image);
-                File? finalImage = await compressImage(croppedImage!);
-                if (finalImage != null) {
-                  await Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(
-                          builder: (context) => CreatePostPage(
-                              selectedFile: finalImage,
-                              isThatImage: true,
-                              aspectRatio: 360),
-                          maintainState: false));
+                if (croppedImage != null) {
+                  SelectedImageDetails details = SelectedImageDetails(
+                    selectedFile: croppedImage,
+                    multiSelectionMode: false,
+                    aspectRatio: aspect,
+                  );
+                  widget.moveToPage(details);
                 }
               }
             } else {
               List<File> selectedImages = [];
               for (int i = 0; i < multiSelectedImage.length; i++) {
                 File? croppedImage = await cropImage(multiSelectedImage[i]);
-                File? finalImage = await compressImage(croppedImage!);
-                if (finalImage != null) {
-                  selectedImages.add(finalImage);
+                if (croppedImage != null) {
+                  selectedImages.add(croppedImage);
                 }
               }
               if (selectedImages.isNotEmpty) {
-                await Navigator.of(context, rootNavigator: true).push(
-                    CupertinoPageRoute(
-                        builder: (context) => CreatePostPage(
-                            selectedFile: selectedImages[0],
-                            multiSelectedFiles: selectedImages,
-                            isThatImage: true,
-                            aspectRatio: 360),
-                        maintainState: false));
+                SelectedImageDetails details = SelectedImageDetails(
+                    selectedFile: selectedImages[0],
+                    selectedFiles: selectedImages,
+                    multiSelectionMode: true,
+                    aspectRatio: aspect);
+                widget.moveToPage(details);
               }
             }
           },
@@ -544,7 +508,7 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
               child: Stack(
                 children: [
                   Crop.file(selectedImage!,
-                      key: cropKey, aspectRatio: expandImage ? 6 / 8 : null),
+                      key: cropKey, aspectRatio: expandImage ? 6 / 8 : 1.0),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Padding(
@@ -554,7 +518,9 @@ class CustomGalleryDisplayState extends State<CustomGalleryDisplay>
                           setState(() {
                             multiSelectionMode = !multiSelectionMode;
                             if (!multiSelectionMode) {
-                              multiSelectedImage.clear();
+                              setState(() {
+                                multiSelectedImage.clear();
+                              });
                             }
                           });
                         },
