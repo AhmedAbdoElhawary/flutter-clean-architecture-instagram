@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +16,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/pages/profile/custom_gallery_page/gallery_of_story.dart';
 import 'package:instagram/presentation/pages/profile/custom_gallery_page/gallery_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
@@ -324,7 +326,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   Widget createVideo() {
     return InkWell(
-        onTap: () async => createNewVideo(),
+        onTap: () async => createNewPost(isThatImage: false),
         child: createSizedBox(StringsManager.reel.tr(),
             nameOfPath: IconsAssets.videoIcon));
   }
@@ -334,39 +336,41 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     final List<CameraDescription> cameras = await availableCameras();
     Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
         builder: (context) {
-          return CustomStoryGalleryDisplay(
-            cameras: cameras,
-          );
+          return CustomStoryGalleryDisplay(cameras: cameras);
         },
         maintainState: false));
 
     rebuildUserInfo.value = true;
   }
 
-  createNewVideo() async {
+  createNewPost({bool isThatImage = true}) async {
     Navigator.maybePop(context);
-    final List<CameraDescription> cameras = await availableCameras();
-    Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-        builder: (context) {
-          return CustomGalleryDisplay(
-            cameras: cameras,
-          );
-        },
-        maintainState: false));
+    await customGalleryDisplay(isThatImage: isThatImage);
     rebuildUserInfo.value = true;
   }
 
-  createNewPost() async {
-    Navigator.maybePop(context);
+  Future<void> customGalleryDisplay({bool isThatImage = true}) async {
     final List<CameraDescription> cameras = await availableCameras();
-    Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
         builder: (context) {
           return CustomGalleryDisplay(
             cameras: cameras,
+            moveToPage: (SelectedImageDetails details) async {
+              File multiSelection = details.multiSelectionMode
+                  ? details.selectedFiles![0]
+                  : details.selectedFile;
+              await Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(
+                      builder: (context) => CreatePostPage(
+                          selectedFile:multiSelection,
+                          multiSelectedFiles: details.selectedFiles,
+                          isThatImage: details.isThatImage,
+                          aspectRatio: details.aspectRatio),
+                      maintainState: false));
+            },
           );
         },
         maintainState: false));
-    rebuildUserInfo.value = true;
   }
 
   Widget createPost() {

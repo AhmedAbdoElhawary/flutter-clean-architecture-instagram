@@ -1,23 +1,26 @@
 import 'dart:io';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memory_image_display.dart';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-Future<FutureBuilder<File?>> getImageGallery(
+
+Future<FutureBuilder<Uint8List?>> getImageGallery(
     List<AssetEntity> media, int i) async {
-  FutureBuilder<File?> futureBuilder = FutureBuilder(
-    future: media[i].file,
-    builder: (BuildContext context, AsyncSnapshot<File?> snapshot) {
+  FutureBuilder<Uint8List?> futureBuilder = FutureBuilder(
+    future: media[i].thumbnailDataWithSize(const ThumbnailSize(200, 200)),
+    builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
       if (snapshot.connectionState == ConnectionState.done) {
-        File? image = snapshot.data;
+        Uint8List? image = snapshot.data;
         if (image != null) {
           return Container(
-            key: GlobalKey(debugLabel: "exist data"),
             color: Colors.grey,
             child: Stack(
               children: <Widget>[
                 Positioned.fill(
-                  child: MemoryImageDisplay(imagePath: image),
+                  child: Image.memory(
+                    image,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 if (media[i].type == AssetType.video)
                   const Align(
@@ -25,7 +28,7 @@ Future<FutureBuilder<File?>> getImageGallery(
                     child: Padding(
                       padding: EdgeInsets.only(right: 5, bottom: 5),
                       child: Icon(
-                        Icons.videocam,
+                        Icons.slow_motion_video_rounded,
                         color: Colors.white,
                       ),
                     ),
@@ -35,10 +38,10 @@ Future<FutureBuilder<File?>> getImageGallery(
           );
         }
       }
-      return Container(
-        key: GlobalKey(debugLabel: "don't exist"),
-      );
+      return Container();
     },
   );
   return futureBuilder;
 }
+Future<File?> highQualityImage(List<AssetEntity> media, int i) async =>
+    media[i].loadFile();

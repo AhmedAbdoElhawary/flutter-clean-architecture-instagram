@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,13 +24,11 @@ class CustomStoryGalleryDisplay extends StatefulWidget {
 
 class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
     with TickerProviderStateMixin {
-  final ValueNotifier<List<FutureBuilder<File?>>> mediaList =
-  ValueNotifier([]);
-  final ValueNotifier<List<File>> multiSelectedImage = ValueNotifier([]);
-  final ValueNotifier<List<File?>> allImages = ValueNotifier([]);
-  ValueNotifier<bool> isImagesReady = ValueNotifier(true);
-  final ValueNotifier<File?> selectedImage = ValueNotifier(null);
-  final currentPage = ValueNotifier(0);
+  final List<FutureBuilder<Uint8List?>> _mediaList = [];
+  List<File?> allImages = [];
+  bool isImagesReady = true;
+  File? selectedImage;
+  int currentPage = 0;
   late int lastPage;
 
   @override
@@ -39,7 +38,7 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
 
   @override
   void initState() {
-    isImagesReady.value = false;
+    isImagesReady = false;
     _fetchNewMedia();
     super.initState();
   }
@@ -48,7 +47,6 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
   void dispose() {
     super.dispose();
   }
-
 
   bool _handleScrollEvent(ScrollNotification scroll, int currentPage) {
     if (scroll.metrics.pixels / scroll.metrics.maxScrollExtent > 0.33) {
@@ -59,30 +57,32 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
     }
     return false;
   }
+
   _fetchNewMedia() async {
-    lastPage = currentPage.value;
+    lastPage = currentPage;
     var result = await PhotoManager.requestPermissionExtend();
     if (result.isAuth) {
       List<AssetPathEntity> albums =
-      await PhotoManager.getAssetPathList(onlyAll: true);
+          await PhotoManager.getAssetPathList(onlyAll: true);
       List<AssetEntity> media =
-      await albums[0].getAssetListPaged(page: currentPage.value, size: 60);
-      List<FutureBuilder<File?>> temp = [];
+          await albums[0].getAssetListPaged(page: currentPage, size: 60);
+      List<FutureBuilder<Uint8List?>> temp = [];
       List<File?> imageTemp = [];
       for (int i = 0; i < media.length; i++) {
-        await getImageGallery(media, i).then((value) async {
-          temp.add(value);
-          await value.future!.then((File? value) {
-            if (value != null) {
-              imageTemp.add(value);
-            }
-          });
-        });
+        FutureBuilder<Uint8List?> gridViewImage =
+            await getImageGallery(media, i);
+        File? image = await highQualityImage(media, i);
+        temp.add(gridViewImage);
+        imageTemp.add(image);
       }
-      mediaList.value.addAll(temp);
-      allImages.value.addAll(imageTemp);
-      currentPage.value++;
-      isImagesReady.value = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        setState(() {
+          _mediaList.addAll(temp);
+          allImages.addAll(imageTemp);
+          currentPage++;
+          isImagesReady = true;
+        });
+      });
     } else {
       PhotoManager.openSetting();
     }
@@ -90,21 +90,18 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: currentPage,
-      builder: (context, int currentPageValue, child) =>
-          NotificationListener<ScrollNotification>(
-            onNotification: (ScrollNotification scroll) {
-              return _handleScrollEvent(scroll, currentPageValue);
-            },
-            child: defaultTabController(),
-          ),
+    return NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification scroll) {
+        return _handleScrollEvent(scroll, currentPage);
+      },
+      child: defaultTabController(),
     );
   }
+
   Widget loadingWidget() {
     return SingleChildScrollView(
       child: Shimmer.fromColors(
-        baseColor:  Colors.grey[500]!,
+        baseColor: Colors.grey[500]!,
         highlightColor: ColorManager.shimmerDarkGrey,
         child: GridView.builder(
           shrinkWrap: true,
@@ -132,7 +129,7 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
     return Scaffold(
       backgroundColor: ColorManager.black,
       appBar: appBar(),
-      body:isImagesReady.value ? gridView():loadingWidget(),
+      body: isImagesReady ? gridView() : loadingWidget(),
     );
   }
 
@@ -168,13 +165,13 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
         childAspectRatio: .5,
       ),
       itemBuilder: (context, index) {
-        FutureBuilder<File?> listOfMedia = mediaList.value[index];
-        File? image = allImages.value[index];
+        FutureBuilder<Uint8List?> listOfMedia = _mediaList[index];
+        File? image = allImages[index];
         if (image != null) {
-          if (index == 0 && selectedImage.value == null) {
+          if (index == 0 && selectedImage == null) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               setState(() {
-                selectedImage.value = image;
+                selectedImage = image;
               });
             });
           }
@@ -182,20 +179,20 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
               onTap: () async {
                 Navigator.of(context, rootNavigator: true)
                     .push(CupertinoPageRoute(
-                    builder: (context) {
-                      return CreateStoryPage(
-                        isThatImage: true,
-                        storyImage: image,
-                      );
-                    },
-                    maintainState: false));
+                        builder: (context) {
+                          return CreateStoryPage(
+                            isThatImage: true,
+                            storyImage: image,
+                          );
+                        },
+                        maintainState: false));
               },
               child: listOfMedia);
         } else {
           return Container();
         }
       },
-      itemCount: mediaList.value.length,
+      itemCount: _mediaList.length,
     );
   }
 }
