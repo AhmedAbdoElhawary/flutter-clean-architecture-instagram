@@ -29,10 +29,12 @@ import '../../../widgets/global/circle_avatar_image/circle_avatar_of_profile_ima
 
 class HomeScreen extends StatefulWidget {
   final String userId;
+  final bool playVideo;
 
   const HomeScreen({
     Key? key,
     required this.userId,
+    required this.playVideo,
   }) : super(key: key);
 
   @override
@@ -160,7 +162,8 @@ class _HomeScreenState extends State<HomeScreen> {
               return InViewNotifierWidget(
                 id: '$index',
                 builder: (_, bool isInView, __) {
-                  return columnOfWidgets(bodyHeight, index, isInView);
+                  return columnOfWidgets(
+                      bodyHeight, index, isInView && widget.playVideo);
                 },
               );
             },

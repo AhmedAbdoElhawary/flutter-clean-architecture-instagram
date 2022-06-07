@@ -21,7 +21,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  ValueNotifier<bool> stopVideo = ValueNotifier(false);
+  ValueNotifier<bool> playReelVideo = ValueNotifier(false);
+  ValueNotifier<bool> playHomeVideo = ValueNotifier(false);
   CupertinoTabController controller = CupertinoTabController();
   @override
   void initState() {
@@ -33,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
     return WillPopScope(
       onWillPop: () async => true,
       child: ValueListenableBuilder(
-        valueListenable: stopVideo,
+        valueListenable: playReelVideo,
         builder: (BuildContext context, bool value, __) {
           return CupertinoTabScaffold(
               tabBar: CupertinoTabBar(
@@ -70,7 +71,8 @@ class _MainScreenState extends State<MainScreen> {
               controller: controller,
               tabBuilder: (context, index) {
                 WidgetsBinding.instance.addPostFrameCallback((_) async {
-                  stopVideo.value = controller.index == 2 ? true : false;
+                  playReelVideo.value = controller.index == 2 ? true : false;
+                  playHomeVideo.value = controller.index == 0 ? true : false;
                 });
 
                 switch (index) {
@@ -79,7 +81,12 @@ class _MainScreenState extends State<MainScreen> {
                       builder: (context) => CupertinoPageScaffold(
                           child: BlocProvider<PostCubit>(
                         create: (context) => injector<PostCubit>(),
-                        child: HomeScreen(userId: widget.userId),
+                        child: ValueListenableBuilder(
+                            valueListenable: playHomeVideo,
+                            builder: (context, bool playVideoValue, child) =>
+                                HomeScreen(
+                                    userId: widget.userId,
+                                    playVideo: playVideoValue)),
                       )),
                     );
                   case 1:
