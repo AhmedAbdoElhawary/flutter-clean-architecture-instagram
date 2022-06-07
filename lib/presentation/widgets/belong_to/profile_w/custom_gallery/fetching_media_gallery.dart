@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-
 Future<FutureBuilder<Uint8List?>> getImageGallery(
     List<AssetEntity> media, int i) async {
   FutureBuilder<Uint8List?> futureBuilder = FutureBuilder(
@@ -43,5 +42,6 @@ Future<FutureBuilder<Uint8List?>> getImageGallery(
   );
   return futureBuilder;
 }
+
 Future<File?> highQualityImage(List<AssetEntity> media, int i) async =>
-    media[i].loadFile();
+    media[i].file;

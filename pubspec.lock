@@ -218,6 +218,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  custom_gallery_display:
+    dependency: "direct main"
+    description:
+      name: custom_gallery_display
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   dartz:
     dependency: "direct main"
     description:
@@ -1105,5 +1112,5 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.17.0 <3.0.0"
+  dart: ">=2.17.1 <3.0.0"
   flutter: ">=3.0.0"
