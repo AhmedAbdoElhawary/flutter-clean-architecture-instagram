@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,6 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/pages/profile/custom_gallery_page/gallery_of_story.dart';
-import 'package:instagram/presentation/pages/profile/custom_gallery_page/gallery_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_page.dart';
@@ -355,6 +355,14 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         builder: (context) {
           return CustomGalleryDisplay(
             cameras: cameras,
+            nameOfVideo: StringsManager.video.tr(),
+            nameOfPhoto: StringsManager.photo.tr(),
+            nameOfGallery: StringsManager.gallery.tr(),
+            nameOfDeleting:StringsManager.delete.tr() ,
+            nameOfLimiting:StringsManager.limitOfPhotos.tr() ,
+            themeOfApp: Theme.of(context),
+            nameOfNotFoundingCamera:StringsManager.noSecondaryCameraFound.tr() ,
+            nameOfPressAndHold:  StringsManager.pressAndHold.tr(),
             moveToPage: (SelectedImageDetails details) async {
               File multiSelection = details.multiSelectionMode
                   ? details.selectedFiles![0]
