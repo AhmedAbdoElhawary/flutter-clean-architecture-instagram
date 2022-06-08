@@ -136,14 +136,12 @@ class _CommentBoxState extends State<CommentBox> {
       await commentsInfoCubit.addComment(
           commentInfo: newCommentInfo(myPersonalInfo, DateOfNow.dateOfNow()));
       widget.makeSelectedCommentNullable(true);
-
     } else {
       Comment replyInfo = newReplyInfo(DateOfNow.dateOfNow(),
           widget.selectedCommentInfo!, myPersonalInfo.userId);
       await ReplyInfoCubit.get(context)
           .replyOnThisComment(replyInfo: replyInfo);
       widget.makeSelectedCommentNullable(false);
-
     }
   }
 
