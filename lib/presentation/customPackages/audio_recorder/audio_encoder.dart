@@ -1,4 +1,3 @@
-
 enum AudioEncoderType {
   /// Will output to MPEG_4 format container.
   // ignore: constant_identifier_names

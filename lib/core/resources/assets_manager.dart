@@ -24,8 +24,6 @@ class IconsAssets {
   static const String favorite = "$iconPath/favorite.svg";
   static const String plus = "$iconPath/plus.svg";
 
-
-
   static const String addInstagramStoryIcon =
       "$iconPath/add-instagram-story.svg";
   static const String instagramHighlightStoryIcon =
