@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -25,8 +24,7 @@ class ImageOptions {
 }
 
 class ImageCrop {
-  static const _channel =
-  MethodChannel('plugins.lykhonis.com/image_crop');
+  static const _channel = MethodChannel('plugins.lykhonis.com/image_crop');
 
   static Future<bool> requestPermissions() => _channel
       .invokeMethod('requestPermissions')
@@ -36,7 +34,7 @@ class ImageCrop {
     required File file,
   }) async {
     final result =
-    await _channel.invokeMethod('getImageOptions', {'path': file.path});
+        await _channel.invokeMethod('getImageOptions', {'path': file.path});
 
     return ImageOptions(
       width: result['width'],

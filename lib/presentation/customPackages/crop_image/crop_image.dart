@@ -215,7 +215,7 @@ class CropState extends State<Crop> with TickerProviderStateMixin, Drag {
                   ),
                 );
               },
-              animation:_activeController ,
+              animation: _activeController,
             ),
           ),
         ),
