@@ -4,10 +4,10 @@ class FollowedUserInfo {
   String profileImageUrl;
   String userName;
 
-  FollowedUserInfo(
-      {this.followedId = "",
-      this.name = "",
-      this.profileImageUrl = "",
-      this.userName = "",
-      });
+  FollowedUserInfo({
+    this.followedId = "",
+    this.name = "",
+    this.profileImageUrl = "",
+    this.userName = "",
+  });
 }
