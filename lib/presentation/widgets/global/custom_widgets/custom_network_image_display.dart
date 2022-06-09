@@ -67,14 +67,15 @@ class _NetworkImageDisplayState extends State<NetworkImageDisplay> {
           size: 50, color: Theme.of(context).focusColor),
     );
   }
+
   Widget loadingWidget() {
     double aspectRatio = widget.aspectRatio;
     return aspectRatio == 0
         ? buildSizedBox()
         : AspectRatio(
-      aspectRatio: aspectRatio,
-      child: buildSizedBox(),
-    );
+            aspectRatio: aspectRatio,
+            child: buildSizedBox(),
+          );
   }
 
   Widget buildSizedBox() {
