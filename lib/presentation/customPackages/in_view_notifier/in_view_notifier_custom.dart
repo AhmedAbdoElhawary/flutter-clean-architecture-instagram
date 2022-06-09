@@ -25,27 +25,27 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
     Key? center,
     double anchor = 0.0,
   }) : super(
-    key: key,
-    initialInViewIds: initialInViewIds,
-    endNotificationOffset: endNotificationOffset,
-    onListEndReached: onListEndReached,
-    throttleDuration: throttleDuration,
-    isInViewPortCondition: isInViewPortCondition,
-    onRefreshData: onRefreshData,
-    postsIds: postsIds,
-    isThatEndOfList: isThatEndOfList,
-    child: CustomScrollView(
-      slivers: slivers,
-      anchor: anchor,
-      controller: controller,
-      scrollDirection: scrollDirection,
-      physics: physics,
-      reverse: reverse,
-      primary: primary,
-      shrinkWrap: shrinkWrap,
-      center: center,
-    ),
-  );
+          key: key,
+          initialInViewIds: initialInViewIds,
+          endNotificationOffset: endNotificationOffset,
+          onListEndReached: onListEndReached,
+          throttleDuration: throttleDuration,
+          isInViewPortCondition: isInViewPortCondition,
+          onRefreshData: onRefreshData,
+          postsIds: postsIds,
+          isThatEndOfList: isThatEndOfList,
+          child: CustomScrollView(
+            slivers: slivers,
+            anchor: anchor,
+            controller: controller,
+            scrollDirection: scrollDirection,
+            physics: physics,
+            reverse: reverse,
+            primary: primary,
+            shrinkWrap: shrinkWrap,
+            center: center,
+          ),
+        );
 
   static InViewState? of(BuildContext context) {
     final InheritedInViewWidget widget = context

@@ -4,7 +4,6 @@ import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_s
 import 'package:flutter/foundation.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/widget_data.dart';
 
-
 class InViewNotifierList extends InViewNotifier {
   InViewNotifierList({
     Key? key,
@@ -28,28 +27,28 @@ class InViewNotifierList extends InViewNotifier {
     bool addAutomaticKeepAlive = true,
   })  : assert(endNotificationOffset >= 0.0),
         super(
-        key: key,
-        initialInViewIds: initialInViewIds,
-        endNotificationOffset: endNotificationOffset,
-        onListEndReached: onListEndReached,
-        throttleDuration: throttleDuration,
-        onRefreshData: onRefreshData,
-        postsIds: postsIds,
-        isThatEndOfList: isThatEndOfList,
-        isInViewPortCondition: isInViewPortCondition,
-        child: ListView.builder(
-          padding: padding,
-          controller: controller,
-          scrollDirection: scrollDirection,
-          physics: physics,
-          reverse: reverse,
-          primary: primary,
-          addAutomaticKeepAlives: addAutomaticKeepAlive,
-          shrinkWrap: shrinkWrap,
-          itemCount: itemCount,
-          itemBuilder: builder,
-        ),
-      );
+          key: key,
+          initialInViewIds: initialInViewIds,
+          endNotificationOffset: endNotificationOffset,
+          onListEndReached: onListEndReached,
+          throttleDuration: throttleDuration,
+          onRefreshData: onRefreshData,
+          postsIds: postsIds,
+          isThatEndOfList: isThatEndOfList,
+          isInViewPortCondition: isInViewPortCondition,
+          child: ListView.builder(
+            padding: padding,
+            controller: controller,
+            scrollDirection: scrollDirection,
+            physics: physics,
+            reverse: reverse,
+            primary: primary,
+            addAutomaticKeepAlives: addAutomaticKeepAlive,
+            shrinkWrap: shrinkWrap,
+            itemCount: itemCount,
+            itemBuilder: builder,
+          ),
+        );
 
   static InViewState? of(BuildContext context) {
     final InheritedInViewWidget widget = context
