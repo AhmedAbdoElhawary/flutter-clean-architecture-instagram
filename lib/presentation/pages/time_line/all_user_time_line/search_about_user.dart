@@ -45,19 +45,16 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
           decoration: BoxDecoration(
               color: Theme.of(context).shadowColor,
               borderRadius: BorderRadius.circular(10)),
-          child: ValueListenableBuilder(
-            valueListenable: _textController,
-            builder: (context, TextEditingController textValue, child) =>
-                TextFormField(
-              style: Theme.of(context).textTheme.bodyText1,
-              controller: textValue,
-              textAlign: TextAlign.start,
-              decoration: InputDecoration(
-                  contentPadding: const EdgeInsetsDirectional.all(12.5),
-                  hintText: StringsManager.search.tr(),
-                  hintStyle: Theme.of(context).textTheme.headline1,
-                  border: InputBorder.none),
-            ),
+          child: TextFormField(
+            style: Theme.of(context).textTheme.bodyText1,
+            controller: _textController.value,
+            textAlign: TextAlign.start,
+            decoration: InputDecoration(
+                contentPadding: const EdgeInsetsDirectional.all(12.5),
+                hintText: StringsManager.search.tr(),
+                hintStyle: Theme.of(context).textTheme.headline1,
+                border: InputBorder.none),
+            onChanged: (_) => setState(() {}),
           ),
         ),
       ),
