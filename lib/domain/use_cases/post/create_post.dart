@@ -9,7 +9,8 @@ class CreatePostUseCase implements UseCaseTwoParams<String, Post, List<File>> {
   CreatePostUseCase(this._createPostRepository);
 
   @override
-  Future<String> call({required Post paramsOne, required List<File> paramsTwo}) {
+  Future<String> call(
+      {required Post paramsOne, required List<File> paramsTwo}) {
     return _createPostRepository.createPost(
         postInfo: paramsOne, files: paramsTwo);
   }

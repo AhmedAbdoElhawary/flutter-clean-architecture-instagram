@@ -23,9 +23,9 @@ class DateOfNow {
   }
 
   static String chattingDateOfNow(
-      String theDate, String previousDateOfmessage) {
+      String theDate, String previousDateOfMessage) {
     DateTime theActualDate = DateTime.parse(theDate);
-    DateTime thePreviousDate = DateTime.parse(previousDateOfmessage);
+    DateTime thePreviousDate = DateTime.parse(previousDateOfMessage);
     DateTime now = DateTime.now();
 
     String dateOfToday = DateFormat(" h:m a").format(theActualDate);

@@ -109,8 +109,6 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
     );
   }
 
-  buildInView() {}
-
   Widget columnOfWidgets(
       double bodyHeight, Post postInfo, int index, bool playTheVideo) {
     return Column(
@@ -127,7 +125,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
 
   Widget posts(int index, Post postInfo, double bodyHeight, bool playTheVideo) {
     return PostImage(
-      postInfo: postInfo,
+      postInfo: ValueNotifier(postInfo),
       bodyHeight: bodyHeight,
       indexOfPost: index,
       playTheVideo: playTheVideo,

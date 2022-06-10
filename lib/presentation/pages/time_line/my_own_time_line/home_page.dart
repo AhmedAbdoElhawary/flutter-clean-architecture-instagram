@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (state is CubitMyPersonalPostsLoaded) {
             postsInfo.value = state.postsInfo;
             return postsInfo.value.isNotEmpty
-                ? inViewNotifier(state, bodyHeight)
+                ? inViewNotifier(bodyHeight)
                 : emptyMessage();
           } else if (state is CubitPostFailed) {
             ToastShow.toastStateError(state);
@@ -142,34 +142,38 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget inViewNotifier(CubitMyPersonalPostsLoaded state, double bodyHeight) {
-    return InViewNotifierList(
-      onRefreshData: getData,
-      postsIds: postsIds,
-      isThatEndOfList: isThatEndOfList,
-      initialInViewIds: const ['0'],
-      isInViewPortCondition:
-          (double deltaTop, double deltaBottom, double vpHeight) {
-        return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
-      },
-      itemCount: state.postsInfo.length,
-      builder: (BuildContext context, int index) {
-        return Container(
-          width: double.infinity,
-          margin: const EdgeInsetsDirectional.only(bottom: .5, top: .5),
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              return InViewNotifierWidget(
-                id: '$index',
-                builder: (_, bool isInView, __) {
-                  return columnOfWidgets(
-                      bodyHeight, index, isInView && widget.playVideo);
-                },
-              );
-            },
-          ),
-        );
-      },
+  Widget inViewNotifier(double bodyHeight) {
+    return ValueListenableBuilder(
+      valueListenable: postsInfo,
+      builder: (context, List<Post> postsInfoValue, child) =>
+          InViewNotifierList(
+        onRefreshData: getData,
+        postsIds: postsIds,
+        isThatEndOfList: isThatEndOfList,
+        initialInViewIds: const ['0'],
+        isInViewPortCondition:
+            (double deltaTop, double deltaBottom, double vpHeight) {
+          return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
+        },
+        itemCount: postsInfoValue.length,
+        builder: (BuildContext context, int index) {
+          return Container(
+            width: double.infinity,
+            margin: const EdgeInsetsDirectional.only(bottom: .5, top: .5),
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return InViewNotifierWidget(
+                  id: '$index',
+                  builder: (_, bool isInView, __) {
+                    return columnOfWidgets(
+                        bodyHeight, index, isInView && widget.playVideo);
+                  },
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -203,13 +207,16 @@ class _HomeScreenState extends State<HomeScreen> {
       height: 0.3);
 
   Widget posts(int index, double bodyHeight, bool playTheVideo) {
-    return PostImage(
-      postInfo: postsInfo.value[index],
-      postsInfo: postsInfo,
-      bodyHeight: bodyHeight,
-      playTheVideo: playTheVideo,
-      indexOfPost: index,
-      reLoadData: reloadTheData,
+    return ValueListenableBuilder(
+      valueListenable: postsInfo,
+      builder: (context, List<Post> postsInfoValue, child) => PostImage(
+        postInfo: ValueNotifier(postsInfoValue[index]),
+        postsInfo: postsInfo,
+        bodyHeight: bodyHeight,
+        playTheVideo: playTheVideo,
+        indexOfPost: index,
+        reLoadData: reloadTheData,
+      ),
     );
   }
 
