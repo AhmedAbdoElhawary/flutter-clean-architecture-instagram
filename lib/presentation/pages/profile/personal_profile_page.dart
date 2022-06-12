@@ -358,11 +358,11 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             nameOfVideo: StringsManager.video.tr(),
             nameOfPhoto: StringsManager.photo.tr(),
             nameOfGallery: StringsManager.gallery.tr(),
-            nameOfDeleting:StringsManager.delete.tr() ,
-            nameOfLimiting:StringsManager.limitOfPhotos.tr() ,
+            nameOfDeleting: StringsManager.delete.tr(),
+            nameOfLimiting: StringsManager.limitOfPhotos.tr(),
             themeOfApp: Theme.of(context),
-            nameOfNotFoundingCamera:StringsManager.noSecondaryCameraFound.tr() ,
-            nameOfPressAndHold:  StringsManager.pressAndHold.tr(),
+            nameOfNotFoundingCamera: StringsManager.noSecondaryCameraFound.tr(),
+            nameOfPressAndHold: StringsManager.pressAndHold.tr(),
             moveToPage: (SelectedImageDetails details) async {
               File multiSelection = details.multiSelectionMode
                   ? details.selectedFiles![0]
@@ -370,7 +370,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
               await Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(
                       builder: (context) => CreatePostPage(
-                          selectedFile:multiSelection,
+                          selectedFile: multiSelection,
                           multiSelectedFiles: details.selectedFiles,
                           isThatImage: details.isThatImage,
                           aspectRatio: details.aspectRatio),
