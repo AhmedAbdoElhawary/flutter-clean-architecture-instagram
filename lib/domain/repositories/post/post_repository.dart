@@ -2,7 +2,8 @@ import 'dart:io';
 import 'package:instagram/data/models/post.dart';
 
 abstract class FirestorePostRepository {
-  Future<String> createPost({required Post postInfo, required List<File> files});
+  Future<String> createPost(
+      {required Post postInfo, required List<File> files});
   Future<List<Post>> getPostsInfo(
       {required List<dynamic> postsIds,
       required String userId,

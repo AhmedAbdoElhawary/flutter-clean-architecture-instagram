@@ -224,7 +224,7 @@ packages:
       name: custom_gallery_display
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1"
+    version: "0.0.3"
   dartz:
     dependency: "direct main"
     description:
