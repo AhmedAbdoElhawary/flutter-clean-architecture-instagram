@@ -54,9 +54,11 @@ This repository and "documentation" are still under development.
     * Image (gallery & camera)
     * Voice
 ## SnapShots
-* soon
-* I have some bad user experiences and bugs trying to improve,
-* then, I will publish snapshots of this huge project
+<p>
+<img src="https://user-images.githubusercontent.com/88978546/173256887-3e3df39a-bc7e-4b9e-9568-92eefe64aed4.gif"  width="250">
+<img src="https://user-images.githubusercontent.com/88978546/173257036-a5eca476-a302-4bd7-bfdf-9176f8100d9d.gif"  width="250">
+</p>
+
 ## Getting started
 
 #### 1. [Setup Flutter](https://flutter.io/setup/)
