@@ -9,7 +9,7 @@ class LogInAuthUseCase implements UseCase<User, RegisteredUser> {
   LogInAuthUseCase(this._firebaseAuthRepository);
 
   @override
-Future<User> call({required RegisteredUser params}) {
-  return _firebaseAuthRepository.logIn(params);
-}
+  Future<User> call({required RegisteredUser params}) {
+    return _firebaseAuthRepository.logIn(params);
+  }
 }

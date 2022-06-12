@@ -17,6 +17,7 @@ class InViewNotifierWidget extends StatefulWidget {
   @override
   _InViewNotifierWidgetState createState() => _InViewNotifierWidgetState();
 }
+
 class _InViewNotifierWidgetState extends State<InViewNotifierWidget> {
   late final InViewState state;
 
@@ -55,9 +56,9 @@ class _InViewNotifierWidgetState extends State<InViewNotifierWidget> {
     );
   }
 }
+
 typedef InViewNotifierWidgetBuilder = Widget Function(
   BuildContext context,
   bool isInView,
   Widget? child,
 );
-
