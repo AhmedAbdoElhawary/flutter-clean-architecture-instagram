@@ -57,6 +57,21 @@ This repository and "documentation" are still under development.
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/173256887-3e3df39a-bc7e-4b9e-9568-92eefe64aed4.gif"  width="250">
 <img src="https://user-images.githubusercontent.com/88978546/173257036-a5eca476-a302-4bd7-bfdf-9176f8100d9d.gif"  width="250">
+ 
+<img src="https://user-images.githubusercontent.com/88978546/173257119-4006f644-4fcf-43c1-9a4a-3255afcf0db5.gif"  width="250">
+<img src="https://user-images.githubusercontent.com/88978546/173257164-9fc3b546-e940-4496-86c0-2e31b31f2c61.gif"  width="250">
+
+<img src="https://user-images.githubusercontent.com/88978546/173257177-46c9a927-b269-4aac-8aad-d449b51b455f.gif"  width="250">
+
+<img src="https://user-images.githubusercontent.com/88978546/173257186-613a59c8-d5cc-40a1-b3aa-82c4545eb3a9.gif"  width="250">
+<img src="https://user-images.githubusercontent.com/88978546/173257199-1a0152a0-ff20-4479-b51c-f9f329726a12.gif"  width="250">
+ 
+<img src="https://user-images.githubusercontent.com/88978546/173257206-d78fa66e-6295-4ede-a46e-7e94f943cd02.gif"  width="250">
+<img src="https://user-images.githubusercontent.com/88978546/173257217-e8fabbf2-ce9d-460c-84ae-57057895bdfd.gif"  width="250">
+<img src="https://user-images.githubusercontent.com/88978546/173257225-ccfc0561-eee2-4c26-ad5f-a94e22da108a.gif"  width="250">
+<img src="https://user-images.githubusercontent.com/88978546/173257249-3aef7bd3-8174-45ce-9af9-73696ff20c8d.gif"  width="250">
+<img src="https://user-images.githubusercontent.com/88978546/173257255-4fdd1318-3e21-47e4-bc4b-3f3809dc5b9c.gif"  width="250">
+
 </p>
 
 ## Getting started
