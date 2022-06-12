@@ -7,7 +7,8 @@ class StorySwipe extends StatefulWidget {
   final List<Widget> children;
   late final PageController controller;
 
-  StorySwipe({Key? key,
+  StorySwipe({
+    Key? key,
     required this.children,
     required this.controller,
   }) : super(key: key) {
