@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
-import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +9,10 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:instagram/config/themes/theme_service.dart';
 import 'package:instagram/core/app_prefs.dart';
+import 'package:instagram/core/functions/compress_image.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -354,31 +355,54 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
         builder: (context) {
           return CustomGalleryDisplay(
-            cameras: cameras,
-            nameOfVideo: StringsManager.video.tr(),
-            nameOfPhoto: StringsManager.photo.tr(),
-            nameOfGallery: StringsManager.gallery.tr(),
-            nameOfDeleting: StringsManager.delete.tr(),
-            nameOfLimiting: StringsManager.limitOfPhotos.tr(),
-            themeOfApp: Theme.of(context),
-            nameOfNotFoundingCamera: StringsManager.noSecondaryCameraFound.tr(),
-            nameOfPressAndHold: StringsManager.pressAndHold.tr(),
-            moveToPage: (SelectedImageDetails details) async {
-              File multiSelection = details.multiSelectionMode
-                  ? details.selectedFiles![0]
-                  : details.selectedFile;
-              await Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(
-                      builder: (context) => CreatePostPage(
-                          selectedFile: multiSelection,
-                          multiSelectedFiles: details.selectedFiles,
-                          isThatImage: details.isThatImage,
-                          aspectRatio: details.aspectRatio),
-                      maintainState: false));
-            },
-          );
+              tapsNames: tapsNames(),
+              appTheme: appTheme(context),
+              cameras: cameras,
+              moveToPage: moveToPage);
         },
         maintainState: false));
+  }
+
+  Future<void> moveToPage(SelectedImageDetails details) async {
+    final singleImage = details.selectedFile;
+    details.selectedFile = await compressImage(singleImage) ?? singleImage;
+    if (details.selectedFiles != null && details.multiSelectionMode) {
+      for (int i = 0; i < details.selectedFiles!.length; i++) {
+        final image = details.selectedFiles![i];
+        details.selectedFiles![i] = (await compressImage(image)) ?? image;
+      }
+    }
+
+    File file = details.multiSelectionMode
+        ? details.selectedFiles![0]
+        : details.selectedFile;
+    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+        builder: (context) => CreatePostPage(
+            selectedFile: file,
+            multiSelectedFiles: details.selectedFiles,
+            isThatImage: details.isThatImage,
+            aspectRatio: details.aspectRatio),
+        maintainState: false));
+  }
+
+  AppTheme appTheme(BuildContext context) {
+    return AppTheme(
+        focusColor: Theme.of(context).focusColor,
+        primaryColor: Theme.of(context).primaryColor,
+        shimmerBaseColor: Theme.of(context).textTheme.headline5!.color!,
+        shimmerHighlightColor: Theme.of(context).textTheme.headline6!.color!);
+  }
+
+  TapsNames tapsNames() {
+    return TapsNames(
+      deletingName: StringsManager.delete.tr(),
+      galleryName: StringsManager.gallery.tr(),
+      holdButtonName: StringsManager.pressAndHold.tr(),
+      limitingName: StringsManager.limitOfPhotos.tr(),
+      notFoundingCameraName: StringsManager.noSecondaryCameraFound.tr(),
+      photoName: StringsManager.photo.tr(),
+      videoName: StringsManager.video.tr(),
+    );
   }
 
   Widget createPost() {
