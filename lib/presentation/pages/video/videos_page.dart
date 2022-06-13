@@ -24,7 +24,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../core/utility/constant.dart';
 
 class VideosPage extends StatefulWidget {
-  final bool stopVideo;
+  final ValueNotifier<bool> stopVideo;
 
   const VideosPage({Key? key, required this.stopVideo}) : super(key: key);
 
@@ -33,9 +33,8 @@ class VideosPage extends StatefulWidget {
 }
 
 class VideosPageState extends State<VideosPage> {
-  File? videoFile;
+  ValueNotifier<File?> videoFile = ValueNotifier(null);
   ValueNotifier<bool> rebuildUserInfo = ValueNotifier(false);
-  bool? isFollowed;
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +78,19 @@ class VideosPageState extends State<VideosPage> {
     );
   }
 
+  AppBar appBar() =>
+      AppBar(backgroundColor: ColorManager.transparent, actions: [
+        IconButton(
+          onPressed: () async {
+            File? pickVideo = await videoCameraPicker();
+            if (pickVideo == null) {
+              ToastShow.toast(StringsManager.noImageSelected.tr());
+            }
+          },
+          icon:
+              const Icon(Icons.camera_alt, size: 30, color: ColorManager.white),
+        )
+      ]);
   Widget loadingWidget() {
     return Stack(
       children: [
@@ -128,109 +140,126 @@ class VideosPageState extends State<VideosPage> {
         return Stack(children: [
           SizedBox(
               height: double.infinity,
-              child: ReelVideoPlay(
-                videoInfo: videoInfo,
-                stopVideo: widget.stopVideo,
+              child: ValueListenableBuilder(
+                valueListenable: widget.stopVideo,
+                builder: (context, bool stopVideoValue, child) => ReelVideoPlay(
+                  videoInfo: videoInfo,
+                  stopVideo: stopVideoValue,
+                ),
               )),
-          horizontalWidgets(videoInfo),
-          verticalWidgets(videoInfo.value),
+          _HorizontalButtons(videoInfo: videoInfo, stopVideo: widget.stopVideo),
+          _VerticalButtons(videoInfo: videoInfo, stopVideo: widget.stopVideo),
         ]);
       },
     );
   }
+}
 
-  AppBar appBar() =>
-      AppBar(backgroundColor: ColorManager.transparent, actions: [
-        IconButton(
-          onPressed: () async {
-            File? pickVideo = await videoCameraPicker();
-            if (pickVideo != null) {
-              setState(() {
-                videoFile = pickVideo;
-              });
-            } else {
-              ToastShow.toast(StringsManager.noImageSelected.tr());
-            }
-          },
-          icon:
-              const Icon(Icons.camera_alt, size: 30, color: ColorManager.white),
-        )
-      ]);
+class _VerticalButtons extends StatefulWidget {
+  final ValueNotifier<Post> videoInfo;
+  final ValueNotifier<bool> stopVideo;
 
-  Widget verticalWidgets(Post postInfo) {
-    UserPersonalInfo? personalInfo = postInfo.publisherInfo;
+  const _VerticalButtons(
+      {Key? key, required this.videoInfo, required this.stopVideo})
+      : super(key: key);
+
+  @override
+  State<_VerticalButtons> createState() => _VerticalButtonsState();
+}
+
+class _VerticalButtonsState extends State<_VerticalButtons> {
+  ValueNotifier<bool?> isFollowed = ValueNotifier(null);
+
+  @override
+  Widget build(BuildContext context) {
+    return verticalWidgets();
+  }
+
+  Widget verticalWidgets() {
     return Padding(
       padding:
           const EdgeInsetsDirectional.only(end: 25.0, bottom: 20, start: 15),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Align(
-              alignment: AlignmentDirectional.bottomStart,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () => goToUserProfile(personalInfo!),
-                    child: CircleAvatar(
-                      radius: 18,
-                      backgroundColor: ColorManager.white,
-                      backgroundImage:
-                          NetworkImage(personalInfo!.profileImageUrl),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                      onTap: () => goToUserProfile(personalInfo),
-                      child: Text(
-                        personalInfo.name,
-                        style: const TextStyle(color: ColorManager.white),
-                      )),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  if (postInfo.publisherId != myPersonalId)
-                    followButton(personalInfo),
-                ],
-              )),
-          const SizedBox(height: 10),
-          Text(postInfo.caption,
-              style: getNormalStyle(
-                color: ColorManager.white,
-              )),
-        ],
+      child: ValueListenableBuilder(
+        valueListenable: widget.videoInfo,
+        builder: (context, Post videoInfoValue, child) {
+          UserPersonalInfo? personalInfo = videoInfoValue.publisherInfo;
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                  alignment: AlignmentDirectional.bottomStart,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: () => goToUserProfile(personalInfo!),
+                        child: CircleAvatar(
+                          radius: 18,
+                          backgroundColor: ColorManager.white,
+                          backgroundImage:
+                              NetworkImage(personalInfo!.profileImageUrl),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                          onTap: () => goToUserProfile(personalInfo),
+                          child: Text(
+                            personalInfo.name,
+                            style: const TextStyle(color: ColorManager.white),
+                          )),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      if (videoInfoValue.publisherId != myPersonalId)
+                        followButton(personalInfo),
+                    ],
+                  )),
+              const SizedBox(height: 10),
+              Text(videoInfoValue.caption,
+                  style: getNormalStyle(
+                    color: ColorManager.white,
+                  )),
+            ],
+          );
+        },
       ),
     );
   }
 
-  goToUserProfile(UserPersonalInfo personalInfo) => Navigator.of(
-        context,
-      ).push(CupertinoPageRoute(
-        builder: (context) => WhichProfilePage(
-            userId: personalInfo.userId, userName: personalInfo.userName),
-      ));
+  goToUserProfile(UserPersonalInfo personalInfo) async {
+    await Navigator.of(
+      context,
+    ).push(CupertinoPageRoute(
+      builder: (context) => WhichProfilePage(
+          userId: personalInfo.userId, userName: personalInfo.userName),
+    ));
+    widget.stopVideo.value = false;
+  }
 
-  GestureDetector followButton(UserPersonalInfo personalInfo) {
-    return GestureDetector(
-        onTap: () {
-          rebuildUserInfo.value = false;
-          if (personalInfo.followerPeople.contains(myPersonalId)) {
-            BlocProvider.of<FollowCubit>(context).removeThisFollower(
-                followingUserId: personalInfo.userId,
-                myPersonalId: myPersonalId);
-            isFollowed = false;
-          } else {
-            BlocProvider.of<FollowCubit>(context).followThisUser(
-                followingUserId: personalInfo.userId,
-                myPersonalId: myPersonalId);
-            isFollowed = true;
-          }
-          rebuildUserInfo.value = true;
-        },
-        child: followText(personalInfo));
+  Widget followButton(UserPersonalInfo personalInfo) {
+    return ValueListenableBuilder(
+      valueListenable: isFollowed,
+      builder: (context, bool? isFollowedValue, child) => GestureDetector(
+          onTap: () {
+            if (personalInfo.followerPeople.contains(myPersonalId) ||
+                isFollowedValue == null ||
+                isFollowedValue == true) {
+              BlocProvider.of<FollowCubit>(context).removeThisFollower(
+                  followingUserId: personalInfo.userId,
+                  myPersonalId: myPersonalId);
+              isFollowed.value = false;
+            } else {
+              BlocProvider.of<FollowCubit>(context).followThisUser(
+                  followingUserId: personalInfo.userId,
+                  myPersonalId: myPersonalId);
+              isFollowed.value = true;
+            }
+          },
+          child: followText(personalInfo)),
+    );
   }
 
   Container followText(UserPersonalInfo personalInfo) {
@@ -240,65 +269,103 @@ class VideosPageState extends State<VideosPage> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             border: Border.all(color: ColorManager.white, width: 1)),
-        child: Text(
-          (isFollowed == null &&
-                      personalInfo.followerPeople.contains(myPersonalId)) ||
-                  (isFollowed != null && isFollowed!)
-              ? StringsManager.following.tr()
-              : StringsManager.follow.tr(),
-          style: const TextStyle(color: ColorManager.white),
+        child: ValueListenableBuilder(
+          valueListenable: isFollowed,
+          builder: (context, bool? isFollowedValue, child) => Text(
+            (isFollowedValue == null &&
+                        personalInfo.followerPeople.contains(myPersonalId)) ||
+                    (isFollowedValue != null && isFollowedValue)
+                ? StringsManager.following.tr()
+                : StringsManager.follow.tr(),
+            style: const TextStyle(color: ColorManager.white),
+          ),
         ));
   }
+}
 
-  Padding horizontalWidgets(ValueNotifier<Post> postInfo) {
+class _HorizontalButtons extends StatefulWidget {
+  final ValueNotifier<Post> videoInfo;
+  final ValueNotifier<bool> stopVideo;
+
+  const _HorizontalButtons(
+      {Key? key, required this.videoInfo, required this.stopVideo})
+      : super(key: key);
+
+  @override
+  State<_HorizontalButtons> createState() => _HorizontalButtonsState();
+}
+
+class _HorizontalButtonsState extends State<_HorizontalButtons> {
+  @override
+  Widget build(BuildContext context) {
+    return horizontalWidgets();
+  }
+
+  Padding horizontalWidgets() {
     return Padding(
       padding: const EdgeInsetsDirectional.only(end: 15.0, bottom: 8),
       child: Align(
           alignment: AlignmentDirectional.bottomEnd,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              loveButton(postInfo),
-              buildSizedBox(),
-              numberOfLikes(postInfo),
-              sizedBox(),
-              commentButton(postInfo.value),
-              buildSizedBox(),
-              Text(
-                "${postInfo.value.comments.length}",
-                style: const TextStyle(color: ColorManager.white),
-              ),
-              sizedBox(),
-              GestureDetector(
-                onTap: () {},
-                child: SvgPicture.asset(
-                  IconsAssets.send1Icon,
-                  color: ColorManager.white,
-                  height: 25,
+          child: ValueListenableBuilder(
+            valueListenable: widget.videoInfo,
+            builder: (context, Post videoInfoValue, child) => Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                loveButton(videoInfoValue),
+                buildSizedBox(),
+                numberOfLikes(videoInfoValue),
+                commentButton(videoInfoValue),
+                buildSizedBox(),
+                numberOfComment(videoInfoValue),
+                GestureDetector(
+                  child: SvgPicture.asset(
+                    IconsAssets.send1Icon,
+                    color: ColorManager.white,
+                    height: 25,
+                  ),
                 ),
-              ),
-              sizedBox(),
-              GestureDetector(
-                onTap: () {},
-                child: SvgPicture.asset(
-                  IconsAssets.menuHorizontalIcon,
-                  color: ColorManager.white,
-                  height: 25,
+                sizedBox(),
+                GestureDetector(
+                  child: SvgPicture.asset(
+                    IconsAssets.menuHorizontalIcon,
+                    color: ColorManager.white,
+                    height: 25,
+                  ),
                 ),
-              ),
-              sizedBox(),
-            ],
+                sizedBox(),
+              ],
+            ),
           )),
     );
   }
 
-  GestureDetector commentButton(Post postInfo) {
+  Widget numberOfComment(Post videoInfoValue) {
+    return InkWell(
+      onTap: () async => goToCommentPage(videoInfoValue),
+      child: SizedBox(
+        width: 30,
+        height: 40,
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: Text(
+            "${videoInfoValue.comments.length}",
+            style: const TextStyle(color: ColorManager.white),
+          ),
+        ),
+      ),
+    );
+  }
+
+  goToCommentPage(Post videoInfo) async {
+    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+        builder: (context) => CommentsPage(postId: videoInfo.postUid),
+        maintainState: false));
+    widget.stopVideo.value = false;
+  }
+
+  GestureDetector commentButton(Post videoInfo) {
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-            builder: (context) => CommentsPage(postId: postInfo.postUid),
-            maintainState: false));
-      },
+      onTap: () async => goToCommentPage(videoInfo),
       child: SvgPicture.asset(
         IconsAssets.commentIcon,
         color: ColorManager.white,
@@ -307,24 +374,32 @@ class VideosPageState extends State<VideosPage> {
     );
   }
 
-  Widget numberOfLikes(ValueNotifier<Post> postInfo) {
+  Widget numberOfLikes(Post videoInfo) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).push(CupertinoPageRoute(
+      onTap: () async {
+        await Navigator.of(context).push(CupertinoPageRoute(
             builder: (context) => UsersWhoLikesOnPostPage(
                   showSearchBar: true,
-                  usersIds: postInfo.value.likes,
+                  usersIds: videoInfo.likes,
                 )));
+        widget.stopVideo.value = false;
       },
-      child: Text(
-        "${postInfo.value.likes.length}",
-        style: const TextStyle(color: ColorManager.white),
+      child: SizedBox(
+        width: 30,
+        height: 40,
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: Text(
+            "${videoInfo.likes.length}",
+            style: const TextStyle(color: ColorManager.white),
+          ),
+        ),
       ),
     );
   }
 
-  Widget loveButton(ValueNotifier<Post> postInfo) {
-    bool isLiked = postInfo.value.likes.contains(myPersonalId);
+  Widget loveButton(Post videoInfo) {
+    bool isLiked = videoInfo.likes.contains(myPersonalId);
     return Builder(builder: (context) {
       PostLikesCubit likeCubit = BlocProvider.of<PostLikesCubit>(context);
       return GestureDetector(
@@ -343,12 +418,12 @@ class VideosPageState extends State<VideosPage> {
           setState(() {
             if (isLiked) {
               likeCubit.removeTheLikeOnThisPost(
-                  postId: postInfo.value.postUid, userId: myPersonalId);
-              postInfo.value.likes.remove(myPersonalId);
+                  postId: videoInfo.postUid, userId: myPersonalId);
+              videoInfo.likes.remove(myPersonalId);
             } else {
               likeCubit.putLikeOnThisPost(
-                  postId: postInfo.value.postUid, userId: myPersonalId);
-              postInfo.value.likes.add(myPersonalId);
+                  postId: videoInfo.postUid, userId: myPersonalId);
+              videoInfo.likes.add(myPersonalId);
             }
           });
         },

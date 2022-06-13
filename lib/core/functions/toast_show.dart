@@ -21,7 +21,8 @@ class ToastShow {
       error = state.error;
     }
     if (kDebugMode) {
-      print("=====================> $error !!!!!!the error in toast show!!!!!!!");
+      print(
+          "=====================> $error !!!!!!the error in toast show!!!!!!!");
     }
     ToastShow.toast(error);
   }

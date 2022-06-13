@@ -2,7 +2,8 @@ import 'package:instagram/core/use_case/use_case.dart';
 import '../../../data/models/user_personal_info.dart';
 import '../../repositories/user_repository.dart';
 
-class UpdateUserInfoUseCase implements UseCase< UserPersonalInfo,UserPersonalInfo> {
+class UpdateUserInfoUseCase
+    implements UseCase<UserPersonalInfo, UserPersonalInfo> {
   final FirestoreUserRepository _addNewUserRepository;
 
   UpdateUserInfoUseCase(this._addNewUserRepository);

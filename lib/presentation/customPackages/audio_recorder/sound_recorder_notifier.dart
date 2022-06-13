@@ -118,7 +118,9 @@ class SoundRecordNotifier extends ChangeNotifier {
     String _sdPath = "";
     if (Platform.isIOS) {
       Directory tempDir = await getTemporaryDirectory();
-      _sdPath = initialStorePathRecord.isEmpty ? tempDir.path : initialStorePathRecord;
+      _sdPath = initialStorePathRecord.isEmpty
+          ? tempDir.path
+          : initialStorePathRecord;
     } else {
       _sdPath = initialStorePathRecord.isEmpty
           ? "/storage/emulated/0/new_record_sound"

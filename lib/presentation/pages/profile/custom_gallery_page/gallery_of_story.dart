@@ -32,20 +32,10 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
   late int lastPage;
 
   @override
-  void didUpdateWidget(CustomStoryGalleryDisplay oldWidget) {
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   void initState() {
     isImagesReady = false;
     _fetchNewMedia();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   bool _handleScrollEvent(ScrollNotification scroll, int currentPage) {
@@ -137,13 +127,7 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
     return AppBar(
       backgroundColor: ColorManager.black,
       elevation: 0,
-      leading: IconButton(
-        icon: const Icon(Icons.clear_rounded,
-            color: ColorManager.white, size: 30),
-        onPressed: () {
-          Navigator.of(context).maybePop();
-        },
-      ),
+      leading: iconButton(),
       centerTitle: true,
       title: Text(
         StringsManager.addToStory.tr(),
@@ -153,6 +137,16 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
       actions: const [
         Icon(Icons.settings_rounded, color: ColorManager.white, size: 30),
       ],
+    );
+  }
+
+  IconButton iconButton() {
+    return IconButton(
+      icon: const Icon(Icons.clear_rounded,
+          color: ColorManager.white, size: 30),
+      onPressed: () {
+        Navigator.of(context).maybePop();
+      },
     );
   }
 
@@ -175,24 +169,28 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
               });
             });
           }
-          return GestureDetector(
-              onTap: () async {
-                Navigator.of(context, rootNavigator: true)
-                    .push(CupertinoPageRoute(
-                        builder: (context) {
-                          return CreateStoryPage(
-                            isThatImage: true,
-                            storyImage: image,
-                          );
-                        },
-                        maintainState: false));
-              },
-              child: listOfMedia);
+          return gestureDetector(context, image, listOfMedia);
         } else {
           return Container();
         }
       },
       itemCount: _mediaList.length,
     );
+  }
+
+  GestureDetector gestureDetector(
+      BuildContext context, File image, FutureBuilder<Uint8List?> listOfMedia) {
+    return GestureDetector(
+        onTap: () async {
+          Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+              builder: (context) {
+                return CreateStoryPage(
+                  isThatImage: true,
+                  storyImage: image,
+                );
+              },
+              maintainState: false));
+        },
+        child: listOfMedia);
   }
 }

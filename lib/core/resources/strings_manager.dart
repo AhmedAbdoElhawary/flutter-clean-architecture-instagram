@@ -52,6 +52,8 @@ class StringsManager {
   static const String newPost = "newPost";
   static const String loading = "loading";
   static const String password = "password";
+  static const String noFollowers = "noFollowers";
+  static const String noFollowings = "noFollowings";
 
   static const String hide = "hide";
   static const String unfollow = "unfollow";

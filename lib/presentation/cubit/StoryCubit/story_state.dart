@@ -36,6 +36,7 @@ class SpecificStoriesInfoLoaded extends StoryState {
 }
 
 class CubitDeletingStoryLoaded extends StoryState {}
+
 class CubitDeletingStoryLoading extends StoryState {}
 
 class CubitStoryFailed extends StoryState {

@@ -1,12 +1,13 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memory_image_display.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 Future<FutureBuilder<Uint8List?>> getImageGallery(
     List<AssetEntity> media, int i) async {
   FutureBuilder<Uint8List?> futureBuilder = FutureBuilder(
-    future: media[i].thumbnailDataWithSize(const ThumbnailSize(200, 200)),
+    future: media[i].thumbnailDataWithSize(const ThumbnailSize(350, 350)),
     builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
       if (snapshot.connectionState == ConnectionState.done) {
         Uint8List? image = snapshot.data;
@@ -16,10 +17,7 @@ Future<FutureBuilder<Uint8List?>> getImageGallery(
             child: Stack(
               children: <Widget>[
                 Positioned.fill(
-                  child: Image.memory(
-                    image,
-                    fit: BoxFit.cover,
-                  ),
+                  child: MemoryImageDisplay(imagePath: image),
                 ),
                 if (media[i].type == AssetType.video)
                   const Align(

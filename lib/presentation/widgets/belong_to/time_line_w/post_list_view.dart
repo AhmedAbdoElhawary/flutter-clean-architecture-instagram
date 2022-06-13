@@ -32,7 +32,7 @@ import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_t
 import 'package:like_button/like_button.dart';
 
 class PostImage extends StatefulWidget {
-  final Post postInfo;
+  final ValueNotifier<Post> postInfo;
   final bool playTheVideo;
   final VoidCallback reLoadData;
   final int indexOfPost;
@@ -77,7 +77,6 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
     return thePostsOfHomePage(
-      postInfo: widget.postInfo,
       bodyHeight: bodyHeight,
     );
   }
@@ -93,130 +92,134 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
       ));
 
   Widget thePostsOfHomePage({
-    required Post postInfo,
     required double bodyHeight,
   }) {
     return SizedBox(
       width: double.infinity,
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatarOfProfileImage(
-                    bodyHeight: bodyHeight * .5,
-                    userInfo: postInfo.publisherInfo!,
-                  ),
-                  const SizedBox(width: 5),
-                  Expanded(
-                      child: InkWell(
-                          onTap: () => pushToProfilePage(postInfo),
-                          child: NameOfCircleAvatar(
-                              postInfo.publisherInfo!.name, false))),
-                  menuButton()
-                ],
-              ),
-            ),
-            imageOfPost(postInfo),
-            Padding(
-              padding: const EdgeInsetsDirectional.only(
-                  start: 8, top: 10, bottom: 8),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: ValueListenableBuilder(
+        valueListenable: widget.postInfo,
+        builder: (context, Post postInfoValue, child) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    loveButton(postInfo),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 5),
-                      child: GestureDetector(
-                        child: iconsOfImagePost(IconsAssets.commentIcon),
-                        onTap: () {
-                          Navigator.of(
-                            context,
-                          ).push(CupertinoPageRoute(
-                            builder: (context) =>
-                                CommentsPage(postId: postInfo.postUid),
-                          ));
-                        },
-                      ),
+                    CircleAvatarOfProfileImage(
+                      bodyHeight: bodyHeight * .5,
+                      userInfo: postInfoValue.publisherInfo!,
                     ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 15.0),
-                      child: GestureDetector(
-                        child: iconsOfImagePost(IconsAssets.send1Icon,
-                            lowHeight: true),
-                      ),
-                    ),
-                    const Spacer(),
-                    if (postInfo.imagesUrls.isNotEmpty)
-                      ValueListenableBuilder(
-                        valueListenable: initPosition,
-                        builder: (context, int positionValue, child) =>
-                            PointsScrollBar(
-                          photoCount: postInfo.imagesUrls.length,
-                          activePhotoIndex: positionValue,
-                        ),
-                      ),
-                    const Spacer(),
-                    const Spacer(),
-                    ValueListenableBuilder(
-                      valueListenable: isSaved,
-                      builder: (context, bool isSavedValue, child) => Padding(
-                        padding: const EdgeInsetsDirectional.only(end: 12.0),
+                    const SizedBox(width: 5),
+                    Expanded(
+                        child: InkWell(
+                            onTap: () => pushToProfilePage(postInfoValue),
+                            child: NameOfCircleAvatar(
+                                postInfoValue.publisherInfo!.name, false))),
+                    menuButton()
+                  ],
+                ),
+              ),
+              imageOfPost(postInfoValue),
+              Padding(
+                padding: const EdgeInsetsDirectional.only(
+                    start: 8, top: 10, bottom: 8),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      loveButton(postInfoValue),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(start: 5),
                         child: GestureDetector(
-                          child: isSavedValue
-                              ? Icon(
-                                  Icons.bookmark_border,
-                                  color: Theme.of(context).focusColor,
-                                )
-                              : Icon(
-                                  Icons.bookmark,
-                                  color: Theme.of(context).focusColor,
-                                ),
+                          child: iconsOfImagePost(IconsAssets.commentIcon),
                           onTap: () {
-                            isSaved.value = !isSaved.value;
+                            Navigator.of(
+                              context,
+                            ).push(CupertinoPageRoute(
+                              builder: (context) =>
+                                  CommentsPage(postId: postInfoValue.postUid),
+                            ));
                           },
                         ),
                       ),
-                    ),
-                  ]),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 11.5),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (postInfo.likes.isNotEmpty) numberOfLikes(postInfo),
-                  const SizedBox(height: 5),
-                  if (currentLanguage == 'en') ...[
-                    ReadMore(
-                        "${postInfo.publisherInfo!.name} ${postInfo.caption}",
-                        2),
-                  ] else ...[
-                    ReadMore(
-                        "${postInfo.caption} ${postInfo.publisherInfo!.name}",
-                        2),
-                  ],
-                  const SizedBox(height: 8),
-                  if (postInfo.comments.isNotEmpty) numberOfComment(postInfo),
-                  buildCommentBox(bodyHeight),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(top: 5.0),
-                    child: Text(
-                      DateOfNow.chattingDateOfNow(
-                          postInfo.datePublished, postInfo.datePublished),
-                      style: getNormalStyle(
-                          color: Theme.of(context).bottomAppBarColor),
-                    ),
-                  ),
-                ],
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(start: 15.0),
+                        child: GestureDetector(
+                          child: iconsOfImagePost(IconsAssets.send1Icon,
+                              lowHeight: true),
+                        ),
+                      ),
+                      const Spacer(),
+                      if (postInfoValue.imagesUrls.isNotEmpty)
+                        ValueListenableBuilder(
+                          valueListenable: initPosition,
+                          builder: (context, int positionValue, child) =>
+                              PointsScrollBar(
+                            photoCount: postInfoValue.imagesUrls.length,
+                            activePhotoIndex: positionValue,
+                          ),
+                        ),
+                      const Spacer(),
+                      const Spacer(),
+                      ValueListenableBuilder(
+                        valueListenable: isSaved,
+                        builder: (context, bool isSavedValue, child) => Padding(
+                          padding: const EdgeInsetsDirectional.only(end: 12.0),
+                          child: GestureDetector(
+                            child: isSavedValue
+                                ? Icon(
+                                    Icons.bookmark_border,
+                                    color: Theme.of(context).focusColor,
+                                  )
+                                : Icon(
+                                    Icons.bookmark,
+                                    color: Theme.of(context).focusColor,
+                                  ),
+                            onTap: () {
+                              isSaved.value = !isSaved.value;
+                            },
+                          ),
+                        ),
+                      ),
+                    ]),
               ),
-            )
-          ]),
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 11.5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (postInfoValue.likes.isNotEmpty)
+                      numberOfLikes(postInfoValue),
+                    const SizedBox(height: 5),
+                    if (currentLanguage == 'en') ...[
+                      ReadMore(
+                          "${postInfoValue.publisherInfo!.name} ${postInfoValue.caption}",
+                          2),
+                    ] else ...[
+                      ReadMore(
+                          "${postInfoValue.caption} ${postInfoValue.publisherInfo!.name}",
+                          2),
+                    ],
+                    const SizedBox(height: 8),
+                    if (postInfoValue.comments.isNotEmpty)
+                      numberOfComment(postInfoValue),
+                    buildCommentBox(bodyHeight),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(top: 5.0),
+                      child: Text(
+                        DateOfNow.chattingDateOfNow(postInfoValue.datePublished,
+                            postInfoValue.datePublished),
+                        style: getNormalStyle(
+                            color: Theme.of(context).bottomAppBarColor),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ]),
+      ),
     );
   }
 
@@ -233,10 +236,10 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
               valueListenable: textController,
               builder: (context, TextEditingController textValue, child) =>
                   CommentBox(
-                postId: widget.postInfo.postUid,
+                postId: widget.postInfo.value.postUid,
                 textController: textValue,
                 focusNode: FocusNode(),
-                userPersonalInfo: widget.postInfo.publisherInfo!,
+                userPersonalInfo: widget.postInfo.value.publisherInfo!,
                 makeSelectedCommentNullable: makeSelectedCommentNullable,
               ),
             ),
@@ -247,7 +250,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
   }
 
   makeSelectedCommentNullable(bool isThatComment) {
-    widget.postInfo.comments.add(" ");
+    widget.postInfo.value.comments.add(" ");
     textController.value.text = '';
     Navigator.maybePop(context);
   }
@@ -263,7 +266,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
               : CrossAxisAlignment.end,
           children: [
             CircleAvatarOfProfileImage(
-              userInfo: widget.postInfo.publisherInfo!,
+              userInfo: widget.postInfo.value.publisherInfo!,
               bodyHeight: bodyHeight * .5,
             ),
             const SizedBox(
@@ -465,7 +468,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
     return CustomBottomSheet.bottomSheet(
       context,
       headIcon: shareThisPost(),
-      bodyText: widget.postInfo.publisherId == myPersonalId
+      bodyText: widget.postInfo.value.publisherId == myPersonalId
           ? ordersOfMyPost()
           : ordersOfOtherUser(),
     );
@@ -484,47 +487,50 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
           buildText(StringsManager.share.tr()),
         ],
       ),
-      onTap: () {},
     );
   }
 
   Widget ordersOfMyPost() {
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 10),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GestureDetector(
-              onTap: () {}, child: textOfOrders(StringsManager.archive.tr())),
-          deletePost(),
-          editPost(),
-          GestureDetector(
-              onTap: () {},
-              child: textOfOrders(StringsManager.hideLikeCount.tr())),
-          GestureDetector(
-              onTap: () {},
-              child: textOfOrders(StringsManager.turnOffCommenting.tr())),
-          Container(height: 10)
-        ],
+      child: ValueListenableBuilder(
+        valueListenable: widget.postInfo,
+        builder: (context, Post postInfoValue, child) => Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(child: textOfOrders(StringsManager.archive.tr())),
+            deletePost(postInfoValue),
+            editPost(postInfoValue),
+            GestureDetector(
+                child: textOfOrders(StringsManager.hideLikeCount.tr())),
+            GestureDetector(
+                child: textOfOrders(StringsManager.turnOffCommenting.tr())),
+            Container(height: 10)
+          ],
+        ),
       ),
     );
   }
 
-  BlocBuilder<PostCubit, PostState> deletePost() {
+  BlocBuilder<PostCubit, PostState> deletePost(Post postInfoValue) {
     return BlocBuilder<PostCubit, PostState>(builder: (context, state) {
       return GestureDetector(
           onTap: () async {
             Navigator.maybePop(context);
             await PostCubit.get(context)
-                .deletePostInfo(postInfo: widget.postInfo);
-            widget.postsInfo.value.removeAt(widget.indexOfPost);
+                .deletePostInfo(postInfo: postInfoValue);
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              setState(() {
+                widget.postsInfo.value.removeAt(widget.indexOfPost);
+              });
+            });
           },
           child: textOfOrders(StringsManager.delete.tr()));
     });
   }
 
-  BlocBuilder<PostCubit, PostState> editPost() {
+  BlocBuilder<PostCubit, PostState> editPost(Post postInfoValue) {
     return BlocBuilder<PostCubit, PostState>(builder: (context, state) {
       return GestureDetector(
           onTap: () async {
@@ -532,8 +538,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
             await Navigator.of(context, rootNavigator: true)
                 .push(MaterialPageRoute(
               maintainState: false,
-              builder: (context) =>
-                  UpdatePostInfo(oldPostInfo: widget.postInfo),
+              builder: (context) => UpdatePostInfo(oldPostInfo: postInfoValue),
             ));
           },
           child: textOfOrders(StringsManager.edit.tr()));
@@ -547,19 +552,25 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GestureDetector(
-              onTap: () {}, child: textOfOrders(StringsManager.hide.tr())),
+          GestureDetector(child: textOfOrders(StringsManager.hide.tr())),
           Builder(builder: (context) {
             FollowCubit followCubit = BlocProvider.of<FollowCubit>(context);
-            return GestureDetector(
-                onTap: () async {
-                  await followCubit.removeThisFollower(
-                      followingUserId: widget.postInfo.publisherId,
-                      myPersonalId: myPersonalId);
-                  widget.reLoadData();
-                  widget.postsInfo.value.remove(widget.postInfo);
-                },
-                child: textOfOrders(StringsManager.unfollow.tr()));
+            return ValueListenableBuilder(
+              valueListenable: widget.postInfo,
+              builder: (context, Post postInfoValue, child) => GestureDetector(
+                  onTap: () async {
+                    await followCubit.removeThisFollower(
+                        followingUserId: widget.postInfo.value.publisherId,
+                        myPersonalId: myPersonalId);
+                    WidgetsBinding.instance.addPostFrameCallback((_) async {
+                      setState(() {
+                        widget.reLoadData();
+                        widget.postsInfo.value.remove(postInfoValue);
+                      });
+                    });
+                  },
+                  child: textOfOrders(StringsManager.unfollow.tr())),
+            );
           }),
           Container(height: 10)
         ],

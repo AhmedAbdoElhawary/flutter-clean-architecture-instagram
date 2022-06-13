@@ -1,6 +1,5 @@
 part of 'message_bloc.dart';
 
-
 abstract class MessageBlocState extends Equatable {
   const MessageBlocState();
 

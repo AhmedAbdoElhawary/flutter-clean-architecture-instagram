@@ -31,98 +31,94 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => true,
-      child: ValueListenableBuilder(
-        valueListenable: playReelVideo,
-        builder: (BuildContext context, bool value, __) {
-          return CupertinoTabScaffold(
-              tabBar: CupertinoTabBar(
-                  backgroundColor: value
-                      ? ColorManager.black
-                      : Theme.of(context).primaryColor,
-                  height: 40,
-                  items: [
-                    navigationBarItem("house_white.svg", value),
-                    navigationBarItem("search.svg", value),
-                    navigationBarItem("video.svg", value),
-                    navigationBarItem("shop_white.svg", value),
-                    BottomNavigationBarItem(
-                      icon: BlocBuilder<FirestoreUserInfoCubit,
-                          FirestoreGetUserInfoState>(builder: (context, state) {
-                        FirestoreUserInfoCubit userCubit =
-                            FirestoreUserInfoCubit.get(context);
-                        String userImage =
-                            userCubit.myPersonalInfo!.profileImageUrl;
+    return ValueListenableBuilder(
+      valueListenable: playReelVideo,
+      builder: (BuildContext context, bool value, __) {
+        return CupertinoTabScaffold(
+            tabBar: CupertinoTabBar(
+                backgroundColor:
+                    value ? ColorManager.black : Theme.of(context).primaryColor,
+                height: 40,
+                items: [
+                  navigationBarItem("house_white.svg", value),
+                  navigationBarItem("search.svg", value),
+                  navigationBarItem("video.svg", value),
+                  navigationBarItem("shop_white.svg", value),
+                  BottomNavigationBarItem(
+                    icon: BlocBuilder<FirestoreUserInfoCubit,
+                        FirestoreGetUserInfoState>(builder: (context, state) {
+                      FirestoreUserInfoCubit userCubit =
+                          FirestoreUserInfoCubit.get(context);
+                      String userImage =
+                          userCubit.myPersonalInfo!.profileImageUrl;
 
-                        return CircleAvatar(
-                            radius: 14,
-                            backgroundImage: userImage.isNotEmpty
-                                ? NetworkImage(userImage)
-                                : null,
-                            backgroundColor: Theme.of(context).hintColor,
-                            child: userImage.isEmpty
-                                ? const Icon(Icons.person,
-                                    color: ColorManager.white)
-                                : null);
-                      }),
-                    ),
-                  ]),
-              controller: controller,
-              tabBuilder: (context, index) {
-                WidgetsBinding.instance.addPostFrameCallback((_) async {
-                  playReelVideo.value = controller.index == 2 ? true : false;
-                  playHomeVideo.value = controller.index == 0 ? true : false;
-                });
-
-                switch (index) {
-                  case 0:
-                    return CupertinoTabView(
-                      builder: (context) => CupertinoPageScaffold(
-                          child: BlocProvider<PostCubit>(
-                        create: (context) => injector<PostCubit>(),
-                        child: ValueListenableBuilder(
-                            valueListenable: playHomeVideo,
-                            builder: (context, bool playVideoValue, child) =>
-                                HomeScreen(
-                                    userId: widget.userId,
-                                    playVideo: playVideoValue)),
-                      )),
-                    );
-                  case 1:
-                    return CupertinoTabView(
-                      builder: (context) =>
-                          CupertinoPageScaffold(child: AllUsersTimeLinePage()),
-                    );
-                  case 2:
-                    return CupertinoTabView(
-                      builder: (context) => CupertinoPageScaffold(
-                        child: BlocProvider<PostCubit>(
-                            create: (context) => injector<PostCubit>(),
-                            child: VideosPage(
-                              stopVideo: value,
-                            )),
-                      ),
-                    );
-                  case 3:
-                    return CupertinoTabView(
-                      builder: (context) => const CupertinoPageScaffold(
-                        child: ShopPage(),
-                      ),
-                    );
-                  default:
-                    return CupertinoTabView(
-                      builder: (context) => CupertinoPageScaffold(
-                        child: BlocProvider<PostCubit>(
-                          create: (context) => injector<PostCubit>(),
-                          child: PersonalProfilePage(personalId: widget.userId),
-                        ),
-                      ),
-                    );
-                }
+                      return CircleAvatar(
+                          radius: 14,
+                          backgroundImage: userImage.isNotEmpty
+                              ? NetworkImage(userImage)
+                              : null,
+                          backgroundColor: Theme.of(context).hintColor,
+                          child: userImage.isEmpty
+                              ? const Icon(Icons.person,
+                                  color: ColorManager.white)
+                              : null);
+                    }),
+                  ),
+                ]),
+            controller: controller,
+            tabBuilder: (context, index) {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                playReelVideo.value = controller.index == 2 ? true : false;
+                playHomeVideo.value = controller.index == 0 ? true : false;
               });
-        },
-      ),
+
+              switch (index) {
+                case 0:
+                  return CupertinoTabView(
+                    builder: (context) => CupertinoPageScaffold(
+                        child: BlocProvider<PostCubit>(
+                      create: (context) => injector<PostCubit>(),
+                      child: ValueListenableBuilder(
+                          valueListenable: playHomeVideo,
+                          builder: (context, bool playVideoValue, child) =>
+                              HomeScreen(
+                                  userId: widget.userId,
+                                  playVideo: playVideoValue)),
+                    )),
+                  );
+                case 1:
+                  return CupertinoTabView(
+                    builder: (context) =>
+                        CupertinoPageScaffold(child: AllUsersTimeLinePage()),
+                  );
+                case 2:
+                  return CupertinoTabView(
+                    builder: (context) => CupertinoPageScaffold(
+                      child: BlocProvider<PostCubit>(
+                          create: (context) => injector<PostCubit>(),
+                          child: VideosPage(
+                            stopVideo: ValueNotifier(value),
+                          )),
+                    ),
+                  );
+                case 3:
+                  return CupertinoTabView(
+                    builder: (context) => const CupertinoPageScaffold(
+                      child: ShopPage(),
+                    ),
+                  );
+                default:
+                  return CupertinoTabView(
+                    builder: (context) => CupertinoPageScaffold(
+                      child: BlocProvider<PostCubit>(
+                        create: (context) => injector<PostCubit>(),
+                        child: PersonalProfilePage(personalId: widget.userId),
+                      ),
+                    ),
+                  );
+              }
+            });
+      },
     );
   }
 

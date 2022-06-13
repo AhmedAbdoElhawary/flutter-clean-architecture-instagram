@@ -51,7 +51,7 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
         ),
         body: ValueListenableBuilder(
           valueListenable: rebuildUsersInfo,
-          builder: (context, bool value, child) => BlocBuilder(
+          builder: (context, bool rebuildValue, child) => BlocBuilder(
             bloc: BlocProvider.of<UsersInfoCubit>(context)
               ..getFollowersAndFollowingsInfo(
                   followersIds: widget.userInfo.followerPeople,
@@ -61,7 +61,9 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
                   (current is CubitFollowersAndFollowingsLoaded)) {
                 return true;
               }
-              if (value && (current is CubitFollowersAndFollowingsLoaded)) {
+              if (rebuildUsersInfo.value &&
+                  (current is CubitFollowersAndFollowingsLoaded)) {
+                rebuildUsersInfo.value = false;
                 return true;
               }
               return false;
@@ -71,7 +73,7 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
                 return _TapBarView(
                   rebuild: rebuild,
                   state: state,
-                  userInfo: widget.userInfo,
+                  userInfo: ValueNotifier(widget.userInfo),
                 );
               }
               if (state is CubitGettingSpecificUsersFailed) {
@@ -100,7 +102,7 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
 class _TapBarView extends StatelessWidget {
   final CubitFollowersAndFollowingsLoaded state;
   final ValueChanged<bool> rebuild;
-  final UserPersonalInfo userInfo;
+  final ValueNotifier<UserPersonalInfo> userInfo;
 
   const _TapBarView({
     Key? key,
@@ -117,14 +119,14 @@ class _TapBarView extends StatelessWidget {
           usersInfo: state.followersAndFollowingsInfo.followersInfo,
           isThatFollower: true,
           userInfo: userInfo,
-          rebuildVariable: rebuild,
+          rebuild: rebuild,
           showSearchBar: true,
         ),
         ShowMeTheUsers(
           usersInfo: state.followersAndFollowingsInfo.followingsInfo,
           isThatFollower: false,
           userInfo: userInfo,
-          rebuildVariable: rebuild,
+          rebuild: rebuild,
           showSearchBar: true,
         ),
       ],

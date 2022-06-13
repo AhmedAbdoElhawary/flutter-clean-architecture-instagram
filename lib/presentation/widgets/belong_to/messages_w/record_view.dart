@@ -86,7 +86,8 @@ class _RecordViewState extends State<RecordView> {
   }
 
   Icon buildIcon(IconData icon) => Icon(icon,
-      color: widget.isThatMine ? ColorManager.white : Theme.of(context).focusColor,
+      color:
+          widget.isThatMine ? ColorManager.white : Theme.of(context).focusColor,
       size: 30);
 
   Future<void> _onPlay({required String filePath}) async {

@@ -15,7 +15,7 @@ class InViewState extends ChangeNotifier {
 
   InViewState(
       {required List<String> initialIds,
-        bool Function(double, double, double)? isInViewCondition})
+      bool Function(double, double, double)? isInViewCondition})
       : _isInViewCondition = isInViewCondition {
     _contexts = <WidgetData>{};
     _currentInViewIds.addAll(initialIds);
@@ -62,10 +62,10 @@ class InViewState extends ChangeNotifier {
 
       //Retrieve the viewport related to the scroll area
       final RenderAbstractViewport viewport =
-      RenderAbstractViewport.of(renderObject)!;
+          RenderAbstractViewport.of(renderObject)!;
       final double vpHeight = notification.metrics.viewportDimension;
       final RevealedOffset vpOffset =
-      viewport.getOffsetToReveal(renderObject, 0.0);
+          viewport.getOffsetToReveal(renderObject, 0.0);
 
       // Retrieve the dimensions of the item
       final Size size = renderObject.semanticBounds.size;

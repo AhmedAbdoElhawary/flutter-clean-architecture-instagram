@@ -40,9 +40,12 @@ class ShowMicWithText extends StatelessWidget {
                 width: isButtonPressed ? 40 : 24,
                 height: isButtonPressed ? 40 : 24,
                 child: Container(
-                  color: (isButtonPressed) ? ColorManager.blue : ColorManager.transparent,
+                  color: (isButtonPressed)
+                      ? ColorManager.blue
+                      : ColorManager.transparent,
                   child: Padding(
-                    padding: EdgeInsetsDirectional.all(isButtonPressed ? 8.0 : 0),
+                    padding:
+                        EdgeInsetsDirectional.all(isButtonPressed ? 8.0 : 0),
                     child: SvgPicture.asset(
                       "assets/icons/microphone.svg",
                       color: (isButtonPressed)

@@ -93,7 +93,7 @@ dependencies:
   get_storage: ^2.0.3
   blurhash: ^1.0.0
   octo_image: ^1.0.2
-  custom_gallery_display: ^0.0.3
+  custom_gallery_display: ^0.1.0
 
 
 

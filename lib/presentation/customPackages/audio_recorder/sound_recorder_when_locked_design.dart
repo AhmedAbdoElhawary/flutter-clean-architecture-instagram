@@ -24,7 +24,7 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width*.8,
+      width: MediaQuery.of(context).size.width * .8,
       color: ColorManager.transparent,
       child: InkWell(
         onTap: () {
@@ -56,8 +56,8 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
                     height: 40,
                     child: Container(
                       color: recordIconWhenLockBackGroundColor,
-                      child:const Padding(
-                        padding:  EdgeInsetsDirectional.all(4.0),
+                      child: const Padding(
+                        padding: EdgeInsetsDirectional.all(4.0),
                         child: Icon(
                           Icons.send,
                           textDirection: TextDirection.ltr,

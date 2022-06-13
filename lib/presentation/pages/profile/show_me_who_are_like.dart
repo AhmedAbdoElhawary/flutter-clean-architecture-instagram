@@ -52,7 +52,7 @@ class _UsersWhoLikesOnPostPageState extends State<UsersWhoLikesOnPostPage> {
               return ShowMeTheUsers(
                 usersInfo: state.specificUsersInfo,
                 isThatFollower: true,
-                rebuildVariable: rebuild,
+                rebuild: rebuild,
                 showSearchBar: widget.showSearchBar,
               );
             }
