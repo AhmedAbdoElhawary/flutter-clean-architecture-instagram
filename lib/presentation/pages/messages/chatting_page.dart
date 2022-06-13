@@ -479,9 +479,10 @@ class _ChattingPageState extends State<ChattingPage>
                           MessageCubit messageCubit = MessageCubit.get(context);
                           newMessageInfo.value = newMessage();
                           isMessageLoaded.value = true;
-                          messageCubit.sendMessage(
+                          await messageCubit.sendMessage(
                               messageInfo: newMessage(),
                               pathOfRecorded: soundFile.path);
+                          newMessageInfo.value = null;
                         });
                         scrollToLastIndex(context);
                       },
@@ -608,7 +609,6 @@ class _ChattingPageState extends State<ChattingPage>
 
   GestureDetector pickSticker() {
     return GestureDetector(
-      onTap: () {},
       child: SvgPicture.asset(
         "assets/icons/sticker.svg",
         height: 25,
