@@ -71,41 +71,36 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget tapBar() {
-    return ValueListenableBuilder(
-      valueListenable: reBuild,
-      builder: (context, bool reBuildValue, child) =>
-          BlocBuilder<PostCubit, PostState>(
-        bloc: PostCubit.get(context)
-          ..getPostsInfo(
-              userId: widget.userInfo.userId,
-              postsIds: widget.userInfo.posts,
-              isThatForMyPosts: widget.isThatMyPersonalId),
-        buildWhen: (previous, current) {
-          if (reBuildValue) {
-            reBuild.value = false;
-            return true;
-          }
-          if (previous != current && current is CubitPostFailed) {
-            return true;
-          }
-          return previous != current &&
-              ((current is CubitMyPersonalPostsLoaded &&
-                      widget.isThatMyPersonalId) ||
-                  (current is CubitPostsInfoLoaded &&
-                      !widget.isThatMyPersonalId));
-        },
-        builder: (BuildContext context, PostState state) {
-          if (state is CubitMyPersonalPostsLoaded &&
-              widget.isThatMyPersonalId) {
-            return columnOfWidgets(state.postsInfo);
-          } else if (state is CubitPostsInfoLoaded &&
-              !widget.isThatMyPersonalId) {
-            return columnOfWidgets(state.postsInfo);
-          } else {
-            return loadingWidget();
-          }
-        },
-      ),
+    return BlocBuilder<PostCubit, PostState>(
+      bloc: PostCubit.get(context)
+        ..getPostsInfo(
+            userId: widget.userInfo.userId,
+            postsIds: widget.userInfo.posts,
+            isThatForMyPosts: widget.isThatMyPersonalId),
+      buildWhen: (previous, current) {
+        if (reBuild.value) {
+          reBuild.value = false;
+          return true;
+        }
+        if (previous != current && current is CubitPostFailed) {
+          return true;
+        }
+        return previous != current &&
+            ((current is CubitMyPersonalPostsLoaded &&
+                    widget.isThatMyPersonalId) ||
+                (current is CubitPostsInfoLoaded &&
+                    !widget.isThatMyPersonalId));
+      },
+      builder: (BuildContext context, PostState state) {
+        if (state is CubitMyPersonalPostsLoaded && widget.isThatMyPersonalId) {
+          return columnOfWidgets(state.postsInfo);
+        } else if (state is CubitPostsInfoLoaded &&
+            !widget.isThatMyPersonalId) {
+          return columnOfWidgets(state.postsInfo);
+        } else {
+          return loadingWidget();
+        }
+      },
     );
   }
 
@@ -294,11 +289,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     userInfo: userInfo,
                     initialIndex:
                         usersInfo == userInfo.followerPeople ? 0 : 1)));
-
             BlocProvider.of<FirestoreUserInfoCubit>(context).getUserInfo(
                 userInfo.userId,
                 isThatMyPersonalId: widget.isThatMyPersonalId);
-            reBuild.value = true;
+            setState(() {
+              reBuild.value = true;
+            });
           }
         },
         child: Column(
