@@ -13,8 +13,8 @@ import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile
 class ShowMeTheUsers extends StatefulWidget {
   final List<UserPersonalInfo> usersInfo;
   final bool isThatFollower;
-  final UserPersonalInfo? userInfo;
-  final ValueChanged<bool> rebuildVariable;
+  final ValueNotifier<UserPersonalInfo>? userInfo;
+  final ValueChanged<bool> rebuild;
   final bool showSearchBar;
 
   const ShowMeTheUsers(
@@ -23,7 +23,7 @@ class ShowMeTheUsers extends StatefulWidget {
       required this.isThatFollower,
       required this.showSearchBar,
       this.userInfo,
-      required this.rebuildVariable})
+      required this.rebuild})
       : super(key: key);
 
   @override
@@ -35,6 +35,8 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           widget.usersInfo.isNotEmpty
               ? ListView.builder(
@@ -47,7 +49,13 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                         widget.usersInfo[index], widget.isThatFollower);
                   },
                   itemCount: widget.usersInfo.length)
-              : Container(),
+              : Center(
+                  child: Text(
+                  widget.isThatFollower
+                      ? StringsManager.noFollowers.tr()
+                      : StringsManager.noFollowings.tr(),
+                  style: Theme.of(context).textTheme.bodyText1,
+                )),
         ],
       ),
     );
@@ -56,11 +64,13 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
   Widget containerOfUserInfo(UserPersonalInfo userInfo, bool isThatFollower) {
     String hash = "${userInfo.userId.hashCode}userInfo";
     return InkWell(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
+      onTap: () async {
+        await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => WhichProfilePage(
                   userId: userInfo.userId,
                 )));
+
+        widget.rebuild(true);
       },
       child: Padding(
         padding: const EdgeInsetsDirectional.only(end: 10, start: 10, top: 10),
@@ -107,8 +117,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
             } else {
               return GestureDetector(
                   onTap: () async {
-                    widget.rebuildVariable(false);
-
+                    widget.rebuild(false);
                     if (userInfo.followerPeople.contains(myPersonalId)) {
                       BlocProvider.of<FollowCubit>(followContext)
                           .removeThisFollower(
@@ -128,7 +137,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                               followingUserId: userInfo.userId,
                               myPersonalId: myPersonalId);
                     }
-                    widget.rebuildVariable(true);
+                    widget.rebuild(true);
                   },
                   child: whichContainerOfText(stateOfFollow, userInfo));
             }
