@@ -55,7 +55,7 @@ This repository and "documentation" are still under development.
     * Voice
 ## SnapShots
 
-### |-------- Login page ---------|---------- Stories -----------|--------- List of posts ------ |
+### |--------- Login page ----------|----------- Stories ------------|---------- List of posts ------- |
 
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/173256887-3e3df39a-bc7e-4b9e-9568-92eefe64aed4.gif"   width="32%" height="50%">
