@@ -3,18 +3,18 @@
 Instagram clean architecture using flutter and firebase as ( frontend & backend ) with almost fully functionally
 
 ## Scan me
+
 ### Notes
-* You can only read from my firebase, you cannot write in it (it's because the limit of firebase).
-* you cannot create new post ,likes, comments and edit profile etc..
-* This apk for only to read or see what is this app really looks like
-* If you need fully functions (read, write) just create google-services.json and reaplace it with my json file in  [google services](android/app/google-services.json).
-* You can follow the steps in [Getting started](#getting-started)
+* This apk for only to read or see what is this app looks like
+* You can only read from my firebase, you cannot write in it (because the limit of firebase).
+* You cannot create a new post, likes, comments, edit profile, etc...
+* If you need full functions (read, write) just create google-services.json and replace it with my JSON file in  [google services](android/app/google-services.json).
+* You can follow the steps in [Getting started](#getting-started) to create a firebase
 <p align="center">
     <img src="https://user-images.githubusercontent.com/88978546/173915132-7bd2fb4d-22a8-4b9d-9ce9-d684d9d0e32a.png"
       alt="Pub Package" width="25%" height="25%"/>
  <p/>
  
-
 ## Features
 
 * Support
