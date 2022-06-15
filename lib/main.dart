@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:instagram/core/resources/langauge_manager.dart';
-import 'package:instagram/material_app.dart';
+import 'package:instagram/presentation/widgets/belong_to/main_w/material_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/utility/injector.dart';
 
