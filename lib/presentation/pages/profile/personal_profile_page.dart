@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
-import 'package:instagram/presentation/pages/profile/custom_gallery_page/gallery_of_story.dart';
+import 'package:instagram/presentation/pages/story/create_story.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_page.dart';
@@ -334,14 +333,39 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   createNewStory() async {
     Navigator.maybePop(context);
-    final List<CameraDescription> cameras = await availableCameras();
     Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
         builder: (context) {
-          return CustomStoryGalleryDisplay(cameras: cameras);
+          return CustomGallery.normalDisplay(
+            appTheme: appStoryTheme(),
+            moveToPage: moveToCreateStoryPage,
+          );
         },
         maintainState: false));
 
     rebuildUserInfo.value = true;
+  }
+
+  AppTheme appStoryTheme() {
+    return AppTheme(
+        primaryColor: ColorManager.black, focusColor: ColorManager.white);
+  }
+
+  Future<void> moveToCreateStoryPage(SelectedImageDetails details) async {
+    final singleImage = details.selectedFile;
+    details.selectedFile = await compressImage(singleImage) ?? singleImage;
+    if (details.selectedFiles != null && details.multiSelectionMode) {
+      final image = details.selectedFiles![0];
+      details.selectedFiles![0] = (await compressImage(image)) ?? image;
+    }
+    File file = details.multiSelectionMode
+        ? details.selectedFiles![0]
+        : details.selectedFile;
+    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+        builder: (context) => CreateStoryPage(
+              storyImage: file,
+              isThatImage: details.isThatImage,
+            ),
+        maintainState: false));
   }
 
   createNewPost({bool isThatImage = true}) async {
@@ -351,19 +375,18 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   }
 
   Future<void> customGalleryDisplay({bool isThatImage = true}) async {
-    final List<CameraDescription> cameras = await availableCameras();
     await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
         builder: (context) {
-          return CustomGalleryDisplay(
-              tapsNames: tapsNames(),
-              appTheme: appTheme(context),
-              cameras: cameras,
-              moveToPage: moveToPage);
+          return CustomGallery.instagramDisplay(
+            tabsNames: tapsNames(),
+            appTheme: appTheme(context),
+            moveToPage: moveToCreatePostPage,
+          );
         },
         maintainState: false));
   }
 
-  Future<void> moveToPage(SelectedImageDetails details) async {
+  Future<void> moveToCreatePostPage(SelectedImageDetails details) async {
     final singleImage = details.selectedFile;
     details.selectedFile = await compressImage(singleImage) ?? singleImage;
     if (details.selectedFiles != null && details.multiSelectionMode) {
@@ -393,12 +416,13 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         shimmerHighlightColor: Theme.of(context).textTheme.headline6!.color!);
   }
 
-  TapsNames tapsNames() {
-    return TapsNames(
+  TabsNames tapsNames() {
+    return TabsNames(
       deletingName: StringsManager.delete.tr(),
       galleryName: StringsManager.gallery.tr(),
       holdButtonName: StringsManager.pressAndHold.tr(),
       limitingName: StringsManager.limitOfPhotos.tr(),
+      clearImagesName: StringsManager.clearSelectedImages.tr(),
       notFoundingCameraName: StringsManager.noSecondaryCameraFound.tr(),
       photoName: StringsManager.photo.tr(),
       videoName: StringsManager.video.tr(),
