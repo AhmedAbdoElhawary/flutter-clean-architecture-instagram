@@ -10,6 +10,11 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
 * You cannot create a new post, likes, comments, edit profile, etc...
 * If you need full functions (read, write) just create google-services.json and replace it with my JSON file in  [google services](android/app/google-services.json).
 * You can follow the steps in [Getting started](#getting-started) to create a firebase
+<h3 align="center">Use this account to register</h3>
+<h4 align="center">[Email] ahmed1@gmail.com</h4>
+<h4 align="center">[Password] 123456</h4>
+
+
 <p align="center">
     <img src="https://user-images.githubusercontent.com/88978546/173915132-7bd2fb4d-22a8-4b9d-9ce9-d684d9d0e32a.png"
       alt="Pub Package" width="25%" height="25%"/>
