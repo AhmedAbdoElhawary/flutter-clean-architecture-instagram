@@ -71,7 +71,7 @@ class StringsManager {
   static const String video = "video";
   static const String pressAndHold = "pressAndHold";
   static const String noSecondaryCameraFound = "noSecondaryCameraFound";
-
+  static const String clearSelectedImages = "clearSelectedImages";
   static const String restrict = "restrict";
   static const String share = "share";
 
