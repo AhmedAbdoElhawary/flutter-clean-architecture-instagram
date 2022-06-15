@@ -1,6 +1,6 @@
 # flutter-clean-architecture-instagram
 
-Instagram clean architecture using flutter and firebase as ( frontend & backend ) with almost fully functionally
+Instagram clean architecture using flutter and firebase as ( frontend & backend ) with almost fully functional
 
 ## Scan me
 
