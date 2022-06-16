@@ -6,6 +6,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:instagram/core/resources/langauge_manager.dart';
 import 'package:instagram/presentation/widgets/belong_to/main_w/material_app.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/utility/injector.dart';
 
@@ -25,6 +26,7 @@ EasyLocalization easyLocalization(Widget myApp) {
 Future<SharedPreferences> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await PhotoManager.requestPermissionExtend();
   await Firebase.initializeApp();
   await initializeDependencies();
   await GetStorage.init();
