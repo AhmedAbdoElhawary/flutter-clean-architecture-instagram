@@ -28,7 +28,12 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     compileSdkVersion 32
-
+    lintOptions {
+        disable 'InvalidPackage'
+        disable "Instantiatable"
+        checkReleaseBuilds false
+        abortOnError false
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -49,7 +54,6 @@ android {
         targetSdkVersion 32
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-
         multiDexEnabled true
 
     }
@@ -59,10 +63,6 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
-            debuggable false                // make app non-debuggable
-            crunchPngs true                 // shrink images
-            minifyEnabled true              // obfuscate code and remove unused code
-            shrinkResources true            // shrink and remove unused resources
         }
     }
 }
@@ -74,6 +74,5 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation platform('com.google.firebase:firebase-bom:29.1.0')
-//    implementation "com.google.firebase:firebase-messaging:23.0.4"
     implementation 'com.android.support:multidex:1.0.3'
 }
