@@ -321,7 +321,7 @@ class _ChattingPageState extends State<ChattingPage>
                             builder: (context, String recordsValue, child) =>
                                 SizedBox(
                               child: RecordView(
-                                record: recordedUrl.isEmpty
+                                urlRecord: recordedUrl.isEmpty
                                     ? recordsValue
                                     : recordedUrl,
                                 isThatMine: isThatMine,
