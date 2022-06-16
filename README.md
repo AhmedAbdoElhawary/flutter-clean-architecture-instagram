@@ -15,10 +15,10 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
 <h4 align="center">[Password] 123456</h4>
 
  <p align="center">
-    <img src="https://user-images.githubusercontent.com/88978546/173964361-25c7cea5-afa1-4deb-b2a7-d4853d399099.png"
+    <img src="https://user-images.githubusercontent.com/88978546/173978306-b8b8b3ca-d516-42a5-877c-084ae1ae15f3.png"
       alt="Pub Package" width="25%" height="25%"/>
  <p/>
- 
+
 ## Features
 
 * Support
