@@ -137,7 +137,7 @@ Total : 319 files,  1357 codes, -96 comments, 36 blanks, all 1297 lines
 | [lib/domain/usecases/storyUseCase/get_stories_info.dart](/lib/domain/usecases/storyUseCase/get_stories_info.dart) | Dart | -16 | 0 | -4 | -20 |
 | [lib/injector.dart](/lib/injector.dart) | Dart | -192 | -44 | -31 | -267 |
 | [lib/main.dart](/lib/main.dart) | Dart | -40 | 0 | -3 | -43 |
-| [lib/material_app.dart](/lib/material_app.dart) | Dart | 56 | 0 | 7 | 63 |
+| [lib/material_app.dart](/lib/presentation/widgets/belong_to/main_w/material_app.dart) | Dart | 56 | 0 | 7 | 63 |
 | [lib/presentation/cubit/StoryCubit/story_cubit.dart](/lib/presentation/cubit/StoryCubit/story_cubit.dart) | Dart | 27 | 0 | 2 | 29 |
 | [lib/presentation/cubit/StoryCubit/story_state.dart](/lib/presentation/cubit/StoryCubit/story_state.dart) | Dart | 8 | 0 | 4 | 12 |
 | [lib/presentation/cubit/blocObserver/bloc_observer.dart](/lib/presentation/cubit/blocObserver/bloc_observer.dart) | Dart | 0 | 0 | -1 | -1 |
@@ -325,7 +325,7 @@ Total : 319 files,  1357 codes, -96 comments, 36 blanks, all 1297 lines
 | [lib/presentation/widgets/toast_show.dart](/lib/presentation/widgets/toast_show.dart) | Dart | -22 | 0 | -1 | -23 |
 | [lib/presentation/widgets/try.dart](/lib/presentation/widgets/global/custom_widgets/custom_gallery_display.dart) | Dart | 947 | 23 | 110 | 1,080 |
 | [lib/presentation/widgets/user_profile_page.dart](/lib/presentation/widgets/user_profile_page.dart) | Dart | -241 | -1 | -16 | -258 |
-| [lib/responsive_layout.dart](/lib/responsive_layout.dart) | Dart | 0 | 1 | 0 | 1 |
+| [lib/responsive_layout.dart](/lib/presentation/widgets/belong_to/main_w/responsive_layout.dart) | Dart | 0 | 1 | 0 | 1 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 25 | 0 | 0 | 25 |
 | [test/widget_test.dart](/test/widget_test.dart) | Dart | -2 | 1 | -1 | -2 |
 | [windows/flutter/generated_plugin_registrant.cc](/windows/flutter/generated_plugin_registrant.cc) | C++ | 3 | 0 | 0 | 3 |

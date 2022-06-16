@@ -6,9 +6,9 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 
 class RecordView extends StatefulWidget {
-  final String record;
+  final String urlRecord;
   final bool isThatMine;
-  const RecordView({Key? key, required this.record, required this.isThatMine})
+  const RecordView({Key? key, required this.urlRecord, required this.isThatMine})
       : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class _RecordViewState extends State<RecordView> {
   AudioPlayer audioPlayer = AudioPlayer();
   @override
   Widget build(BuildContext context) {
-    return widget.record.isEmpty
+    return widget.urlRecord.isEmpty
         ? Center(
             child: Text(
             StringsManager.noRecordsYet,
@@ -38,7 +38,7 @@ class _RecordViewState extends State<RecordView> {
                 child: _isPlaying
                     ? buildIcon(Icons.pause_sharp)
                     : buildIcon(Icons.play_arrow_rounded),
-                onTap: () => _onPlay(filePath: widget.record),
+                onTap: () => _onPlay(urlRecord: widget.urlRecord),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -90,14 +90,14 @@ class _RecordViewState extends State<RecordView> {
           widget.isThatMine ? ColorManager.white : Theme.of(context).focusColor,
       size: 30);
 
-  Future<void> _onPlay({required String filePath}) async {
+  Future<void> _onPlay({required String urlRecord}) async {
     if (!_isPlaying) {
-      audioPlayer.play(filePath, isLocal: true);
+      audioPlayer.play(UrlSource(urlRecord));
       setState(() {
         _isPlaying = true;
       });
 
-      audioPlayer.onPlayerCompletion.listen((_) {
+      audioPlayer.onPlayerComplete.listen((_) {
         setState(() {
           _isPlaying = false;
         });
@@ -109,7 +109,7 @@ class _RecordViewState extends State<RecordView> {
         });
       });
 
-      audioPlayer.onAudioPositionChanged.listen((duration) {
+      audioPlayer.onPositionChanged.listen((duration) {
         setState(() {
           _currentDuration = duration.inMicroseconds;
           _completedPercentage =

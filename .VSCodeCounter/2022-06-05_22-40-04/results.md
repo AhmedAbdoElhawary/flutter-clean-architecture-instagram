@@ -1,0 +1,152 @@
+# Summary
+
+Date : 2022-06-05 22:40:04
+
+Directory c:\Users\ahmed\OneDrive\Desktop\flutter-clean-architecture-instagram-3
+
+Total : 317 files,  18899 codes, 845 comments, 2226 blanks, all 21970 lines
+
+Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
+
+## Languages
+| language | files | code | comment | blank | total |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| Dart | 215 | 17,338 | 598 | 1,953 | 19,889 |
+| JSON | 7 | 429 | 0 | 3 | 432 |
+| C++ | 11 | 405 | 80 | 132 | 617 |
+| XML | 65 | 208 | 46 | 15 | 269 |
+| YAML | 5 | 181 | 98 | 37 | 316 |
+| Markdown | 6 | 125 | 0 | 44 | 169 |
+| Groovy | 3 | 95 | 4 | 25 | 124 |
+| HTML | 1 | 80 | 18 | 7 | 105 |
+| CMake | 1 | 18 | 0 | 6 | 24 |
+| Swift | 1 | 12 | 0 | 2 | 14 |
+| Properties | 2 | 8 | 1 | 2 | 11 |
+
+## Directories
+| path | files | code | comment | blank | total |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| . | 317 | 18,899 | 845 | 2,226 | 21,970 |
+| .github | 3 | 87 | 16 | 14 | 117 |
+| .github\workflows | 3 | 87 | 16 | 14 | 117 |
+| android | 15 | 228 | 49 | 39 | 316 |
+| android\app | 11 | 186 | 48 | 27 | 261 |
+| android\app\src | 9 | 85 | 44 | 12 | 141 |
+| android\app\src\debug | 1 | 4 | 3 | 1 | 8 |
+| android\app\src\main | 7 | 77 | 38 | 10 | 125 |
+| android\app\src\main\res | 6 | 35 | 32 | 7 | 74 |
+| android\app\src\main\res\drawable | 1 | 4 | 7 | 2 | 13 |
+| android\app\src\main\res\drawable-v21 | 1 | 4 | 7 | 2 | 13 |
+| android\app\src\main\res\mipmap-anydpi-v26 | 1 | 5 | 0 | 1 | 6 |
+| android\app\src\main\res\values | 2 | 13 | 9 | 1 | 23 |
+| android\app\src\main\res\values-night | 1 | 9 | 9 | 1 | 19 |
+| android\app\src\profile | 1 | 4 | 3 | 1 | 8 |
+| android\gradle | 1 | 5 | 1 | 1 | 7 |
+| android\gradle\wrapper | 1 | 5 | 1 | 1 | 7 |
+| assets | 57 | 271 | 0 | 1 | 272 |
+| assets\icons | 54 | 62 | 0 | 1 | 63 |
+| assets\splash_gif | 1 | 1 | 0 | 0 | 1 |
+| assets\translations | 2 | 208 | 0 | 0 | 208 |
+| ios | 7 | 222 | 2 | 9 | 233 |
+| ios\Runner | 7 | 222 | 2 | 9 | 233 |
+| ios\Runner\Assets.xcassets | 3 | 148 | 0 | 4 | 152 |
+| ios\Runner\Assets.xcassets\AppIcon.appiconset | 1 | 122 | 0 | 1 | 123 |
+| ios\Runner\Assets.xcassets\LaunchImage.imageset | 2 | 26 | 0 | 3 | 29 |
+| ios\Runner\Base.lproj | 2 | 61 | 2 | 2 | 65 |
+| lib | 218 | 17,331 | 588 | 1,946 | 19,865 |
+| lib\config | 3 | 100 | 0 | 9 | 109 |
+| lib\config\routes | 1 | 0 | 0 | 1 | 1 |
+| lib\config\themes | 2 | 100 | 0 | 8 | 108 |
+| lib\core | 16 | 683 | 46 | 136 | 865 |
+| lib\core\functions | 5 | 163 | 0 | 21 | 184 |
+| lib\core\resources | 6 | 253 | 0 | 56 | 309 |
+| lib\core\use_case | 1 | 20 | 0 | 4 | 24 |
+| lib\core\utility | 2 | 212 | 46 | 46 | 304 |
+| lib\data | 22 | 1,382 | 3 | 176 | 1,561 |
+| lib\data\datasourses | 8 | 551 | 0 | 86 | 637 |
+| lib\data\datasourses\remote | 8 | 551 | 0 | 86 | 637 |
+| lib\data\datasourses\remote\post | 3 | 238 | 0 | 40 | 278 |
+| lib\data\datasourses\remote\post\comment | 2 | 129 | 0 | 24 | 153 |
+| lib\data\datasourses\remote\story | 1 | 46 | 0 | 6 | 52 |
+| lib\data\datasourses\remote\user | 2 | 227 | 0 | 32 | 259 |
+| lib\data\models | 8 | 351 | 3 | 38 | 392 |
+| lib\data\repositories_impl | 6 | 480 | 0 | 52 | 532 |
+| lib\data\repositories_impl\post | 3 | 201 | 0 | 24 | 225 |
+| lib\data\repositories_impl\post\comment | 2 | 105 | 0 | 15 | 120 |
+| lib\domain | 52 | 604 | 0 | 184 | 788 |
+| lib\domain\entities | 5 | 38 | 0 | 8 | 46 |
+| lib\domain\repositories | 7 | 90 | 0 | 20 | 110 |
+| lib\domain\repositories\post | 3 | 35 | 0 | 6 | 41 |
+| lib\domain\repositories\post\comment | 2 | 18 | 0 | 4 | 22 |
+| lib\domain\use_cases | 40 | 476 | 0 | 156 | 632 |
+| lib\domain\use_cases\auth | 3 | 34 | 0 | 12 | 46 |
+| lib\domain\use_cases\follow | 2 | 21 | 0 | 8 | 29 |
+| lib\domain\use_cases\post | 16 | 191 | 0 | 64 | 255 |
+| lib\domain\use_cases\post\comments | 8 | 97 | 0 | 32 | 129 |
+| lib\domain\use_cases\post\comments\getComment | 1 | 11 | 0 | 4 | 15 |
+| lib\domain\use_cases\post\comments\replies | 4 | 51 | 0 | 16 | 67 |
+| lib\domain\use_cases\post\comments\replies\likes | 2 | 26 | 0 | 8 | 34 |
+| lib\domain\use_cases\post\delete | 1 | 11 | 0 | 4 | 15 |
+| lib\domain\use_cases\post\get | 3 | 35 | 0 | 12 | 47 |
+| lib\domain\use_cases\post\likes | 2 | 24 | 0 | 8 | 32 |
+| lib\domain\use_cases\post\update | 1 | 11 | 0 | 4 | 15 |
+| lib\domain\use_cases\story | 4 | 47 | 0 | 16 | 63 |
+| lib\domain\use_cases\user | 14 | 182 | 0 | 56 | 238 |
+| lib\domain\use_cases\user\getUserInfo | 4 | 50 | 0 | 16 | 66 |
+| lib\domain\use_cases\user\message | 4 | 54 | 0 | 16 | 70 |
+| lib\presentation | 122 | 14,462 | 404 | 1,426 | 16,292 |
+| lib\presentation\cubit | 34 | 1,070 | 0 | 280 | 1,350 |
+| lib\presentation\cubit\StoryCubit | 2 | 102 | 0 | 22 | 124 |
+| lib\presentation\cubit\firebaseAuthCubit | 2 | 60 | 0 | 16 | 76 |
+| lib\presentation\cubit\firestoreUserInfoCubit | 14 | 430 | 0 | 113 | 543 |
+| lib\presentation\cubit\firestoreUserInfoCubit\message | 5 | 131 | 0 | 40 | 171 |
+| lib\presentation\cubit\firestoreUserInfoCubit\message\bloc | 3 | 66 | 0 | 22 | 88 |
+| lib\presentation\cubit\firestoreUserInfoCubit\message\cubit | 2 | 65 | 0 | 18 | 83 |
+| lib\presentation\cubit\firestoreUserInfoCubit\searchAboutUser | 3 | 69 | 0 | 20 | 89 |
+| lib\presentation\cubit\followCubit | 2 | 48 | 0 | 14 | 62 |
+| lib\presentation\cubit\postInfoCubit | 14 | 430 | 0 | 115 | 545 |
+| lib\presentation\cubit\postInfoCubit\commentsInfo | 8 | 209 | 0 | 60 | 269 |
+| lib\presentation\cubit\postInfoCubit\commentsInfo\cubit | 8 | 209 | 0 | 60 | 269 |
+| lib\presentation\cubit\postInfoCubit\commentsInfo\cubit\comment_likes | 2 | 54 | 0 | 15 | 69 |
+| lib\presentation\cubit\postInfoCubit\commentsInfo\cubit\repliesInfo | 4 | 103 | 0 | 30 | 133 |
+| lib\presentation\cubit\postInfoCubit\commentsInfo\cubit\repliesInfo\replyLikes | 2 | 49 | 0 | 15 | 64 |
+| lib\presentation\cubit\postInfoCubit\postLikes | 2 | 49 | 0 | 14 | 63 |
+| lib\presentation\customPackages | 23 | 2,670 | 198 | 398 | 3,266 |
+| lib\presentation\customPackages\audio_recorder | 8 | 615 | 68 | 64 | 747 |
+| lib\presentation\customPackages\crop_image | 2 | 652 | 0 | 104 | 756 |
+| lib\presentation\customPackages\in_view_notifier | 7 | 371 | 36 | 66 | 473 |
+| lib\presentation\customPackages\story_view | 6 | 1,032 | 94 | 164 | 1,290 |
+| lib\presentation\pages | 23 | 5,616 | 13 | 364 | 5,993 |
+| lib\presentation\pages\comments | 1 | 224 | 0 | 24 | 248 |
+| lib\presentation\pages\messages | 2 | 829 | 0 | 37 | 866 |
+| lib\presentation\pages\profile | 9 | 2,576 | 10 | 151 | 2,737 |
+| lib\presentation\pages\profile\custom_gallery_page | 3 | 1,304 | 8 | 59 | 1,371 |
+| lib\presentation\pages\register | 2 | 221 | 2 | 25 | 248 |
+| lib\presentation\pages\shop | 1 | 15 | 0 | 3 | 18 |
+| lib\presentation\pages\story | 2 | 472 | 0 | 37 | 509 |
+| lib\presentation\pages\time_line | 4 | 855 | 1 | 58 | 914 |
+| lib\presentation\pages\time_line\all_user_time_line | 2 | 265 | 1 | 19 | 285 |
+| lib\presentation\pages\time_line\my_own_time_line | 2 | 590 | 0 | 39 | 629 |
+| lib\presentation\pages\video | 2 | 424 | 0 | 29 | 453 |
+| lib\presentation\screens | 1 | 124 | 0 | 8 | 132 |
+| lib\presentation\widgets | 41 | 4,982 | 193 | 376 | 5,551 |
+| lib\presentation\widgets\belong_to | 27 | 3,190 | 6 | 234 | 3,430 |
+| lib\presentation\widgets\belong_to\comments_w | 2 | 536 | 1 | 19 | 556 |
+| lib\presentation\widgets\belong_to\messages_w | 1 | 116 | 0 | 11 | 127 |
+| lib\presentation\widgets\belong_to\profile_w | 10 | 1,002 | 3 | 79 | 1,084 |
+| lib\presentation\widgets\belong_to\profile_w\custom_gallery | 3 | 242 | 0 | 25 | 267 |
+| lib\presentation\widgets\belong_to\register_w | 3 | 198 | 0 | 17 | 215 |
+| lib\presentation\widgets\belong_to\story_w | 1 | 84 | 0 | 14 | 98 |
+| lib\presentation\widgets\belong_to\time_line_w | 9 | 1,139 | 2 | 82 | 1,223 |
+| lib\presentation\widgets\belong_to\videos_w | 1 | 115 | 0 | 12 | 127 |
+| lib\presentation\widgets\global | 13 | 1,715 | 186 | 138 | 2,039 |
+| lib\presentation\widgets\global\aimation | 1 | 51 | 0 | 10 | 61 |
+| lib\presentation\widgets\global\circle_avatar_image | 2 | 204 | 0 | 20 | 224 |
+| lib\presentation\widgets\global\custom_widgets | 10 | 1,460 | 186 | 108 | 1,754 |
+| test | 1 | 12 | 10 | 7 | 29 |
+| web | 2 | 115 | 18 | 8 | 141 |
+| windows | 11 | 422 | 80 | 137 | 639 |
+| windows\flutter | 3 | 26 | 9 | 17 | 52 |
+| windows\runner | 8 | 396 | 71 | 120 | 587 |
+
+Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)

@@ -284,7 +284,7 @@ Total : 289 files,  14210 codes, 750 comments, 1934 blanks, all 16894 lines
 | [lib/presentation/widgets/story_page.dart](/lib/presentation/widgets/story_page.dart) | Dart | 296 | 9 | 28 | 333 |
 | [lib/presentation/widgets/toast_show.dart](/lib/core/functions/toast_show.dart) | Dart | 22 | 0 | 1 | 23 |
 | [lib/presentation/widgets/user_profile_page.dart](/lib/presentation/pages/profile/user_profile_page.dart) | Dart | 241 | 1 | 16 | 258 |
-| [lib/responsive_layout.dart](/lib/responsive_layout.dart) | Dart | 17 | 0 | 4 | 21 |
+| [lib/responsive_layout.dart](/lib/presentation/widgets/belong_to/main_w/responsive_layout.dart) | Dart | 17 | 0 | 4 | 21 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 79 | 57 | 22 | 158 |
 | [test/widget_test.dart](/test/widget_test.dart) | Dart | 14 | 10 | 7 | 31 |
 | [web/index.html](/web/index.html) | HTML | 80 | 18 | 7 | 105 |
