@@ -34,19 +34,16 @@ analyzer:
 dependencies:
   flutter:
     sdk: flutter
+
   bloc: ^7.0.3
   cloud_firestore: ^3.1.13
-  cloud_firestore_web: ^2.6.10
   cupertino_icons: ^1.0.2
   firebase_auth: ^3.3.9
   firebase_core: ^1.12.0
   firebase_storage: ^10.2.9
-  firebase_storage_web: ^3.2.10
-  firebase_analytics: ^5.0.15
   flutter_bloc: ^7.0.1
   flutter_svg: ^1.0.3
   readmore: ^2.1.0
-  image_picker_for_web: ^2.1.4
   equatable: ^2.0.3
   fluttertoast: ^8.0.8
   get_it: ^7.2.0
@@ -65,41 +62,20 @@ dependencies:
   flutter_phoenix: ^1.0.0
   easy_localization: ^3.0.0
   video_compress: ^3.1.0
-  uuid: ^3.0.6
   animated_text_kit: ^4.2.1
   record: ^3.0.4
-  dashed_circle: ^0.0.1
   flutter_image_compress: ^1.1.0
   like_button: ^2.0.4
-  image_picker: ^0.8.4+4
+  image_picker: ^0.8.5+3
   flutter_staggered_grid_view: ^0.4.1
   cached_network_image: ^3.2.1
   permission_handler: ^8.1.6
-  photo_manager: ^2.1.1
-  photofilters: ^3.0.1
-  camera: ^0.9.7
   video_player:
-  flutter_ringtone_player: ^3.2.0
-  image_cropper: ^2.0.3
-  ui_helper: ^1.1.0
-  dotted_border: ^2.0.0+2
-  cropperx: ^1.1.0
-  font_awesome_flutter: ^8.8.1
-  image_crop: ^0.4.0
-  path_provider: ^2.0.9
-  provider: ^6.0.2
   shimmer: ^2.0.0
-  get: ^4.6.5
   get_storage: ^2.0.3
+  photo_manager: ^2.1.2
   blurhash: ^1.0.0
-  octo_image: ^1.0.2
-  custom_gallery_display: ^0.2.4
-
-
-
-
-
-
+  custom_gallery_display: ^0.2.5
 
 
 dev_dependencies:
