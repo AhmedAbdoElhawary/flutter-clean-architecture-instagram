@@ -8,7 +8,8 @@ import 'package:instagram/core/resources/styles_manager.dart';
 class RecordView extends StatefulWidget {
   final String urlRecord;
   final bool isThatMine;
-  const RecordView({Key? key, required this.urlRecord, required this.isThatMine})
+  const RecordView(
+      {Key? key, required this.urlRecord, required this.isThatMine})
       : super(key: key);
 
   @override
