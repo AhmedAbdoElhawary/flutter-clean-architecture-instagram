@@ -142,8 +142,8 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
 
   IconButton iconButton() {
     return IconButton(
-      icon: const Icon(Icons.clear_rounded,
-          color: ColorManager.white, size: 30),
+      icon:
+          const Icon(Icons.clear_rounded, color: ColorManager.white, size: 30),
       onPressed: () {
         Navigator.of(context).maybePop();
       },
