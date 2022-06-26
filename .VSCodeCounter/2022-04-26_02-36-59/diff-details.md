@@ -27,11 +27,11 @@ Total : 73 files,  4428 codes, -267 comments, 600 blanks, all 4761 lines
 | [lib/presentation/cubit/bloc/get_comments_event.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/bloc/get_comments_event.dart) | Dart | 18 | -23 | 5 | 0 |
 | [lib/presentation/cubit/bloc/get_comments_state.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/bloc/get_comments_state.dart) | Dart | 14 | -20 | 6 | 0 |
 | [lib/presentation/cubit/postInfoCubit/commentsInfo/comments_info_cubit.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart) | Dart | -9 | 9 | 0 | 0 |
-| [lib/presentation/customPackages/story_view/sory_controller.dart](/lib/presentation/customPackages/story_view/sory_controller.dart) | Dart | 20 | 10 | 8 | 38 |
-| [lib/presentation/customPackages/story_view/story_image.dart](/lib/presentation/customPackages/story_view/story_image.dart) | Dart | 167 | 13 | 38 | 218 |
-| [lib/presentation/customPackages/story_view/story_video.dart](/lib/presentation/customPackages/story_view/story_video.dart) | Dart | 127 | 0 | 25 | 152 |
-| [lib/presentation/customPackages/story_view/story_view.dart](/lib/presentation/customPackages/story_view/story_view.dart) | Dart | 703 | 71 | 98 | 872 |
-| [lib/presentation/customPackages/story_view/utils.dart](/lib/presentation/customPackages/story_view/utils.dart) | Dart | 18 | 0 | 8 | 26 |
+| [lib/presentation/customPackages/story_view/sory_controller.dart](/customPackages/story_view/story_controller.dart) | Dart | 20 | 10 | 8 | 38 |
+| [lib/presentation/customPackages/story_view/story_image.dart](/customPackages/story_view/story_image.dart) | Dart | 167 | 13 | 38 | 218 |
+| [lib/presentation/customPackages/story_view/story_video.dart](/customPackages/story_view/story_video.dart) | Dart | 127 | 0 | 25 | 152 |
+| [lib/presentation/customPackages/story_view/story_view.dart](/customPackages/story_view/story_view.dart) | Dart | 703 | 71 | 98 | 872 |
+| [lib/presentation/customPackages/story_view/utils.dart](/customPackages/story_view/utils.dart) | Dart | 18 | 0 | 8 | 26 |
 | [lib/presentation/pages/comments_page.dart](/lib/presentation/pages/comments/comments_page.dart) | Dart | -2 | 5 | 3 | 6 |
 | [lib/presentation/pages/home_page.dart](/lib/presentation/pages/time_line/my_own_time_line/home_page.dart) | Dart | 2 | 0 | -1 | 1 |
 | [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/main_screen.dart) | Dart | -2 | 0 | 0 | -2 |
@@ -82,7 +82,7 @@ Total : 73 files,  4428 codes, -267 comments, 600 blanks, all 4761 lines
 | [lib/presentation/widgets/mmmmmmmmmm/try.dart](/lib/presentation/widgets/mmmmmmmmmm/try.dart) | Dart | 0 | 0 | 1 | 1 |
 | [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 4 | 0 | 1 | 5 |
 | [lib/presentation/widgets/story_page.dart](/lib/presentation/widgets/story_page.dart) | Dart | 230 | 9 | 18 | 257 |
-| [lib/presentation/widgets/try.dart](/lib/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart) | Dart | 0 | -487 | -1 | -488 |
+| [lib/presentation/widgets/try.dart](/customPackages/in_view_notifier/in_view_notifier_widget.dart) | Dart | 0 | -487 | -1 | -488 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 9 | 0 | -1 | 8 |
 
 [Summary](results.md) / [Details](details.md) / [Diff Summary](diff.md) / Diff Details

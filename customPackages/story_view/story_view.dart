@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/presentation/customPackages/story_view/story_image.dart';
-import 'package:instagram/presentation/customPackages/story_view/story_video.dart';
-import 'package:instagram/presentation/customPackages/story_view/sory_controller.dart';
-import 'package:instagram/presentation/customPackages/story_view/utils.dart';
+import 'story_image.dart';
+import 'story_video.dart';
+import 'story_controller.dart';
+import 'utils.dart';
 
 /// Indicates where the progress indicators should be placed.
 enum ProgressPosition { top, bottom }

@@ -8,7 +8,7 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/story.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/presentation/customPackages/story_view/sory_controller.dart';
+import 'package:instagram/presentation/customPackages/story_view/story_controller.dart';
 import 'package:instagram/presentation/customPackages/story_view/story_view.dart';
 import 'package:instagram/presentation/customPackages/story_view/utils.dart';
 import 'package:instagram/presentation/widgets/belong_to/story_w/story_swipe.dart';

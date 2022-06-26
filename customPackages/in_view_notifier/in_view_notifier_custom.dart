@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_state.dart';
 import 'package:flutter/foundation.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/widget_data.dart';
+import 'in_view_notifier.dart';
+import 'in_view_state.dart';
+import 'widget_data.dart';
 
-class InViewNotifierList extends InViewNotifier {
-  InViewNotifierList({
+class InViewNotifierCustomScrollView extends InViewNotifier {
+  InViewNotifierCustomScrollView({
     Key? key,
-    int? itemCount,
-    required IndexedWidgetBuilder builder,
+    required List<Widget> slivers,
     List<String> initialInViewIds = const [],
     double endNotificationOffset = 0.0,
     VoidCallback? onListEndReached,
@@ -16,37 +15,35 @@ class InViewNotifierList extends InViewNotifier {
     Axis scrollDirection = Axis.vertical,
     required IsInViewPortCondition isInViewPortCondition,
     ScrollController? controller,
-    EdgeInsets? padding,
     ScrollPhysics? physics,
-    bool reverse = false,
     required List postsIds,
     required AsyncValueSetter<int> onRefreshData,
     required ValueNotifier<bool> isThatEndOfList,
+    bool reverse = false,
     bool? primary,
     bool shrinkWrap = false,
-    bool addAutomaticKeepAlive = true,
-  })  : assert(endNotificationOffset >= 0.0),
-        super(
+    Key? center,
+    double anchor = 0.0,
+  }) : super(
           key: key,
           initialInViewIds: initialInViewIds,
           endNotificationOffset: endNotificationOffset,
           onListEndReached: onListEndReached,
           throttleDuration: throttleDuration,
+          isInViewPortCondition: isInViewPortCondition,
           onRefreshData: onRefreshData,
           postsIds: postsIds,
           isThatEndOfList: isThatEndOfList,
-          isInViewPortCondition: isInViewPortCondition,
-          child: ListView.builder(
-            padding: padding,
+          child: CustomScrollView(
+            slivers: slivers,
+            anchor: anchor,
             controller: controller,
             scrollDirection: scrollDirection,
             physics: physics,
             reverse: reverse,
             primary: primary,
-            addAutomaticKeepAlives: addAutomaticKeepAlive,
             shrinkWrap: shrinkWrap,
-            itemCount: itemCount,
-            itemBuilder: builder,
+            center: center,
           ),
         );
 

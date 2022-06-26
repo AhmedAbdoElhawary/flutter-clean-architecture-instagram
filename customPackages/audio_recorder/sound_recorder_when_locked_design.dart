@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/presentation/customPackages/audio_recorder/show_counter.dart';
-import 'package:instagram/presentation/customPackages/audio_recorder/sound_recorder_notifier.dart';
 import 'package:flutter/material.dart';
+
+import 'show_counter.dart';
+import 'sound_recorder_notifier.dart';
 
 // ignore: must_be_immutable
 class SoundRecorderWhenLockedDesign extends StatelessWidget {

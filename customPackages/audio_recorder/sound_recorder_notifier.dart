@@ -5,7 +5,8 @@ import 'package:record/record.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:instagram/presentation/customPackages/audio_recorder/audio_encoder.dart';
+
+import 'audio_encoder.dart';
 
 class SoundRecordNotifier extends ChangeNotifier {
   GlobalKey key = GlobalKey();

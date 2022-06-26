@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'in_view_notifier.dart';
+import 'in_view_state.dart';
 import 'package:flutter/foundation.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_state.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/widget_data.dart';
+import 'widget_data.dart';
 
-class InViewNotifierCustomScrollView extends InViewNotifier {
-  InViewNotifierCustomScrollView({
+class InViewNotifierList extends InViewNotifier {
+  InViewNotifierList({
     Key? key,
-    required List<Widget> slivers,
+    int? itemCount,
+    required IndexedWidgetBuilder builder,
     List<String> initialInViewIds = const [],
     double endNotificationOffset = 0.0,
     VoidCallback? onListEndReached,
@@ -15,35 +16,37 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
     Axis scrollDirection = Axis.vertical,
     required IsInViewPortCondition isInViewPortCondition,
     ScrollController? controller,
+    EdgeInsets? padding,
     ScrollPhysics? physics,
+    bool reverse = false,
     required List postsIds,
     required AsyncValueSetter<int> onRefreshData,
     required ValueNotifier<bool> isThatEndOfList,
-    bool reverse = false,
     bool? primary,
     bool shrinkWrap = false,
-    Key? center,
-    double anchor = 0.0,
-  }) : super(
+    bool addAutomaticKeepAlive = true,
+  })  : assert(endNotificationOffset >= 0.0),
+        super(
           key: key,
           initialInViewIds: initialInViewIds,
           endNotificationOffset: endNotificationOffset,
           onListEndReached: onListEndReached,
           throttleDuration: throttleDuration,
-          isInViewPortCondition: isInViewPortCondition,
           onRefreshData: onRefreshData,
           postsIds: postsIds,
           isThatEndOfList: isThatEndOfList,
-          child: CustomScrollView(
-            slivers: slivers,
-            anchor: anchor,
+          isInViewPortCondition: isInViewPortCondition,
+          child: ListView.builder(
+            padding: padding,
             controller: controller,
             scrollDirection: scrollDirection,
             physics: physics,
             reverse: reverse,
             primary: primary,
+            addAutomaticKeepAlives: addAutomaticKeepAlive,
             shrinkWrap: shrinkWrap,
-            center: center,
+            itemCount: itemCount,
+            itemBuilder: builder,
           ),
         );
 

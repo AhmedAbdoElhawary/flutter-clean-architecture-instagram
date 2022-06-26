@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_state.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/widget_data.dart';
+import 'in_view_state.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/smart_refresher.dart';
 import 'package:flutter/foundation.dart';
 import 'package:stream_transform/stream_transform.dart';
+
+import 'widget_data.dart';
 
 class InViewNotifier extends StatefulWidget {
   ///The String list of ids of the child widgets that should be initialized as inView

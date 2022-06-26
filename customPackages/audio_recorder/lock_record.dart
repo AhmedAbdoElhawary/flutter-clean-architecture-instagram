@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instagram/presentation/customPackages/audio_recorder/sound_recorder_notifier.dart';
+import 'sound_recorder_notifier.dart';
 
 /// This Class Represent Icons To swap top to lock recording
 class LockRecord extends StatefulWidget {

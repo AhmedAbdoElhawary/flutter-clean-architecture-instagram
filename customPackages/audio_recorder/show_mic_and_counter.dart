@@ -2,7 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/presentation/customPackages/audio_recorder/sound_recorder_notifier.dart';
+import 'sound_recorder_notifier.dart';
 
 /// used to show mic and show dragg text when
 /// press into record icon
