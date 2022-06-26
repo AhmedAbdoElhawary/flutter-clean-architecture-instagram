@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/widget_data.dart';
+import 'in_view_notifier.dart';
+import 'widget_data.dart';
 
 class InViewState extends ChangeNotifier {
   ///The context's of the widgets in the listview that the user expects a
