@@ -1,12 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/presentation/customPackages/audio_recorder/lock_record.dart';
-import 'package:instagram/presentation/customPackages/audio_recorder/show_counter.dart';
-import 'package:instagram/presentation/customPackages/audio_recorder/show_mic_and_counter.dart';
-import 'package:instagram/presentation/customPackages/audio_recorder/sound_recorder_notifier.dart';
-import 'package:instagram/presentation/customPackages/audio_recorder/sound_recorder_when_locked_design.dart';
+import 'lock_record.dart';
+import 'show_counter.dart';
+import 'show_mic_and_counter.dart';
+import 'sound_recorder_notifier.dart';
 import 'package:provider/provider.dart';
+
+import 'sound_recorder_when_locked_design.dart';
 
 class SocialMediaRecorder extends StatefulWidget {
   /// function reture the recording sound file
