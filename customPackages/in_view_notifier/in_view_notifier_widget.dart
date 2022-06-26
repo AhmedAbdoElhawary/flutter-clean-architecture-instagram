@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_state.dart';
+import 'in_view_notifier_list.dart';
+import 'in_view_state.dart';
 
 class InViewNotifierWidget extends StatefulWidget {
   final String id;
