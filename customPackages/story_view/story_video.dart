@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/presentation/customPackages/story_view/sory_controller.dart';
-import 'package:instagram/presentation/customPackages/story_view/utils.dart';
+import 'story_controller.dart';
+import 'utils.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoLoader {
