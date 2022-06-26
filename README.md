@@ -1,7 +1,7 @@
 # flutter-clean-architecture-instagram
 
-Instagram clean architecture using flutter and firebase as ( frontend & backend ) with almost fully functionally
-
+Instagram clean architecture using flutter and firebase as ( frontend & backend ) with almost fully functionalities
+<!-- 
 ## Scan me
 
 ### Notes
@@ -18,7 +18,7 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
     <img src="https://user-images.githubusercontent.com/88978546/173980359-cef2f7d2-6c1c-4745-b630-c57cd3ea622b.png"
       alt="Pub Package" width="25%" height="25%"/>
  <p/>
-
+ -->
 ## Features
 
 * Support
