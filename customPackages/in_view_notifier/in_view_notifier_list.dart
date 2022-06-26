@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_state.dart';
+import 'in_view_notifier.dart';
+import 'in_view_state.dart';
 import 'package:flutter/foundation.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/widget_data.dart';
+import 'widget_data.dart';
 
 class InViewNotifierList extends InViewNotifier {
   InViewNotifierList({
