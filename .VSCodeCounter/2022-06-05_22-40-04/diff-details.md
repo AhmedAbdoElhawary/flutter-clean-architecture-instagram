@@ -189,7 +189,7 @@ Total : 611 files,  3332 codes, 191 comments, 256 blanks, all 3779 lines
 | [lib/domain/use_cases/user/update_user_info.dart](/lib/domain/use_cases/user/update_user_info.dart) | Dart | 11 | 0 | 4 | 15 |
 | [lib/domain/use_cases/user/upload_profile_image_usecase.dart](/lib/domain/use_cases/user/upload_profile_image_usecase.dart) | Dart | 16 | 0 | 4 | 20 |
 | [lib/main.dart](/lib/main.dart) | Dart | 33 | 134 | 5 | 172 |
-| [lib/material_app.dart](/lib/presentation/widgets/belong_to/main_w/material_app.dart) | Dart | 50 | 0 | 6 | 56 |
+| [lib/material_app.dart](/lib/material_app.dart) | Dart | 50 | 0 | 6 | 56 |
 | [lib/presentation/cubit/StoryCubit/story_cubit.dart](/lib/presentation/cubit/StoryCubit/story_cubit.dart) | Dart | 68 | 0 | 9 | 77 |
 | [lib/presentation/cubit/StoryCubit/story_state.dart](/lib/presentation/cubit/StoryCubit/story_state.dart) | Dart | 34 | 0 | 13 | 47 |
 | [lib/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart](/lib/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart) | Dart | 47 | 0 | 7 | 54 |

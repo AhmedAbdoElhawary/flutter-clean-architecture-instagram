@@ -137,7 +137,7 @@ Total : 319 files,  1357 codes, -96 comments, 36 blanks, all 1297 lines
 | [lib/domain/usecases/storyUseCase/get_stories_info.dart](/lib/domain/usecases/storyUseCase/get_stories_info.dart) | Dart | -16 | 0 | -4 | -20 |
 | [lib/injector.dart](/lib/injector.dart) | Dart | -192 | -44 | -31 | -267 |
 | [lib/main.dart](/lib/main.dart) | Dart | -40 | 0 | -3 | -43 |
-| [lib/material_app.dart](/lib/presentation/widgets/belong_to/main_w/material_app.dart) | Dart | 56 | 0 | 7 | 63 |
+| [lib/material_app.dart](/lib/material_app.dart) | Dart | 56 | 0 | 7 | 63 |
 | [lib/presentation/cubit/StoryCubit/story_cubit.dart](/lib/presentation/cubit/StoryCubit/story_cubit.dart) | Dart | 27 | 0 | 2 | 29 |
 | [lib/presentation/cubit/StoryCubit/story_state.dart](/lib/presentation/cubit/StoryCubit/story_state.dart) | Dart | 8 | 0 | 4 | 12 |
 | [lib/presentation/cubit/blocObserver/bloc_observer.dart](/lib/presentation/cubit/blocObserver/bloc_observer.dart) | Dart | 0 | 0 | -1 | -1 |
