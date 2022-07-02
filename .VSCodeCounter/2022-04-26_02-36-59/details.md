@@ -195,11 +195,11 @@ Total : 289 files,  14210 codes, 750 comments, 1934 blanks, all 16894 lines
 | [lib/presentation/cubit/postInfoCubit/post_state.dart](/lib/presentation/cubit/postInfoCubit/post_state.dart) | Dart | 24 | 0 | 12 | 36 |
 | [lib/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart](/lib/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart) | Dart | 26 | 0 | 6 | 32 |
 | [lib/presentation/cubit/postInfoCubit/specific_users_posts_state.dart](/lib/presentation/cubit/postInfoCubit/specific_users_posts_state.dart) | Dart | 16 | 0 | 7 | 23 |
-| [lib/presentation/customPackages/story_view/sory_controller.dart](/customPackages/story_view/story_controller.dart) | Dart | 20 | 10 | 8 | 38 |
-| [lib/presentation/customPackages/story_view/story_image.dart](/customPackages/story_view/story_image.dart) | Dart | 167 | 13 | 38 | 218 |
-| [lib/presentation/customPackages/story_view/story_video.dart](/customPackages/story_view/story_video.dart) | Dart | 127 | 0 | 25 | 152 |
-| [lib/presentation/customPackages/story_view/story_view.dart](/customPackages/story_view/story_view.dart) | Dart | 703 | 71 | 98 | 872 |
-| [lib/presentation/customPackages/story_view/utils.dart](/customPackages/story_view/utils.dart) | Dart | 18 | 0 | 8 | 26 |
+| [lib/presentation/customPackages/story_view/sory_controller.dart](/lib/presentation/customPackages/story_view/story_controller.dart) | Dart | 20 | 10 | 8 | 38 |
+| [lib/presentation/customPackages/story_view/story_image.dart](/lib/presentation/customPackages/story_view/story_image.dart) | Dart | 167 | 13 | 38 | 218 |
+| [lib/presentation/customPackages/story_view/story_video.dart](/lib/presentation/customPackages/story_view/story_video.dart) | Dart | 127 | 0 | 25 | 152 |
+| [lib/presentation/customPackages/story_view/story_view.dart](/lib/presentation/customPackages/story_view/story_view.dart) | Dart | 703 | 71 | 98 | 872 |
+| [lib/presentation/customPackages/story_view/utils.dart](/lib/presentation/customPackages/story_view/utils.dart) | Dart | 18 | 0 | 8 | 26 |
 | [lib/presentation/pages/chatting_page.dart](/lib/presentation/pages/messages/chatting_page.dart) | Dart | 539 | 8 | 29 | 576 |
 | [lib/presentation/pages/comments_page.dart](/lib/presentation/pages/comments/comments_page.dart) | Dart | 255 | 7 | 18 | 280 |
 | [lib/presentation/pages/edit_profile_page.dart](/lib/presentation/pages/profile/edit_profile_page.dart) | Dart | 222 | 1 | 16 | 239 |

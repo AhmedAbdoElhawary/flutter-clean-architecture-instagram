@@ -75,7 +75,8 @@ dependencies:
   get_storage: ^2.0.3
   photo_manager: ^2.1.2
   blurhash: ^1.0.0
-  custom_gallery_display: ^0.2.5
+  ## My package
+  custom_gallery_display: ^0.2.7
 
 
 dev_dependencies:
