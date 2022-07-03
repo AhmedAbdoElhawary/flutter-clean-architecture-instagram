@@ -157,7 +157,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
       onOffsetChange: (offset) {
         if (_refreshController.value.headerMode!.value !=
             RefreshStatus.refreshing) {
-          _scaleController.value = offset / 100.0;
+          _scaleController.value = offset / 150.0;
         }
       },
       builder: (context, mode) {
@@ -168,7 +168,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
 
   Container customCircleProgress(BuildContext context) {
     return Container(
-      color: Theme.of(context).backgroundColor,
+      color: Theme.of(context).primaryColor,
       child: FadeTransition(
         opacity: _scaleController,
         child: ScaleTransition(
@@ -183,7 +183,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
   CircularProgressIndicator circularProgressIndicator(BuildContext context) {
     return CircularProgressIndicator(
       strokeWidth: 1.5,
-      color: ColorManager.black38,
+      color: Theme.of(context).iconTheme.color,
       backgroundColor: Theme.of(context).dividerColor,
     );
   }
