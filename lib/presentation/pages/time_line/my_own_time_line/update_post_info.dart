@@ -164,7 +164,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
           padding: const EdgeInsetsDirectional.only(top: 8.0),
           child: postInfo.isThatImage
               ? (postInfo.imagesUrls.length > 1
-                  ? ImageSlider(
+                  ? ImagesSlider(
                       aspectRatio: postInfo.aspectRatio,
                       blurHash: postInfo.blurHash,
                       imagesUrls: postInfo.imagesUrls,
