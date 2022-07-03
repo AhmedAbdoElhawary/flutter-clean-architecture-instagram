@@ -407,19 +407,31 @@ class _HomeScreenState extends State<HomeScreen> {
             nameOfCircle: StringsManager.yourStory.tr(),
           ),
           Positioned(
-              top: bodyHeight * .058,
-              left: bodyHeight * .058,
-              right: bodyHeight * .012,
-              child: CircleAvatar(
-                  radius: 9.5,
-                  backgroundColor: Theme.of(context).primaryColor,
-                  child: const CircleAvatar(
-                      radius: 10,
-                      backgroundColor: ColorManager.blue,
-                      child: Icon(
-                        Icons.add,
-                        size: 14,
-                      )))),
+            top: bodyHeight * .0525,
+            left: bodyHeight * .0555,
+            right: bodyHeight * .01,
+            child: CircleAvatar(
+              radius: 13,
+              backgroundColor: Theme.of(context).primaryColor,
+            ),
+          ),
+          Positioned(
+            top: bodyHeight * .058,
+            left: bodyHeight * .058,
+            right: bodyHeight * .012,
+            child: CircleAvatar(
+              radius: 9.5,
+              backgroundColor: Theme.of(context).primaryColor,
+              child: const CircleAvatar(
+                radius: 10,
+                backgroundColor: ColorManager.blue,
+                child: Icon(
+                  Icons.add,
+                  size: 14,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
