@@ -4,6 +4,8 @@ class ColorManager {
   static const Color white = Color(0xffFFFFFF);
   static const Color lightGrey = Color.fromARGB(255, 232, 232, 232);
   static const Color grey = Color(0xff9E9E9E);
+  static const Color customGrey = Color(0xffdcdcdc);
+
   static const Color lowOpacityGrey = Color(0x2A3E3E2F);
   static const Color veryLowOpacityGrey = Color(0x16444439);
 
