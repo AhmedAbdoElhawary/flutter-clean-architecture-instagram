@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
@@ -24,9 +25,9 @@ import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_slider.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_viewer.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/points_scroll_bar.dart';
+import 'package:instagram/presentation/widgets/global/aimation/like_popup_animation.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
-import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_text.dart';
 import 'package:like_button/like_button.dart';
@@ -59,13 +60,13 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
   ValueChanged<Post>? selectedPostInfo;
   ValueNotifier<bool> isSaved = ValueNotifier(false);
   late Size imageSize = const Size(0.0, 0.0);
-  late Widget videoStatusAnimation;
   String currentLanguage = 'en';
   ValueNotifier<int> initPosition = ValueNotifier(0);
 
+  bool isLiked = false;
+  bool isHeartAnimation = false;
   @override
   void initState() {
-    videoStatusAnimation = Container();
     getLanguage();
     super.initState();
   }
@@ -394,57 +395,69 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
       alignment: Alignment.center,
       children: [
         GestureDetector(
-            onDoubleTap: () {
-              videoStatusAnimation = FadeAnimation(child: lovePopAnimation());
-              setState(() {
-                if (!isLiked) {
-                  BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
-                      postId: postInfo.postUid, userId: myPersonalId);
-                  postInfo.likes.add(myPersonalId);
-                }
-              });
-            },
-            onTap: () async {
-              Navigator.of(context).push(
-                CupertinoPageRoute(
-                  builder: (context) {
-                    return ValueListenableBuilder(
-                      valueListenable: initPosition,
-                      builder: (context, int positionValue, child) =>
-                          PictureViewer(
-                              blurHash: postInfo.blurHash,
-                              aspectRatio: postInfo.aspectRatio,
-                              isThatImage: postInfo.isThatImage,
-                              imageUrl: postInfo.postUrl.isNotEmpty
-                                  ? postInfo.postUrl
-                                  : postInfo.imagesUrls[positionValue]),
-                    );
-                  },
-                ),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsetsDirectional.only(top: 8.0),
-              child: postInfo.isThatImage
-                  ? (postInfo.imagesUrls.length > 1
-                      ? ImageSlider(
+          onDoubleTap: () {
+            setState(() {
+              isHeartAnimation = true;
+              this.isLiked = true;
+              if (!isLiked) {
+                BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
+                    postId: postInfo.postUid, userId: myPersonalId);
+                postInfo.likes.add(myPersonalId);
+              }
+            });
+          },
+          onTap: () async {
+            Navigator.of(context).push(
+              CupertinoPageRoute(
+                builder: (context) {
+                  return ValueListenableBuilder(
+                    valueListenable: initPosition,
+                    builder: (context, int positionValue, child) =>
+                        PictureViewer(
+                      blurHash: postInfo.blurHash,
+                      aspectRatio: postInfo.aspectRatio,
+                      isThatImage: postInfo.isThatImage,
+                      imageUrl: postInfo.postUrl.isNotEmpty
+                          ? postInfo.postUrl
+                          : postInfo.imagesUrls[positionValue],
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsetsDirectional.only(top: 8.0),
+            child: postInfo.isThatImage
+                ? (postInfo.imagesUrls.length > 1
+                    ? ImagesSlider(
+                        blurHash: postInfo.blurHash,
+                        aspectRatio: postInfo.aspectRatio,
+                        imagesUrls: postInfo.imagesUrls,
+                        updateImageIndex: _updateImageIndex,
+                      )
+                    : Hero(
+                        tag: postInfo.postUrl,
+                        child: NetworkImageDisplay(
+                          blurHash: postInfo.blurHash,
                           aspectRatio: postInfo.aspectRatio,
-                          imagesUrls: postInfo.imagesUrls,
-                          updateImageIndex: _updateImageIndex,
-                        )
-                      : Hero(
-                          tag: postInfo.postUrl,
-                          child: NetworkImageDisplay(
-                            blurHash: postInfo.blurHash,
-                            aspectRatio: postInfo.aspectRatio,
-                            bodyHeight: widget.bodyHeight,
-                            imageUrl: postInfo.postUrl,
-                          ),
-                        ))
-                  : PlayThisVideo(
-                      videoUrl: postInfo.postUrl, play: widget.playTheVideo),
-            )),
-        Align(alignment: Alignment.center, child: videoStatusAnimation),
+                          bodyHeight: widget.bodyHeight,
+                          imageUrl: postInfo.postUrl,
+                        ),
+                      ))
+                : PlayThisVideo(
+                    videoUrl: postInfo.postUrl, play: widget.playTheVideo),
+          ),
+        ),
+        Opacity(
+          opacity: isHeartAnimation ? 1 : 0,
+          child: LikePopupAnimation(
+              isAnimating: isHeartAnimation,
+              duration: const Duration(milliseconds: 700),
+              child: const Icon(Icons.favorite,
+                  color: ColorManager.white, size: 100),
+              onEnd: () => setState(() => isHeartAnimation = false)),
+        ),
       ],
     );
   }
