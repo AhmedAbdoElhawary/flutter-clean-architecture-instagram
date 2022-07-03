@@ -3,7 +3,6 @@ class StringsManager {
 
   static const String less = "less";
   static const String reel = "reel";
-  static const String like = "like";
   static const String post = "post";
   static const String live = "live";
   static const String view = "view";
@@ -17,6 +16,11 @@ class StringsManager {
   static const String unSend = "unSend";
   static const String send = "send";
   static const String name = "name";
+
+  static const String like = "like";
+  static const String unLike = "unLike";
+
+  static const String menu = "menu";
 
   static const String likes = "likes";
   static const String logIn = "logIn";

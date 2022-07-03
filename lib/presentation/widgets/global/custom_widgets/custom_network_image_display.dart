@@ -81,7 +81,7 @@ class _NetworkImageDisplayState extends State<NetworkImageDisplay> {
   Widget buildSizedBox() {
     return Container(
       width: double.infinity,
-      color: ColorManager.black26,
+      color: ColorManager.lowOpacityGrey,
     );
   }
 }
