@@ -161,7 +161,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
 
   Widget imageOfUser(String profileImage) {
     return CircleAvatar(
-      backgroundColor: ColorManager.grey,
+      backgroundColor: ColorManager.customGrey,
       backgroundImage: profileImage.isNotEmpty
           ? CachedNetworkImageProvider(profileImage)
           : null,
