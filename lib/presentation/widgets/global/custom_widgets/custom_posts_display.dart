@@ -5,7 +5,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/post_list_view.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/post_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_up_icon.dart';
 
