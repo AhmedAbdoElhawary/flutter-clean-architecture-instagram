@@ -1,13 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class LikePopupAnimation extends StatefulWidget {
   final Widget child;
   final Duration duration;
   final bool isAnimating;
-  final VoidCallback? onEnd;
+  final VoidCallback onEnd;
   const LikePopupAnimation({
     required this.child,
-    this.onEnd,
+    required this.onEnd,
     this.duration = const Duration(milliseconds: 150),
     required this.isAnimating,
     Key? key,
@@ -33,9 +34,9 @@ class _LikePopupAnimationState extends State<LikePopupAnimation>
   @override
   void didUpdateWidget(LikePopupAnimation oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.isAnimating != oldWidget.isAnimating) {
+    // if (widget.isAnimating != oldWidget.isAnimating) {
       doAnimation();
-    }
+    // }
   }
 
   Future doAnimation() async {
@@ -43,10 +44,10 @@ class _LikePopupAnimationState extends State<LikePopupAnimation>
       await animationController.forward();
       await animationController.reverse();
       await Future.delayed(const Duration(milliseconds: 400));
-
-      if (widget.onEnd != null) {
-        widget.onEnd!();
+      if (kDebugMode) {
+        print("remove animation :");
       }
+      widget.onEnd();
     }
   }
 
