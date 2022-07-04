@@ -41,7 +41,7 @@ class CustomAppBar {
         ),
         IconButton(
           icon: SvgPicture.asset(
-            IconsAssets.message,
+            IconsAssets.messengerIcon,
             color: Theme.of(context).focusColor,
             height: 22.5,
           ),

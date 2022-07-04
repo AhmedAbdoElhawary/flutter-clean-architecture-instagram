@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,11 +24,15 @@ class _PositionDimension {
   final double positionBottom;
   final double positionLeft;
   final double positionRight;
-  _PositionDimension(
-      {required this.positionTop,
-      required this.positionBottom,
-      required this.positionLeft,
-      required this.positionRight});
+  final double positionCenter;
+
+  _PositionDimension({
+    required this.positionTop,
+    required this.positionBottom,
+    required this.positionLeft,
+    required this.positionRight,
+    required this.positionCenter,
+  });
 }
 
 // ignore: must_be_immutable
@@ -53,19 +58,26 @@ class CustomGridViewDisplay extends StatefulWidget {
 
 class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   OverlayEntry? _popupDialog;
-  OverlayEntry? _popupTextDialog;
+  OverlayEntry? _popupEmptyDialog;
 
+  GlobalKey imageKey = GlobalKey();
   GlobalKey loveKey = GlobalKey();
   GlobalKey viewProfileKey = GlobalKey();
   GlobalKey shareKey = GlobalKey();
   GlobalKey menuKey = GlobalKey();
 
+  ValueNotifier<bool> messageVisibility = ValueNotifier(false);
   ValueNotifier<bool> loveVisibility = ValueNotifier(false);
   ValueNotifier<bool> viewProfileVisibility = ValueNotifier(false);
   ValueNotifier<bool> shareVisibility = ValueNotifier(false);
   ValueNotifier<bool> menuVisibility = ValueNotifier(false);
+
   bool isLiked = false;
-  bool isHeartAnimation = false;
+  ValueNotifier<bool> isHeartAnimation = ValueNotifier(false);
+
+  double widgetPositionLeft = 0;
+
+  String messageText = "";
 
   @override
   void initState() {
@@ -82,12 +94,19 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   _PositionDimension _getOffset(GlobalKey key) {
     RenderBox? box = key.currentContext?.findRenderObject() as RenderBox?;
     Offset position = box?.localToGlobal(Offset.zero) ?? const Offset(0, 0);
-
+    Size widgetSize = key.currentContext?.size ?? Size.zero;
+    double widgetWidth = widgetSize.width;
+    double widgetHeight = widgetSize.height;
+    if (kDebugMode) {
+      print("widgetWidth: $widgetWidth, widgetHeight: $widgetHeight");
+    }
     _PositionDimension positionDimension = _PositionDimension(
-        positionTop: position.dy,
-        positionBottom: position.dy + 50,
-        positionLeft: position.dx,
-        positionRight: position.dx + 50);
+      positionTop: position.dy,
+      positionBottom: position.dy + 50,
+      positionLeft: position.dx,
+      positionRight: position.dx + 50,
+      positionCenter: widgetWidth / 2,
+    );
 
     return positionDimension;
   }
@@ -111,45 +130,71 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
             _PositionDimension commentPosition = _getOffset(viewProfileKey);
             _PositionDimension sharePosition = _getOffset(shareKey);
             _PositionDimension menuPosition = _getOffset(menuKey);
+
             setState(() {
               if (details.globalPosition.dy > lovePosition.positionTop &&
                   details.globalPosition.dy < lovePosition.positionBottom &&
                   details.globalPosition.dx > lovePosition.positionLeft &&
                   details.globalPosition.dx < lovePosition.positionRight) {
+                messageText = isLiked
+                    ? StringsManager.unLike.tr()
+                    : StringsManager.like.tr();
+                widgetPositionLeft = lovePosition.positionLeft -
+                    lovePosition.positionCenter -
+                    (isLiked ? 15 : 7);
                 loveVisibility.value = true;
+                messageVisibility.value = true;
               } else if (details.globalPosition.dy >
                       commentPosition.positionTop &&
                   details.globalPosition.dy < commentPosition.positionBottom &&
                   details.globalPosition.dx > commentPosition.positionLeft &&
                   details.globalPosition.dx < commentPosition.positionRight) {
+                messageText = StringsManager.viewProfile.tr();
+                widgetPositionLeft = commentPosition.positionLeft -
+                    commentPosition.positionCenter -
+                    30;
                 viewProfileVisibility.value = true;
+                messageVisibility.value = true;
               } else if (details.globalPosition.dy >
                       sharePosition.positionTop &&
                   details.globalPosition.dy < sharePosition.positionBottom &&
                   details.globalPosition.dx > sharePosition.positionLeft &&
                   details.globalPosition.dx < sharePosition.positionRight) {
+                messageText = StringsManager.share.tr();
+                widgetPositionLeft = sharePosition.positionLeft -
+                    sharePosition.positionCenter -
+                    12;
                 shareVisibility.value = true;
+                messageVisibility.value = true;
               } else if (details.globalPosition.dy > menuPosition.positionTop &&
                   details.globalPosition.dy < menuPosition.positionBottom &&
                   details.globalPosition.dx > menuPosition.positionLeft &&
                   details.globalPosition.dx < menuPosition.positionRight) {
+                messageText = StringsManager.menu.tr();
+                widgetPositionLeft = menuPosition.positionLeft -
+                    menuPosition.positionCenter -
+                    15;
                 menuVisibility.value = true;
+                messageVisibility.value = true;
               } else {
+                messageText = "";
+                widgetPositionLeft = 0;
+                loveVisibility.value = false;
                 viewProfileVisibility.value = false;
                 shareVisibility.value = false;
                 menuVisibility.value = false;
-                loveVisibility.value = false;
+                messageVisibility.value = false;
               }
             });
 
-            _popupTextDialog = _createPopupTextDialog();
-            Overlay.of(context)!.insert(_popupTextDialog!);
+            _popupEmptyDialog = _createPopupEmptyDialog();
+            Overlay.of(context)!.insert(_popupEmptyDialog!);
           },
           onLongPress: () {
             _popupDialog = _createPopupDialog(widget.postClickedInfo);
             Overlay.of(context)!.insert(_popupDialog!);
-            _popupTextDialog = _createPopupTextDialog();
-            Overlay.of(context)!.insert(_popupTextDialog!);
+            _popupEmptyDialog = _createPopupEmptyDialog();
+            Overlay.of(context)!.insert(_popupEmptyDialog!);
           },
           onLongPressEnd: (details) async {
             if (loveVisibility.value) {
@@ -164,15 +209,16 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
                 });
               } else {
                 setState(() {
+                  isHeartAnimation.value = true;
                   BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
                       postId: widget.postClickedInfo.postUid,
                       userId: myPersonalId);
                   widget.postClickedInfo.likes.add(myPersonalId);
                   isLiked = true;
-                  isHeartAnimation = true;
                 });
               }
               await Future.delayed(const Duration(seconds: 1));
+              isHeartAnimation.value = false;
             }
             if (viewProfileVisibility.value) {
               Navigator.of(context).push(
@@ -185,8 +231,12 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
                 ),
               );
             }
-            _popupDialog?.remove();
-            _popupTextDialog?.remove();
+            setState(() {
+              messageVisibility.value = false;
+              // isHeartAnimation.value = false;
+              _popupDialog?.remove();
+              _popupEmptyDialog?.remove();
+            });
           },
           child: widget.postClickedInfo.isThatImage
               ? NetworkImageDisplay(
@@ -214,7 +264,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
     );
   }
 
-  OverlayEntry _createPopupTextDialog() {
+  OverlayEntry _createPopupEmptyDialog() {
     return OverlayEntry(
       builder: (context) => const SizedBox(),
     );
@@ -233,39 +283,27 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
             Stack(
               alignment: Alignment.center,
               children: [
-                Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    postInfo.isThatImage
-                        ? Container(
-                            color: Theme.of(context).primaryColor,
-                            width: double.infinity,
-                            child: NetworkImageDisplay(
-                                blurHash: postInfo.blurHash,
-                                imageUrl: postInfo.postUrl.isNotEmpty
-                                    ? postInfo.postUrl
-                                    : postInfo.imagesUrls[0],
-                                boxFit: BoxFit.fitWidth),
-                          )
-                        : Container(
-                            color: Theme.of(context).primaryColor,
-                            width: double.infinity,
-                            height: screenSize.height - 200,
-                            child: PlayThisVideo(
-                                videoUrl: postInfo.postUrl, play: true),
-                          ),
-                    popupMessage(),
-                  ],
-                ),
-                Opacity(
-                  opacity: isHeartAnimation ? 1 : 0,
-                  child: LikePopupAnimation(
-                      isAnimating: isHeartAnimation,
-                      duration: const Duration(milliseconds: 700),
-                      child: const Icon(Icons.favorite,
-                          color: ColorManager.white, size: 100),
-                      onEnd: () => setState(() => isHeartAnimation = false)),
-                ),
+                postInfo.isThatImage
+                    ? Container(
+                        key: imageKey,
+                        color: Theme.of(context).primaryColor,
+                        width: double.infinity,
+                        child: NetworkImageDisplay(
+                            blurHash: postInfo.blurHash,
+                            imageUrl: postInfo.postUrl.isNotEmpty
+                                ? postInfo.postUrl
+                                : postInfo.imagesUrls[0],
+                            boxFit: BoxFit.fitWidth),
+                      )
+                    : Container(
+                        color: Theme.of(context).primaryColor,
+                        width: double.infinity,
+                        height: screenSize.height - 200,
+                        child: PlayThisVideo(
+                            videoUrl: postInfo.postUrl, play: true),
+                      ),
+                popupMessage(),
+                loveAnimation()
               ],
             ),
             _createActionBar(),
@@ -275,50 +313,25 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
     );
   }
 
-  Padding popupMessage() {
-    return Padding(
-      padding: EdgeInsetsDirectional.only(start: isLiked ? 5 : 17, end: 0),
-      child: Row(
-        children: [
-          ValueListenableBuilder(
-            valueListenable: loveVisibility,
-            builder: (context, bool loveVisibilityValue, child) =>
-                _PopupMessageDialog(
-              message: isLiked
-                  ? StringsManager.unLike.tr()
-                  : StringsManager.like.tr(),
-              paddingCornerStart: 20,
-              visible: loveVisibilityValue,
-            ),
-          ),
-          ValueListenableBuilder(
-            valueListenable: viewProfileVisibility,
-            builder: (context, bool profileVisibilityValue, child) =>
-                _PopupMessageDialog(
-              message: StringsManager.viewProfile.tr(),
-              visible: profileVisibilityValue,
-            ),
-          ),
-          ValueListenableBuilder(
-            valueListenable: shareVisibility,
-            builder: (context, bool shareVisibilityValue, child) =>
-                _PopupMessageDialog(
-              message: StringsManager.share.tr(),
-              visible: shareVisibilityValue,
-            ),
-          ),
-          ValueListenableBuilder(
-            valueListenable: menuVisibility,
-            builder: (context, bool menuVisibilityValue, child) =>
-                _PopupMessageDialog(
-              message: StringsManager.menu.tr(),
-              paddingCornerEnd: 20,
-              paddingCornerStart: 8,
-              visible: menuVisibilityValue,
-            ),
-          ),
-        ],
-      ),
+  Widget loveAnimation() {
+    return LikePopupAnimation(
+      isAnimating: isHeartAnimation.value,
+      duration: const Duration(milliseconds: 700),
+      child: const Icon(Icons.favorite, color: ColorManager.white, size: 100),
+      onEnd: () {
+        setState(() {
+          isHeartAnimation.value = false;
+          print("HEREEEEEEEEEEEEEEEEEEEEEEEEE");
+        });
+      },
+    );
+  }
+
+  Widget popupMessage() {
+    return _PopupMessageDialog(
+      visible: messageVisibility.value,
+      message: messageText,
+      widgetPositionLeft: widgetPositionLeft,
     );
   }
 
@@ -395,32 +408,23 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
 }
 
 class _PopupMessageDialog extends StatelessWidget {
-  final bool visible;
   final String message;
-  final double paddingCornerStart;
-  final double paddingCornerEnd;
+  final bool visible;
+  final double widgetPositionLeft;
   const _PopupMessageDialog({
     Key? key,
-    required this.visible,
     required this.message,
-    this.paddingCornerStart = 0,
-    this.paddingCornerEnd = 0,
+    required this.visible,
+    required this.widgetPositionLeft,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Visibility(
       visible: visible,
-      maintainSize: true,
-      maintainAnimation: true,
-      maintainState: true,
-      child: Padding(
-        padding: EdgeInsetsDirectional.only(
-          start: paddingCornerStart,
-          end: paddingCornerEnd,
-          top: 20,
-          bottom: 20,
-        ),
+      child: Positioned(
+        bottom: 20,
+        left: widgetPositionLeft,
         child: Container(
           decoration: BoxDecoration(
             color: ColorManager.black87,

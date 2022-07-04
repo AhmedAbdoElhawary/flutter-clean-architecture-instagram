@@ -21,7 +21,7 @@ class IconsAssets {
   static const String noMoreData = "$iconPath/check-circle.svg";
   static const String shareCircle = "$iconPath/share-circle.svg";
   static const String point = "$iconPath/circle.svg";
-  static const String message = "$iconPath/messenger.svg";
+  static const String messengerIcon = "$iconPath/messenger.svg";
   static const String favorite = "$iconPath/favorite.svg";
   static const String plus = "$iconPath/plus.svg";
 

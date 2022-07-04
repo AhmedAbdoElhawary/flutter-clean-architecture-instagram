@@ -273,7 +273,7 @@ Total : 289 files,  14210 codes, 750 comments, 1934 blanks, all 16894 lines
 | [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 77 | 1 | 5 | 83 |
 | [lib/presentation/widgets/or_text.dart](/lib/presentation/widgets/belong_to/register_w/or_text.dart) | Dart | 27 | 0 | 3 | 30 |
 | [lib/presentation/widgets/post_list_saved.dart](/lib/presentation/widgets/post_list_saved.dart) | Dart | 216 | 8 | 12 | 236 |
-| [lib/presentation/widgets/post_list_view.dart](/lib/presentation/widgets/belong_to/time_line_w/post_list_view.dart) | Dart | 226 | 7 | 14 | 247 |
+| [lib/presentation/widgets/post_list_view.dart](/lib/presentation/widgets/belong_to/time_line_w/post_image.dart) | Dart | 226 | 7 | 14 | 247 |
 | [lib/presentation/widgets/profile_page.dart](/lib/presentation/widgets/belong_to/profile_w/profile_page.dart) | Dart | 205 | 10 | 15 | 230 |
 | [lib/presentation/widgets/read_more_text.dart](/lib/presentation/widgets/belong_to/time_line_w/read_more_text.dart) | Dart | 20 | 0 | 3 | 23 |
 | [lib/presentation/widgets/recommendation_people.dart](/lib/presentation/widgets/belong_to/profile_w/recommendation_people.dart) | Dart | 22 | 1 | 3 | 26 |
