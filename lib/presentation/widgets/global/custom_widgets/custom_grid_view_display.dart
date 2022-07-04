@@ -111,33 +111,36 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
             _PositionDimension commentPosition = _getOffset(viewProfileKey);
             _PositionDimension sharePosition = _getOffset(shareKey);
             _PositionDimension menuPosition = _getOffset(menuKey);
-            if (details.globalPosition.dy > lovePosition.positionTop &&
-                details.globalPosition.dy < lovePosition.positionBottom &&
-                details.globalPosition.dx > lovePosition.positionLeft &&
-                details.globalPosition.dx < lovePosition.positionRight) {
-              loveVisibility.value = true;
-            } else if (details.globalPosition.dy >
-                    commentPosition.positionTop &&
-                details.globalPosition.dy < commentPosition.positionBottom &&
-                details.globalPosition.dx > commentPosition.positionLeft &&
-                details.globalPosition.dx < commentPosition.positionRight) {
-              viewProfileVisibility.value = true;
-            } else if (details.globalPosition.dy > sharePosition.positionTop &&
-                details.globalPosition.dy < sharePosition.positionBottom &&
-                details.globalPosition.dx > sharePosition.positionLeft &&
-                details.globalPosition.dx < sharePosition.positionRight) {
-              shareVisibility.value = true;
-            } else if (details.globalPosition.dy > menuPosition.positionTop &&
-                details.globalPosition.dy < menuPosition.positionBottom &&
-                details.globalPosition.dx > menuPosition.positionLeft &&
-                details.globalPosition.dx < menuPosition.positionRight) {
-              menuVisibility.value = true;
-            } else {
-              viewProfileVisibility.value = false;
-              shareVisibility.value = false;
-              menuVisibility.value = false;
-              loveVisibility.value = false;
-            }
+            setState(() {
+              if (details.globalPosition.dy > lovePosition.positionTop &&
+                  details.globalPosition.dy < lovePosition.positionBottom &&
+                  details.globalPosition.dx > lovePosition.positionLeft &&
+                  details.globalPosition.dx < lovePosition.positionRight) {
+                loveVisibility.value = true;
+              } else if (details.globalPosition.dy >
+                      commentPosition.positionTop &&
+                  details.globalPosition.dy < commentPosition.positionBottom &&
+                  details.globalPosition.dx > commentPosition.positionLeft &&
+                  details.globalPosition.dx < commentPosition.positionRight) {
+                viewProfileVisibility.value = true;
+              } else if (details.globalPosition.dy >
+                      sharePosition.positionTop &&
+                  details.globalPosition.dy < sharePosition.positionBottom &&
+                  details.globalPosition.dx > sharePosition.positionLeft &&
+                  details.globalPosition.dx < sharePosition.positionRight) {
+                shareVisibility.value = true;
+              } else if (details.globalPosition.dy > menuPosition.positionTop &&
+                  details.globalPosition.dy < menuPosition.positionBottom &&
+                  details.globalPosition.dx > menuPosition.positionLeft &&
+                  details.globalPosition.dx < menuPosition.positionRight) {
+                menuVisibility.value = true;
+              } else {
+                viewProfileVisibility.value = false;
+                shareVisibility.value = false;
+                menuVisibility.value = false;
+                loveVisibility.value = false;
+              }
+            });
 
             _popupTextDialog = _createPopupTextDialog();
             Overlay.of(context)!.insert(_popupTextDialog!);
@@ -200,14 +203,6 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
         ),
       );
 
-  Widget lovePopAnimation() {
-    return Icon(
-      Icons.favorite,
-      size: 150,
-      color: Theme.of(context).primaryColor,
-    );
-  }
-
   OverlayEntry _createPopupDialog(Post postInfo) {
     return OverlayEntry(
       builder: (context) => BackdropFilter(
@@ -262,17 +257,14 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
                     popupMessage(),
                   ],
                 ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Opacity(
-                    opacity: isHeartAnimation ? 1 : 0,
-                    child: LikePopupAnimation(
-                        isAnimating: isHeartAnimation,
-                        duration: const Duration(milliseconds: 700),
-                        child: const Icon(Icons.favorite,
-                            color: ColorManager.white, size: 100),
-                        onEnd: () => setState(() => isHeartAnimation = false)),
-                  ),
+                Opacity(
+                  opacity: isHeartAnimation ? 1 : 0,
+                  child: LikePopupAnimation(
+                      isAnimating: isHeartAnimation,
+                      duration: const Duration(milliseconds: 700),
+                      child: const Icon(Icons.favorite,
+                          color: ColorManager.white, size: 100),
+                      onEnd: () => setState(() => isHeartAnimation = false)),
                 ),
               ],
             ),
