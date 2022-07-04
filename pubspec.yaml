@@ -75,9 +75,6 @@ dependencies:
   get_storage: ^2.0.3
   photo_manager: ^2.1.4
   blurhash: ^1.0.0
-#  firebase_messaging: ^11.4.3
-#  agora_uikit: ^1.0.2
-#  agora_rtc_engine: ^5.2.0
   ## My package
   custom_gallery_display: ^0.2.7
 
