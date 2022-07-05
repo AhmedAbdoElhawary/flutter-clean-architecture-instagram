@@ -12,17 +12,24 @@ class Message extends Equatable {
   String imageUrl;
   String recordedUrl;
   bool isThatImage;
-
+  bool isThatPost;
+  String postId;
+  String profileImageUrl;
+  String userNameOfSharedPost;
   Message({
-    required this.datePublished,
     required this.message,
     required this.blurHash,
     required this.receiverId,
+    this.isThatPost = false,
     required this.senderId,
+    this.postId = "",
+    this.profileImageUrl = "",
+    this.userNameOfSharedPost = "",
     this.messageUid = "",
     this.imageUrl = "",
     this.recordedUrl = "",
     required this.isThatImage,
+    required this.datePublished,
   });
 
   static Message fromJson(QueryDocumentSnapshot<Map<String, dynamic>> snap) {
@@ -36,6 +43,10 @@ class Message extends Equatable {
       imageUrl: snap.data()["imageUrl"] ?? "",
       recordedUrl: snap.data()["recordedUrl"] ?? "",
       isThatImage: snap.data()["isThatImage"] ?? false,
+      isThatPost: snap.data()["isThatPost"] ?? false,
+      postId: snap.data()["postId"] ?? "",
+      profileImageUrl: snap.data()["profileImageUrl"] ?? "",
+      userNameOfSharedPost: snap.data()["userNameOfSharedPost"] ?? "",
     );
   }
 
@@ -48,6 +59,10 @@ class Message extends Equatable {
         "imageUrl": imageUrl,
         "recordedUrl": recordedUrl,
         "isThatImage": isThatImage,
+        "isThatPost": isThatPost,
+        "postId": postId,
+        "profileImageUrl": profileImageUrl,
+        "userNameOfSharedPost": userNameOfSharedPost,
       };
 
   @override
@@ -60,6 +75,10 @@ class Message extends Equatable {
         blurHash,
         imageUrl,
         recordedUrl,
-        isThatImage
+        isThatImage,
+        isThatPost,
+        postId,
+        profileImageUrl,
+        userNameOfSharedPost,
       ];
 }
