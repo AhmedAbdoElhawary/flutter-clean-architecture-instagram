@@ -34,11 +34,15 @@ class _LikePopupAnimationState extends State<LikePopupAnimation>
   @override
   void didUpdateWidget(LikePopupAnimation oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // if (widget.isAnimating != oldWidget.isAnimating) {
+    if (widget.isAnimating != oldWidget.isAnimating) {
       doAnimation();
-    // }
+    }
   }
-
+  @override
+  void deactivate() {
+    animationController.stop();
+    super.deactivate();
+  }
   Future doAnimation() async {
     if (widget.isAnimating) {
       await animationController.forward();
