@@ -3,27 +3,38 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 
-class CustomBottomSheet {
-  static Future<void> bottomSheet(BuildContext context,
-      {required Widget headIcon, required Widget bodyText}) async {
-    return showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).splashColor,
-            borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(25.0)),
-          ),
-          child: listOfBodyWidgets(context,
-              bodyText: bodyText, headIcon: headIcon),
-        );
-      },
+class CustomBottomSheet extends StatelessWidget {
+  final Widget headIcon;
+  final Widget bodyText;
+  const CustomBottomSheet({
+    Key? key,
+    required this.headIcon,
+    required this.bodyText,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).splashColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      child: _ListOfBodyWidgets(bodyText: bodyText, headIcon: headIcon),
     );
   }
+}
 
-  static Widget listOfBodyWidgets(BuildContext context,
-      {required Widget headIcon, required Widget bodyText}) {
+class _ListOfBodyWidgets extends StatelessWidget {
+  final Widget headIcon;
+  final Widget bodyText;
+  const _ListOfBodyWidgets({
+    Key? key,
+    required this.headIcon,
+    required this.bodyText,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Column(
