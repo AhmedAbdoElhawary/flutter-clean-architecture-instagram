@@ -20,7 +20,6 @@ import 'package:instagram/presentation/pages/time_line/my_own_time_line/update_p
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
 import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/draggable_bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_slider.dart';
@@ -58,9 +57,13 @@ class PostImage extends StatefulWidget {
 }
 
 class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
-  final ValueNotifier<TextEditingController> textController =
+  final ValueNotifier<TextEditingController> commentTextController =
       ValueNotifier(TextEditingController());
   ValueChanged<Post>? selectedPostInfo;
+  final TextEditingController _bottomSheetMessageTextController =
+      TextEditingController();
+  final TextEditingController _bottomSheetSearchTextController =
+      TextEditingController();
   ValueNotifier<bool> isSaved = ValueNotifier(false);
   late Size imageSize = const Size(0.0, 0.0);
   String currentLanguage = 'en';
@@ -231,15 +234,121 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
     return showSlidingBottomSheet<void>(
       context,
       builder: (BuildContext context) => SlidingSheetDialog(
-          snapSpec: const SnapSpec(
-            snappings: [.4, .7],
-          ),
-          builder: buildSheet),
+        cornerRadius: 16,
+        color: Theme.of(context).primaryColor,
+        snapSpec: const SnapSpec(
+          initialSnap: 1,
+          snappings: [.4, 1, .7],
+        ),
+        builder: buildSheet,
+        headerBuilder: (context, state) => Material(
+          child: upperWidgets(context),
+        ),
+      ),
     );
   }
 
+  Column upperWidgets(BuildContext context) {
+    String postImageUrl = widget.postInfo.value.imagesUrls.length > 1
+        ? widget.postInfo.value.imagesUrls[0]
+        : widget.postInfo.value.postUrl;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsetsDirectional.only(top: 10),
+          child: Container(
+            width: 45,
+            height: 4.5,
+            decoration: BoxDecoration(
+              color: Theme.of(context).textTheme.headline4!.color,
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Container(
+                width: 50,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: ColorManager.grey,
+                  borderRadius: BorderRadius.circular(5),
+                  image: DecorationImage(
+                    image: NetworkImage(postImageUrl),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Flexible(
+              child: TextField(
+                controller: _bottomSheetMessageTextController,
+                cursorColor: ColorManager.teal,
+                decoration: InputDecoration(
+                  hintText: StringsManager.writeMessage.tr(),
+                  hintStyle: const TextStyle(
+                    color: ColorManager.grey,
+                  ),
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                ),
+                onChanged: (_) => setState(() {}),
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding:
+              const EdgeInsetsDirectional.only(top: 30.0, end: 20, start: 20),
+          child: Container(
+            width: double.infinity,
+            height: 35,
+            decoration: BoxDecoration(
+                color: Theme.of(context).shadowColor,
+                borderRadius: BorderRadius.circular(10)),
+            child: TextFormField(
+              cursorColor: ColorManager.teal,
+              style: Theme.of(context).textTheme.bodyText1,
+              controller: _bottomSheetSearchTextController,
+              textAlign: TextAlign.start,
+              decoration: InputDecoration(
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    size: 20,
+                    color: ColorManager.lowOpacityGrey,
+                  ),
+                  contentPadding: const EdgeInsetsDirectional.all(12),
+                  hintText: StringsManager.search.tr(),
+                  hintStyle: Theme.of(context).textTheme.headline1,
+                  border: InputBorder.none),
+              onChanged: (_) => setState(() {}),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  clearTextsController() {
+    setState(() {
+      _bottomSheetMessageTextController.clear();
+      _bottomSheetSearchTextController.clear();
+    });
+  }
+
   Widget buildSheet(context, state) => Material(
-        child: SendToUsers(userInfo: widget.postInfo.value.publisherInfo!),
+        child: SendToUsers(
+          userInfo: widget.postInfo.value.publisherInfo!,
+          messageTextController: _bottomSheetMessageTextController,
+          postInfo: widget.postInfo.value,
+          clearTexts: clearTextsController,
+        ),
       );
 
   Padding commentButton(BuildContext context, Post postInfoValue) {
@@ -268,7 +377,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
           child: Padding(
             padding: EdgeInsets.only(bottom: media),
             child: ValueListenableBuilder(
-              valueListenable: textController,
+              valueListenable: commentTextController,
               builder: (context, TextEditingController textValue, child) =>
                   CommentBox(
                 postId: widget.postInfo.value.postUid,
@@ -286,7 +395,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
 
   makeSelectedCommentNullable(bool isThatComment) {
     widget.postInfo.value.comments.add(" ");
-    textController.value.text = '';
+    commentTextController.value.text = '';
     Navigator.maybePop(context);
   }
 
@@ -294,7 +403,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
     return GestureDetector(
       onTap: _showAddCommentModal,
       child: ValueListenableBuilder(
-        valueListenable: textController,
+        valueListenable: commentTextController,
         builder: (context, TextEditingController textValue, child) => Row(
           crossAxisAlignment: textValue.text.length < 70
               ? CrossAxisAlignment.center
@@ -318,7 +427,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
             ),
             GestureDetector(
               onTap: () {
-                textController.value.text = '❤';
+                commentTextController.value.text = '❤';
                 _showAddCommentModal();
               },
               child: const Text('❤'),
@@ -326,7 +435,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
             const SizedBox(width: 8),
             GestureDetector(
               onTap: () {
-                textController.value.text = '🙌';
+                commentTextController.value.text = '🙌';
                 _showAddCommentModal();
               },
               child: const Text('🙌'),

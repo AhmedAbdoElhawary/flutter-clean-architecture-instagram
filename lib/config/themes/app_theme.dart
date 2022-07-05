@@ -35,11 +35,12 @@ class AppTheme {
               getNormalStyle(fontSize: FontSize.s16, color: ColorManager.black),
         ),
         textTheme: TextTheme(
-          bodyText1: getNormalStyle(color: ColorManager.black),
+          bodyText1: getNormalStyle(color: ColorManager.black, fontSize: 15),
           bodyText2: getNormalStyle(color: ColorManager.white),
           headline1: getNormalStyle(color: ColorManager.grey, fontSize: 15),
           headline2: getBoldStyle(color: ColorManager.black, fontSize: 15),
           headline3: getMediumStyle(color: ColorManager.black, fontSize: 15),
+          headline4: getNormalStyle(color: ColorManager.black54, fontSize: 15),
           headline5: getNormalStyle(color: ColorManager.shimmerLightGrey),
           headline6: getNormalStyle(color: Colors.white),
         ));
@@ -81,6 +82,7 @@ class AppTheme {
         headline1: getNormalStyle(color: ColorManager.grey, fontSize: 15),
         headline2: getBoldStyle(color: ColorManager.white, fontSize: 15),
         headline3: getMediumStyle(color: ColorManager.white, fontSize: 15),
+        headline4: getNormalStyle(color: ColorManager.grey, fontSize: 15),
         headline5: getNormalStyle(color: Colors.grey[500]!),
         headline6: getNormalStyle(color: ColorManager.shimmerDarkGrey),
       ),

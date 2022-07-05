@@ -75,7 +75,6 @@ dependencies:
   get_storage: ^2.0.3
   photo_manager: ^2.1.4
   blurhash: ^1.0.0
-#  snapping_sheet: ^3.1.0
   sliding_sheet: ^0.5.2
 
   ## My package
