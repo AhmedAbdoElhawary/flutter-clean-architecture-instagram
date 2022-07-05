@@ -60,6 +60,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
 
   Widget buildColumn(String profileImage, BuildContext context) {
     return SingleChildScrollView(
+
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
