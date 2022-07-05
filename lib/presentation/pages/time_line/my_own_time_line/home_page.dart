@@ -156,6 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
         },
         itemCount: postsInfoValue.length,
+
         builder: (BuildContext context, int index) {
           return Container(
             width: double.infinity,
