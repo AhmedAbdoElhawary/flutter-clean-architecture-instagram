@@ -20,17 +20,20 @@ import 'package:instagram/presentation/pages/time_line/my_own_time_line/update_p
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
 import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/draggable_bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_slider.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_viewer.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/points_scroll_bar.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/send_to_users.dart';
 import 'package:instagram/presentation/widgets/global/aimation/like_popup_animation.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_text.dart';
 import 'package:like_button/like_button.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
 
 class PostImage extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
@@ -130,96 +133,127 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       loveButton(postInfoValue),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(start: 5),
-                        child: GestureDetector(
-                          child: iconsOfImagePost(IconsAssets.commentIcon),
-                          onTap: () {
-                            Navigator.of(
-                              context,
-                            ).push(CupertinoPageRoute(
-                              builder: (context) =>
-                                  CommentsPage(postId: postInfoValue.postUid),
-                            ));
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(start: 15.0),
-                        child: GestureDetector(
-                          child: iconsOfImagePost(IconsAssets.send1Icon,
-                              lowHeight: true),
-                        ),
-                      ),
+                      commentButton(context, postInfoValue),
+                      shareButton(),
                       const Spacer(),
                       if (postInfoValue.imagesUrls.isNotEmpty)
-                        ValueListenableBuilder(
-                          valueListenable: initPosition,
-                          builder: (context, int positionValue, child) =>
-                              PointsScrollBar(
-                            photoCount: postInfoValue.imagesUrls.length,
-                            activePhotoIndex: positionValue,
-                          ),
-                        ),
+                        scrollBar(postInfoValue),
                       const Spacer(),
                       const Spacer(),
-                      ValueListenableBuilder(
-                        valueListenable: isSaved,
-                        builder: (context, bool isSavedValue, child) => Padding(
-                          padding: const EdgeInsetsDirectional.only(end: 12.0),
-                          child: GestureDetector(
-                            child: isSavedValue
-                                ? Icon(
-                                    Icons.bookmark_border,
-                                    color: Theme.of(context).focusColor,
-                                  )
-                                : Icon(
-                                    Icons.bookmark,
-                                    color: Theme.of(context).focusColor,
-                                  ),
-                            onTap: () {
-                              isSaved.value = !isSaved.value;
-                            },
-                          ),
-                        ),
-                      ),
+                      saveButton(),
                     ]),
               ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 11.5),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (postInfoValue.likes.isNotEmpty)
-                      numberOfLikes(postInfoValue),
-                    const SizedBox(height: 5),
-                    if (currentLanguage == 'en') ...[
-                      ReadMore(
-                          "${postInfoValue.publisherInfo!.name} ${postInfoValue.caption}",
-                          2),
-                    ] else ...[
-                      ReadMore(
-                          "${postInfoValue.caption} ${postInfoValue.publisherInfo!.name}",
-                          2),
-                    ],
-                    const SizedBox(height: 8),
-                    if (postInfoValue.comments.isNotEmpty)
-                      numberOfComment(postInfoValue),
-                    buildCommentBox(bodyHeight),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(top: 5.0),
-                      child: Text(
-                        DateOfNow.chattingDateOfNow(postInfoValue.datePublished,
-                            postInfoValue.datePublished),
-                        style: getNormalStyle(
-                            color: Theme.of(context).bottomAppBarColor),
-                      ),
-                    ),
-                  ],
-                ),
-              )
+              imageCaption(postInfoValue, bodyHeight, context)
             ]),
+      ),
+    );
+  }
+
+  ValueListenableBuilder<int> scrollBar(Post postInfoValue) {
+    return ValueListenableBuilder(
+      valueListenable: initPosition,
+      builder: (context, int positionValue, child) => PointsScrollBar(
+        photoCount: postInfoValue.imagesUrls.length,
+        activePhotoIndex: positionValue,
+      ),
+    );
+  }
+
+  Padding imageCaption(
+      Post postInfoValue, double bodyHeight, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 11.5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (postInfoValue.likes.isNotEmpty) numberOfLikes(postInfoValue),
+          const SizedBox(height: 5),
+          if (currentLanguage == 'en') ...[
+            ReadMore(
+                "${postInfoValue.publisherInfo!.name} ${postInfoValue.caption}",
+                2),
+          ] else ...[
+            ReadMore(
+                "${postInfoValue.caption} ${postInfoValue.publisherInfo!.name}",
+                2),
+          ],
+          const SizedBox(height: 8),
+          if (postInfoValue.comments.isNotEmpty) numberOfComment(postInfoValue),
+          buildCommentBox(bodyHeight),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(top: 5.0),
+            child: Text(
+              DateOfNow.chattingDateOfNow(
+                  postInfoValue.datePublished, postInfoValue.datePublished),
+              style: getNormalStyle(color: Theme.of(context).bottomAppBarColor),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  ValueListenableBuilder<bool> saveButton() {
+    return ValueListenableBuilder(
+      valueListenable: isSaved,
+      builder: (context, bool isSavedValue, child) => Padding(
+        padding: const EdgeInsetsDirectional.only(end: 12.0),
+        child: GestureDetector(
+          child: isSavedValue
+              ? Icon(
+                  Icons.bookmark_border,
+                  color: Theme.of(context).focusColor,
+                )
+              : Icon(
+                  Icons.bookmark,
+                  color: Theme.of(context).focusColor,
+                ),
+          onTap: () {
+            isSaved.value = !isSaved.value;
+          },
+        ),
+      ),
+    );
+  }
+
+  Padding shareButton() {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 15.0),
+      child: GestureDetector(
+        child: iconsOfImagePost(IconsAssets.send1Icon, lowHeight: true),
+        onTap: () async => draggableBottomSheet(),
+      ),
+    );
+  }
+
+  Future<void> draggableBottomSheet() async {
+    return showSlidingBottomSheet<void>(
+      context,
+      builder: (BuildContext context) => SlidingSheetDialog(
+          snapSpec: const SnapSpec(
+            snappings: [.4, .7],
+          ),
+          builder: buildSheet),
+    );
+  }
+
+  Widget buildSheet(context, state) => Material(
+        child: SendToUsers(userInfo: widget.postInfo.value.publisherInfo!),
+      );
+
+  Padding commentButton(BuildContext context, Post postInfoValue) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 5),
+      child: GestureDetector(
+        child: iconsOfImagePost(IconsAssets.commentIcon),
+        onTap: () {
+          Navigator.of(
+            context,
+          ).push(CupertinoPageRoute(
+            builder: (context) => CommentsPage(postId: postInfoValue.postUid),
+          ));
+        },
       ),
     );
   }
@@ -478,12 +512,16 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
   }
 
   Future<void> bottomSheet() async {
-    return CustomBottomSheet.bottomSheet(
-      context,
-      headIcon: shareThisPost(),
-      bodyText: widget.postInfo.value.publisherId == myPersonalId
-          ? ordersOfMyPost()
-          : ordersOfOtherUser(),
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBottomSheet(
+          headIcon: shareThisPost(),
+          bodyText: widget.postInfo.value.publisherId == myPersonalId
+              ? ordersOfMyPost()
+              : ordersOfOtherUser(),
+        );
+      },
     );
   }
 
