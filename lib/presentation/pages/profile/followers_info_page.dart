@@ -51,7 +51,8 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
         ),
         body: ValueListenableBuilder(
           valueListenable: rebuildUsersInfo,
-          builder: (context, bool rebuildValue, child) => BlocBuilder(
+          builder: (context, bool rebuildValue, child) =>
+              BlocBuilder<UsersInfoCubit, UsersInfoState>(
             bloc: BlocProvider.of<UsersInfoCubit>(context)
               ..getFollowersAndFollowingsInfo(
                   followersIds: widget.userInfo.followerPeople,

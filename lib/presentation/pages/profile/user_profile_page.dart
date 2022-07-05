@@ -93,10 +93,14 @@ class _ProfilePageState extends State<UserProfilePage> {
   }
 
   Future<void> bottomSheetOfAdd() {
-    return CustomBottomSheet.bottomSheet(
-      context,
-      headIcon: Container(),
-      bodyText: buildPadding(),
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBottomSheet(
+          headIcon: Container(),
+          bodyText: buildPadding(),
+        );
+      },
     );
   }
 

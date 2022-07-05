@@ -15,6 +15,7 @@ class StringsManager {
   static const String reply = "reply";
   static const String unSend = "unSend";
   static const String send = "send";
+  static const String undo = "undo";
   static const String name = "name";
 
   static const String like = "like";

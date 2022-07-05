@@ -150,20 +150,30 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   }
 
   Future<void> bottomSheet({bool createNewData = true}) {
-    return CustomBottomSheet.bottomSheet(
-      context,
-      headIcon: ValueListenableBuilder(
-          valueListenable: darkTheme,
-          builder: (context, bool themeValue, child) {
-            Color themeOfApp =
-                themeValue ? ColorManager.white : ColorManager.black;
-            return Text(StringsManager.create.tr(),
-                style: getBoldStyle(color: themeOfApp, fontSize: 17));
-          }),
-      bodyText: Padding(
-        padding: const EdgeInsetsDirectional.only(start: 20.0),
-        child: createNewData ? columnOfCreateData() : columnOfThemeData(),
-      ),
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context)=>CustomBottomSheet(
+          bodyText: bodyTextOfBottomSheet(createNewData),
+          headIcon: bottomSheetHeadIcon(),
+        ),
+    );
+  }
+
+  ValueListenableBuilder<bool> bottomSheetHeadIcon() {
+    return ValueListenableBuilder(
+        valueListenable: darkTheme,
+        builder: (context, bool themeValue, child) {
+          Color themeOfApp =
+              themeValue ? ColorManager.white : ColorManager.black;
+          return Text(StringsManager.create.tr(),
+              style: getBoldStyle(color: themeOfApp, fontSize: 17));
+        });
+  }
+
+  Padding bodyTextOfBottomSheet(bool createNewData) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 20.0),
+      child: createNewData ? columnOfCreateData() : columnOfThemeData(),
     );
   }
 

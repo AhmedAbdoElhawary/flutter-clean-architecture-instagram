@@ -14,7 +14,7 @@ import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/animated_dialog.dart';
-import 'package:instagram/presentation/widgets/global/aimation/like_popup_animation.dart';
+import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_posts_display.dart';
@@ -72,7 +72,12 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   ValueNotifier<bool> shareVisibility = ValueNotifier(false);
   ValueNotifier<bool> menuVisibility = ValueNotifier(false);
 
+  final ValueNotifier<Widget> loveStatusAnimation =
+      ValueNotifier(const SizedBox());
+
   bool isLiked = false;
+  bool isTempLiked = false;
+
   ValueNotifier<bool> isHeartAnimation = ValueNotifier(false);
 
   double widgetPositionLeft = 0;
@@ -110,7 +115,6 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
 
     return positionDimension;
   }
-
   Widget createGridTileWidget() => Builder(
         builder: (context) => GestureDetector(
           onTap: () {
@@ -144,6 +148,8 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
                     (isLiked ? 15 : 7);
                 loveVisibility.value = true;
                 messageVisibility.value = true;
+                isLiked = !isLiked;
+
               } else if (details.globalPosition.dy >
                       commentPosition.positionTop &&
                   details.globalPosition.dy < commentPosition.positionBottom &&
@@ -179,6 +185,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
               } else {
                 messageText = "";
                 widgetPositionLeft = 0;
+                // isLiked = !isLiked;
                 loveVisibility.value = false;
                 viewProfileVisibility.value = false;
                 shareVisibility.value = false;
@@ -191,6 +198,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
             Overlay.of(context)!.insert(_popupEmptyDialog!);
           },
           onLongPress: () {
+            loveStatusAnimation.value=const SizedBox();
             _popupDialog = _createPopupDialog(widget.postClickedInfo);
             Overlay.of(context)!.insert(_popupDialog!);
             _popupEmptyDialog = _createPopupEmptyDialog();
@@ -200,6 +208,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
             if (loveVisibility.value) {
               if (isLiked) {
                 setState(() {
+
                   BlocProvider.of<PostLikesCubit>(context)
                       .removeTheLikeOnThisPost(
                           postId: widget.postClickedInfo.postUid,
@@ -209,12 +218,16 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
                 });
               } else {
                 setState(() {
-                  isHeartAnimation.value = true;
+                  loveStatusAnimation.value = const FadeAnimation(
+                      child: Icon(Icons.favorite,
+                          color: ColorManager.white, size: 100));
+
                   BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
                       postId: widget.postClickedInfo.postUid,
                       userId: myPersonalId);
                   widget.postClickedInfo.likes.add(myPersonalId);
-                  isLiked = true;
+                  isHeartAnimation.value = true;
+
                 });
               }
               await Future.delayed(const Duration(seconds: 1));
@@ -314,16 +327,11 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   }
 
   Widget loveAnimation() {
-    return LikePopupAnimation(
-      isAnimating: isHeartAnimation.value,
-      duration: const Duration(milliseconds: 700),
-      child: const Icon(Icons.favorite, color: ColorManager.white, size: 100),
-      onEnd: () {
-        setState(() {
-          isHeartAnimation.value = false;
-          print("HEREEEEEEEEEEEEEEEEEEEEEEEEE");
-        });
-      },
+    print("isHeartAnimation: ${isHeartAnimation.value}");
+    return ValueListenableBuilder(
+      valueListenable: loveStatusAnimation,
+      builder: (context, value, child) =>
+          Center(child: loveStatusAnimation.value),
     );
   }
 
