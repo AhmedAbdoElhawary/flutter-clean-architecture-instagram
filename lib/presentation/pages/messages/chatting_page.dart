@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/functions/image_picker.dart';
@@ -11,6 +13,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/message.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
@@ -18,11 +21,13 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubi
 import 'package:instagram/presentation/customPackages/audio_recorder/social_media_recoder.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/record_view.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_viewer.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_text.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/presentation/pages/profile/user_profile_page.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/get_post_info.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ChattingPage extends StatefulWidget {
@@ -49,7 +54,6 @@ class _ChattingPageState extends State<ChattingPage>
   late AnimationController _colorAnimationController;
   late Animation _colorTween;
   int itemIndex = 0;
-
   Future<void> scrollToLastIndex(BuildContext context) async {
     if (globalMessagesInfo.value.length > 1) {
       itemScrollController.value.scrollTo(
@@ -60,13 +64,21 @@ class _ChattingPageState extends State<ChattingPage>
     }
   }
 
+  String currentLanguage = 'en';
+
   @override
   void initState() {
+    getLanguage();
     _colorAnimationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _colorTween = ColorTween(begin: Colors.purple, end: Colors.blue)
         .animate(_colorAnimationController);
     super.initState();
+  }
+
+  getLanguage() async {
+    AppPreferences _appPreferences = injector<AppPreferences>();
+    currentLanguage = await _appPreferences.getAppLanguage();
   }
 
   @override
@@ -262,74 +274,182 @@ class _ChattingPageState extends State<ChattingPage>
           animation: _colorAnimationController,
           builder: (_, __) => Container(
                 decoration: BoxDecoration(
-                    color: isThatMine
-                        ? _colorTween.value
-                        : Theme.of(context).selectedRowColor,
-                    borderRadius: BorderRadiusDirectional.only(
-                      bottomStart: Radius.circular(isThatMine ? 20 : 0),
-                      bottomEnd: Radius.circular(isThatMine ? 0 : 20),
-                      topStart: const Radius.circular(20),
-                      topEnd: const Radius.circular(20),
-                    )),
+                  color: messageInfo.isThatPost
+                      ? (Theme.of(context).selectedRowColor)
+                      : (isThatMine
+                          ? _colorTween.value
+                          : Theme.of(context).selectedRowColor),
+                  borderRadius: BorderRadiusDirectional.only(
+                    bottomStart: Radius.circular(isThatMine ? 20 : 0),
+                    bottomEnd: Radius.circular(isThatMine ? 0 : 20),
+                    topStart: const Radius.circular(20),
+                    topEnd: const Radius.circular(20),
+                  ),
+                ),
                 clipBehavior: Clip.antiAliasWithSaveLayer,
                 padding: imageUrl.isEmpty
                     ? const EdgeInsetsDirectional.only(
                         start: 10, end: 10, bottom: 8, top: 8)
                     : const EdgeInsetsDirectional.all(0),
-                child: message.isNotEmpty
-                    ? Text(message,
-                        style: isThatMine
-                            ? getNormalStyle(color: ColorManager.white)
-                            : getNormalStyle(
-                                color: Theme.of(context).focusColor))
-                    : (messageInfo.isThatImage
-                        ? SizedBox(
-                            width: 90,
-                            height: 150,
-                            child: messageInfo.messageUid.isNotEmpty
-                                ? GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).push(
-                                        CupertinoPageRoute(
-                                          builder: (context) {
-                                            return PictureViewer(
-                                                blurHash: messageInfo.blurHash,
-                                                imageUrl: imageUrl);
-                                          },
-                                        ),
-                                      );
-                                    },
-                                    child: Hero(
-                                      tag: imageUrl,
-                                      child: NetworkImageDisplay(
-                                        blurHash: messageInfo.blurHash,
-                                        imageUrl: imageUrl,
-                                        boxFit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  )
-                                : ValueListenableBuilder(
-                                    valueListenable: newMessageInfo,
-                                    builder: (context, Message? newMessageValue,
-                                            child) =>
-                                        Image.file(
-                                            File(newMessageValue!.imageUrl),
-                                            fit: BoxFit.cover),
-                                  ))
-                        : ValueListenableBuilder(
-                            valueListenable: records,
-                            builder: (context, String recordsValue, child) =>
-                                SizedBox(
-                              child: RecordView(
-                                urlRecord: recordedUrl.isEmpty
-                                    ? recordsValue
-                                    : recordedUrl,
-                                isThatMine: isThatMine,
-                              ),
-                            ),
-                          )),
+                child: messageInfo.recordedUrl.isNotEmpty
+                    ? recordMessage(recordedUrl, isThatMine)
+                    : (messageInfo.isThatPost
+                        ? sharedMessage(messageInfo, isThatMine)
+                        : (messageInfo.isThatImage
+                            ? imageMessage(messageInfo, imageUrl)
+                            : textMessage(message, isThatMine))),
               )),
     );
+  }
+
+  Widget sharedMessage(Message messageInfo, bool isThatMine) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(CupertinoPageRoute(
+          builder: (context) => GetsPostInfoAndDisplay(
+            postId: messageInfo.postId,
+          ),
+        ));
+      },
+      child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _createPhotoTitle(messageInfo),
+            Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                Container(
+                  color: Theme.of(context).toggleableActiveColor,
+                  width: double.infinity,
+                  child: NetworkImageDisplay(
+                    blurHash: messageInfo.blurHash,
+                    imageUrl: messageInfo.imageUrl,
+                    boxFit: BoxFit.fitWidth,
+                  ),
+                ),
+                const Padding(
+                  padding:  EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Icon(
+                      Icons.collections_rounded,
+                      size: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            _createActionBar(messageInfo),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _createPhotoTitle(Message messageInfo) {
+    return Container(
+      padding: const EdgeInsetsDirectional.only(
+          bottom: 5, top: 5, end: 10, start: 15),
+      height: 50,
+      width: double.infinity,
+      color: Theme.of(context).toggleableActiveColor,
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundColor: ColorManager.customGrey,
+            backgroundImage: messageInfo.imageUrl.isNotEmpty
+                ? CachedNetworkImageProvider(messageInfo.profileImageUrl)
+                : null,
+            child: messageInfo.imageUrl.isEmpty
+                ? Icon(
+                    Icons.person,
+                    color: Theme.of(context).primaryColor,
+                    size: 15,
+                  )
+                : null,
+            radius: 15,
+          ),
+          const SizedBox(width: 7),
+          Text(
+            messageInfo.userNameOfSharedPost,
+            style: getBoldStyle(
+              color: Theme.of(context).focusColor,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _createActionBar(Message messageInfo) {
+    return Container(
+      // height: 50,
+      width: double.infinity,
+      padding: const EdgeInsetsDirectional.only(bottom: 5, top: 5, start: 15),
+      color: Theme.of(context).toggleableActiveColor,
+      child: ReadMore(
+          currentLanguage == 'en'
+              ? "${messageInfo.userNameOfSharedPost} ${messageInfo.message}"
+              : "${messageInfo.message} ${messageInfo.userNameOfSharedPost}",
+          2),
+    );
+  }
+
+  ValueListenableBuilder<String> recordMessage(
+      String recordedUrl, bool isThatMine) {
+    return ValueListenableBuilder(
+      valueListenable: records,
+      builder: (context, String recordsValue, child) => SizedBox(
+        child: RecordView(
+          urlRecord: recordedUrl.isEmpty ? recordsValue : recordedUrl,
+          isThatMine: isThatMine,
+        ),
+      ),
+    );
+  }
+
+  SizedBox imageMessage(Message messageInfo, String imageUrl) {
+    return SizedBox(
+        width: 90,
+        height: 150,
+        child: messageInfo.messageUid.isNotEmpty
+            ? GestureDetector(
+                onTap: () async {
+                  Navigator.of(context).push(
+                    CupertinoPageRoute(
+                      builder: (context) {
+                        return PictureViewer(
+                            blurHash: messageInfo.blurHash, imageUrl: imageUrl);
+                      },
+                    ),
+                  );
+                },
+                child: Hero(
+                  tag: imageUrl,
+                  child: NetworkImageDisplay(
+                    blurHash: messageInfo.blurHash,
+                    imageUrl: imageUrl,
+                    boxFit: BoxFit.cover,
+                  ),
+                ),
+              )
+            : ValueListenableBuilder(
+                valueListenable: newMessageInfo,
+                builder: (context, Message? newMessageValue, child) =>
+                    Image.file(File(newMessageValue!.imageUrl),
+                        fit: BoxFit.cover),
+              ));
+  }
+
+  Text textMessage(String message, bool isThatMine) {
+    return Text(message,
+        style: isThatMine
+            ? getNormalStyle(color: ColorManager.white)
+            : getNormalStyle(color: Theme.of(context).focusColor));
   }
 
   Widget fieldOfMessage() {
