@@ -1,21 +1,18 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram/core/functions/image_picker.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
-import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
-import 'package:instagram/presentation/pages/story/create_story.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/create_new_story.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/post_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
@@ -72,10 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
     PostCubit postCubit = PostCubit.get(context);
     await postCubit
         .getPostsInfo(
-            userId: myPersonalId,
-            postsIds: postsIds,
-            isThatForMyPosts: true,
-            lengthOfCurrentList: index)
+            postsIds: postsIds, isThatMyPosts: true, lengthOfCurrentList: index)
         .then((value) {
       reLoadData.value = true;
     });
@@ -156,7 +150,6 @@ class _HomeScreenState extends State<HomeScreen> {
           return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
         },
         itemCount: postsInfoValue.length,
-
         builder: (BuildContext context, int index) {
           return Container(
             width: double.infinity,
@@ -246,16 +239,16 @@ class _HomeScreenState extends State<HomeScreen> {
     ));
   }
 
-  createNewStory({bool isThatFromCamera = true}) async {
-    File? pickImage = isThatFromCamera
-        ? await imageCameraPicker()
-        : await imageGalleryPicker();
-    if (pickImage != null) {
-      await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-          builder: (context) => CreateStoryPage(storyImage: pickImage),
-          maintainState: false));
-      reLoadData.value = true;
-    }
+  createNewStory() async {
+    Navigator.maybePop(context);
+    Navigator.of(context, rootNavigator: true).push(
+      CupertinoPageRoute(
+          builder: (context) {
+            return const CreateNewStory();
+          },
+          maintainState: false),
+    );
+    reLoadData.value = true;
   }
 
   Widget storiesLines(double bodyHeight) {
@@ -390,7 +383,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(height: 15),
                         GestureDetector(
                           onTap: () async {
-                            await createNewStory(isThatFromCamera: false);
+                            await createNewStory();
                             await getData(0);
                           },
                           child: Text(StringsManager.fromGallery.tr()),
