@@ -74,9 +74,8 @@ class _ProfilePageState extends State<ProfilePage> {
     return BlocBuilder<PostCubit, PostState>(
       bloc: PostCubit.get(context)
         ..getPostsInfo(
-            userId: widget.userInfo.userId,
             postsIds: widget.userInfo.posts,
-            isThatForMyPosts: widget.isThatMyPersonalId),
+            isThatMyPosts: widget.isThatMyPersonalId),
       buildWhen: (previous, current) {
         if (reBuild.value) {
           reBuild.value = false;
