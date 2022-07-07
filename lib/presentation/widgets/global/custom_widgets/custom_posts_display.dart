@@ -12,8 +12,13 @@ import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_u
 class CustomPostsDisplay extends StatefulWidget {
   final List<Post> postsInfo;
   final bool isThatProfile;
+  final bool showCatchUp;
+
   const CustomPostsDisplay(
-      {Key? key, required this.postsInfo, required this.isThatProfile})
+      {Key? key,
+      required this.postsInfo,
+      this.showCatchUp = true,
+      required this.isThatProfile})
       : super(key: key);
 
   @override
@@ -116,7 +121,9 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
       children: [
         posts(index, postInfo, bodyHeight, playTheVideo),
         const Divider(color: ColorManager.lightGrey, thickness: .15),
-        if (isThatEndOfList.value && index == postsInfo.value.length - 1) ...[
+        if (widget.showCatchUp &&
+            isThatEndOfList.value &&
+            index == postsInfo.value.length - 1) ...[
           const AllCatchUpIcon(),
         ]
       ],
