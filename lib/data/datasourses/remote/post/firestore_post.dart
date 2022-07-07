@@ -37,7 +37,6 @@ class FirestorePost {
 
   static Future<List<Post>> getPostsInfo(
       {required List<dynamic> postsIds,
-      required String userId,
       required int lengthOfCurrentList}) async {
     List<Post> postsInfo = [];
     int condition = postsIds.length;
