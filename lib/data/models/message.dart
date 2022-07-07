@@ -13,12 +13,14 @@ class Message extends Equatable {
   String recordedUrl;
   bool isThatImage;
   bool isThatPost;
+  bool multiImages;
   String postId;
   String profileImageUrl;
   String userNameOfSharedPost;
   Message({
     required this.message,
     required this.blurHash,
+    this.multiImages = false,
     required this.receiverId,
     this.isThatPost = false,
     required this.senderId,
@@ -47,6 +49,7 @@ class Message extends Equatable {
       postId: snap.data()["postId"] ?? "",
       profileImageUrl: snap.data()["profileImageUrl"] ?? "",
       userNameOfSharedPost: snap.data()["userNameOfSharedPost"] ?? "",
+      multiImages: snap.data()["multiImages"] ?? false,
     );
   }
 
@@ -63,6 +66,7 @@ class Message extends Equatable {
         "postId": postId,
         "profileImageUrl": profileImageUrl,
         "userNameOfSharedPost": userNameOfSharedPost,
+        "multiImages": multiImages,
       };
 
   @override
@@ -80,5 +84,6 @@ class Message extends Equatable {
         postId,
         profileImageUrl,
         userNameOfSharedPost,
+        multiImages,
       ];
 }
