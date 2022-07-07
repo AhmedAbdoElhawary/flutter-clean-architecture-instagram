@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,10 +13,12 @@ import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/animated_dialog.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/send_to_users.dart';
 import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_posts_display.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
 
 class _PositionDimension {
   final double positionTop;
@@ -66,6 +67,11 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   GlobalKey shareKey = GlobalKey();
   GlobalKey menuKey = GlobalKey();
 
+  final TextEditingController _bottomSheetMessageTextController =
+      TextEditingController();
+  final TextEditingController _bottomSheetSearchTextController =
+      TextEditingController();
+
   ValueNotifier<bool> messageVisibility = ValueNotifier(false);
   ValueNotifier<bool> loveVisibility = ValueNotifier(false);
   ValueNotifier<bool> viewProfileVisibility = ValueNotifier(false);
@@ -101,10 +107,6 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
     Offset position = box?.localToGlobal(Offset.zero) ?? const Offset(0, 0);
     Size widgetSize = key.currentContext?.size ?? Size.zero;
     double widgetWidth = widgetSize.width;
-    double widgetHeight = widgetSize.height;
-    if (kDebugMode) {
-      print("widgetWidth: $widgetWidth, widgetHeight: $widgetHeight");
-    }
     _PositionDimension positionDimension = _PositionDimension(
       positionTop: position.dy,
       positionBottom: position.dy + 50,
@@ -115,6 +117,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
 
     return positionDimension;
   }
+
   Widget createGridTileWidget() => Builder(
         builder: (context) => GestureDetector(
           onTap: () {
@@ -149,7 +152,6 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
                 loveVisibility.value = true;
                 messageVisibility.value = true;
                 isLiked = !isLiked;
-
               } else if (details.globalPosition.dy >
                       commentPosition.positionTop &&
                   details.globalPosition.dy < commentPosition.positionBottom &&
@@ -198,7 +200,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
             Overlay.of(context)!.insert(_popupEmptyDialog!);
           },
           onLongPress: () {
-            loveStatusAnimation.value=const SizedBox();
+            loveStatusAnimation.value = const SizedBox();
             _popupDialog = _createPopupDialog(widget.postClickedInfo);
             Overlay.of(context)!.insert(_popupDialog!);
             _popupEmptyDialog = _createPopupEmptyDialog();
@@ -208,7 +210,6 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
             if (loveVisibility.value) {
               if (isLiked) {
                 setState(() {
-
                   BlocProvider.of<PostLikesCubit>(context)
                       .removeTheLikeOnThisPost(
                           postId: widget.postClickedInfo.postUid,
@@ -227,7 +228,6 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
                       userId: myPersonalId);
                   widget.postClickedInfo.likes.add(myPersonalId);
                   isHeartAnimation.value = true;
-
                 });
               }
               await Future.delayed(const Duration(seconds: 1));
@@ -244,6 +244,8 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
                 ),
               );
             }
+            if (shareVisibility.value) await draggableBottomSheet();
+
             setState(() {
               messageVisibility.value = false;
               // isHeartAnimation.value = false;
@@ -263,6 +265,135 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
                   play: widget.playThisVideo,
                   withoutSound: true,
                 ),
+        ),
+      );
+
+  SvgPicture iconsOfImagePost(String path, {bool lowHeight = false}) {
+    return SvgPicture.asset(
+      path,
+      color: Theme.of(context).focusColor,
+      height: lowHeight ? 22 : 28,
+    );
+  }
+
+  Future<void> draggableBottomSheet() async {
+    return showSlidingBottomSheet<void>(
+      context,
+      builder: (BuildContext context) => SlidingSheetDialog(
+        cornerRadius: 16,
+        color: Theme.of(context).primaryColor,
+        snapSpec: const SnapSpec(
+          initialSnap: 1,
+          snappings: [.4, 1, .7],
+        ),
+        builder: buildSheet,
+        headerBuilder: (context, state) => Material(
+          child: upperWidgets(context),
+        ),
+      ),
+    );
+  }
+
+  Column upperWidgets(BuildContext context) {
+    String postImageUrl = widget.postClickedInfo.imagesUrls.length > 1
+        ? widget.postClickedInfo.imagesUrls[0]
+        : widget.postClickedInfo.postUrl;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsetsDirectional.only(top: 10),
+          child: Container(
+            width: 45,
+            height: 4.5,
+            decoration: BoxDecoration(
+              color: Theme.of(context).textTheme.headline4!.color,
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Container(
+                width: 50,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: ColorManager.grey,
+                  borderRadius: BorderRadius.circular(5),
+                  image: DecorationImage(
+                    image: NetworkImage(postImageUrl),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Flexible(
+              child: TextField(
+                controller: _bottomSheetMessageTextController,
+                cursorColor: ColorManager.teal,
+                decoration: InputDecoration(
+                  hintText: StringsManager.writeMessage.tr(),
+                  hintStyle: const TextStyle(
+                    color: ColorManager.grey,
+                  ),
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                ),
+                onChanged: (_) => setState(() {}),
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding:
+              const EdgeInsetsDirectional.only(top: 30.0, end: 20, start: 20),
+          child: Container(
+            width: double.infinity,
+            height: 35,
+            decoration: BoxDecoration(
+                color: Theme.of(context).shadowColor,
+                borderRadius: BorderRadius.circular(10)),
+            child: TextFormField(
+              cursorColor: ColorManager.teal,
+              style: Theme.of(context).textTheme.bodyText1,
+              controller: _bottomSheetSearchTextController,
+              textAlign: TextAlign.start,
+              decoration: InputDecoration(
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    size: 20,
+                    color: ColorManager.lowOpacityGrey,
+                  ),
+                  contentPadding: const EdgeInsetsDirectional.all(12),
+                  hintText: StringsManager.search.tr(),
+                  hintStyle: Theme.of(context).textTheme.headline1,
+                  border: InputBorder.none),
+              onChanged: (_) => setState(() {}),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  clearTextsController() {
+    setState(() {
+      _bottomSheetMessageTextController.clear();
+      _bottomSheetSearchTextController.clear();
+    });
+  }
+
+  Widget buildSheet(context, state) => Material(
+        child: SendToUsers(
+          userInfo: widget.postClickedInfo.publisherInfo!,
+          messageTextController: _bottomSheetMessageTextController,
+          postInfo: widget.postClickedInfo,
+          clearTexts: clearTextsController,
         ),
       );
 
@@ -327,7 +458,6 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   }
 
   Widget loveAnimation() {
-    print("isHeartAnimation: ${isHeartAnimation.value}");
     return ValueListenableBuilder(
       valueListenable: loveStatusAnimation,
       builder: (context, value, child) =>
@@ -364,7 +494,6 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
 
   Widget _createActionBar() {
     isLiked = widget.postClickedInfo.likes.contains(myPersonalId);
-
     return Container(
       height: 50,
       padding: const EdgeInsetsDirectional.only(bottom: 5, top: 5),
