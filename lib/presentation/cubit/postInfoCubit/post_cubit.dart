@@ -47,17 +47,15 @@ class PostCubit extends Cubit<PostState> {
 
   Future<void> getPostsInfo(
       {required List<dynamic> postsIds,
-      required String userId,
-      required bool isThatForMyPosts,
+      required bool isThatMyPosts,
       int lengthOfCurrentList = -1}) async {
     emit(CubitPostLoading());
     await _getPostsInfoUseCase
         .call(
             paramsOne: postsIds,
-            paramsTwo: userId,
-            paramsThree: lengthOfCurrentList)
+            paramsTwo: lengthOfCurrentList)
         .then((postsInfo) {
-      if (isThatForMyPosts) {
+      if (isThatMyPosts) {
         myPostsInfo = postsInfo;
         emit(CubitMyPersonalPostsLoaded(postsInfo));
       } else {

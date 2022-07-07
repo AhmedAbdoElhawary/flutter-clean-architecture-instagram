@@ -141,10 +141,13 @@ class SendToUsers extends StatelessWidget {
       receiverId: userInfoWhoIShared.userId,
       isThatImage: true,
       postId: postInfo.postUid,
-      imageUrl: postInfo.postUrl,
+      imageUrl: postInfo.imagesUrls.length > 1
+          ? postInfo.imagesUrls[0]
+          : postInfo.postUrl,
       isThatPost: true,
       profileImageUrl: userInfo.profileImageUrl,
-      userNameOfSharedPost: userInfo.userName,
+      multiImages: postInfo.imagesUrls.length > 1,
+      userNameOfSharedPost: userInfo.name,
     );
   }
 
