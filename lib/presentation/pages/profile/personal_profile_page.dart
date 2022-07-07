@@ -20,6 +20,7 @@ import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/pages/story/create_story.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/create_new_story.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/recommendation_people.dart';
@@ -152,10 +153,10 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Future<void> bottomSheet({bool createNewData = true}) {
     return showModalBottomSheet<void>(
       context: context,
-      builder: (BuildContext context)=>CustomBottomSheet(
-          bodyText: bodyTextOfBottomSheet(createNewData),
-          headIcon: bottomSheetHeadIcon(),
-        ),
+      builder: (BuildContext context) => CustomBottomSheet(
+        bodyText: bodyTextOfBottomSheet(createNewData),
+        headIcon: bottomSheetHeadIcon(),
+      ),
     );
   }
 
@@ -345,37 +346,11 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     Navigator.maybePop(context);
     Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
         builder: (context) {
-          return CustomGallery.normalDisplay(
-            appTheme: appStoryTheme(),
-            moveToPage: moveToCreateStoryPage,
-          );
+          return const CreateNewStory();
         },
         maintainState: false));
 
     rebuildUserInfo.value = true;
-  }
-
-  AppTheme appStoryTheme() {
-    return AppTheme(
-        primaryColor: ColorManager.black, focusColor: ColorManager.white);
-  }
-
-  Future<void> moveToCreateStoryPage(SelectedImageDetails details) async {
-    final singleImage = details.selectedFile;
-    details.selectedFile = await compressImage(singleImage) ?? singleImage;
-    if (details.selectedFiles != null && details.multiSelectionMode) {
-      final image = details.selectedFiles![0];
-      details.selectedFiles![0] = (await compressImage(image)) ?? image;
-    }
-    File file = details.multiSelectionMode
-        ? details.selectedFiles![0]
-        : details.selectedFile;
-    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-        builder: (context) => CreateStoryPage(
-              storyImage: file,
-              isThatImage: details.isThatImage,
-            ),
-        maintainState: false));
   }
 
   createNewPost({bool isThatImage = true}) async {
