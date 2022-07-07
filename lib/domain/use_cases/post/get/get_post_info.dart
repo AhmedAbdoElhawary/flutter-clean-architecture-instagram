@@ -3,19 +3,15 @@ import 'package:instagram/domain/repositories/post/post_repository.dart';
 import 'package:instagram/core/use_case/use_case.dart';
 
 class GetPostsInfoUseCase
-    implements UseCaseThreeParams<List<Post>, List<dynamic>, String, int> {
+    implements UseCaseTwoParams<List<Post>, List<dynamic>, int> {
   final FirestorePostRepository _getPostRepository;
 
   GetPostsInfoUseCase(this._getPostRepository);
 
   @override
   Future<List<Post>> call(
-      {required List<dynamic> paramsOne,
-      required String paramsTwo,
-      required int paramsThree}) {
+      {required List<dynamic> paramsOne, required int paramsTwo}) {
     return _getPostRepository.getPostsInfo(
-        postsIds: paramsOne,
-        userId: paramsTwo,
-        lengthOfCurrentList: paramsThree);
+        postsIds: paramsOne, lengthOfCurrentList: paramsTwo);
   }
 }
