@@ -21,16 +21,16 @@ import 'package:instagram/core/functions/toast_show.dart';
 
 // ignore: must_be_immutable
 class CommentInfo extends StatefulWidget {
-  final Comment commentInfo;
-  TextEditingController textController;
-  ValueChanged<Comment>? selectedCommentInfo;
-  UserPersonalInfo myPersonalInfo;
   int index;
-  bool isThatReply;
-  final CustomRebuildCallback customRebuildCallback;
-  final bool rebuildComment;
   bool addReply;
+  bool isThatReply;
+  final Comment commentInfo;
+  final bool rebuildComment;
   Map<int, bool> showMeReplies;
+  UserPersonalInfo myPersonalInfo;
+  TextEditingController textController;
+  final ValueChanged<Comment>? selectedCommentInfo;
+  final CustomRebuildCallback customRebuildCallback;
 
   CommentInfo(
       {Key? key,
@@ -61,107 +61,107 @@ class _CommentInfoState extends State<CommentInfo> {
           rowOfCommentator(context, isLiked, widget.commentInfo.theComment),
           if (!widget.isThatReply && widget.commentInfo.replies!.isNotEmpty)
             widget.showMeReplies[widget.index] == false
-                ? Padding(
-                    padding: const EdgeInsetsDirectional.only(start: 50.0),
-                    child: Row(
-                      children: [
-                        Container(
-                            color: Theme.of(context).dividerColor,
-                            height: 1,
-                            width: 40),
-                        const SizedBox(width: 10),
-                        Expanded(
-                            child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    widget.showMeReplies
-                                        .update(widget.index, (value) => true);
-                                  });
-                                },
-                                child: Text(
-                                    "${StringsManager.view.tr()} ${widget.commentInfo.replies!.length} ${StringsManager.more.tr()} ${widget.commentInfo.replies!.length > 1 ? StringsManager.replies.tr() : StringsManager.reply.tr()}",
-                                    style: getNormalStyle(
-                                        color:
-                                            Theme.of(context).indicatorColor))))
-                      ],
-                    ),
-                  )
-                : BlocBuilder<ReplyInfoCubit, ReplyInfoState>(
-                    bloc: BlocProvider.of<ReplyInfoCubit>(context)
-                      ..getRepliesOfThisComment(
-                          commentId: widget.commentInfo.commentUid),
-                    buildWhen: (previous, current) {
-                      if (previous != current &&
-                          (current is CubitReplyInfoLoaded)) {
-                        return true;
-                      }
-                      if (widget.rebuildComment) {
-                        widget.customRebuildCallback(isRebuild: false);
-                        return true;
-                      }
-                      return false;
-                    },
-                    builder: (context, state) {
-                      if (state is CubitReplyInfoLoaded) {
-                        List<Comment> repliesInfo =
-                            BlocProvider.of<ReplyInfoCubit>(context)
-                                .repliesOnComment;
-                        return Padding(
-                          padding:
-                              const EdgeInsetsDirectional.only(start: 40.0),
-                          child: ListView.separated(
-                              keyboardDismissBehavior:
-                                  ScrollViewKeyboardDismissBehavior.onDrag,
-                              shrinkWrap: true,
-                              primary: false,
-                              itemBuilder: (context, index) {
-                                return CommentInfo(
-                                  showMeReplies: widget.showMeReplies,
-                                  commentInfo: repliesInfo[index],
-                                  textController: widget.textController,
-                                  customRebuildCallback:
-                                      widget.customRebuildCallback,
-                                  index: index,
-                                  selectedCommentInfo:
-                                      widget.selectedCommentInfo,
-                                  myPersonalInfo: widget.myPersonalInfo,
-                                  addReply: widget.addReply,
-                                  isThatReply: true,
-                                  rebuildComment: widget.rebuildComment,
-                                );
-                              },
-                              itemCount: repliesInfo.length,
-                              separatorBuilder:
-                                  (BuildContext context, int index) =>
-                                      const SizedBox(
-                                        height: 20,
-                                      )),
-                        );
-                      } else if (state is CubitReplyInfoFailed) {
-                        ToastShow.toastStateError(state);
-                        return Text(state.toString(),
-                            style: Theme.of(context).textTheme.bodyText1);
-                      } else {
-                        return Padding(
-                          padding:
-                              const EdgeInsetsDirectional.only(start: 50.0),
-                          child: Row(
-                            children: [
-                              Container(
-                                  color: Theme.of(context).dividerColor,
-                                  height: 1,
-                                  width: 40),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                  child: Text(StringsManager.loading.tr(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline1))
-                            ],
-                          ),
-                        );
-                      }
-                    }),
+                ? textOfReplyCount(context)
+                : showReplies(context),
+        ],
+      ),
+    );
+  }
+
+  BlocBuilder<ReplyInfoCubit, ReplyInfoState> showReplies(
+      BuildContext context) {
+    return BlocBuilder<ReplyInfoCubit, ReplyInfoState>(
+        bloc: BlocProvider.of<ReplyInfoCubit>(context)
+          ..getRepliesOfThisComment(commentId: widget.commentInfo.commentUid),
+        buildWhen: (previous, current) {
+          if (previous != current && (current is CubitReplyInfoLoaded)) {
+            return true;
+          }
+          if (widget.rebuildComment) {
+            widget.customRebuildCallback(isRebuild: false);
+            return true;
+          }
+          return false;
+        },
+        builder: (context, state) {
+          if (state is CubitReplyInfoLoaded) {
+            List<Comment> repliesInfo =
+                BlocProvider.of<ReplyInfoCubit>(context).repliesOnComment;
+            return Padding(
+              padding: const EdgeInsetsDirectional.only(start: 40.0),
+              child: ListView.separated(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  shrinkWrap: true,
+                  primary: false,
+                  itemBuilder: (context, index) {
+                    return CommentInfo(
+                      showMeReplies: widget.showMeReplies,
+                      commentInfo: repliesInfo[index],
+                      textController: widget.textController,
+                      customRebuildCallback: widget.customRebuildCallback,
+                      index: index,
+                      selectedCommentInfo: widget.selectedCommentInfo,
+                      myPersonalInfo: widget.myPersonalInfo,
+                      addReply: widget.addReply,
+                      isThatReply: true,
+                      rebuildComment: widget.rebuildComment,
+                    );
+                  },
+                  itemCount: repliesInfo.length,
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const SizedBox(
+                        height: 20,
+                      )),
+            );
+          } else if (state is CubitReplyInfoFailed) {
+            ToastShow.toastStateError(state);
+            return Text(state.toString(),
+                style: Theme.of(context).textTheme.bodyText1);
+          } else {
+            return textOfLoading(context,StringsManager.loading.tr());
+          }
+        });
+  }
+
+  Padding textOfLoading(BuildContext context,String loadingText) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 50.0),
+      child: Row(
+        children: [
+          Container(
+              color: Theme.of(context).dividerColor, height: 1, width: 40),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(loadingText,
+                style: Theme.of(context).textTheme.headline1),
+          )
+        ],
+      ),
+    );
+  }
+
+  Padding textOfReplyCount(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 50.0, bottom: 10),
+      child: Row(
+        children: [
+          Container(
+              color: Theme.of(context).dividerColor, height: 1, width: 40),
+          const SizedBox(width: 10),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  widget.showMeReplies.update(widget.index, (value) => true);
+                });
+              },
+              child: Text(
+                "${StringsManager.view.tr()} ${widget.commentInfo.replies!.length} ${StringsManager.more.tr()} ${widget.commentInfo.replies!.length > 1 ? StringsManager.replies.tr() : StringsManager.reply.tr()}",
+                style: getNormalStyle(color: Theme.of(context).indicatorColor),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -173,181 +173,190 @@ class _CommentInfoState extends State<CommentInfo> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.of(
-              context,
-            ).push(CupertinoPageRoute(
-              builder: (context) => WhichProfilePage(
-                  userId: widget.commentInfo.whoCommentInfo!.userId),
-            ));
-          },
-          child: CircleAvatarOfProfileImage(
-            userInfo: widget.commentInfo.whoCommentInfo!,
-            bodyHeight: widget.isThatReply ? 280 : 400,
-          ),
-        ),
+        profileImage(context),
         const SizedBox(width: 8),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsetsDirectional.only(top: 3.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(
-                        context,
-                      ).push(CupertinoPageRoute(
-                        builder: (context) => WhichProfilePage(
-                            userId: widget.commentInfo.whoCommentInfo!.userId),
-                      ));
-                    },
-                    child: Text.rich(
-                      TextSpan(
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: widget.commentInfo.whoCommentInfo!.userName,
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                          const TextSpan(
-                            text: '  ',
-                          ),
-                          if (widget.isThatReply)
-                            TextSpan(
-                              text: hashTageOfUserName.split(" ")[0],
-                              style:
-                                  getNormalStyle(color: ColorManager.lightBlue),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () async {
-                                  List<String> hashTagName =
-                                      hashTageOfUserName.split(" ");
-                                  String userName =
-                                      hashTagName[0].replaceAll('@', '');
-                                  await Navigator.of(
-                                    context,
-                                  ).push(CupertinoPageRoute(
-                                      builder: (context) => WhichProfilePage(
-                                            userName: userName,
-                                          ),
-                                      maintainState: false));
-                                },
-                            ),
-                          TextSpan(
-                            style:
-                                TextStyle(color: Theme.of(context).focusColor),
-                            text:
-                                " ${widget.isThatReply ? hashTageOfUserName.split(" ")[1] : hashTageOfUserName}",
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                          DateOfNow.commentsDateOfNow(
-                              widget.commentInfo.datePublished),
-                          style: Theme.of(context).textTheme.headline1),
-                      if (widget.commentInfo.likes.isNotEmpty)
-                        Padding(
-                          padding:
-                              const EdgeInsetsDirectional.only(start: 20.0),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(CupertinoPageRoute(
-                                  builder: (context) => UsersWhoLikesOnPostPage(
-                                        showSearchBar: false,
-                                        usersIds: widget.commentInfo.likes,
-                                      )));
-                            },
-                            child: Text(
-                              "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like.tr() : StringsManager.likes.tr()}",
-                              style: Theme.of(context).textTheme.headline1,
-                            ),
-                          ),
-                        ),
-                      const SizedBox(width: 20),
-                      InkWell(
-                        onTap: () async {
-                          String hashTag =
-                              "@${widget.commentInfo.whoCommentInfo!.userName} ";
-
-                          widget.textController.text = hashTag;
-
-                          widget.textController.selection =
-                              TextSelection.fromPosition(TextPosition(
-                                  offset: widget.textController.text.length));
-                          Comment commentInfo = widget.commentInfo;
-                          if (widget.commentInfo.parentCommentId.isEmpty) {
-                            commentInfo.parentCommentId =
-                                commentInfo.commentUid;
-                          }
-                          setState(() {
-                            widget.selectedCommentInfo!(commentInfo);
-                          });
-                        },
-                        child: Text(
-                          StringsManager.reply.tr(),
-                          style: Theme.of(context).textTheme.headline1,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 15),
-                ]),
-          ),
-        ),
-        IconButton(
-          icon: !isLiked
-              ? const Icon(
-                  Icons.favorite_border,
-                  size: 15,
-                  color: Colors.grey,
-                )
-              : const Icon(
-                  Icons.favorite,
-                  size: 15,
-                  color: Colors.red,
-                ),
-          onPressed: () {
-            setState(() {
-              if (widget.isThatReply) {
-                if (isLiked) {
-                  BlocProvider.of<ReplyLikesCubit>(context)
-                      .removeLikeOnThisReply(
-                          replyId: widget.commentInfo.commentUid,
-                          myPersonalId: myPersonalId);
-                  widget.commentInfo.likes.remove(myPersonalId);
-                } else {
-                  BlocProvider.of<ReplyLikesCubit>(context).putLikeOnThisReply(
-                      replyId: widget.commentInfo.commentUid,
-                      myPersonalId: myPersonalId);
-                  widget.commentInfo.likes.add(myPersonalId);
-                }
-              } else {
-                if (isLiked) {
-                  BlocProvider.of<CommentLikesCubit>(context)
-                      .removeLikeOnThisComment(
-                          postId: widget.commentInfo.postId,
-                          commentId: widget.commentInfo.commentUid,
-                          myPersonalId: myPersonalId);
-                  widget.commentInfo.likes.remove(myPersonalId);
-                } else {
-                  BlocProvider.of<CommentLikesCubit>(context)
-                      .putLikeOnThisComment(
-                          postId: widget.commentInfo.postId,
-                          commentId: widget.commentInfo.commentUid,
-                          myPersonalId: myPersonalId);
-                  widget.commentInfo.likes.add(myPersonalId);
-                }
-              }
-            });
-          },
-        )
+        buildCommentInfo(context, hashTageOfUserName),
+        if (!widget.commentInfo.isLoading) loveButton(isLiked, context)
       ],
     );
   }
+
+  GestureDetector profileImage(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(
+          context,
+        ).push(CupertinoPageRoute(
+          builder: (context) => WhichProfilePage(
+              userId: widget.commentInfo.whoCommentInfo!.userId),
+        ));
+      },
+      child: CircleAvatarOfProfileImage(
+        userInfo: widget.commentInfo.whoCommentInfo!,
+        bodyHeight: widget.isThatReply ? 280 : 400,
+      ),
+    );
+  }
+  Expanded buildCommentInfo(BuildContext context, String hashTageOfUserName) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsetsDirectional.only(top: 3.0),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              whoCommentUserName(context, hashTageOfUserName),
+              const SizedBox(height: 5),
+              commentOption(context),
+              const SizedBox(height: 15),
+            ]),
+      ),
+    );
+  }
+
+  Row commentOption(BuildContext context) {
+    return Row(
+      children: [
+        Text(DateOfNow.commentsDateOfNow(widget.commentInfo.datePublished),
+            style: Theme.of(context).textTheme.headline1),
+        if (widget.commentInfo.likes.isNotEmpty)
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 20.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(CupertinoPageRoute(
+                    builder: (context) => UsersWhoLikesOnPostPage(
+                      showSearchBar: false,
+                      usersIds: widget.commentInfo.likes,
+                    )));
+              },
+              child: Text(
+                "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like.tr() : StringsManager.likes.tr()}",
+                style: Theme.of(context).textTheme.headline1,
+              ),
+            ),
+          ),
+        const SizedBox(width: 20),
+        InkWell(
+          onTap: () async {
+            String hashTag = "@${widget.commentInfo.whoCommentInfo!.userName} ";
+
+            widget.textController.text = hashTag;
+
+            widget.textController.selection = TextSelection.fromPosition(
+                TextPosition(offset: widget.textController.text.length));
+            Comment commentInfo = widget.commentInfo;
+            if (widget.commentInfo.parentCommentId.isEmpty) {
+              commentInfo.parentCommentId = commentInfo.commentUid;
+            }
+            setState(() {
+              widget.selectedCommentInfo!(commentInfo);
+            });
+          },
+          child: Text(
+            StringsManager.reply.tr(),
+            style: Theme.of(context).textTheme.headline1,
+          ),
+        ),
+      ],
+    );
+  }
+
+  GestureDetector whoCommentUserName(
+      BuildContext context, String hashTageOfUserName) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(
+          context,
+        ).push(CupertinoPageRoute(
+          builder: (context) => WhichProfilePage(
+              userId: widget.commentInfo.whoCommentInfo!.userId),
+        ));
+      },
+      child: Text.rich(
+        TextSpan(
+          children: <TextSpan>[
+            TextSpan(
+              text: widget.commentInfo.whoCommentInfo!.userName,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            const TextSpan(
+              text: '  ',
+            ),
+            if (widget.isThatReply)
+              TextSpan(
+                text: hashTageOfUserName.split(" ")[0],
+                style: getNormalStyle(color: ColorManager.lightBlue),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () async {
+                    List<String> hashTagName = hashTageOfUserName.split(" ");
+                    String userName = hashTagName[0].replaceAll('@', '');
+                    await Navigator.of(
+                      context,
+                    ).push(CupertinoPageRoute(
+                        builder: (context) => WhichProfilePage(
+                          userName: userName,
+                        ),
+                        maintainState: false));
+                  },
+              ),
+            TextSpan(
+              style: TextStyle(color: Theme.of(context).focusColor),
+              text:
+              " ${widget.isThatReply ? hashTageOfUserName.split(" ")[1] : hashTageOfUserName}",
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  IconButton loveButton(bool isLiked, BuildContext context) {
+    return IconButton(
+      icon: !isLiked
+          ? const Icon(
+              Icons.favorite_border,
+              size: 15,
+              color: Colors.grey,
+            )
+          : const Icon(
+              Icons.favorite,
+              size: 15,
+              color: Colors.red,
+            ),
+      onPressed: () {
+        setState(() {
+          if (widget.isThatReply) {
+            if (isLiked) {
+              BlocProvider.of<ReplyLikesCubit>(context).removeLikeOnThisReply(
+                  replyId: widget.commentInfo.commentUid,
+                  myPersonalId: myPersonalId);
+              widget.commentInfo.likes.remove(myPersonalId);
+            } else {
+              BlocProvider.of<ReplyLikesCubit>(context).putLikeOnThisReply(
+                  replyId: widget.commentInfo.commentUid,
+                  myPersonalId: myPersonalId);
+              widget.commentInfo.likes.add(myPersonalId);
+            }
+          } else {
+            if (isLiked) {
+              BlocProvider.of<CommentLikesCubit>(context)
+                  .removeLikeOnThisComment(
+                      postId: widget.commentInfo.postId,
+                      commentId: widget.commentInfo.commentUid,
+                      myPersonalId: myPersonalId);
+              widget.commentInfo.likes.remove(myPersonalId);
+            } else {
+              BlocProvider.of<CommentLikesCubit>(context).putLikeOnThisComment(
+                  postId: widget.commentInfo.postId,
+                  commentId: widget.commentInfo.commentUid,
+                  myPersonalId: myPersonalId);
+              widget.commentInfo.likes.add(myPersonalId);
+            }
+          }
+        });
+      },
+    );
+  }
+
 }
