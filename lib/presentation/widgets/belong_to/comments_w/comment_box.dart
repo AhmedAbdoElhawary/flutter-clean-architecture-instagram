@@ -12,21 +12,24 @@ import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/re
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 
 class CommentBox extends StatefulWidget {
-  final TextEditingController textController;
-  final Comment? selectedCommentInfo;
-  final FocusNode? focusNode;
-  final ValueChanged<bool> makeSelectedCommentNullable;
-  final UserPersonalInfo userPersonalInfo;
   final String postId;
-  const CommentBox(
-      {Key? key,
-      required this.textController,
-      this.focusNode,
-      required this.userPersonalInfo,
-      required this.makeSelectedCommentNullable,
-      required this.postId,
-      this.selectedCommentInfo})
-      : super(key: key);
+  final FocusNode? focusNode;
+  final bool isThatCommentScreen;
+  final Comment? selectedCommentInfo;
+  final UserPersonalInfo userPersonalInfo;
+  final TextEditingController textController;
+  final ValueChanged<bool> makeSelectedCommentNullable;
+
+  const CommentBox({
+    Key? key,
+    this.focusNode,
+    required this.postId,
+    this.selectedCommentInfo,
+    required this.textController,
+    required this.userPersonalInfo,
+    this.isThatCommentScreen = true,
+    required this.makeSelectedCommentNullable,
+  }) : super(key: key);
 
   @override
   State<CommentBox> createState() => _CommentBoxState();
@@ -83,7 +86,8 @@ class _CommentBoxState extends State<CommentBox> {
                   onChanged: (e) => setState(() {}),
                 ),
               ),
-              if (widget.textController.text.isEmpty) ...[
+              if (widget.textController.text.isEmpty &&
+                  !widget.isThatCommentScreen) ...[
                 GestureDetector(
                   onTap: () {
                     setState(() {
@@ -173,13 +177,15 @@ class _CommentBoxState extends State<CommentBox> {
     final _whitespaceRE = RegExp(r"\s+");
     String textWithOneSpaces =
         widget.textController.text.replaceAll(_whitespaceRE, " ");
+
     return Comment(
-        theComment: textWithOneSpaces,
-        whoCommentId: myPersonalInfo.userId,
-        datePublished: formattedDate,
-        postId: widget.postId,
-        likes: [],
-        replies: []);
+      theComment: textWithOneSpaces,
+      whoCommentId: myPersonalInfo.userId,
+      datePublished: formattedDate,
+      postId: widget.postId,
+      likes: [],
+      replies: [],
+    );
   }
 
   Comment newReplyInfo(
@@ -188,11 +194,12 @@ class _CommentBoxState extends State<CommentBox> {
     String textWithOneSpaces =
         widget.textController.text.replaceAll(_whitespaceRE, " ");
     return Comment(
-        datePublished: formattedDate,
-        parentCommentId: commentInfo.parentCommentId,
-        postId: commentInfo.postId,
-        theComment: textWithOneSpaces,
-        whoCommentId: myPersonalId,
-        likes: []);
+      datePublished: formattedDate,
+      parentCommentId: commentInfo.parentCommentId,
+      postId: commentInfo.postId,
+      theComment: textWithOneSpaces,
+      whoCommentId: myPersonalId,
+      likes: [],
+    );
   }
 }
