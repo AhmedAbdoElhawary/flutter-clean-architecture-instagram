@@ -20,6 +20,7 @@ class StringsManager {
   static const String writeMessage = "writeMessage";
   static const String like = "like";
   static const String unLike = "unLike";
+  static const String posting = "posting";
 
   static const String menu = "menu";
 

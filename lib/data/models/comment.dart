@@ -9,15 +9,14 @@ class Comment {
   String whoCommentId;
   UserPersonalInfo? whoCommentInfo;
   List<dynamic> likes;
-
   String parentCommentId;
-
   List<dynamic>? replies;
-
+  bool isLoading;
   Comment({
     required this.whoCommentId,
     required this.datePublished,
     required this.theComment,
+     this.isLoading=false,
     this.commentUid = "",
     required this.postId,
     this.whoCommentInfo,

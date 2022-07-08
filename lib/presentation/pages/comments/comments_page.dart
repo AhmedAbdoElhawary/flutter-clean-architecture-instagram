@@ -26,11 +26,10 @@ class CommentsPage extends StatefulWidget {
 
 class _CommentsPageState extends State<CommentsPage> {
   final TextEditingController _textController = TextEditingController();
-
+  Map<int, bool> showMeReplies = {};
+  List<Comment> allComments = [];
   Comment? selectedCommentInfo;
-
   bool addReply = false;
-
   bool rebuild = false;
 
   @override
@@ -101,7 +100,8 @@ class _CommentsPageState extends State<CommentsPage> {
       UserPersonalInfo? myPersonalInfo) {
     state.commentsOfThePost
         .sort((a, b) => b.datePublished.compareTo(a.datePublished));
-    return buildListView(state.commentsOfThePost, myPersonalInfo!, context);
+    allComments = state.commentsOfThePost;
+    return buildListView(myPersonalInfo!, context);
   }
 
   Widget whenBuildFailed(BuildContext context, state) {
@@ -116,40 +116,39 @@ class _CommentsPageState extends State<CommentsPage> {
     });
   }
 
-  Widget buildListView(List<Comment> commentsOfThePost,
-      UserPersonalInfo myPersonalInfo, BuildContext context) {
-    Map<int, bool> showMeReplies = {};
-    return commentsOfThePost.isNotEmpty
-        ? commentsListView(showMeReplies, commentsOfThePost, myPersonalInfo)
+  Widget buildListView(UserPersonalInfo myPersonalInfo, BuildContext context) {
+    return allComments.isNotEmpty
+        ? commentsListView(allComments, myPersonalInfo)
         : noCommentText(context);
   }
 
-  ListView commentsListView(Map<int, bool> showMeReplies,
+  ListView commentsListView(
       List<Comment> commentsOfThePost, UserPersonalInfo myPersonalInfo) {
     return ListView.separated(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        scrollDirection: Axis.vertical,
-        itemBuilder: (context, index) {
-          showMeReplies[index] = false;
-          return BlocProvider<ReplyInfoCubit>(
-            create: (_) => injector<ReplyInfoCubit>(),
-            child: CommentInfo(
-              commentInfo: commentsOfThePost[index],
-              index: index,
-              showMeReplies: showMeReplies,
-              textController: _textController,
-              selectedCommentInfo: selectedComment,
-              myPersonalInfo: myPersonalInfo,
-              addReply: addReply,
-              customRebuildCallback: isScreenRebuild,
-              rebuildComment: rebuild,
-            ),
-          );
-        },
-        itemCount: commentsOfThePost.length,
-        separatorBuilder: (BuildContext context, int index) => const SizedBox(
-              height: 20,
-            ));
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      scrollDirection: Axis.vertical,
+      itemBuilder: (context, index) {
+        if (!showMeReplies.containsKey(index)) showMeReplies[index] = false;
+
+        return BlocProvider<ReplyInfoCubit>(
+          create: (_) => injector<ReplyInfoCubit>(),
+          child: CommentInfo(
+            commentInfo: commentsOfThePost[index],
+            index: index,
+            showMeReplies: showMeReplies,
+            textController: _textController,
+            selectedCommentInfo: selectedComment,
+            myPersonalInfo: myPersonalInfo,
+            addReply: addReply,
+            customRebuildCallback: isScreenRebuild,
+            rebuildComment: rebuild,
+          ),
+        );
+      },
+      itemCount: commentsOfThePost.length,
+      separatorBuilder: (BuildContext context, int index) =>
+          const SizedBox(height: 10),
+    );
   }
 
   void isScreenRebuild({bool isRebuild = false}) {

@@ -380,11 +380,14 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
               valueListenable: commentTextController,
               builder: (context, TextEditingController textValue, child) =>
                   CommentBox(
+
+                    isThatCommentScreen: false,
                 postId: widget.postInfo.value.postUid,
                 textController: textValue,
                 focusNode: FocusNode(),
                 userPersonalInfo: widget.postInfo.value.publisherInfo!,
                 makeSelectedCommentNullable: makeSelectedCommentNullable,
+
               ),
             ),
           ),
