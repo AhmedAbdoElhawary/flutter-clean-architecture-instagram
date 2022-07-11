@@ -8,7 +8,8 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubi
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
-import 'package:instagram/presentation/cubit/followCubit/follow_cubit.dart';
+import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
+import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comment_likes/comment_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/replyLikes/reply_likes_cubit.dart';
@@ -75,6 +76,9 @@ class MultiBlocs extends StatelessWidget {
       ),
       BlocProvider<SearchAboutUserBloc>(
         create: (context) => injector<SearchAboutUserBloc>(),
+      ),
+      BlocProvider<NotificationCubit>(
+        create: (context) => injector<NotificationCubit>(),
       ),
     ], child: materialApp);
   }
