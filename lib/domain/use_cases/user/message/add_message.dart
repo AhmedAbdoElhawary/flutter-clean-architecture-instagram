@@ -13,7 +13,7 @@ class AddMessageUseCase
       {required Message paramsOne,
       required String paramsTwo,
       required String paramsThree}) {
-    return _addPostToUserRepository.sendmessage(
+    return _addPostToUserRepository.sendMessage(
         messageInfo: paramsOne,
         pathOfPhoto: paramsTwo,
         pathOfRecorded: paramsThree);
