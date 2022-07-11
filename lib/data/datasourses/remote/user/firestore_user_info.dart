@@ -21,10 +21,27 @@ class FirestoreUser {
     DocumentSnapshot<Map<String, dynamic>> snap =
         await _fireStoreUserCollection.doc(userId).get();
     if (snap.exists) {
-      return UserPersonalInfo.fromDocSnap(docSnap: snap);
+      return UserPersonalInfo.fromDocSnap(snap.data());
     } else {
       return Future.error(StringsManager.userNotExist.tr());
     }
+  }
+
+  static Future<List<UserPersonalInfo>> getAllUnFollowersUsers(
+      UserPersonalInfo myPersonalInfo) async {
+    QuerySnapshot<Map<String, dynamic>> snap =
+        await _fireStoreUserCollection.get();
+    List<UserPersonalInfo> usersInfo = [];
+    for (final doc in snap.docs) {
+      UserPersonalInfo formatUser = UserPersonalInfo.fromDocSnap(doc.data());
+      bool isThatMe = formatUser.userId == myPersonalInfo.userId;
+      bool isThatUserFollowedByMe =
+          !myPersonalInfo.followedPeople.contains(formatUser.userId);
+      if (!isThatMe && isThatUserFollowedByMe) {
+        usersInfo.add(formatUser);
+      }
+    }
+    return usersInfo;
   }
 
   static Future<List<UserPersonalInfo>> getSpecificUsersInfo(
@@ -37,7 +54,7 @@ class FirestoreUser {
             await _fireStoreUserCollection.doc(usersIds[i]).get();
         if (snap.exists) {
           UserPersonalInfo postReformat =
-              UserPersonalInfo.fromDocSnap(docSnap: snap);
+              UserPersonalInfo.fromDocSnap(snap.data());
           usersInfo.add(postReformat);
         }
         ids.add(usersIds[i]);
@@ -93,8 +110,8 @@ class FirestoreUser {
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        Map<String, dynamic> snap = snapshot.docs[0].data();
-        userPersonalInfo = UserPersonalInfo.fromDocSnap(mapSnap: snap);
+        QueryDocumentSnapshot<Map<String, dynamic>> snap = snapshot.docs[0];
+        userPersonalInfo = UserPersonalInfo.fromDocSnap(snap.data());
       }
     });
     return userPersonalInfo;
@@ -177,8 +194,7 @@ class FirestoreUser {
             .snapshots();
 
     return snapSearch.map((snapshot) => snapshot.docs.map((doc) {
-          UserPersonalInfo userInfo =
-              UserPersonalInfo.fromDocSnap(docSnap: doc);
+          UserPersonalInfo userInfo = UserPersonalInfo.fromDocSnap(doc.data());
           return userInfo;
         }).toList());
   }
