@@ -1,12 +1,14 @@
 import 'package:get_it/get_it.dart';
 import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/data/repositories_impl/firebase_auth_repository_impl.dart';
+import 'package:instagram/data/repositories_impl/firestore_notification.dart';
 import 'package:instagram/data/repositories_impl/firestore_story_repo_impl.dart';
 import 'package:instagram/data/repositories_impl/firestore_user_repo_impl.dart';
 import 'package:instagram/data/repositories_impl/post/comment/firestore_comment_repo_impl.dart';
 import 'package:instagram/data/repositories_impl/post/comment/firestore_reply_repo_impl.dart';
 import 'package:instagram/data/repositories_impl/post/firestore_post_repo_impl.dart';
 import 'package:instagram/domain/repositories/auth_repository.dart';
+import 'package:instagram/domain/repositories/firestore_notification.dart';
 import 'package:instagram/domain/repositories/post/comment/comment_repository.dart';
 import 'package:instagram/domain/repositories/post/comment/reply_repository.dart';
 import 'package:instagram/domain/repositories/post/post_repository.dart';
@@ -17,6 +19,9 @@ import 'package:instagram/domain/use_cases/auth/sign_out_auth_usecase.dart';
 import 'package:instagram/domain/use_cases/auth/sign_up_auth_usecase.dart';
 import 'package:instagram/domain/use_cases/follow/follow_this_user.dart';
 import 'package:instagram/domain/use_cases/follow/remove_this_follower.dart';
+import 'package:instagram/domain/use_cases/notification/create_notification_use_case.dart';
+import 'package:instagram/domain/use_cases/notification/delete_notification.dart';
+import 'package:instagram/domain/use_cases/notification/get_notifications_use_case.dart';
 import 'package:instagram/domain/use_cases/post/comments/add_comment_use_case.dart';
 import 'package:instagram/domain/use_cases/post/comments/getComment/get_all_comment.dart';
 import 'package:instagram/domain/use_cases/post/comments/put_like.dart';
@@ -40,6 +45,7 @@ import 'package:instagram/domain/use_cases/story/get_stories_info.dart';
 import 'package:instagram/domain/use_cases/user/add_new_user_usecase.dart';
 import 'package:instagram/domain/use_cases/user/add_post_to_user.dart';
 import 'package:instagram/domain/use_cases/user/add_story_to_user.dart';
+import 'package:instagram/domain/use_cases/user/getUserInfo/get_all_users_info.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_followers_and_followings_usecase.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_specific_users_usecase.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_user_from_user_name.dart';
@@ -59,7 +65,8 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubi
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
-import 'package:instagram/presentation/cubit/followCubit/follow_cubit.dart';
+import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
+import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comment_likes/comment_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/replyLikes/reply_likes_cubit.dart';
@@ -108,6 +115,10 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<FirestoreStoryRepository>(
     FirestoreStoryRepositoryImpl(),
   );
+  // notification
+  injector.registerSingleton<FirestoreNotificationRepository>(
+    FirestoreNotificationRepoImpl(),
+  );
   // *
   /// ==============================================================================================>
 
@@ -144,8 +155,12 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<AddStoryToUserUseCase>(
       AddStoryToUserUseCase(injector()));
 
+  injector
+      .registerSingleton<GetAllUsersUseCase>(GetAllUsersUseCase(injector()));
+
   injector.registerSingleton<SearchAboutUserUseCase>(
       SearchAboutUserUseCase(injector()));
+
   injector.registerSingleton<GetChatUsersInfoAddMessageUseCase>(
       GetChatUsersInfoAddMessageUseCase(injector()));
 
@@ -224,6 +239,15 @@ Future<void> initializeDependencies() async {
       .registerSingleton<DeleteStoryUseCase>(DeleteStoryUseCase(injector()));
 
   // *
+  // notification useCases
+  injector.registerSingleton<GetNotificationsUseCase>(
+      GetNotificationsUseCase(injector()));
+  injector.registerSingleton<CreateNotificationUseCase>(
+      CreateNotificationUseCase(injector()));
+  injector.registerSingleton<DeleteNotificationUseCase>(
+      DeleteNotificationUseCase(injector()));
+  // *
+
   /// ==============================================================================================>
 
   // auth Blocs
@@ -237,7 +261,14 @@ Future<void> initializeDependencies() async {
     () => FirestoreAddNewUserCubit(injector()),
   );
   injector.registerFactory<FirestoreUserInfoCubit>(() => FirestoreUserInfoCubit(
-      injector(), injector(), injector(), injector(), injector(), injector()));
+        injector(),
+        injector(),
+        injector(),
+        injector(),
+        injector(),
+        injector(),
+        injector(),
+      ));
 
   injector.registerFactory<UsersInfoCubit>(
     () => UsersInfoCubit(injector(), injector(), injector()),
@@ -298,5 +329,9 @@ Future<void> initializeDependencies() async {
     () => StoryCubit(injector(), injector(), injector(), injector()),
   );
   // *
+  // notification Blocs
+  injector.registerFactory<NotificationCubit>(
+    () => NotificationCubit(injector(), injector(), injector()),
+  );
   // *
 }
