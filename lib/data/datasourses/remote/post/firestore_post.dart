@@ -81,8 +81,7 @@ class FirestorePost {
     QuerySnapshot<Map<String, dynamic>> snap =
         await _fireStorePostCollection.get();
 
-    for (int i = 0; i < snap.docs.length; i++) {
-      QueryDocumentSnapshot<Map<String, dynamic>> doc = snap.docs[i];
+    for (final doc in snap.docs) {
       Post postReformat = Post.fromQuery(doc: doc);
       UserPersonalInfo publisherInfo =
           await FirestoreUser.getUserInfo(postReformat.publisherId);
