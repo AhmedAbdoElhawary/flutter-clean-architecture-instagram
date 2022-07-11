@@ -6,20 +6,14 @@ import 'package:octo_image/octo_image.dart';
 class NetworkImageDisplay extends StatefulWidget {
   final String imageUrl;
   final String blurHash;
-  final BoxFit boxFit;
-  final bool circularLoading;
   final double aspectRatio;
-  final double bodyHeight;
 
-  const NetworkImageDisplay(
-      {Key? key,
-      required this.imageUrl,
-      this.blurHash = "",
-      this.bodyHeight = 0,
-      this.aspectRatio = 0,
-      this.circularLoading = true,
-      this.boxFit = BoxFit.cover})
-      : super(key: key);
+  const NetworkImageDisplay({
+    Key? key,
+    required this.imageUrl,
+    this.blurHash = "",
+    this.aspectRatio = 0,
+  }) : super(key: key);
 
   @override
   State<NetworkImageDisplay> createState() => _NetworkImageDisplayState();
