@@ -46,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
                   navigationBarItem("shop_white.svg", value),
                   BottomNavigationBarItem(
                     icon: BlocBuilder<FirestoreUserInfoCubit,
-                        FirestoreGetUserInfoState>(builder: (context, state) {
+                        FirestoreUserInfoState>(builder: (context, state) {
                       FirestoreUserInfoCubit userCubit =
                           FirestoreUserInfoCubit.get(context);
                       String userImage =
@@ -79,11 +79,13 @@ class _MainScreenState extends State<MainScreen> {
                         child: BlocProvider<PostCubit>(
                       create: (context) => injector<PostCubit>(),
                       child: ValueListenableBuilder(
-                          valueListenable: playHomeVideo,
-                          builder: (context, bool playVideoValue, child) =>
-                              HomeScreen(
-                                  userId: widget.userId,
-                                  playVideo: playVideoValue)),
+                        valueListenable: playHomeVideo,
+                        builder: (context, bool playVideoValue, child) =>
+                            HomeScreen(
+                          userId: widget.userId,
+                          playVideo: playVideoValue,
+                        ),
+                      ),
                     )),
                   );
                 case 1:
