@@ -3,12 +3,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/data/models/notification.dart';
+import 'package:instagram/domain/entities/notification_check.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
-import 'package:instagram/presentation/cubit/followCubit/follow_cubit.dart';
+import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
+import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/pages/messages/chatting_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
@@ -32,7 +36,21 @@ class UserProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<UserProfilePage> {
-  bool rebuildUserInfo = false;
+  ValueNotifier<bool> rebuildUserInfo = ValueNotifier(false);
+  late UserPersonalInfo myPersonalInfo;
+
+  @override
+  initState() {
+    myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
+    super.initState();
+  }
+
+  @override
+  dispose() {
+    rebuildUserInfo.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return scaffold();
@@ -44,67 +62,70 @@ class _ProfilePageState extends State<UserProfilePage> {
             .getUserFromUserName(widget.userName))
         : (await BlocProvider.of<FirestoreUserInfoCubit>(context)
             .getUserInfo(widget.userId, isThatMyPersonalId: false));
-    setState(() {
-      rebuildUserInfo = true;
-    });
+    rebuildUserInfo.value = true;
   }
 
   Widget scaffold() {
-    return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
-      bloc: widget.userName.isNotEmpty
-          ? (BlocProvider.of<FirestoreUserInfoCubit>(context)
-            ..getUserFromUserName(widget.userName))
-          : (BlocProvider.of<FirestoreUserInfoCubit>(context)
-            ..getUserInfo(widget.userId, isThatMyPersonalId: false)),
-      buildWhen: (previous, current) {
-        if (previous != current && current is CubitUserLoaded) {
-          return true;
-        }
-        if (rebuildUserInfo && current is CubitUserLoaded) {
-          return true;
-        }
-        return false;
-      },
-      builder: (context, state) {
-        if (state is CubitUserLoaded) {
-          return Scaffold(
-            appBar: CustomAppBar.menuOfUserAppBar(
-                context, state.userPersonalInfo.userName, bottomSheetOfAdd),
-            body: ProfilePage(
-              isThatMyPersonalId: false,
-              userId: widget.userId,
-              getData: getData,
-              userInfo: state.userPersonalInfo,
-              widgetsAboveTapBars:
-                  widgetsAboveTapBars(state.userPersonalInfo, state),
-            ),
-          );
-        } else if (state is CubitGetUserInfoFailed) {
-          ToastShow.toastStateError(state);
-          return Text(
-            StringsManager.somethingWrong.tr(),
-            style: Theme.of(context).textTheme.bodyText1,
-          );
-        } else {
-          return const ThineCircularProgress();
-        }
-      },
+    return ValueListenableBuilder(
+      valueListenable: rebuildUserInfo,
+      builder: (context, bool rebuildUserInfoValue, child) =>
+          BlocBuilder<FirestoreUserInfoCubit, FirestoreUserInfoState>(
+        bloc: widget.userName.isNotEmpty
+            ? (BlocProvider.of<FirestoreUserInfoCubit>(context)
+              ..getUserFromUserName(widget.userName))
+            : (BlocProvider.of<FirestoreUserInfoCubit>(context)
+              ..getUserInfo(widget.userId, isThatMyPersonalId: false)),
+        buildWhen: (previous, current) {
+          if (previous != current && current is CubitUserLoaded) {
+            return true;
+          }
+          if (rebuildUserInfoValue && current is CubitUserLoaded) {
+            rebuildUserInfo.value = false;
+            return true;
+          }
+          return false;
+        },
+        builder: (context, state) {
+          if (state is CubitUserLoaded) {
+            return Scaffold(
+              appBar: CustomAppBar.menuOfUserAppBar(
+                  context, state.userPersonalInfo.userName, bottomSheet),
+              body: ProfilePage(
+                isThatMyPersonalId: false,
+                userId: widget.userId,
+                getData: getData,
+                userInfo: state.userPersonalInfo,
+                widgetsAboveTapBars:
+                    widgetsAboveTapBars(state.userPersonalInfo, state),
+              ),
+            );
+          } else if (state is CubitGetUserInfoFailed) {
+            ToastShow.toastStateError(state);
+            return Text(
+              StringsManager.somethingWrong.tr(),
+              style: Theme.of(context).textTheme.bodyText1,
+            );
+          } else {
+            return const ThineCircularProgress();
+          }
+        },
+      ),
     );
   }
 
-  Future<void> bottomSheetOfAdd() {
+  Future<void> bottomSheet() {
     return showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
         return CustomBottomSheet(
           headIcon: Container(),
-          bodyText: buildPadding(),
+          bodyText: buildTexts(),
         );
       },
     );
   }
 
-  Padding buildPadding() {
+  Padding buildTexts() {
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 15.0),
       child: Column(
@@ -137,7 +158,7 @@ class _ProfilePageState extends State<UserProfilePage> {
   }
 
   List<Widget> widgetsAboveTapBars(
-      UserPersonalInfo userInfo, FirestoreGetUserInfoState userInfoState) {
+      UserPersonalInfo userInfo, FirestoreUserInfoState userInfoState) {
     return [
       followButton(userInfo, userInfoState),
       const SizedBox(width: 5),
@@ -149,33 +170,57 @@ class _ProfilePageState extends State<UserProfilePage> {
   }
 
   Widget followButton(
-      UserPersonalInfo userInfo, FirestoreGetUserInfoState userInfoState) {
+      UserPersonalInfo userInfo, FirestoreUserInfoState userInfoState) {
     return BlocBuilder<FollowCubit, FollowState>(
-      // buildWhen: ,
       builder: (context, stateOfFollow) {
         return Expanded(
           child: InkWell(
               onTap: () async {
-                setState(() {
-                  rebuildUserInfo = false;
-                });
-                if (userInfo.followerPeople.contains(myPersonalId)) {
+                if (myPersonalInfo.followedPeople.contains(userInfo.userId)) {
                   BlocProvider.of<FollowCubit>(context).removeThisFollower(
                       followingUserId: userInfo.userId,
                       myPersonalId: myPersonalId);
+                  myPersonalInfo.followedPeople.remove(userInfo.userId);
+                  //for notification
+                  BlocProvider.of<NotificationCubit>(context)
+                      .deleteNotification(
+                          notificationCheck: createNotificationCheck(userInfo));
                 } else {
                   BlocProvider.of<FollowCubit>(context).followThisUser(
                       followingUserId: userInfo.userId,
                       myPersonalId: myPersonalId);
+                  myPersonalInfo.followedPeople.add(userInfo.userId);
+                  //for notification
+                  BlocProvider.of<NotificationCubit>(context)
+                      .createNotification(
+                          newNotification: createNotification(userInfo));
                 }
-
-                setState(() {
-                  rebuildUserInfo = true;
-                });
               },
               child: whichContainerOfText(stateOfFollow, userInfo)),
         );
       },
+    );
+  }
+
+  NotificationCheck createNotificationCheck(UserPersonalInfo userInfo) {
+    return NotificationCheck(
+      senderId: myPersonalId,
+      receiverId: userInfo.userId,
+      isThatLike: false,
+      isThatPost: false,
+    );
+  }
+
+  CustomNotification createNotification(UserPersonalInfo userInfo) {
+    return CustomNotification(
+      text: "${myPersonalInfo.userName} started following you.",
+      time: DateOfNow.dateOfNow(),
+      senderId: myPersonalId,
+      receiverId: userInfo.userId,
+      personalUserName: myPersonalInfo.userName,
+      personalProfileImageUrl: myPersonalInfo.profileImageUrl,
+      isThatLike: false,
+      isThatPost: false,
     );
   }
 
@@ -185,14 +230,18 @@ class _ProfilePageState extends State<UserProfilePage> {
     if (stateOfFollow is CubitFollowThisUserFailed) {
       ToastShow.toastStateError(stateOfFollow);
     }
-    return !userInfo.followerPeople.contains(myPersonalId)
+    bool isThatFollower =
+        myPersonalInfo.followerPeople.contains(userInfo.userId);
+    return !myPersonalInfo.followedPeople.contains(userInfo.userId)
         ? containerOfFollowText(
-            text: StringsManager.follow.tr(),
-            isThatFollower: false,
+            text: isThatFollower
+                ? StringsManager.followBack.tr()
+                : StringsManager.follow.tr(),
+            isThatFollowers: false,
             isItLoading: isFollowLoading)
         : containerOfFollowText(
             text: StringsManager.following.tr(),
-            isThatFollower: true,
+            isThatFollowers: true,
             isItLoading: isFollowLoading);
   }
 
@@ -215,7 +264,7 @@ class _ProfilePageState extends State<UserProfilePage> {
         },
         child: containerOfFollowText(
             text: StringsManager.message.tr(),
-            isThatFollower: true,
+            isThatFollowers: true,
             isItLoading: false),
       ),
     );
@@ -223,22 +272,23 @@ class _ProfilePageState extends State<UserProfilePage> {
 
   Container containerOfFollowText(
       {required String text,
-      required bool isThatFollower,
+      required bool isThatFollowers,
       required bool isItLoading}) {
     return Container(
       height: 35.0,
       decoration: BoxDecoration(
-        color:
-            isThatFollower ? Theme.of(context).primaryColor : ColorManager.blue,
+        color: isThatFollowers
+            ? Theme.of(context).primaryColor
+            : ColorManager.blue,
         border: Border.all(
             color: Theme.of(context).bottomAppBarColor,
-            width: isThatFollower ? 1.0 : 0),
-        borderRadius: BorderRadius.circular(6.0),
+            width: isThatFollowers ? 1.0 : 0),
+        borderRadius: BorderRadius.circular(10.0),
       ),
       child: Center(
         child: isItLoading
             ? CircularProgressIndicator(
-                color: isThatFollower
+                color: isThatFollowers
                     ? Theme.of(context).focusColor
                     : Theme.of(context).primaryColor,
                 strokeWidth: 1,
@@ -247,7 +297,7 @@ class _ProfilePageState extends State<UserProfilePage> {
                 text,
                 style: TextStyle(
                     fontSize: 17.0,
-                    color: isThatFollower
+                    color: isThatFollowers
                         ? Theme.of(context).focusColor
                         : ColorManager.white,
                     fontWeight: FontWeight.w500),
