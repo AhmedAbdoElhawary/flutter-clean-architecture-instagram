@@ -17,14 +17,16 @@ class CircleAvatarOfProfileImage extends StatefulWidget {
   final String nameOfCircle;
   final String hashTag;
   final bool moveTextMore;
+  final bool showColorfulCircle;
 
   const CircleAvatarOfProfileImage({
+    this.hashTag = "",
+    this.nameOfCircle = "",
     required this.userInfo,
     required this.bodyHeight,
     this.moveTextMore = false,
-    this.hashTag = "",
-    this.nameOfCircle = "",
     this.thisForStoriesLine = false,
+    this.showColorfulCircle = true,
     Key? key,
   }) : super(key: key);
 
@@ -60,7 +62,6 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
 
   Widget buildColumn(String profileImage, BuildContext context) {
     return SingleChildScrollView(
-
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -133,7 +134,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     return Stack(
       alignment: Alignment.center,
       children: [
-        if (hasStory) ...[
+        if (widget.showColorfulCircle && hasStory) ...[
           isStorySeen ? unColorfulContainer() : colorfulContainer(),
           customSpacer()
         ],
