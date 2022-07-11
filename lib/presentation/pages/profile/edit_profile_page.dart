@@ -46,7 +46,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
+    return BlocBuilder<FirestoreUserInfoCubit, FirestoreUserInfoState>(
       buildWhen: (previous, current) {
         if (previous != current && (current is CubitMyPersonalInfoLoaded)) {
           return true;
@@ -75,34 +75,41 @@ class _EditProfilePageState extends State<EditProfilePage> {
           });
         }
 
-        return Scaffold(
-          backgroundColor: Theme.of(context).primaryColor,
-          appBar: AppBar(
-              iconTheme: IconThemeData(color: Theme.of(context).focusColor),
-              elevation: 0,
-              backgroundColor: Theme.of(context).primaryColor,
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: SvgPicture.asset(
-                    IconsAssets.cancelIcon,
-                    color: Theme.of(context).focusColor,
-                    height: 27,
-                  )),
-              title: Text(
-                StringsManager.editProfile.tr(),
-                style: getMediumStyle(
-                    color: Theme.of(context).focusColor, fontSize: 20),
-              ),
-              actions: actionsWidgets(getUserState, updateUserCubit)),
-          body: Column(
-            children: [
-              circleAvatarAndTextFields(context, updateUserCubit),
-            ],
-          ),
-        );
+        return buildScaffold(context, getUserState, updateUserCubit);
       },
+    );
+  }
+
+  Scaffold buildScaffold(
+      BuildContext context,
+      FirestoreUserInfoState getUserState,
+      FirestoreUserInfoCubit updateUserCubit) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
+      appBar: AppBar(
+          iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+          elevation: 0,
+          backgroundColor: Theme.of(context).primaryColor,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: SvgPicture.asset(
+                IconsAssets.cancelIcon,
+                color: Theme.of(context).focusColor,
+                height: 27,
+              )),
+          title: Text(
+            StringsManager.editProfile.tr(),
+            style: getMediumStyle(
+                color: Theme.of(context).focusColor, fontSize: 20),
+          ),
+          actions: actionsWidgets(getUserState, updateUserCubit)),
+      body: Column(
+        children: [
+          circleAvatarAndTextFields(context, updateUserCubit),
+        ],
+      ),
     );
   }
 
