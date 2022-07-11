@@ -101,7 +101,6 @@ class AllUsersTimeLinePage extends StatelessWidget {
               postsVideosInfo: videoPosts,
               isThatEndOfList: isThatEndOfList,
               reloadData: reloadData,
-              isThatProfile: false,
               allPostsInfo: state.allPostInfo,
             );
           } else if (state is CubitPostFailed) {
