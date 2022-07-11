@@ -10,6 +10,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
+import 'package:instagram/presentation/pages/comments/comments_page.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/animated_dialog.dart';
@@ -119,154 +120,161 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   }
 
   Widget createGridTileWidget() => Builder(
-        builder: (context) => GestureDetector(
-          onTap: () {
-            List<Post> customPostsInfo = widget.postsInfo;
-            customPostsInfo.removeWhere(
-                (value) => value.postUid == widget.postClickedInfo.postUid);
-            customPostsInfo.insert(0, widget.postClickedInfo);
-            Navigator.of(context).push(CupertinoPageRoute(
-              builder: (context) => CustomPostsDisplay(
-                postsInfo: widget.postsInfo,
-                isThatProfile: widget.isThatProfile,
-              ),
-            ));
-          },
-          onLongPressMoveUpdate: (details) {
-            _PositionDimension lovePosition = _getOffset(loveKey);
-            _PositionDimension commentPosition = _getOffset(viewProfileKey);
-            _PositionDimension sharePosition = _getOffset(shareKey);
-            _PositionDimension menuPosition = _getOffset(menuKey);
+    builder: (context) => GestureDetector(
+      onTap: () {
+        List<Post> customPostsInfo = widget.postsInfo;
+        customPostsInfo.removeWhere(
+            (value) => value.postUid == widget.postClickedInfo.postUid);
+        customPostsInfo.insert(0, widget.postClickedInfo);
+        Navigator.of(context).push(CupertinoPageRoute(
+          builder: (context) => CustomPostsDisplay(
+            postsInfo: widget.postsInfo,
+            isThatProfile: widget.isThatProfile,
+          ),
+        ));
+      },
+      onLongPressMoveUpdate: (details) {
+        _PositionDimension lovePosition = _getOffset(loveKey);
+        _PositionDimension commentPosition = _getOffset(viewProfileKey);
+        _PositionDimension sharePosition = _getOffset(shareKey);
+        _PositionDimension menuPosition = _getOffset(menuKey);
 
+        setState(() {
+          if (details.globalPosition.dy > lovePosition.positionTop &&
+              details.globalPosition.dy < lovePosition.positionBottom &&
+              details.globalPosition.dx > lovePosition.positionLeft &&
+              details.globalPosition.dx < lovePosition.positionRight) {
+            messageText = isLiked
+                ? StringsManager.unLike.tr()
+                : StringsManager.like.tr();
+            widgetPositionLeft = lovePosition.positionLeft -
+                lovePosition.positionCenter -
+                (isLiked ? 15 : 7);
+            loveVisibility.value = true;
+            messageVisibility.value = true;
+          } else if (details.globalPosition.dy >
+                  commentPosition.positionTop &&
+              details.globalPosition.dy <
+                  commentPosition.positionBottom &&
+              details.globalPosition.dx > commentPosition.positionLeft &&
+              details.globalPosition.dx < commentPosition.positionRight) {
+            messageText = widget.isThatProfile
+                ? StringsManager.comment.tr()
+                : StringsManager.viewProfile.tr();
+            widgetPositionLeft = commentPosition.positionLeft -
+                commentPosition.positionCenter -
+                30;
+            viewProfileVisibility.value = true;
+            messageVisibility.value = true;
+          } else if (details.globalPosition.dy >
+                  sharePosition.positionTop &&
+              details.globalPosition.dy < sharePosition.positionBottom &&
+              details.globalPosition.dx > sharePosition.positionLeft &&
+              details.globalPosition.dx < sharePosition.positionRight) {
+            messageText = StringsManager.share.tr();
+            widgetPositionLeft = sharePosition.positionLeft -
+                sharePosition.positionCenter -
+                12;
+            shareVisibility.value = true;
+            messageVisibility.value = true;
+          } else if (details.globalPosition.dy >
+                  menuPosition.positionTop &&
+              details.globalPosition.dy < menuPosition.positionBottom &&
+              details.globalPosition.dx > menuPosition.positionLeft &&
+              details.globalPosition.dx < menuPosition.positionRight) {
+            messageText = StringsManager.menu.tr();
+            widgetPositionLeft = menuPosition.positionLeft -
+                menuPosition.positionCenter -
+                15;
+            menuVisibility.value = true;
+            messageVisibility.value = true;
+          } else {
+            messageText = "";
+            widgetPositionLeft = 0;
+            // isLiked = !isLiked;
+            loveVisibility.value = false;
+            viewProfileVisibility.value = false;
+            shareVisibility.value = false;
+            menuVisibility.value = false;
+            messageVisibility.value = false;
+          }
+        });
+
+        _popupEmptyDialog = _createPopupEmptyDialog();
+        Overlay.of(context)!.insert(_popupEmptyDialog!);
+      },
+      onLongPress: () {
+        loveStatusAnimation.value = const SizedBox();
+        _popupDialog = _createPopupDialog(widget.postClickedInfo);
+        Overlay.of(context)!.insert(_popupDialog!);
+        _popupEmptyDialog = _createPopupEmptyDialog();
+        Overlay.of(context)!.insert(_popupEmptyDialog!);
+      },
+      onLongPressEnd: (details) async {
+        if (loveVisibility.value) {
+          if (isLiked) {
             setState(() {
-              if (details.globalPosition.dy > lovePosition.positionTop &&
-                  details.globalPosition.dy < lovePosition.positionBottom &&
-                  details.globalPosition.dx > lovePosition.positionLeft &&
-                  details.globalPosition.dx < lovePosition.positionRight) {
-                messageText = isLiked
-                    ? StringsManager.unLike.tr()
-                    : StringsManager.like.tr();
-                widgetPositionLeft = lovePosition.positionLeft -
-                    lovePosition.positionCenter -
-                    (isLiked ? 15 : 7);
-                loveVisibility.value = true;
-                messageVisibility.value = true;
-                isLiked = !isLiked;
-              } else if (details.globalPosition.dy >
-                      commentPosition.positionTop &&
-                  details.globalPosition.dy < commentPosition.positionBottom &&
-                  details.globalPosition.dx > commentPosition.positionLeft &&
-                  details.globalPosition.dx < commentPosition.positionRight) {
-                messageText = StringsManager.viewProfile.tr();
-                widgetPositionLeft = commentPosition.positionLeft -
-                    commentPosition.positionCenter -
-                    30;
-                viewProfileVisibility.value = true;
-                messageVisibility.value = true;
-              } else if (details.globalPosition.dy >
-                      sharePosition.positionTop &&
-                  details.globalPosition.dy < sharePosition.positionBottom &&
-                  details.globalPosition.dx > sharePosition.positionLeft &&
-                  details.globalPosition.dx < sharePosition.positionRight) {
-                messageText = StringsManager.share.tr();
-                widgetPositionLeft = sharePosition.positionLeft -
-                    sharePosition.positionCenter -
-                    12;
-                shareVisibility.value = true;
-                messageVisibility.value = true;
-              } else if (details.globalPosition.dy > menuPosition.positionTop &&
-                  details.globalPosition.dy < menuPosition.positionBottom &&
-                  details.globalPosition.dx > menuPosition.positionLeft &&
-                  details.globalPosition.dx < menuPosition.positionRight) {
-                messageText = StringsManager.menu.tr();
-                widgetPositionLeft = menuPosition.positionLeft -
-                    menuPosition.positionCenter -
-                    15;
-                menuVisibility.value = true;
-                messageVisibility.value = true;
-              } else {
-                messageText = "";
-                widgetPositionLeft = 0;
-                // isLiked = !isLiked;
-                loveVisibility.value = false;
-                viewProfileVisibility.value = false;
-                shareVisibility.value = false;
-                menuVisibility.value = false;
-                messageVisibility.value = false;
-              }
-            });
-
-            _popupEmptyDialog = _createPopupEmptyDialog();
-            Overlay.of(context)!.insert(_popupEmptyDialog!);
-          },
-          onLongPress: () {
-            loveStatusAnimation.value = const SizedBox();
-            _popupDialog = _createPopupDialog(widget.postClickedInfo);
-            Overlay.of(context)!.insert(_popupDialog!);
-            _popupEmptyDialog = _createPopupEmptyDialog();
-            Overlay.of(context)!.insert(_popupEmptyDialog!);
-          },
-          onLongPressEnd: (details) async {
-            if (loveVisibility.value) {
-              if (isLiked) {
-                setState(() {
-                  BlocProvider.of<PostLikesCubit>(context)
-                      .removeTheLikeOnThisPost(
-                          postId: widget.postClickedInfo.postUid,
-                          userId: myPersonalId);
-                  widget.postClickedInfo.likes.remove(myPersonalId);
-                  isLiked = false;
-                });
-              } else {
-                setState(() {
-                  loveStatusAnimation.value = const FadeAnimation(
-                      child: Icon(Icons.favorite,
-                          color: ColorManager.white, size: 100));
-
-                  BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
+              BlocProvider.of<PostLikesCubit>(context)
+                  .removeTheLikeOnThisPost(
                       postId: widget.postClickedInfo.postUid,
                       userId: myPersonalId);
-                  widget.postClickedInfo.likes.add(myPersonalId);
-                  isHeartAnimation.value = true;
-                });
-              }
-              await Future.delayed(const Duration(seconds: 1));
-              isHeartAnimation.value = false;
-            }
-            if (viewProfileVisibility.value) {
-              Navigator.of(context).push(
-                CupertinoPageRoute(
-                  builder: (context) {
-                    return WhichProfilePage(
-                      userId: widget.postClickedInfo.publisherId,
-                    );
-                  },
-                ),
-              );
-            }
-            if (shareVisibility.value) await draggableBottomSheet();
-
-            setState(() {
-              messageVisibility.value = false;
-              // isHeartAnimation.value = false;
-              _popupDialog?.remove();
-              _popupEmptyDialog?.remove();
+              widget.postClickedInfo.likes.remove(myPersonalId);
+              isLiked = false;
             });
-          },
-          child: widget.postClickedInfo.isThatImage
-              ? NetworkImageDisplay(
-                  blurHash: widget.postClickedInfo.blurHash,
-                  imageUrl: widget.postClickedInfo.postUrl.isNotEmpty
-                      ? widget.postClickedInfo.postUrl
-                      : widget.postClickedInfo.imagesUrls[0],
-                  boxFit: BoxFit.cover)
-              : PlayThisVideo(
-                  videoUrl: widget.postClickedInfo.postUrl,
-                  play: widget.playThisVideo,
-                  withoutSound: true,
-                ),
-        ),
-      );
+          } else {
+            setState(() {
+              loveStatusAnimation.value = const FadeAnimation(
+                  child: Icon(Icons.favorite,
+                      color: ColorManager.white, size: 100));
+
+              BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
+                  postId: widget.postClickedInfo.postUid,
+                  userId: myPersonalId);
+              widget.postClickedInfo.likes.add(myPersonalId);
+              isHeartAnimation.value = true;
+            });
+          }
+          await Future.delayed(const Duration(seconds: 1));
+          isHeartAnimation.value = false;
+        }
+        if (viewProfileVisibility.value) {
+          Navigator.of(context).push(
+            CupertinoPageRoute(
+              builder: (context) {
+                if (widget.isThatProfile) {
+                  return CommentsPage(
+                      postInfo: widget.postClickedInfo);
+                } else {
+                  return WhichProfilePage(
+                    userId: widget.postClickedInfo.publisherId,
+                  );
+                }
+              },
+            ),
+          );
+        }
+        if (shareVisibility.value) draggableBottomSheet();
+
+        setState(() {
+          messageVisibility.value = false;
+          _popupDialog?.remove();
+          _popupEmptyDialog?.remove();
+        });
+      },
+      child: widget.postClickedInfo.isThatImage
+          ? NetworkImageDisplay(
+              blurHash: widget.postClickedInfo.blurHash,
+              imageUrl: widget.postClickedInfo.postUrl.isNotEmpty
+                  ? widget.postClickedInfo.postUrl
+                  : widget.postClickedInfo.imagesUrls[0],
+            )
+          : PlayThisVideo(
+              videoUrl: widget.postClickedInfo.postUrl,
+              play: widget.playThisVideo,
+              withoutSound: true,
+            ),
+    ),
+  );
 
   SvgPicture iconsOfImagePost(String path, {bool lowHeight = false}) {
     return SvgPicture.asset(
@@ -399,10 +407,12 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
 
   OverlayEntry _createPopupDialog(Post postInfo) {
     return OverlayEntry(
-      builder: (context) => BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 25, sigmaY: 20),
-        child: AnimatedDialog(
-          child: _createPopupContent(postInfo),
+      builder: (context) => SafeArea(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 25, sigmaY: 20),
+          child: AnimatedDialog(
+            child: _createPopupContent(postInfo),
+          ),
         ),
       ),
     );
@@ -416,42 +426,46 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
 
   Widget _createPopupContent(Post postInfo) {
     Size screenSize = MediaQuery.of(context).size;
+
     return Container(
       padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _createPhotoTitle(postInfo),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                postInfo.isThatImage
-                    ? Container(
-                        key: imageKey,
-                        color: Theme.of(context).primaryColor,
-                        width: double.infinity,
-                        child: NetworkImageDisplay(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _createPhotoTitle(postInfo),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  postInfo.isThatImage
+                      ? Container(
+                          key: imageKey,
+                          color: Theme.of(context).primaryColor,
+                          width: double.infinity,
+                          child: NetworkImageDisplay(
                             blurHash: postInfo.blurHash,
                             imageUrl: postInfo.postUrl.isNotEmpty
                                 ? postInfo.postUrl
                                 : postInfo.imagesUrls[0],
-                            boxFit: BoxFit.fitWidth),
-                      )
-                    : Container(
-                        color: Theme.of(context).primaryColor,
-                        width: double.infinity,
-                        height: screenSize.height - 200,
-                        child: PlayThisVideo(
-                            videoUrl: postInfo.postUrl, play: true),
-                      ),
-                popupMessage(),
-                loveAnimation()
-              ],
-            ),
-            _createActionBar(),
-          ],
+                            aspectRatio: postInfo.aspectRatio,
+                          ),
+                        )
+                      : Container(
+                          color: Theme.of(context).primaryColor,
+                          width: double.infinity,
+                          height: screenSize.height - 200,
+                          child: PlayThisVideo(
+                              videoUrl: postInfo.postUrl, play: true),
+                        ),
+                  popupMessage(),
+                  loveAnimation()
+                ],
+              ),
+              _createActionBar(),
+            ],
+          ),
         ),
       ),
     );
@@ -518,7 +532,9 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
           SizedBox(
             key: viewProfileKey,
             child: SvgPicture.asset(
-              IconsAssets.profileIcon,
+              widget.isThatProfile
+                  ? IconsAssets.commentIcon
+                  : IconsAssets.profileIcon,
               height: 28,
               color: Theme.of(context).focusColor,
             ),
