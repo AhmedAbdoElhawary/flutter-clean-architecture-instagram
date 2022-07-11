@@ -7,7 +7,9 @@ import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
+import 'package:instagram/presentation/pages/activity/activity_page.dart';
 import 'package:instagram/presentation/pages/messages/messages_page.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
@@ -37,7 +39,18 @@ class CustomAppBar {
             color: Theme.of(context).focusColor,
             height: 30,
           ),
-          onPressed: () {},
+          onPressed: () {
+            UserPersonalInfo myPersonalInfo =
+                FirestoreUserInfoCubit.getMyPersonalInfo(context);
+            Navigator.of(context).push(
+              CupertinoPageRoute(
+                builder: (context) => BlocProvider<UsersInfoCubit>(
+                  create: (context) => injector<UsersInfoCubit>(),
+                  child: ActivityPage(myPersonalInfo: myPersonalInfo),
+                ),
+              ),
+            );
+          },
         ),
         IconButton(
           icon: SvgPicture.asset(
@@ -46,12 +59,14 @@ class CustomAppBar {
             height: 22.5,
           ),
           onPressed: () {
-            Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-                builder: (context) => BlocProvider<UsersInfoCubit>(
-                      create: (context) => injector<UsersInfoCubit>(),
-                      child: const MessagesPage(),
-                    ),
-                maintainState: false));
+            Navigator.of(context, rootNavigator: true).push(
+              CupertinoPageRoute(
+                  builder: (context) => BlocProvider<UsersInfoCubit>(
+                        create: (context) => injector<UsersInfoCubit>(),
+                        child: const MessagesPage(),
+                      ),
+                  maintainState: false),
+            );
           },
         )
       ],
