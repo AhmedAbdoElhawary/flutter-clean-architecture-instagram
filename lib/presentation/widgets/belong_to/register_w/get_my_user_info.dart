@@ -30,7 +30,7 @@ class _GetMyPersonalIdState extends State<GetMyPersonalId> {
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
-      return BlocBuilder<FirestoreUserInfoCubit, FirestoreGetUserInfoState>(
+      return BlocBuilder<FirestoreUserInfoCubit, FirestoreUserInfoState>(
         bloc: FirestoreUserInfoCubit.get(context)
           ..getUserInfo(widget.myPersonalId),
         builder: (context, userState) {
