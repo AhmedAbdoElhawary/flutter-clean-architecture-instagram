@@ -84,17 +84,17 @@ This project doesn't have google-services.json, so follow the steps in (3. Setup
 <img src="https://user-images.githubusercontent.com/88978546/173257206-d78fa66e-6295-4ede-a46e-7e94f943cd02.gif"  width="250">
 </p>
 
-### |---- Change app theme -----|--- Change app language ----| Chatting with bottom video |
+### |--- Change app theme ----|-- Change app language ---|
 
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/173257217-e8fabbf2-ce9d-460c-84ae-57057895bdfd.gif"  width="250">
 <img src="https://user-images.githubusercontent.com/88978546/173257225-ccfc0561-eee2-4c26-ad5f-a94e22da108a.gif"   width="250">
-<img src="https://user-images.githubusercontent.com/88978546/173257249-3aef7bd3-8174-45ce-9af9-73696ff20c8d.gif"  width="250">
 </p>
 
-### |-- Chatting with top video --|
+### |----------------------- Chatting page ----------------------|
 
 <p>
+<img src="https://user-images.githubusercontent.com/88978546/173257249-3aef7bd3-8174-45ce-9af9-73696ff20c8d.gif"  width="250">
 <img src="https://user-images.githubusercontent.com/88978546/173257255-4fdd1318-3e21-47e4-bc4b-3f3809dc5b9c.gif"  width="250">
 </p>
 
