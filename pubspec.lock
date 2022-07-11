@@ -498,7 +498,7 @@ packages:
     source: hosted
     version: "8.0.9"
   get:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: get
       url: "https://pub.dartlang.org"
