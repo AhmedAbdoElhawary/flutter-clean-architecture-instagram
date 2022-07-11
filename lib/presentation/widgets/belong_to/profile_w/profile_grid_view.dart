@@ -9,13 +9,8 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_grid
 class ProfileGridView extends StatefulWidget {
   List<Post> postsInfo;
   final String userId;
-  final bool isThatProfile;
 
-  ProfileGridView(
-      {required this.userId,
-      required this.postsInfo,
-      this.isThatProfile = true,
-      Key? key})
+  ProfileGridView({required this.userId, required this.postsInfo, Key? key})
       : super(key: key);
 
   @override
@@ -40,7 +35,6 @@ class _CustomGridViewState extends State<ProfileGridView> {
                 postClickedInfo: widget.postsInfo[index],
                 postsInfo: widget.postsInfo,
                 index: index,
-                isThatProfile: widget.isThatProfile,
               );
             },
             staggeredTileBuilder: (index) {
