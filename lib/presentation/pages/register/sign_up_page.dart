@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/domain/entities/unregistered_user.dart';
@@ -79,11 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   moveToMain(CubitAuthConfirmed authState) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => MainScreen(authState.user.uid)),
-        (Route<dynamic> route) => false,
-      );
+      Get.offAll(MainScreen(authState.user.uid));
     });
   }
 
