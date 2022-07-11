@@ -62,7 +62,7 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
                   (current is CubitFollowersAndFollowingsLoaded)) {
                 return true;
               }
-              if (rebuildUsersInfo.value &&
+              if (rebuildValue &&
                   (current is CubitFollowersAndFollowingsLoaded)) {
                 rebuildUsersInfo.value = false;
                 return true;
@@ -72,7 +72,6 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
             builder: (context, state) {
               if (state is CubitFollowersAndFollowingsLoaded) {
                 return _TapBarView(
-                  rebuild: rebuild,
                   state: state,
                   userInfo: ValueNotifier(widget.userInfo),
                 );
@@ -94,20 +93,14 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
     return Text(text,
         style: getNormalStyle(color: Theme.of(context).focusColor));
   }
-
-  void rebuild(bool rebuild) {
-    rebuildUsersInfo.value = rebuild;
-  }
 }
 
 class _TapBarView extends StatelessWidget {
   final CubitFollowersAndFollowingsLoaded state;
-  final ValueChanged<bool> rebuild;
   final ValueNotifier<UserPersonalInfo> userInfo;
 
   const _TapBarView({
     Key? key,
-    required this.rebuild,
     required this.userInfo,
     required this.state,
   }) : super(key: key);
@@ -118,17 +111,12 @@ class _TapBarView extends StatelessWidget {
       children: [
         ShowMeTheUsers(
           usersInfo: state.followersAndFollowingsInfo.followersInfo,
-          isThatFollower: true,
           userInfo: userInfo,
-          rebuild: rebuild,
-          showSearchBar: true,
         ),
         ShowMeTheUsers(
           usersInfo: state.followersAndFollowingsInfo.followingsInfo,
           isThatFollower: false,
           userInfo: userInfo,
-          rebuild: rebuild,
-          showSearchBar: true,
         ),
       ],
     );
