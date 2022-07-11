@@ -135,7 +135,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Future<Message> sendmessage(
+  Future<Message> sendMessage(
       {required Message messageInfo,
       required String pathOfPhoto,
       required String pathOfRecorded}) async {
@@ -167,7 +167,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Stream<List<Message>> getmessages({required String receiverId}) =>
+  Stream<List<Message>> getMessages({required String receiverId}) =>
       FireStoreMessage.getMessages(receiverId: receiverId);
 
   @override
@@ -175,7 +175,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       FirestoreUser.searchAboutUser(name: name);
 
   @override
-  Future<void> deletemessage(
+  Future<void> deleteMessage(
       {required Message messageInfo, Message? replacedMessage}) async {
     try {
       await FireStoreMessage.deleteMessage(
@@ -201,6 +201,15 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       List<SenderInfo> allUsersInfo =
           await FirestoreUser.extractUsersIds(usersInfo: allUsersIds);
       return allUsersInfo;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  @override
+  Future<List<UserPersonalInfo>> getAllUnFollowersUsers(UserPersonalInfo myPersonalInfo) {
+    try {
+      return FirestoreUser.getAllUnFollowersUsers( myPersonalInfo);
     } catch (e) {
       return Future.error(e.toString());
     }

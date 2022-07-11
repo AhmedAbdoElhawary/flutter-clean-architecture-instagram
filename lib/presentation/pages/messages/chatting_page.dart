@@ -326,7 +326,6 @@ class _ChattingPageState extends State<ChattingPage>
                   child: NetworkImageDisplay(
                     blurHash: messageInfo.blurHash,
                     imageUrl: messageInfo.imageUrl,
-                    boxFit: BoxFit.fitWidth,
                   ),
                 ),
                 const Padding(
@@ -433,7 +432,6 @@ class _ChattingPageState extends State<ChattingPage>
                   child: NetworkImageDisplay(
                     blurHash: messageInfo.blurHash,
                     imageUrl: imageUrl,
-                    boxFit: BoxFit.cover,
                   ),
                 ),
               )
@@ -782,7 +780,6 @@ class _ChattingPageState extends State<ChattingPage>
         child: ClipOval(
             child: NetworkImageDisplay(
           imageUrl: widget.userInfo.profileImageUrl,
-          boxFit: BoxFit.cover,
         )),
         radius: 45);
   }

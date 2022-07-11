@@ -10,9 +10,11 @@ import '../../cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 class UsersWhoLikesOnPostPage extends StatefulWidget {
   final List<dynamic> usersIds;
   final bool showSearchBar;
-  const UsersWhoLikesOnPostPage(
-      {Key? key, required this.showSearchBar, required this.usersIds})
-      : super(key: key);
+  const UsersWhoLikesOnPostPage({
+    Key? key,
+    required this.showSearchBar,
+    required this.usersIds,
+  }) : super(key: key);
 
   @override
   State<UsersWhoLikesOnPostPage> createState() =>
@@ -51,8 +53,6 @@ class _UsersWhoLikesOnPostPageState extends State<UsersWhoLikesOnPostPage> {
             if (state is CubitGettingSpecificUsersLoaded) {
               return ShowMeTheUsers(
                 usersInfo: state.specificUsersInfo,
-                isThatFollower: true,
-                rebuild: rebuild,
                 showSearchBar: widget.showSearchBar,
               );
             }
@@ -67,11 +67,5 @@ class _UsersWhoLikesOnPostPageState extends State<UsersWhoLikesOnPostPage> {
         ),
       ),
     );
-  }
-
-  void rebuild(bool rebuild) {
-    setState(() {
-      rebuildUsersInfo = rebuild;
-    });
   }
 }

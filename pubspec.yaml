@@ -76,6 +76,7 @@ dependencies:
   photo_manager: ^2.1.4
   blurhash: ^1.0.0
   sliding_sheet: ^0.5.2
+  get: ^4.6.5
 
   ## My package
   custom_gallery_display: ^0.2.7

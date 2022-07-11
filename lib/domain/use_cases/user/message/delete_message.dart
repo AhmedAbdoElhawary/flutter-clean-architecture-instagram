@@ -10,7 +10,7 @@ class DeleteMessageUseCase
 
   @override
   Future<void> call({required Message paramsOne, required Message? paramsTwo}) {
-    return _addPostToUserRepository.deletemessage(
+    return _addPostToUserRepository.deleteMessage(
         messageInfo: paramsOne, replacedMessage: paramsTwo);
   }
 }

@@ -11,7 +11,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/presentation/cubit/followCubit/follow_cubit.dart';
+import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/comments/comments_page.dart';
@@ -358,7 +358,7 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
 
   goToCommentPage(Post videoInfo) async {
     await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-        builder: (context) => CommentsPage(postId: videoInfo.postUid),
+        builder: (context) => CommentsPage( postInfo: videoInfo),
         maintainState: false));
     widget.stopVideo.value = false;
   }

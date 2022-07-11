@@ -174,7 +174,6 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                       tag: postUrl,
                       child: NetworkImageDisplay(
                         blurHash: postInfo.blurHash,
-                        bodyHeight: bodyHeight,
                         imageUrl: postUrl,
                       ),
                     ))

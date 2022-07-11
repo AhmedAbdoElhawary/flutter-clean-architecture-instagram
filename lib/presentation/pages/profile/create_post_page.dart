@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -195,10 +196,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
           isItDone.value = true;
         }
       });
-      Navigator.of(context).pushAndRemoveUntil(
-        CupertinoPageRoute(builder: (_) => MainScreen(myPersonalId)),
-        (route) => false,
-      );
+      Get.offAll(MainScreen(myPersonalId));
     });
   }
 

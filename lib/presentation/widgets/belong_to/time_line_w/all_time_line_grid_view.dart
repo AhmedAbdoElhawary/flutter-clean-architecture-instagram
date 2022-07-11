@@ -13,7 +13,6 @@ class AllTimeLineGridView extends StatefulWidget {
   List<Post> postsImagesInfo;
   List<Post> postsVideosInfo;
   List<Post> allPostsInfo;
-  final bool isThatProfile;
   final ValueNotifier<bool> isThatEndOfList;
   final AsyncValueSetter<int> onRefreshData;
   final ValueNotifier<bool> reloadData;
@@ -24,7 +23,6 @@ class AllTimeLineGridView extends StatefulWidget {
       required this.isThatEndOfList,
       required this.allPostsInfo,
       required this.onRefreshData,
-      this.isThatProfile = true,
       required this.reloadData,
       Key? key})
       : super(key: key);
@@ -119,7 +117,7 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
                 postsInfo: widget.allPostsInfo,
                 index: index,
                 playThisVideo: isInView,
-                isThatProfile: widget.isThatProfile,
+                isThatProfile: false,
               );
               // return columnOfWidgets(bodyHeight, index, isInView);
             },

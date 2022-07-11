@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
@@ -93,8 +95,7 @@ class _LoginPageState extends State<LoginPage> {
         myPersonalId = userId;
         if (myPersonalId.isNotEmpty) {
           await widget.sharePrefs.setString("myPersonalId", myPersonalId);
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => MainScreen(myPersonalId)));
+          Get.offAll(MainScreen(myPersonalId));
         } else {
           ToastShow.toast(StringsManager.somethingWrong.tr());
         }

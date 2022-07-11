@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await userCubit.getUserInfo(widget.userId);
     personalInfo = userCubit.myPersonalInfo;
 
-    List usersIds = personalInfo!.followedPeople + personalInfo!.followerPeople;
+    List usersIds = personalInfo!.followedPeople;
 
     SpecificUsersPostsCubit usersPostsCubit =
         BlocProvider.of<SpecificUsersPostsCubit>(context, listen: false);

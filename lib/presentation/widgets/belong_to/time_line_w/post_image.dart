@@ -11,8 +11,13 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/data/models/notification.dart';
 import 'package:instagram/data/models/post.dart';
-import 'package:instagram/presentation/cubit/followCubit/follow_cubit.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/domain/entities/notification_check.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
+import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/comments/comments_page.dart';
@@ -71,8 +76,10 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
 
   bool isLiked = false;
   bool isHeartAnimation = false;
+  late UserPersonalInfo myPersonalInfo;
   @override
   void initState() {
+    myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
     getLanguage();
     super.initState();
   }
@@ -360,7 +367,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
           Navigator.of(
             context,
           ).push(CupertinoPageRoute(
-            builder: (context) => CommentsPage(postId: postInfoValue.postUid),
+            builder: (context) => CommentsPage( postInfo: postInfoValue),
           ));
         },
       ),
@@ -380,14 +387,12 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
               valueListenable: commentTextController,
               builder: (context, TextEditingController textValue, child) =>
                   CommentBox(
-
-                    isThatCommentScreen: false,
-                postId: widget.postInfo.value.postUid,
+                isThatCommentScreen: false,
+                postInfo: widget.postInfo.value,
                 textController: textValue,
                 focusNode: FocusNode(),
                 userPersonalInfo: widget.postInfo.value.publisherInfo!,
                 makeSelectedCommentNullable: makeSelectedCommentNullable,
-
               ),
             ),
           ),
@@ -473,15 +478,43 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
             BlocProvider.of<PostLikesCubit>(context).removeTheLikeOnThisPost(
                 postId: postInfo.postUid, userId: myPersonalId);
             postInfo.likes.remove(myPersonalId);
+            BlocProvider.of<NotificationCubit>(context).deleteNotification(
+                notificationCheck: createNotificationCheck(postInfo));
           } else {
             BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
                 postId: postInfo.postUid, userId: myPersonalId);
             postInfo.likes.add(myPersonalId);
+
+            BlocProvider.of<NotificationCubit>(context).createNotification(
+                newNotification: createNotification(postInfo));
           }
         });
 
         return !isLiked;
       },
+    );
+  }
+
+  NotificationCheck createNotificationCheck(Post postInfo) {
+    return NotificationCheck(
+      senderId: myPersonalId,
+      receiverId: postInfo.publisherId,
+      postId: postInfo.postUid,
+    );
+  }
+
+  CustomNotification createNotification(Post postInfo) {
+    return CustomNotification(
+      text: "${myPersonalInfo.userName} liked your photo.",
+      postId: postInfo.postUid,
+      postImageUrl: postInfo.imagesUrls.length > 1
+          ? postInfo.imagesUrls[0]
+          : postInfo.postUrl,
+      time: DateOfNow.dateOfNow(),
+      senderId: myPersonalId,
+      receiverId: postInfo.publisherId,
+      personalUserName: myPersonalInfo.userName,
+      personalProfileImageUrl: myPersonalInfo.profileImageUrl,
     );
   }
 
@@ -492,7 +525,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
         Navigator.of(
           context,
         ).push(CupertinoPageRoute(
-          builder: (context) => CommentsPage(postId: postInfo.postUid),
+          builder: (context) => CommentsPage(postInfo: postInfo),
         ));
       },
       child: Text(
@@ -587,7 +620,6 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
                         child: NetworkImageDisplay(
                           blurHash: postInfo.blurHash,
                           aspectRatio: postInfo.aspectRatio,
-                          bodyHeight: widget.bodyHeight,
                           imageUrl: postInfo.postUrl,
                         ),
                       ))

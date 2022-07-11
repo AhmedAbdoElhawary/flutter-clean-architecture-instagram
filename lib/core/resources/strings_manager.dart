@@ -28,6 +28,8 @@ class StringsManager {
   static const String logIn = "logIn";
 
   static const String follow = "follow";
+  static const String followBack = "followBack";
+
   static const String create = "create";
   static const String search = "search";
 
@@ -46,6 +48,7 @@ class StringsManager {
   static const String photoSent = "photoSent";
 
   static const String userNotExist = "userNotExist";
+
   static const String yourStory = "yourStory";
 
   static const String fromCamera = "fromCamera";

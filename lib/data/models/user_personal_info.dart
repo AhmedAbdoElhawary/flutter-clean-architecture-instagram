@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:instagram/data/models/story.dart';
 
@@ -31,22 +30,19 @@ class UserPersonalInfo extends Equatable {
       this.userName = "",
       this.userId = ""});
 
-  static UserPersonalInfo fromDocSnap(
-      {DocumentSnapshot<Map<String, dynamic>>? docSnap,
-      Map<String, dynamic>? mapSnap}) {
-    dynamic snap = docSnap ?? mapSnap;
+  static UserPersonalInfo fromDocSnap(Map<String, dynamic>? snap) {
     return UserPersonalInfo(
-      name: snap["name"],
-      userId: snap["uid"],
-      charactersOfName: snap["charactersOfName"],
-      profileImageUrl: snap["profileImageUrl"],
-      email: snap["email"],
-      bio: snap["bio"],
-      userName: snap["userName"],
-      posts: snap['posts'],
-      stories: snap['stories'],
-      followedPeople: snap['following'],
-      followerPeople: snap['followers'],
+      name: snap?["name"] ?? "",
+      bio: snap?["bio"] ?? "",
+      email: snap?["email"] ?? "",
+      profileImageUrl: snap?["profileImageUrl"] ?? "",
+      userName: snap?["userName"] ?? "",
+      userId: snap?["uid"] ?? "",
+      followedPeople: snap?["following"] ?? [],
+      followerPeople: snap?["followers"] ?? [],
+      posts: snap?["posts"] ?? [],
+      stories: snap?["stories"] ?? [],
+      charactersOfName: snap?["charactersOfName"] ?? [],
     );
   }
 

@@ -9,6 +9,6 @@ class GetMessagesUseCase implements StreamUseCase<List<Message>, String> {
 
   @override
   Stream<List<Message>> call({required String params}) {
-    return _addPostToUserRepository.getmessages(receiverId: params);
+    return _addPostToUserRepository.getMessages(receiverId: params);
   }
 }
