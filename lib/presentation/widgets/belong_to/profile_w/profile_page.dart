@@ -274,7 +274,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-        ]);
+        ],);
   }
 
   Widget personalNumbersInfo(
@@ -283,11 +283,13 @@ class _ProfilePageState extends State<ProfilePage> {
       return GestureDetector(
         onTap: () async {
           if (text != StringsManager.posts.tr()) {
-            await Navigator.of(context).push(CupertinoPageRoute(
+            await Navigator.of(context).push(
+              CupertinoPageRoute(
                 builder: (context) => FollowersInfoPage(
                     userInfo: userInfo,
-                    initialIndex:
-                        usersInfo == userInfo.followerPeople ? 0 : 1)));
+                    initialIndex: usersInfo == userInfo.followerPeople ? 0 : 1),
+              ),
+            );
             BlocProvider.of<FirestoreUserInfoCubit>(context).getUserInfo(
                 userInfo.userId,
                 isThatMyPersonalId: widget.isThatMyPersonalId);
