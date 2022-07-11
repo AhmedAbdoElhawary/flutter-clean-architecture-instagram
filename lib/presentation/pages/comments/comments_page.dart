@@ -5,6 +5,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/comment.dart';
+import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -16,9 +17,9 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circ
 import 'package:instagram/core/functions/toast_show.dart';
 
 class CommentsPage extends StatefulWidget {
-  final String postId;
+  final Post postInfo ;
 
-  const CommentsPage({Key? key, required this.postId}) : super(key: key);
+  const CommentsPage({Key? key, required this.postInfo}) : super(key: key);
 
   @override
   State<CommentsPage> createState() => _CommentsPageState();
@@ -81,7 +82,7 @@ class _CommentsPageState extends State<CommentsPage> {
 
   CommentsInfoCubit blocAction(BuildContext context) =>
       BlocProvider.of<CommentsInfoCubit>(context)
-        ..getSpecificComments(postId: widget.postId);
+        ..getSpecificComments(postId: widget.postInfo.postUid);
 
   bool buildBlocWhen(CommentsInfoState previous, CommentsInfoState current) =>
       previous != current && current is CubitCommentsInfoLoaded;
@@ -142,6 +143,7 @@ class _CommentsPageState extends State<CommentsPage> {
             addReply: addReply,
             customRebuildCallback: isScreenRebuild,
             rebuildComment: rebuild,
+              postInfo:widget.postInfo,
           ),
         );
       },
@@ -221,7 +223,7 @@ class _CommentsPageState extends State<CommentsPage> {
 
   Widget commentTextField(UserPersonalInfo userPersonalInfo) {
     return CommentBox(
-      postId: widget.postId,
+      postInfo: widget.postInfo,
       selectedCommentInfo: selectedCommentInfo,
       textController: _textController,
       userPersonalInfo: userPersonalInfo,
