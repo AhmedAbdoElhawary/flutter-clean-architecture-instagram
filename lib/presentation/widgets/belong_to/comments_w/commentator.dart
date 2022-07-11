@@ -10,7 +10,11 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/define_function.dart';
 import 'package:instagram/data/models/comment.dart';
+import 'package:instagram/data/models/notification.dart';
+import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/domain/entities/notification_check.dart';
+import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comment_likes/comment_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/replyLikes/reply_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
@@ -31,6 +35,7 @@ class CommentInfo extends StatefulWidget {
   TextEditingController textController;
   final ValueChanged<Comment>? selectedCommentInfo;
   final CustomRebuildCallback customRebuildCallback;
+  final Post postInfo;
 
   CommentInfo(
       {Key? key,
@@ -43,7 +48,8 @@ class CommentInfo extends StatefulWidget {
       required this.showMeReplies,
       required this.customRebuildCallback,
       required this.addReply,
-      required this.textController})
+      required this.textController,
+      required this.postInfo})
       : super(key: key);
 
   @override
@@ -106,6 +112,7 @@ class _CommentInfoState extends State<CommentInfo> {
                       addReply: widget.addReply,
                       isThatReply: true,
                       rebuildComment: widget.rebuildComment,
+                      postInfo: widget.postInfo,
                     );
                   },
                   itemCount: repliesInfo.length,
@@ -119,12 +126,12 @@ class _CommentInfoState extends State<CommentInfo> {
             return Text(state.toString(),
                 style: Theme.of(context).textTheme.bodyText1);
           } else {
-            return textOfLoading(context,StringsManager.loading.tr());
+            return textOfLoading(context, StringsManager.loading.tr());
           }
         });
   }
 
-  Padding textOfLoading(BuildContext context,String loadingText) {
+  Padding textOfLoading(BuildContext context, String loadingText) {
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 50.0),
       child: Row(
@@ -133,8 +140,8 @@ class _CommentInfoState extends State<CommentInfo> {
               color: Theme.of(context).dividerColor, height: 1, width: 40),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(loadingText,
-                style: Theme.of(context).textTheme.headline1),
+            child:
+                Text(loadingText, style: Theme.of(context).textTheme.headline1),
           )
         ],
       ),
@@ -197,6 +204,7 @@ class _CommentInfoState extends State<CommentInfo> {
       ),
     );
   }
+
   Expanded buildCommentInfo(BuildContext context, String hashTageOfUserName) {
     return Expanded(
       child: Padding(
@@ -226,9 +234,9 @@ class _CommentInfoState extends State<CommentInfo> {
               onTap: () {
                 Navigator.of(context).push(CupertinoPageRoute(
                     builder: (context) => UsersWhoLikesOnPostPage(
-                      showSearchBar: false,
-                      usersIds: widget.commentInfo.likes,
-                    )));
+                          showSearchBar: false,
+                          usersIds: widget.commentInfo.likes,
+                        )));
               },
               child: Text(
                 "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like.tr() : StringsManager.likes.tr()}",
@@ -295,15 +303,15 @@ class _CommentInfoState extends State<CommentInfo> {
                       context,
                     ).push(CupertinoPageRoute(
                         builder: (context) => WhichProfilePage(
-                          userName: userName,
-                        ),
+                              userName: userName,
+                            ),
                         maintainState: false));
                   },
               ),
             TextSpan(
               style: TextStyle(color: Theme.of(context).focusColor),
               text:
-              " ${widget.isThatReply ? hashTageOfUserName.split(" ")[1] : hashTageOfUserName}",
+                  " ${widget.isThatReply ? hashTageOfUserName.split(" ")[1] : hashTageOfUserName}",
             )
           ],
         ),
@@ -332,11 +340,17 @@ class _CommentInfoState extends State<CommentInfo> {
                   replyId: widget.commentInfo.commentUid,
                   myPersonalId: myPersonalId);
               widget.commentInfo.likes.remove(myPersonalId);
+              //for notification
+              BlocProvider.of<NotificationCubit>(context).deleteNotification(
+                  notificationCheck: createNotificationCheck(widget.postInfo));
             } else {
               BlocProvider.of<ReplyLikesCubit>(context).putLikeOnThisReply(
                   replyId: widget.commentInfo.commentUid,
                   myPersonalId: myPersonalId);
               widget.commentInfo.likes.add(myPersonalId);
+              //for notification
+              BlocProvider.of<NotificationCubit>(context).createNotification(
+                  newNotification: createNotification(widget.commentInfo));
             }
           } else {
             if (isLiked) {
@@ -346,12 +360,18 @@ class _CommentInfoState extends State<CommentInfo> {
                       commentId: widget.commentInfo.commentUid,
                       myPersonalId: myPersonalId);
               widget.commentInfo.likes.remove(myPersonalId);
+              //for notification
+              BlocProvider.of<NotificationCubit>(context).deleteNotification(
+                  notificationCheck: createNotificationCheck(widget.postInfo));
             } else {
               BlocProvider.of<CommentLikesCubit>(context).putLikeOnThisComment(
                   postId: widget.commentInfo.postId,
                   commentId: widget.commentInfo.commentUid,
                   myPersonalId: myPersonalId);
               widget.commentInfo.likes.add(myPersonalId);
+              //for notification
+              BlocProvider.of<NotificationCubit>(context).createNotification(
+                  newNotification: createNotification(widget.commentInfo));
             }
           }
         });
@@ -359,4 +379,29 @@ class _CommentInfoState extends State<CommentInfo> {
     );
   }
 
+  NotificationCheck createNotificationCheck(Post postInfo) {
+    return NotificationCheck(
+      senderId: myPersonalId,
+      receiverId: postInfo.publisherId,
+      postId: postInfo.postUid,
+      isThatLike: false,
+    );
+  }
+
+  CustomNotification createNotification(Comment commentInfo) {
+    return CustomNotification(
+      text:
+          "${widget.myPersonalInfo.userName} liked your comment:${commentInfo.theComment}",
+      postId: widget.postInfo.postUid,
+      postImageUrl: widget.postInfo.imagesUrls.length > 1
+          ? widget.postInfo.imagesUrls[0]
+          : widget.postInfo.postUrl,
+      time: DateOfNow.dateOfNow(),
+      senderId: myPersonalId,
+      receiverId: widget.postInfo.publisherId,
+      personalUserName: widget.myPersonalInfo.userName,
+      personalProfileImageUrl: widget.myPersonalInfo.profileImageUrl,
+      isThatLike: false,
+    );
+  }
 }
