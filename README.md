@@ -2,6 +2,9 @@
 
 Instagram clean architecture using flutter and firebase as ( frontend & backend ) with almost fully functionalities
 
+## Note
+This project doesn't have google-services.json, so follow the steps in (3. Setup the firebase app) to connect with your firebase
+
 ## Features
 
 * Support
