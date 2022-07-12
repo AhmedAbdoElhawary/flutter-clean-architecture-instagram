@@ -391,7 +391,7 @@ class _CommentInfoState extends State<CommentInfo> {
   CustomNotification createNotification(Comment commentInfo) {
     return CustomNotification(
       text:
-          "${widget.myPersonalInfo.userName} liked your comment:${commentInfo.theComment}",
+          "liked your comment:${commentInfo.theComment}",
       postId: widget.postInfo.postUid,
       postImageUrl: widget.postInfo.imagesUrls.length > 1
           ? widget.postInfo.imagesUrls[0]
