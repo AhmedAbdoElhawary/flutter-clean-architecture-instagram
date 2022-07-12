@@ -3,14 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/notification.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
@@ -35,33 +33,31 @@ import 'package:instagram/presentation/widgets/global/aimation/like_popup_animat
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_text.dart';
 import 'package:like_button/like_button.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
-class PostImage extends StatefulWidget {
+class ImageOfPost extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
   final bool playTheVideo;
-  final VoidCallback reLoadData;
+  final VoidCallback? reLoadData;
   final int indexOfPost;
   final ValueNotifier<List<Post>> postsInfo;
-  final double bodyHeight;
 
-  const PostImage({
+  const ImageOfPost({
     Key? key,
     required this.postInfo,
     required this.reLoadData,
     required this.indexOfPost,
     required this.playTheVideo,
     required this.postsInfo,
-    required this.bodyHeight,
   }) : super(key: key);
 
   @override
-  State<PostImage> createState() => _PostImageState();
+  State<ImageOfPost> createState() => _ImageOfPostState();
 }
 
-class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
+class _ImageOfPostState extends State<ImageOfPost>
+    with TickerProviderStateMixin {
   final ValueNotifier<TextEditingController> commentTextController =
       ValueNotifier(TextEditingController());
   ValueChanged<Post>? selectedPostInfo;
@@ -70,8 +66,6 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
   final TextEditingController _bottomSheetSearchTextController =
       TextEditingController();
   ValueNotifier<bool> isSaved = ValueNotifier(false);
-  late Size imageSize = const Size(0.0, 0.0);
-  String currentLanguage = 'en';
   ValueNotifier<int> initPosition = ValueNotifier(0);
 
   bool isLiked = false;
@@ -80,7 +74,6 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
   @override
   void initState() {
     myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
-    getLanguage();
     super.initState();
   }
 
@@ -93,11 +86,6 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
     return thePostsOfHomePage(
       bodyHeight: bodyHeight,
     );
-  }
-
-  getLanguage() async {
-    AppPreferences _appPreferences = injector<AppPreferences>();
-    currentLanguage = await _appPreferences.getAppLanguage();
   }
 
   pushToProfilePage(Post postInfo) =>
@@ -127,10 +115,12 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
                     ),
                     const SizedBox(width: 5),
                     Expanded(
-                        child: InkWell(
-                            onTap: () => pushToProfilePage(postInfoValue),
-                            child: NameOfCircleAvatar(
-                                postInfoValue.publisherInfo!.name, false))),
+                      child: InkWell(
+                        onTap: () => pushToProfilePage(postInfoValue),
+                        child: NameOfCircleAvatar(
+                            postInfoValue.publisherInfo!.name, false),
+                      ),
+                    ),
                     menuButton()
                   ],
                 ),
@@ -153,304 +143,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
                       saveButton(),
                     ]),
               ),
-              imageCaption(postInfoValue, bodyHeight, context)
             ]),
-      ),
-    );
-  }
-
-  ValueListenableBuilder<int> scrollBar(Post postInfoValue) {
-    return ValueListenableBuilder(
-      valueListenable: initPosition,
-      builder: (context, int positionValue, child) => PointsScrollBar(
-        photoCount: postInfoValue.imagesUrls.length,
-        activePhotoIndex: positionValue,
-      ),
-    );
-  }
-
-  Padding imageCaption(
-      Post postInfoValue, double bodyHeight, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 11.5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (postInfoValue.likes.isNotEmpty) numberOfLikes(postInfoValue),
-          const SizedBox(height: 5),
-          if (currentLanguage == 'en') ...[
-            ReadMore(
-                "${postInfoValue.publisherInfo!.name} ${postInfoValue.caption}",
-                2),
-          ] else ...[
-            ReadMore(
-                "${postInfoValue.caption} ${postInfoValue.publisherInfo!.name}",
-                2),
-          ],
-          const SizedBox(height: 8),
-          if (postInfoValue.comments.isNotEmpty) numberOfComment(postInfoValue),
-          buildCommentBox(bodyHeight),
-          Padding(
-            padding: const EdgeInsetsDirectional.only(top: 5.0),
-            child: Text(
-              DateOfNow.chattingDateOfNow(
-                  postInfoValue.datePublished, postInfoValue.datePublished),
-              style: getNormalStyle(color: Theme.of(context).bottomAppBarColor),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  ValueListenableBuilder<bool> saveButton() {
-    return ValueListenableBuilder(
-      valueListenable: isSaved,
-      builder: (context, bool isSavedValue, child) => Padding(
-        padding: const EdgeInsetsDirectional.only(end: 12.0),
-        child: GestureDetector(
-          child: isSavedValue
-              ? Icon(
-                  Icons.bookmark_border,
-                  color: Theme.of(context).focusColor,
-                )
-              : Icon(
-                  Icons.bookmark,
-                  color: Theme.of(context).focusColor,
-                ),
-          onTap: () {
-            isSaved.value = !isSaved.value;
-          },
-        ),
-      ),
-    );
-  }
-
-  Padding shareButton() {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 15.0),
-      child: GestureDetector(
-        child: iconsOfImagePost(IconsAssets.send1Icon, lowHeight: true),
-        onTap: () async => draggableBottomSheet(),
-      ),
-    );
-  }
-
-  Future<void> draggableBottomSheet() async {
-    return showSlidingBottomSheet<void>(
-      context,
-      builder: (BuildContext context) => SlidingSheetDialog(
-        cornerRadius: 16,
-        color: Theme.of(context).primaryColor,
-        snapSpec: const SnapSpec(
-          initialSnap: 1,
-          snappings: [.4, 1, .7],
-        ),
-        builder: buildSheet,
-        headerBuilder: (context, state) => Material(
-          child: upperWidgets(context),
-        ),
-      ),
-    );
-  }
-
-  Column upperWidgets(BuildContext context) {
-    String postImageUrl = widget.postInfo.value.imagesUrls.length > 1
-        ? widget.postInfo.value.imagesUrls[0]
-        : widget.postInfo.value.postUrl;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsetsDirectional.only(top: 10),
-          child: Container(
-            width: 45,
-            height: 4.5,
-            decoration: BoxDecoration(
-              color: Theme.of(context).textTheme.headline4!.color,
-              borderRadius: BorderRadius.circular(5),
-            ),
-          ),
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Container(
-                width: 50,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: ColorManager.grey,
-                  borderRadius: BorderRadius.circular(5),
-                  image: DecorationImage(
-                    image: NetworkImage(postImageUrl),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Flexible(
-              child: TextField(
-                controller: _bottomSheetMessageTextController,
-                cursorColor: ColorManager.teal,
-                decoration: InputDecoration(
-                  hintText: StringsManager.writeMessage.tr(),
-                  hintStyle: const TextStyle(
-                    color: ColorManager.grey,
-                  ),
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                ),
-                onChanged: (_) => setState(() {}),
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding:
-              const EdgeInsetsDirectional.only(top: 30.0, end: 20, start: 20),
-          child: Container(
-            width: double.infinity,
-            height: 35,
-            decoration: BoxDecoration(
-                color: Theme.of(context).shadowColor,
-                borderRadius: BorderRadius.circular(10)),
-            child: TextFormField(
-              cursorColor: ColorManager.teal,
-              style: Theme.of(context).textTheme.bodyText1,
-              controller: _bottomSheetSearchTextController,
-              textAlign: TextAlign.start,
-              decoration: InputDecoration(
-                  prefixIcon: const Icon(
-                    Icons.search,
-                    size: 20,
-                    color: ColorManager.lowOpacityGrey,
-                  ),
-                  contentPadding: const EdgeInsetsDirectional.all(12),
-                  hintText: StringsManager.search.tr(),
-                  hintStyle: Theme.of(context).textTheme.headline1,
-                  border: InputBorder.none),
-              onChanged: (_) => setState(() {}),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-
-  clearTextsController() {
-    setState(() {
-      _bottomSheetMessageTextController.clear();
-      _bottomSheetSearchTextController.clear();
-    });
-  }
-
-  Widget buildSheet(context, state) => Material(
-        child: SendToUsers(
-          userInfo: widget.postInfo.value.publisherInfo!,
-          messageTextController: _bottomSheetMessageTextController,
-          postInfo: widget.postInfo.value,
-          clearTexts: clearTextsController,
-        ),
-      );
-
-  Padding commentButton(BuildContext context, Post postInfoValue) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 5),
-      child: GestureDetector(
-        child: iconsOfImagePost(IconsAssets.commentIcon),
-        onTap: () {
-          Navigator.of(
-            context,
-          ).push(CupertinoPageRoute(
-            builder: (context) => CommentsPage( postInfo: postInfoValue),
-          ));
-        },
-      ),
-    );
-  }
-
-  void _showAddCommentModal() {
-    double media = MediaQuery.of(context).viewInsets.bottom;
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          color: Theme.of(context).primaryColor,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: media),
-            child: ValueListenableBuilder(
-              valueListenable: commentTextController,
-              builder: (context, TextEditingController textValue, child) =>
-                  CommentBox(
-                isThatCommentScreen: false,
-                postInfo: widget.postInfo.value,
-                textController: textValue,
-                focusNode: FocusNode(),
-                userPersonalInfo: widget.postInfo.value.publisherInfo!,
-                makeSelectedCommentNullable: makeSelectedCommentNullable,
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  makeSelectedCommentNullable(bool isThatComment) {
-    widget.postInfo.value.comments.add(" ");
-    commentTextController.value.text = '';
-    Navigator.maybePop(context);
-  }
-
-  Widget buildCommentBox(double bodyHeight) {
-    return GestureDetector(
-      onTap: _showAddCommentModal,
-      child: ValueListenableBuilder(
-        valueListenable: commentTextController,
-        builder: (context, TextEditingController textValue, child) => Row(
-          crossAxisAlignment: textValue.text.length < 70
-              ? CrossAxisAlignment.center
-              : CrossAxisAlignment.end,
-          children: [
-            CircleAvatarOfProfileImage(
-              userInfo: widget.postInfo.value.publisherInfo!,
-              bodyHeight: bodyHeight * .5,
-            ),
-            const SizedBox(
-              width: 12.0,
-            ),
-            Expanded(
-              child: GestureDetector(
-                child: Text(
-                  StringsManager.addComment.tr(),
-                  style: TextStyle(
-                      color: Theme.of(context).bottomAppBarColor, fontSize: 14),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                commentTextController.value.text = '❤';
-                _showAddCommentModal();
-              },
-              child: const Text('❤'),
-            ),
-            const SizedBox(width: 8),
-            GestureDetector(
-              onTap: () {
-                commentTextController.value.text = '🙌';
-                _showAddCommentModal();
-              },
-              child: const Text('🙌'),
-            ),
-            const SizedBox(width: 8),
-          ],
-        ),
       ),
     );
   }
@@ -505,7 +198,7 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
 
   CustomNotification createNotification(Post postInfo) {
     return CustomNotification(
-      text: "${myPersonalInfo.userName} liked your photo.",
+      text: "liked your photo.",
       postId: postInfo.postUid,
       postImageUrl: postInfo.imagesUrls.length > 1
           ? postInfo.imagesUrls[0]
@@ -535,6 +228,16 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
     );
   }
 
+  ValueListenableBuilder<int> scrollBar(Post postInfoValue) {
+    return ValueListenableBuilder(
+      valueListenable: initPosition,
+      builder: (context, int positionValue, child) => PointsScrollBar(
+        photoCount: postInfoValue.imagesUrls.length,
+        activePhotoIndex: positionValue,
+      ),
+    );
+  }
+
   Widget numberOfLikes(Post postInfo) {
     int likes = postInfo.likes.length;
     return InkWell(
@@ -557,14 +260,6 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
       path,
       color: Theme.of(context).focusColor,
       height: lowHeight ? 22 : 28,
-    );
-  }
-
-  Widget lovePopAnimation() {
-    return Icon(
-      Icons.favorite,
-      size: 150,
-      color: Theme.of(context).primaryColor,
     );
   }
 
@@ -759,7 +454,9 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
                         myPersonalId: myPersonalId);
                     WidgetsBinding.instance.addPostFrameCallback((_) async {
                       setState(() {
-                        widget.reLoadData();
+                        if(widget.reLoadData!= null) {
+                          widget.reLoadData!();
+                        }
                         widget.postsInfo.value.remove(postInfoValue);
                       });
                     });
@@ -788,5 +485,256 @@ class _PostImageState extends State<PostImage> with TickerProviderStateMixin {
     return Text(text,
         style:
             getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15));
+  }
+
+  ValueListenableBuilder<bool> saveButton() {
+    return ValueListenableBuilder(
+      valueListenable: isSaved,
+      builder: (context, bool isSavedValue, child) => Padding(
+        padding: const EdgeInsetsDirectional.only(end: 12.0),
+        child: GestureDetector(
+          child: isSavedValue
+              ? Icon(
+                  Icons.bookmark_border,
+                  color: Theme.of(context).focusColor,
+                )
+              : Icon(
+                  Icons.bookmark,
+                  color: Theme.of(context).focusColor,
+                ),
+          onTap: () {
+            isSaved.value = !isSaved.value;
+          },
+        ),
+      ),
+    );
+  }
+
+  Padding shareButton() {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 15.0),
+      child: GestureDetector(
+        child: iconsOfImagePost(IconsAssets.send1Icon, lowHeight: true),
+        onTap: () async => draggableBottomSheet(),
+      ),
+    );
+  }
+
+  Future<void> draggableBottomSheet() async {
+    return showSlidingBottomSheet<void>(
+      context,
+      builder: (BuildContext context) => SlidingSheetDialog(
+        cornerRadius: 16,
+        color: Theme.of(context).primaryColor,
+        snapSpec: const SnapSpec(
+          initialSnap: 1,
+          snappings: [.4, 1, .7],
+        ),
+        builder: buildSheet,
+        headerBuilder: (context, state) => Material(
+          child: upperWidgets(context),
+        ),
+      ),
+    );
+  }
+
+  Column upperWidgets(BuildContext context) {
+    String postImageUrl = widget.postInfo.value.imagesUrls.length > 1
+        ? widget.postInfo.value.imagesUrls[0]
+        : widget.postInfo.value.postUrl;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsetsDirectional.only(top: 10),
+          child: Container(
+            width: 45,
+            height: 4.5,
+            decoration: BoxDecoration(
+              color: Theme.of(context).textTheme.headline4!.color,
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Container(
+                width: 50,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: ColorManager.grey,
+                  borderRadius: BorderRadius.circular(5),
+                  image: DecorationImage(
+                    image: NetworkImage(postImageUrl),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Flexible(
+              child: TextField(
+                controller: _bottomSheetMessageTextController,
+                cursorColor: ColorManager.teal,
+                decoration: InputDecoration(
+                  hintText: StringsManager.writeMessage.tr(),
+                  hintStyle: const TextStyle(
+                    color: ColorManager.grey,
+                  ),
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                ),
+                onChanged: (_) => setState(() {}),
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding:
+              const EdgeInsetsDirectional.only(top: 30.0, end: 20, start: 20),
+          child: Container(
+            width: double.infinity,
+            height: 35,
+            decoration: BoxDecoration(
+                color: Theme.of(context).shadowColor,
+                borderRadius: BorderRadius.circular(10)),
+            child: TextFormField(
+              cursorColor: ColorManager.teal,
+              style: Theme.of(context).textTheme.bodyText1,
+              controller: _bottomSheetSearchTextController,
+              textAlign: TextAlign.start,
+              decoration: InputDecoration(
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    size: 20,
+                    color: ColorManager.lowOpacityGrey,
+                  ),
+                  contentPadding: const EdgeInsetsDirectional.all(12),
+                  hintText: StringsManager.search.tr(),
+                  hintStyle: Theme.of(context).textTheme.headline1,
+                  border: InputBorder.none),
+              onChanged: (_) => setState(() {}),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  clearTextsController() {
+    setState(() {
+      _bottomSheetMessageTextController.clear();
+      _bottomSheetSearchTextController.clear();
+    });
+  }
+
+  Widget buildSheet(context, state) => Material(
+        child: SendToUsers(
+          userInfo: widget.postInfo.value.publisherInfo!,
+          messageTextController: _bottomSheetMessageTextController,
+          postInfo: widget.postInfo.value,
+          clearTexts: clearTextsController,
+        ),
+      );
+
+  Padding commentButton(BuildContext context, Post postInfoValue) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 5),
+      child: GestureDetector(
+        child: iconsOfImagePost(IconsAssets.commentIcon),
+        onTap: () {
+          Navigator.of(
+            context,
+          ).push(CupertinoPageRoute(
+            builder: (context) => CommentsPage(postInfo: postInfoValue),
+          ));
+        },
+      ),
+    );
+  }
+
+  void _showAddCommentModal() {
+    double media = MediaQuery.of(context).viewInsets.bottom;
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: Theme.of(context).primaryColor,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: media),
+            child: ValueListenableBuilder(
+              valueListenable: commentTextController,
+              builder: (context, TextEditingController textValue, child) =>
+                  CommentBox(
+                isThatCommentScreen: false,
+                postInfo: widget.postInfo.value,
+                textController: textValue,
+                focusNode: FocusNode(),
+                userPersonalInfo: widget.postInfo.value.publisherInfo!,
+                makeSelectedCommentNullable: makeSelectedCommentNullable,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  makeSelectedCommentNullable(bool isThatComment) {
+    widget.postInfo.value.comments.add(" ");
+    commentTextController.value.text = '';
+    Navigator.maybePop(context);
+  }
+
+  Widget buildCommentBox(double bodyHeight) {
+    return GestureDetector(
+      onTap: _showAddCommentModal,
+      child: ValueListenableBuilder(
+        valueListenable: commentTextController,
+        builder: (context, TextEditingController textValue, child) => Row(
+          crossAxisAlignment: textValue.text.length < 70
+              ? CrossAxisAlignment.center
+              : CrossAxisAlignment.end,
+          children: [
+            CircleAvatarOfProfileImage(
+              userInfo: widget.postInfo.value.publisherInfo!,
+              bodyHeight: bodyHeight * .5,
+            ),
+            const SizedBox(
+              width: 12.0,
+            ),
+            Expanded(
+              child: GestureDetector(
+                child: Text(
+                  StringsManager.addComment.tr(),
+                  style: TextStyle(
+                      color: Theme.of(context).bottomAppBarColor, fontSize: 14),
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                commentTextController.value.text = '❤';
+                _showAddCommentModal();
+              },
+              child: const Text('❤'),
+            ),
+            const SizedBox(width: 8),
+            GestureDetector(
+              onTap: () {
+                commentTextController.value.text = '🙌';
+                _showAddCommentModal();
+              },
+              child: const Text('🙌'),
+            ),
+            const SizedBox(width: 8),
+          ],
+        ),
+      ),
+    );
   }
 }

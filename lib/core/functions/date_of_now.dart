@@ -14,10 +14,17 @@ class DateOfNow {
     int day = now.day - int.parse(dateDetails[2]);
     int hour = now.hour - int.parse(dateDetails[3]);
     int minute = now.minute - int.parse(dateDetails[4]);
+    int second = (now.second - double.parse(dateDetails[5])).toInt();
     int week = month * 4;
     return year == 0
         ? (month == 0
-            ? (day == 0 ? (hour == 0 ? "${minute}m" : "${hour}h") : "${day}d")
+            ? (day == 0
+                ? (hour == 0
+                    ? minute == 0
+                        ? "${second}s"
+                        : "${minute}m"
+                    : "${hour}h")
+                : "${day}d")
             : "${day != 0 ? day ~/ 7 + week : week}w")
         : ("${year}y");
   }

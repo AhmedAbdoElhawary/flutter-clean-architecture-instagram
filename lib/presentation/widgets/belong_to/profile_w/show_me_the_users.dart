@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -17,6 +18,7 @@ class ShowMeTheUsers extends StatefulWidget {
   final ValueNotifier<UserPersonalInfo>? userInfo;
   final bool showSearchBar;
   final bool showColorfulCircle;
+  final String emptyText;
 
   const ShowMeTheUsers({
     Key? key,
@@ -24,6 +26,7 @@ class ShowMeTheUsers extends StatefulWidget {
     this.showColorfulCircle = true,
     this.isThatFollower = true,
     this.showSearchBar = true,
+    required this.emptyText,
     this.userInfo,
   }) : super(key: key);
 
@@ -42,25 +45,23 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
   @override
   Widget build(BuildContext context) {
     if (widget.usersInfo.isNotEmpty) {
-      return SingleChildScrollView(
-        child: ListView.separated(
-            shrinkWrap: true,
-            primary: false,
-            addAutomaticKeepAlives: false,
-            addRepaintBoundaries: false,
-            itemBuilder: (context, index) {
-              return containerOfUserInfo(
-                  widget.usersInfo[index], widget.isThatFollower);
-            },
-          separatorBuilder: (context,index)=>const SizedBox(height: 10),
-            itemCount: widget.usersInfo.length,),
+      return ListView.separated(
+        shrinkWrap: true,
+        primary: false,
+        physics: const NeverScrollableScrollPhysics(),
+        addAutomaticKeepAlives: false,
+        addRepaintBoundaries: false,
+        itemBuilder: (context, index) {
+          return containerOfUserInfo(
+              widget.usersInfo[index], widget.isThatFollower);
+        },
+        separatorBuilder: (context, index) => const SizedBox(height: 10),
+        itemCount: widget.usersInfo.length,
       );
     } else {
       return Center(
         child: Text(
-          widget.isThatFollower
-              ? StringsManager.noFollowers.tr()
-              : StringsManager.noFollowings.tr(),
+          widget.emptyText,
           style: Theme.of(context).textTheme.bodyText1,
         ),
       );
@@ -72,7 +73,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
     return InkWell(
       onTap: () async {
         await Navigator.of(context).push(
-          MaterialPageRoute(
+          CupertinoPageRoute(
             builder: (context) => WhichProfilePage(
               userId: userInfo.userId,
             ),
@@ -80,7 +81,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
         );
       },
       child: Padding(
-        padding: const EdgeInsetsDirectional.only( start: 10, top: 10),
+        padding: const EdgeInsetsDirectional.only(start: 15, top: 15),
         child: Row(children: [
           Hero(
             tag: hash,
@@ -88,7 +89,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
               bodyHeight: 600,
               hashTag: hash,
               userInfo: userInfo,
-              showColorfulCircle:widget.showColorfulCircle ,
+              showColorfulCircle: widget.showColorfulCircle,
             ),
           ),
           const SizedBox(width: 10),
@@ -168,12 +169,13 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
   Widget containerOfFollowText(
       {required String text, required bool isThatFollower}) {
     return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 45,end: 15),
+      padding: const EdgeInsetsDirectional.only(start: 45, end: 15),
       child: Container(
         height: 32.0,
         decoration: BoxDecoration(
-          color:
-              isThatFollower ? Theme.of(context).primaryColor : ColorManager.blue,
+          color: isThatFollower
+              ? Theme.of(context).primaryColor
+              : ColorManager.blue,
           border: Border.all(
               color: Theme.of(context).bottomAppBarColor,
               width: isThatFollower ? 1.0 : 0),

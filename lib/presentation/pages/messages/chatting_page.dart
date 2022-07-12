@@ -308,6 +308,7 @@ class _ChattingPageState extends State<ChattingPage>
         Navigator.of(context).push(CupertinoPageRoute(
           builder: (context) => GetsPostInfoAndDisplay(
             postId: messageInfo.postId,
+            appBarText: StringsManager.post.tr(),
           ),
         ));
       },
@@ -329,7 +330,7 @@ class _ChattingPageState extends State<ChattingPage>
                   ),
                 ),
                 const Padding(
-                  padding:  EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Align(
                     alignment: Alignment.topRight,
                     child: Icon(

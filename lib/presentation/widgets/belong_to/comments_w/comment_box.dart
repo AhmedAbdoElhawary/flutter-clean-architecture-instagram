@@ -162,7 +162,7 @@ class _CommentBoxState extends State<CommentBox> {
   CustomNotification createNotification(
       String textWithOneSpaces, UserPersonalInfo myPersonalInfo) {
     return CustomNotification(
-      text: "${myPersonalInfo.userName} commented: $textWithOneSpaces",
+      text: "commented: $textWithOneSpaces",
       postId: widget.postInfo.postUid,
       postImageUrl: widget.postInfo.postUrl,
       time: DateOfNow.dateOfNow(),

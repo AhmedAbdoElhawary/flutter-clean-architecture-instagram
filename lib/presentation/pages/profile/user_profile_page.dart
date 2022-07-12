@@ -213,7 +213,7 @@ class _ProfilePageState extends State<UserProfilePage> {
 
   CustomNotification createNotification(UserPersonalInfo userInfo) {
     return CustomNotification(
-      text: "${myPersonalInfo.userName} started following you.",
+      text: "started following you.",
       time: DateOfNow.dateOfNow(),
       senderId: myPersonalId,
       receiverId: userInfo.userId,

@@ -51,9 +51,12 @@ class _UsersWhoLikesOnPostPageState extends State<UsersWhoLikesOnPostPage> {
           },
           builder: (context, state) {
             if (state is CubitGettingSpecificUsersLoaded) {
-              return ShowMeTheUsers(
-                usersInfo: state.specificUsersInfo,
-                showSearchBar: widget.showSearchBar,
+              return SingleChildScrollView(
+                child: ShowMeTheUsers(
+                  usersInfo: state.specificUsersInfo,
+                  showSearchBar: widget.showSearchBar,
+                  emptyText: StringsManager.noUsers.tr(),
+                ),
               );
             }
             if (state is CubitGettingSpecificUsersFailed) {

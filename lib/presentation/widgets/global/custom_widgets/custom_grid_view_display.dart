@@ -17,6 +17,7 @@ import 'package:instagram/presentation/widgets/belong_to/time_line_w/animated_di
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/send_to_users.dart';
 import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_posts_display.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
@@ -120,161 +121,161 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   }
 
   Widget createGridTileWidget() => Builder(
-    builder: (context) => GestureDetector(
-      onTap: () {
-        List<Post> customPostsInfo = widget.postsInfo;
-        customPostsInfo.removeWhere(
-            (value) => value.postUid == widget.postClickedInfo.postUid);
-        customPostsInfo.insert(0, widget.postClickedInfo);
-        Navigator.of(context).push(CupertinoPageRoute(
-          builder: (context) => CustomPostsDisplay(
-            postsInfo: widget.postsInfo,
-            isThatProfile: widget.isThatProfile,
-          ),
-        ));
-      },
-      onLongPressMoveUpdate: (details) {
-        _PositionDimension lovePosition = _getOffset(loveKey);
-        _PositionDimension commentPosition = _getOffset(viewProfileKey);
-        _PositionDimension sharePosition = _getOffset(shareKey);
-        _PositionDimension menuPosition = _getOffset(menuKey);
+        builder: (context) => GestureDetector(
+          onTap: () {
+            List<Post> customPostsInfo = widget.postsInfo;
+            customPostsInfo.removeWhere(
+                (value) => value.postUid == widget.postClickedInfo.postUid);
+            customPostsInfo.insert(0, widget.postClickedInfo);
+            Navigator.of(context).push(CupertinoPageRoute(
+              builder: (context) => Scaffold(
+                appBar: CustomAppBar.oneTitleAppBar(
+                    context, widget.isThatProfile?StringsManager.posts.tr():StringsManager.explore.tr()),
+                body: CustomPostsDisplay(
+                  postsInfo: widget.postsInfo,
+                ),
+              ),
+            ));
+          },
+          onLongPressMoveUpdate: (details) {
+            _PositionDimension lovePosition = _getOffset(loveKey);
+            _PositionDimension commentPosition = _getOffset(viewProfileKey);
+            _PositionDimension sharePosition = _getOffset(shareKey);
+            _PositionDimension menuPosition = _getOffset(menuKey);
 
-        setState(() {
-          if (details.globalPosition.dy > lovePosition.positionTop &&
-              details.globalPosition.dy < lovePosition.positionBottom &&
-              details.globalPosition.dx > lovePosition.positionLeft &&
-              details.globalPosition.dx < lovePosition.positionRight) {
-            messageText = isLiked
-                ? StringsManager.unLike.tr()
-                : StringsManager.like.tr();
-            widgetPositionLeft = lovePosition.positionLeft -
-                lovePosition.positionCenter -
-                (isLiked ? 15 : 7);
-            loveVisibility.value = true;
-            messageVisibility.value = true;
-          } else if (details.globalPosition.dy >
-                  commentPosition.positionTop &&
-              details.globalPosition.dy <
-                  commentPosition.positionBottom &&
-              details.globalPosition.dx > commentPosition.positionLeft &&
-              details.globalPosition.dx < commentPosition.positionRight) {
-            messageText = widget.isThatProfile
-                ? StringsManager.comment.tr()
-                : StringsManager.viewProfile.tr();
-            widgetPositionLeft = commentPosition.positionLeft -
-                commentPosition.positionCenter -
-                30;
-            viewProfileVisibility.value = true;
-            messageVisibility.value = true;
-          } else if (details.globalPosition.dy >
-                  sharePosition.positionTop &&
-              details.globalPosition.dy < sharePosition.positionBottom &&
-              details.globalPosition.dx > sharePosition.positionLeft &&
-              details.globalPosition.dx < sharePosition.positionRight) {
-            messageText = StringsManager.share.tr();
-            widgetPositionLeft = sharePosition.positionLeft -
-                sharePosition.positionCenter -
-                12;
-            shareVisibility.value = true;
-            messageVisibility.value = true;
-          } else if (details.globalPosition.dy >
-                  menuPosition.positionTop &&
-              details.globalPosition.dy < menuPosition.positionBottom &&
-              details.globalPosition.dx > menuPosition.positionLeft &&
-              details.globalPosition.dx < menuPosition.positionRight) {
-            messageText = StringsManager.menu.tr();
-            widgetPositionLeft = menuPosition.positionLeft -
-                menuPosition.positionCenter -
-                15;
-            menuVisibility.value = true;
-            messageVisibility.value = true;
-          } else {
-            messageText = "";
-            widgetPositionLeft = 0;
-            // isLiked = !isLiked;
-            loveVisibility.value = false;
-            viewProfileVisibility.value = false;
-            shareVisibility.value = false;
-            menuVisibility.value = false;
-            messageVisibility.value = false;
-          }
-        });
-
-        _popupEmptyDialog = _createPopupEmptyDialog();
-        Overlay.of(context)!.insert(_popupEmptyDialog!);
-      },
-      onLongPress: () {
-        loveStatusAnimation.value = const SizedBox();
-        _popupDialog = _createPopupDialog(widget.postClickedInfo);
-        Overlay.of(context)!.insert(_popupDialog!);
-        _popupEmptyDialog = _createPopupEmptyDialog();
-        Overlay.of(context)!.insert(_popupEmptyDialog!);
-      },
-      onLongPressEnd: (details) async {
-        if (loveVisibility.value) {
-          if (isLiked) {
             setState(() {
-              BlocProvider.of<PostLikesCubit>(context)
-                  .removeTheLikeOnThisPost(
+              if (details.globalPosition.dy > lovePosition.positionTop &&
+                  details.globalPosition.dy < lovePosition.positionBottom &&
+                  details.globalPosition.dx > lovePosition.positionLeft &&
+                  details.globalPosition.dx < lovePosition.positionRight) {
+                messageText = isLiked
+                    ? StringsManager.unLike.tr()
+                    : StringsManager.like.tr();
+                widgetPositionLeft = lovePosition.positionLeft -
+                    lovePosition.positionCenter -
+                    (isLiked ? 15 : 7);
+                loveVisibility.value = true;
+                messageVisibility.value = true;
+              } else if (details.globalPosition.dy >
+                      commentPosition.positionTop &&
+                  details.globalPosition.dy < commentPosition.positionBottom &&
+                  details.globalPosition.dx > commentPosition.positionLeft &&
+                  details.globalPosition.dx < commentPosition.positionRight) {
+                messageText = widget.isThatProfile
+                    ? StringsManager.comment.tr()
+                    : StringsManager.viewProfile.tr();
+                widgetPositionLeft = commentPosition.positionLeft -
+                    commentPosition.positionCenter -
+                    30;
+                viewProfileVisibility.value = true;
+                messageVisibility.value = true;
+              } else if (details.globalPosition.dy >
+                      sharePosition.positionTop &&
+                  details.globalPosition.dy < sharePosition.positionBottom &&
+                  details.globalPosition.dx > sharePosition.positionLeft &&
+                  details.globalPosition.dx < sharePosition.positionRight) {
+                messageText = StringsManager.share.tr();
+                widgetPositionLeft = sharePosition.positionLeft -
+                    sharePosition.positionCenter -
+                    12;
+                shareVisibility.value = true;
+                messageVisibility.value = true;
+              } else if (details.globalPosition.dy > menuPosition.positionTop &&
+                  details.globalPosition.dy < menuPosition.positionBottom &&
+                  details.globalPosition.dx > menuPosition.positionLeft &&
+                  details.globalPosition.dx < menuPosition.positionRight) {
+                messageText = StringsManager.menu.tr();
+                widgetPositionLeft = menuPosition.positionLeft -
+                    menuPosition.positionCenter -
+                    15;
+                menuVisibility.value = true;
+                messageVisibility.value = true;
+              } else {
+                messageText = "";
+                widgetPositionLeft = 0;
+                // isLiked = !isLiked;
+                loveVisibility.value = false;
+                viewProfileVisibility.value = false;
+                shareVisibility.value = false;
+                menuVisibility.value = false;
+                messageVisibility.value = false;
+              }
+            });
+
+            _popupEmptyDialog = _createPopupEmptyDialog();
+            Overlay.of(context)!.insert(_popupEmptyDialog!);
+          },
+          onLongPress: () {
+            loveStatusAnimation.value = const SizedBox();
+            _popupDialog = _createPopupDialog(widget.postClickedInfo);
+            Overlay.of(context)!.insert(_popupDialog!);
+            _popupEmptyDialog = _createPopupEmptyDialog();
+            Overlay.of(context)!.insert(_popupEmptyDialog!);
+          },
+          onLongPressEnd: (details) async {
+            if (loveVisibility.value) {
+              if (isLiked) {
+                setState(() {
+                  BlocProvider.of<PostLikesCubit>(context)
+                      .removeTheLikeOnThisPost(
+                          postId: widget.postClickedInfo.postUid,
+                          userId: myPersonalId);
+                  widget.postClickedInfo.likes.remove(myPersonalId);
+                  isLiked = false;
+                });
+              } else {
+                setState(() {
+                  loveStatusAnimation.value = const FadeAnimation(
+                      child: Icon(Icons.favorite,
+                          color: ColorManager.white, size: 100));
+
+                  BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
                       postId: widget.postClickedInfo.postUid,
                       userId: myPersonalId);
-              widget.postClickedInfo.likes.remove(myPersonalId);
-              isLiked = false;
-            });
-          } else {
+                  widget.postClickedInfo.likes.add(myPersonalId);
+                  isHeartAnimation.value = true;
+                });
+              }
+              await Future.delayed(const Duration(seconds: 1));
+              isHeartAnimation.value = false;
+            }
+            if (viewProfileVisibility.value) {
+              Navigator.of(context).push(
+                CupertinoPageRoute(
+                  builder: (context) {
+                    if (widget.isThatProfile) {
+                      return CommentsPage(postInfo: widget.postClickedInfo);
+                    } else {
+                      return WhichProfilePage(
+                        userId: widget.postClickedInfo.publisherId,
+                      );
+                    }
+                  },
+                ),
+              );
+            }
+            if (shareVisibility.value) draggableBottomSheet();
+
             setState(() {
-              loveStatusAnimation.value = const FadeAnimation(
-                  child: Icon(Icons.favorite,
-                      color: ColorManager.white, size: 100));
-
-              BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
-                  postId: widget.postClickedInfo.postUid,
-                  userId: myPersonalId);
-              widget.postClickedInfo.likes.add(myPersonalId);
-              isHeartAnimation.value = true;
+              messageVisibility.value = false;
+              _popupDialog?.remove();
+              _popupEmptyDialog?.remove();
             });
-          }
-          await Future.delayed(const Duration(seconds: 1));
-          isHeartAnimation.value = false;
-        }
-        if (viewProfileVisibility.value) {
-          Navigator.of(context).push(
-            CupertinoPageRoute(
-              builder: (context) {
-                if (widget.isThatProfile) {
-                  return CommentsPage(
-                      postInfo: widget.postClickedInfo);
-                } else {
-                  return WhichProfilePage(
-                    userId: widget.postClickedInfo.publisherId,
-                  );
-                }
-              },
-            ),
-          );
-        }
-        if (shareVisibility.value) draggableBottomSheet();
-
-        setState(() {
-          messageVisibility.value = false;
-          _popupDialog?.remove();
-          _popupEmptyDialog?.remove();
-        });
-      },
-      child: widget.postClickedInfo.isThatImage
-          ? NetworkImageDisplay(
-              blurHash: widget.postClickedInfo.blurHash,
-              imageUrl: widget.postClickedInfo.postUrl.isNotEmpty
-                  ? widget.postClickedInfo.postUrl
-                  : widget.postClickedInfo.imagesUrls[0],
-            )
-          : PlayThisVideo(
-              videoUrl: widget.postClickedInfo.postUrl,
-              play: widget.playThisVideo,
-              withoutSound: true,
-            ),
-    ),
-  );
+          },
+          child: widget.postClickedInfo.isThatImage
+              ? NetworkImageDisplay(
+                  blurHash: widget.postClickedInfo.blurHash,
+                  imageUrl: widget.postClickedInfo.postUrl.isNotEmpty
+                      ? widget.postClickedInfo.postUrl
+                      : widget.postClickedInfo.imagesUrls[0],
+                )
+              : PlayThisVideo(
+                  videoUrl: widget.postClickedInfo.postUrl,
+                  play: widget.playThisVideo,
+                  withoutSound: true,
+                ),
+        ),
+      );
 
   SvgPicture iconsOfImagePost(String path, {bool lowHeight = false}) {
     return SvgPicture.asset(

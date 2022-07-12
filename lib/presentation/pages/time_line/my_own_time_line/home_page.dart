@@ -13,7 +13,7 @@ import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/create_new_story.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/post_image.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_of_post_for_time_line.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_up_icon.dart';
@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget posts(int index, double bodyHeight, bool playTheVideo) {
     return ValueListenableBuilder(
       valueListenable: postsInfo,
-      builder: (context, List<Post> postsInfoValue, child) => PostImage(
+      builder: (context, List<Post> postsInfoValue, child) => ImageOfPostForTimeLine(
         postInfo: ValueNotifier(postsInfoValue[index]),
         postsInfo: postsInfo,
         bodyHeight: bodyHeight,

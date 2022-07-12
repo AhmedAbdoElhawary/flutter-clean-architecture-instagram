@@ -178,8 +178,8 @@ Total : 247 files,  9782 codes, 1017 comments, 1334 blanks, all 12133 lines
 | [lib/presentation/cubit/firestoreUserInfoCubit/user_info_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/user_info_state.dart) | Dart | 21 | 0 | 11 | 32 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart](/lib/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart) | Dart | 35 | 0 | 6 | 41 |
 | [lib/presentation/cubit/firestoreUserInfoCubit/users_info_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/users_info_state.dart) | Dart | 16 | 0 | 9 | 25 |
-| [lib/presentation/cubit/followCubit/follow_cubit.dart](/lib/presentation/cubit/followCubit/follow_cubit.dart) | Dart | 35 | 0 | 7 | 42 |
-| [lib/presentation/cubit/followCubit/follow_state.dart](/lib/presentation/cubit/followCubit/follow_state.dart) | Dart | 13 | 0 | 7 | 20 |
+| [lib/presentation/cubit/followCubit/follow_cubit.dart](/lib/presentation/cubit/follow/follow_cubit.dart) | Dart | 35 | 0 | 7 | 42 |
+| [lib/presentation/cubit/followCubit/follow_state.dart](/lib/presentation/cubit/follow/follow_state.dart) | Dart | 13 | 0 | 7 | 20 |
 | [lib/presentation/cubit/postInfoCubit/commentsInfo/comment_likes/comment_likes_cubit.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/cubit/comment_likes/comment_likes_cubit.dart) | Dart | 41 | 0 | 8 | 49 |
 | [lib/presentation/cubit/postInfoCubit/commentsInfo/comment_likes/comment_likes_state.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/cubit/comment_likes/comment_likes_state.dart) | Dart | 13 | 0 | 7 | 20 |
 | [lib/presentation/cubit/postInfoCubit/commentsInfo/comments_info_cubit.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart) | Dart | 36 | 0 | 8 | 44 |
@@ -230,7 +230,7 @@ Total : 247 files,  9782 codes, 1017 comments, 1334 blanks, all 12133 lines
 | [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 73 | 1 | 4 | 78 |
 | [lib/presentation/widgets/or_text.dart](/lib/presentation/widgets/belong_to/register_w/or_text.dart) | Dart | 27 | 0 | 3 | 30 |
 | [lib/presentation/widgets/post_list_saved.dart](/lib/presentation/widgets/post_list_saved.dart) | Dart | 216 | 8 | 12 | 236 |
-| [lib/presentation/widgets/post_list_view.dart](/lib/presentation/widgets/belong_to/time_line_w/post_image.dart) | Dart | 226 | 7 | 14 | 247 |
+| [lib/presentation/widgets/post_list_view.dart](/lib/presentation/widgets/belong_to/time_line_w/image_of_post_for_time_line.dart) | Dart | 226 | 7 | 14 | 247 |
 | [lib/presentation/widgets/profile_page.dart](/lib/presentation/widgets/belong_to/profile_w/profile_page.dart) | Dart | 205 | 10 | 15 | 230 |
 | [lib/presentation/widgets/read_more_text.dart](/lib/presentation/widgets/belong_to/time_line_w/read_more_text.dart) | Dart | 20 | 0 | 3 | 23 |
 | [lib/presentation/widgets/recommendation_people.dart](/lib/presentation/widgets/belong_to/profile_w/recommendation_people.dart) | Dart | 22 | 1 | 3 | 26 |

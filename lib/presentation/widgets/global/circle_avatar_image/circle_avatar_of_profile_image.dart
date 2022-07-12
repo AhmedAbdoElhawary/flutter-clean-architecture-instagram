@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/pages/story/stroy_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -84,38 +86,48 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
   }
 
   onPressedImage(BuildContext context) async {
-    if (widget.userInfo.stories.isNotEmpty) {
-      Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
-        maintainState: false,
-        builder: (context) {
-          return BlocBuilder<StoryCubit, StoryState>(
-            bloc: StoryCubit.get(context)
-              ..getSpecificStoriesInfo(userInfo: widget.userInfo),
-            buildWhen: (previous, current) {
-              if (previous != current && current is SpecificStoriesInfoLoaded) {
-                return true;
-              }
-              if (previous != current && current is CubitStoryFailed) {
-                return true;
-              }
-              return false;
-            },
-            builder: (context, state) {
-              if (state is SpecificStoriesInfoLoaded) {
-                return StoryPage(
-                    hashTag: widget.hashTag,
-                    user: state.userInfo,
-                    storiesOwnersInfo: [state.userInfo]);
-              } else {
-                return Scaffold(
-                    body: Center(
-                  child: CustomCircularProgress(Theme.of(context).focusColor),
-                ));
-              }
-            },
-          );
-        },
-      ));
+    if (!widget.showColorfulCircle) {
+      await Navigator.of(context).push(
+        CupertinoPageRoute(
+          builder: (context) =>
+              WhichProfilePage(userId: widget.userInfo.userId),
+        ),
+      );
+    } else {
+      if (widget.userInfo.stories.isNotEmpty) {
+        Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+          maintainState: false,
+          builder: (context) {
+            return BlocBuilder<StoryCubit, StoryState>(
+              bloc: StoryCubit.get(context)
+                ..getSpecificStoriesInfo(userInfo: widget.userInfo),
+              buildWhen: (previous, current) {
+                if (previous != current &&
+                    current is SpecificStoriesInfoLoaded) {
+                  return true;
+                }
+                if (previous != current && current is CubitStoryFailed) {
+                  return true;
+                }
+                return false;
+              },
+              builder: (context, state) {
+                if (state is SpecificStoriesInfoLoaded) {
+                  return StoryPage(
+                      hashTag: widget.hashTag,
+                      user: state.userInfo,
+                      storiesOwnersInfo: [state.userInfo]);
+                } else {
+                  return Scaffold(
+                      body: Center(
+                    child: CustomCircularProgress(Theme.of(context).focusColor),
+                  ));
+                }
+              },
+            );
+          },
+        ));
+      }
     }
   }
 
