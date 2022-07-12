@@ -1,25 +1,21 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/post_image.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_of_post_for_time_line.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_up_icon.dart';
 
 class CustomPostsDisplay extends StatefulWidget {
   final List<Post> postsInfo;
-  final bool isThatProfile;
+
   final bool showCatchUp;
 
-  const CustomPostsDisplay(
-      {Key? key,
-      required this.postsInfo,
-      this.showCatchUp = true,
-      required this.isThatProfile})
-      : super(key: key);
+  const CustomPostsDisplay({
+    Key? key,
+    required this.postsInfo,
+    this.showCatchUp = true,
+  }) : super(key: key);
 
   @override
   State<CustomPostsDisplay> createState() => _HomeScreenState();
@@ -58,14 +54,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
         mediaQuery.padding.top;
 
     centerItemIndex ??= ((bodyHeight / 2) / bodyHeight).floor();
-    return Scaffold(
-      appBar: CustomAppBar.oneTitleAppBar(
-          context,
-          widget.isThatProfile
-              ? StringsManager.posts.tr()
-              : StringsManager.explore.tr()),
-      body: valueListener(bodyHeight),
-    );
+    return valueListener(bodyHeight);
   }
 
   Widget valueListener(double bodyHeight) {
@@ -131,7 +120,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
   }
 
   Widget posts(int index, Post postInfo, double bodyHeight, bool playTheVideo) {
-    return PostImage(
+    return ImageOfPostForTimeLine(
       postInfo: ValueNotifier(postInfo),
       bodyHeight: bodyHeight,
       indexOfPost: index,
