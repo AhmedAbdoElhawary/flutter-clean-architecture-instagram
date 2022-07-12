@@ -8,6 +8,7 @@ class StringsManager {
   static const String view = "view";
 
   static const String more = "more";
+  static const String noActivity = "noActivity";
 
   static const String story = "story";
   static const String posts = "posts";
@@ -15,12 +16,15 @@ class StringsManager {
   static const String reply = "reply";
   static const String unSend = "unSend";
   static const String send = "send";
+
+  static const String noUsers = "noUsers";
   static const String undo = "undo";
   static const String name = "name";
   static const String writeMessage = "writeMessage";
   static const String like = "like";
   static const String unLike = "unLike";
   static const String posting = "posting";
+  static const String suggestionsForYou = "suggestionsForYou";
 
   static const String menu = "menu";
 
@@ -126,6 +130,7 @@ class StringsManager {
   static const String loginWithFacebook = "loginWithFacebook";
   static const String comments = "comments";
   static const String comment = "comment";
+  static const String activity = "activity";
 
   static const String somethingWrong = "somethingWrong";
   static const String noComments = "noComments";
