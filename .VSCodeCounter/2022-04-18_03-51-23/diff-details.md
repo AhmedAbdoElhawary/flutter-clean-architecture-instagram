@@ -60,7 +60,7 @@ Total : 56 files,  1364 codes, -558 comments, 138 blanks, all 944 lines
 | [lib/presentation/widgets/custom_videos_grid_view.dart](/lib/presentation/widgets/belong_to/profile_w/custom_videos_grid_view.dart) | Dart | 138 | 1 | 12 | 151 |
 | [lib/presentation/widgets/fade_animation.dart](/lib/presentation/widgets/global/aimation/fade_animation.dart) | Dart | 50 | 0 | 10 | 60 |
 | [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 4 | 0 | -1 | 3 |
-| [lib/presentation/widgets/post_list_view.dart](/lib/presentation/widgets/belong_to/time_line_w/post_image.dart) | Dart | 10 | 6 | 0 | 16 |
+| [lib/presentation/widgets/post_list_view.dart](/lib/presentation/widgets/belong_to/time_line_w/image_of_post_for_time_line.dart) | Dart | 10 | 6 | 0 | 16 |
 | [lib/presentation/widgets/profile_page.dart](/lib/presentation/widgets/belong_to/profile_w/profile_page.dart) | Dart | -3 | 0 | 0 | -3 |
 | [lib/presentation/widgets/reel_video_play.dart](/lib/presentation/widgets/belong_to/videos_w/reel_video_play.dart) | Dart | 76 | 0 | 10 | 86 |
 | [lib/presentation/widgets/show_me_the_users.dart](/lib/presentation/widgets/belong_to/profile_w/show_me_the_users.dart) | Dart | 0 | -15 | -1 | -16 |
