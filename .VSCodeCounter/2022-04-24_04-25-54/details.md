@@ -227,7 +227,7 @@ Total : 247 files,  9782 codes, 1017 comments, 1334 blanks, all 12133 lines
 | [lib/presentation/widgets/fade_animation.dart](/lib/presentation/widgets/global/aimation/fade_animation.dart) | Dart | 50 | 0 | 10 | 60 |
 | [lib/presentation/widgets/fade_in_image.dart](/lib/presentation/widgets/global/custom_widgets/custom_network_image_display.dart) | Dart | 43 | 0 | 4 | 47 |
 | [lib/presentation/widgets/instagram_story_swipe.dart](/lib/presentation/widgets/belong_to/story_w/story_swipe.dart) | Dart | 86 | 0 | 15 | 101 |
-| [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 73 | 1 | 4 | 78 |
+| [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/global/others/multi_bloc_provider.dart) | Dart | 73 | 1 | 4 | 78 |
 | [lib/presentation/widgets/or_text.dart](/lib/presentation/widgets/belong_to/register_w/or_text.dart) | Dart | 27 | 0 | 3 | 30 |
 | [lib/presentation/widgets/post_list_saved.dart](/lib/presentation/widgets/post_list_saved.dart) | Dart | 216 | 8 | 12 | 236 |
 | [lib/presentation/widgets/post_list_view.dart](/lib/presentation/widgets/belong_to/time_line_w/image_of_post_for_time_line.dart) | Dart | 226 | 7 | 14 | 247 |
