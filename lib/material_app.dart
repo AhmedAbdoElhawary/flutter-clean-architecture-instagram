@@ -6,7 +6,7 @@ import 'package:instagram/config/themes/app_theme.dart';
 import 'package:instagram/config/themes/theme_service.dart';
 import 'package:instagram/presentation/pages/register/login_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/get_my_user_info.dart';
-import 'package:instagram/presentation/widgets/multi_bloc_provider.dart';
+import 'package:instagram/presentation/widgets/global/others/multi_bloc_provider.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
