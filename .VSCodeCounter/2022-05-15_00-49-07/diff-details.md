@@ -246,7 +246,7 @@ Total : 319 files,  1357 codes, -96 comments, 36 blanks, all 1297 lines
 | [lib/presentation/widgets/belong_to/time_line_w/all_catch_up_icon.dart](/lib/presentation/widgets/belong_to/time_line_w/all_catch_up_icon.dart) | Dart | 48 | 0 | 4 | 52 |
 | [lib/presentation/widgets/belong_to/time_line_w/animated_dialog.dart](/lib/presentation/widgets/belong_to/time_line_w/animated_dialog.dart) | Dart | 40 | 0 | 8 | 48 |
 | [lib/presentation/widgets/belong_to/time_line_w/picture_viewer.dart](/lib/presentation/widgets/belong_to/time_line_w/picture_viewer.dart) | Dart | 60 | 0 | 4 | 64 |
-| [lib/presentation/widgets/belong_to/time_line_w/post_list_view.dart](/lib/presentation/widgets/belong_to/time_line_w/post_image.dart) | Dart | 470 | 5 | 25 | 500 |
+| [lib/presentation/widgets/belong_to/time_line_w/post_list_view.dart](/lib/presentation/widgets/belong_to/time_line_w/image_of_post_for_time_line.dart) | Dart | 470 | 5 | 25 | 500 |
 | [lib/presentation/widgets/belong_to/time_line_w/read_more_text.dart](/lib/presentation/widgets/belong_to/time_line_w/read_more_text.dart) | Dart | 23 | 0 | 2 | 25 |
 | [lib/presentation/widgets/belong_to/time_line_w/smart_refresher.dart](/lib/presentation/widgets/belong_to/time_line_w/smart_refresher.dart) | Dart | 177 | 4 | 7 | 188 |
 | [lib/presentation/widgets/belong_to/videos_w/reel_video_play.dart](/lib/presentation/widgets/belong_to/videos_w/reel_video_play.dart) | Dart | 111 | 10 | 14 | 135 |
