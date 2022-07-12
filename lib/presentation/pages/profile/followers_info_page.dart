@@ -109,14 +109,21 @@ class _TapBarView extends StatelessWidget {
   Widget build(BuildContext context) {
     return TabBarView(
       children: [
-        ShowMeTheUsers(
-          usersInfo: state.followersAndFollowingsInfo.followersInfo,
-          userInfo: userInfo,
+        SingleChildScrollView(
+          child: ShowMeTheUsers(
+            usersInfo: state.followersAndFollowingsInfo.followersInfo,
+            userInfo: userInfo,
+            emptyText: StringsManager.noFollowers.tr(),
+          ),
         ),
-        ShowMeTheUsers(
-          usersInfo: state.followersAndFollowingsInfo.followingsInfo,
-          isThatFollower: false,
-          userInfo: userInfo,
+        SingleChildScrollView(
+          child: ShowMeTheUsers(
+            usersInfo: state.followersAndFollowingsInfo.followingsInfo,
+            isThatFollower: false,
+            userInfo: userInfo,
+            emptyText: StringsManager.noFollowings.tr(),
+
+          ),
         ),
       ],
     );
