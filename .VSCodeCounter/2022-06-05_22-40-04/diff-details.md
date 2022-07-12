@@ -311,7 +311,7 @@ Total : 611 files,  3332 codes, 191 comments, 256 blanks, all 3779 lines
 | [lib/presentation/widgets/global/custom_widgets/custom_network_image_display.dart](/lib/presentation/widgets/global/custom_widgets/custom_network_image_display.dart) | Dart | 77 | 0 | 10 | 87 |
 | [lib/presentation/widgets/global/custom_widgets/custom_posts_display.dart](/lib/presentation/widgets/global/custom_widgets/custom_posts_display.dart) | Dart | 126 | 0 | 13 | 139 |
 | [lib/presentation/widgets/global/custom_widgets/custom_text_field.dart](/lib/presentation/widgets/global/custom_widgets/custom_text_field.dart) | Dart | 42 | 0 | 5 | 47 |
-| [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 77 | 1 | 4 | 82 |
+| [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/global/others/multi_bloc_provider.dart) | Dart | 77 | 1 | 4 | 82 |
 | [lib/responsive_layout.dart](/lib/presentation/widgets/belong_to/main_w/responsive_layout.dart) | Dart | 17 | 1 | 4 | 22 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 88 | 57 | 19 | 164 |
 | [test/widget_test.dart](/test/widget_test.dart) | Dart | 12 | 10 | 7 | 29 |
