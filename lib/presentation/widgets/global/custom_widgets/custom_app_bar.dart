@@ -19,11 +19,7 @@ class CustomAppBar {
       backgroundColor: Theme.of(context).primaryColor,
       centerTitle: false,
       iconTheme: IconThemeData(color: Theme.of(context).focusColor),
-      title: SvgPicture.asset(
-        IconsAssets.instagramLogo,
-        height: 32,
-        color: Theme.of(context).focusColor,
-      ),
+      title: instagramLogo(context),
       actions: [
         IconButton(
           icon: SvgPicture.asset(
@@ -44,10 +40,8 @@ class CustomAppBar {
                 FirestoreUserInfoCubit.getMyPersonalInfo(context);
             Navigator.of(context).push(
               CupertinoPageRoute(
-                builder: (context) => BlocProvider<UsersInfoCubit>(
-                  create: (context) => injector<UsersInfoCubit>(),
-                  child: ActivityPage(myPersonalInfo: myPersonalInfo),
-                ),
+                builder: (context) =>
+                    ActivityPage(myPersonalInfo: myPersonalInfo),
               ),
             );
           },
@@ -119,16 +113,27 @@ class CustomAppBar {
     );
   }
 
-  static AppBar oneTitleAppBar(BuildContext context, String text) {
+  static AppBar oneTitleAppBar(BuildContext context, String text,
+      {bool logoOfInstagram = false}) {
     return AppBar(
       backgroundColor: Theme.of(context).primaryColor,
       centerTitle: false,
       iconTheme: IconThemeData(color: Theme.of(context).focusColor),
-      title: Text(
-        text,
-        style:
-            getMediumStyle(color: Theme.of(context).focusColor, fontSize: 20),
-      ),
+      title: logoOfInstagram
+          ? instagramLogo(context)
+          : Text(
+              text,
+              style: getMediumStyle(
+                  color: Theme.of(context).focusColor, fontSize: 20),
+            ),
+    );
+  }
+
+  static SvgPicture instagramLogo(BuildContext context) {
+    return SvgPicture.asset(
+      IconsAssets.instagramLogo,
+      height: 32,
+      color: Theme.of(context).focusColor,
     );
   }
 
