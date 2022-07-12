@@ -310,7 +310,7 @@ Total : 319 files,  1357 codes, -96 comments, 36 blanks, all 1297 lines
 | [lib/presentation/widgets/mmmmmmmmmm/lib/components/timeline/widgets/widgets.dart](/lib/presentation/widgets/mmmmmmmmmm/lib/components/timeline/widgets/widgets.dart) | Dart | -1 | 0 | -1 | -2 |
 | [lib/presentation/widgets/mmmmmmmmmm/lib/main.dart](/lib/presentation/widgets/mmmmmmmmmm/lib/main.dart) | Dart | -7 | 0 | -3 | -10 |
 | [lib/presentation/widgets/mmmmmmmmmm/try.dart](/lib/presentation/widgets/mmmmmmmmmm/try.dart) | Dart | 0 | 0 | -1 | -1 |
-| [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 0 | 0 | -1 | -1 |
+| [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/global/others/multi_bloc_provider.dart) | Dart | 0 | 0 | -1 | -1 |
 | [lib/presentation/widgets/or_text.dart](/lib/presentation/widgets/or_text.dart) | Dart | -27 | 0 | -3 | -30 |
 | [lib/presentation/widgets/post_list_saved.dart](/lib/presentation/widgets/post_list_saved.dart) | Dart | -216 | -8 | -12 | -236 |
 | [lib/presentation/widgets/post_list_view.dart](/lib/presentation/widgets/post_list_view.dart) | Dart | -226 | -7 | -14 | -247 |

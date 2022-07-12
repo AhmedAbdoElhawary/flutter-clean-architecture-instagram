@@ -80,7 +80,7 @@ Total : 73 files,  4428 codes, -267 comments, 600 blanks, all 4761 lines
 | [lib/presentation/widgets/mmmmmmmmmm/lib/components/timeline/widgets/widgets.dart](/lib/presentation/widgets/mmmmmmmmmm/lib/components/timeline/widgets/widgets.dart) | Dart | 1 | 0 | 1 | 2 |
 | [lib/presentation/widgets/mmmmmmmmmm/lib/main.dart](/lib/presentation/widgets/mmmmmmmmmm/lib/main.dart) | Dart | 7 | 0 | 3 | 10 |
 | [lib/presentation/widgets/mmmmmmmmmm/try.dart](/lib/presentation/widgets/mmmmmmmmmm/try.dart) | Dart | 0 | 0 | 1 | 1 |
-| [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/multi_bloc_provider.dart) | Dart | 4 | 0 | 1 | 5 |
+| [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/global/others/multi_bloc_provider.dart) | Dart | 4 | 0 | 1 | 5 |
 | [lib/presentation/widgets/story_page.dart](/lib/presentation/widgets/story_page.dart) | Dart | 230 | 9 | 18 | 257 |
 | [lib/presentation/widgets/try.dart](/lib/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart) | Dart | 0 | -487 | -1 | -488 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 9 | 0 | -1 | 8 |

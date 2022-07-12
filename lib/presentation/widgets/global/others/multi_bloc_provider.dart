@@ -16,9 +16,9 @@ import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/re
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
-import '../../core/utility/injector.dart';
-import '../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
-import '../cubit/postInfoCubit/post_cubit.dart';
+import '../../../../core/utility/injector.dart';
+import '../../../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
+import '../../../cubit/postInfoCubit/post_cubit.dart';
 
 // ignore: must_be_immutable
 class MultiBlocs extends StatelessWidget {
