@@ -225,7 +225,7 @@ Total : 319 files,  1357 codes, -96 comments, 36 blanks, all 1297 lines
 | [lib/presentation/pages/video/videos_page.dart](/lib/presentation/pages/video/videos_page.dart) | Dart | 309 | 0 | 20 | 329 |
 | [lib/presentation/pages/videos_page.dart](/lib/presentation/pages/videos_page.dart) | Dart | -284 | 0 | -19 | -303 |
 | [lib/presentation/pages/which_profile_page.dart](/lib/presentation/pages/which_profile_page.dart) | Dart | -35 | 0 | -5 | -40 |
-| [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/main_screen.dart) | Dart | 15 | 0 | 1 | 16 |
+| [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/mobile_screen_layout.dart) | Dart | 15 | 0 | 1 | 16 |
 | [lib/presentation/widgets/animated_dialog.dart](/lib/presentation/widgets/animated_dialog.dart) | Dart | -40 | 0 | -8 | -48 |
 | [lib/presentation/widgets/audio_recorder_view.dart](/lib/presentation/widgets/audio_recorder_view.dart) | Dart | -104 | 0 | -23 | -127 |
 | [lib/presentation/widgets/belong_to/comments_w/add_comment.dart](/lib/presentation/widgets/belong_to/comments_w/add_comment.dart) | Dart | 72 | 11 | 9 | 92 |
@@ -325,7 +325,7 @@ Total : 319 files,  1357 codes, -96 comments, 36 blanks, all 1297 lines
 | [lib/presentation/widgets/toast_show.dart](/lib/presentation/widgets/toast_show.dart) | Dart | -22 | 0 | -1 | -23 |
 | [lib/presentation/widgets/try.dart](/lib/presentation/widgets/global/custom_widgets/custom_gallery_display.dart) | Dart | 947 | 23 | 110 | 1,080 |
 | [lib/presentation/widgets/user_profile_page.dart](/lib/presentation/widgets/user_profile_page.dart) | Dart | -241 | -1 | -16 | -258 |
-| [lib/responsive_layout.dart](/lib/presentation/widgets/belong_to/main_w/responsive_layout.dart) | Dart | 0 | 1 | 0 | 1 |
+| [lib/responsive_layout.dart](/lib/presentation/screens/responsive_layout.dart) | Dart | 0 | 1 | 0 | 1 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 25 | 0 | 0 | 25 |
 | [test/widget_test.dart](/test/widget_test.dart) | Dart | -2 | 1 | -1 | -2 |
 | [windows/flutter/generated_plugin_registrant.cc](/windows/flutter/generated_plugin_registrant.cc) | C++ | 3 | 0 | 0 | 3 |

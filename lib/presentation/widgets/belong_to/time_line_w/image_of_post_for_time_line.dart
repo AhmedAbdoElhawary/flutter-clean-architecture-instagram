@@ -16,7 +16,6 @@ class ImageOfPostForTimeLine extends StatefulWidget {
   final VoidCallback reLoadData;
   final int indexOfPost;
   final ValueNotifier<List<Post>> postsInfo;
-  final double bodyHeight;
 
   const ImageOfPostForTimeLine({
     Key? key,
@@ -25,7 +24,6 @@ class ImageOfPostForTimeLine extends StatefulWidget {
     required this.indexOfPost,
     required this.playTheVideo,
     required this.postsInfo,
-    required this.bodyHeight,
   }) : super(key: key);
 
   @override
@@ -44,18 +42,10 @@ class _ImageOfPostForTimeLineState extends State<ImageOfPostForTimeLine>
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final bodyHeight = mediaQuery.size.height -
-        AppBar().preferredSize.height -
-        mediaQuery.padding.top;
-    return thePostsOfHomePage(
-      bodyHeight: bodyHeight,
-    );
+    return thePostsOfHomePage(bodyHeight: 700);
   }
 
-  Widget thePostsOfHomePage({
-    required double bodyHeight,
-  }) {
+  Widget thePostsOfHomePage({required double bodyHeight}) {
     return SizedBox(
       width: double.infinity,
       child: ValueListenableBuilder(
@@ -78,12 +68,10 @@ class _ImageOfPostForTimeLineState extends State<ImageOfPostForTimeLine>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 8),
-                    if (postInfoValue.comments.isNotEmpty)...[
+                    if (postInfoValue.comments.isNotEmpty) ...[
                       numberOfComment(postInfoValue),
                       const SizedBox(height: 8),
                     ],
-
-
                     buildCommentBox(bodyHeight),
                     Padding(
                       padding: const EdgeInsetsDirectional.only(top: 5.0),

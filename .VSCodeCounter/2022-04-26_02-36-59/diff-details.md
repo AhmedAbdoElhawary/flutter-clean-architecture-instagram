@@ -34,7 +34,7 @@ Total : 73 files,  4428 codes, -267 comments, 600 blanks, all 4761 lines
 | [lib/presentation/customPackages/story_view/utils.dart](/lib/presentation/customPackages/story_view/utils.dart) | Dart | 18 | 0 | 8 | 26 |
 | [lib/presentation/pages/comments_page.dart](/lib/presentation/pages/comments/comments_page.dart) | Dart | -2 | 5 | 3 | 6 |
 | [lib/presentation/pages/home_page.dart](/lib/presentation/pages/time_line/my_own_time_line/home_page.dart) | Dart | 2 | 0 | -1 | 1 |
-| [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/main_screen.dart) | Dart | -2 | 0 | 0 | -2 |
+| [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/mobile_screen_layout.dart) | Dart | -2 | 0 | 0 | -2 |
 | [lib/presentation/widgets/commentator.dart](/lib/presentation/widgets/belong_to/comments_w/commentator.dart) | Dart | 9 | 2 | 2 | 13 |
 | [lib/presentation/widgets/create_post.dart](/lib/presentation/widgets/create_post.dart) | Dart | 0 | -44 | -1 | -45 |
 | [lib/presentation/widgets/custom_grid_view.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart) | Dart | 7 | 0 | 1 | 8 |

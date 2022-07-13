@@ -27,18 +27,7 @@ class MessagesPage extends StatelessWidget {
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.add,
-                color: Theme.of(context).focusColor,
-                size: 30,
-              ))
-        ],
-      ),
+      appBar:isThatMobile? buildAppBar(context):null,
       body: BlocBuilder<UsersInfoCubit, UsersInfoState>(
         bloc: UsersInfoCubit.get(context)
           ..getChatUsersInfo(userId: myPersonalId),
@@ -114,6 +103,21 @@ class MessagesPage extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Theme.of(context).primaryColor,
+      actions: [
+        IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.add,
+              color: Theme.of(context).focusColor,
+              size: 30,
+            ))
+      ],
     );
   }
 }

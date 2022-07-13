@@ -88,8 +88,8 @@ class _ProfilePageState extends State<UserProfilePage> {
         builder: (context, state) {
           if (state is CubitUserLoaded) {
             return Scaffold(
-              appBar: CustomAppBar.menuOfUserAppBar(
-                  context, state.userPersonalInfo.userName, bottomSheet),
+              appBar:isThatMobile? CustomAppBar.menuOfUserAppBar(
+                  context, state.userPersonalInfo.userName, bottomSheet):null,
               body: ProfilePage(
                 isThatMyPersonalId: false,
                 userId: widget.userId,
@@ -283,7 +283,7 @@ class _ProfilePageState extends State<UserProfilePage> {
         border: Border.all(
             color: Theme.of(context).bottomAppBarColor,
             width: isThatFollowers ? 1.0 : 0),
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(20.0),
       ),
       child: Center(
         child: isItLoading

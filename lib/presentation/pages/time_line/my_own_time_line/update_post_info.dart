@@ -7,6 +7,7 @@ import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
@@ -46,27 +47,31 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Theme.of(context).focusColor),
-          elevation: 0,
-          backgroundColor: Theme.of(context).primaryColor,
-          leading: IconButton(
-              onPressed: () {
-                Navigator.maybePop(context);
-              },
-              icon: SvgPicture.asset(
-                IconsAssets.cancelIcon,
-                color: Theme.of(context).focusColor,
-                height: 27,
-              )),
-          title: Text(
-            StringsManager.editInfo.tr(),
-            style: getMediumStyle(
-                color: Theme.of(context).focusColor, fontSize: 20),
-          ),
-          actions: [actionsWidgets()],
-        ),
+        appBar:isThatMobile? buildAppBar(context):null,
         body: buildSizedBox(bodyHeight, context));
+  }
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+        iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+        elevation: 0,
+        backgroundColor: Theme.of(context).primaryColor,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.maybePop(context);
+            },
+            icon: SvgPicture.asset(
+              IconsAssets.cancelIcon,
+              color: Theme.of(context).focusColor,
+              height: 27,
+            )),
+        title: Text(
+          StringsManager.editInfo.tr(),
+          style: getMediumStyle(
+              color: Theme.of(context).focusColor, fontSize: 20),
+        ),
+        actions: [actionsWidgets()],
+      );
   }
 
   Widget actionsWidgets() {

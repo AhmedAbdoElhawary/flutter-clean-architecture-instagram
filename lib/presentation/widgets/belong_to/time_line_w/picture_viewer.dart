@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
@@ -21,24 +22,7 @@ class PictureViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      appBar: AppBar(
-        elevation: 0,
-        actions: [
-          Padding(
-            padding: const EdgeInsetsDirectional.only(end: 10.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(Icons.close_outlined,
-                  size: 30, color: Theme.of(context).focusColor),
-            ),
-          )
-        ],
-        iconTheme: IconThemeData(color: Theme.of(context).focusColor),
-        backgroundColor: ColorManager.transparent,
-        foregroundColor: Theme.of(context).primaryColor,
-      ),
+      appBar:isThatMobile? buildAppBar(context):null,
       extendBodyBehindAppBar: true,
       body: InteractiveViewer(
         child: GestureDetector(
@@ -59,6 +43,27 @@ class PictureViewer extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+      elevation: 0,
+      actions: [
+        Padding(
+          padding: const EdgeInsetsDirectional.only(end: 10.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.close_outlined,
+                size: 30, color: Theme.of(context).focusColor),
+          ),
+        )
+      ],
+      iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+      backgroundColor: ColorManager.transparent,
+      foregroundColor: Theme.of(context).primaryColor,
     );
   }
 }

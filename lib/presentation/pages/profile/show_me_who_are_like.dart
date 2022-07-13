@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/show_me_the_users.dart';
 import 'package:instagram/core/functions/toast_show.dart';
@@ -29,12 +30,7 @@ class _UsersWhoLikesOnPostPageState extends State<UsersWhoLikesOnPostPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Theme.of(context).primaryColor,
-          title: Text(StringsManager.likes.tr(),
-              style: Theme.of(context).textTheme.bodyText1),
-        ),
+        appBar:isThatMobile? buildAppBar(context):null,
         body: BlocBuilder(
           bloc: BlocProvider.of<UsersInfoCubit>(context)
             ..getSpecificUsersInfo(usersIds: widget.usersIds),
@@ -70,5 +66,14 @@ class _UsersWhoLikesOnPostPageState extends State<UsersWhoLikesOnPostPage> {
         ),
       ),
     );
+  }
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text(StringsManager.likes.tr(),
+            style: Theme.of(context).textTheme.bodyText1),
+      );
   }
 }

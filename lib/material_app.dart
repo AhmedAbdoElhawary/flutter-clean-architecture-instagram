@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
         splash: Lottie.asset('assets/splash_gif/instagram.json'),
         nextScreen: myId == null
             ? LoginPage(sharePrefs: widget.sharePrefs)
-            : GetMyPersonalId(myPersonalId: myId!),
+            : GetMyPersonalInfo(myPersonalId: myId!),
       ),
     );
   }

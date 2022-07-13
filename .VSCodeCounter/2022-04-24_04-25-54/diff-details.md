@@ -95,7 +95,7 @@ Total : 107 files,  1675 codes, 505 comments, 176 blanks, all 2356 lines
 | [lib/presentation/pages/texting_page.dart](/lib/presentation/pages/texting_page.dart) | Dart | -357 | -13 | -23 | -393 |
 | [lib/presentation/pages/ttry.dart](/lib/presentation/pages/ttry.dart) | Dart | -133 | -11 | -22 | -166 |
 | [lib/presentation/pages/videos_page.dart](/lib/presentation/pages/video/videos_page.dart) | Dart | 82 | -14 | 7 | 75 |
-| [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/main_screen.dart) | Dart | 13 | 0 | -1 | 12 |
+| [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/mobile_screen_layout.dart) | Dart | 13 | 0 | -1 | 12 |
 | [lib/presentation/widgets/audio_recorder_view.dart](/lib/presentation/widgets/audio_recorder_view.dart) | Dart | 104 | 0 | 23 | 127 |
 | [lib/presentation/widgets/circle_avatar_name.dart](/lib/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart) | Dart | 3 | 0 | 0 | 3 |
 | [lib/presentation/widgets/circle_avatar_of_profile_image.dart](/lib/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart) | Dart | -3 | 0 | 0 | -3 |

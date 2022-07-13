@@ -129,8 +129,8 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
             customPostsInfo.insert(0, widget.postClickedInfo);
             Navigator.of(context).push(CupertinoPageRoute(
               builder: (context) => Scaffold(
-                appBar: CustomAppBar.oneTitleAppBar(
-                    context, widget.isThatProfile?StringsManager.posts.tr():StringsManager.explore.tr()),
+                appBar:isThatMobile? CustomAppBar.oneTitleAppBar(
+                    context, widget.isThatProfile?StringsManager.posts.tr():StringsManager.explore.tr()):null,
                 body: CustomPostsDisplay(
                   postsInfo: widget.postsInfo,
                 ),

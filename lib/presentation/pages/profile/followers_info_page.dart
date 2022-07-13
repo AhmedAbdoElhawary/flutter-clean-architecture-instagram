@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/show_me_the_users.dart';
@@ -31,24 +32,7 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
       length: 2,
       initialIndex: widget.initialIndex,
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Theme.of(context).primaryColor,
-          bottom: TabBar(
-            unselectedLabelColor: ColorManager.grey,
-            indicatorColor: Theme.of(context).focusColor,
-            indicatorWeight: 1,
-            tabs: [
-              Tab(
-                  icon: buildText(context,
-                      "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr()}")),
-              Tab(
-                  icon: buildText(context,
-                      "${widget.userInfo.followedPeople.length} ${StringsManager.following.tr()}")),
-            ],
-          ),
-          title: buildText(context, widget.userInfo.userName),
-        ),
+        appBar:isThatMobile? buildAppBar(context):null,
         body: ValueListenableBuilder(
           valueListenable: rebuildUsersInfo,
           builder: (context, bool rebuildValue, child) =>
@@ -87,6 +71,27 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
         ),
       ),
     );
+  }
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(context).primaryColor,
+        bottom: TabBar(
+          unselectedLabelColor: ColorManager.grey,
+          indicatorColor: Theme.of(context).focusColor,
+          indicatorWeight: 1,
+          tabs: [
+            Tab(
+                icon: buildText(context,
+                    "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr()}")),
+            Tab(
+                icon: buildText(context,
+                    "${widget.userInfo.followedPeople.length} ${StringsManager.following.tr()}")),
+          ],
+        ),
+        title: buildText(context, widget.userInfo.userName),
+      );
   }
 
   Text buildText(BuildContext context, String text) {

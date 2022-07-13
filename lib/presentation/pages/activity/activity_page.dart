@@ -27,9 +27,9 @@ class ActivityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar:isThatMobile? AppBar(
         title: const Text('Activity'),
-      ),
+      ):null,
       body: BlocBuilder<FirestoreUserInfoCubit, FirestoreUserInfoState>(
         bloc: FirestoreUserInfoCubit.get(context)
           ..getAllUnFollowersUsers(myPersonalInfo),

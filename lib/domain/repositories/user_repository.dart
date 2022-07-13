@@ -8,7 +8,8 @@ abstract class FirestoreUserRepository {
   Future<void> addNewUser(UserPersonalInfo newUserInfo);
 
   Future<UserPersonalInfo> getPersonalInfo(String userId);
-  Future<List<UserPersonalInfo>> getAllUnFollowersUsers(UserPersonalInfo myPersonalInfo);
+  Future<List<UserPersonalInfo>> getAllUnFollowersUsers(
+      UserPersonalInfo myPersonalInfo);
 
   Future<UserPersonalInfo?> getUserFromUserName({required String userName});
   Future<UserPersonalInfo> updateUserPostsInfo(

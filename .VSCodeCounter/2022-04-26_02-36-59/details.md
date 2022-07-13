@@ -217,7 +217,7 @@ Total : 289 files,  14210 codes, 750 comments, 1934 blanks, all 16894 lines
 | [lib/presentation/pages/story_config.dart](/lib/presentation/pages/story/create_story.dart) | Dart | 134 | 2 | 12 | 148 |
 | [lib/presentation/pages/videos_page.dart](/lib/presentation/pages/video/videos_page.dart) | Dart | 284 | 0 | 19 | 303 |
 | [lib/presentation/pages/which_profile_page.dart](/lib/presentation/widgets/belong_to/profile_w/which_profile_page.dart) | Dart | 35 | 0 | 5 | 40 |
-| [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/main_screen.dart) | Dart | 97 | 0 | 6 | 103 |
+| [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/mobile_screen_layout.dart) | Dart | 97 | 0 | 6 | 103 |
 | [lib/presentation/widgets/animated_dialog.dart](/lib/presentation/widgets/belong_to/time_line_w/animated_dialog.dart) | Dart | 40 | 0 | 8 | 48 |
 | [lib/presentation/widgets/audio_recorder_view.dart](/lib/presentation/widgets/audio_recorder_view.dart) | Dart | 104 | 0 | 23 | 127 |
 | [lib/presentation/widgets/circle_avatar_name.dart](/lib/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart) | Dart | 24 | 0 | 4 | 28 |
@@ -284,7 +284,7 @@ Total : 289 files,  14210 codes, 750 comments, 1934 blanks, all 16894 lines
 | [lib/presentation/widgets/story_page.dart](/lib/presentation/widgets/story_page.dart) | Dart | 296 | 9 | 28 | 333 |
 | [lib/presentation/widgets/toast_show.dart](/lib/core/functions/toast_show.dart) | Dart | 22 | 0 | 1 | 23 |
 | [lib/presentation/widgets/user_profile_page.dart](/lib/presentation/pages/profile/user_profile_page.dart) | Dart | 241 | 1 | 16 | 258 |
-| [lib/responsive_layout.dart](/lib/presentation/widgets/belong_to/main_w/responsive_layout.dart) | Dart | 17 | 0 | 4 | 21 |
+| [lib/responsive_layout.dart](/lib/presentation/screens/responsive_layout.dart) | Dart | 17 | 0 | 4 | 21 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 79 | 57 | 22 | 158 |
 | [test/widget_test.dart](/test/widget_test.dart) | Dart | 14 | 10 | 7 | 31 |
 | [web/index.html](/web/index.html) | HTML | 80 | 18 | 7 | 105 |

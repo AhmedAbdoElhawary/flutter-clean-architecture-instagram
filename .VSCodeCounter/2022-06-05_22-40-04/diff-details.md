@@ -270,7 +270,7 @@ Total : 611 files,  3332 codes, 191 comments, 256 blanks, all 3779 lines
 | [lib/presentation/pages/time_line/my_own_time_line/update_post_info.dart](/lib/presentation/pages/time_line/my_own_time_line/update_post_info.dart) | Dart | 200 | 0 | 11 | 211 |
 | [lib/presentation/pages/video/play_this_video.dart](/lib/presentation/pages/video/play_this_video.dart) | Dart | 73 | 0 | 9 | 82 |
 | [lib/presentation/pages/video/videos_page.dart](/lib/presentation/pages/video/videos_page.dart) | Dart | 351 | 0 | 20 | 371 |
-| [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/main_screen.dart) | Dart | 124 | 0 | 8 | 132 |
+| [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/mobile_screen_layout.dart) | Dart | 124 | 0 | 8 | 132 |
 | [lib/presentation/widgets/belong_to/comments_w/comment_box.dart](/lib/presentation/widgets/belong_to/comments_w/comment_box.dart) | Dart | 190 | 0 | 11 | 201 |
 | [lib/presentation/widgets/belong_to/comments_w/commentator.dart](/lib/presentation/widgets/belong_to/comments_w/commentator.dart) | Dart | 346 | 1 | 8 | 355 |
 | [lib/presentation/widgets/belong_to/messages_w/record_view.dart](/lib/presentation/widgets/belong_to/messages_w/record_view.dart) | Dart | 116 | 0 | 11 | 127 |
@@ -312,7 +312,7 @@ Total : 611 files,  3332 codes, 191 comments, 256 blanks, all 3779 lines
 | [lib/presentation/widgets/global/custom_widgets/custom_posts_display.dart](/lib/presentation/widgets/global/custom_widgets/custom_posts_display.dart) | Dart | 126 | 0 | 13 | 139 |
 | [lib/presentation/widgets/global/custom_widgets/custom_text_field.dart](/lib/presentation/widgets/global/custom_widgets/custom_text_field.dart) | Dart | 42 | 0 | 5 | 47 |
 | [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/global/others/multi_bloc_provider.dart) | Dart | 77 | 1 | 4 | 82 |
-| [lib/responsive_layout.dart](/lib/presentation/widgets/belong_to/main_w/responsive_layout.dart) | Dart | 17 | 1 | 4 | 22 |
+| [lib/responsive_layout.dart](/lib/presentation/screens/responsive_layout.dart) | Dart | 17 | 1 | 4 | 22 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 88 | 57 | 19 | 164 |
 | [test/widget_test.dart](/test/widget_test.dart) | Dart | 12 | 10 | 7 | 29 |
 | [web/index.html](/web/index.html) | HTML | 80 | 18 | 7 | 105 |

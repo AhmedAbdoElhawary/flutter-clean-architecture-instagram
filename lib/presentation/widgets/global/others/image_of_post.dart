@@ -79,13 +79,7 @@ class _ImageOfPostState extends State<ImageOfPost>
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final bodyHeight = mediaQuery.size.height -
-        AppBar().preferredSize.height -
-        mediaQuery.padding.top;
-    return thePostsOfHomePage(
-      bodyHeight: bodyHeight,
-    );
+    return thePostsOfHomePage(bodyHeight: 700);
   }
 
   pushToProfilePage(Post postInfo) =>
@@ -93,9 +87,7 @@ class _ImageOfPostState extends State<ImageOfPost>
         builder: (context) => WhichProfilePage(userId: postInfo.publisherId),
       ));
 
-  Widget thePostsOfHomePage({
-    required double bodyHeight,
-  }) {
+  Widget thePostsOfHomePage({required double bodyHeight}) {
     return SizedBox(
       width: double.infinity,
       child: ValueListenableBuilder(
@@ -454,7 +446,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                         myPersonalId: myPersonalId);
                     WidgetsBinding.instance.addPostFrameCallback((_) async {
                       setState(() {
-                        if(widget.reLoadData!= null) {
+                        if (widget.reLoadData != null) {
                           widget.reLoadData!();
                         }
                         widget.postsInfo.value.remove(postInfoValue);
@@ -653,87 +645,6 @@ class _ImageOfPostState extends State<ImageOfPost>
             builder: (context) => CommentsPage(postInfo: postInfoValue),
           ));
         },
-      ),
-    );
-  }
-
-  void _showAddCommentModal() {
-    double media = MediaQuery.of(context).viewInsets.bottom;
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          color: Theme.of(context).primaryColor,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: media),
-            child: ValueListenableBuilder(
-              valueListenable: commentTextController,
-              builder: (context, TextEditingController textValue, child) =>
-                  CommentBox(
-                isThatCommentScreen: false,
-                postInfo: widget.postInfo.value,
-                textController: textValue,
-                focusNode: FocusNode(),
-                userPersonalInfo: widget.postInfo.value.publisherInfo!,
-                makeSelectedCommentNullable: makeSelectedCommentNullable,
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  makeSelectedCommentNullable(bool isThatComment) {
-    widget.postInfo.value.comments.add(" ");
-    commentTextController.value.text = '';
-    Navigator.maybePop(context);
-  }
-
-  Widget buildCommentBox(double bodyHeight) {
-    return GestureDetector(
-      onTap: _showAddCommentModal,
-      child: ValueListenableBuilder(
-        valueListenable: commentTextController,
-        builder: (context, TextEditingController textValue, child) => Row(
-          crossAxisAlignment: textValue.text.length < 70
-              ? CrossAxisAlignment.center
-              : CrossAxisAlignment.end,
-          children: [
-            CircleAvatarOfProfileImage(
-              userInfo: widget.postInfo.value.publisherInfo!,
-              bodyHeight: bodyHeight * .5,
-            ),
-            const SizedBox(
-              width: 12.0,
-            ),
-            Expanded(
-              child: GestureDetector(
-                child: Text(
-                  StringsManager.addComment.tr(),
-                  style: TextStyle(
-                      color: Theme.of(context).bottomAppBarColor, fontSize: 14),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                commentTextController.value.text = '❤';
-                _showAddCommentModal();
-              },
-              child: const Text('❤'),
-            ),
-            const SizedBox(width: 8),
-            GestureDetector(
-              onTap: () {
-                commentTextController.value.text = '🙌';
-                _showAddCommentModal();
-              },
-              child: const Text('🙌'),
-            ),
-            const SizedBox(width: 8),
-          ],
-        ),
       ),
     );
   }

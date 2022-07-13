@@ -90,7 +90,7 @@ class _ChattingPageState extends State<ChattingPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar.chattingAppBar(widget.userInfo, context),
+      appBar:isThatMobile? CustomAppBar.chattingAppBar(widget.userInfo, context):null,
       body: GestureDetector(
           onTap: () {
             unSend.value = false;

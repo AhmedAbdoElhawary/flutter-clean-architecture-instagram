@@ -6,6 +6,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/time_line/all_user_time_line/search_about_user.dart';
@@ -27,7 +28,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
       onWillPop: () async => true,
       child: Scaffold(
         body: blocBuilder(),
-        appBar: searchAppBar(context),
+        appBar:isThatMobile? searchAppBar(context):null,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +16,7 @@ import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
-import 'package:instagram/presentation/screens/main_screen.dart';
+import 'package:instagram/presentation/screens/mobile_screen_layout.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 
 class CreatePostPage extends StatefulWidget {
@@ -47,7 +48,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       create: (context) => injector<PostCubit>(),
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        appBar: appBar(context),
+        appBar:isThatMobile? appBar(context):null,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -191,12 +192,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
           await userCubit.updateUserPostsInfo(
               userId: personalInfo.userId, postId: postCubit.postId);
           await postCubit.getPostsInfo(
-              postsIds: personalInfo.posts,
-              isThatMyPosts: true);
+              postsIds: personalInfo.posts, isThatMyPosts: true);
           isItDone.value = true;
         }
       });
-      Get.offAll(MainScreen(myPersonalId));
+      Get.offAll(MobileScreenLayout(myPersonalId));
     });
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/widgets/belong_to/comments_w/build_comments.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
@@ -16,8 +17,8 @@ class GetsPostInfoAndDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar.oneTitleAppBar(context, appBarText,
-          logoOfInstagram: true),
+      appBar:isThatMobile? CustomAppBar.oneTitleAppBar(context, appBarText,
+          logoOfInstagram: true):null,
       body: BlocBuilder<PostCubit, PostState>(
         bloc: PostCubit.get(context)
           ..getPostsInfo(postsIds: [postId], isThatMyPosts: false),

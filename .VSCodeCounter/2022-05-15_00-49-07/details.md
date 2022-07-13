@@ -254,7 +254,7 @@ Total : 294 files,  15567 codes, 654 comments, 1970 blanks, all 18191 lines
 | [lib/presentation/pages/time_line/my_own_time_line/home_page.dart](/lib/presentation/pages/time_line/my_own_time_line/home_page.dart) | Dart | 404 | 15 | 31 | 450 |
 | [lib/presentation/pages/video/play_this_video.dart](/lib/presentation/pages/video/play_this_video.dart) | Dart | 65 | 2 | 10 | 77 |
 | [lib/presentation/pages/video/videos_page.dart](/lib/presentation/pages/video/videos_page.dart) | Dart | 309 | 0 | 20 | 329 |
-| [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/main_screen.dart) | Dart | 112 | 0 | 7 | 119 |
+| [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/mobile_screen_layout.dart) | Dart | 112 | 0 | 7 | 119 |
 | [lib/presentation/widgets/belong_to/comments_w/add_comment.dart](/lib/presentation/widgets/belong_to/comments_w/add_comment.dart) | Dart | 72 | 11 | 9 | 92 |
 | [lib/presentation/widgets/belong_to/comments_w/comment_box.dart](/lib/presentation/widgets/belong_to/comments_w/comment_box.dart) | Dart | 183 | 0 | 10 | 193 |
 | [lib/presentation/widgets/belong_to/comments_w/commentator.dart](/lib/presentation/widgets/belong_to/comments_w/commentator.dart) | Dart | 333 | 1 | 10 | 344 |
@@ -289,7 +289,7 @@ Total : 294 files,  15567 codes, 654 comments, 1970 blanks, all 18191 lines
 | [lib/presentation/widgets/global/image_display.dart](/lib/presentation/widgets/global/custom_widgets/custom_network_image_display.dart) | Dart | 74 | 0 | 7 | 81 |
 | [lib/presentation/widgets/multi_bloc_provider.dart](/lib/presentation/widgets/global/others/multi_bloc_provider.dart) | Dart | 77 | 1 | 4 | 82 |
 | [lib/presentation/widgets/try.dart](/lib/presentation/widgets/global/custom_widgets/custom_gallery_display.dart) | Dart | 947 | 23 | 110 | 1,080 |
-| [lib/responsive_layout.dart](/lib/presentation/widgets/belong_to/main_w/responsive_layout.dart) | Dart | 17 | 1 | 4 | 22 |
+| [lib/responsive_layout.dart](/lib/presentation/screens/responsive_layout.dart) | Dart | 17 | 1 | 4 | 22 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 104 | 57 | 22 | 183 |
 | [test/widget_test.dart](/test/widget_test.dart) | Dart | 12 | 11 | 6 | 29 |
 | [web/index.html](/web/index.html) | HTML | 80 | 18 | 7 | 105 |

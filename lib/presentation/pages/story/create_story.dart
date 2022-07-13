@@ -13,7 +13,7 @@ import 'package:instagram/data/models/story.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instagram/presentation/screens/main_screen.dart';
+import 'package:instagram/presentation/screens/mobile_screen_layout.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -116,7 +116,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
                 await SharedPreferences.getInstance();
             sharePrefs.remove(myPersonalId);
             Navigator.of(context).pushAndRemoveUntil(
-              CupertinoPageRoute(builder: (_) => MainScreen(myPersonalId)),
+              CupertinoPageRoute(builder: (_) => MobileScreenLayout(myPersonalId)),
               (route) => false,
             );
           });

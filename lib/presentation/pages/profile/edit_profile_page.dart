@@ -8,6 +8,7 @@ import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -86,31 +87,36 @@ class _EditProfilePageState extends State<EditProfilePage> {
       FirestoreUserInfoCubit updateUserCubit) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      appBar: AppBar(
-          iconTheme: IconThemeData(color: Theme.of(context).focusColor),
-          elevation: 0,
-          backgroundColor: Theme.of(context).primaryColor,
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: SvgPicture.asset(
-                IconsAssets.cancelIcon,
-                color: Theme.of(context).focusColor,
-                height: 27,
-              )),
-          title: Text(
-            StringsManager.editProfile.tr(),
-            style: getMediumStyle(
-                color: Theme.of(context).focusColor, fontSize: 20),
-          ),
-          actions: actionsWidgets(getUserState, updateUserCubit)),
+      appBar:isThatMobile? buildAppBar(context, getUserState, updateUserCubit):null,
       body: Column(
         children: [
           circleAvatarAndTextFields(context, updateUserCubit),
         ],
       ),
     );
+  }
+
+  AppBar buildAppBar(BuildContext context, FirestoreUserInfoState getUserState,
+      FirestoreUserInfoCubit updateUserCubit) {
+    return AppBar(
+        iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+        elevation: 0,
+        backgroundColor: Theme.of(context).primaryColor,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: SvgPicture.asset(
+              IconsAssets.cancelIcon,
+              color: Theme.of(context).focusColor,
+              height: 27,
+            )),
+        title: Text(
+          StringsManager.editProfile.tr(),
+          style:
+              getMediumStyle(color: Theme.of(context).focusColor, fontSize: 20),
+        ),
+        actions: actionsWidgets(getUserState, updateUserCubit));
   }
 
   List<Widget> actionsWidgets(
