@@ -207,9 +207,10 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Future<List<UserPersonalInfo>> getAllUnFollowersUsers(UserPersonalInfo myPersonalInfo) {
+  Future<List<UserPersonalInfo>> getAllUnFollowersUsers(
+      UserPersonalInfo myPersonalInfo) {
     try {
-      return FirestoreUser.getAllUnFollowersUsers( myPersonalInfo);
+      return FirestoreUser.getAllUnFollowersUsers(myPersonalInfo);
     } catch (e) {
       return Future.error(e.toString());
     }
