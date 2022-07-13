@@ -35,29 +35,7 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
         mediaQuery.padding.top;
 
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 50,
-        iconTheme: IconThemeData(color: Theme.of(context).focusColor),
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Container(
-          width: double.infinity,
-          height: 35,
-          decoration: BoxDecoration(
-              color: Theme.of(context).shadowColor,
-              borderRadius: BorderRadius.circular(10)),
-          child: TextFormField(
-            style: Theme.of(context).textTheme.bodyText1,
-            controller: _textController.value,
-            textAlign: TextAlign.start,
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsetsDirectional.all(12.5),
-                hintText: StringsManager.search.tr(),
-                hintStyle: Theme.of(context).textTheme.headline1,
-                border: InputBorder.none),
-            onChanged: (_) => setState(() {}),
-          ),
-        ),
-      ),
+      appBar:isThatMobile? buildAppBar(context):null,
       body: BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
         bloc: BlocProvider.of<SearchAboutUserBloc>(context)
           ..add(FindSpecificUser(_textController.value.text)),
@@ -129,6 +107,32 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
             return buildCircularProgress();
           }
         },
+      ),
+    );
+  }
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+      toolbarHeight: 50,
+      iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+      backgroundColor: Theme.of(context).primaryColor,
+      title: Container(
+        width: double.infinity,
+        height: 35,
+        decoration: BoxDecoration(
+            color: Theme.of(context).shadowColor,
+            borderRadius: BorderRadius.circular(10)),
+        child: TextFormField(
+          style: Theme.of(context).textTheme.bodyText1,
+          controller: _textController.value,
+          textAlign: TextAlign.start,
+          decoration: InputDecoration(
+              contentPadding: const EdgeInsetsDirectional.all(12.5),
+              hintText: StringsManager.search.tr(),
+              hintStyle: Theme.of(context).textTheme.headline1,
+              border: InputBorder.none),
+          onChanged: (_) => setState(() {}),
+        ),
       ),
     );
   }
