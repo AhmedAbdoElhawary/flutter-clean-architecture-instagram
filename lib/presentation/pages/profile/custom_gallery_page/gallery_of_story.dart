@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/pages/story/create_story.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/fetching_media_gallery.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -118,7 +119,7 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
   Scaffold defaultTabController() {
     return Scaffold(
       backgroundColor: ColorManager.black,
-      appBar: appBar(),
+      appBar: isThatMobile ? appBar() : null,
       body: isImagesReady ? gridView() : loadingWidget(),
     );
   }
