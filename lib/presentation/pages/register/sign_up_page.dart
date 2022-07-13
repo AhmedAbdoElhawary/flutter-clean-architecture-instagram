@@ -5,9 +5,12 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/domain/entities/unregistered_user.dart';
 import 'package:instagram/core/utility/injector.dart';
-import 'package:instagram/presentation/screens/main_screen.dart';
+import 'package:instagram/presentation/screens/mobile_screen_layout.dart';
+import 'package:instagram/presentation/screens/responsive_layout.dart';
+import 'package:instagram/presentation/screens/web_screen_layout.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/register_widgets.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
 import '../../../data/models/user_personal_info.dart';
@@ -33,6 +36,12 @@ class _SignUpPageState extends State<SignUpPage> {
   void didChangeDependencies() {
     _appPreferences.getLocal().then((local) => {context.setLocale(local)});
     super.didChangeDependencies();
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    isToastShowed.dispose();
   }
 
   @override
@@ -81,7 +90,13 @@ class _SignUpPageState extends State<SignUpPage> {
 
   moveToMain(CubitAuthConfirmed authState) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Get.offAll(MainScreen(authState.user.uid));
+     myPersonalId= authState.user.uid;
+      Get.offAll(
+        ResponsiveLayout(
+          mobileScreenLayout: MobileScreenLayout(myPersonalId),
+          webScreenLayout: const WebScreenLayout(),
+        ),
+      );
     });
   }
 
