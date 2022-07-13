@@ -59,7 +59,7 @@ class VideosPageState extends State<VideosPage> {
                   if (state is CubitAllPostsLoaded) {
                     return Scaffold(
                       extendBodyBehindAppBar: true,
-                      appBar: appBar(),
+                      appBar:isThatMobile? appBar():null,
                       body: buildBody(state.allPostInfo),
                     );
                   } else if (state is CubitPostFailed) {
@@ -358,7 +358,7 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
 
   goToCommentPage(Post videoInfo) async {
     await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-        builder: (context) => CommentsPage( postInfo: videoInfo),
+        builder: (context) => CommentsPage(postInfo: videoInfo),
         maintainState: false));
     widget.stopVideo.value = false;
   }
