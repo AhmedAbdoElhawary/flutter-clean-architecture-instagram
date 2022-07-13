@@ -5,8 +5,7 @@ abstract class FirestorePostRepository {
   Future<String> createPost(
       {required Post postInfo, required List<File> files});
   Future<List<Post>> getPostsInfo(
-      {required List<dynamic> postsIds,
-      required int lengthOfCurrentList});
+      {required List<dynamic> postsIds, required int lengthOfCurrentList});
   Future<List<Post>> getAllPostsInfo();
   Future<List> getSpecificUsersPosts(List<dynamic> usersIds);
   Future<void> putLikeOnThisPost(
