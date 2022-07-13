@@ -122,7 +122,6 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
   Widget posts(int index, Post postInfo, double bodyHeight, bool playTheVideo) {
     return ImageOfPostForTimeLine(
       postInfo: ValueNotifier(postInfo),
-      bodyHeight: bodyHeight,
       indexOfPost: index,
       playTheVideo: playTheVideo,
       postsInfo: postsInfo,
