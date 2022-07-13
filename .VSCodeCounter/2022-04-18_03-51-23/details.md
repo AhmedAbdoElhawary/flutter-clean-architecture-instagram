@@ -178,7 +178,7 @@ Total : 207 files,  8107 codes, 512 comments, 1158 blanks, all 9777 lines
 | [lib/presentation/pages/ttry.dart](/lib/presentation/pages/ttry.dart) | Dart | 133 | 11 | 22 | 166 |
 | [lib/presentation/pages/videos_page.dart](/lib/presentation/pages/video/videos_page.dart) | Dart | 202 | 14 | 12 | 228 |
 | [lib/presentation/pages/which_profile_page.dart](/lib/presentation/widgets/belong_to/profile_w/which_profile_page.dart) | Dart | 35 | 0 | 5 | 40 |
-| [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/main_screen.dart) | Dart | 86 | 0 | 7 | 93 |
+| [lib/presentation/screens/main_screen.dart](/lib/presentation/screens/mobile_screen_layout.dart) | Dart | 86 | 0 | 7 | 93 |
 | [lib/presentation/widgets/animated_dialog.dart](/lib/presentation/widgets/belong_to/time_line_w/animated_dialog.dart) | Dart | 40 | 0 | 8 | 48 |
 | [lib/presentation/widgets/circle_avatar_name.dart](/lib/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart) | Dart | 21 | 0 | 4 | 25 |
 | [lib/presentation/widgets/circle_avatar_of_profile_image.dart](/lib/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart) | Dart | 51 | 0 | 4 | 55 |
@@ -202,7 +202,7 @@ Total : 207 files,  8107 codes, 512 comments, 1158 blanks, all 9777 lines
 | [lib/presentation/widgets/toast_show.dart](/lib/core/functions/toast_show.dart) | Dart | 22 | 0 | 1 | 23 |
 | [lib/presentation/widgets/try.dart](/lib/presentation/widgets/story_page.dart) | Dart | 0 | 52 | 2 | 54 |
 | [lib/presentation/widgets/user_profile_page.dart](/lib/presentation/pages/profile/user_profile_page.dart) | Dart | 244 | 1 | 17 | 262 |
-| [lib/responsive_layout.dart](/lib/presentation/widgets/belong_to/main_w/responsive_layout.dart) | Dart | 17 | 0 | 4 | 21 |
+| [lib/responsive_layout.dart](/lib/presentation/screens/responsive_layout.dart) | Dart | 17 | 0 | 4 | 21 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | 62 | 57 | 24 | 143 |
 | [test/widget_test.dart](/test/widget_test.dart) | Dart | 14 | 10 | 7 | 31 |
 | [web/index.html](/web/index.html) | HTML | 80 | 18 | 7 | 105 |
