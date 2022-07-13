@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/widgets/belong_to/comments_w/build_comments.dart';
 
@@ -19,7 +20,7 @@ class _CommentsPageState extends State<CommentsPage> {
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return Scaffold(
-        appBar: appBar(context),
+        appBar: isThatMobile ? appBar(context) : null,
         body: BuildComments(postInfo: widget.postInfo),
       );
     });
@@ -36,5 +37,4 @@ class _CommentsPageState extends State<CommentsPage> {
       ),
     );
   }
-
 }
