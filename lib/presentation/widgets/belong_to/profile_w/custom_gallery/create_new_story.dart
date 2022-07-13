@@ -39,9 +39,9 @@ class _CreateNewStoryState extends State<CreateNewStory> {
         : details.selectedFile;
     await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
         builder: (context) => CreateStoryPage(
-          storyImage: file,
-          isThatImage: details.isThatImage,
-        ),
+              storyImage: file,
+              isThatImage: details.isThatImage,
+            ),
         maintainState: false));
   }
 }
