@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
@@ -24,21 +25,21 @@ import '../../../../data/models/user_personal_info.dart';
 import '../../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../../../widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomePage extends StatefulWidget {
   final String userId;
   final bool playVideo;
 
-  const HomeScreen({
+  const HomePage({
     Key? key,
     required this.userId,
     required this.playVideo,
   }) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomePageState extends State<HomePage> {
   ValueNotifier<bool> isThatEndOfList = ValueNotifier(false);
   UserPersonalInfo? personalInfo;
   ValueNotifier<bool> reLoadData = ValueNotifier(false);
@@ -86,9 +87,10 @@ class _HomeScreenState extends State<HomeScreen> {
       getData(0);
       rebuild = false;
     }
+
     return Scaffold(
-      appBar: CustomAppBar.basicAppBar(context),
-      body: blocBuilder(bodyHeight),
+      appBar: isThatMobile ? CustomAppBar.basicAppBar(context) : null,
+      body: Center(child: SizedBox(width: isThatMobile?null:450,child: blocBuilder(bodyHeight))),
     );
   }
 
@@ -176,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (index == 0) ...[
-          storiesLines(bodyHeight),
+          storiesLines(500),
           customDivider(),
         ] else ...[
           divider(),
@@ -203,10 +205,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget posts(int index, double bodyHeight, bool playTheVideo) {
     return ValueListenableBuilder(
       valueListenable: postsInfo,
-      builder: (context, List<Post> postsInfoValue, child) => ImageOfPostForTimeLine(
+      builder: (context, List<Post> postsInfoValue, child) =>
+          ImageOfPostForTimeLine(
         postInfo: ValueNotifier(postsInfoValue[index]),
         postsInfo: postsInfo,
-        bodyHeight: bodyHeight,
         playTheVideo: playTheVideo,
         indexOfPost: index,
         reLoadData: reloadTheData,
