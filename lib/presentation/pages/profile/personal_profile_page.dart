@@ -16,6 +16,7 @@ import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
@@ -98,7 +99,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           builder: (context, state) {
             if (state is CubitMyPersonalInfoLoaded) {
               return Scaffold(
-                appBar: appBar(state.userPersonalInfo.userName),
+                appBar:isThatMobile? appBar(state.userPersonalInfo.userName):null,
                 body: ProfilePage(
                   isThatMyPersonalId: true,
                   getData: getData,
@@ -302,7 +303,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
               color: Theme.of(context).primaryColor,
               border: Border.all(
                   color: Theme.of(context).bottomAppBarColor, width: 1.0),
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(20.0),
             ),
             child: Center(
               child: Text(
@@ -336,7 +337,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   Widget createVideo() {
     return InkWell(
-        onTap: () async => createNewPost(isThatImage: false),
+        onTap: () async => createNewPost(),
         child: createSizedBox(StringsManager.reel.tr(),
             nameOfPath: IconsAssets.videoIcon));
   }
@@ -352,22 +353,24 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     rebuildUserInfo.value = true;
   }
 
-  createNewPost({bool isThatImage = true}) async {
+  createNewPost() async {
     Navigator.maybePop(context);
-    await customGalleryDisplay(isThatImage: isThatImage);
+    await customGalleryDisplay();
     rebuildUserInfo.value = true;
   }
 
-  Future<void> customGalleryDisplay({bool isThatImage = true}) async {
-    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-        builder: (context) {
-          return CustomGallery.instagramDisplay(
-            tabsNames: tapsNames(),
-            appTheme: appTheme(context),
-            moveToPage: moveToCreatePostPage,
-          );
-        },
-        maintainState: false));
+  Future<void> customGalleryDisplay() async {
+    await Navigator.of(context, rootNavigator: true).push(
+      CupertinoPageRoute(
+          builder: (context) {
+            return CustomGallery.instagramDisplay(
+              tabsNames: tapsNames(),
+              appTheme: appTheme(context),
+              moveToPage: moveToCreatePostPage,
+            );
+          },
+          maintainState: false),
+    );
   }
 
   Future<void> moveToCreatePostPage(SelectedImageDetails details) async {
