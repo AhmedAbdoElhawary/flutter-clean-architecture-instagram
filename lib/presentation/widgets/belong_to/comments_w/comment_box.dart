@@ -112,23 +112,20 @@ class _CommentBoxState extends State<CommentBox> {
                   child: const Text('🙌'),
                 ),
               ] else ...[
-                BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
-                    builder: (context1, state) {
-                  return InkWell(
-                    onTap: () {
-                      if (widget.textController.text.isNotEmpty) {
-                        postTheComment(widget.userPersonalInfo);
-                      }
-                    },
-                    child: Text(
-                      StringsManager.post.tr(),
-                      style: getNormalStyle(
-                          color: widget.textController.text.isNotEmpty
-                              ? ColorManager.blue
-                              : ColorManager.lightBlue),
-                    ),
-                  );
-                })
+                InkWell(
+                  onTap: () {
+                    if (widget.textController.text.isNotEmpty) {
+                      postTheComment(widget.userPersonalInfo);
+                    }
+                  },
+                  child: Text(
+                    StringsManager.post.tr(),
+                    style: getNormalStyle(
+                        color: widget.textController.text.isNotEmpty
+                            ? ColorManager.blue
+                            : ColorManager.lightBlue),
+                  ),
+                ),
               ],
             ],
           ),

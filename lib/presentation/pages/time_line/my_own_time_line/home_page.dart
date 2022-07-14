@@ -90,7 +90,10 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: isThatMobile ? CustomAppBar.basicAppBar(context) : null,
-      body: Center(child: SizedBox(width: isThatMobile?null:450,child: blocBuilder(bodyHeight))),
+      body: Center(
+          child: SizedBox(
+              width: isThatMobile ? null : 450,
+              child: blocBuilder(bodyHeight))),
     );
   }
 
@@ -179,13 +182,13 @@ class _HomePageState extends State<HomePage> {
       children: [
         if (index == 0) ...[
           storiesLines(500),
-          customDivider(),
+          if (isThatMobile) customDivider(),
         ] else ...[
-          divider(),
+          if (isThatMobile) divider(),
         ],
         posts(index, bodyHeight, playTheVideo),
         if (isThatEndOfList.value && index == postsIds.length - 1) ...[
-          divider(),
+          if (isThatMobile) divider(),
           const AllCatchUpIcon(),
         ]
       ],
@@ -203,7 +206,7 @@ class _HomePageState extends State<HomePage> {
       height: 0.3);
 
   Widget posts(int index, double bodyHeight, bool playTheVideo) {
-    return ValueListenableBuilder(
+    Widget buildPost = ValueListenableBuilder(
       valueListenable: postsInfo,
       builder: (context, List<Post> postsInfoValue, child) =>
           ImageOfPostForTimeLine(
@@ -214,6 +217,9 @@ class _HomePageState extends State<HomePage> {
         reLoadData: reloadTheData,
       ),
     );
+    return isThatMobile
+        ? buildPost
+        : roundedContainer(child: buildPost, internalPadding: false,verticalPadding: true);
   }
 
   reloadTheData() {
@@ -280,63 +286,9 @@ class _HomePageState extends State<HomePage> {
         builder: (context, state) {
           if (state is CubitStoriesInfoLoaded) {
             List<UserPersonalInfo> storiesOwnersInfo = state.storiesOwnersInfo;
-            return Padding(
-              padding: const EdgeInsetsDirectional.only(start: 10),
-              child: SizedBox(
-                width: double.infinity,
-                height: bodyHeight * 0.155,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (personalInfo!.stories.isEmpty) ...[
-                        myOwnStory(context, storiesOwnersInfo, bodyHeight),
-                        const SizedBox(width: 12),
-                      ],
-                      ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: storiesOwnersInfo.length,
-                        separatorBuilder: (BuildContext context, int index) =>
-                            const SizedBox(width: 12),
-                        itemBuilder: (BuildContext context, int index) {
-                          UserPersonalInfo publisherInfo =
-                              storiesOwnersInfo[index];
-                          return Hero(
-                            tag: "${publisherInfo.userId.hashCode}",
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context, rootNavigator: true)
-                                    .push(MaterialPageRoute(
-                                  maintainState: false,
-                                  builder: (context) => StoryPage(
-                                      user: publisherInfo,
-                                      hashTag:
-                                          "${publisherInfo.userId.hashCode}",
-                                      storiesOwnersInfo: storiesOwnersInfo),
-                                ));
-                              },
-                              child: CircleAvatarOfProfileImage(
-                                userInfo: publisherInfo,
-                                bodyHeight: bodyHeight * 1.1,
-                                thisForStoriesLine: true,
-                                nameOfCircle: index == 0 &&
-                                        publisherInfo.userId ==
-                                            personalInfo!.userId
-                                    ? StringsManager.yourStory.tr()
-                                    : "",
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
+            Widget stories =
+                buildStories(bodyHeight, context, storiesOwnersInfo);
+            return isThatMobile ? stories : roundedContainer(child: stories);
           } else if (state is CubitStoryFailed) {
             ToastShow.toastStateError(state);
             return Center(
@@ -348,6 +300,85 @@ class _HomePageState extends State<HomePage> {
             return Container();
           }
         },
+      ),
+    );
+  }
+
+  Padding roundedContainer({
+    required Widget child,
+    bool internalPadding = true,
+    bool verticalPadding = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15.0),
+      child: Container(
+        padding: internalPadding||verticalPadding
+            ?  EdgeInsets.symmetric(horizontal:verticalPadding?0: 10, vertical: 15)
+            : null,
+        decoration: BoxDecoration(
+          color: ColorManager.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: ColorManager.lightGrey, width: .5),
+        ),
+        child: child,
+      ),
+    );
+  }
+
+  Padding buildStories(double bodyHeight, BuildContext context,
+      List<UserPersonalInfo> storiesOwnersInfo) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 10),
+      child: SizedBox(
+        width: double.infinity,
+        height: bodyHeight * 0.155,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (personalInfo!.stories.isEmpty) ...[
+                myOwnStory(context, storiesOwnersInfo, bodyHeight),
+                const SizedBox(width: 12),
+              ],
+              ListView.separated(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: storiesOwnersInfo.length,
+                separatorBuilder: (BuildContext context, int index) =>
+                    const SizedBox(width: 12),
+                itemBuilder: (BuildContext context, int index) {
+                  UserPersonalInfo publisherInfo = storiesOwnersInfo[index];
+                  return Hero(
+                    tag: "${publisherInfo.userId.hashCode}",
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true)
+                            .push(MaterialPageRoute(
+                          maintainState: false,
+                          builder: (context) => StoryPage(
+                              user: publisherInfo,
+                              hashTag: "${publisherInfo.userId.hashCode}",
+                              storiesOwnersInfo: storiesOwnersInfo),
+                        ));
+                      },
+                      child: CircleAvatarOfProfileImage(
+                        userInfo: publisherInfo,
+                        bodyHeight: bodyHeight * 1.1,
+                        thisForStoriesLine: true,
+                        nameOfCircle: index == 0 &&
+                                publisherInfo.userId == personalInfo!.userId
+                            ? StringsManager.yourStory.tr()
+                            : "",
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
