@@ -22,7 +22,6 @@ import 'package:instagram/presentation/pages/comments/comments_page.dart';
 import 'package:instagram/presentation/pages/time_line/my_own_time_line/update_post_info.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
-import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_slider.dart';
@@ -317,11 +316,12 @@ class _ImageOfPostState extends State<ImageOfPost>
         Opacity(
           opacity: isHeartAnimation ? 1 : 0,
           child: LikePopupAnimation(
-              isAnimating: isHeartAnimation,
-              duration: const Duration(milliseconds: 700),
-              child: const Icon(Icons.favorite,
-                  color: ColorManager.white, size: 100),
-              onEnd: () => setState(() => isHeartAnimation = false)),
+            isAnimating: isHeartAnimation,
+            duration: const Duration(milliseconds: 700),
+            child: const Icon(Icons.favorite,
+                color: ColorManager.white, size: 100),
+            onEnd: () => setState(() => isHeartAnimation = false),
+          ),
         ),
       ],
     );
@@ -334,7 +334,7 @@ class _ImageOfPostState extends State<ImageOfPost>
   Widget menuButton() {
     return GestureDetector(
       child: SvgPicture.asset(
-        IconsAssets.menuHorizontalIcon,
+        isThatMobile ? IconsAssets.menuHorizontalIcon : IconsAssets.menuIcon,
         color: Theme.of(context).focusColor,
         height: 23,
       ),
