@@ -8,6 +8,7 @@ import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
@@ -53,19 +54,28 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget defaultTabController(double bodyHeight) {
-    return DefaultTabController(
-      length: 3,
-      child: NestedScrollView(
-        headerSliverBuilder: (_, __) {
-          return [
-            SliverList(
-              delegate: SliverChildListDelegate(
-                listOfWidgetsAboveTapBars(widget.userInfo, bodyHeight),
-              ),
-            ),
-          ];
-        },
-        body: tapBar(),
+    return Center(
+      child: SizedBox(
+        width: isThatMobile ? null : 920,
+        child: DefaultTabController(
+          length: 3,
+          child: NestedScrollView(
+            headerSliverBuilder: (_, __) {
+              return [
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    isThatMobile
+                        ? widgetsAboveTapBarsForMobile(
+                            widget.userInfo, bodyHeight)
+                        : widgetsAboveTapBarsForWeb(
+                            widget.userInfo, bodyHeight),
+                  ),
+                ),
+              ];
+            },
+            body: tapBar(),
+          ),
+        ),
       ),
     );
   }
@@ -161,28 +171,170 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   TabBar tabBarIcons() {
+    bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
     return TabBar(
+      unselectedLabelColor: ColorManager.grey,
+      labelColor: isWidthAboveMinimum ? ColorManager.black : ColorManager.blue,
+      labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w100),
+      indicatorSize: isThatMobile ? null : TabBarIndicatorSize.label,
+      isScrollable: isWidthAboveMinimum ? true : false,
+      labelPadding: isWidthAboveMinimum
+          ? const EdgeInsetsDirectional.only(
+              start: 50, end: 50, top: 5, bottom: 3)
+          : null,
+      indicatorWeight: isWidthAboveMinimum ? 2 : 0,
+      indicator: isThatMobile
+          ? null
+          : BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                    color: isWidthAboveMinimum
+                        ? Theme.of(context).focusColor
+                        : ColorManager.transparent,
+                    width: 1.0),
+              ),
+            ),
       tabs: [
-        const Tab(
-            icon: Icon(
-          Icons.grid_on_rounded,
-        )),
         Tab(
-            icon: SvgPicture.asset(
-          IconsAssets.videoIcon,
-          color: Theme.of(context).errorColor,
-          height: 22.5,
-        )),
-        const Tab(
-            icon: Icon(
-          Icons.play_arrow_rounded,
-          size: 38,
-        )),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.grid_on_rounded,
+                size: isWidthAboveMinimum ? 14 : null,
+              ),
+              if (isWidthAboveMinimum) ...[
+                const SizedBox(width: 8),
+                Text(
+                  StringsManager.postsCap.tr(),
+                ),
+              ],
+            ],
+          ),
+        ),
+        Tab(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                IconsAssets.videoIcon,
+                color: Theme.of(context).errorColor,
+                height: isWidthAboveMinimum ? 14 : 22.5,
+              ),
+              if (isWidthAboveMinimum) ...[
+                const SizedBox(width: 8),
+                Text(StringsManager.reels.tr()),
+              ],
+            ],
+          ),
+        ),
+        Tab(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.play_arrow_rounded,
+                size: isWidthAboveMinimum ? 22 : 38,
+              ),
+              if (isWidthAboveMinimum) ...[
+                const SizedBox(width: 8),
+                Text(StringsManager.videos.tr()),
+              ],
+            ],
+          ),
+        ),
       ],
     );
   }
 
-  List<Widget> listOfWidgetsAboveTapBars(
+  widgetsAboveTapBarsForWeb(UserPersonalInfo userInfo, double bodyHeight) {
+    return [
+      Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 30),
+            child: CircleAvatarOfProfileImage(
+              bodyHeight: 1500,
+              userInfo: userInfo,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 40),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      userInfo.userName,
+                      style:TextStyle(color:Theme.of(context).focusColor,fontSize: 25,fontWeight: FontWeight.w100),
+                    ),
+                    const SizedBox(width: 20),
+                    customTransparentButton(),
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Icon(Icons.settings_rounded,
+                          color: ColorManager.black),
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 30.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      personalNumbersInfo(
+                          userInfo.posts, StringsManager.posts.tr(), userInfo),
+                      const SizedBox(width: 20),
+                      personalNumbersInfo(userInfo.followerPeople,
+                          StringsManager.followers.tr(), userInfo),
+                      const SizedBox(width: 20),
+                      personalNumbersInfo(userInfo.followedPeople,
+                          StringsManager.following.tr(), userInfo),
+                    ],
+                  ),
+                ),
+                Text(userInfo.name,
+                    style: Theme.of(context).textTheme.headline2),
+                const SizedBox(height: 5),
+                Text(userInfo.bio,
+                    style: getNormalStyle(
+                        color: Theme.of(context).focusColor, fontSize: 15)),
+                const SizedBox(height: 10),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ];
+  }
+
+  Widget customTransparentButton() {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 7,vertical: 5),
+        decoration: BoxDecoration(
+          color: ColorManager.transparent,
+          border: Border.all(
+            color: ColorManager.lowOpacityGrey,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(3),
+        ),
+        child: Text(
+          StringsManager.editProfile.tr(),
+          style: getMediumStyle(color: ColorManager.black),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> widgetsAboveTapBarsForMobile(
       UserPersonalInfo userInfo, double bodyHeight) {
     return [
       GestureDetector(
@@ -242,44 +394,57 @@ class _ProfilePageState extends State<ProfilePage> {
   Row personalPhotoAndNumberInfo(UserPersonalInfo userInfo, double bodyHeight) {
     String hash = "${userInfo.userId.hashCode}personal";
     return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Hero(
-            tag: hash,
-            child: Padding(
-              padding: const EdgeInsetsDirectional.only(start: 15.0, top: 10),
-              child: CircleAvatarOfProfileImage(
-                  bodyHeight: bodyHeight * 1.45,
-                  userInfo: userInfo,
-                  hashTag: hash),
-            ),
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Hero(
+          tag: hash,
+          child: Padding(
+            padding: const EdgeInsetsDirectional.only(start: 15.0, top: 10),
+            child: CircleAvatarOfProfileImage(
+                bodyHeight: bodyHeight * 1.45,
+                userInfo: userInfo,
+                hashTag: hash),
           ),
-          Expanded(
-            child: Column(
-              children: [
-                Container(height: bodyHeight * .055),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    personalNumbersInfo(
-                        userInfo.posts, StringsManager.posts.tr(), userInfo),
-                    personalNumbersInfo(userInfo.followerPeople,
-                        StringsManager.followers.tr(), userInfo),
-                    personalNumbersInfo(userInfo.followedPeople,
-                        StringsManager.following.tr(), userInfo),
-                  ],
-                ),
-              ],
-            ),
+        ),
+        Expanded(
+          child: Column(
+            children: [
+              Container(height: bodyHeight * .055),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  personalNumbersInfo(
+                      userInfo.posts, StringsManager.posts.tr(), userInfo),
+                  personalNumbersInfo(userInfo.followerPeople,
+                      StringsManager.followers.tr(), userInfo),
+                  personalNumbersInfo(userInfo.followedPeople,
+                      StringsManager.following.tr(), userInfo),
+                ],
+              ),
+            ],
           ),
-        ],);
+        ),
+      ],
+    );
   }
 
   Widget personalNumbersInfo(
       List usersInfo, String text, UserPersonalInfo userInfo) {
     return Builder(builder: (builderContext) {
+      List<Widget> userInfoWidgets = [
+        Text(
+          "${usersInfo.length}",
+          style: getBoldStyle(
+              color: Theme.of(context).focusColor,
+              fontSize: isThatMobile ? 20 : 15),
+        ),
+        if (!isThatMobile) const SizedBox(width: 5),
+        Text(text,
+            style: getNormalStyle(
+                color: Theme.of(context).focusColor, fontSize: 15)),
+      ];
       return GestureDetector(
         onTap: () async {
           if (text != StringsManager.posts.tr()) {
@@ -298,16 +463,9 @@ class _ProfilePageState extends State<ProfilePage> {
             });
           }
         },
-        child: Column(
-          children: [
-            Text("${usersInfo.length}",
-                style: getMediumStyle(
-                    color: Theme.of(context).focusColor, fontSize: 20)),
-            Text(text,
-                style: getNormalStyle(
-                    color: Theme.of(context).focusColor, fontSize: 15))
-          ],
-        ),
+        child: isThatMobile
+            ? Column(children: userInfoWidgets)
+            : Row(children: userInfoWidgets),
       );
     });
   }
