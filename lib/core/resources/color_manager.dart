@@ -5,7 +5,7 @@ class ColorManager {
   static const Color lightGrey = Color.fromARGB(255, 232, 232, 232);
   static const Color grey = Color(0xff9E9E9E);
   static const Color customGrey = Color(0xffdcdcdc);
-  static const Color customGreyForWeb = Color(0x80fafafa);
+  static const Color customGreyForWeb = Color(0x99efefef);
 
   static const Color lowOpacityGrey = Color(0x2A3E3E2F);
   static const Color veryLowOpacityGrey = Color(0x16444439);
@@ -31,12 +31,14 @@ class ColorManager {
   static const Color green = Colors.green;
 
   static const Color darkBlue = Color.fromARGB(255, 4, 113, 238);
-  static const Color purple = Colors.purple;
+  static const Color purple = Color.fromARGB(255, 160, 4, 238);
   static const Color lightBlue = Color(0xFF93C6F8);
   static const Color redAccent = Colors.redAccent;
   static const Color red = Color(0xffe61f34);
   static const Color blackRed = Color.fromARGB(255, 182, 14, 14);
   static const Color yellow = Color.fromARGB(255, 252, 219, 3);
+  static const Color lightYellow = Color.fromARGB(219, 255, 240, 27);
+
   static const Color orange = Color.fromARGB(255, 170, 115, 33);
 
   static const Color transparent = Colors.transparent;
