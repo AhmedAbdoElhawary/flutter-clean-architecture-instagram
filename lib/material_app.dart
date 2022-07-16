@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:instagram/config/themes/app_theme.dart';
 import 'package:instagram/config/themes/theme_service.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/pages/register/login_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/get_my_user_info.dart';
 import 'package:instagram/presentation/widgets/global/others/multi_bloc_provider.dart';
@@ -29,6 +30,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    TargetPlatform platform = Theme.of(context).platform;
+    isThatMobile =
+        platform == TargetPlatform.iOS || platform == TargetPlatform.android;
     return MultiBlocs(materialApp(context));
   }
 
