@@ -91,9 +91,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: isThatMobile ? CustomAppBar.basicAppBar(context) : null,
       body: Center(
-          child: SizedBox(
-              width: isThatMobile ? null : 450,
-              child: blocBuilder(bodyHeight))),
+        child: blocBuilder(bodyHeight),
+      ),
     );
   }
 
@@ -156,19 +155,23 @@ class _HomePageState extends State<HomePage> {
         },
         itemCount: postsInfoValue.length,
         builder: (BuildContext context, int index) {
-          return Container(
-            width: double.infinity,
-            margin: const EdgeInsetsDirectional.only(bottom: .5, top: .5),
-            child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                return InViewNotifierWidget(
-                  id: '$index',
-                  builder: (_, bool isInView, __) {
-                    return columnOfWidgets(
-                        bodyHeight, index, isInView && widget.playVideo);
-                  },
-                );
-              },
+          return Center(
+            child: Container(
+              width: isThatMobile ? double.infinity : 450,
+              margin: const EdgeInsetsDirectional.only(bottom: .5, top: .5),
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  return InViewNotifierWidget(
+                    id: '$index',
+                    builder: (_, bool isInView, __) {
+                      print('isInView: $isInView');
+                      print('index: $index');
+                      return columnOfWidgets(
+                          bodyHeight, index, isInView && widget.playVideo);
+                    },
+                  );
+                },
+              ),
             ),
           );
         },
@@ -219,7 +222,8 @@ class _HomePageState extends State<HomePage> {
     );
     return isThatMobile
         ? buildPost
-        : roundedContainer(child: buildPost, internalPadding: false,verticalPadding: true);
+        : roundedContainer(
+            child: buildPost, internalPadding: false, verticalPadding: true);
   }
 
   reloadTheData() {
@@ -312,8 +316,9 @@ class _HomePageState extends State<HomePage> {
     return Padding(
       padding: const EdgeInsets.only(top: 15.0),
       child: Container(
-        padding: internalPadding||verticalPadding
-            ?  EdgeInsets.symmetric(horizontal:verticalPadding?0: 10, vertical: 15)
+        padding: internalPadding || verticalPadding
+            ? EdgeInsets.symmetric(
+                horizontal: verticalPadding ? 0 : 10, vertical: 15)
             : null,
         decoration: BoxDecoration(
           color: ColorManager.white,
