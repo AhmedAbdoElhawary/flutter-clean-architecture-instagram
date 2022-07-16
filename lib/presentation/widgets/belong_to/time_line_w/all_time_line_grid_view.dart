@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_custom.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart';
@@ -49,8 +50,8 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
     return InViewNotifierCustomScrollView(
       slivers: [
         SliverStaggeredGrid.countBuilder(
-          crossAxisSpacing: 1.5,
-          mainAxisSpacing: 1.5,
+          crossAxisSpacing: isThatMobile ? 1.5 : 30,
+          mainAxisSpacing: isThatMobile ? 1.5 : 30,
           crossAxisCount: 3,
           itemCount:
               widget.postsImagesInfo.length + widget.postsVideosInfo.length,
@@ -70,7 +71,11 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
                 indexOfPostsVideo = 0;
                 indexOfPostsImage = 0;
               }
-              if ((index == 2 || (index % 11 == 0 && index != 0)) &&
+              bool firstCondition = isThatMobile ? index == 2 : index == 1;
+              bool secondCondition =
+                  isThatMobile ? index % 11 == 0 : index % 14 == 0;
+
+              if ((firstCondition || (secondCondition && index != 0)) &&
                   indexOfPostsVideo < widget.postsVideosInfo.length) {
                 postInfo = widget.postsVideosInfo[indexOfPostsVideo];
                 indexOfPostsVideo++;
@@ -85,9 +90,14 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
             return inViewWidget(index, postInfo);
           },
           staggeredTileBuilder: (index) {
-            double num =
-                (index == 2 || (index % 11 == 0 && index != 0)) ? 2 : 1;
-            return StaggeredTile.count(1, num);
+            bool firstCondition = isThatMobile ? index == 2 : index == 1;
+            bool secondCondition =
+                isThatMobile ? index % 11 == 0 : index % 14 == 0;
+
+            double num2 =
+                (firstCondition || (secondCondition && index != 0)) ? 2 : 1;
+            int num1 = (isThatMobile ? 1 : num2).toInt();
+            return StaggeredTile.count(num1, num2);
           },
         ),
       ],
