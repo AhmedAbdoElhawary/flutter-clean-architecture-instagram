@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/font_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 
 class AppTheme {
   static ThemeData get light {
@@ -15,7 +16,8 @@ class AppTheme {
         focusColor: ColorManager.black,
         disabledColor: ColorManager.black54,
         dialogBackgroundColor: ColorManager.black87,
-        hoverColor: ColorManager.black45,
+        hoverColor:
+            isThatMobile ? ColorManager.black45 : ColorManager.transparent,
         indicatorColor: ColorManager.black38,
         dividerColor: ColorManager.black12,
         backgroundColor: ColorManager.lightBlack,
@@ -56,7 +58,7 @@ class AppTheme {
       shadowColor: ColorManager.darkWhite,
       focusColor: ColorManager.white,
       dialogBackgroundColor: ColorManager.white,
-      hoverColor: ColorManager.grey,
+      hoverColor: isThatMobile ? ColorManager.grey : ColorManager.transparent,
       indicatorColor: ColorManager.grey,
       dividerColor: ColorManager.grey,
       bottomAppBarColor: ColorManager.grey,
