@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/animated_dialog.dart';
@@ -23,13 +24,15 @@ class CustomVideosGridView extends StatefulWidget {
 class _CustomVideosGridViewState extends State<CustomVideosGridView> {
   @override
   Widget build(BuildContext context) {
+    bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
+
     return widget.postsInfo.isNotEmpty
         ? GridView(
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 150,
               mainAxisExtent: 215,
-              crossAxisSpacing: 1.5,
-              mainAxisSpacing: 1.5,
+              crossAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
+              mainAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
               childAspectRatio: 1.0,
             ),
             primary: false,
