@@ -54,7 +54,8 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
   ButtonStyle buttonStyle() {
     return ButtonStyle(
         padding: MaterialStateProperty.all(
-            const EdgeInsetsDirectional.only(start: 140, end: 140)),
+          const EdgeInsetsDirectional.only(start: 140, end: 140),
+        ),
         backgroundColor: MaterialStateProperty.all<Color>(
             widget.isItDone ? ColorManager.blue : ColorManager.lightBlue));
   }
