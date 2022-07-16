@@ -6,6 +6,7 @@ import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/pages/register/sign_up_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/or_text.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_text_field.dart';
@@ -104,8 +105,12 @@ class _SignUpPageState extends State<RegisterWidgets> {
     return InkWell(
         onTap: () {
           if (widget.isThatLogIn) {
-            Navigator.push(context,
-                CupertinoPageRoute(builder: (context) => const SignUpPage()));
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => const SignUpPage(),
+              ),
+            );
           } else {
             Navigator.pop(context);
           }
