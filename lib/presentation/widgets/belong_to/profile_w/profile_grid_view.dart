@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart';
 
@@ -20,11 +21,13 @@ class ProfileGridView extends StatefulWidget {
 class _CustomGridViewState extends State<ProfileGridView> {
   @override
   Widget build(BuildContext context) {
+    bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
+
     return widget.postsInfo.isNotEmpty
         ? StaggeredGridView.countBuilder(
             padding: const EdgeInsetsDirectional.only(bottom: 1.5, top: 1.5),
-            crossAxisSpacing: 1.5,
-            mainAxisSpacing: 1.5,
+            crossAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
+            mainAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
             crossAxisCount: 3,
             primary: false,
             physics: const NeverScrollableScrollPhysics(),
