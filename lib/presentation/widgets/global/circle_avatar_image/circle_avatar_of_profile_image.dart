@@ -47,8 +47,10 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
   }
 
   final SharedPreferences _sharePrefs = injector<SharedPreferences>();
-  Color topColor = ColorManager.red;
-  Color bottomColor = ColorManager.yellow;
+  Color topColor = ColorManager.purple;
+  Color middleColor = ColorManager.red;
+
+  Color bottomColor = ColorManager.lightYellow;
 
   Alignment begin = Alignment.bottomLeft;
   Alignment end = Alignment.topRight;
@@ -195,7 +197,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
       decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: LinearGradient(
-              begin: begin, end: end, colors: [bottomColor, topColor])),
+              begin: begin, end: end, colors: [bottomColor,middleColor, topColor])),
       child: CircleAvatar(
         radius: widget.bodyHeight < 900
             ? widget.bodyHeight * .0525

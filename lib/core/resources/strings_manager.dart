@@ -3,6 +3,8 @@ class StringsManager {
 
   static const String less = "less";
   static const String reel = "reel";
+  static const String reels = "reels";
+
   static const String post = "post";
   static const String live = "live";
   static const String view = "view";
@@ -12,6 +14,8 @@ class StringsManager {
 
   static const String story = "story";
   static const String posts = "posts";
+  static const String postsCap = "postsCap";
+
   static const String block = "block";
   static const String reply = "reply";
   static const String unSend = "unSend";
@@ -82,6 +86,8 @@ class StringsManager {
   static const String gallery = "gallery";
   static const String photo = "photo";
   static const String video = "video";
+  static const String videos = "videos";
+
   static const String pressAndHold = "pressAndHold";
   static const String noSecondaryCameraFound = "noSecondaryCameraFound";
   static const String clearSelectedImages = "clearSelectedImages";

@@ -27,8 +27,8 @@ class AllUsersTimeLinePage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => true,
       child: Scaffold(
+        appBar: isThatMobile ? searchAppBar(context) : null,
         body: blocBuilder(),
-        appBar:isThatMobile? searchAppBar(context):null,
       ),
     );
   }
@@ -46,8 +46,11 @@ class AllUsersTimeLinePage extends StatelessWidget {
         child: Center(
           child: TextField(
             onTap: () {
-              Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => const SearchAboutUserPage()));
+              Navigator.of(context).push(
+                CupertinoPageRoute(
+                  builder: (context) => const SearchAboutUserPage(),
+                ),
+              );
             },
             readOnly: true,
             decoration: InputDecoration(
@@ -96,13 +99,18 @@ class AllUsersTimeLinePage extends StatelessWidget {
                   : videoPosts.add(element);
             }
 
-            return AllTimeLineGridView(
-              onRefreshData: (int index) => getData(context, index),
-              postsImagesInfo: imagePosts,
-              postsVideosInfo: videoPosts,
-              isThatEndOfList: isThatEndOfList,
-              reloadData: reloadData,
-              allPostsInfo: state.allPostInfo,
+            return Center(
+              child: SizedBox(
+                width: isThatMobile ? null : 910,
+                child: AllTimeLineGridView(
+                  onRefreshData: (int index) => getData(context, index),
+                  postsImagesInfo: imagePosts,
+                  postsVideosInfo: videoPosts,
+                  isThatEndOfList: isThatEndOfList,
+                  reloadData: reloadData,
+                  allPostsInfo: state.allPostInfo,
+                ),
+              ),
             );
           } else if (state is CubitPostFailed) {
             ToastShow.toastStateError(state);

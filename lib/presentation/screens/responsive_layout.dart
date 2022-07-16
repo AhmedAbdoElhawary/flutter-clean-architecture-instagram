@@ -12,9 +12,6 @@ class ResponsiveLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TargetPlatform platform = Theme.of(context).platform;
-    isThatMobile =
-        platform == TargetPlatform.iOS || platform == TargetPlatform.android;
     return isThatMobile ? mobileScreenLayout : webScreenLayout;
   }
 }

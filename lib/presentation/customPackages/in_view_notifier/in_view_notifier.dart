@@ -107,10 +107,11 @@ class _InViewNotifierState extends State<InViewNotifier> {
       inViewState: _inViewState,
       child: NotificationListener<ScrollNotification>(
         child: SmarterRefresh(
-            onRefreshData: widget.onRefreshData,
-            posts: widget.postsIds,
-            isThatEndOfList: widget.isThatEndOfList,
-            child: widget.child),
+          onRefreshData: widget.onRefreshData,
+          posts: widget.postsIds,
+          isThatEndOfList: widget.isThatEndOfList,
+          child: widget.child,
+        ),
         onNotification: (ScrollNotification notification) {
           late bool isScrollDirection;
           final AxisDirection scrollDirection =

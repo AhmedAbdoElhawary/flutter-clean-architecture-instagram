@@ -15,6 +15,7 @@ import 'core/utility/injector.dart';
 
 Future<void> main() async {
   final sharePrefs = await init();
+
   Widget myApp = MyApp(sharePrefs: sharePrefs);
   runApp(easyLocalization(myApp));
 }
