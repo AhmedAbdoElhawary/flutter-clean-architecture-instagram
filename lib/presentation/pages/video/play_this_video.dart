@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:video_player/video_player.dart';
 
 class PlayThisVideo extends StatefulWidget {
@@ -69,7 +70,9 @@ class _PlayThisVideoState extends State<PlayThisVideo> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return AspectRatio(
-              aspectRatio: 0.65, child: VideoPlayer(_controller));
+            aspectRatio: 0.65,
+            child: VideoPlayer(_controller),
+          );
         } else {
           return AspectRatio(
               aspectRatio: 0.65,
