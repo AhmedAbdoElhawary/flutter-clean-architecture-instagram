@@ -2,25 +2,26 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
+import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/comment.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
 import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.dart';
 import 'package:instagram/presentation/widgets/belong_to/comments_w/commentator.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
-import 'package:instagram/core/functions/toast_show.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_post_display.dart';
 
 class BuildComments extends StatefulWidget {
   final Post postInfo;
   final bool showImage;
+
   const BuildComments({
     Key? key,
     required this.postInfo,
@@ -39,6 +40,7 @@ class _BuildCommentsState extends State<BuildComments> {
   bool addReply = false;
   bool rebuild = false;
   late UserPersonalInfo myPersonalInfo;
+
   @override
   initState() {
     myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
