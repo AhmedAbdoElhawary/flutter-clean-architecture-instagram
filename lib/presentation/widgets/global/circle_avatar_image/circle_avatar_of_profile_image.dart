@@ -6,10 +6,11 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/pages/story/stroy_page.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'circle_avatar_name.dart';
 
 class CircleAvatarOfProfileImage extends StatefulWidget {
@@ -54,6 +55,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
 
   Alignment begin = Alignment.bottomLeft;
   Alignment end = Alignment.topRight;
+
   @override
   Widget build(BuildContext context) {
     String profileImage = widget.userInfo.profileImageUrl;
@@ -197,7 +199,9 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
       decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: LinearGradient(
-              begin: begin, end: end, colors: [bottomColor,middleColor, topColor])),
+              begin: begin,
+              end: end,
+              colors: [bottomColor, middleColor, topColor])),
       child: CircleAvatar(
         radius: widget.bodyHeight < 900
             ? widget.bodyHeight * .0525
