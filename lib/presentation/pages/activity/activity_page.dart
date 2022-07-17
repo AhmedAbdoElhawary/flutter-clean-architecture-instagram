@@ -16,20 +16,23 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cu
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/show_me_the_users.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/get_post_info.dart';
 
 class ActivityPage extends StatelessWidget {
   final ValueNotifier<bool> rebuildUsersInfo = ValueNotifier(false);
   final UserPersonalInfo myPersonalInfo;
+
   ActivityPage({Key? key, required this.myPersonalInfo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:isThatMobile? AppBar(
-        title: const Text('Activity'),
-      ):null,
+      appBar: isThatMobile
+          ? AppBar(
+              title: const Text('Activity'),
+            )
+          : null,
       body: BlocBuilder<FirestoreUserInfoCubit, FirestoreUserInfoState>(
         bloc: FirestoreUserInfoCubit.get(context)
           ..getAllUnFollowersUsers(myPersonalInfo),
@@ -130,6 +133,7 @@ class _ShowNotifications extends StatefulWidget {
 
 class _ShowNotificationsState extends State<_ShowNotifications> {
   late UserPersonalInfo myPersonalInfo;
+
   @override
   initState() {
     myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
@@ -250,12 +254,12 @@ class _ShowNotificationsState extends State<_ShowNotifications> {
             GestureDetector(
               onTap: () {
                 String appBarText;
-               if (notificationInfo.isThatPost&&notificationInfo.isThatLike){
-                  appBarText=StringsManager.post.tr();
-                }else{
-                 appBarText=StringsManager.comments.tr();
-
-               }
+                if (notificationInfo.isThatPost &&
+                    notificationInfo.isThatLike) {
+                  appBarText = StringsManager.post.tr();
+                } else {
+                  appBarText = StringsManager.comments.tr();
+                }
                 Navigator.of(context).push(CupertinoPageRoute(
                   builder: (context) => GetsPostInfoAndDisplay(
                     postId: notificationInfo.postId,
