@@ -4,11 +4,12 @@ Date : 2022-06-05 22:40:04
 
 Directory c:\Users\ahmed\OneDrive\Desktop\flutter-clean-architecture-instagram-3
 
-Total : 317 files,  18899 codes, 845 comments, 2226 blanks, all 21970 lines
+Total : 317 files, 18899 codes, 845 comments, 2226 blanks, all 21970 lines
 
 [Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
 
 ## Files
+
 | filename | language | code | comment | blank | total |
 | :--- | :--- | ---: | ---: | ---: | ---: |
 | [.github/workflows/ci.yml](/.github/workflows/ci.yml) | YAML | 40 | 8 | 9 | 57 |
@@ -303,7 +304,7 @@ Total : 317 files,  18899 codes, 845 comments, 2226 blanks, all 21970 lines
 | [lib/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart](/lib/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart) | Dart | 178 | 0 | 16 | 194 |
 | [lib/presentation/widgets/global/custom_widgets/customGalleryFile.dart](/lib/presentation/widgets/global/custom_widgets/customGalleryFile.dart) | Dart | 787 | 185 | 42 | 1,014 |
 | [lib/presentation/widgets/global/custom_widgets/custom_app_bar.dart](/lib/presentation/widgets/global/custom_widgets/custom_app_bar.dart) | Dart | 137 | 0 | 5 | 142 |
-| [lib/presentation/widgets/global/custom_widgets/custom_circular_progress.dart](/lib/presentation/widgets/global/custom_widgets/custom_circular_progress.dart) | Dart | 30 | 0 | 5 | 35 |
+| [lib/presentation/widgets/global/custom_widgets/custom_circular_progress.dart](/lib/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart) | Dart | 30 | 0 | 5 | 35 |
 | [lib/presentation/widgets/global/custom_widgets/custom_elevated_button.dart](/lib/presentation/widgets/global/custom_widgets/custom_elevated_button.dart) | Dart | 55 | 0 | 7 | 62 |
 | [lib/presentation/widgets/global/custom_widgets/custom_gallery_display.dart](/lib/presentation/widgets/global/custom_widgets/custom_gallery_display.dart) | Dart | 0 | 0 | 1 | 1 |
 | [lib/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart) | Dart | 161 | 1 | 12 | 174 |
