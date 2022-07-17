@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+
+import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,6 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:instagram/config/themes/theme_service.dart';
 import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/functions/compress_image.dart';
@@ -21,16 +22,17 @@ import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/create_new_story.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/recommendation_people.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../core/functions/toast_show.dart';
 import '../../../data/models/user_personal_info.dart';
 import '../../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import '../../../core/functions/toast_show.dart';
-import 'edit_profile_page.dart';
 import '../register/login_page.dart';
+import 'edit_profile_page.dart';
 
 class PersonalProfilePage extends StatefulWidget {
   final String personalId;
@@ -99,7 +101,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           builder: (context, state) {
             if (state is CubitMyPersonalInfoLoaded) {
               return Scaffold(
-                appBar:isThatMobile? appBar(state.userPersonalInfo.userName):null,
+                appBar: isThatMobile
+                    ? appBar(state.userPersonalInfo.userName)
+                    : null,
                 body: ProfilePage(
                   isThatMyPersonalId: true,
                   getData: getData,
