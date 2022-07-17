@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
-import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/core/widgets/svg_pictures.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
+import 'package:instagram/presentation/pages/messages/messages_for_web.dart';
 import 'package:instagram/presentation/pages/profile/personal_profile_page.dart';
 import 'package:instagram/presentation/pages/shop/shop_page.dart';
 import 'package:instagram/presentation/pages/time_line/all_user_time_line/all_users_time_line.dart';
@@ -72,7 +72,6 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
             onPressed: () => navigationTapped(1),
           ),
           const SizedBox(width: 5),
-
           IconButton(
             icon: icons(IconsAssets.addIcon, _page == 2),
             onPressed: () => navigationTapped(2),
@@ -85,7 +84,9 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
           const SizedBox(width: 5),
           IconButton(
             icon: Icon(
-              _page == 4 ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+              _page == 4
+                  ? Icons.favorite_rounded
+                  : Icons.favorite_border_rounded,
               color: Theme.of(context).focusColor,
               size: 28,
             ),
@@ -109,7 +110,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
 
   List<Widget> homeScreenItems = [
     const _HomePage(),
-    AllUsersTimeLinePage(),
+    const MessagesForWeb(),
     const ShopPage(),
     AllUsersTimeLinePage(),
     const ShopPage(),

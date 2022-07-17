@@ -1,9 +1,11 @@
 import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
@@ -13,14 +15,14 @@ import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
+import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart';
+import 'package:instagram/presentation/pages/story/stroy_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/create_new_story.dart';
+import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_up_icon.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_of_post_for_time_line.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_up_icon.dart';
-import 'package:instagram/presentation/pages/story/stroy_page.dart';
-import 'package:instagram/core/functions/toast_show.dart';
-import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
+
 import '../../../../data/models/user_personal_info.dart';
 import '../../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../../../widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';

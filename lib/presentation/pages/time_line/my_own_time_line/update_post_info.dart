@@ -16,11 +16,12 @@ import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_slide
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/points_scroll_bar.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
 class UpdatePostInfo extends StatefulWidget {
   final Post oldPostInfo;
+
   const UpdatePostInfo({
     required this.oldPostInfo,
     Key? key,
@@ -47,31 +48,31 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
     return Scaffold(
-        appBar:isThatMobile? buildAppBar(context):null,
+        appBar: isThatMobile ? buildAppBar(context) : null,
         body: buildSizedBox(bodyHeight, context));
   }
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-        iconTheme: IconThemeData(color: Theme.of(context).focusColor),
-        elevation: 0,
-        backgroundColor: Theme.of(context).primaryColor,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.maybePop(context);
-            },
-            icon: SvgPicture.asset(
-              IconsAssets.cancelIcon,
-              color: Theme.of(context).focusColor,
-              height: 27,
-            )),
-        title: Text(
-          StringsManager.editInfo.tr(),
-          style: getMediumStyle(
-              color: Theme.of(context).focusColor, fontSize: 20),
-        ),
-        actions: [actionsWidgets()],
-      );
+      iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+      elevation: 0,
+      backgroundColor: Theme.of(context).primaryColor,
+      leading: IconButton(
+          onPressed: () {
+            Navigator.maybePop(context);
+          },
+          icon: SvgPicture.asset(
+            IconsAssets.cancelIcon,
+            color: Theme.of(context).focusColor,
+            height: 27,
+          )),
+      title: Text(
+        StringsManager.editInfo.tr(),
+        style:
+            getMediumStyle(color: Theme.of(context).focusColor, fontSize: 20),
+      ),
+      actions: [actionsWidgets()],
+    );
   }
 
   Widget actionsWidgets() {

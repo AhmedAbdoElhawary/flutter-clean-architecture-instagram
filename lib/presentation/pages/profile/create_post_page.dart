@@ -11,19 +11,20 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/screens/mobile_screen_layout.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
 class CreatePostPage extends StatefulWidget {
   final File selectedFile;
   final List<File>? multiSelectedFiles;
   final bool isThatImage;
   final double aspectRatio;
+
   const CreatePostPage({
     required this.selectedFile,
     required this.aspectRatio,
@@ -48,7 +49,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       create: (context) => injector<PostCubit>(),
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        appBar:isThatMobile? appBar(context):null,
+        appBar: isThatMobile ? appBar(context) : null,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

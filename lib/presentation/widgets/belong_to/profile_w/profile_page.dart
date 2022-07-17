@@ -13,9 +13,10 @@ import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/profile/followers_info_page.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_grid_view.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_videos_grid_view.dart';
+import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_grid_view.dart';
 import 'package:shimmer/shimmer.dart';
+
 import '../../../../data/models/user_personal_info.dart';
 import '../../global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import '../time_line_w/read_more_text.dart';
@@ -27,6 +28,7 @@ class ProfilePage extends StatefulWidget {
   UserPersonalInfo userInfo;
   List<Widget> widgetsAboveTapBars;
   final AsyncCallback getData;
+
   ProfilePage(
       {required this.widgetsAboveTapBars,
       required this.isThatMyPersonalId,
@@ -191,7 +193,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: isWidthAboveMinimum
                         ? Theme.of(context).focusColor
                         : ColorManager.transparent,
-                    width: 1.0),
+                    width: 1),
               ),
             ),
       tabs: [
@@ -270,7 +272,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Text(
                       userInfo.userName,
-                      style:TextStyle(color:Theme.of(context).focusColor,fontSize: 25,fontWeight: FontWeight.w100),
+                      style: TextStyle(
+                          color: Theme.of(context).focusColor,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w100),
                     ),
                     const SizedBox(width: 20),
                     customTransparentButton(),
@@ -317,7 +322,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 7,vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
         decoration: BoxDecoration(
           color: ColorManager.transparent,
           border: Border.all(

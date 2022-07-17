@@ -4,11 +4,12 @@ Date : 2022-04-26 02:36:59
 
 Directory d:\updated_instagram_day_4_6\instagram
 
-Total : 289 files,  14210 codes, 750 comments, 1934 blanks, all 16894 lines
+Total : 289 files, 14210 codes, 750 comments, 1934 blanks, all 16894 lines
 
 [Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
 
 ## Files
+
 | filename | language | code | comment | blank | total |
 | :--- | :--- | ---: | ---: | ---: | ---: |
 | [README.md](/README.md) | Markdown | 10 | 0 | 7 | 17 |
@@ -224,7 +225,7 @@ Total : 289 files,  14210 codes, 750 comments, 1934 blanks, all 16894 lines
 | [lib/presentation/widgets/circle_avatar_of_profile_image.dart](/lib/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart) | Dart | 48 | 0 | 4 | 52 |
 | [lib/presentation/widgets/commentator.dart](/lib/presentation/widgets/belong_to/comments_w/commentator.dart) | Dart | 308 | 3 | 12 | 323 |
 | [lib/presentation/widgets/custom_app_bar.dart](/lib/presentation/widgets/global/custom_widgets/custom_app_bar.dart) | Dart | 39 | 0 | 2 | 41 |
-| [lib/presentation/widgets/custom_circular_progress.dart](/lib/presentation/widgets/global/custom_widgets/custom_circular_progress.dart) | Dart | 20 | 0 | 3 | 23 |
+| [lib/presentation/widgets/custom_circular_progress.dart](/lib/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart) | Dart | 20 | 0 | 3 | 23 |
 | [lib/presentation/widgets/custom_grid_view.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart) | Dart | 157 | 3 | 13 | 173 |
 | [lib/presentation/widgets/custom_posts_display.dart](/lib/presentation/widgets/custom_posts_display.dart) | Dart | 29 | 1 | 4 | 34 |
 | [lib/presentation/widgets/custom_text_field.dart](/lib/presentation/widgets/global/custom_widgets/custom_text_field.dart) | Dart | 37 | 0 | 3 | 40 |

@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,9 +11,10 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
-import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
+
 import '../../../core/functions/toast_show.dart';
+import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 
 // ignore: must_be_immutable
 class EditProfilePage extends StatefulWidget {
@@ -25,6 +27,7 @@ class EditProfilePage extends StatefulWidget {
   final TextEditingController websiteController =
       TextEditingController(text: "");
   TextEditingController bioController = TextEditingController(text: "");
+
   EditProfilePage(this.userInfo, {Key? key}) : super(key: key);
 
   @override
@@ -87,7 +90,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       FirestoreUserInfoCubit updateUserCubit) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      appBar:isThatMobile? buildAppBar(context, getUserState, updateUserCubit):null,
+      appBar: isThatMobile
+          ? buildAppBar(context, getUserState, updateUserCubit)
+          : null,
       body: Column(
         children: [
           circleAvatarAndTextFields(context, updateUserCubit),

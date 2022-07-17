@@ -4,11 +4,12 @@ Date : 2022-05-15 00:49:07
 
 Directory d:\updated_instagram_day_4_6\instagram
 
-Total : 319 files,  1357 codes, -96 comments, 36 blanks, all 1297 lines
+Total : 319 files, 1357 codes, -96 comments, 36 blanks, all 1297 lines
 
 [Summary](results.md) / [Details](details.md) / [Diff Summary](diff.md) / Diff Details
 
 ## Files
+
 | filename | language | code | comment | blank | total |
 | :--- | :--- | ---: | ---: | ---: | ---: |
 | [.github/workflows/ci.yml](/.github/workflows/ci.yml) | YAML | 40 | 8 | 9 | 57 |
@@ -265,7 +266,7 @@ Total : 319 files,  1357 codes, -96 comments, 36 blanks, all 1297 lines
 | [lib/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart](/lib/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart) | Dart | 26 | 0 | 4 | 30 |
 | [lib/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart](/lib/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart) | Dart | 238 | 0 | 17 | 255 |
 | [lib/presentation/widgets/global/custom_widgets/custom_app_bar.dart](/lib/presentation/widgets/global/custom_widgets/custom_app_bar.dart) | Dart | 124 | 0 | 5 | 129 |
-| [lib/presentation/widgets/global/custom_widgets/custom_circular_progress.dart](/lib/presentation/widgets/global/custom_widgets/custom_circular_progress.dart) | Dart | 30 | 0 | 5 | 35 |
+| [lib/presentation/widgets/global/custom_widgets/custom_circular_progress.dart](/lib/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart) | Dart | 30 | 0 | 5 | 35 |
 | [lib/presentation/widgets/global/custom_widgets/custom_elevated_button.dart](/lib/presentation/widgets/global/custom_widgets/custom_elevated_button.dart) | Dart | 55 | 0 | 7 | 62 |
 | [lib/presentation/widgets/global/custom_widgets/custom_grid_view.dart](/lib/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart) | Dart | 169 | 1 | 12 | 182 |
 | [lib/presentation/widgets/global/custom_widgets/custom_posts_display.dart](/lib/presentation/widgets/global/custom_widgets/custom_posts_display.dart) | Dart | 113 | 0 | 10 | 123 |

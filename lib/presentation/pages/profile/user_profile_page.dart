@@ -1,9 +1,11 @@
 import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
+import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
@@ -15,11 +17,11 @@ import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/pages/messages/chatting_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/recommendation_people.dart';
-import 'package:instagram/core/functions/toast_show.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
+
 import '../../../core/utility/constant.dart';
 import '../../../data/models/user_personal_info.dart';
 import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -88,8 +90,10 @@ class _ProfilePageState extends State<UserProfilePage> {
         builder: (context, state) {
           if (state is CubitUserLoaded) {
             return Scaffold(
-              appBar:isThatMobile? CustomAppBar.menuOfUserAppBar(
-                  context, state.userPersonalInfo.userName, bottomSheet):null,
+              appBar: isThatMobile
+                  ? CustomAppBar.menuOfUserAppBar(
+                      context, state.userPersonalInfo.userName, bottomSheet)
+                  : null,
               body: ProfilePage(
                 isThatMyPersonalId: false,
                 userId: widget.userId,
