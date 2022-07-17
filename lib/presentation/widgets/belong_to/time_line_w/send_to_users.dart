@@ -12,7 +12,7 @@ import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
 class SendToUsers extends StatelessWidget {
   final ValueNotifier<bool> sendToUsers = ValueNotifier(false);
@@ -22,6 +22,7 @@ class SendToUsers extends StatelessWidget {
   final UserPersonalInfo userInfo;
   final Post postInfo;
   final VoidCallback clearTexts;
+
   SendToUsers(
       {Key? key,
       required this.userInfo,
@@ -29,6 +30,7 @@ class SendToUsers extends StatelessWidget {
       required this.messageTextController,
       required this.postInfo})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UsersInfoCubit, UsersInfoState>(
