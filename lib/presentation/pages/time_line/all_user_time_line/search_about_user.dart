@@ -9,7 +9,7 @@ import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
 class SearchAboutUserPage extends StatefulWidget {
   const SearchAboutUserPage({Key? key}) : super(key: key);
@@ -21,6 +21,7 @@ class SearchAboutUserPage extends StatefulWidget {
 class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
   final ValueNotifier<TextEditingController> _textController =
       ValueNotifier(TextEditingController());
+
   @override
   void dispose() {
     _textController.value.dispose();
@@ -35,7 +36,7 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
         mediaQuery.padding.top;
 
     return Scaffold(
-      appBar:isThatMobile? buildAppBar(context):null,
+      appBar: isThatMobile ? buildAppBar(context) : null,
       body: BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
         bloc: BlocProvider.of<SearchAboutUserBloc>(context)
           ..add(FindSpecificUser(_textController.value.text)),
