@@ -1,16 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circular_progress.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/show_me_the_users.dart';
-import 'package:instagram/core/functions/toast_show.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
+
 import '../../cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 
 class UsersWhoLikesOnPostPage extends StatefulWidget {
   final List<dynamic> usersIds;
   final bool showSearchBar;
+
   const UsersWhoLikesOnPostPage({
     Key? key,
     required this.showSearchBar,
@@ -30,7 +32,7 @@ class _UsersWhoLikesOnPostPageState extends State<UsersWhoLikesOnPostPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar:isThatMobile? buildAppBar(context):null,
+        appBar: isThatMobile ? buildAppBar(context) : null,
         body: BlocBuilder(
           bloc: BlocProvider.of<UsersInfoCubit>(context)
             ..getSpecificUsersInfo(usersIds: widget.usersIds),
@@ -70,10 +72,10 @@ class _UsersWhoLikesOnPostPageState extends State<UsersWhoLikesOnPostPage> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text(StringsManager.likes.tr(),
-            style: Theme.of(context).textTheme.bodyText1),
-      );
+      elevation: 0,
+      backgroundColor: Theme.of(context).primaryColor,
+      title: Text(StringsManager.likes.tr(),
+          style: Theme.of(context).textTheme.bodyText1),
+    );
   }
 }
