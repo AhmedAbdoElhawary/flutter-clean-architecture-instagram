@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomCircularProgress extends StatelessWidget {
   final Color color;
+
   const CustomCircularProgress(this.color, {Key? key}) : super(key: key);
 
   @override
