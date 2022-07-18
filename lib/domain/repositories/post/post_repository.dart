@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
 import 'package:instagram/data/models/post.dart';
 
 abstract class FirestorePostRepository {
