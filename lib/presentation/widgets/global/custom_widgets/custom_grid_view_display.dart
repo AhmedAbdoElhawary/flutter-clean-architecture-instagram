@@ -135,15 +135,17 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   }
 
   Widget createGridTileWidget() {
-    return Builder(
-      builder: (context) => GestureDetector(
-        onTap: onTapPost,
-        onLongPressMoveUpdate: onLongPressMoveUpdate,
-        onLongPress: onLongPressPost,
-        onLongPressEnd: onLongPressEnd,
-        child: widget.postClickedInfo.isThatImage
-            ? buildCardImage()
-            : buildCardVideo(),
+    return SafeArea(
+      child: Builder(
+        builder: (context) => GestureDetector(
+          onTap: onTapPost,
+          onLongPressMoveUpdate: onLongPressMoveUpdate,
+          onLongPress: onLongPressPost,
+          onLongPressEnd: onLongPressEnd,
+          child: widget.postClickedInfo.isThatImage
+              ? buildCardImage()
+              : buildCardVideo(),
+        ),
       ),
     );
   }
@@ -202,9 +204,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
                     ? StringsManager.posts.tr()
                     : StringsManager.explore.tr())
             : null,
-        body: CustomPostsDisplay(
-          postsInfo: widget.postsInfo,
-        ),
+        body: CustomPostsDisplay(postsInfo: widget.postsInfo),
       ),
     ));
   }
