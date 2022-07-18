@@ -1,4 +1,4 @@
-import 'package:universal_io/io.dart';
+import 'dart:typed_data';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +24,7 @@ class StoryCubit extends Cubit<StoryState> {
 
   static StoryCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future<void> createStory(Story storyInfo, File file) async {
+  Future<void> createStory(Story storyInfo, Uint8List file) async {
     emit(CubitStoryLoading());
     await _createStoryUseCase
         .call(paramsOne: storyInfo, paramsTwo: file)
