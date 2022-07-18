@@ -4,6 +4,7 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 
 class RecordView extends StatefulWidget {
   final String urlRecord;
@@ -27,6 +28,9 @@ class _RecordViewState extends State<RecordView> {
   AudioPlayer audioPlayer = AudioPlayer();
   @override
   Widget build(BuildContext context) {
+    Color theColor = widget.isThatMine
+        ? (isThatMobile ? ColorManager.white : Theme.of(context).focusColor)
+        : Theme.of(context).focusColor;
     return widget.urlRecord.isEmpty
         ? Center(
             child: Text(
@@ -37,36 +41,28 @@ class _RecordViewState extends State<RecordView> {
             children: [
               GestureDetector(
                 child: _isPlaying
-                    ? buildIcon(Icons.pause_sharp)
-                    : buildIcon(Icons.play_arrow_rounded),
+                    ? buildIcon(Icons.pause_sharp,theColor)
+                    : buildIcon(Icons.play_arrow_rounded,theColor),
                 onTap: () => _onPlay(urlRecord: widget.urlRecord),
               ),
               const SizedBox(width: 10),
               Expanded(
                 child: ProgressBar(
                   timeLabelLocation: TimeLabelLocation.none,
-                  thumbColor: widget.isThatMine
-                      ? ColorManager.white
-                      : Theme.of(context).focusColor,
+                  thumbColor: theColor,
                   total: Duration(microseconds: _totalDuration ?? 0),
                   barHeight: 3,
                   thumbRadius: 6.0,
                   baseBarColor: widget.isThatMine
-                      ? ColorManager.darkWhite
+                      ? (isThatMobile?ColorManager.darkWhite:ColorManager.veryLowOpacityGrey)
                       : ColorManager.veryLowOpacityGrey,
-                  progressBarColor: widget.isThatMine
-                      ? ColorManager.white
-                      : Theme.of(context).focusColor,
+                  progressBarColor: theColor,
                   progress: Duration(microseconds: _currentDuration ?? 0),
                 ),
               ),
               const SizedBox(width: 15),
               if (_totalDuration != null && _currentDuration != null)
-                Text(getReformatDate(),
-                    style: getNormalStyle(
-                        color: widget.isThatMine
-                            ? ColorManager.white
-                            : Theme.of(context).focusColor)),
+                Text(getReformatDate(), style: getNormalStyle(color: theColor)),
             ],
           );
   }
@@ -86,9 +82,8 @@ class _RecordViewState extends State<RecordView> {
     return "${datesSeparated[0]}:${datesSeparated[1]}";
   }
 
-  Icon buildIcon(IconData icon) => Icon(icon,
-      color:
-          widget.isThatMine ? ColorManager.white : Theme.of(context).focusColor,
+  Icon buildIcon(IconData icon,Color theColor) => Icon(icon,
+      color:theColor,
       size: 30);
 
   Future<void> _onPlay({required String urlRecord}) async {
