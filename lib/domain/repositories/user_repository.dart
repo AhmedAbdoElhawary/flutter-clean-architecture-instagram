@@ -1,4 +1,4 @@
-import 'package:universal_io/io.dart';
+import 'dart:typed_data';
 import 'package:instagram/data/models/message.dart';
 import 'package:instagram/data/models/sender_info.dart';
 import 'package:instagram/data/models/specific_users_info.dart';
@@ -19,7 +19,7 @@ abstract class FirestoreUserRepository {
   Future<UserPersonalInfo> updateUserInfo({required UserPersonalInfo userInfo});
 
   Future<String> uploadProfileImage(
-      {required File photo,
+      {required Uint8List photo,
       required String userId,
       required String previousImageUrl});
 
@@ -36,8 +36,8 @@ abstract class FirestoreUserRepository {
 
   Future<Message> sendMessage(
       {required Message messageInfo,
-      required String pathOfPhoto,
-      required String pathOfRecorded});
+       Uint8List? pathOfPhoto,
+        required String pathOfRecorded});
 
   Stream<List<Message>> getMessages({required String receiverId});
   Stream<List<UserPersonalInfo>> searchAboutUser({required String name});
