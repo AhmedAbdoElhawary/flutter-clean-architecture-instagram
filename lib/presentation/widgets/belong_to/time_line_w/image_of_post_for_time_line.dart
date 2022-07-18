@@ -56,7 +56,7 @@ class _ImageOfPostForTimeLineState extends State<ImageOfPostForTimeLine>
   Widget thePostsOfHomePage({required double bodyHeight}) {
     return Container(
       width: double.infinity,
-      color: ColorManager.white,
+      color:isThatMobile?null:ColorManager.white,
       child: ValueListenableBuilder(
         valueListenable: widget.postInfo,
         builder: (context, Post postInfoValue, child) => Column(
