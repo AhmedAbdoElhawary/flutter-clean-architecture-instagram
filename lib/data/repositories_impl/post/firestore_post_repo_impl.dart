@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
 import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
 import 'package:instagram/data/datasourses/remote/post/firestore_post.dart';
 import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
