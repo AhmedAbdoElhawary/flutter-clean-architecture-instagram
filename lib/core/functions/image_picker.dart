@@ -1,17 +1,18 @@
-import 'package:universal_io/io.dart';
+import 'dart:typed_data';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram/core/functions/compress_image.dart';
 import 'package:instagram/core/utility/constant.dart';
 
-Future<File?> imageCameraPicker() async {
+Future<Uint8List?> imageCameraPicker() async {
   final ImagePicker _picker = ImagePicker();
   final XFile? image = await _picker.pickImage(
       source: ImageSource.camera, maxWidth: double.infinity, maxHeight: 300);
   if (image != null) {
-    File photo = File(image.path);
+
+    Uint8List photo = await image.readAsBytes();
     if (isThatMobile) {
-      File? compressPhoto = await compressImage(photo);
+      Uint8List? compressPhoto = await compressImage(photo);
       return compressPhoto;
     } else {
       return photo;
@@ -21,14 +22,14 @@ Future<File?> imageCameraPicker() async {
   }
 }
 
-Future<File?> imageGalleryPicker() async {
+Future<Uint8List?> imageGalleryPicker() async {
   final ImagePicker _picker = ImagePicker();
   final XFile? image = await _picker.pickImage(
       source: ImageSource.gallery, maxWidth: double.infinity, maxHeight: 300);
   if (image != null) {
-    File photo = File(image.path);
+    Uint8List photo = await image.readAsBytes();
     if (isThatMobile) {
-      File? compressPhoto = await compressImage(photo);
+      Uint8List? compressPhoto = await compressImage(photo);
       return compressPhoto;
     } else {
       return photo;
@@ -38,13 +39,12 @@ Future<File?> imageGalleryPicker() async {
   }
 }
 
-Future<File?> videoCameraPicker() async {
+Future<Uint8List?> videoCameraPicker() async {
   final ImagePicker _picker = ImagePicker();
   final XFile? video = await _picker.pickVideo(source: ImageSource.camera);
   if (video != null) {
-    File videoFile = File(video.path);
-    File? compressV = await compressVideo(videoFile);
-    return compressV;
+    Uint8List videoFile = await video.readAsBytes();
+    return videoFile;
   } else {
     return null;
   }

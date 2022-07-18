@@ -1,4 +1,4 @@
-import 'package:universal_io/io.dart';
+import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,7 @@ class VideosPage extends StatefulWidget {
 }
 
 class VideosPageState extends State<VideosPage> {
-  ValueNotifier<File?> videoFile = ValueNotifier(null);
+  ValueNotifier<Uint8List?> videoFile = ValueNotifier(null);
   ValueNotifier<bool> rebuildUserInfo = ValueNotifier(false);
 
   @override
@@ -59,7 +59,7 @@ class VideosPageState extends State<VideosPage> {
                   if (state is CubitAllPostsLoaded) {
                     return Scaffold(
                       extendBodyBehindAppBar: true,
-                      appBar:isThatMobile? appBar():null,
+                      appBar: isThatMobile ? appBar() : null,
                       body: buildBody(state.allPostInfo),
                     );
                   } else if (state is CubitPostFailed) {
@@ -82,7 +82,7 @@ class VideosPageState extends State<VideosPage> {
       AppBar(backgroundColor: ColorManager.transparent, actions: [
         IconButton(
           onPressed: () async {
-            File? pickVideo = await videoCameraPicker();
+            Uint8List? pickVideo = await videoCameraPicker();
             if (pickVideo == null) {
               ToastShow.toast(StringsManager.noImageSelected.tr());
             }

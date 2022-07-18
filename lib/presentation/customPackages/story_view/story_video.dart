@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'package:universal_io/io.dart';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -10,7 +11,7 @@ import 'package:video_player/video_player.dart';
 class VideoLoader {
   String url;
 
-  File? videoFile;
+  Uint8List? videoFile;
 
   Map<String, dynamic>? requestHeaders;
 
@@ -30,8 +31,10 @@ class VideoLoader {
     fileStream.listen((fileResponse) {
       if (fileResponse is FileInfo) {
         if (videoFile == null) {
+          Uint8List bytesFile = fileResponse.file.readAsBytesSync();
+          ByteData.view(bytesFile.buffer);
           state = LoadState.success;
-          videoFile = fileResponse.file;
+          videoFile = bytesFile;
           onComplete();
         }
       }
@@ -78,8 +81,9 @@ class StoryVideoState extends State<StoryVideo> {
 
     widget.videoLoader.loadVideo(() {
       if (widget.videoLoader.state == LoadState.success) {
+       File convertedFile= File.fromRawPath(widget.videoLoader.videoFile!);
         playerController =
-            VideoPlayerController.file(widget.videoLoader.videoFile!);
+            VideoPlayerController.file(convertedFile);
 
         playerController!.initialize().then((v) {
           setState(() {});

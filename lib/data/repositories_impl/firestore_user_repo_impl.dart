@@ -1,4 +1,5 @@
-import 'package:universal_io/io.dart';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
 import 'package:instagram/data/datasourses/remote/user/message.dart';
 import 'package:instagram/data/models/message.dart';
@@ -62,7 +63,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
 
   @override
   Future<String> uploadProfileImage(
-      {required File photo,
+      {required Uint8List photo,
       required String userId,
       required String previousImageUrl}) async {
     try {
@@ -137,21 +138,21 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   @override
   Future<Message> sendMessage(
       {required Message messageInfo,
-      required String pathOfPhoto,
-      required String pathOfRecorded}) async {
+       Uint8List? pathOfPhoto,
+  required String  pathOfRecorded}) async {
     try {
-      if (pathOfPhoto.isNotEmpty) {
+      if (pathOfPhoto!=null) {
         String imageUrl = await FirebaseStoragePost.uploadFile(
-            File(pathOfPhoto), "messagesFiles");
+            pathOfPhoto, "messagesFiles");
         messageInfo.imageUrl = imageUrl;
       }
       if (pathOfRecorded.isNotEmpty) {
         String recordedUrl = await FirebaseStoragePost.uploadFile(
-            File(pathOfRecorded), "messagesFiles");
+            pathOfPhoto!, "messagesFiles",postFile:File(pathOfRecorded) );
         messageInfo.recordedUrl = recordedUrl;
       }
 
-      Message mymessageInfo = await FireStoreMessage.sendMessage(
+      Message myMessageInfo = await FireStoreMessage.sendMessage(
           userId: messageInfo.senderId,
           chatId: messageInfo.receiverId,
           message: messageInfo);
@@ -160,7 +161,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
           chatId: messageInfo.senderId,
           message: messageInfo);
 
-      return mymessageInfo;
+      return myMessageInfo;
     } catch (e) {
       return Future.error(e.toString());
     }

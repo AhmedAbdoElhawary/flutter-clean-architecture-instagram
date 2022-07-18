@@ -1,5 +1,4 @@
-import 'package:universal_io/io.dart';
-
+import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,8 +19,8 @@ import 'package:instagram/presentation/screens/mobile_screen_layout.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
 class CreatePostPage extends StatefulWidget {
-  final File selectedFile;
-  final List<File>? multiSelectedFiles;
+  final Uint8List selectedFile;
+  final List<Uint8List>? multiSelectedFiles;
   final bool isThatImage;
   final double aspectRatio;
 
@@ -64,7 +63,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     child: widget.isThatImage
                         ? Stack(
                             children: [
-                              Image.file(widget.selectedFile),
+                              Image.memory(widget.selectedFile),
                               if (widget.multiSelectedFiles != null)
                                 const Padding(
                                   padding: EdgeInsets.all(2.0),
@@ -186,7 +185,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       PostCubit postCubit =
           BlocProvider.of<PostCubit>(builder2context, listen: false);
-      List<File>? selectedFiles =
+      List<Uint8List>? selectedFiles =
           widget.multiSelectedFiles ?? [widget.selectedFile];
       await postCubit.createPost(postInfo, selectedFiles).then((_) async {
         if (postCubit.postId != '') {

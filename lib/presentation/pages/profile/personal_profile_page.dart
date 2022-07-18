@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'package:universal_io/io.dart';
-
-import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,19 +9,18 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:instagram/config/themes/theme_service.dart';
 import 'package:instagram/core/app_prefs.dart';
-import 'package:instagram/core/functions/compress_image.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
-import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/create_new_story.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/recommendation_people.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/functions/toast_show.dart';
@@ -367,56 +363,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     await Navigator.of(context, rootNavigator: true).push(
       CupertinoPageRoute(
           builder: (context) {
-            return CustomGallery.instagramDisplay(
-              tabsNames: tapsNames(),
-              appTheme: appTheme(context),
-              moveToPage: moveToCreatePostPage,
-            );
+            return const CustomGalleryDisplay();
           },
           maintainState: false),
-    );
-  }
-
-  Future<void> moveToCreatePostPage(SelectedImageDetails details) async {
-    final singleImage = details.selectedFile;
-    details.selectedFile = await compressImage(singleImage) ?? singleImage;
-    if (details.selectedFiles != null && details.multiSelectionMode) {
-      for (int i = 0; i < details.selectedFiles!.length; i++) {
-        final image = details.selectedFiles![i];
-        details.selectedFiles![i] = (await compressImage(image)) ?? image;
-      }
-    }
-
-    File file = details.multiSelectionMode
-        ? details.selectedFiles![0]
-        : details.selectedFile;
-    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-        builder: (context) => CreatePostPage(
-            selectedFile: file,
-            multiSelectedFiles: details.selectedFiles,
-            isThatImage: details.isThatImage,
-            aspectRatio: details.aspectRatio),
-        maintainState: false));
-  }
-
-  AppTheme appTheme(BuildContext context) {
-    return AppTheme(
-        focusColor: Theme.of(context).focusColor,
-        primaryColor: Theme.of(context).primaryColor,
-        shimmerBaseColor: Theme.of(context).textTheme.headline5!.color!,
-        shimmerHighlightColor: Theme.of(context).textTheme.headline6!.color!);
-  }
-
-  TabsNames tapsNames() {
-    return TabsNames(
-      deletingName: StringsManager.delete.tr(),
-      galleryName: StringsManager.gallery.tr(),
-      holdButtonName: StringsManager.pressAndHold.tr(),
-      limitingName: StringsManager.limitOfPhotos.tr(),
-      clearImagesName: StringsManager.clearSelectedImages.tr(),
-      notFoundingCameraName: StringsManager.noSecondaryCameraFound.tr(),
-      photoName: StringsManager.photo.tr(),
-      videoName: StringsManager.video.tr(),
     );
   }
 

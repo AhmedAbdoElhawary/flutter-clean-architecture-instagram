@@ -1,4 +1,3 @@
-import 'package:universal_io/io.dart';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -26,9 +25,9 @@ class CustomStoryGalleryDisplay extends StatefulWidget {
 class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
     with TickerProviderStateMixin {
   final List<FutureBuilder<Uint8List?>> _mediaList = [];
-  List<File?> allImages = [];
+  List<Uint8List?> allImages = [];
   bool isImagesReady = true;
-  File? selectedImage;
+  Uint8List? selectedImage;
   int currentPage = 0;
   late int lastPage;
 
@@ -58,11 +57,11 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
       List<AssetEntity> media =
           await albums[0].getAssetListPaged(page: currentPage, size: 60);
       List<FutureBuilder<Uint8List?>> temp = [];
-      List<File?> imageTemp = [];
+      List<Uint8List?> imageTemp = [];
       for (int i = 0; i < media.length; i++) {
         FutureBuilder<Uint8List?> gridViewImage =
             await getImageGallery(media, i);
-        File? image = await highQualityImage(media, i);
+        Uint8List? image = await highQualityImage(media, i);
         temp.add(gridViewImage);
         imageTemp.add(image);
       }
@@ -161,7 +160,7 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
       ),
       itemBuilder: (context, index) {
         FutureBuilder<Uint8List?> listOfMedia = _mediaList[index];
-        File? image = allImages[index];
+        Uint8List? image = allImages[index];
         if (image != null) {
           if (index == 0 && selectedImage == null) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -180,7 +179,7 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
   }
 
   GestureDetector gestureDetector(
-      BuildContext context, File image, FutureBuilder<Uint8List?> listOfMedia) {
+      BuildContext context, Uint8List image, FutureBuilder<Uint8List?> listOfMedia) {
     return GestureDetector(
         onTap: () async {
           Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(

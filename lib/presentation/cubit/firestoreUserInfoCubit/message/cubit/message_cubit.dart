@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +20,7 @@ class MessageCubit extends Cubit<MessageState> {
 
   Future<void> sendMessage(
       {required Message messageInfo,
-      String pathOfPhoto = "",
+        Uint8List? pathOfPhoto,
       String pathOfRecorded = ""}) async {
     emit(SendMessageLoading());
     await _addMessageUseCase

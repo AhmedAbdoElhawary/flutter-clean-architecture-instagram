@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
@@ -10,6 +12,7 @@ class Message extends Equatable {
   String blurHash;
   String senderId;
   String imageUrl;
+  Uint8List? localImage;
   String recordedUrl;
   bool isThatImage;
   bool isThatPost;
@@ -18,6 +21,7 @@ class Message extends Equatable {
   String profileImageUrl;
   String userNameOfSharedPost;
   Message({
+    this.localImage,
     required this.message,
     required this.blurHash,
     this.multiImages = false,

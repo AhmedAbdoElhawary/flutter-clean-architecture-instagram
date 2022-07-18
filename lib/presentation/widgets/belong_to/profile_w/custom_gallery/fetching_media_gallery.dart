@@ -1,4 +1,3 @@
-import 'package:universal_io/io.dart';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memory_image_display.dart';
@@ -41,5 +40,5 @@ Future<FutureBuilder<Uint8List?>> getImageGallery(
   return futureBuilder;
 }
 
-Future<File?> highQualityImage(List<AssetEntity> media, int i) async =>
-    media[i].file;
+Future<Uint8List?> highQualityImage(List<AssetEntity> media, int i) async =>
+    media[i].thumbnailData;

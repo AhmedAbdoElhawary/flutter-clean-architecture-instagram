@@ -1,4 +1,4 @@
-import 'package:universal_io/io.dart';
+import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elev
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateStoryPage extends StatefulWidget {
-  final File storyImage;
+  final Uint8List storyImage;
   final bool isThatImage;
 
   const CreateStoryPage(
@@ -39,7 +39,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
       body: SafeArea(
         child: Column(
           children: [
-            Expanded(child: Image.file(widget.storyImage)),
+            Expanded(child: Image.memory(widget.storyImage)),
             Container(
               decoration: const BoxDecoration(
                 color: ColorManager.white,
@@ -116,7 +116,8 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
                 await SharedPreferences.getInstance();
             sharePrefs.remove(myPersonalId);
             Navigator.of(context).pushAndRemoveUntil(
-              CupertinoPageRoute(builder: (_) => MobileScreenLayout(myPersonalId)),
+              CupertinoPageRoute(
+                  builder: (_) => MobileScreenLayout(myPersonalId)),
               (route) => false,
             );
           });

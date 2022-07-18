@@ -1,4 +1,5 @@
-import 'package:universal_io/io.dart';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -549,7 +550,7 @@ class _ChatMessagesState extends State<ChatMessages>
             : ValueListenableBuilder(
                 valueListenable: newMessageInfo,
                 builder: (context, Message? newMessageValue, child) =>
-                    Image.file(File(newMessageValue!.imageUrl),
+                    Image.memory(newMessageValue!.localImage!,
                         fit: BoxFit.cover),
               ));
   }
@@ -805,18 +806,18 @@ class _ChatMessagesState extends State<ChatMessages>
                 padding: const EdgeInsetsDirectional.only(end: 10.0),
                 child: GestureDetector(
                   onTap: () async {
-                    File? pickImage = await imageCameraPicker();
+                    Uint8List? pickImage = await imageCameraPicker();
                     if (pickImage != null) {
                       isMessageLoaded.value = true;
                       String blurHash = await blurHashEncode(pickImage);
 
                       newMessageInfo.value =
                           newMessage(blurHash: blurHash, isThatImage: true);
-                      newMessageInfo.value!.imageUrl = pickImage.path;
+                      newMessageInfo.value!.localImage = pickImage;
                       messageCubit.sendMessage(
                           messageInfo:
                               newMessage(blurHash: blurHash, isThatImage: true),
-                          pathOfPhoto: pickImage.path);
+                          pathOfPhoto: pickImage);
                       scrollToLastIndex(context);
                     } else {
                       ToastShow.toast(StringsManager.noImageSelected.tr());
@@ -907,16 +908,17 @@ class _ChatMessagesState extends State<ChatMessages>
       padding: const EdgeInsetsDirectional.only(start: 7.0),
       child: GestureDetector(
         onTap: () async {
-          File? pickImage = await imageGalleryPicker();
+          Uint8List? pickImage = await imageGalleryPicker();
           if (pickImage != null) {
             isMessageLoaded.value = true;
             String blurHash = await blurHashEncode(pickImage);
             newMessageInfo.value =
                 newMessage(blurHash: blurHash, isThatImage: true);
-            newMessageInfo.value!.imageUrl = pickImage.path;
+            newMessageInfo.value!.localImage = pickImage;
+
             messageCubit.sendMessage(
                 messageInfo: newMessage(blurHash: blurHash, isThatImage: true),
-                pathOfPhoto: pickImage.path);
+                pathOfPhoto: pickImage);
             scrollToLastIndex(context);
           } else {
             ToastShow.toast(StringsManager.noImageSelected.tr());

@@ -53,7 +53,6 @@ class _ListOfMessagesState extends State<ListOfMessages> {
               primary: false,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                String hash = "${usersInfo[index].userInfo!.userId.hashCode}";
                 Message theLastMessage = usersInfo[index].lastMessage;
 
                 return ListTile(
@@ -81,13 +80,9 @@ class _ListOfMessagesState extends State<ListOfMessages> {
                           style: getNormalStyle(color: ColorManager.grey)),
                     ],
                   ),
-                  leading: Hero(
-                    tag: hash,
-                    child: CircleAvatarOfProfileImage(
-                      bodyHeight: bodyHeight * 0.85,
-                      hashTag: hash,
-                      userInfo: usersInfo[index].userInfo!,
-                    ),
+                  leading:CircleAvatarOfProfileImage(
+                    bodyHeight: bodyHeight * 0.85,
+                    userInfo: usersInfo[index].userInfo!,
                   ),
                   onTap: () {
                     if (widget.userInfo != null) {

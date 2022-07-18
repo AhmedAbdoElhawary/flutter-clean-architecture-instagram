@@ -1,4 +1,4 @@
-import 'package:universal_io/io.dart';
+import 'dart:typed_data';
 import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
 import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
 import 'package:instagram/data/datasourses/remote/story/firestore_story.dart';
@@ -9,7 +9,7 @@ import 'package:instagram/domain/repositories/story_repository.dart';
 class FirestoreStoryRepositoryImpl implements FirestoreStoryRepository {
   @override
   Future<String> createStory(
-      {required Story storyInfo, required File file}) async {
+      {required Story storyInfo, required Uint8List file}) async {
     try {
       String postUrl = await FirebaseStoragePost.uploadFile(file, 'postsImage');
       storyInfo.storyUrl = postUrl;
