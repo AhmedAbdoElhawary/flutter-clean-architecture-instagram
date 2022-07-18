@@ -43,6 +43,8 @@ class _ListOfMessagesState extends State<ListOfMessages> {
         : 500;
     return BlocBuilder<UsersInfoCubit, UsersInfoState>(
       bloc: UsersInfoCubit.get(context)..getChatUsersInfo(userId: myPersonalId),
+      buildWhen: (previous, current) =>
+          previous != current && current is CubitGettingChatUsersInfoLoaded,
       builder: (context, state) {
         if (state is CubitGettingChatUsersInfoLoaded) {
           List<SenderInfo> usersInfo = state.usersInfo;
