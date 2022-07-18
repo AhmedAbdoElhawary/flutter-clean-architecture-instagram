@@ -28,6 +28,11 @@ class IconsAssets {
   static const String search = "$iconPath/search.svg";
   static const String video = "$iconPath/video.svg";
   static const String shop = "$iconPath/shop_white.svg";
+  static const String phone = "$iconPath/phone.svg";
+  static const String videoPoint = "$iconPath/video_point.svg";
+  static const String gallery = "$iconPath/gallery.svg";
+  static const String galleryBold = "$iconPath/gallery_blod.svg";
+
 
   static const String addInstagramStoryIcon =
       "$iconPath/add-instagram-story.svg";

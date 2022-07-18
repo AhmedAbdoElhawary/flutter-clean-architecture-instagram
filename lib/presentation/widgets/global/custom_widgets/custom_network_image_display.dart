@@ -7,10 +7,11 @@ class NetworkImageDisplay extends StatefulWidget {
   final String imageUrl;
   final String blurHash;
   final double aspectRatio;
-
+  final double? height;
   const NetworkImageDisplay({
     Key? key,
     required this.imageUrl,
+     this.height,
     this.blurHash = "",
     this.aspectRatio = 0,
   }) : super(key: key);
@@ -40,13 +41,12 @@ class _NetworkImageDisplayState extends State<NetworkImageDisplay> {
     );
   }
 
-  OctoImage buildOctoImage({double? height = double.infinity}) {
+  Widget buildOctoImage({double? height = double.infinity}) {
     return OctoImage(
       image: CachedNetworkImageProvider(widget.imageUrl),
       errorBuilder: (context, url, error) => buildError(),
       fit: BoxFit.cover,
-      height: height,
-      width: double.infinity,
+      height: widget.height ?? height,
       placeholderBuilder: widget.blurHash.isNotEmpty
           ? OctoPlaceholder.blurHash(widget.blurHash)
           : (context) => Center(child: loadingWidget()),

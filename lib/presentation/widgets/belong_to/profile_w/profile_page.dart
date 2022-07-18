@@ -252,68 +252,75 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   widgetsAboveTapBarsForWeb(UserPersonalInfo userInfo, double bodyHeight) {
+    double widthOfScreen = MediaQuery.of(context).size.width;
+    bool isWidthAboveMinimum = widthOfScreen > 800;
     return [
-      Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 30),
-            child: CircleAvatarOfProfileImage(
-              bodyHeight: 1500,
-              userInfo: userInfo,
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Padding(
+              padding:  EdgeInsets.symmetric(horizontal:isWidthAboveMinimum? 60:40, vertical: 30),
+              child: CircleAvatarOfProfileImage(
+                bodyHeight: isWidthAboveMinimum ? 1500 : 900,
+                userInfo: userInfo,
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 40),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      userInfo.userName,
-                      style: TextStyle(
-                          color: Theme.of(context).focusColor,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w100),
-                    ),
-                    const SizedBox(width: 20),
-                    customTransparentButton(),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {},
-                      child: const Icon(Icons.settings_rounded,
-                          color: ColorManager.black),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      personalNumbersInfo(
-                          userInfo.posts, StringsManager.posts.tr(), userInfo),
+                      Text(
+                        userInfo.userName,
+                        style: TextStyle(
+                            color: Theme.of(context).focusColor,
+                            fontSize: isWidthAboveMinimum ? 25 : 15,
+                            fontWeight: FontWeight.w100),
+                      ),
                       const SizedBox(width: 20),
-                      personalNumbersInfo(userInfo.followerPeople,
-                          StringsManager.followers.tr(), userInfo),
-                      const SizedBox(width: 20),
-                      personalNumbersInfo(userInfo.followedPeople,
-                          StringsManager.following.tr(), userInfo),
+                      customTransparentButton(),
+                      const SizedBox(width: 10),
+                      GestureDetector(
+                        onTap: () {},
+                        child: const Icon(Icons.settings_rounded,
+                            color: ColorManager.black),
+                      )
                     ],
                   ),
-                ),
-                Text(userInfo.name,
-                    style: Theme.of(context).textTheme.headline2),
-                const SizedBox(height: 5),
-                Text(userInfo.bio,
-                    style: getNormalStyle(
-                        color: Theme.of(context).focusColor, fontSize: 15)),
-                const SizedBox(height: 10),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 30.0),
+                    child: SingleChildScrollView(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          personalNumbersInfo(userInfo.posts,
+                              StringsManager.posts.tr(), userInfo),
+                          const SizedBox(width: 20),
+                          personalNumbersInfo(userInfo.followerPeople,
+                              StringsManager.followers.tr(), userInfo),
+                          const SizedBox(width: 20),
+                          personalNumbersInfo(userInfo.followedPeople,
+                              StringsManager.following.tr(), userInfo),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Text(userInfo.name,
+                      style: Theme.of(context).textTheme.headline2),
+                  const SizedBox(height: 5),
+                  Text(userInfo.bio,
+                      style: getNormalStyle(
+                          color: Theme.of(context).focusColor, fontSize: 15)),
+                  const SizedBox(height: 10),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ];
   }

@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
 import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,7 +27,7 @@ class CustomAppBar {
       backgroundColor: Theme.of(context).primaryColor,
       centerTitle: false,
       iconTheme: IconThemeData(color: Theme.of(context).focusColor),
-      title:const InstagramLogo(),
+      title: const InstagramLogo(),
       actions: [
         Padding(
           padding: const EdgeInsetsDirectional.only(end: 10.0),
@@ -249,21 +249,19 @@ class CustomAppBar {
                 imageUrl: userInfo.profileImageUrl,
               )),
               radius: 17),
-          const SizedBox(
-            width: 15,
-          ),
+          const SizedBox(width: 15),
           Text(
             userInfo.name,
             style: TextStyle(
                 color: Theme.of(context).focusColor,
                 fontSize: 16,
                 fontWeight: FontWeight.normal),
-          )
+          ),
         ],
       ),
       actions: [
         SvgPicture.asset(
-          "assets/icons/phone.svg",
+          IconsAssets.phone,
           height: 27,
           color: Theme.of(context).focusColor,
         ),
@@ -271,7 +269,7 @@ class CustomAppBar {
           width: 20,
         ),
         SvgPicture.asset(
-          "assets/icons/video_point.svg",
+          IconsAssets.videoPoint,
           height: 25,
           color: Theme.of(context).focusColor,
         ),

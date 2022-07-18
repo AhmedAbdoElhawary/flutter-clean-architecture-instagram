@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
 
 import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:flutter/cupertino.dart';

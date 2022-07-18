@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/core/use_case/use_case.dart';
 import '../../repositories/post/post_repository.dart';

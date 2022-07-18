@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
 import 'package:instagram/data/models/message.dart';
 import 'package:instagram/data/models/sender_info.dart';
 import 'package:instagram/data/models/specific_users_info.dart';

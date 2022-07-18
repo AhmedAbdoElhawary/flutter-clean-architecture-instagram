@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
@@ -8,6 +10,8 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/chat_messages.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/list_of_messages.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
 class MessagesForWeb extends StatefulWidget {
   const MessagesForWeb({Key? key}) : super(key: key);
@@ -57,11 +61,17 @@ class _MessagesForWebState extends State<MessagesForWeb> {
 
   Widget chatting() {
     return selectedTextingUser == null
-        ? Center(
-            child: Text(
-              "There is no selected massage",
-              style: getMediumStyle(color: ColorManager.black),
-            ),
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: Text(
+                  "There is no selected massage",
+                  style: getMediumStyle(color: ColorManager.black),
+                ),
+              ),
+            ],
           )
         : Expanded(
             child: Column(
@@ -91,6 +101,47 @@ class _MessagesForWebState extends State<MessagesForWeb> {
           ),
         ),
       ),
+      child: selectedTextingUser != null
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const SizedBox(width: 25),
+                    CircleAvatarOfProfileImage(
+                      bodyHeight: 350,
+                      userInfo: selectedTextingUser!,
+                      showColorfulCircle: false,
+                    ),
+                    const SizedBox(width: 15),
+                    Text(
+                      selectedTextingUser!.name,
+                      style: TextStyle(
+                          color: Theme.of(context).focusColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      IconsAssets.phone,
+                      height: 27,
+                      color: Theme.of(context).focusColor,
+                    ),
+                    const SizedBox(width: 20),
+                    SvgPicture.asset(
+                      IconsAssets.videoPoint,
+                      height: 25,
+                      color: Theme.of(context).focusColor,
+                    ),
+                    const SizedBox(width: 25),
+                  ],
+                ),
+              ],
+            )
+          : null,
     );
   }
 
@@ -118,6 +169,7 @@ class _MessagesForWebState extends State<MessagesForWeb> {
 
   void selectChatting(UserPersonalInfo userInfo) {
     setState(() {
+      selectedTextingUser = null;
       selectedTextingUser = userInfo;
     });
   }

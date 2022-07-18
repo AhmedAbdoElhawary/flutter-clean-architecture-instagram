@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
 import 'dart:async';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:flutter/material.dart';

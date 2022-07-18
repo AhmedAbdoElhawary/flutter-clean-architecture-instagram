@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -11,6 +11,7 @@ import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/functions/image_picker.dart';
 import 'package:instagram/core/functions/toast_show.dart';
+import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
@@ -24,7 +25,7 @@ import 'package:instagram/presentation/customPackages/audio_recorder/social_medi
 import 'package:instagram/presentation/pages/profile/user_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/record_view.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_viewer.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_text.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
@@ -79,6 +80,16 @@ class _ChatMessagesState extends State<ChatMessages>
     super.initState();
   }
 
+  @override
+  void didUpdateWidget(ChatMessages oldWidget) {
+    if (widget.userInfo != oldWidget.userInfo) {
+      newMessageInfo.value = null;
+      globalMessagesInfo.value.clear();
+      isMessageLoaded.value = false;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   getLanguage() async {
     AppPreferences _appPreferences = injector<AppPreferences>();
     currentLanguage = await _appPreferences.getAppLanguage();
@@ -120,7 +131,8 @@ class _ChatMessagesState extends State<ChatMessages>
                         if (state.messages.length >=
                             globalMessagesValue.length) {
                           globalMessagesInfo.value = state.messages;
-                          if (itemIndex < globalMessagesValue.length - 1) {
+                          if (itemIndex < globalMessagesValue.length - 1 &&
+                              isThatMobile) {
                             itemIndex = globalMessagesValue.length - 1;
                             scrollToLastIndex(context);
                           }
@@ -160,7 +172,9 @@ class _ChatMessagesState extends State<ChatMessages>
                     ? notificationListenerForMobile(globalMessagesValue)
                     : listViewForWeb(globalMessagesValue)
                 : buildUserInfo(context)),
-        Align(alignment: Alignment.bottomCenter, child: fieldOfMessage()),
+        Align(
+            alignment: Alignment.bottomCenter,
+            child: fieldOfMessageForMobile()),
       ],
     );
   }
@@ -170,15 +184,17 @@ class _ChatMessagesState extends State<ChatMessages>
     return Stack(
       children: [
         Padding(
-            padding: const EdgeInsetsDirectional.only(
-                end: 10, start: 10, top: 10, bottom: 10),
+            padding: EdgeInsetsDirectional.only(
+                end: 10, start: 10, top: 10, bottom: isThatMobile ? 10 : 25),
             child: listViewForWeb(globalMessagesValue)),
+        Align(alignment: Alignment.bottomCenter, child: fieldOfMessageForWeb())
       ],
     );
   }
 
   Widget listViewForWeb(List<Message> globalMessagesValue) {
     return ListView.separated(
+        controller: ScrollController(),
         itemBuilder: (context, index) {
           return Column(
             children: [
@@ -270,6 +286,14 @@ class _ChatMessagesState extends State<ChatMessages>
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            if (!isThatMine && !isThatMobile) ...[
+              CircleAvatarOfProfileImage(
+                bodyHeight: 350,
+                userInfo: widget.userInfo,
+                showColorfulCircle: false,
+              ),
+              const SizedBox(width: 10),
+            ],
             if (isThatMine) const SizedBox(width: 100),
             Expanded(
               child: GestureDetector(
@@ -278,7 +302,9 @@ class _ChatMessagesState extends State<ChatMessages>
                   indexOfGarbageMessage.value = index;
                   unSend.value = true;
                 },
-                child: buildMessage(isThatMine, messageInfo),
+                child: isThatMobile
+                    ? buildMessageForMobile(isThatMine, messageInfo)
+                    : buildMessageForWeb(isThatMine, messageInfo),
               ),
             ),
             if (!isThatMine) const SizedBox(width: 100),
@@ -287,7 +313,7 @@ class _ChatMessagesState extends State<ChatMessages>
                 child: Padding(
                   padding: const EdgeInsetsDirectional.only(start: 5.0),
                   child: SvgPicture.asset(
-                    "assets/icons/paper_plane_right.svg",
+                    IconsAssets.send2Icon,
                     height: 15,
                     color: Theme.of(context).focusColor,
                   ),
@@ -298,10 +324,17 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  Align buildMessage(bool isThatMine, Message messageInfo) {
+  Align buildMessageForMobile(bool isThatMine, Message messageInfo) {
     String message = messageInfo.message;
     String imageUrl = messageInfo.imageUrl;
     String recordedUrl = messageInfo.recordedUrl;
+    Widget messageWidget = messageInfo.recordedUrl.isNotEmpty
+        ? recordMessage(recordedUrl, isThatMine)
+        : (messageInfo.isThatPost
+            ? sharedMessage(messageInfo, isThatMine)
+            : (messageInfo.isThatImage
+                ? imageMessage(messageInfo, imageUrl)
+                : textMessage(message, isThatMine)));
     return Align(
       alignment: isThatMine
           ? AlignmentDirectional.centerEnd
@@ -327,14 +360,42 @@ class _ChatMessagesState extends State<ChatMessages>
                     ? const EdgeInsetsDirectional.only(
                         start: 10, end: 10, bottom: 8, top: 8)
                     : const EdgeInsetsDirectional.all(0),
-                child: messageInfo.recordedUrl.isNotEmpty
-                    ? recordMessage(recordedUrl, isThatMine)
-                    : (messageInfo.isThatPost
-                        ? sharedMessage(messageInfo, isThatMine)
-                        : (messageInfo.isThatImage
-                            ? imageMessage(messageInfo, imageUrl)
-                            : textMessage(message, isThatMine))),
+                child: messageWidget,
               )),
+    );
+  }
+
+  Align buildMessageForWeb(bool isThatMine, Message messageInfo) {
+    String message = messageInfo.message;
+    String imageUrl = messageInfo.imageUrl;
+    String recordedUrl = messageInfo.recordedUrl;
+    Widget messageWidget = messageInfo.recordedUrl.isNotEmpty
+        ? recordMessage(recordedUrl, isThatMine)
+        : (messageInfo.isThatPost
+            ? sharedMessage(messageInfo, isThatMine)
+            : (messageInfo.isThatImage
+                ? imageMessage(messageInfo, imageUrl)
+                : textMessage(message, isThatMine)));
+    return Align(
+      alignment: isThatMine
+          ? AlignmentDirectional.centerEnd
+          : AlignmentDirectional.centerStart,
+      child: Container(
+        decoration: BoxDecoration(
+          color: isThatMine
+              ? Theme.of(context).selectedRowColor
+              : ColorManager.white,
+          borderRadius: const BorderRadiusDirectional.all(Radius.circular(25)),
+          border: isThatMine
+              ? null
+              : Border.all(color: ColorManager.lowOpacityGrey),
+        ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        padding: imageUrl.isEmpty
+            ? const EdgeInsets.symmetric(vertical: 15, horizontal: 25)
+            : const EdgeInsetsDirectional.all(0),
+        child: messageWidget,
+      ),
     );
   }
 
@@ -349,7 +410,7 @@ class _ChatMessagesState extends State<ChatMessages>
         ));
       },
       child: SizedBox(
-        width: double.infinity,
+        width: 240,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -363,6 +424,7 @@ class _ChatMessagesState extends State<ChatMessages>
                   child: NetworkImageDisplay(
                     blurHash: messageInfo.blurHash,
                     imageUrl: messageInfo.imageUrl,
+                    height: 270,
                   ),
                 ),
                 const Padding(
@@ -423,15 +485,26 @@ class _ChatMessagesState extends State<ChatMessages>
 
   Widget _createActionBar(Message messageInfo) {
     return Container(
-      // height: 50,
+      height: 50,
       width: double.infinity,
       padding: const EdgeInsetsDirectional.only(bottom: 5, top: 5, start: 15),
       color: Theme.of(context).toggleableActiveColor,
-      child: ReadMore(
-          currentLanguage == 'en'
-              ? "${messageInfo.userNameOfSharedPost} ${messageInfo.message}"
-              : "${messageInfo.message} ${messageInfo.userNameOfSharedPost}",
-          2),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            currentLanguage == 'en'
+                ? "${messageInfo.userNameOfSharedPost} ${messageInfo.message}"
+                : "${messageInfo.message} ${messageInfo.userNameOfSharedPost}",
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: getNormalStyle(
+              color: ColorManager.black,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -440,6 +513,7 @@ class _ChatMessagesState extends State<ChatMessages>
     return ValueListenableBuilder(
       valueListenable: records,
       builder: (context, String recordsValue, child) => SizedBox(
+        width: isThatMobile ? null : 240,
         child: RecordView(
           urlRecord: recordedUrl.isEmpty ? recordsValue : recordedUrl,
           isThatMine: isThatMine,
@@ -450,8 +524,8 @@ class _ChatMessagesState extends State<ChatMessages>
 
   SizedBox imageMessage(Message messageInfo, String imageUrl) {
     return SizedBox(
-        width: 90,
-        height: 150,
+        height: isThatMobile ? 150 : 300,
+        width: isThatMobile ? 90 : 210,
         child: messageInfo.messageUid.isNotEmpty
             ? GestureDetector(
                 onTap: () async {
@@ -481,13 +555,16 @@ class _ChatMessagesState extends State<ChatMessages>
   }
 
   Text textMessage(String message, bool isThatMine) {
-    return Text(message,
-        style: isThatMine
-            ? getNormalStyle(color: ColorManager.white)
-            : getNormalStyle(color: Theme.of(context).focusColor));
+    TextStyle style = isThatMine
+        ? getNormalStyle(color: ColorManager.white)
+        : getNormalStyle(color: Theme.of(context).focusColor);
+    style = isThatMobile
+        ? style
+        : getNormalStyle(color: Theme.of(context).focusColor);
+    return Text(message, style: style);
   }
 
-  Widget fieldOfMessage() {
+  Widget fieldOfMessageForMobile() {
     return ValueListenableBuilder(
       valueListenable: unSend,
       builder: (context, bool unSendValue, child) => AnimatedSwitcher(
@@ -520,6 +597,62 @@ class _ChatMessagesState extends State<ChatMessages>
           ),
         ],
       );
+  Widget fieldOfMessageForWeb() {
+    return Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          height: 70,
+          color: Theme.of(context).primaryColor,
+          child: Center(
+              child: Container(
+            decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(35),
+                border: Border.all(color: Colors.grey[300]!, width: 1)),
+            height: 50,
+            padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
+            margin: const EdgeInsetsDirectional.only(start: 10, end: 10),
+            child: Builder(builder: (context) {
+              MessageCubit messageCubit = MessageCubit.get(context);
+              return rowOfTextFieldForWeb(messageCubit);
+            }),
+          )),
+        ));
+  }
+
+  Widget rowOfTextFieldForWeb(MessageCubit messageCubit) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Icon(Icons.favorite_border_rounded,
+            size: 27, color: ColorManager.black),
+        const SizedBox(width: 10),
+        messageTextField(),
+        ValueListenableBuilder(
+          valueListenable: _textController,
+          builder: (context, TextEditingController textValue, child) {
+            if (textValue.text.isNotEmpty) {
+              return sendButton(messageCubit, textValue);
+            } else {
+              return Row(
+                children: [
+                  const SizedBox(width: 10),
+                  Row(
+                    children: [
+                      pickPhoto(messageCubit),
+                      const SizedBox(width: 10),
+                      const Icon(Icons.favorite_border_rounded,
+                          size: 27, color: ColorManager.black),
+                    ],
+                  ),
+                ],
+              );
+            }
+          },
+        )
+      ],
+    );
+  }
 
   ValueListenableBuilder<Message?> deleteTheMessage(bool unSendValue) {
     return ValueListenableBuilder(
@@ -610,59 +743,56 @@ class _ChatMessagesState extends State<ChatMessages>
   }
 
   Widget rowOfTextField(MessageCubit messageCubit) {
-    return ValueListenableBuilder(
-      valueListenable: appearIcons,
-      builder: (context, bool appearIconsValue, child) => Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          pickImageFromCamera(messageCubit),
-          messageTextField(),
-          ValueListenableBuilder(
-            valueListenable: _textController,
-            builder: (context, TextEditingController textValue, child) {
-              if (textValue.text.isNotEmpty) {
-                return sendButton(messageCubit, textValue);
-              } else {
-                return Row(
-                  children: [
-                    const SizedBox(width: 10),
-                    SocialMediaRecorder(
-                      showIcons: showIcons,
-                      sendRequestFunction: (File soundFile) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) async {
-                          records.value = soundFile.path;
-                          MessageCubit messageCubit = MessageCubit.get(context);
-                          newMessageInfo.value = newMessage();
-                          isMessageLoaded.value = true;
-                          await messageCubit.sendMessage(
-                              messageInfo: newMessage(),
-                              pathOfRecorded: soundFile.path);
-                          newMessageInfo.value = null;
-                        });
-                        scrollToLastIndex(context);
-                      },
-                    ),
-                    ValueListenableBuilder(
-                      valueListenable: appearIcons,
-                      builder: (context, bool appearIconsValue, child) =>
-                          Visibility(
-                        visible: appearIconsValue,
-                        child: Row(
-                          children: [
-                            pickPhoto(messageCubit),
-                            const SizedBox(width: 10),
-                            pickSticker(),
-                          ],
-                        ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        pickImageFromCamera(messageCubit),
+        messageTextField(),
+        ValueListenableBuilder(
+          valueListenable: _textController,
+          builder: (context, TextEditingController textValue, child) {
+            if (textValue.text.isNotEmpty) {
+              return sendButton(messageCubit, textValue);
+            } else {
+              return Row(
+                children: [
+                  const SizedBox(width: 10),
+                  SocialMediaRecorder(
+                    showIcons: showIcons,
+                    sendRequestFunction: (File soundFile) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) async {
+                        records.value = soundFile.path;
+                        MessageCubit messageCubit = MessageCubit.get(context);
+                        newMessageInfo.value = newMessage();
+                        isMessageLoaded.value = true;
+                        await messageCubit.sendMessage(
+                            messageInfo: newMessage(),
+                            pathOfRecorded: soundFile.path);
+                        newMessageInfo.value = null;
+                      });
+                      scrollToLastIndex(context);
+                    },
+                  ),
+                  ValueListenableBuilder(
+                    valueListenable: appearIcons,
+                    builder: (context, bool appearIconsValue, child) =>
+                        Visibility(
+                      visible: appearIconsValue,
+                      child: Row(
+                        children: [
+                          pickPhoto(messageCubit),
+                          const SizedBox(width: 10),
+                          pickSticker(),
+                        ],
                       ),
                     ),
-                  ],
-                );
-              }
-            },
-          )
-        ],
-      ),
+                  ),
+                ],
+              );
+            }
+          },
+        )
+      ],
     );
   }
 
@@ -745,7 +875,7 @@ class _ChatMessagesState extends State<ChatMessages>
               messageCubit.sendMessage(
                 messageInfo: newMessage(),
               );
-              scrollToLastIndex(context);
+              if (isThatMobile) scrollToLastIndex(context);
               _textController.value.text = "";
             }
           },
@@ -793,8 +923,8 @@ class _ChatMessagesState extends State<ChatMessages>
           }
         },
         child: SvgPicture.asset(
-          "assets/icons/gallery.svg",
-          height: 23,
+          isThatMobile ? IconsAssets.gallery : IconsAssets.galleryBold,
+          height: isThatMobile ? 23 : 26,
           color: Theme.of(context).focusColor,
         ),
       ),
