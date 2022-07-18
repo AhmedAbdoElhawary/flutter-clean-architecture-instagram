@@ -23,6 +23,8 @@ class StringsManager {
 
   static const String noUsers = "noUsers";
   static const String undo = "undo";
+  static const String done = "done";
+
   static const String name = "name";
   static const String writeMessage = "writeMessage";
   static const String like = "like";
