@@ -11,7 +11,7 @@ class NetworkImageDisplay extends StatefulWidget {
   const NetworkImageDisplay({
     Key? key,
     required this.imageUrl,
-     this.height,
+    this.height,
     this.blurHash = "",
     this.aspectRatio = 0,
   }) : super(key: key);
@@ -46,6 +46,7 @@ class _NetworkImageDisplayState extends State<NetworkImageDisplay> {
       image: CachedNetworkImageProvider(widget.imageUrl),
       errorBuilder: (context, url, error) => buildError(),
       fit: BoxFit.cover,
+      width: double.infinity,
       height: widget.height ?? height,
       placeholderBuilder: widget.blurHash.isNotEmpty
           ? OctoPlaceholder.blurHash(widget.blurHash)
