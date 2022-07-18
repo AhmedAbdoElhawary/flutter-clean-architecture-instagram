@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:video_compress/video_compress.dart';
 
