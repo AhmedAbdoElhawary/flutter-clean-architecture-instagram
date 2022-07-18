@@ -30,7 +30,7 @@ class CustomAppBar {
           padding: const EdgeInsetsDirectional.only(end: 10.0),
           child: PopupMenuButton<int>(
             position: PopupMenuPosition.under,
-            elevation: 20,
+            elevation: 20,color:Theme.of(context).splashColor ,
             offset: const Offset(90, 8),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -159,7 +159,7 @@ class CustomAppBar {
   static void onSelected(BuildContext context, int item) {
     switch (item) {
       case 0:
-        pushToCustomGallery(context);
+        _pushToCustomGallery(context);
         break;
       case 1:
         Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
@@ -169,22 +169,20 @@ class CustomAppBar {
             maintainState: false));
         break;
       case 2:
-        pushToCustomGallery(context);
+        _pushToCustomGallery(context);
         break;
       case 3:
     }
   }
 
-  static Future pushToCustomGallery(BuildContext context) =>
+  static Future _pushToCustomGallery(BuildContext context) =>
       Navigator.of(context, rootNavigator: true).push(
         CupertinoPageRoute(
             builder: (context) {
               return const CustomGalleryDisplay();
-
             },
             maintainState: false),
       );
-
 
   static AppBar chattingAppBar(
       UserPersonalInfo userInfo, BuildContext context) {

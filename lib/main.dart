@@ -31,7 +31,7 @@ Future<SharedPreferences> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
     await Firebase.initializeApp(
-      options:  FirebaseOptions(
+      options: FirebaseOptions(
         // I deleted private_keys in github project,
         // so create your own firebase project and add your web private keys here and in web/index.html.
         apiKey: apiKey,
@@ -43,8 +43,7 @@ Future<SharedPreferences> init() async {
     );
   } else {
     await Firebase.initializeApp();
-      await PhotoManager.requestPermissionExtend();
-
+    await PhotoManager.requestPermissionExtend();
   }
   await EasyLocalization.ensureInitialized();
   await initializeDependencies();

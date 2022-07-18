@@ -17,7 +17,6 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circ
 class SendToUsers extends StatelessWidget {
   final ValueNotifier<bool> sendToUsers = ValueNotifier(false);
   UserPersonalInfo? selectedUserInfo;
-  final List<UserPersonalInfo> globalUsersInfo = [];
   final TextEditingController messageTextController;
   final UserPersonalInfo userInfo;
   final Post postInfo;
@@ -38,18 +37,17 @@ class SendToUsers extends StatelessWidget {
         ..getFollowersAndFollowingsInfo(
             followersIds: userInfo.followerPeople,
             followingsIds: userInfo.followedPeople),
-      buildWhen: (previous, current) {
-        if (previous != current &&
-            (current is CubitFollowersAndFollowingsLoaded)) {
-          return true;
-        }
-        return false;
-      },
+      buildWhen: (previous, current) =>
+          previous != current && (current is CubitFollowersAndFollowingsLoaded),
       builder: (context, state) {
         if (state is CubitFollowersAndFollowingsLoaded) {
           List<UserPersonalInfo> usersInfo =
-              state.followersAndFollowingsInfo.followersInfo +
-                  state.followersAndFollowingsInfo.followingsInfo;
+              state.followersAndFollowingsInfo.followersInfo;
+          for (final i in state.followersAndFollowingsInfo.followingsInfo) {
+            if (!usersInfo.contains(i)) {
+              usersInfo.add(i);
+            }
+          }
           return ValueListenableBuilder(
             valueListenable: sendToUsers,
             builder: (context, bool sendToUsersValue, child) => Stack(
@@ -64,15 +62,8 @@ class SendToUsers extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     addAutomaticKeepAlives: false,
                     addRepaintBoundaries: false,
-                    itemBuilder: (context, index) {
-                      if (!globalUsersInfo.contains(usersInfo[index])) {
-                        globalUsersInfo.add(usersInfo[index]);
-                      }
-                      return buildUserInfo(
-                        context,
-                        globalUsersInfo[index],
-                      );
-                    },
+                    itemBuilder: (context, index) =>
+                        buildUserInfo(context, usersInfo[index]),
                     itemCount: usersInfo.length,
                     separatorBuilder: (context, _) =>
                         const SizedBox(height: 15),
@@ -161,10 +152,10 @@ class SendToUsers extends StatelessWidget {
       decoration: const BoxDecoration(
         color: ColorManager.blue,
       ),
-      child: const Center(
+      child: Center(
         child: Text(
-          "Done",
-          style: TextStyle(
+          StringsManager.done.tr(),
+          style: const TextStyle(
               fontSize: 15.0,
               color: ColorManager.white,
               fontWeight: FontWeight.w500),

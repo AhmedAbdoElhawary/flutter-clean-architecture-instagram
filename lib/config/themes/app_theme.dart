@@ -55,7 +55,7 @@ class AppTheme {
       primaryColorLight: ColorManager.black54,
       primarySwatch: Colors.grey,
       hintColor: ColorManager.darkGray,
-      shadowColor: ColorManager.darkWhite,
+      shadowColor: ColorManager.darkGray,
       focusColor: ColorManager.white,
       dialogBackgroundColor: ColorManager.white,
       hoverColor: isThatMobile ? ColorManager.grey : ColorManager.transparent,

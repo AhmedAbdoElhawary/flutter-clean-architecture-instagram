@@ -176,7 +176,9 @@ class _ProfilePageState extends State<ProfilePage> {
     bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
     return TabBar(
       unselectedLabelColor: ColorManager.grey,
-      labelColor: isWidthAboveMinimum ? ColorManager.black : ColorManager.blue,
+      labelColor: isWidthAboveMinimum
+          ? ColorManager.black
+          : (isThatMobile ? Theme.of(context).focusColor : ColorManager.blue),
       labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w100),
       indicatorSize: isThatMobile ? null : TabBarIndicatorSize.label,
       isScrollable: isWidthAboveMinimum ? true : false,
@@ -184,7 +186,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ? const EdgeInsetsDirectional.only(
               start: 50, end: 50, top: 5, bottom: 3)
           : null,
-      indicatorWeight: isWidthAboveMinimum ? 2 : 0,
+      indicatorWeight: isWidthAboveMinimum ? 2 : (isThatMobile ? 2 : 0),
       indicator: isThatMobile
           ? null
           : BoxDecoration(
@@ -260,7 +262,8 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Row(
           children: [
             Padding(
-              padding:  EdgeInsets.symmetric(horizontal:isWidthAboveMinimum? 60:40, vertical: 30),
+              padding: EdgeInsets.symmetric(
+                  horizontal: isWidthAboveMinimum ? 60 : 40, vertical: 30),
               child: CircleAvatarOfProfileImage(
                 bodyHeight: isWidthAboveMinimum ? 1500 : 900,
                 userInfo: userInfo,
