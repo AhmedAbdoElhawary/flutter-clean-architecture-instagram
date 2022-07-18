@@ -1,6 +1,8 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram/core/functions/compress_image.dart';
+import 'package:instagram/core/utility/constant.dart';
 
 Future<File?> imageCameraPicker() async {
   final ImagePicker _picker = ImagePicker();
@@ -8,8 +10,12 @@ Future<File?> imageCameraPicker() async {
       source: ImageSource.camera, maxWidth: double.infinity, maxHeight: 300);
   if (image != null) {
     File photo = File(image.path);
-    File? compressPhoto = await compressImage(photo);
-    return compressPhoto;
+    if (isThatMobile) {
+      File? compressPhoto = await compressImage(photo);
+      return compressPhoto;
+    } else {
+      return photo;
+    }
   } else {
     return null;
   }
@@ -21,8 +27,12 @@ Future<File?> imageGalleryPicker() async {
       source: ImageSource.gallery, maxWidth: double.infinity, maxHeight: 300);
   if (image != null) {
     File photo = File(image.path);
-    File? compressPhoto = await compressImage(photo);
-    return compressPhoto;
+    if (isThatMobile) {
+      File? compressPhoto = await compressImage(photo);
+      return compressPhoto;
+    } else {
+      return photo;
+    }
   } else {
     return null;
   }
