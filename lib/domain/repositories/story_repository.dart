@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
 import 'package:instagram/data/models/story.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 
