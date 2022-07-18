@@ -1,4 +1,4 @@
-import 'package:universal_io/io.dart';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
@@ -124,7 +124,7 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreUserInfoState> {
   }
 
   Future<void> uploadProfileImage(
-      {required File photo,
+      {required Uint8List photo,
       required String userId,
       required String previousImageUrl}) async {
     emit(CubitUserLoading());
