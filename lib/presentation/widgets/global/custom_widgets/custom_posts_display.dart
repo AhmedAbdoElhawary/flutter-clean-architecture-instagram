@@ -8,7 +8,6 @@ import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_u
 
 class CustomPostsDisplay extends StatefulWidget {
   final List<Post> postsInfo;
-
   final bool showCatchUp;
 
   const CustomPostsDisplay({
