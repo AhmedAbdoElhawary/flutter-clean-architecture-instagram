@@ -1,4 +1,4 @@
-import 'package:universal_io/io.dart';
+import 'dart:typed_data';
 import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
 import 'package:instagram/data/datasourses/remote/post/firestore_post.dart';
 import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
@@ -8,7 +8,7 @@ import '../../../domain/repositories/post/post_repository.dart';
 class FirestorePostRepositoryImpl implements FirestorePostRepository {
   @override
   Future<String> createPost(
-      {required Post postInfo, required List<File> files}) async {
+      {required Post postInfo, required List<Uint8List> files}) async {
     try {
       if (files.length == 1) {
         String postUrl =
