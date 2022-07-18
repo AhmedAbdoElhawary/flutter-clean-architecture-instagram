@@ -1,4 +1,4 @@
-import 'package:universal_io/io.dart';
+import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 // ignore: must_be_immutable
 class EditProfilePage extends StatefulWidget {
   UserPersonalInfo userInfo;
-  File? _photo;
+  Uint8List? _photo;
   TextEditingController nameController = TextEditingController(text: "");
   TextEditingController userNameController = TextEditingController(text: "");
   final TextEditingController pronounsController =
@@ -194,7 +194,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         Center(
             child: InkWell(
           onTap: () async {
-            File? pickImage = await imageGalleryPicker();
+            Uint8List? pickImage = await imageGalleryPicker();
             if (pickImage != null) {
               setState(() {
                 widget._photo = pickImage;
