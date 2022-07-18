@@ -166,8 +166,6 @@ class _HomePageState extends State<HomePage> {
                   return InViewNotifierWidget(
                     id: '$index',
                     builder: (_, bool isInView, __) {
-                      print('isInView: $isInView');
-                      print('index: $index');
                       return columnOfWidgets(
                           bodyHeight, index, isInView && widget.playVideo);
                     },
@@ -186,7 +184,7 @@ class _HomePageState extends State<HomePage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (index == 0) ...[
-          storiesLines(500),
+          storiesLines(isThatMobile ? 672 : 500),
           if (isThatMobile) customDivider(),
         ] else ...[
           if (isThatMobile) divider(),
