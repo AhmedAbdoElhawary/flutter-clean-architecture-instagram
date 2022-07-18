@@ -1,4 +1,4 @@
-import 'package:universal_io/io.dart';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/data/models/post.dart';
@@ -32,7 +32,7 @@ class PostCubit extends Cubit<PostState> {
 
   static PostCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future<void> createPost(Post postInfo, List<File> files) async {
+  Future<void> createPost(Post postInfo, List<Uint8List> files) async {
     emit(CubitPostLoading());
     await _createPostUseCase
         .call(paramsOne: postInfo, paramsTwo: files)
