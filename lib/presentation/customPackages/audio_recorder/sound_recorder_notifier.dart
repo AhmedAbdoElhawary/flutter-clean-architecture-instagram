@@ -1,11 +1,11 @@
-import 'dart:io';
 import 'dart:async';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:uuid/uuid.dart';
 import 'package:record/record.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'dart:io';
 import 'audio_encoder.dart';
 
 class SoundRecordNotifier extends ChangeNotifier {
