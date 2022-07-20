@@ -43,7 +43,7 @@ Total : 56 files,  1364 codes, -558 comments, 138 blanks, all 944 lines
 | [lib/presentation/cubit/firestoreUserInfoCubit/user_info_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/user_info_state.dart) | Dart | -4 | 6 | -2 | 0 |
 | [lib/presentation/cubit/postInfoCubit/commentsInfo/repliesInfo/reply_info_cubit.dart](/lib/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart) | Dart | -1 | 0 | 0 | -1 |
 | [lib/presentation/cubit/postInfoCubit/post_cubit.dart](/lib/presentation/cubit/postInfoCubit/post_cubit.dart) | Dart | -3 | 0 | 0 | -3 |
-| [lib/presentation/pages/comments_page.dart](/lib/presentation/pages/comments/comments_page.dart) | Dart | -5 | -28 | 0 | -33 |
+| [lib/presentation/pages/comments_page.dart](/lib/presentation/pages/comments/comments_for_mobile.dart) | Dart | -5 | -28 | 0 | -33 |
 | [lib/presentation/pages/edit_profile_page.dart](/lib/presentation/pages/profile/edit_profile_page.dart) | Dart | 8 | 0 | -2 | 6 |
 | [lib/presentation/pages/home_page.dart](/lib/presentation/pages/time_line/my_own_time_line/home_page.dart) | Dart | -12 | 0 | -1 | -13 |
 | [lib/presentation/pages/login_page.dart](/lib/presentation/pages/register/login_page.dart) | Dart | -1 | 0 | 0 | -1 |
