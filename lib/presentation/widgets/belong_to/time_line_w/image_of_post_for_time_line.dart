@@ -69,6 +69,8 @@ class _ImageOfPostForTimeLineState extends State<ImageOfPostForTimeLine>
               indexOfPost: widget.indexOfPost,
               playTheVideo: widget.playTheVideo,
               reLoadData: widget.reLoadData,
+              textController: commentTextController,
+              selectedCommentInfo: ValueNotifier(null),
             ),
             Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -122,8 +124,8 @@ class _ImageOfPostForTimeLineState extends State<ImageOfPostForTimeLine>
                   isThatCommentScreen: false,
                   postInfo: widget.postInfo.value,
                   textController: textValue,
-                  focusNode: FocusNode(),
                   userPersonalInfo: widget.postInfo.value.publisherInfo!,
+                  currentFocus: ValueNotifier(FocusScopeNode()),
                   makeSelectedCommentNullable: makeSelectedCommentNullable,
                 ),
               ),
@@ -135,6 +137,8 @@ class _ImageOfPostForTimeLineState extends State<ImageOfPostForTimeLine>
   }
 
   makeSelectedCommentNullable(bool isThatComment) {
+    print("222222222222222222222222222222222222222222222");
+
     widget.postInfo.value.comments.add(" ");
     commentTextController.value.text = '';
     Navigator.maybePop(context);
