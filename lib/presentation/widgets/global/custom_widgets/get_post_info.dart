@@ -17,8 +17,10 @@ class GetsPostInfoAndDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:isThatMobile? CustomAppBar.oneTitleAppBar(context, appBarText,
-          logoOfInstagram: true):null,
+      appBar: isThatMobile
+          ? CustomAppBar.oneTitleAppBar(context, appBarText,
+              logoOfInstagram: true)
+          : null,
       body: BlocBuilder<PostCubit, PostState>(
         bloc: PostCubit.get(context)
           ..getPostsInfo(postsIds: [postId], isThatMyPosts: false),
@@ -33,6 +35,8 @@ class GetsPostInfoAndDisplay extends StatelessWidget {
             if (state.postsInfo[0].comments.length < 10) {
               return CommentsOfPost(
                 postInfo: state.postsInfo[0],
+                textController: ValueNotifier(TextEditingController()),
+                selectedCommentInfo: ValueNotifier(null),
                 showImage: true,
               );
             } else {
