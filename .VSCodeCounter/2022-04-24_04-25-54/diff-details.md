@@ -80,7 +80,7 @@ Total : 107 files,  1675 codes, 505 comments, 176 blanks, all 2356 lines
 | [lib/presentation/cubit/firestoreUserInfoCubit/user_info_state.dart](/lib/presentation/cubit/firestoreUserInfoCubit/user_info_state.dart) | Dart | 4 | -6 | 2 | 0 |
 | [lib/presentation/cubit/postInfoCubit/post_cubit.dart](/lib/presentation/cubit/postInfoCubit/post_cubit.dart) | Dart | 0 | 0 | -1 | -1 |
 | [lib/presentation/pages/chatting_page.dart](/lib/presentation/pages/messages/chatting_page.dart) | Dart | 539 | 8 | 29 | 576 |
-| [lib/presentation/pages/comments_page.dart](/lib/presentation/pages/comments/comments_page.dart) | Dart | 3 | -3 | -3 | -3 |
+| [lib/presentation/pages/comments_page.dart](/lib/presentation/pages/comments/comments_for_mobile.dart) | Dart | 3 | -3 | -3 | -3 |
 | [lib/presentation/pages/edit_profile_page.dart](/lib/presentation/pages/profile/edit_profile_page.dart) | Dart | 5 | 0 | 0 | 5 |
 | [lib/presentation/pages/followers_and_followings_info_page.dart](/lib/presentation/pages/profile/followers_info_page.dart) | Dart | 1 | 0 | 0 | 1 |
 | [lib/presentation/pages/home_page.dart](/lib/presentation/pages/time_line/my_own_time_line/home_page.dart) | Dart | 55 | 2 | -1 | 56 |
