@@ -236,14 +236,14 @@ Total : 294 files, 15567 codes, 654 comments, 1970 blanks, all 18191 lines
 | [lib/presentation/customPackages/story_view/story_video.dart](/lib/presentation/customPackages/story_view/story_video.dart) | Dart | 129 | 0 | 25 | 154 |
 | [lib/presentation/customPackages/story_view/story_view.dart](/lib/presentation/customPackages/story_view/story_view.dart) | Dart | 698 | 70 | 86 | 854 |
 | [lib/presentation/customPackages/story_view/utils.dart](/lib/presentation/customPackages/story_view/utils.dart) | Dart | 18 | 0 | 8 | 26 |
-| [lib/presentation/pages/comments/comments_page.dart](/lib/presentation/pages/comments/comments_page.dart) | Dart | 190 | 4 | 14 | 208 |
+| [lib/presentation/pages/comments/comments_page.dart](/lib/presentation/pages/comments/comments_for_mobile.dart) | Dart | 190 | 4 | 14 | 208 |
 | [lib/presentation/pages/messages/chatting_page.dart](/lib/presentation/pages/messages/chatting_page.dart) | Dart | 642 | 1 | 31 | 674 |
 | [lib/presentation/pages/messages/messages_page.dart](/lib/presentation/pages/messages/messages_page.dart) | Dart | 75 | 0 | 5 | 80 |
 | [lib/presentation/pages/profile/create_post_page.dart](/lib/presentation/pages/profile/create_post_page.dart) | Dart | 178 | 3 | 15 | 196 |
 | [lib/presentation/pages/profile/edit_profile_page.dart](/lib/presentation/pages/profile/edit_profile_page.dart) | Dart | 253 | 1 | 17 | 271 |
 | [lib/presentation/pages/profile/followers_info_page.dart](/lib/presentation/pages/profile/followers_info_page.dart) | Dart | 106 | 0 | 8 | 114 |
 | [lib/presentation/pages/profile/personal_profile_page.dart](/lib/presentation/pages/profile/personal_profile_page.dart) | Dart | 360 | 6 | 27 | 393 |
-| [lib/presentation/pages/profile/show_me_who_are_like.dart](/lib/presentation/pages/profile/show_me_who_are_like.dart) | Dart | 72 | 0 | 6 | 78 |
+| [lib/presentation/pages/profile/show_me_who_are_like.dart](/lib/presentation/pages/profile/users_who_likes_for_mobile.dart) | Dart | 72 | 0 | 6 | 78 |
 | [lib/presentation/pages/profile/user_profile_page.dart](/lib/presentation/pages/profile/user_profile_page.dart) | Dart | 222 | 1 | 15 | 238 |
 | [lib/presentation/pages/register/login_page.dart](/lib/presentation/pages/register/login_page.dart) | Dart | 103 | 0 | 14 | 117 |
 | [lib/presentation/pages/register/sign_up_page.dart](/lib/presentation/pages/register/sign_up_page.dart) | Dart | 115 | 2 | 13 | 130 |
