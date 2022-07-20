@@ -20,11 +20,16 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circ
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_post_display.dart';
 
 class CommentsOfPost extends StatefulWidget {
+  final ValueNotifier<Comment?> selectedCommentInfo;
+  final ValueNotifier<TextEditingController> textController;
+
   final Post postInfo;
   final bool showImage;
 
   const CommentsOfPost({
     Key? key,
+    required this.selectedCommentInfo,
+    required this.textController,
     required this.postInfo,
     this.showImage = false,
   }) : super(key: key);
@@ -34,13 +39,12 @@ class CommentsOfPost extends StatefulWidget {
 }
 
 class _CommentsOfPostState extends State<CommentsOfPost> {
-  final TextEditingController _textController = TextEditingController();
   Map<int, bool> showMeReplies = {};
   List<Comment> allComments = [];
-  Comment? selectedCommentInfo;
   bool addReply = false;
   bool rebuild = false;
   late UserPersonalInfo myPersonalInfo;
+  ValueNotifier<FocusNode> currentFocus = ValueNotifier(FocusNode());
 
   @override
   initState() {
@@ -50,10 +54,10 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
 
   @override
   Widget build(BuildContext context) {
-    return isThatMobile ? buildForMobile() : buildForWeb();
+    return isThatMobile ? buildForMobile() : commentsList();
   }
 
-  Column buildForMobile() {
+  Widget buildForMobile() {
     return Column(
       children: [
         commentsList(),
@@ -62,20 +66,8 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
     );
   }
 
-  Column buildForWeb() {
-    return Column(
-      children: [
-
-        commentsList(),
-        commentBox(),
-      ],
-    );
-  }
-
-  Expanded commentsList() {
-    return Expanded(
-      child: blocBuilder(),
-    );
+  Widget commentsList() {
+    return Flexible(child: blocBuilder());
   }
 
   Widget blocBuilder() {
@@ -117,7 +109,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
 
   selectedComment(Comment commentInfo) {
     setState(() {
-      selectedCommentInfo = commentInfo;
+      widget.selectedCommentInfo.value = commentInfo;
     });
   }
 
@@ -125,33 +117,39 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
     return allComments.isEmpty && !widget.showImage
         ? noCommentText(context)
         : SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (widget.showImage) ...[
-                  CustomPostDisplay(
-                    playTheVideo: true,
-                    indexOfPost: 0,
-                    postsInfo: ValueNotifier([widget.postInfo]),
-                    postInfo: ValueNotifier(widget.postInfo),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.only(start: 11.5, top: 5.0),
-                    child: Text(
-                      DateOfNow.chattingDateOfNow(widget.postInfo.datePublished,
-                          widget.postInfo.datePublished),
-                      style: getNormalStyle(
-                          color: Theme.of(context).bottomAppBarColor),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 5.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (widget.showImage) ...[
+                    CustomPostDisplay(
+                      playTheVideo: true,
+                      indexOfPost: 0,
+                      postsInfo: ValueNotifier([widget.postInfo]),
+                      postInfo: ValueNotifier(widget.postInfo),
+                      textController: widget.textController,
+                      selectedCommentInfo: widget.selectedCommentInfo,
                     ),
-                  ),
-                  const Divider(color: ColorManager.black26),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                          start: 11.5, top: 5.0),
+                      child: Text(
+                        DateOfNow.chattingDateOfNow(
+                            widget.postInfo.datePublished,
+                            widget.postInfo.datePublished),
+                        style: getNormalStyle(
+                            color: Theme.of(context).bottomAppBarColor),
+                      ),
+                    ),
+                    const Divider(color: ColorManager.black26),
+                  ],
+                  allComments.isNotEmpty
+                      ? buildComments(commentsOfThePost)
+                      : const SizedBox(),
                 ],
-                allComments.isNotEmpty
-                    ? buildComments(commentsOfThePost)
-                    : const SizedBox(),
-              ],
+              ),
             ),
           );
   }
@@ -174,13 +172,14 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
             commentInfo: commentsOfThePost[index],
             index: index,
             showMeReplies: showMeReplies,
-            textController: _textController,
-            selectedCommentInfo: selectedComment,
+            textController: widget.textController,
+            selectedCommentInfo: ValueNotifier(selectedComment),
             myPersonalInfo: myPersonalInfo,
             addReply: addReply,
             rebuildCallback: isScreenRebuild,
             rebuildComment: rebuild,
             postInfo: widget.postInfo,
+            currentFocus: currentFocus,
           ),
         );
       },
@@ -188,12 +187,6 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
       separatorBuilder: (BuildContext context, int index) =>
           const SizedBox(height: 10),
     );
-  }
-
-  void isScreenRebuild(isRebuild) {
-    setState(() {
-      rebuild = isRebuild;
-    });
   }
 
   Widget noCommentText(BuildContext context) {
@@ -222,7 +215,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
   }
 
   Widget replyingMention() {
-    if (selectedCommentInfo != null) {
+    if (widget.selectedCommentInfo.value != null) {
       return Container(
         width: double.infinity,
         height: 45,
@@ -234,15 +227,15 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
               children: [
                 Expanded(
                   child: Text(
-                      "${StringsManager.replyingTo.tr()} ${selectedCommentInfo!.whoCommentInfo!.userName}",
+                      "${StringsManager.replyingTo.tr()} ${widget.selectedCommentInfo.value!.whoCommentInfo!.userName}",
                       style: getNormalStyle(
                           color: Theme.of(context).disabledColor)),
                 ),
                 GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedCommentInfo = null;
-                        _textController.text = '';
+                        widget.selectedCommentInfo.value = null;
+                        widget.textController.value.text = '';
                       });
                     },
                     child: Icon(
@@ -260,20 +253,25 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
     }
   }
 
-  Widget commentTextField() {
-    return CommentBox(
-      postInfo: widget.postInfo,
-      selectedCommentInfo: selectedCommentInfo,
-      textController: _textController,
-      userPersonalInfo: myPersonalInfo,
-      makeSelectedCommentNullable: makeSelectedCommentNullable,
-    );
+  Widget commentTextField() => CommentBox(
+        postInfo: widget.postInfo,
+        selectedCommentInfo: widget.selectedCommentInfo.value,
+        textController: widget.textController.value,
+        userPersonalInfo: myPersonalInfo,
+        currentFocus: currentFocus,
+        makeSelectedCommentNullable: makeSelectedCommentNullable,
+      );
+
+  void isScreenRebuild(isRebuild) {
+    setState(() {
+      rebuild = isRebuild;
+    });
   }
 
   makeSelectedCommentNullable(bool isThatComment) {
     setState(() {
-      selectedCommentInfo = null;
-      _textController.text = '';
+      widget.selectedCommentInfo.value = null;
+      widget.textController.value.text = '';
       if (!isThatComment) isScreenRebuild(true);
     });
   }

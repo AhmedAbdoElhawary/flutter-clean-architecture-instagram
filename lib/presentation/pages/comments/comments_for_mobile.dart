@@ -9,7 +9,8 @@ import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_of_p
 class CommentsPageForMobile extends StatefulWidget {
   final Post postInfo;
 
-  const CommentsPageForMobile({Key? key, required this.postInfo}) : super(key: key);
+  const CommentsPageForMobile({Key? key, required this.postInfo})
+      : super(key: key);
 
   @override
   State<CommentsPageForMobile> createState() => _CommentsPageForMobileState();
@@ -20,7 +21,11 @@ class _CommentsPageForMobileState extends State<CommentsPageForMobile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: isThatMobile ? appBar(context) : null,
-      body: CommentsOfPost(postInfo: widget.postInfo),
+      body: CommentsOfPost(
+        postInfo: widget.postInfo,
+        selectedCommentInfo: ValueNotifier(null),
+        textController: ValueNotifier(TextEditingController()),
+      ),
     );
   }
 

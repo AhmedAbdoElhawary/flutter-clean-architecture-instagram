@@ -31,14 +31,16 @@ class CommentInfo extends StatefulWidget {
   final bool rebuildComment;
   Map<int, bool> showMeReplies;
   UserPersonalInfo myPersonalInfo;
-  TextEditingController textController;
-  final ValueChanged<Comment>? selectedCommentInfo;
+  ValueNotifier<TextEditingController> textController;
+  final ValueNotifier<ValueChanged<Comment>>? selectedCommentInfo;
   final ValueChanged<bool> rebuildCallback;
   final Post postInfo;
+  ValueNotifier<FocusNode> currentFocus;
 
   CommentInfo(
       {Key? key,
       required this.commentInfo,
+      required this.currentFocus,
       this.selectedCommentInfo,
       required this.index,
       this.isThatReply = false,
@@ -112,6 +114,7 @@ class _CommentInfoState extends State<CommentInfo> {
                       isThatReply: true,
                       rebuildComment: widget.rebuildComment,
                       postInfo: widget.postInfo,
+                      currentFocus: widget.currentFocus,
                     );
                   },
                   itemCount: repliesInfo.length,
@@ -221,7 +224,7 @@ class _CommentInfoState extends State<CommentInfo> {
     );
   }
 
-  Row commentOption(BuildContext context) {
+  Widget commentOption(BuildContext context) {
     return Row(
       children: [
         Text(DateOfNow.commentsDateOfNow(widget.commentInfo.datePublished),
@@ -248,16 +251,18 @@ class _CommentInfoState extends State<CommentInfo> {
           onTap: () async {
             String hashTag = "@${widget.commentInfo.whoCommentInfo!.userName} ";
 
-            widget.textController.text = hashTag;
+            widget.textController.value.text = hashTag;
 
-            widget.textController.selection = TextSelection.fromPosition(
-                TextPosition(offset: widget.textController.text.length));
+            widget.textController.value.selection = TextSelection.fromPosition(
+                TextPosition(offset: widget.textController.value.text.length));
             Comment commentInfo = widget.commentInfo;
             if (widget.commentInfo.parentCommentId.isEmpty) {
               commentInfo.parentCommentId = commentInfo.commentUid;
             }
+            // widget.currentFocus.value.requestFocus();
+
             setState(() {
-              widget.selectedCommentInfo!(commentInfo);
+              widget.selectedCommentInfo!.value(commentInfo);
             });
           },
           child: Text(
@@ -318,9 +323,9 @@ class _CommentInfoState extends State<CommentInfo> {
     );
   }
 
-  IconButton loveButton(bool isLiked, BuildContext context) {
-    return IconButton(
-      icon: !isLiked
+  Widget loveButton(bool isLiked, BuildContext context) {
+    return GestureDetector(
+      child: !isLiked
           ? const Icon(
               Icons.favorite_border,
               size: 15,
@@ -331,47 +336,42 @@ class _CommentInfoState extends State<CommentInfo> {
               size: 15,
               color: Colors.red,
             ),
-      onPressed: () {
+      onTap: () {
         setState(() {
-          if (widget.isThatReply) {
-            if (isLiked) {
+          if (isLiked) {
+            if (widget.isThatReply) {
               BlocProvider.of<ReplyLikesCubit>(context).removeLikeOnThisReply(
                   replyId: widget.commentInfo.commentUid,
                   myPersonalId: myPersonalId);
-              widget.commentInfo.likes.remove(myPersonalId);
-              //for notification
-              BlocProvider.of<NotificationCubit>(context).deleteNotification(
-                  notificationCheck: createNotificationCheck(widget.postInfo));
             } else {
-              BlocProvider.of<ReplyLikesCubit>(context).putLikeOnThisReply(
-                  replyId: widget.commentInfo.commentUid,
-                  myPersonalId: myPersonalId);
-              widget.commentInfo.likes.add(myPersonalId);
-              //for notification
-              BlocProvider.of<NotificationCubit>(context).createNotification(
-                  newNotification: createNotification(widget.commentInfo));
-            }
-          } else {
-            if (isLiked) {
               BlocProvider.of<CommentLikesCubit>(context)
                   .removeLikeOnThisComment(
-                      postId: widget.commentInfo.postId,
-                      commentId: widget.commentInfo.commentUid,
-                      myPersonalId: myPersonalId);
-              widget.commentInfo.likes.remove(myPersonalId);
-              //for notification
-              BlocProvider.of<NotificationCubit>(context).deleteNotification(
-                  notificationCheck: createNotificationCheck(widget.postInfo));
+                postId: widget.commentInfo.postId,
+                commentId: widget.commentInfo.commentUid,
+                myPersonalId: myPersonalId,
+              );
+            }
+            widget.commentInfo.likes.remove(myPersonalId);
+            //for notification
+            BlocProvider.of<NotificationCubit>(context).deleteNotification(
+                notificationCheck: createNotificationCheck(widget.postInfo));
+          } else {
+            if (widget.isThatReply) {
+              BlocProvider.of<ReplyLikesCubit>(context).putLikeOnThisReply(
+                replyId: widget.commentInfo.commentUid,
+                myPersonalId: myPersonalId,
+              );
             } else {
               BlocProvider.of<CommentLikesCubit>(context).putLikeOnThisComment(
-                  postId: widget.commentInfo.postId,
-                  commentId: widget.commentInfo.commentUid,
-                  myPersonalId: myPersonalId);
-              widget.commentInfo.likes.add(myPersonalId);
-              //for notification
-              BlocProvider.of<NotificationCubit>(context).createNotification(
-                  newNotification: createNotification(widget.commentInfo));
+                postId: widget.commentInfo.postId,
+                commentId: widget.commentInfo.commentUid,
+                myPersonalId: myPersonalId,
+              );
             }
+            widget.commentInfo.likes.add(myPersonalId);
+            //for notification
+            BlocProvider.of<NotificationCubit>(context).createNotification(
+                newNotification: createNotification(widget.commentInfo));
           }
         });
       },

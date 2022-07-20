@@ -10,6 +10,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/data/models/comment.dart';
 import 'package:instagram/data/models/notification.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
@@ -22,6 +23,8 @@ import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
 import 'package:instagram/presentation/pages/time_line/my_own_time_line/update_post_info.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
+import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.dart';
+import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_of_post.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_slider.dart';
@@ -32,6 +35,7 @@ import 'package:instagram/presentation/widgets/global/aimation/like_popup_animat
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
+import 'package:instagram/presentation/widgets/global/others/count_of_likes.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
 class ImageOfPost extends StatefulWidget {
@@ -41,9 +45,16 @@ class ImageOfPost extends StatefulWidget {
   final int indexOfPost;
   final ValueNotifier<List<Post>> postsInfo;
   final VoidCallback rebuildPreviousWidget;
+  final bool popupWebContainer;
+  final ValueNotifier<TextEditingController> textController;
+  final ValueNotifier<Comment?> selectedCommentInfo;
+
   const ImageOfPost({
     Key? key,
     required this.postInfo,
+    required this.textController,
+    required this.selectedCommentInfo,
+    this.popupWebContainer = false,
     required this.rebuildPreviousWidget,
     required this.reLoadData,
     required this.indexOfPost,
@@ -66,6 +77,7 @@ class _ImageOfPostState extends State<ImageOfPost>
       TextEditingController();
   ValueNotifier<bool> isSaved = ValueNotifier(false);
   ValueNotifier<int> initPosition = ValueNotifier(0);
+  bool showCommentBox = false;
 
   bool isLiked = false;
   bool isHeartAnimation = false;
@@ -78,7 +90,9 @@ class _ImageOfPostState extends State<ImageOfPost>
 
   @override
   Widget build(BuildContext context) {
-    return thePostsOfHomePage(bodyHeight: 700);
+    return !widget.popupWebContainer
+        ? buildPostForMobile(bodyHeight: 700)
+        : buildPostForWeb(bodyHeight: 700);
   }
 
   pushToProfilePage(Post postInfo) =>
@@ -86,61 +100,216 @@ class _ImageOfPostState extends State<ImageOfPost>
         builder: (context) => WhichProfilePage(userId: postInfo.publisherId),
       ));
 
-  Widget thePostsOfHomePage({required double bodyHeight}) {
+  Widget buildPostForMobile({required double bodyHeight}) {
     return SizedBox(
       width: double.infinity,
-      child: ValueListenableBuilder(
-        valueListenable: widget.postInfo,
-        builder: (context, Post postInfoValue, child) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatarOfProfileImage(
-                    bodyHeight: bodyHeight * .5,
-                    userInfo: postInfoValue.publisherInfo!,
-                  ),
-                  const SizedBox(width: 5),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () => pushToProfilePage(postInfoValue),
-                      child: NameOfCircleAvatar(
-                          postInfoValue.publisherInfo!.name, false),
+      child: buildNormalPostDisplay(bodyHeight),
+    );
+  }
+
+  ValueListenableBuilder<Post> buildNormalPostDisplay(double bodyHeight) {
+    return ValueListenableBuilder(
+      valueListenable: widget.postInfo,
+      builder: (context, Post postInfoValue, child) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
+            child: buildPublisherInfo(bodyHeight, postInfoValue),
+          ),
+          imageOfPost(postInfoValue),
+          Padding(
+            padding:
+                const EdgeInsetsDirectional.only(start: 8, top: 10, bottom: 8),
+            child: buildPostInteraction(postInfoValue),
+          ),
+          if (!isThatMobile && widget.popupWebContainer)
+            ...likesAndCommentBox(postInfoValue),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> likesAndCommentBox(Post postInfoValue) {
+    double withOfScreen = MediaQuery.of(context).size.width;
+    bool minimumWidth = withOfScreen > 800;
+    return [
+      if (postInfoValue.likes.isNotEmpty)
+        Padding(
+          padding: const EdgeInsetsDirectional.only(start: 10),
+          child: CountOfLikes(postInfo: postInfoValue),
+        ),
+      Padding(
+        padding: const EdgeInsetsDirectional.all(10),
+        child: Text(
+          DateOfNow.chattingDateOfNow(
+              postInfoValue.datePublished, postInfoValue.datePublished),
+          style: getNormalStyle(color: Theme.of(context).bottomAppBarColor),
+        ),
+      ),
+      if (showCommentBox || minimumWidth)
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: CommentBox(
+            postInfo: postInfoValue,
+            selectedCommentInfo: widget.selectedCommentInfo.value,
+            textController: widget.textController.value,
+            userPersonalInfo: myPersonalInfo,
+            expandCommentBox: true,
+            currentFocus: ValueNotifier(FocusScopeNode()),
+            makeSelectedCommentNullable: makeSelectedCommentNullable,
+          ),
+        ),
+    ];
+  }
+
+  Row buildPostInteraction(Post postInfoValue) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        loveButton(postInfoValue),
+        const SizedBox(width: 5),
+        commentButton(context, postInfoValue),
+        shareButton(),
+        const Spacer(),
+        if (postInfoValue.imagesUrls.isNotEmpty) scrollBar(postInfoValue),
+        const Spacer(),
+        const Spacer(),
+        saveButton(),
+      ],
+    );
+  }
+
+  Row buildPublisherInfo(double bodyHeight, Post postInfoValue,
+      {bool makeCircleAvatarBigger = false}) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CircleAvatarOfProfileImage(
+          bodyHeight:
+              makeCircleAvatarBigger ? bodyHeight * .6 : bodyHeight * .5,
+          userInfo: postInfoValue.publisherInfo!,
+        ),
+        const SizedBox(width: 5),
+        GestureDetector(
+          onTap: () => pushToProfilePage(postInfoValue),
+          child: NameOfCircleAvatar(postInfoValue.publisherInfo!.name, false),
+        ),
+        const Spacer(),
+        menuButton()
+      ],
+    );
+  }
+
+  Widget buildPostForWeb({required double bodyHeight}) {
+    double withOfScreen = MediaQuery.of(context).size.width;
+    bool minimumWidth = withOfScreen > 800;
+    Post postInfoValue = widget.postInfo.value;
+    return GestureDetector(
+      onTap: () {
+        showCommentBox = false;
+        Navigator.of(context).maybePop();
+      },
+      child: Scaffold(
+        body: GestureDetector(
+          onTap: () {},
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 80.0),
+            child: Center(
+              child: !minimumWidth
+                  ? Container(
+                      width: 300,
+                      height: showCommentBox ? 509 : 454,
+                      padding: const EdgeInsets.only(top: 10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: ColorManager.white),
+                      child: buildNormalPostDisplay(bodyHeight))
+                  : SizedBox(
+                      height: withOfScreen / 2,
+                      width: minimumWidth ? 1270 : 800,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: Container(
+                              height: double.infinity,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(5),
+                                    topLeft: Radius.circular(5)),
+                                color: ColorManager.black,
+                              ),
+                              child: imageOfPost(widget.postInfo.value),
+                            ),
+                          ),
+                          Container(
+                            height: withOfScreen / 2,
+                            width: 500,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(5),
+                                  topRight: Radius.circular(5)),
+                              color: ColorManager.white,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 15),
+                                  child: buildPublisherInfo(
+                                    bodyHeight,
+                                    postInfoValue,
+                                    makeCircleAvatarBigger: true,
+                                  ),
+                                ),
+                                Flexible(
+                                  fit: FlexFit.loose,
+                                  flex: 1,
+                                  child: SizedBox(
+                                    height: double.infinity,
+                                    child: CommentsOfPost(
+                                      postInfo: postInfoValue,
+                                      selectedCommentInfo:
+                                          widget.selectedCommentInfo,
+                                      textController: widget.textController,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                      start: 10, top: 10, bottom: 8),
+                                  child: buildPostInteraction(postInfoValue),
+                                ),
+                                ...likesAndCommentBox(postInfoValue),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  menuButton()
-                ],
-              ),
             ),
-            imageOfPost(postInfoValue),
-            Padding(
-              padding: const EdgeInsetsDirectional.only(
-                  start: 8, top: 10, bottom: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  loveButton(postInfoValue),
-                  const SizedBox(width: 5),
-                  commentButton(context, postInfoValue),
-                  shareButton(),
-                  const Spacer(),
-                  if (postInfoValue.imagesUrls.isNotEmpty)
-                    scrollBar(postInfoValue),
-                  const Spacer(),
-                  const Spacer(),
-                  saveButton(),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
+
+  makeSelectedCommentNullable(bool isThatComment) {
+    setState(() {
+      widget.selectedCommentInfo.value = null;
+      widget.textController.value.text = '';
+    });
+  }
+
+  SizedBox buildSizedBox() => SizedBox(
+        width: double.infinity,
+        height: 50,
+        child: Text("Yes", style: getNormalStyle(color: ColorManager.black)),
+      );
 
   Widget loveButton(Post postInfo) {
     bool isLiked = postInfo.likes.contains(myPersonalId);
@@ -606,7 +775,6 @@ class _ImageOfPostState extends State<ImageOfPost>
           clearTexts: clearTextsController,
         ),
       );
-
   Padding commentButton(BuildContext context, Post postInfoValue) {
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 5),
@@ -621,20 +789,31 @@ class _ImageOfPostState extends State<ImageOfPost>
                   CommentsPageForMobile(postInfo: postInfoValue),
             ));
           } else {
-            /// not yet implemented
-            // Navigator.of(context).push(
-            //   HeroDialogRoute(
-            //     builder: (context) =>
-            //         UsersWhoLikesForWeb(usersIds: postInfo.likes),
-            //   ),
-            // );
+            if (!widget.popupWebContainer) {
+              Navigator.of(context).push(
+                HeroDialogRoute(
+                  builder: (context) => ImageOfPost(
+                    postInfo: widget.postInfo,
+                    playTheVideo: widget.playTheVideo,
+                    indexOfPost: widget.indexOfPost,
+                    postsInfo: widget.postsInfo,
+                    rebuildPreviousWidget: widget.rebuildPreviousWidget,
+                    reLoadData: widget.reLoadData,
+                    popupWebContainer: true,
+                    selectedCommentInfo: widget.selectedCommentInfo,
+                    textController: widget.textController,
+                  ),
+                ),
+              );
+            } else {
+              setState(() => showCommentBox = true);
+            }
           }
         },
       ),
     );
   }
 }
-
 
 class _MenuCard extends StatelessWidget {
   const _MenuCard({Key? key}) : super(key: key);
