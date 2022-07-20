@@ -17,16 +17,17 @@ import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle
 
 class CommentBox extends StatefulWidget {
   final Post postInfo;
-  final FocusNode? focusNode;
+  ValueNotifier<FocusNode> currentFocus;
   final bool isThatCommentScreen;
   final Comment? selectedCommentInfo;
   final UserPersonalInfo userPersonalInfo;
   final TextEditingController textController;
   final ValueChanged<bool> makeSelectedCommentNullable;
-
-  const CommentBox({
+  final bool expandCommentBox;
+  CommentBox({
     Key? key,
-    this.focusNode,
+    required this.currentFocus,
+    this.expandCommentBox = false,
     required this.postInfo,
     this.selectedCommentInfo,
     required this.textController,
@@ -45,24 +46,27 @@ class _CommentBoxState extends State<CommentBox> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            textOfEmoji('❤'),
-            textOfEmoji('🙌'),
-            textOfEmoji('🔥'),
-            textOfEmoji('👏🏻'),
-            textOfEmoji('😢'),
-            textOfEmoji('😍'),
-            textOfEmoji('😮'),
-            textOfEmoji('😂'),
-          ],
-        ),
-        const Divider(),
+        if (isThatMobile) ...[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              textOfEmoji('❤'),
+              textOfEmoji('🙌'),
+              textOfEmoji('🔥'),
+              textOfEmoji('👏🏻'),
+              textOfEmoji('😢'),
+              textOfEmoji('😍'),
+              textOfEmoji('😮'),
+              textOfEmoji('😂'),
+            ],
+          ),
+          const Divider(),
+        ],
         Padding(
           padding: const EdgeInsetsDirectional.only(start: 8, end: 8),
           child: Row(
-            crossAxisAlignment: widget.textController.text.length < 70
+            crossAxisAlignment: widget.expandCommentBox ||
+                    widget.textController.text.length < 70
                 ? CrossAxisAlignment.center
                 : CrossAxisAlignment.end,
             children: [
@@ -70,17 +74,14 @@ class _CommentBoxState extends State<CommentBox> {
                 userInfo: widget.userPersonalInfo,
                 bodyHeight: 330,
               ),
-              const SizedBox(
-                width: 20.0,
-              ),
+              const SizedBox(width: 20.0),
               Expanded(
                 child: TextFormField(
                   keyboardType: TextInputType.multiline,
                   cursorColor: ColorManager.teal,
-                  focusNode: widget.focusNode == null ? null : FocusNode()
-                    ?..requestFocus(),
+                  focusNode: widget.currentFocus.value,
                   style: Theme.of(context).textTheme.bodyText1,
-                  maxLines: null,
+                  maxLines: widget.expandCommentBox ? 1 : null,
                   decoration: InputDecoration.collapsed(
                       hintText: StringsManager.addComment.tr(),
                       hintStyle: TextStyle(
