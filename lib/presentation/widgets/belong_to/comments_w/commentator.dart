@@ -8,7 +8,6 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/core/utility/define_function.dart';
 import 'package:instagram/data/models/comment.dart';
 import 'package:instagram/data/models/notification.dart';
 import 'package:instagram/data/models/post.dart';
@@ -18,7 +17,7 @@ import 'package:instagram/presentation/cubit/notification/notification_cubit.dar
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comment_likes/comment_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/replyLikes/reply_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
-import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
+import 'package:instagram/presentation/pages/profile/users_who_likes_for_mobile.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/core/functions/toast_show.dart';
@@ -34,7 +33,7 @@ class CommentInfo extends StatefulWidget {
   UserPersonalInfo myPersonalInfo;
   TextEditingController textController;
   final ValueChanged<Comment>? selectedCommentInfo;
-  final CustomRebuildCallback customRebuildCallback;
+  final ValueChanged<bool> rebuildCallback;
   final Post postInfo;
 
   CommentInfo(
@@ -46,7 +45,7 @@ class CommentInfo extends StatefulWidget {
       required this.myPersonalInfo,
       required this.rebuildComment,
       required this.showMeReplies,
-      required this.customRebuildCallback,
+      required this.rebuildCallback,
       required this.addReply,
       required this.textController,
       required this.postInfo})
@@ -84,7 +83,7 @@ class _CommentInfoState extends State<CommentInfo> {
             return true;
           }
           if (widget.rebuildComment) {
-            widget.customRebuildCallback(isRebuild: false);
+            widget.rebuildCallback(false);
             return true;
           }
           return false;
@@ -105,7 +104,7 @@ class _CommentInfoState extends State<CommentInfo> {
                       showMeReplies: widget.showMeReplies,
                       commentInfo: repliesInfo[index],
                       textController: widget.textController,
-                      customRebuildCallback: widget.customRebuildCallback,
+                      rebuildCallback: widget.rebuildCallback,
                       index: index,
                       selectedCommentInfo: widget.selectedCommentInfo,
                       myPersonalInfo: widget.myPersonalInfo,
@@ -233,7 +232,7 @@ class _CommentInfoState extends State<CommentInfo> {
             child: InkWell(
               onTap: () {
                 Navigator.of(context).push(CupertinoPageRoute(
-                    builder: (context) => UsersWhoLikesOnPostPage(
+                    builder: (context) => UsersWhoLikesForMobile(
                           showSearchBar: false,
                           usersIds: widget.commentInfo.likes,
                         )));
@@ -390,8 +389,7 @@ class _CommentInfoState extends State<CommentInfo> {
 
   CustomNotification createNotification(Comment commentInfo) {
     return CustomNotification(
-      text:
-          "liked your comment:${commentInfo.theComment}",
+      text: "liked your comment:${commentInfo.theComment}",
       postId: widget.postInfo.postUid,
       postImageUrl: widget.postInfo.imagesUrls.length > 1
           ? widget.postInfo.imagesUrls[0]
