@@ -14,8 +14,8 @@ import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
-import 'package:instagram/presentation/pages/comments/comments_page.dart';
-import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
+import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
+import 'package:instagram/presentation/pages/profile/users_who_likes_for_mobile.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/videos_w/reel_video_play.dart';
 import 'package:instagram/core/functions/toast_show.dart';
@@ -358,7 +358,7 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
 
   goToCommentPage(Post videoInfo) async {
     await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-        builder: (context) => CommentsPage(postInfo: videoInfo),
+        builder: (context) => CommentsPageForMobile(postInfo: videoInfo),
         maintainState: false));
     widget.stopVideo.value = false;
   }
@@ -378,7 +378,7 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
     return InkWell(
       onTap: () async {
         await Navigator.of(context).push(CupertinoPageRoute(
-            builder: (context) => UsersWhoLikesOnPostPage(
+            builder: (context) => UsersWhoLikesForMobile(
                   showSearchBar: true,
                   usersIds: videoInfo.likes,
                 )));

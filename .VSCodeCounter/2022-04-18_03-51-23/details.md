@@ -162,7 +162,7 @@ Total : 207 files, 8107 codes, 512 comments, 1158 blanks, all 9777 lines
 | [lib/presentation/cubit/postInfoCubit/post_state.dart](/lib/presentation/cubit/postInfoCubit/post_state.dart) | Dart | 24 | 0 | 12 | 36 |
 | [lib/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart](/lib/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart) | Dart | 26 | 0 | 6 | 32 |
 | [lib/presentation/cubit/postInfoCubit/specific_users_posts_state.dart](/lib/presentation/cubit/postInfoCubit/specific_users_posts_state.dart) | Dart | 16 | 0 | 7 | 23 |
-| [lib/presentation/pages/comments_page.dart](/lib/presentation/pages/comments/comments_page.dart) | Dart | 254 | 5 | 18 | 277 |
+| [lib/presentation/pages/comments_page.dart](/lib/presentation/pages/comments/comments_for_mobile.dart) | Dart | 254 | 5 | 18 | 277 |
 | [lib/presentation/pages/edit_profile_page.dart](/lib/presentation/pages/profile/edit_profile_page.dart) | Dart | 217 | 1 | 16 | 234 |
 | [lib/presentation/pages/followers_and_followings_info_page.dart](/lib/presentation/pages/profile/followers_info_page.dart) | Dart | 100 | 0 | 8 | 108 |
 | [lib/presentation/pages/home_page.dart](/lib/presentation/pages/time_line/my_own_time_line/home_page.dart) | Dart | 144 | 0 | 22 | 166 |
@@ -173,7 +173,7 @@ Total : 207 files, 8107 codes, 512 comments, 1158 blanks, all 9777 lines
 | [lib/presentation/pages/play_this_video.dart](/lib/presentation/pages/video/play_this_video.dart) | Dart | 38 | 0 | 10 | 48 |
 | [lib/presentation/pages/search_about_user_page.dart](/lib/presentation/pages/time_line/all_user_time_line/all_users_time_line.dart) | Dart | 61 | 0 | 10 | 71 |
 | [lib/presentation/pages/shop_page.dart](/lib/presentation/pages/shop/shop_page.dart) | Dart | 10 | 0 | 3 | 13 |
-| [lib/presentation/pages/show_me_who_are_like.dart](/lib/presentation/pages/profile/show_me_who_are_like.dart) | Dart | 69 | 0 | 7 | 76 |
+| [lib/presentation/pages/show_me_who_are_like.dart](/lib/presentation/pages/profile/users_who_likes_for_mobile.dart) | Dart | 69 | 0 | 7 | 76 |
 | [lib/presentation/pages/sign_up_page.dart](/lib/presentation/pages/register/sign_up_page.dart) | Dart | 165 | 11 | 13 | 189 |
 | [lib/presentation/pages/texting_page.dart](/lib/presentation/pages/messages/chatting_page.dart) | Dart | 357 | 13 | 23 | 393 |
 | [lib/presentation/pages/ttry.dart](/lib/presentation/pages/ttry.dart) | Dart | 133 | 11 | 22 | 166 |

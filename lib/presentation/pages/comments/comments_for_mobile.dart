@@ -4,26 +4,24 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
-import 'package:instagram/presentation/widgets/belong_to/comments_w/build_comments.dart';
+import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_of_post.dart';
 
-class CommentsPage extends StatefulWidget {
+class CommentsPageForMobile extends StatefulWidget {
   final Post postInfo;
 
-  const CommentsPage({Key? key, required this.postInfo}) : super(key: key);
+  const CommentsPageForMobile({Key? key, required this.postInfo}) : super(key: key);
 
   @override
-  State<CommentsPage> createState() => _CommentsPageState();
+  State<CommentsPageForMobile> createState() => _CommentsPageForMobileState();
 }
 
-class _CommentsPageState extends State<CommentsPage> {
+class _CommentsPageForMobileState extends State<CommentsPageForMobile> {
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      return Scaffold(
-        appBar: isThatMobile ? appBar(context) : null,
-        body: BuildComments(postInfo: widget.postInfo),
-      );
-    });
+    return Scaffold(
+      appBar: isThatMobile ? appBar(context) : null,
+      body: CommentsOfPost(postInfo: widget.postInfo),
+    );
   }
 
   AppBar appBar(BuildContext context) {

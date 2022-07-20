@@ -6,6 +6,7 @@ import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/comment.dart';
 import 'package:instagram/data/models/post.dart';
@@ -18,21 +19,21 @@ import 'package:instagram/presentation/widgets/belong_to/comments_w/commentator.
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_post_display.dart';
 
-class BuildComments extends StatefulWidget {
+class CommentsOfPost extends StatefulWidget {
   final Post postInfo;
   final bool showImage;
 
-  const BuildComments({
+  const CommentsOfPost({
     Key? key,
     required this.postInfo,
     this.showImage = false,
   }) : super(key: key);
 
   @override
-  State<BuildComments> createState() => _BuildCommentsState();
+  State<CommentsOfPost> createState() => _CommentsOfPostState();
 }
 
-class _BuildCommentsState extends State<BuildComments> {
+class _CommentsOfPostState extends State<CommentsOfPost> {
   final TextEditingController _textController = TextEditingController();
   Map<int, bool> showMeReplies = {};
   List<Comment> allComments = [];
@@ -49,31 +50,44 @@ class _BuildCommentsState extends State<BuildComments> {
 
   @override
   Widget build(BuildContext context) {
+    return isThatMobile ? buildForMobile() : buildForWeb();
+  }
+
+  Column buildForMobile() {
     return Column(
       children: [
-        commentsList(context),
+        commentsList(),
         commentBox(),
       ],
     );
   }
 
-  Expanded commentsList(BuildContext context) {
-    return Expanded(
-      child: blocBuilder(context),
+  Column buildForWeb() {
+    return Column(
+      children: [
+
+        commentsList(),
+        commentBox(),
+      ],
     );
   }
 
-  Widget blocBuilder(BuildContext context) {
+  Expanded commentsList() {
+    return Expanded(
+      child: blocBuilder(),
+    );
+  }
+
+  Widget blocBuilder() {
     return BlocBuilder<CommentsInfoCubit, CommentsInfoState>(
-      bloc: blocAction(context),
+      bloc: blocAction(),
       buildWhen: buildBlocWhen,
       builder: (context, state) => buildBloc(context, state),
     );
   }
 
-  CommentsInfoCubit blocAction(BuildContext context) =>
-      BlocProvider.of<CommentsInfoCubit>(context)
-        ..getSpecificComments(postId: widget.postInfo.postUid);
+  CommentsInfoCubit blocAction() => BlocProvider.of<CommentsInfoCubit>(context)
+    ..getSpecificComments(postId: widget.postInfo.postUid);
 
   bool buildBlocWhen(CommentsInfoState previous, CommentsInfoState current) =>
       previous != current && current is CubitCommentsInfoLoaded;
@@ -164,7 +178,7 @@ class _BuildCommentsState extends State<BuildComments> {
             selectedCommentInfo: selectedComment,
             myPersonalInfo: myPersonalInfo,
             addReply: addReply,
-            customRebuildCallback: isScreenRebuild,
+            rebuildCallback: isScreenRebuild,
             rebuildComment: rebuild,
             postInfo: widget.postInfo,
           ),
@@ -176,7 +190,7 @@ class _BuildCommentsState extends State<BuildComments> {
     );
   }
 
-  void isScreenRebuild({bool isRebuild = false}) {
+  void isScreenRebuild(isRebuild) {
     setState(() {
       rebuild = isRebuild;
     });
@@ -260,7 +274,7 @@ class _BuildCommentsState extends State<BuildComments> {
     setState(() {
       selectedCommentInfo = null;
       _textController.text = '';
-      if (!isThatComment) isScreenRebuild(isRebuild: true);
+      if (!isThatComment) isScreenRebuild(true);
     });
   }
 

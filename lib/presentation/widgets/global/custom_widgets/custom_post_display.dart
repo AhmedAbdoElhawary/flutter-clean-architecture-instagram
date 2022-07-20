@@ -1,11 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/post.dart';
-import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
+import 'package:instagram/presentation/pages/profile/users_who_likes_for_mobile.dart';
+import 'package:instagram/presentation/pages/profile/users_who_likes_for_web.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_text.dart';
 import 'package:instagram/presentation/widgets/global/others/image_of_post.dart';
 
@@ -68,6 +71,7 @@ class _CustomPostDisplayState extends State<CustomPostDisplay>
               reLoadData: widget.reLoadData,
               indexOfPost: widget.indexOfPost,
               postsInfo: widget.postsInfo,
+              rebuildPreviousWidget: () => setState(() {}),
             ),
             imageCaption(postInfoValue, bodyHeight, context)
           ],
@@ -104,11 +108,23 @@ class _CustomPostDisplayState extends State<CustomPostDisplay>
     int likes = postInfo.likes.length;
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(CupertinoPageRoute(
-            builder: (context) => UsersWhoLikesOnPostPage(
-                  showSearchBar: true,
-                  usersIds: postInfo.likes,
-                )));
+        if (isThatMobile) {
+          Navigator.of(context).push(
+            CupertinoPageRoute(
+              builder: (context) => UsersWhoLikesForMobile(
+                showSearchBar: true,
+                usersIds: postInfo.likes,
+              ),
+            ),
+          );
+        } else {
+          Navigator.of(context).push(
+            HeroDialogRoute(
+              builder: (context) =>
+                  UsersWhoLikesForWeb(usersIds: postInfo.likes),
+            ),
+          );
+        }
       },
       child: Text(
           '$likes ${likes > 1 ? StringsManager.likes.tr() : StringsManager.like.tr()}',

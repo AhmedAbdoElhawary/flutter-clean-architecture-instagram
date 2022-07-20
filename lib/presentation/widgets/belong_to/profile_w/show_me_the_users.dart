@@ -45,18 +45,19 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
   @override
   Widget build(BuildContext context) {
     if (widget.usersInfo.isNotEmpty) {
-      return ListView.separated(
-        shrinkWrap: true,
-        primary: false,
-        physics: const NeverScrollableScrollPhysics(),
-        addAutomaticKeepAlives: false,
-        addRepaintBoundaries: false,
-        itemBuilder: (context, index) {
-          return containerOfUserInfo(
-              widget.usersInfo[index], widget.isThatFollower);
-        },
-        separatorBuilder: (context, index) => const SizedBox(height: 10),
-        itemCount: widget.usersInfo.length,
+      return SingleChildScrollView(
+        child: ListView.separated(
+          shrinkWrap: true,
+          primary: false,
+          physics: const NeverScrollableScrollPhysics(),
+          addAutomaticKeepAlives: false,
+          itemBuilder: (context, index) {
+            return containerOfUserInfo(
+                widget.usersInfo[index], widget.isThatFollower);
+          },
+          separatorBuilder: (context, index) => const SizedBox(height: 10),
+          itemCount: widget.usersInfo.length,
+        ),
       );
     } else {
       return Center(
@@ -70,6 +71,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
 
   Widget containerOfUserInfo(UserPersonalInfo userInfo, bool isThatFollower) {
     String hash = "${userInfo.userId.hashCode}userInfo";
+
     return InkWell(
       onTap: () async {
         await Navigator.of(context).push(
@@ -99,17 +101,23 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  userInfo.userName,
+                  userInfo.userName ,
                   style: Theme.of(context).textTheme.headline2,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  userInfo.name,
+                  userInfo.name ,
                   style: Theme.of(context).textTheme.headline1,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+
                 )
               ],
             ),
           ),
+          const Spacer(),
           followButton(userInfo, isThatFollower),
         ]),
       ),
@@ -119,32 +127,28 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
   Widget followButton(UserPersonalInfo userInfo, bool isThatFollower) {
     return BlocBuilder<FollowCubit, FollowState>(
       builder: (followContext, stateOfFollow) {
-        return Expanded(
-          child: Builder(builder: (userContext) {
-            if (myPersonalId == userInfo.userId) {
-              return Container();
-            } else {
-              return GestureDetector(
-                  onTap: () async {
-                    if (myPersonalInfo.followedPeople
-                        .contains(userInfo.userId)) {
-                      BlocProvider.of<FollowCubit>(followContext)
-                          .removeThisFollower(
-                              followingUserId: userInfo.userId,
-                              myPersonalId: myPersonalId);
-                      myPersonalInfo.followedPeople.remove(userInfo.userId);
-                    } else {
-                      BlocProvider.of<FollowCubit>(followContext)
-                          .followThisUser(
-                              followingUserId: userInfo.userId,
-                              myPersonalId: myPersonalId);
-                      myPersonalInfo.followedPeople.add(userInfo.userId);
-                    }
-                  },
-                  child: whichContainerOfText(stateOfFollow, userInfo));
-            }
-          }),
-        );
+        return Builder(builder: (userContext) {
+          if (myPersonalId == userInfo.userId) {
+            return Container();
+          } else {
+            return GestureDetector(
+                onTap: () async {
+                  if (myPersonalInfo.followedPeople.contains(userInfo.userId)) {
+                    BlocProvider.of<FollowCubit>(followContext)
+                        .removeThisFollower(
+                            followingUserId: userInfo.userId,
+                            myPersonalId: myPersonalId);
+                    myPersonalInfo.followedPeople.remove(userInfo.userId);
+                  } else {
+                    BlocProvider.of<FollowCubit>(followContext).followThisUser(
+                        followingUserId: userInfo.userId,
+                        myPersonalId: myPersonalId);
+                    myPersonalInfo.followedPeople.add(userInfo.userId);
+                  }
+                },
+                child: whichContainerOfText(stateOfFollow, userInfo));
+          }
+        });
       },
     );
   }
@@ -176,20 +180,25 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
           color: isThatFollower
               ? Theme.of(context).primaryColor
               : ColorManager.blue,
-          border: Border.all(
-              color: Theme.of(context).bottomAppBarColor,
-              width: isThatFollower ? 1.0 : 0),
-          borderRadius: BorderRadius.circular(15.0),
+          border: isThatFollower
+              ? Border.all(
+                  color: Theme.of(context).bottomAppBarColor, width: 1.0)
+              : null,
+          borderRadius: BorderRadius.circular(isThatMobile ? 15 : 5),
         ),
         child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-                fontSize: 17.0,
-                color: isThatFollower
-                    ? Theme.of(context).focusColor
-                    : ColorManager.white,
-                fontWeight: FontWeight.w500),
+          child: Padding(
+            padding:
+                EdgeInsets.symmetric(horizontal: isThatFollower ? 10.0 : 22),
+            child: Text(
+              text,
+              style: TextStyle(
+                  fontSize: 17.0,
+                  color: isThatFollower
+                      ? Theme.of(context).focusColor
+                      : ColorManager.white,
+                  fontWeight: FontWeight.w500),
+            ),
           ),
         ),
       ),

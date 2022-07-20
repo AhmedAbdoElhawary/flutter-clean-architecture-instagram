@@ -11,7 +11,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
-import 'package:instagram/presentation/pages/comments/comments_page.dart';
+import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/animated_dialog.dart';
@@ -309,7 +309,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
         CupertinoPageRoute(
           builder: (context) {
             if (widget.isThatProfile) {
-              return CommentsPage(postInfo: widget.postClickedInfo);
+              return CommentsPageForMobile(postInfo: widget.postClickedInfo);
             } else {
               return WhichProfilePage(
                 userId: widget.postClickedInfo.publisherId,
@@ -478,7 +478,6 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
 
   Widget _createPopupContent(Post postInfo) {
     Size screenSize = MediaQuery.of(context).size;
-
     return Container(
       padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
       child: ClipRRect(

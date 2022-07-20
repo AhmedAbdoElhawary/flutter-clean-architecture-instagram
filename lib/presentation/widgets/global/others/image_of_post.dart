@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -18,10 +19,9 @@ import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
-import 'package:instagram/presentation/pages/comments/comments_page.dart';
+import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
 import 'package:instagram/presentation/pages/time_line/my_own_time_line/update_post_info.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
-import 'package:instagram/presentation/pages/profile/show_me_who_are_like.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_slider.dart';
@@ -32,7 +32,6 @@ import 'package:instagram/presentation/widgets/global/aimation/like_popup_animat
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
-import 'package:like_button/like_button.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
 class ImageOfPost extends StatefulWidget {
@@ -41,10 +40,11 @@ class ImageOfPost extends StatefulWidget {
   final VoidCallback? reLoadData;
   final int indexOfPost;
   final ValueNotifier<List<Post>> postsInfo;
-
+  final VoidCallback rebuildPreviousWidget;
   const ImageOfPost({
     Key? key,
     required this.postInfo,
+    required this.rebuildPreviousWidget,
     required this.reLoadData,
     required this.indexOfPost,
     required this.playTheVideo,
@@ -92,90 +92,88 @@ class _ImageOfPostState extends State<ImageOfPost>
       child: ValueListenableBuilder(
         valueListenable: widget.postInfo,
         builder: (context, Post postInfoValue, child) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircleAvatarOfProfileImage(
-                      bodyHeight: bodyHeight * .5,
-                      userInfo: postInfoValue.publisherInfo!,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatarOfProfileImage(
+                    bodyHeight: bodyHeight * .5,
+                    userInfo: postInfoValue.publisherInfo!,
+                  ),
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => pushToProfilePage(postInfoValue),
+                      child: NameOfCircleAvatar(
+                          postInfoValue.publisherInfo!.name, false),
                     ),
-                    const SizedBox(width: 5),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () => pushToProfilePage(postInfoValue),
-                        child: NameOfCircleAvatar(
-                            postInfoValue.publisherInfo!.name, false),
-                      ),
-                    ),
-                    menuButton()
-                  ],
-                ),
+                  ),
+                  menuButton()
+                ],
               ),
-              imageOfPost(postInfoValue),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(
-                    start: 8, top: 10, bottom: 8),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      loveButton(postInfoValue),
-                      commentButton(context, postInfoValue),
-                      shareButton(),
-                      const Spacer(),
-                      if (postInfoValue.imagesUrls.isNotEmpty)
-                        scrollBar(postInfoValue),
-                      const Spacer(),
-                      const Spacer(),
-                      saveButton(),
-                    ]),
+            ),
+            imageOfPost(postInfoValue),
+            Padding(
+              padding: const EdgeInsetsDirectional.only(
+                  start: 8, top: 10, bottom: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  loveButton(postInfoValue),
+                  const SizedBox(width: 5),
+                  commentButton(context, postInfoValue),
+                  shareButton(),
+                  const Spacer(),
+                  if (postInfoValue.imagesUrls.isNotEmpty)
+                    scrollBar(postInfoValue),
+                  const Spacer(),
+                  const Spacer(),
+                  saveButton(),
+                ],
               ),
-            ]),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget loveButton(Post postInfo) {
     bool isLiked = postInfo.likes.contains(myPersonalId);
-    return LikeButton(
-      isLiked: isLiked,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      likeBuilder: (isLiked) {
-        return !isLiked
-            ? Icon(
-                Icons.favorite_border,
-                color: Theme.of(context).focusColor,
-              )
-            : const Icon(
-                Icons.favorite,
-                color: Colors.red,
-              );
-      },
-      onTap: (isLiked) async {
+    return GestureDetector(
+      onTap: () async {
         setState(() {
           if (isLiked) {
             BlocProvider.of<PostLikesCubit>(context).removeTheLikeOnThisPost(
                 postId: postInfo.postUid, userId: myPersonalId);
             postInfo.likes.remove(myPersonalId);
+            widget.rebuildPreviousWidget();
+
             BlocProvider.of<NotificationCubit>(context).deleteNotification(
                 notificationCheck: createNotificationCheck(postInfo));
           } else {
             BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
                 postId: postInfo.postUid, userId: myPersonalId);
             postInfo.likes.add(myPersonalId);
-
+            widget.rebuildPreviousWidget();
             BlocProvider.of<NotificationCubit>(context).createNotification(
                 newNotification: createNotification(postInfo));
           }
         });
-
-        return !isLiked;
       },
+      child: !isLiked
+          ? Icon(
+              Icons.favorite_border,
+              color: Theme.of(context).focusColor,
+            )
+          : const Icon(
+              Icons.favorite,
+              color: Colors.red,
+            ),
     );
   }
 
@@ -202,23 +200,6 @@ class _ImageOfPostState extends State<ImageOfPost>
     );
   }
 
-  Widget numberOfComment(Post postInfo) {
-    int commentsLength = postInfo.comments.length;
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(
-          context,
-        ).push(CupertinoPageRoute(
-          builder: (context) => CommentsPage(postInfo: postInfo),
-        ));
-      },
-      child: Text(
-        "${StringsManager.viewAll.tr()} $commentsLength ${commentsLength > 1 ? StringsManager.comments.tr() : StringsManager.comment.tr()}",
-        style: Theme.of(context).textTheme.headline1,
-      ),
-    );
-  }
-
   ValueListenableBuilder<int> scrollBar(Post postInfoValue) {
     return ValueListenableBuilder(
       valueListenable: initPosition,
@@ -226,23 +207,6 @@ class _ImageOfPostState extends State<ImageOfPost>
         photoCount: postInfoValue.imagesUrls.length,
         activePhotoIndex: positionValue,
       ),
-    );
-  }
-
-  Widget numberOfLikes(Post postInfo) {
-    int likes = postInfo.likes.length;
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(CupertinoPageRoute(
-            builder: (context) => UsersWhoLikesOnPostPage(
-                  showSearchBar: true,
-                  usersIds: postInfo.likes,
-                )));
-      },
-      child: Text(
-          '$likes ${likes > 1 ? StringsManager.likes.tr() : StringsManager.like.tr()}',
-          textAlign: TextAlign.left,
-          style: Theme.of(context).textTheme.headline2),
     );
   }
 
@@ -272,24 +236,26 @@ class _ImageOfPostState extends State<ImageOfPost>
             });
           },
           onTap: () async {
-            Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder: (context) {
-                  return ValueListenableBuilder(
-                    valueListenable: initPosition,
-                    builder: (context, int positionValue, child) =>
-                        PictureViewer(
-                      blurHash: postInfo.blurHash,
-                      aspectRatio: postInfo.aspectRatio,
-                      isThatImage: postInfo.isThatImage,
-                      imageUrl: postInfo.postUrl.isNotEmpty
-                          ? postInfo.postUrl
-                          : postInfo.imagesUrls[positionValue],
-                    ),
-                  );
-                },
-              ),
-            );
+            if (isThatMobile) {
+              Navigator.of(context).push(
+                CupertinoPageRoute(
+                  builder: (context) {
+                    return ValueListenableBuilder(
+                      valueListenable: initPosition,
+                      builder: (context, int positionValue, child) =>
+                          PictureViewer(
+                        blurHash: postInfo.blurHash,
+                        aspectRatio: postInfo.aspectRatio,
+                        isThatImage: postInfo.isThatImage,
+                        imageUrl: postInfo.postUrl.isNotEmpty
+                            ? postInfo.postUrl
+                            : postInfo.imagesUrls[positionValue],
+                      ),
+                    );
+                  },
+                ),
+              );
+            }
           },
           child: Padding(
             padding: const EdgeInsetsDirectional.only(top: 8.0),
@@ -338,7 +304,7 @@ class _ImageOfPostState extends State<ImageOfPost>
         color: Theme.of(context).focusColor,
         height: 23,
       ),
-      onTap: () async => bottomSheet(),
+      onTap: () async => isThatMobile ? bottomSheet() : popupContainerForWeb(),
     );
   }
 
@@ -355,6 +321,14 @@ class _ImageOfPostState extends State<ImageOfPost>
       },
     );
   }
+
+  popupContainerForWeb() => Navigator.of(context).push(
+        HeroDialogRoute(
+          builder: (context) {
+            return const _MenuCard();
+          },
+        ),
+      );
 
   GestureDetector shareThisPost() {
     return GestureDetector(
@@ -639,12 +613,84 @@ class _ImageOfPostState extends State<ImageOfPost>
       child: GestureDetector(
         child: iconsOfImagePost(IconsAssets.commentIcon),
         onTap: () {
-          Navigator.of(
-            context,
-          ).push(CupertinoPageRoute(
-            builder: (context) => CommentsPage(postInfo: postInfoValue),
-          ));
+          if (isThatMobile) {
+            Navigator.of(
+              context,
+            ).push(CupertinoPageRoute(
+              builder: (context) =>
+                  CommentsPageForMobile(postInfo: postInfoValue),
+            ));
+          } else {
+            /// not yet implemented
+            // Navigator.of(context).push(
+            //   HeroDialogRoute(
+            //     builder: (context) =>
+            //         UsersWhoLikesForWeb(usersIds: postInfo.likes),
+            //   ),
+            // );
+          }
         },
+      ),
+    );
+  }
+}
+
+
+class _MenuCard extends StatelessWidget {
+  const _MenuCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    bool minimumOfWidth = MediaQuery.of(context).size.width > 600;
+    return Center(
+      child: SizedBox(
+        width: minimumOfWidth ? 420 : 250,
+        child: Material(
+          color: ColorManager.white,
+          elevation: 2,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                buildRedContainer("Report", makeColorRed: true),
+                customDivider(),
+                buildRedContainer("Unfollow", makeColorRed: true),
+                customDivider(),
+                buildRedContainer("Go to post"),
+                customDivider(),
+                buildRedContainer("Share to..."),
+                customDivider(),
+                buildRedContainer("Copy link"),
+                customDivider(),
+                buildRedContainer("Embed"),
+                customDivider(),
+                GestureDetector(
+                    onTap: () => Navigator.of(context).maybePop(),
+                    child: buildRedContainer("Cancel")),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Divider customDivider() =>
+      const Divider(color: ColorManager.grey, thickness: 0.5);
+
+  Container buildRedContainer(String text, {bool makeColorRed = false}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Text(
+        text,
+        style: makeColorRed
+            ? getBoldStyle(color: ColorManager.red)
+            : getNormalStyle(color: ColorManager.black),
+        textAlign: TextAlign.center,
       ),
     );
   }

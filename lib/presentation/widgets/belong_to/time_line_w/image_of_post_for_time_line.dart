@@ -13,7 +13,7 @@ import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
-import 'package:instagram/presentation/pages/comments/comments_page.dart';
+import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
 import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_post_display.dart';
@@ -275,7 +275,7 @@ class _ImageOfPostForTimeLineState extends State<ImageOfPostForTimeLine>
           Navigator.of(
             context,
           ).push(CupertinoPageRoute(
-            builder: (context) => CommentsPage(postInfo: postInfo),
+            builder: (context) => CommentsPageForMobile(postInfo: postInfo),
           ));
         },
         child: Text(
