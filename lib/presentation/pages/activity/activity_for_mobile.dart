@@ -19,60 +19,61 @@ import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/get_post_info.dart';
 
-class ActivityPage extends StatelessWidget {
-  final ValueNotifier<bool> rebuildUsersInfo = ValueNotifier(false);
-  final UserPersonalInfo myPersonalInfo;
+class ActivityPage extends StatefulWidget {
+  ActivityPage({Key? key}) : super(key: key);
 
-  ActivityPage({Key? key, required this.myPersonalInfo}) : super(key: key);
+  @override
+  State<ActivityPage> createState() => _ActivityPageState();
+}
+
+class _ActivityPageState extends State<ActivityPage> {
+  late UserPersonalInfo myPersonalInfo;
+  final ValueNotifier<bool> rebuildUsersInfo = ValueNotifier(false);
+
+  @override
+  void initState() {
+    myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: isThatMobile
-          ? AppBar(
+    return isThatMobile
+        ? Scaffold(
+            appBar: AppBar(
               title: const Text('Activity'),
-            )
-          : null,
-      body: BlocBuilder<FirestoreUserInfoCubit, FirestoreUserInfoState>(
-        bloc: FirestoreUserInfoCubit.get(context)
-          ..getAllUnFollowersUsers(myPersonalInfo),
-        buildWhen: (previous, current) =>
-            (previous != current && current is CubitAllUnFollowersUserLoaded),
-        builder: (context, unFollowersState) {
-          return SingleChildScrollView(
-            child: BlocBuilder<NotificationCubit, NotificationState>(
-              bloc: NotificationCubit.get(context)
-                ..getNotifications(userId: myPersonalId),
-              buildWhen: (previous, current) =>
-                  (previous != current && current is NotificationLoaded),
-              builder: (context, notificationState) {
-                if (unFollowersState is CubitAllUnFollowersUserLoaded &&
-                    notificationState is NotificationLoaded) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (notificationState.notifications.isNotEmpty)
-                        _ShowNotifications(
-                          notifications: notificationState.notifications,
-                        ),
-                      if (unFollowersState.usersInfo.isNotEmpty) ...[
-                        suggestionForYouText(context),
-                        ShowMeTheUsers(
-                          usersInfo: unFollowersState.usersInfo,
-                          userInfo: ValueNotifier(myPersonalInfo),
-                          showColorfulCircle: false,
-                          emptyText: StringsManager.noActivity.tr(),
-                        ),
-                      ],
-                    ],
-                  );
-                } else if (notificationState is NotificationFailed &&
-                    unFollowersState is CubitAllUnFollowersUserLoaded) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+            ),
+            body: buildBody(context),
+          )
+        : buildBody(context);
+  }
+
+  BlocBuilder<FirestoreUserInfoCubit, FirestoreUserInfoState> buildBody(
+      BuildContext context) {
+    return BlocBuilder<FirestoreUserInfoCubit, FirestoreUserInfoState>(
+      bloc: FirestoreUserInfoCubit.get(context)
+        ..getAllUnFollowersUsers(myPersonalInfo),
+      buildWhen: (previous, current) =>
+          (previous != current && current is CubitAllUnFollowersUserLoaded),
+      builder: (context, unFollowersState) {
+        return SingleChildScrollView(
+          child: BlocBuilder<NotificationCubit, NotificationState>(
+            bloc: NotificationCubit.get(context)
+              ..getNotifications(userId: myPersonalId),
+            buildWhen: (previous, current) =>
+                (previous != current && current is NotificationLoaded),
+            builder: (context, notificationState) {
+              if (unFollowersState is CubitAllUnFollowersUserLoaded &&
+                  notificationState is NotificationLoaded) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (notificationState.notifications.isNotEmpty)
+                      _ShowNotifications(
+                        notifications: notificationState.notifications,
+                      ),
+                    if (unFollowersState.usersInfo.isNotEmpty) ...[
                       suggestionForYouText(context),
                       ShowMeTheUsers(
                         usersInfo: unFollowersState.usersInfo,
@@ -81,29 +82,43 @@ class ActivityPage extends StatelessWidget {
                         emptyText: StringsManager.noActivity.tr(),
                       ),
                     ],
-                  );
-                } else if (unFollowersState is CubitGetUserInfoFailed &&
-                    notificationState is NotificationLoaded) {
-                  return _ShowNotifications(
-                    notifications: notificationState.notifications,
-                  );
-                } else if (notificationState is NotificationFailed &&
-                    unFollowersState is CubitGetUserInfoFailed) {
-                  ToastShow.toast(notificationState.error);
-                  return Center(
-                    child: Text(
-                      StringsManager.somethingWrong.tr(),
-                      style:
-                          getNormalStyle(color: Theme.of(context).focusColor),
+                  ],
+                );
+              } else if (notificationState is NotificationFailed &&
+                  unFollowersState is CubitAllUnFollowersUserLoaded) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    suggestionForYouText(context),
+                    ShowMeTheUsers(
+                      usersInfo: unFollowersState.usersInfo,
+                      userInfo: ValueNotifier(myPersonalInfo),
+                      showColorfulCircle: false,
+                      emptyText: StringsManager.noActivity.tr(),
                     ),
-                  );
-                }
-                return const ThineCircularProgress();
-              },
-            ),
-          );
-        },
-      ),
+                  ],
+                );
+              } else if (unFollowersState is CubitGetUserInfoFailed &&
+                  notificationState is NotificationLoaded) {
+                return _ShowNotifications(
+                  notifications: notificationState.notifications,
+                );
+              } else if (notificationState is NotificationFailed &&
+                  unFollowersState is CubitGetUserInfoFailed) {
+                ToastShow.toast(notificationState.error);
+                return Center(
+                  child: Text(
+                    StringsManager.somethingWrong.tr(),
+                    style: getNormalStyle(color: Theme.of(context).focusColor),
+                  ),
+                );
+              }
+              return const ThineCircularProgress();
+            },
+          ),
+        );
+      },
     );
   }
 
