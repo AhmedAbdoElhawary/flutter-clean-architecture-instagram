@@ -7,7 +7,7 @@ import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/send_to_users.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_share_button.dart';
-import 'package:instagram/presentation/widgets/global/popup_widgets/head_of_popup_widget.dart';
+import 'package:instagram/presentation/widgets/global/popup_widgets/common/head_of_popup_widget.dart';
 
 class PopupSharePost extends StatefulWidget {
   final Post postInfo;
@@ -25,6 +25,8 @@ class PopupSharePost extends StatefulWidget {
 
 class _PopupSharePostState extends State<PopupSharePost> {
   final TextEditingController messageTextController = TextEditingController();
+  final TextEditingController searchTextController = TextEditingController();
+
   final ValueNotifier<List<UserPersonalInfo>> selectedUsersInfo =
       ValueNotifier([]);
   @override
@@ -52,11 +54,74 @@ class _PopupSharePostState extends State<PopupSharePost> {
                     makeIconsBigger: true,
                   ),
                 ),
+                SingleChildScrollView(
+                  child: customDivider(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 10),
+                      child: Row(
+                        children: [
+                          Text("To:",
+                              style: getBoldStyle(
+                                  color: ColorManager.black, fontSize: 16)),
+                          const SizedBox(width: 20),
+                          for (int i = 0;
+                              i < selectedUsersInfo.value.length;
+                              i++)
+                            buildContainer(
+                                selectedUsersInfo.value[i].name, i),
+                          Flexible(
+                            child: messageField(searchTextController,
+                                StringsManager.search.tr()),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
                 Flexible(fit: FlexFit.loose, flex: 1, child: buildUsers()),
                 ...textFiledAndShareButton(),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildContainer(String selectedUserName, int index) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(end: 10),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: ColorManager.transparentBlue,
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        child: Row(
+          children: [
+            Center(
+              child: Text(
+                selectedUserName,
+                style: const TextStyle(
+                    fontSize: 15.0,
+                    color: ColorManager.blue,
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+            const SizedBox(width: 10),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedUsersInfo.value.removeAt(index);
+                });
+              },
+              child: const Icon(
+                Icons.close_rounded,
+                color: ColorManager.blue,
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -87,7 +152,10 @@ class _PopupSharePostState extends State<PopupSharePost> {
           child: Padding(
             padding: const EdgeInsetsDirectional.only(
                 start: 20, bottom: 10, end: 20, top: 20),
-            child: textFieldOfMessage(),
+            child: selectedUsersInfo.value.isNotEmpty
+                ? messageField(
+                    messageTextController, StringsManager.writeMessage.tr())
+                : null,
           ),
         ),
         Padding(
@@ -109,22 +177,20 @@ class _PopupSharePostState extends State<PopupSharePost> {
         ),
       ];
 
-  clearTextsController() {
+  clearTextsController(bool clearText) {
     setState(() {
-      messageTextController.clear();
+      if (clearText) messageTextController.clear();
     });
   }
 
-  Widget textFieldOfMessage() {
-    return TextField(
-      controller: messageTextController,
+  Widget messageField(TextEditingController textController, String hintText) {
+    return TextFormField(
+      controller: textController,
       cursorColor: ColorManager.teal,
       style: getNormalStyle(color: ColorManager.black),
       decoration: InputDecoration(
-        hintText: StringsManager.writeMessage.tr(),
-        hintStyle: const TextStyle(
-          color: ColorManager.grey,
-        ),
+        hintText: hintText,
+        hintStyle: getNormalStyle(color: ColorManager.grey),
         focusedBorder: InputBorder.none,
         enabledBorder: InputBorder.none,
         errorBorder: InputBorder.none,
@@ -142,6 +208,7 @@ class _PopupSharePostState extends State<PopupSharePost> {
           postInfo: widget.postInfo,
           clearTexts: clearTextsController,
           selectedUsersInfo: selectedUsersInfo,
+          checkBox: true,
         ),
       );
 }
