@@ -6,6 +6,8 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/core/widgets/svg_pictures.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
+import 'package:instagram/presentation/pages/activity/activity_for_mobile.dart';
+import 'package:instagram/presentation/pages/activity/activity_for_web.dart';
 import 'package:instagram/presentation/pages/messages/messages_for_web.dart';
 import 'package:instagram/presentation/pages/profile/personal_profile_page.dart';
 import 'package:instagram/presentation/pages/shop/shop_page.dart';
@@ -23,6 +25,7 @@ class WebScreenLayout extends StatefulWidget {
 class _WebScreenLayoutState extends State<WebScreenLayout> {
   int _page = 0;
   late PageController pageController; // for tabs animation
+  OverlayEntry? _popupDialog;
 
   @override
   void initState() {
@@ -90,12 +93,19 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
               color: Theme.of(context).focusColor,
               size: 28,
             ),
-            onPressed: () => navigationTapped(4),
+            onPressed: () {
+              if (_popupDialog == null) {
+                _popupDialog = _createPopupDialog();
+                Overlay.of(context)!.insert(_popupDialog!);
+              } else {
+                _popupDialog?.remove();
+              }
+            },
           ),
           const SizedBox(width: 5),
           IconButton(
             icon: const PersonalImageIcon(),
-            onPressed: () => navigationTapped(5),
+            onPressed: () => navigationTapped(4),
           ),
         ],
       ),
@@ -108,12 +118,19 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
     );
   }
 
+  _createPopupDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => Material(
+          child: SizedBox(width: 400, height: 600, child: ActivityPage())),
+    );
+  }
+
   List<Widget> homeScreenItems = [
     const _HomePage(),
     const MessagesForWeb(),
     const ShopPage(),
     AllUsersTimeLinePage(),
-    const ShopPage(),
     const _PersonalProfilePage(),
   ];
 
