@@ -1,18 +1,26 @@
-import 'dart:io';
-import 'package:instegram/data/datasourses/remote/firebase_storage.dart';
-import 'package:instegram/data/datasourses/remote/post/firestore_post.dart';
-import 'package:instegram/data/datasourses/remote/firestore_user_info.dart';
-import 'package:instegram/data/models/post.dart';
+import 'dart:typed_data';
+import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
+import 'package:instagram/data/datasourses/remote/post/firestore_post.dart';
+import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
+import 'package:instagram/data/models/post.dart';
 import '../../../domain/repositories/post/post_repository.dart';
 
 class FirestorePostRepositoryImpl implements FirestorePostRepository {
   @override
   Future<String> createPost(
-      {required Post postInfo, required File photo}) async {
+      {required Post postInfo, required List<Uint8List> files}) async {
     try {
-      String postUrl =
-          await FirebaseStoragePost.uploadFile(photo, 'postsImage');
-      postInfo.postUrl = postUrl;
+      if (files.length == 1) {
+        String postUrl =
+            await FirebaseStoragePost.uploadFile(files[0], 'postsImage');
+        postInfo.postUrl = postUrl;
+      } else {
+        for (int i = 0; i < files.length; i++) {
+          String postUrl =
+              await FirebaseStoragePost.uploadFile(files[i], 'postsImage');
+          postInfo.imagesUrls.add(postUrl);
+        }
+      }
       String postUid = await FirestorePost.createPost(postInfo);
       return postUid;
     } catch (e) {
@@ -21,9 +29,12 @@ class FirestorePostRepositoryImpl implements FirestorePostRepository {
   }
 
   @override
-  Future<List<Post>> getPostsInfo(List<dynamic> postId) async {
+  Future<List<Post>> getPostsInfo(
+      {required List<dynamic> postsIds,
+      required int lengthOfCurrentList}) async {
     try {
-      return await FirestorePost.getPostsInfo(postId);
+      return await FirestorePost.getPostsInfo(
+          postsIds: postsIds, lengthOfCurrentList: lengthOfCurrentList);
     } catch (e) {
       return Future.error(e.toString());
     }
@@ -64,6 +75,25 @@ class FirestorePostRepositoryImpl implements FirestorePostRepository {
     try {
       return await FirestorePost.removeTheLikeOnThisPost(
           postId: postId, userId: userId);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  @override
+  Future<void> deletePost({required Post postInfo}) async {
+    try {
+      await FirestorePost.deletePost(postInfo: postInfo);
+      await FirebaseStoragePost.deleteImageFromStorage(postInfo.postUrl);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  @override
+  Future<Post> updatePost({required Post postInfo}) async {
+    try {
+      return await FirestorePost.updatePost(postInfo: postInfo);
     } catch (e) {
       return Future.error(e.toString());
     }

@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/data/datasourses/remote/firestore_user_info.dart';
-import 'package:instegram/data/models/post.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
+import 'package:instagram/data/models/post.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
 
 class FirestorePost {
   static final _fireStorePostCollection =
@@ -21,19 +21,44 @@ class FirestorePost {
     return postRef.id;
   }
 
-  static Future<List<Post>> getPostsInfo(List<dynamic> postsIds) async {
+  static Future<void> deletePost({required Post postInfo}) async {
+    await _fireStorePostCollection.doc(postInfo.postUid).delete();
+    await FirestoreUser.removeUserPost(postId: postInfo.postUid);
+  }
+
+  static Future<Post> updatePost({required Post postInfo}) async {
+    await _fireStorePostCollection
+        .doc(postInfo.postUid)
+        .update({'caption': postInfo.caption});
+    DocumentSnapshot<Map<String, dynamic>> snap =
+        await _fireStorePostCollection.doc(postInfo.postUid).get();
+    return Post.fromQuery(query: snap);
+  }
+
+  static Future<List<Post>> getPostsInfo(
+      {required List<dynamic> postsIds,
+      required int lengthOfCurrentList}) async {
     List<Post> postsInfo = [];
-    for (int i = 0; i < postsIds.length; i++) {
+    int condition = postsIds.length;
+    if (lengthOfCurrentList != -1) {
+      int lengthOfOriginPost = postsIds.length;
+      int lengthOfData = lengthOfOriginPost > 5 ? 5 : lengthOfOriginPost;
+      int addMoreData = lengthOfCurrentList + 5;
+      lengthOfData =
+          addMoreData < lengthOfOriginPost ? addMoreData : lengthOfOriginPost;
+      condition = lengthOfData;
+    }
+    for (int i = 0; i < condition; i++) {
       DocumentSnapshot<Map<String, dynamic>> snap =
           await _fireStorePostCollection.doc(postsIds[i]).get();
       if (snap.exists) {
-        Post postReformat = Post.fromSnap(docSnap: snap);
+        Post postReformat = Post.fromQuery(query: snap);
         UserPersonalInfo publisherInfo =
             await FirestoreUser.getUserInfo(postReformat.publisherId);
         postReformat.publisherInfo = publisherInfo;
         postsInfo.add(postReformat);
       } else {
-        return Future.error(StringsManager.userNotExist.tr());
+        FirestoreUser.removeUserPost(postId: postsIds[i]);
       }
     }
     return postsInfo;
@@ -42,9 +67,9 @@ class FirestorePost {
   static Future<List<dynamic>> getCommentsOfPost(
       {required String postId}) async {
     DocumentSnapshot<Map<String, dynamic>> snap =
-    await _fireStorePostCollection.doc(postId).get();
+        await _fireStorePostCollection.doc(postId).get();
     if (snap.exists) {
-      Post postReformat = Post.fromSnap(docSnap: snap);
+      Post postReformat = Post.fromQuery(query: snap);
       return postReformat.comments;
     } else {
       return Future.error(StringsManager.userNotExist.tr());
@@ -56,9 +81,8 @@ class FirestorePost {
     QuerySnapshot<Map<String, dynamic>> snap =
         await _fireStorePostCollection.get();
 
-    for (int i = 0; i < snap.docs.length; i++) {
-      QueryDocumentSnapshot<Map<String, dynamic>> doc = snap.docs[i];
-      Post postReformat = Post.fromSnap(querySnap: doc);
+    for (final doc in snap.docs) {
+      Post postReformat = Post.fromQuery(doc: doc);
       UserPersonalInfo publisherInfo =
           await FirestoreUser.getUserInfo(postReformat.publisherId);
       postReformat.publisherInfo = publisherInfo;

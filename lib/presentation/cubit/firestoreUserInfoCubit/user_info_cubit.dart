@@ -1,17 +1,19 @@
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/domain/usecases/firestoreUserUseCase/add_post_to_user.dart';
-import 'package:instegram/domain/usecases/firestoreUserUseCase/add_story_to_user.dart';
-import 'package:instegram/domain/usecases/firestoreUserUseCase/getUserInfo/get_user_from_user_name.dart';
-import 'package:instegram/domain/usecases/firestoreUserUseCase/getUserInfo/get_user_info_usecase.dart';
-import 'package:instegram/domain/usecases/firestoreUserUseCase/update_user_info.dart';
-import 'package:instegram/domain/usecases/firestoreUserUseCase/upload_profile_image_usecase.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/domain/use_cases/user/add_post_to_user.dart';
+import 'package:instagram/domain/use_cases/user/add_story_to_user.dart';
+import 'package:instagram/domain/use_cases/user/getUserInfo/get_all_users_info.dart';
+import 'package:instagram/domain/use_cases/user/getUserInfo/get_user_from_user_name.dart';
+import 'package:instagram/domain/use_cases/user/getUserInfo/get_user_info_usecase.dart';
+import 'package:instagram/domain/use_cases/user/update_user_info.dart';
+import 'package:instagram/domain/use_cases/user/upload_profile_image_usecase.dart';
 part 'user_info_state.dart';
 
-class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
+class FirestoreUserInfoCubit extends Cubit<FirestoreUserInfoState> {
   final GetUserInfoUseCase _getUserInfoUseCase;
+  final GetAllUsersUseCase _getAllUnFollowersUsersUseCase;
   final UpdateUserInfoUseCase _updateUserInfoUseCase;
   final UploadProfileImageUseCase _uploadImageUseCase;
   final AddPostToUserUseCase _addPostToUserUseCase;
@@ -25,6 +27,7 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
       this._getUserInfoUseCase,
       this._updateUserInfoUseCase,
       this._addPostToUserUseCase,
+      this._getAllUnFollowersUsersUseCase,
       this._getUserFromUserNameUseCase,
       this._addStoryToUserUseCase,
       this._uploadImageUseCase)
@@ -33,9 +36,15 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
   static FirestoreUserInfoCubit get(BuildContext context) =>
       BlocProvider.of(context);
 
-  Future<void> getUserInfo(String userId, bool isThatMyPersonalId) async {
+  static getMyPersonalInfo(BuildContext context) =>
+      BlocProvider.of<FirestoreUserInfoCubit>(context).myPersonalInfo;
+
+  Future<void> getUserInfo(String userId,
+      {bool isThatMyPersonalId = true}) async {
     emit(CubitUserLoading());
-    await _getUserInfoUseCase.call(params: userId).then((userInfo) {
+    await _getUserInfoUseCase
+        .call(params: userId)
+        .then((UserPersonalInfo userInfo) {
       if (isThatMyPersonalId) {
         myPersonalInfo = userInfo;
         emit(CubitMyPersonalInfoLoaded(userInfo));
@@ -43,6 +52,17 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
         this.userInfo = userInfo;
         emit(CubitUserLoaded(userInfo));
       }
+    }).catchError((e) {
+      emit(CubitGetUserInfoFailed(e.toString()));
+    });
+  }
+
+  Future<void> getAllUnFollowersUsers(UserPersonalInfo myPersonalInfo) async {
+    emit(CubitAllUnFollowersUserLoading());
+    await _getAllUnFollowersUsersUseCase
+        .call(params: myPersonalInfo)
+        .then((usersInfo) {
+      emit(CubitAllUnFollowersUserLoaded(usersInfo));
     }).catchError((e) {
       emit(CubitGetUserInfoFailed(e.toString()));
     });
@@ -104,7 +124,7 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreGetUserInfoState> {
   }
 
   Future<void> uploadProfileImage(
-      {required File photo,
+      {required Uint8List photo,
       required String userId,
       required String previousImageUrl}) async {
     emit(CubitUserLoading());

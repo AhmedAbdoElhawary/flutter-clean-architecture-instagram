@@ -1,18 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instegram/data/models/parent_post.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_post.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
 
 class Post extends ParentPost {
   String postUrl;
+  List<dynamic> imagesUrls;
   String postUid;
   double aspectRatio;
+  String blurHash;
   Post({
     required String datePublished,
     required String publisherId,
     UserPersonalInfo? publisherInfo,
     this.postUid = "",
     this.postUrl = "",
+    required this.imagesUrls,
     required this.aspectRatio,
+    required this.blurHash,
     String caption = "",
     required List<dynamic> comments,
     required List<dynamic> likes,
@@ -26,20 +30,22 @@ class Post extends ParentPost {
             caption: caption,
             publisherInfo: publisherInfo);
 
-  static Post fromSnap(
-      {QueryDocumentSnapshot<Map<String, dynamic>>? querySnap,
-      DocumentSnapshot<Map<String, dynamic>>? docSnap}) {
-    dynamic snap = querySnap ?? docSnap;
+  static Post fromQuery(
+      {DocumentSnapshot<Map<String, dynamic>>? query,
+      QueryDocumentSnapshot<Map<String, dynamic>>? doc}) {
+    dynamic snap = query ?? doc;
     return Post(
-      caption: snap["caption"],
-      datePublished: snap["datePublished"],
-      publisherId: snap["publisherId"],
-      likes: snap["likes"],
-      comments: snap["comments"],
-      postUid: snap["postUid"],
-      aspectRatio: snap["aspectRatio"],
-      postUrl: snap["postUrl"],
-      isThatImage: snap["isThatImage"],
+      caption: snap.data()!["caption"] ?? "",
+      datePublished: snap.data()!["datePublished"] ?? "",
+      publisherId: snap.data()!["publisherId"] ?? "",
+      likes: snap.data()!["likes"] ?? [],
+      comments: snap.data()!["comments"] ?? [],
+      blurHash: snap.data()!["blurHash"] ?? "",
+      imagesUrls: snap.data()!["imagesUrls"] ?? [],
+      postUid: snap.data()!["postUid"] ?? "",
+      aspectRatio: snap.data()!["aspectRatio"] ?? 0.0,
+      postUrl: snap.data()!["postUrl"] ?? "",
+      isThatImage: snap.data()!["isThatImage"] ?? true,
     );
   }
 
@@ -49,6 +55,8 @@ class Post extends ParentPost {
         "publisherId": publisherId,
         'comments': comments,
         'aspectRatio': aspectRatio,
+        'imagesUrls': imagesUrls,
+        'blurHash': blurHash,
         'likes': likes,
         'postUid': postUid,
         "postUrl": postUrl,

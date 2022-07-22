@@ -1,10 +1,13 @@
 import 'dart:io';
-import 'package:instegram/data/datasourses/remote/firebase_storage.dart';
-import 'package:instegram/data/models/massage.dart';
-import 'package:instegram/data/models/specific_users_info.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
+import 'dart:typed_data';
+import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
+import 'package:instagram/data/datasourses/remote/user/message.dart';
+import 'package:instagram/data/models/message.dart';
+import 'package:instagram/data/models/sender_info.dart';
+import 'package:instagram/data/models/specific_users_info.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
 import '../../domain/repositories/user_repository.dart';
-import '../datasourses/remote/firestore_user_info.dart';
+import '../datasourses/remote/user/firestore_user_info.dart';
 
 class FirebaseUserRepoImpl implements FirestoreUserRepository {
   @override
@@ -60,7 +63,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
 
   @override
   Future<String> uploadProfileImage(
-      {required File photo,
+      {required Uint8List photo,
       required String userId,
       required String previousImageUrl}) async {
     try {
@@ -133,42 +136,84 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Future<Massage> sendMassage(
-      {required Massage massageInfo,
-      required String pathOfPhoto,
-      required String pathOfRecorded}) async {
+  Future<Message> sendMessage(
+      {required Message messageInfo,
+       Uint8List? pathOfPhoto,
+  required String  pathOfRecorded}) async {
     try {
-      if (pathOfPhoto.isNotEmpty) {
+      if (pathOfPhoto!=null) {
         String imageUrl = await FirebaseStoragePost.uploadFile(
-            File(pathOfPhoto), "massagesFiles");
-        massageInfo.imageUrl = imageUrl;
+            pathOfPhoto, "messagesFiles");
+        messageInfo.imageUrl = imageUrl;
       }
       if (pathOfRecorded.isNotEmpty) {
         String recordedUrl = await FirebaseStoragePost.uploadFile(
-            File(pathOfRecorded), "massagesFiles");
-        massageInfo.recordedUrl = recordedUrl;
+            pathOfPhoto!, "messagesFiles",postFile:File(pathOfRecorded) );
+        messageInfo.recordedUrl = recordedUrl;
       }
 
-      Massage myMassageInfo = await FirestoreUser.sendMassage(
-          userId: massageInfo.senderId,
-          chatId: massageInfo.receiverId,
-          massage: massageInfo);
-      await FirestoreUser.sendMassage(
-          userId: massageInfo.receiverId,
-          chatId: massageInfo.senderId,
-          massage: massageInfo);
+      Message myMessageInfo = await FireStoreMessage.sendMessage(
+          userId: messageInfo.senderId,
+          chatId: messageInfo.receiverId,
+          message: messageInfo);
+      await FireStoreMessage.sendMessage(
+          userId: messageInfo.receiverId,
+          chatId: messageInfo.senderId,
+          message: messageInfo);
 
-      return myMassageInfo;
+      return myMessageInfo;
     } catch (e) {
       return Future.error(e.toString());
     }
   }
 
   @override
-  Stream<List<Massage>> getMassages({required String receiverId}) =>
-      FirestoreUser.getMassages(receiverId: receiverId);
+  Stream<List<Message>> getMessages({required String receiverId}) =>
+      FireStoreMessage.getMessages(receiverId: receiverId);
 
   @override
   Stream<List<UserPersonalInfo>> searchAboutUser({required String name}) =>
       FirestoreUser.searchAboutUser(name: name);
+
+  @override
+  Future<void> deleteMessage(
+      {required Message messageInfo, Message? replacedMessage}) async {
+    try {
+      await FireStoreMessage.deleteMessage(
+          userId: messageInfo.senderId,
+          chatId: messageInfo.receiverId,
+          messageId: messageInfo.messageUid);
+      if (replacedMessage != null) {
+        await FireStoreMessage.updateLastMessage(
+            userId: messageInfo.receiverId,
+            chatId: messageInfo.senderId,
+            message: replacedMessage);
+      }
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  @override
+  Future<List<SenderInfo>> getChatUserInfo({required String userId}) async {
+    try {
+      List<SenderInfo> allUsersIds =
+          await FirestoreUser.getChatUserInfo(userId: userId);
+      List<SenderInfo> allUsersInfo =
+          await FirestoreUser.extractUsersIds(usersInfo: allUsersIds);
+      return allUsersInfo;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  @override
+  Future<List<UserPersonalInfo>> getAllUnFollowersUsers(
+      UserPersonalInfo myPersonalInfo) {
+    try {
+      return FirestoreUser.getAllUnFollowersUsers(myPersonalInfo);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
 }

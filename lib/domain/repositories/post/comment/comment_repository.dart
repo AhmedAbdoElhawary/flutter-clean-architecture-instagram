@@ -1,5 +1,4 @@
-import 'package:instegram/data/models/comment.dart';
-import 'package:instegram/data/models/post.dart';
+import 'package:instagram/data/models/comment.dart';
 
 abstract class FirestoreCommentRepository {
   Future<Comment> addComment({required Comment commentInfo});

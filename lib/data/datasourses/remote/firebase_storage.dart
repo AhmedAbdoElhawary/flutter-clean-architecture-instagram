@@ -1,14 +1,19 @@
+import 'dart:io';
+
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
-import 'dart:io';
+import 'dart:typed_data';
 
 class FirebaseStoragePost {
-  static Future<String> uploadFile(File postFile, String folderName) async {
-    final fileName = basename(postFile.path);
+  static Future<String> uploadFile(Uint8List postUint8List, String folderName,
+      {File? postFile}) async {
+    final fileName =
+        postFile != null ? basename(postFile.path) : DateTime.now().toString();
     final destination = 'files/$folderName/$fileName';
     final ref = firebase_storage.FirebaseStorage.instance.ref(destination);
-    UploadTask uploadTask = ref.putFile(postFile);
+    UploadTask uploadTask =
+        postFile != null ? ref.putFile(postFile) : ref.putData(postUint8List);
     var fileOfPostUrl =
         await (await uploadTask.whenComplete(() {})).ref.getDownloadURL();
     return fileOfPostUrl.toString();

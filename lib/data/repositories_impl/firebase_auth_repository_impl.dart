@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:instegram/core/resources/strings_manager.dart';
-import 'package:instegram/domain/entities/registered_user.dart';
-import 'package:instegram/domain/entities/unregistered_user.dart';
-import 'package:instegram/domain/repositories/auth_repository.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/domain/entities/registered_user.dart';
+import 'package:instagram/domain/entities/unregistered_user.dart';
+import 'package:instagram/domain/repositories/auth_repository.dart';
 import '../datasourses/remote/firebase_auth.dart';
 
 class FirebaseAuthRepositoryImpl implements FirebaseAuthRepository {

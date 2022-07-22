@@ -9,7 +9,7 @@
 "d:\updated_instagram_day_4_6\instagram\lib\data\datasourses\remote\post\firestore_reel.dart", "Dart", 0, 0, 0, 19, 1, 20
 "d:\updated_instagram_day_4_6\instagram\lib\data\models\comment.dart", "Dart", 0, 0, 0, -43, -2, -45
 "d:\updated_instagram_day_4_6\instagram\lib\data\models\garbage.dart", "Dart", 0, 0, 0, -75, -1, -76
-"d:\updated_instagram_day_4_6\instagram\lib\data\models\massage.dart", "Dart", 0, 34, 0, 0, 5, 39
+"d:\updated_instagram_day_4_6\instagram\lib\data\models\message.dart", "Dart", 0, 34, 0, 0, 5, 39
 "d:\updated_instagram_day_4_6\instagram\lib\data\models\post.dart", "Dart", 0, -4, 0, -1, -1, -6
 "d:\updated_instagram_day_4_6\instagram\lib\data\models\reply_comment.dart", "Dart", 0, 0, 0, -94, -1, -95
 "d:\updated_instagram_day_4_6\instagram\lib\data\models\user_personal_info.dart", "Dart", 0, 2, 0, 0, 0, 2
@@ -19,14 +19,14 @@
 "d:\updated_instagram_day_4_6\instagram\lib\domain\repositories\post\post_repository.dart", "Dart", 0, -1, 0, 0, 0, -1
 "d:\updated_instagram_day_4_6\instagram\lib\domain\repositories\user_repository.dart", "Dart", 0, 5, 0, 0, 1, 6
 "d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\getUserInfo\get_user_from_user_name.dart", "Dart", 0, 11, 0, 0, 4, 15
-"d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\massage\add_massage.dart", "Dart", 0, 11, 0, 0, 4, 15
-"d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\massage\get_massages.dart", "Dart", 0, 11, 0, 0, 4, 15
+"d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\message\add_message.dart", "Dart", 0, 11, 0, 0, 4, 15
+"d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\message\get_messages.dart", "Dart", 0, 11, 0, 0, 4, 15
 "d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\upload_profile_image_usecase.dart", "Dart", 0, 5, 0, -1, 0, 4
 "d:\updated_instagram_day_4_6\instagram\lib\injector.dart", "Dart", 0, 12, 0, 4, -1, 15
 "d:\updated_instagram_day_4_6\instagram\lib\main.dart", "Dart", 0, 0, 0, 12, -1, 11
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\blocObserver\bloc_observer.dart", "Dart", 0, -30, 0, 30, 0, 0
-"d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\massage\massage_cubit.dart", "Dart", 0, 28, 0, 10, 7, 45
-"d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\massage\massage_state.dart", "Dart", 0, 21, 0, 2, 8, 31
+"d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\message\message_cubit.dart", "Dart", 0, 28, 0, 10, 7, 45
+"d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\message\message_state.dart", "Dart", 0, 21, 0, 2, 8, 31
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\user_info_cubit.dart", "Dart", 0, 24, 0, 1, 2, 27
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\user_info_state.dart", "Dart", 0, -4, 0, 6, -2, 0
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\postInfoCubit\commentsInfo\repliesInfo\reply_info_cubit.dart", "Dart", 0, -1, 0, 0, 0, -1
@@ -35,7 +35,7 @@
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\edit_profile_page.dart", "Dart", 0, 8, 0, 0, -2, 6
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\home_page.dart", "Dart", 0, -12, 0, 0, -1, -13
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\login_page.dart", "Dart", 0, -1, 0, 0, 0, -1
-"d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\massages_page.dart", "Dart", 0, 52, 0, 2, 6, 60
+"d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\messages_page.dart", "Dart", 0, 52, 0, 2, 6, 60
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\new_post_page.dart", "Dart", 0, -1, 0, -1, -3, -5
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\personal_profile_page.dart", "Dart", 0, 23, 0, 0, 1, 24
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\play_this_video.dart", "Dart", 0, 38, 0, 0, 10, 48

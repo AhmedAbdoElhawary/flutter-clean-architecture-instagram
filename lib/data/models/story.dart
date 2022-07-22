@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instegram/data/models/parent_post.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_post.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
 
 class Story extends ParentPost {
   String storyUrl;
@@ -25,18 +25,16 @@ class Story extends ParentPost {
             publisherInfo: publisherInfo);
 
   static Story fromSnap(
-      {QueryDocumentSnapshot<Map<String, dynamic>>? querySnap,
-      DocumentSnapshot<Map<String, dynamic>>? docSnap}) {
-    dynamic snap = querySnap ?? docSnap;
+      {required DocumentSnapshot<Map<String, dynamic>> docSnap}) {
     return Story(
-      caption: snap["caption"],
-      datePublished: snap["datePublished"],
-      publisherId: snap["publisherId"],
-      likes: snap["likes"],
-      comments: snap["comments"],
-      storyUid: snap["storyUid"],
-      storyUrl: snap["storyUrl"],
-      isThatImage: snap["isThatImage"],
+      caption: docSnap.data()!["caption"] ?? "",
+      datePublished: docSnap.data()!["datePublished"] ?? "",
+      publisherId: docSnap.data()!["publisherId"] ?? "",
+      likes: docSnap.data()!["likes"] ?? [],
+      comments: docSnap.data()!["comments"] ?? [],
+      storyUid: docSnap.data()!["storyUid"] ?? "",
+      storyUrl: docSnap.data()!["storyUrl"] ?? "",
+      isThatImage: docSnap.data()!["isThatImage"] ?? true,
     );
   }
 

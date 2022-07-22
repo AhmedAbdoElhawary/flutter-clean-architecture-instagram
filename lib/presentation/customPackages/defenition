@@ -1,0 +1,2 @@
+custom packages it's not belong to me, it's external packages but i want to make a lot of changes on them,
+and i faces some issues when trying to customize them in their files, so i mentioned the owner of each package in his file (owner_of_this_package.dart)

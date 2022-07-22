@@ -70,7 +70,7 @@
 "d:\updated_instagram_day_4_6\instagram\lib\data\datasourses\remote\post\firestore_post.dart", "Dart", 0, 0, 0, 82, 0, 0, 0, 0, 0, 0, 0, 0, 13, 95
 "d:\updated_instagram_day_4_6\instagram\lib\data\datasourses\remote\post\firestore_reel.dart", "Dart", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 1, 20
 "d:\updated_instagram_day_4_6\instagram\lib\data\models\comment.dart", "Dart", 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 12, 77
-"d:\updated_instagram_day_4_6\instagram\lib\data\models\massage.dart", "Dart", 0, 0, 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 5, 39
+"d:\updated_instagram_day_4_6\instagram\lib\data\models\message.dart", "Dart", 0, 0, 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 5, 39
 "d:\updated_instagram_day_4_6\instagram\lib\data\models\post.dart", "Dart", 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 5, 54
 "d:\updated_instagram_day_4_6\instagram\lib\data\models\specific_users_info.dart", "Dart", 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 3, 12
 "d:\updated_instagram_day_4_6\instagram\lib\data\models\user_personal_info.dart", "Dart", 0, 0, 0, 51, 0, 0, 0, 0, 0, 0, 0, 0, 5, 56
@@ -100,8 +100,8 @@
 "d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\getUserInfo\get_specific_users_usecase.dart", "Dart", 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 4, 16
 "d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\getUserInfo\get_user_from_user_name.dart", "Dart", 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 4, 15
 "d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\getUserInfo\get_user_info_usecase.dart", "Dart", 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 4, 15
-"d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\massage\add_massage.dart", "Dart", 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 4, 15
-"d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\massage\get_massages.dart", "Dart", 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 4, 15
+"d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\message\add_message.dart", "Dart", 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 4, 15
+"d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\message\get_messages.dart", "Dart", 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 4, 15
 "d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\update_user_info.dart", "Dart", 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 4, 15
 "d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\firestoreUserUseCase\upload_profile_image_usecase.dart", "Dart", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 4, 20
 "d:\updated_instagram_day_4_6\instagram\lib\domain\usecases\followUseCase\follow_this_user.dart", "Dart", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 4, 14
@@ -127,8 +127,8 @@
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firebaseAuthCubit\firebase_auth_state.dart", "Dart", 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 9, 22
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\add_new_user_cubit.dart", "Dart", 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 5, 24
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\add_new_user_state.dart", "Dart", 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 6, 15
-"d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\massage\massage_cubit.dart", "Dart", 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 10, 7, 45
-"d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\massage\massage_state.dart", "Dart", 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 0, 2, 8, 31
+"d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\message\message_cubit.dart", "Dart", 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 10, 7, 45
+"d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\message\message_state.dart", "Dart", 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 0, 2, 8, 31
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\user_info_cubit.dart", "Dart", 0, 0, 0, 96, 0, 0, 0, 0, 0, 0, 0, 1, 10, 107
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\user_info_state.dart", "Dart", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 6, 9, 32
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\cubit\firestoreUserInfoCubit\users_info_cubit.dart", "Dart", 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 0, 0, 6, 41
@@ -154,7 +154,7 @@
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\followers_and_followings_info_page.dart", "Dart", 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 8, 108
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\home_page.dart", "Dart", 0, 0, 0, 144, 0, 0, 0, 0, 0, 0, 0, 0, 22, 166
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\login_page.dart", "Dart", 0, 0, 0, 165, 0, 0, 0, 0, 0, 0, 0, 0, 12, 177
-"d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\massages_page.dart", "Dart", 0, 0, 0, 52, 0, 0, 0, 0, 0, 0, 0, 2, 6, 60
+"d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\messages_page.dart", "Dart", 0, 0, 0, 52, 0, 0, 0, 0, 0, 0, 0, 2, 6, 60
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\new_post_page.dart", "Dart", 0, 0, 0, 151, 0, 0, 0, 0, 0, 0, 0, 3, 16, 170
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\personal_profile_page.dart", "Dart", 0, 0, 0, 273, 0, 0, 0, 0, 0, 0, 0, 0, 16, 289
 "d:\updated_instagram_day_4_6\instagram\lib\presentation\pages\play_this_video.dart", "Dart", 0, 0, 0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 10, 48

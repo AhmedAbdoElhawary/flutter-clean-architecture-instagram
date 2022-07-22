@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(instegram LANGUAGES CXX)
+project(instagram LANGUAGES CXX)
 
-set(BINARY_NAME "instegram")
+set(BINARY_NAME "instagram")
 
 cmake_policy(SET CMP0063 NEW)
 

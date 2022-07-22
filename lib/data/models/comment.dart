@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+
 class Comment {
   String datePublished;
   String theComment;
@@ -8,69 +9,66 @@ class Comment {
   String whoCommentId;
   UserPersonalInfo? whoCommentInfo;
   List<dynamic> likes;
-
   String parentCommentId;
-
   List<dynamic>? replies;
-
+  bool isLoading;
   Comment({
     required this.whoCommentId,
     required this.datePublished,
     required this.theComment,
+     this.isLoading=false,
     this.commentUid = "",
     required this.postId,
     this.whoCommentInfo,
     required this.likes,
-
-    this.parentCommentId='',
-
-     this.replies,
+    this.parentCommentId = '',
+    this.replies,
   });
 
-  static Comment fromSnapComment(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  static Comment fromSnapComment(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return Comment(
-      datePublished: snapshot["datePublished"],
-      theComment: snapshot["theComment"],
-      commentUid: snapshot["commentUid"],
-      postId: snapshot["postId"],
-      whoCommentId: snapshot["whoCommentId"],
-      likes: snapshot['likes'],
-      replies: snapshot["replies"],
+      datePublished: snapshot.data()!["datePublished"] ?? "",
+      theComment: snapshot.data()!["theComment"] ?? "",
+      commentUid: snapshot.data()!["commentUid"] ?? "",
+      whoCommentId: snapshot.data()!["whoCommentId"] ?? "",
+      parentCommentId: snapshot.data()!["parentCommentId"] ?? "",
+      postId: snapshot.data()!['postId'] ?? "",
+      likes: snapshot.data()!['likes'] ?? [],
+      replies: snapshot.data()!["replies"] ?? [],
     );
   }
 
   Map<String, dynamic> toMapComment() => {
-    'datePublished': datePublished,
-    "theComment": theComment,
-    "commentUid": commentUid,
-    "postId": postId,
-    "whoCommentId": whoCommentId,
-    'likes': likes,
-    "replies": replies,
-  };
+        'datePublished': datePublished,
+        "theComment": theComment,
+        "commentUid": commentUid,
+        "postId": postId,
+        "whoCommentId": whoCommentId,
+        'likes': likes,
+        "replies": replies,
+      };
 
   static Comment fromSnapReply(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return Comment(
-      datePublished: snapshot["datePublished"],
-      theComment: snapshot["theReply"],
-      commentUid: snapshot["replyUid"],
-      whoCommentId: snapshot["whoReplyId"],
-      parentCommentId: snapshot["parentCommentId"],
-      postId: snapshot['postId'],
-      likes: snapshot['likes'],
-
+      datePublished: snapshot.data()!["datePublished"] ?? "",
+      theComment: snapshot.data()!["theReply"] ?? "",
+      commentUid: snapshot.data()!["replyUid"] ?? "",
+      whoCommentId: snapshot.data()!["whoReplyId"] ?? "",
+      parentCommentId: snapshot.data()!["parentCommentId"] ?? "",
+      postId: snapshot.data()!['postId'] ?? "",
+      likes: snapshot.data()!['likes'] ?? [],
     );
   }
 
   Map<String, dynamic> toMapReply() => {
-    'whoReplyId': whoCommentId,
-    "datePublished": datePublished,
-    "theReply": theComment,
-    "parentCommentId": parentCommentId,
-    'postId': postId,
-    "replyUid": commentUid,
-    'likes': likes,
-  };
+        'whoReplyId': whoCommentId,
+        "datePublished": datePublished,
+        "theReply": theComment,
+        "parentCommentId": parentCommentId,
+        'postId': postId,
+        "replyUid": commentUid,
+        'likes': likes,
+      };
 }
-

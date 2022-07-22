@@ -1,13 +1,13 @@
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instegram/data/models/story.dart';
-import 'package:instegram/data/models/user_personal_info.dart';
-import 'package:instegram/domain/usecases/storyUseCase/create_story.dart';
-import 'package:instegram/domain/usecases/storyUseCase/delete_story.dart';
-import 'package:instegram/domain/usecases/storyUseCase/get_specific_stories.dart';
-import 'package:instegram/domain/usecases/storyUseCase/get_stories_info.dart';
+import 'package:instagram/data/models/story.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/domain/use_cases/story/create_story.dart';
+import 'package:instagram/domain/use_cases/story/delete_story.dart';
+import 'package:instagram/domain/use_cases/story/get_specific_stories.dart';
+import 'package:instagram/domain/use_cases/story/get_stories_info.dart';
 
 part 'story_state.dart';
 
@@ -24,10 +24,10 @@ class StoryCubit extends Cubit<StoryState> {
 
   static StoryCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future<void> createStory(Story storyInfo, File photo) async {
+  Future<void> createStory(Story storyInfo, Uint8List file) async {
     emit(CubitStoryLoading());
     await _createStoryUseCase
-        .call(paramsOne: storyInfo, paramsTwo: photo)
+        .call(paramsOne: storyInfo, paramsTwo: file)
         .then((storyId) {
       this.storyId = storyId;
       emit(CubitStoryLoaded(storyId));

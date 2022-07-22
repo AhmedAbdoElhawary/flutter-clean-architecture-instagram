@@ -1,7 +1,7 @@
-import 'package:instegram/data/datasourses/remote/post/comment/firestore_comment.dart';
-import 'package:instegram/data/datasourses/remote/post/firestore_post.dart';
-import 'package:instegram/data/models/comment.dart';
-import 'package:instegram/domain/repositories/post/comment/comment_repository.dart';
+import 'package:instagram/data/datasourses/remote/post/comment/firestore_comment.dart';
+import 'package:instagram/data/datasourses/remote/post/firestore_post.dart';
+import 'package:instagram/data/models/comment.dart';
+import 'package:instagram/domain/repositories/post/comment/comment_repository.dart';
 
 class FirestoreCommentRepositoryImpl implements FirestoreCommentRepository {
   @override
