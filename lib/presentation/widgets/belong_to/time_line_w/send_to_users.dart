@@ -2,41 +2,53 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/models/message.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_share_button.dart';
 
-class SendToUsers extends StatelessWidget {
-  final ValueNotifier<bool> sendToUsers = ValueNotifier(false);
-  UserPersonalInfo? selectedUserInfo;
+class SendToUsers extends StatefulWidget {
   final TextEditingController messageTextController;
-  final UserPersonalInfo userInfo;
+  final UserPersonalInfo publisherInfo;
   final Post postInfo;
-  final VoidCallback clearTexts;
+  final ValueChanged<bool> clearTexts;
+  final ValueNotifier<List<UserPersonalInfo>> selectedUsersInfo;
+  final bool checkBox;
+  const SendToUsers({
+    Key? key,
+    this.checkBox = false,
+    required this.publisherInfo,
+    required this.clearTexts,
+    required this.selectedUsersInfo,
+    required this.messageTextController,
+    required this.postInfo,
+  }) : super(key: key);
 
-  SendToUsers(
-      {Key? key,
-      required this.userInfo,
-      required this.clearTexts,
-      required this.messageTextController,
-      required this.postInfo})
-      : super(key: key);
+  @override
+  State<SendToUsers> createState() => _SendToUsersState();
+}
+
+class _SendToUsersState extends State<SendToUsers> {
+  late UserPersonalInfo myPersonalInfo;
+  @override
+  void initState() {
+    myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UsersInfoCubit, UsersInfoState>(
       bloc: BlocProvider.of<UsersInfoCubit>(context)
         ..getFollowersAndFollowingsInfo(
-            followersIds: userInfo.followerPeople,
-            followingsIds: userInfo.followedPeople),
+            followersIds: myPersonalInfo.followerPeople,
+            followingsIds: myPersonalInfo.followedPeople),
       buildWhen: (previous, current) =>
           previous != current && (current is CubitFollowersAndFollowingsLoaded),
       builder: (context, state) {
@@ -48,209 +60,176 @@ class SendToUsers extends StatelessWidget {
               usersInfo.add(i);
             }
           }
-          return ValueListenableBuilder(
-            valueListenable: sendToUsers,
-            builder: (context, bool sendToUsersValue, child) => Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                      end: 20, start: 20, bottom: 60),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    primary: false,
-                    physics: const NeverScrollableScrollPhysics(),
-                    addAutomaticKeepAlives: false,
-                    addRepaintBoundaries: false,
-                    itemBuilder: (context, index) =>
-                        buildUserInfo(context, usersInfo[index]),
-                    itemCount: usersInfo.length,
-                    separatorBuilder: (context, _) =>
-                        const SizedBox(height: 15),
-                  ),
-                ),
-                if (sendToUsersValue)
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Builder(builder: (context) {
-                      MessageCubit messageCubit = MessageCubit.get(context);
 
-                      return ValueListenableBuilder(
-                        valueListenable: sendToUsers,
-                        builder: (context, bool sendToUsersValue, child) =>
-                            InkWell(
-                          onTap: () async {
-                            if (sendToUsersValue) {
-                              await messageCubit.sendMessage(
-                                messageInfo: createSharedMessage(
-                                    postInfo.blurHash, selectedUserInfo!),
-                              );
-                              if (messageTextController.text.isNotEmpty) {
-                                messageCubit.sendMessage(
-                                    messageInfo: createCaptionMessage(
-                                        selectedUserInfo!));
-                              }
-                            }
-                            Navigator.of(context).maybePop();
-                            clearTexts();
-                          },
-                          child: buildDoneButton(),
-                        ),
-                      );
-                    }),
-                  ),
-              ],
-            ),
+          return ValueListenableBuilder(
+            valueListenable: widget.selectedUsersInfo,
+            builder:
+                (context, List<UserPersonalInfo> selectedUsersValue, child) {
+              if (isThatMobile) {
+                return Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    buildUsers(usersInfo, selectedUsersValue),
+                    if (selectedUsersValue.isNotEmpty)
+                      CustomShareButton(
+                        postInfo: widget.postInfo,
+                        clearTexts: widget.clearTexts,
+                        publisherInfo: widget.publisherInfo,
+                        messageTextController: widget.messageTextController,
+                        selectedUsersInfo: selectedUsersValue,
+                        textOfButton: StringsManager.done.tr(),
+                      ),
+                  ],
+                );
+              } else {
+                return buildUsers(usersInfo, selectedUsersValue);
+              }
+            },
           );
         }
         if (state is CubitGettingSpecificUsersFailed) {
           ToastShow.toastStateError(state);
           return Text(StringsManager.somethingWrong.tr());
         } else {
-          return const ThineCircularProgress();
+          return isThatMobile
+              ? const ThineLinearProgress()
+              : const Scaffold(
+                  body: SizedBox(height: 1, child: ThineLinearProgress()),
+                );
         }
       },
     );
   }
 
-  Message createCaptionMessage(UserPersonalInfo userInfoWhoIShared) {
-    return Message(
-      datePublished: DateOfNow.dateOfNow(),
-      message: messageTextController.text,
-      senderId: myPersonalId,
-      blurHash: "",
-      receiverId: userInfoWhoIShared.userId,
-      isThatImage: false,
+  Padding buildUsers(List<UserPersonalInfo> usersInfo,
+      List<UserPersonalInfo> selectedUsersValue) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(
+          end: 20, start: 20, bottom: 60, top: 10),
+      child: ListView.separated(
+        shrinkWrap: true,
+        primary: false,
+        physics: const NeverScrollableScrollPhysics(),
+        addAutomaticKeepAlives: false,
+        addRepaintBoundaries: false,
+        itemBuilder: (context, index) =>
+            buildUserInfo(context, usersInfo[index], selectedUsersValue),
+        itemCount: usersInfo.length,
+        separatorBuilder: (context, _) => const SizedBox(height: 15),
+      ),
     );
   }
 
-  Message createSharedMessage(
-      String blurHash, UserPersonalInfo userInfoWhoIShared) {
-    return Message(
-      datePublished: DateOfNow.dateOfNow(),
-      message: postInfo.caption,
-      senderId: myPersonalId,
-      blurHash: blurHash,
-      receiverId: userInfoWhoIShared.userId,
-      isThatImage: true,
-      postId: postInfo.postUid,
-      imageUrl: postInfo.imagesUrls.length > 1
-          ? postInfo.imagesUrls[0]
-          : postInfo.postUrl,
-      isThatPost: true,
-      profileImageUrl: userInfo.profileImageUrl,
-      multiImages: postInfo.imagesUrls.length > 1,
-      userNameOfSharedPost: userInfo.name,
+  Row buildUserInfo(BuildContext context, UserPersonalInfo userInfo,
+      List<UserPersonalInfo> selectedUsersValue) {
+    return Row(
+      children: [
+        CircleAvatar(
+          backgroundColor: ColorManager.customGrey,
+          backgroundImage: userInfo.profileImageUrl.isNotEmpty
+              ? CachedNetworkImageProvider(userInfo.profileImageUrl)
+              : null,
+          child: userInfo.profileImageUrl.isEmpty
+              ? Icon(
+                  Icons.person,
+                  color: Theme.of(context).primaryColor,
+                  size: 10,
+                )
+              : null,
+          radius: 23,
+        ),
+        const SizedBox(width: 15),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                userInfo.name,
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              Text(
+                userInfo.userName,
+                style: Theme.of(context).textTheme.headline1,
+              ),
+            ],
+          ),
+        ),
+        GestureDetector(
+          onTap: () async {
+            setState(() {
+              if (!selectedUsersValue.contains(userInfo)) {
+                widget.selectedUsersInfo.value.add(userInfo);
+              } else {
+                widget.selectedUsersInfo.value.remove(userInfo);
+              }
+              widget.clearTexts(false);
+            });
+          },
+          child: whichChild(context, selectedUsersValue.contains(userInfo)),
+        ),
+      ],
     );
   }
 
-  Container buildDoneButton() {
+  Widget whichChild(BuildContext context, bool selectedUserValue) {
+    return widget.checkBox
+        ? checkBox(context, selectedUserValue)
+        : whichContainerOfText(context, selectedUserValue);
+  }
+
+  Widget checkBox(BuildContext context, bool selectedUserValue) {
     return Container(
-      height: 50.0,
-      width: double.infinity,
+      padding: const EdgeInsetsDirectional.all(2),
+      decoration: BoxDecoration(
+        color: !selectedUserValue
+            ? Theme.of(context).primaryColor
+            : ColorManager.blue,
+        border: Border.all(
+            color: !selectedUserValue
+                ? ColorManager.darkGray
+                : ColorManager.transparent,
+            width: 2),
+        borderRadius: BorderRadius.circular(50.0),
+      ),
+      child: const Center(
+        child: Icon(Icons.check_rounded, color: ColorManager.white, size: 17),
+      ),
+    );
+  }
+
+  Widget whichContainerOfText(BuildContext context, bool selectedUserValue) {
+    return !selectedUserValue
+        ? containerOfFollowText(
+            context, StringsManager.send.tr(), selectedUserValue)
+        : containerOfFollowText(
+            context, StringsManager.undo.tr(), selectedUserValue);
+  }
+
+  Widget containerOfFollowText(
+      BuildContext context, String text, bool selectedUserValue) {
+    return Container(
+      height: 30.0,
       padding: const EdgeInsetsDirectional.only(start: 17, end: 17),
-      decoration: const BoxDecoration(
-        color: ColorManager.blue,
+      decoration: BoxDecoration(
+        color: selectedUserValue
+            ? Theme.of(context).primaryColor
+            : ColorManager.blue,
+        border: Border.all(
+          color:
+              selectedUserValue ? ColorManager.grey : ColorManager.transparent,
+        ),
+        borderRadius: BorderRadius.circular(6.0),
       ),
       child: Center(
         child: Text(
-          StringsManager.done.tr(),
-          style: const TextStyle(
+          text,
+          style: TextStyle(
               fontSize: 15.0,
-              color: ColorManager.white,
+              color: selectedUserValue
+                  ? Theme.of(context).focusColor
+                  : ColorManager.white,
               fontWeight: FontWeight.w500),
-        ),
-      ),
-    );
-  }
-
-  Row buildUserInfo(BuildContext context, UserPersonalInfo userInfo) {
-    return Row(children: [
-      CircleAvatar(
-        backgroundColor: ColorManager.customGrey,
-        backgroundImage: userInfo.profileImageUrl.isNotEmpty
-            ? CachedNetworkImageProvider(userInfo.profileImageUrl)
-            : null,
-        child: userInfo.profileImageUrl.isEmpty
-            ? Icon(
-                Icons.person,
-                color: Theme.of(context).primaryColor,
-                size: 10,
-              )
-            : null,
-        radius: 23,
-      ),
-      const SizedBox(width: 15),
-      Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              userInfo.name,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Text(
-              userInfo.userName,
-              style: Theme.of(context).textTheme.headline1,
-            ),
-          ],
-        ),
-      ),
-      ValueListenableBuilder(
-        valueListenable: sendToUsers,
-        builder: (context, bool sendToUsersValue, child) => GestureDetector(
-          onTap: () async {
-            sendToUsers.value = !sendToUsers.value;
-            if (!sendToUsersValue) {
-              selectedUserInfo = userInfo;
-            } else {
-              selectedUserInfo = null;
-            }
-          },
-          child: whichContainerOfText(context),
-        ),
-      ),
-    ]);
-  }
-
-  Widget whichContainerOfText(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: sendToUsers,
-      builder: (context, bool sendToUsersValue, child) {
-        return !sendToUsersValue
-            ? containerOfFollowText(context, StringsManager.send.tr())
-            : containerOfFollowText(context, StringsManager.undo.tr());
-      },
-    );
-  }
-
-  Widget containerOfFollowText(BuildContext context, String text) {
-    return ValueListenableBuilder(
-      valueListenable: sendToUsers,
-      builder: (context, bool sendToUsersValue, child) => Container(
-        height: 30.0,
-        padding: const EdgeInsetsDirectional.only(start: 17, end: 17),
-        decoration: BoxDecoration(
-          color: sendToUsersValue
-              ? Theme.of(context).primaryColor
-              : ColorManager.blue,
-          border: Border.all(
-              color: sendToUsersValue
-                  ? ColorManager.grey
-                  : ColorManager.transparent),
-          borderRadius: BorderRadius.circular(6.0),
-        ),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-                fontSize: 15.0,
-                color: sendToUsersValue
-                    ? Theme.of(context).focusColor
-                    : ColorManager.white,
-                fontWeight: FontWeight.w500),
-          ),
         ),
       ),
     );
