@@ -12,7 +12,7 @@ import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
-import 'package:instagram/presentation/pages/activity/activity_page.dart';
+import 'package:instagram/presentation/pages/activity/activity_for_mobile.dart';
 import 'package:instagram/presentation/pages/messages/messages_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/create_new_story.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
@@ -30,7 +30,8 @@ class CustomAppBar {
           padding: const EdgeInsetsDirectional.only(end: 10.0),
           child: PopupMenuButton<int>(
             position: PopupMenuPosition.under,
-            elevation: 20,color:Theme.of(context).splashColor ,
+            elevation: 20,
+            color: Theme.of(context).splashColor,
             offset: const Offset(90, 8),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -124,12 +125,9 @@ class CustomAppBar {
             height: 30,
           ),
           onPressed: () {
-            UserPersonalInfo myPersonalInfo =
-                FirestoreUserInfoCubit.getMyPersonalInfo(context);
             Navigator.of(context).push(
               CupertinoPageRoute(
-                builder: (context) =>
-                    ActivityPage(myPersonalInfo: myPersonalInfo),
+                builder: (context) => ActivityPage(),
               ),
             );
           },

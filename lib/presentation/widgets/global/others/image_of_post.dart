@@ -36,6 +36,8 @@ import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/others/count_of_likes.dart';
+import 'package:instagram/presentation/widgets/global/popup_widgets/common/jump_arrow.dart';
+import 'package:instagram/presentation/widgets/global/popup_widgets/web/share_post.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
 class ImageOfPost extends StatefulWidget {
@@ -44,21 +46,24 @@ class ImageOfPost extends StatefulWidget {
   final VoidCallback? reLoadData;
   final int indexOfPost;
   final ValueNotifier<List<Post>> postsInfo;
-  final VoidCallback rebuildPreviousWidget;
+  final VoidCallback? rebuildPreviousWidget;
   final bool popupWebContainer;
+  final bool showSliderArrow;
+
   final ValueNotifier<TextEditingController> textController;
   final ValueNotifier<Comment?> selectedCommentInfo;
 
   const ImageOfPost({
     Key? key,
+    this.reLoadData,
     required this.postInfo,
     required this.textController,
     required this.selectedCommentInfo,
     this.popupWebContainer = false,
-    required this.rebuildPreviousWidget,
-    required this.reLoadData,
-    required this.indexOfPost,
+    this.showSliderArrow = false,
     required this.playTheVideo,
+    this.rebuildPreviousWidget,
+    required this.indexOfPost,
     required this.postsInfo,
   }) : super(key: key);
 
@@ -113,6 +118,7 @@ class _ImageOfPostState extends State<ImageOfPost>
       builder: (context, Post postInfoValue, child) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
             padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
@@ -122,7 +128,7 @@ class _ImageOfPostState extends State<ImageOfPost>
           Padding(
             padding:
                 const EdgeInsetsDirectional.only(start: 8, top: 10, bottom: 8),
-            child: buildPostInteraction(postInfoValue),
+            child: buildPostInteraction(postInfoValue, showScrollBar: true),
           ),
           if (!isThatMobile && widget.popupWebContainer)
             ...likesAndCommentBox(postInfoValue),
@@ -164,16 +170,17 @@ class _ImageOfPostState extends State<ImageOfPost>
     ];
   }
 
-  Row buildPostInteraction(Post postInfoValue) {
+  Row buildPostInteraction(Post postInfoValue, {bool showScrollBar = false}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         loveButton(postInfoValue),
         const SizedBox(width: 5),
         commentButton(context, postInfoValue),
-        shareButton(),
+        shareButton(postInfoValue),
         const Spacer(),
-        if (postInfoValue.imagesUrls.isNotEmpty) scrollBar(postInfoValue),
+        if (postInfoValue.imagesUrls.isNotEmpty && showScrollBar)
+          scrollBar(postInfoValue),
         const Spacer(),
         const Spacer(),
         saveButton(),
@@ -203,95 +210,172 @@ class _ImageOfPostState extends State<ImageOfPost>
   }
 
   Widget buildPostForWeb({required double bodyHeight}) {
-    double withOfScreen = MediaQuery.of(context).size.width;
-    bool minimumWidth = withOfScreen > 800;
-    Post postInfoValue = widget.postInfo.value;
     return GestureDetector(
       onTap: () {
         showCommentBox = false;
         Navigator.of(context).maybePop();
       },
       child: Scaffold(
+        backgroundColor: ColorManager.black38,
         body: GestureDetector(
           onTap: () {},
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 80.0),
-            child: Center(
-              child: !minimumWidth
-                  ? Container(
-                      width: 300,
-                      height: showCommentBox ? 509 : 454,
-                      padding: const EdgeInsets.only(top: 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: ColorManager.white),
-                      child: buildNormalPostDisplay(bodyHeight))
-                  : SizedBox(
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              buildPopupContainer(bodyHeight),
+              closeButton(),
+              if (widget.showSliderArrow) ...[
+                if (widget.indexOfPost != 0) buildJumpArrow(),
+                if (widget.indexOfPost < widget.postsInfo.value.length - 1)
+                  buildJumpArrow(isThatBack: false),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildJumpArrow({bool isThatBack = true}) {
+    return GestureDetector(
+      onTap: () async {
+        int index =
+            isThatBack ? widget.indexOfPost - 1 : widget.indexOfPost + 1;
+        await Navigator.of(context).maybePop();
+        Navigator.of(context).push(
+          HeroDialogRoute(
+            builder: (context) => ImageOfPost(
+              postInfo: ValueNotifier(widget.postsInfo.value[index]),
+              playTheVideo: widget.playTheVideo,
+              indexOfPost: index,
+              postsInfo: widget.postsInfo,
+              rebuildPreviousWidget: widget.rebuildPreviousWidget,
+              reLoadData: widget.reLoadData,
+              popupWebContainer: true,
+              showSliderArrow: true,
+              selectedCommentInfo: widget.selectedCommentInfo,
+              textController: ValueNotifier(TextEditingController()),
+            ),
+          ),
+        );
+      },
+      child: JumpArrow(isThatBack: isThatBack, makeArrowBigger: true),
+    );
+  }
+
+  Padding buildPopupContainer(double bodyHeight) {
+    double withOfScreen = MediaQuery.of(context).size.width;
+    bool minimumWidth = withOfScreen > 800;
+    Post postInfoValue = widget.postInfo.value;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 80.0),
+      child: Center(
+        child: !minimumWidth
+            ? Container(
+                width: 300,
+                padding: const EdgeInsets.only(top: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: ColorManager.white),
+                child: buildNormalPostDisplay(bodyHeight))
+            : SizedBox(
+                height: withOfScreen / 2,
+                width: minimumWidth ? 1270 : 800,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        height: double.infinity,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(5),
+                              topLeft: Radius.circular(5)),
+                          color: ColorManager.black,
+                        ),
+                        child: imageOfPost(widget.postInfo.value),
+                      ),
+                    ),
+                    Container(
                       height: withOfScreen / 2,
-                      width: minimumWidth ? 1270 : 800,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      width: 500,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(5),
+                            topRight: Radius.circular(5)),
+                        color: ColorManager.white,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Flexible(
-                            child: Container(
-                              height: double.infinity,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(5),
-                                    topLeft: Radius.circular(5)),
-                                color: ColorManager.black,
+                          Container(
+                            decoration: const BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                    color: ColorManager.black38, width: 0.08),
                               ),
-                              child: imageOfPost(widget.postInfo.value),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 15),
+                              child: buildPublisherInfo(
+                                bodyHeight,
+                                postInfoValue,
+                                makeCircleAvatarBigger: true,
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            fit: FlexFit.loose,
+                            flex: 1,
+                            child: SizedBox(
+                              height: double.infinity,
+                              child: CommentsOfPost(
+                                postInfo: postInfoValue,
+                                selectedCommentInfo: widget.selectedCommentInfo,
+                                textController: widget.textController,
+                              ),
                             ),
                           ),
                           Container(
-                            height: withOfScreen / 2,
-                            width: 500,
                             decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(5),
-                                  topRight: Radius.circular(5)),
-                              color: ColorManager.white,
+                              border: Border(
+                                top: BorderSide(
+                                    color: ColorManager.black38, width: 0.08),
+                              ),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 15),
-                                  child: buildPublisherInfo(
-                                    bodyHeight,
-                                    postInfoValue,
-                                    makeCircleAvatarBigger: true,
-                                  ),
-                                ),
-                                Flexible(
-                                  fit: FlexFit.loose,
-                                  flex: 1,
-                                  child: SizedBox(
-                                    height: double.infinity,
-                                    child: CommentsOfPost(
-                                      postInfo: postInfoValue,
-                                      selectedCommentInfo:
-                                          widget.selectedCommentInfo,
-                                      textController: widget.textController,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.only(
-                                      start: 10, top: 10, bottom: 8),
-                                  child: buildPostInteraction(postInfoValue),
-                                ),
-                                ...likesAndCommentBox(postInfoValue),
-                              ],
+                            child: Padding(
+                              padding: const EdgeInsetsDirectional.only(
+                                  start: 10, top: 10, bottom: 8),
+                              child: buildPostInteraction(postInfoValue),
                             ),
                           ),
+                          ...likesAndCommentBox(postInfoValue),
                         ],
                       ),
                     ),
-            ),
+                  ],
+                ),
+              ),
+      ),
+    );
+  }
+
+  Padding closeButton() {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: GestureDetector(
+        onTap: () {
+          showCommentBox = false;
+          Navigator.of(context).maybePop();
+        },
+        child: const Align(
+          alignment: Alignment.topRight,
+          child: Icon(
+            Icons.close_rounded,
+            size: 26,
+            color: ColorManager.white,
           ),
         ),
       ),
@@ -320,7 +404,9 @@ class _ImageOfPostState extends State<ImageOfPost>
             BlocProvider.of<PostLikesCubit>(context).removeTheLikeOnThisPost(
                 postId: postInfo.postUid, userId: myPersonalId);
             postInfo.likes.remove(myPersonalId);
-            widget.rebuildPreviousWidget();
+            if (widget.rebuildPreviousWidget != null) {
+              widget.rebuildPreviousWidget!();
+            }
 
             BlocProvider.of<NotificationCubit>(context).deleteNotification(
                 notificationCheck: createNotificationCheck(postInfo));
@@ -328,7 +414,9 @@ class _ImageOfPostState extends State<ImageOfPost>
             BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
                 postId: postInfo.postUid, userId: myPersonalId);
             postInfo.likes.add(myPersonalId);
-            widget.rebuildPreviousWidget();
+            if (widget.rebuildPreviousWidget != null) {
+              widget.rebuildPreviousWidget!();
+            }
             BlocProvider.of<NotificationCubit>(context).createNotification(
                 newNotification: createNotification(postInfo));
           }
@@ -435,6 +523,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                         aspectRatio: postInfo.aspectRatio,
                         imagesUrls: postInfo.imagesUrls,
                         updateImageIndex: _updateImageIndex,
+                        showPointsScrollBar: widget.popupWebContainer,
                       )
                     : Hero(
                         tag: postInfo.postUrl,
@@ -469,7 +558,7 @@ class _ImageOfPostState extends State<ImageOfPost>
   Widget menuButton() {
     return GestureDetector(
       child: SvgPicture.asset(
-        isThatMobile ? IconsAssets.menuHorizontalIcon : IconsAssets.menuIcon,
+        !isThatMobile ? IconsAssets.menuHorizontal2Icon : IconsAssets.menuIcon,
         color: Theme.of(context).focusColor,
         height: 23,
       ),
@@ -645,12 +734,25 @@ class _ImageOfPostState extends State<ImageOfPost>
     );
   }
 
-  Padding shareButton() {
+  Padding shareButton(Post postInfoValue) {
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 15.0),
       child: GestureDetector(
         child: iconsOfImagePost(IconsAssets.send1Icon, lowHeight: true),
-        onTap: () async => draggableBottomSheet(),
+        onTap: () async {
+          if (isThatMobile) {
+            return draggableBottomSheet();
+          } else {
+            Navigator.of(context).push(
+              HeroDialogRoute(
+                builder: (context) => PopupSharePost(
+                  postInfo: postInfoValue,
+                  publisherInfo: postInfoValue.publisherInfo!,
+                ),
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -674,105 +776,124 @@ class _ImageOfPostState extends State<ImageOfPost>
   }
 
   Column upperWidgets(BuildContext context) {
-    String postImageUrl = widget.postInfo.value.imagesUrls.length > 1
-        ? widget.postInfo.value.imagesUrls[0]
-        : widget.postInfo.value.postUrl;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Padding(
-          padding: const EdgeInsetsDirectional.only(top: 10),
-          child: Container(
-            width: 45,
-            height: 4.5,
-            decoration: BoxDecoration(
-              color: Theme.of(context).textTheme.headline4!.color,
-              borderRadius: BorderRadius.circular(5),
-            ),
-          ),
-        ),
+        dashIcon(context),
         Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Container(
-                width: 50,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: ColorManager.grey,
-                  borderRadius: BorderRadius.circular(5),
-                  image: DecorationImage(
-                    image: NetworkImage(postImageUrl),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
+            postImage(),
             const SizedBox(width: 12),
-            Flexible(
-              child: TextField(
-                controller: _bottomSheetMessageTextController,
-                cursorColor: ColorManager.teal,
-                decoration: InputDecoration(
-                  hintText: StringsManager.writeMessage.tr(),
-                  hintStyle: const TextStyle(
-                    color: ColorManager.grey,
-                  ),
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                ),
-                onChanged: (_) => setState(() {}),
-              ),
-            ),
+            textFieldOfMessage(),
           ],
         ),
-        Padding(
-          padding:
-              const EdgeInsetsDirectional.only(top: 30.0, end: 20, start: 20),
-          child: Container(
-            width: double.infinity,
-            height: 35,
-            decoration: BoxDecoration(
-                color: Theme.of(context).shadowColor,
-                borderRadius: BorderRadius.circular(10)),
-            child: TextFormField(
-              cursorColor: ColorManager.teal,
-              style: Theme.of(context).textTheme.bodyText1,
-              controller: _bottomSheetSearchTextController,
-              textAlign: TextAlign.start,
-              decoration: InputDecoration(
-                  prefixIcon: const Icon(
-                    Icons.search,
-                    size: 20,
-                    color: ColorManager.lowOpacityGrey,
-                  ),
-                  contentPadding: const EdgeInsetsDirectional.all(12),
-                  hintText: StringsManager.search.tr(),
-                  hintStyle: Theme.of(context).textTheme.headline1,
-                  border: InputBorder.none),
-              onChanged: (_) => setState(() {}),
-            ),
-          ),
-        )
+        searchBar(context)
       ],
     );
   }
 
-  clearTextsController() {
+  Padding searchBar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(
+          top: 30.0, end: 20, start: 20, bottom: 10),
+      child: Container(
+        width: double.infinity,
+        height: 35,
+        decoration: BoxDecoration(
+            color: Theme.of(context).shadowColor,
+            borderRadius: BorderRadius.circular(10)),
+        child: TextFormField(
+          cursorColor: ColorManager.teal,
+          style: Theme.of(context).textTheme.bodyText1,
+          controller: _bottomSheetSearchTextController,
+          textAlign: TextAlign.start,
+          decoration: InputDecoration(
+              prefixIcon: const Icon(
+                Icons.search,
+                size: 20,
+                color: ColorManager.lowOpacityGrey,
+              ),
+              contentPadding: const EdgeInsetsDirectional.all(12),
+              hintText: StringsManager.search.tr(),
+              hintStyle: Theme.of(context).textTheme.headline1,
+              border: InputBorder.none),
+          onChanged: (_) => setState(() {}),
+        ),
+      ),
+    );
+  }
+
+  Flexible textFieldOfMessage() {
+    return Flexible(
+      child: TextField(
+        controller: _bottomSheetMessageTextController,
+        cursorColor: ColorManager.teal,
+        decoration: InputDecoration(
+          hintText: StringsManager.writeMessage.tr(),
+          hintStyle: const TextStyle(
+            color: ColorManager.grey,
+          ),
+          focusedBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+        ),
+        onChanged: (_) => setState(() {}),
+      ),
+    );
+  }
+
+  Padding postImage() {
+    String postImageUrl = widget.postInfo.value.imagesUrls.length > 1
+        ? widget.postInfo.value.imagesUrls[0]
+        : widget.postInfo.value.postUrl;
+    return Padding(
+      padding: const EdgeInsets.only(left: 20),
+      child: Container(
+        width: 50,
+        height: 45,
+        decoration: BoxDecoration(
+          color: ColorManager.grey,
+          borderRadius: BorderRadius.circular(5),
+          image: DecorationImage(
+            image: NetworkImage(postImageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding dashIcon(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(top: 10),
+      child: Container(
+        width: 45,
+        height: 4.5,
+        decoration: BoxDecoration(
+          color: Theme.of(context).textTheme.headline4!.color,
+          borderRadius: BorderRadius.circular(5),
+        ),
+      ),
+    );
+  }
+
+  clearTextsController(bool clearText) {
     setState(() {
-      _bottomSheetMessageTextController.clear();
-      _bottomSheetSearchTextController.clear();
+      if (clearText) {
+        _bottomSheetMessageTextController.clear();
+        _bottomSheetSearchTextController.clear();
+      }
     });
   }
 
-  Widget buildSheet(context, state) => Material(
+  Widget buildSheet(_, __) => Material(
         child: SendToUsers(
-          userInfo: widget.postInfo.value.publisherInfo!,
+          publisherInfo: widget.postInfo.value.publisherInfo!,
           messageTextController: _bottomSheetMessageTextController,
           postInfo: widget.postInfo.value,
           clearTexts: clearTextsController,
+          selectedUsersInfo: ValueNotifier<List<UserPersonalInfo>>([]),
         ),
       );
   Padding commentButton(BuildContext context, Post postInfoValue) {

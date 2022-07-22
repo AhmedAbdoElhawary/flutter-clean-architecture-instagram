@@ -212,7 +212,7 @@ class _HomePageState extends State<HomePage> {
     Widget buildPost = ValueListenableBuilder(
       valueListenable: postsInfo,
       builder: (context, List<Post> postsInfoValue, child) =>
-          ImageOfPostForTimeLine(
+          PostOfTimeLine(
         postInfo: ValueNotifier(postsInfoValue[index]),
         postsInfo: postsInfo,
         playTheVideo: playTheVideo,

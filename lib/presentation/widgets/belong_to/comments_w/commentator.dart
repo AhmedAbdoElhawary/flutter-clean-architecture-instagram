@@ -62,7 +62,8 @@ class _CommentInfoState extends State<CommentInfo> {
   Widget build(BuildContext context) {
     bool isLiked = widget.commentInfo.likes.contains(myPersonalId);
     return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 10.0),
+      padding:
+          EdgeInsetsDirectional.only(start: 10.0, end: isThatMobile ? 0 : 10),
       child: Column(
         children: [
           rowOfCommentator(context, isLiked, widget.commentInfo.theComment),

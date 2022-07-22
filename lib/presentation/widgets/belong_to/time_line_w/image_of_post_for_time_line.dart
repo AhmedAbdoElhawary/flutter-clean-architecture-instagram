@@ -18,14 +18,14 @@ import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_post_display.dart';
 
-class ImageOfPostForTimeLine extends StatefulWidget {
+class PostOfTimeLine extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
   final bool playTheVideo;
   final VoidCallback reLoadData;
   final int indexOfPost;
   final ValueNotifier<List<Post>> postsInfo;
 
-  const ImageOfPostForTimeLine({
+  const PostOfTimeLine({
     Key? key,
     required this.postInfo,
     required this.reLoadData,
@@ -35,10 +35,10 @@ class ImageOfPostForTimeLine extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ImageOfPostForTimeLine> createState() => _ImageOfPostForTimeLineState();
+  State<PostOfTimeLine> createState() => _PostOfTimeLineState();
 }
 
-class _ImageOfPostForTimeLineState extends State<ImageOfPostForTimeLine>
+class _PostOfTimeLineState extends State<PostOfTimeLine>
     with TickerProviderStateMixin {
   final ValueNotifier<TextEditingController> commentTextController =
       ValueNotifier(TextEditingController());
@@ -137,8 +137,6 @@ class _ImageOfPostForTimeLineState extends State<ImageOfPostForTimeLine>
   }
 
   makeSelectedCommentNullable(bool isThatComment) {
-    print("222222222222222222222222222222222222222222222");
-
     widget.postInfo.value.comments.add(" ");
     commentTextController.value.text = '';
     Navigator.maybePop(context);

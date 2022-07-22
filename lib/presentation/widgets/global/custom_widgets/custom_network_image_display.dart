@@ -29,9 +29,7 @@ class _NetworkImageDisplayState extends State<NetworkImageDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.aspectRatio == 0
-        ? buildOctoImage(height: null)
-        : buildImage();
+    return widget.aspectRatio == 0 ? buildOctoImage(height: null) : buildImage();
   }
 
   Widget buildImage() {

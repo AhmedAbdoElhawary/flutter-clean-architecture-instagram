@@ -5,11 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
@@ -21,6 +23,7 @@ import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_posts_display.dart';
+import 'package:instagram/presentation/widgets/global/others/image_of_post.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
@@ -137,18 +140,45 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   Widget createGridTileWidget() {
     return SafeArea(
       child: Builder(
-        builder: (context) => GestureDetector(
-          onTap: onTapPost,
-          onLongPressMoveUpdate: onLongPressMoveUpdate,
-          onLongPress: onLongPressPost,
-          onLongPressEnd: onLongPressEnd,
-          child: widget.postClickedInfo.isThatImage
-              ? buildCardImage()
-              : buildCardVideo(),
-        ),
+        builder: (context) {
+          if (isThatMobile) {
+            return GestureDetector(
+              onTap: onTapPost,
+              onLongPressMoveUpdate: onLongPressMoveUpdate,
+              onLongPress: onLongPressPost,
+              onLongPressEnd: onLongPressEnd,
+              child: widget.postClickedInfo.isThatImage
+                  ? buildCardImage()
+                  : buildCardVideo(),
+            );
+          } else {
+            return GestureDetector(
+              onTap: onTapPostForWeb,
+              onLongPressEnd: (_) => onTapPostForWeb,
+              child: widget.postClickedInfo.isThatImage
+                  ? buildCardImage()
+                  : buildCardVideo(),
+            );
+          }
+        },
       ),
     );
   }
+
+  onTapPostForWeb() => Navigator.of(context).push(
+        HeroDialogRoute(
+          builder: (context) => ImageOfPost(
+            postInfo: ValueNotifier(widget.postClickedInfo),
+            playTheVideo: widget.playThisVideo,
+            indexOfPost: widget.index,
+            postsInfo: ValueNotifier(widget.postsInfo),
+            popupWebContainer: true,
+            showSliderArrow: true,
+            selectedCommentInfo: ValueNotifier(null),
+            textController: ValueNotifier(TextEditingController()),
+          ),
+        ),
+      );
 
   Widget buildCardVideo() {
     if (coverOfVideoForWeb != null) {
@@ -328,14 +358,6 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
     });
   }
 
-  SvgPicture iconsOfImagePost(String path, {bool lowHeight = false}) {
-    return SvgPicture.asset(
-      path,
-      color: Theme.of(context).focusColor,
-      height: lowHeight ? 22 : 28,
-    );
-  }
-
   Future<void> draggableBottomSheet() async {
     return showSlidingBottomSheet<void>(
       context,
@@ -441,19 +463,22 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
     );
   }
 
-  clearTextsController() {
+  clearTextsController(bool clearText) {
     setState(() {
-      _bottomSheetMessageTextController.clear();
-      _bottomSheetSearchTextController.clear();
+      if (clearText) {
+        _bottomSheetMessageTextController.clear();
+        _bottomSheetSearchTextController.clear();
+      }
     });
   }
 
   Widget buildSheet(context, state) => Material(
         child: SendToUsers(
-          userInfo: widget.postClickedInfo.publisherInfo!,
+          publisherInfo: widget.postClickedInfo.publisherInfo!,
           messageTextController: _bottomSheetMessageTextController,
           postInfo: widget.postClickedInfo,
           clearTexts: clearTextsController,
+          selectedUsersInfo: ValueNotifier<List<UserPersonalInfo>>([]),
         ),
       );
 

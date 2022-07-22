@@ -6,6 +6,7 @@ class IconsAssets {
   static const String loveIcon = "$iconPath/heart.svg";
   static const String menuIcon = "$iconPath/menu.svg";
   static const String menuHorizontalIcon = "$iconPath/menu_horizontal.svg";
+  static const String menuHorizontal2Icon = "$iconPath/menu_h.svg";
   static const String commentIcon = "$iconPath/comment.svg";
   static const String profileIcon = "$iconPath/profile.svg";
   static const String instagramLogo = "$iconPath/logo_instagram.svg";

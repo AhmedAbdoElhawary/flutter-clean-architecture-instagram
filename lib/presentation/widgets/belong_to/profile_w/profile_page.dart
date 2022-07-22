@@ -116,6 +116,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget loadingWidget() {
+    bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -128,10 +130,10 @@ class _ProfilePageState extends State<ProfilePage> {
               physics: const NeverScrollableScrollPhysics(),
               primary: false,
               padding: const EdgeInsetsDirectional.only(bottom: 1.5, top: 1.5),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                crossAxisSpacing: 1.5,
-                mainAxisSpacing: 1.5,
+                crossAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
+                mainAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
               ),
               itemBuilder: (_, __) {
                 return Container(
