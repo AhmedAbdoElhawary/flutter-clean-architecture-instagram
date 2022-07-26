@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/core/widgets/svg_pictures.dart';
+import 'package:instagram/data/models/notification.dart';
+import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
-import 'package:instagram/presentation/pages/activity/activity_for_mobile.dart';
-import 'package:instagram/presentation/pages/activity/activity_for_web.dart';
 import 'package:instagram/presentation/pages/messages/messages_for_web.dart';
 import 'package:instagram/presentation/pages/profile/personal_profile_page.dart';
 import 'package:instagram/presentation/pages/shop/shop_page.dart';
 import 'package:instagram/presentation/pages/time_line/all_user_time_line/all_users_time_line.dart';
 import 'package:instagram/presentation/pages/time_line/my_own_time_line/home_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/screens_w.dart';
+import 'package:instagram/presentation/widgets/global/others/notification_card_info.dart';
+import 'package:instagram/presentation/widgets/global/popup_widgets/web/new_post.dart';
 
 class WebScreenLayout extends StatefulWidget {
   const WebScreenLayout({Key? key}) : super(key: key);
@@ -24,8 +28,7 @@ class WebScreenLayout extends StatefulWidget {
 
 class _WebScreenLayoutState extends State<WebScreenLayout> {
   int _page = 0;
-  late PageController pageController; // for tabs animation
-  OverlayEntry? _popupDialog;
+  late PageController pageController;
 
   @override
   void initState() {
@@ -47,9 +50,16 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
 
   void navigationTapped(int page) {
     pageController.jumpToPage(page);
-    setState(() {
-      _page = page;
-    });
+    setState(() => _page = page);
+  }
+
+  void onPressedAdd(int page) {
+    Navigator.of(context).push(
+      HeroDialogRoute(
+        builder: (context) => const PopupNewPost(),
+      ),
+    );
+    setState(() => _page = page);
   }
 
   @override
@@ -77,36 +87,51 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
           const SizedBox(width: 5),
           IconButton(
             icon: icons(IconsAssets.addIcon, _page == 2),
-            onPressed: () => navigationTapped(2),
+            onPressed: () => onPressedAdd(2),
           ),
           const SizedBox(width: 5),
           IconButton(
-            icon: icons(IconsAssets.shop, _page == 3),
+            icon: icons(IconsAssets.compass, _page == 3),
             onPressed: () => navigationTapped(3),
           ),
           const SizedBox(width: 5),
-          IconButton(
-            icon: Icon(
+          PopupMenuButton<int>(
+            constraints: const BoxConstraints.tightFor(height: 360, width: 500),
+            position: PopupMenuPosition.under,
+            tooltip: "Show notifications",
+            elevation: 20,
+            color: Theme.of(context).splashColor,
+            offset: const Offset(90, 12),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            child: Icon(
               _page == 4
                   ? Icons.favorite_rounded
                   : Icons.favorite_border_rounded,
               color: Theme.of(context).focusColor,
               size: 28,
             ),
-            onPressed: () {
-              if (_popupDialog == null) {
-                _popupDialog = _createPopupDialog();
-                Overlay.of(context)!.insert(_popupDialog!);
-              } else {
-                _popupDialog?.remove();
-              }
+            itemBuilder: (context) {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                await NotificationCubit.get(context)
+                    .getNotifications(userId: myPersonalId);
+              });
+              List<CustomNotification> notifications =
+                  NotificationCubit.get(context).notifications;
+
+              return List<PopupMenuEntry<int>>.generate(
+                notifications.length,
+                (index) => PopupMenuItem<int>(
+                  value: index,
+                  child: NotificationCardInfo(
+                      notificationInfo: notifications[index]),
+                ),
+              );
             },
           ),
           const SizedBox(width: 5),
-          IconButton(
-            icon: const PersonalImageIcon(),
-            onPressed: () => navigationTapped(4),
-          ),
+          buildPopupMenuButton(context),
+          const SizedBox(width: 10),
         ],
       ),
       body: PageView(
@@ -118,13 +143,71 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
     );
   }
 
-  _createPopupDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => Material(
-          child: SizedBox(width: 400, height: 600, child: ActivityPage())),
+  PopupMenuButton<int> buildPopupMenuButton(BuildContext context) {
+    return PopupMenuButton<int>(
+      constraints: const BoxConstraints.tightFor(width: 180),
+      tooltip: "Show profile menu",
+      position: PopupMenuPosition.under,
+      elevation: 20,
+      color: Theme.of(context).splashColor,
+      offset: const Offset(90, 12),
+      icon: const PersonalImageIcon(),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      onSelected: (int item) => onSelectedProfileMenu(item),
+      itemBuilder: (context) => profileItems(),
     );
   }
+
+  onSelectedProfileMenu(int item) {
+    if (item == 0) {
+      navigationTapped(5);
+      return;
+    } else if (item == 1) {
+    } else {}
+  }
+
+  List<PopupMenuEntry<int>> profileItems() => [
+        PopupMenuItem<int>(
+          value: 0,
+          child: Row(
+            children: [
+              const Icon(Icons.grid_on_sharp, size: 15),
+              const SizedBox(width: 15),
+              Expanded(
+                child: Text(
+                  "Profile",
+                  style: getNormalStyle(
+                      color: Theme.of(context).focusColor, fontSize: 15),
+                ),
+              ),
+            ],
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 1,
+          child: Row(
+            children: [
+              const Icon(Icons.settings_rounded, size: 15),
+              const SizedBox(width: 15),
+              Expanded(
+                child: Text(
+                  "Settings",
+                  style: getNormalStyle(
+                      color: Theme.of(context).focusColor, fontSize: 15),
+                ),
+              ),
+            ],
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 2,
+          child: Text(
+            "Log Out",
+            style: getNormalStyle(
+                color: Theme.of(context).focusColor, fontSize: 15),
+          ),
+        ),
+      ];
 
   List<Widget> homeScreenItems = [
     const _HomePage(),
@@ -150,13 +233,7 @@ class _HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<PostCubit>(
       create: (context) => injector<PostCubit>(),
-      child: ValueListenableBuilder(
-        valueListenable: ValueNotifier(false),
-        builder: (context, bool playVideoValue, child) => HomePage(
-          userId: myPersonalId,
-          playVideo: playVideoValue,
-        ),
-      ),
+      child: HomePage(userId: myPersonalId),
     );
   }
 }
