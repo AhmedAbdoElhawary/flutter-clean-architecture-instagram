@@ -56,7 +56,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
   Widget thePostsOfHomePage({required double bodyHeight}) {
     return Container(
       width: double.infinity,
-      color:isThatMobile?null:ColorManager.white,
+      color: isThatMobile ? null : ColorManager.white,
       child: ValueListenableBuilder(
         valueListenable: widget.postInfo,
         builder: (context, Post postInfoValue, child) => Column(
@@ -98,7 +98,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
 
   Padding buildPublishingDate(Post postInfoValue, BuildContext context) {
     return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 11.5,top: 5.0),
+      padding: const EdgeInsetsDirectional.only(start: 11.5, top: 5.0),
       child: Text(
         DateOfNow.chattingDateOfNow(
             postInfoValue.datePublished, postInfoValue.datePublished),
@@ -169,7 +169,8 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
                   decoration: InputDecoration(
                     hintText: StringsManager.addComment.tr(),
                     hintStyle: TextStyle(
-                        color: Theme.of(context).bottomAppBarColor, fontSize: 14),
+                        color: Theme.of(context).bottomAppBarColor,
+                        fontSize: 14),
                     fillColor: ColorManager.black,
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
@@ -237,8 +238,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
     BlocProvider.of<NotificationCubit>(context).createNotification(
         newNotification: createNotification(textWithOneSpaces, userInfo));
     // To rebuild number of comments
-    widget.postInfo.value.comments
-        .add(newCommentInfo(userInfo, textWithOneSpaces));
+    setState(() {});
   }
 
   CustomNotification createNotification(
