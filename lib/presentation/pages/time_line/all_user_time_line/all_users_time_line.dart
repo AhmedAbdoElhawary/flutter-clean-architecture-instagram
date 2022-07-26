@@ -129,22 +129,28 @@ class AllUsersTimeLinePage extends StatelessWidget {
   }
 
   Widget loadingWidget(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: Theme.of(context).textTheme.headline5!.color!,
-      highlightColor: Theme.of(context).textTheme.headline6!.color!,
-      child: StaggeredGridView.countBuilder(
-        crossAxisSpacing: 1.5,
-        mainAxisSpacing: 1.5,
-        crossAxisCount: 3,
-        itemCount: 16,
-        itemBuilder: (_, __) {
-          return Container(
-              color: ColorManager.lightDarkGray, width: double.infinity);
-        },
-        staggeredTileBuilder: (index) {
-          double num = (index == 2 || (index % 11 == 0 && index != 0)) ? 2 : 1;
-          return StaggeredTile.count(1, num);
-        },
+    return Center(
+      child: SizedBox(
+        width: isThatMobile ? null : 910,
+        child: Shimmer.fromColors(
+          baseColor: Theme.of(context).textTheme.headline5!.color!,
+          highlightColor: Theme.of(context).textTheme.headline6!.color!,
+          child: StaggeredGridView.countBuilder(
+            crossAxisSpacing: isThatMobile ? 1.5 : 30,
+            mainAxisSpacing: isThatMobile ? 1.5 : 30,
+            crossAxisCount: 3,
+            itemCount: 16,
+            itemBuilder: (_, __) {
+              return Container(
+                  color: ColorManager.lightDarkGray, width: double.infinity);
+            },
+            staggeredTileBuilder: (index) {
+              double num =
+                  (index == 2 || (index % 11 == 0 && index != 0)) ? 2 : 1;
+              return StaggeredTile.count(1, num);
+            },
+          ),
+        ),
       ),
     );
   }

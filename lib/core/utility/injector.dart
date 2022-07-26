@@ -151,10 +151,6 @@ Future<void> initializeDependencies() async {
 
   injector.registerSingleton<GetUserFromUserNameUseCase>(
       GetUserFromUserNameUseCase(injector()));
-
-  injector.registerSingleton<AddStoryToUserUseCase>(
-      AddStoryToUserUseCase(injector()));
-
   injector
       .registerSingleton<GetAllUsersUseCase>(GetAllUsersUseCase(injector()));
 
@@ -267,8 +263,9 @@ Future<void> initializeDependencies() async {
         injector(),
         injector(),
         injector(),
-        injector(),
+     // injector(),
       ));
+  print("");
 
   injector.registerFactory<UsersInfoCubit>(
     () => UsersInfoCubit(injector(), injector(), injector()),

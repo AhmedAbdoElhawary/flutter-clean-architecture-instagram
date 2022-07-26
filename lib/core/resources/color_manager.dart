@@ -7,7 +7,7 @@ class ColorManager {
   static const Color transparentGrey = Color(0xbbe3e3e3);
 
   static const Color customGrey = Color(0xffdcdcdc);
-  static const Color customGreyForWeb = Color(0xb3fafafa);
+  static const Color customGreyForWeb = Color(0x17ecece5);
 
   static const Color lowOpacityGrey = Color(0x2A3E3E2F);
   static const Color veryLowOpacityGrey = Color(0x16444439);
@@ -23,6 +23,8 @@ class ColorManager {
 
   static const Color lightBlack = Color(0x19242424);
   static const Color darkGray = Color(0xff282828);
+  static const Color veryDarkGray = Color(0xff1a1a1a);
+
   static const Color lightDarkGray = Color(0xff696969);
 
   static const Color black45 = Colors.black45;

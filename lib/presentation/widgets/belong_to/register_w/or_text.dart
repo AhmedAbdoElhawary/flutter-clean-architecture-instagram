@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 
@@ -12,9 +13,10 @@ class OrText extends StatelessWidget {
       children: [
         const Expanded(
             child: Divider(
-          indent: 20,
-          endIndent: 5,
-          thickness: 1,
+          indent: 30,
+          endIndent: 20,
+          thickness: 0.2,
+          color: ColorManager.grey,
         )),
         Text(
           StringsManager.or.tr(),
@@ -22,9 +24,10 @@ class OrText extends StatelessWidget {
         ),
         const Expanded(
             child: Divider(
-          indent: 5,
-          endIndent: 20,
-          thickness: 1,
+          indent: 20,
+          endIndent: 30,
+          thickness: 0.2,
+          color: ColorManager.grey,
         )),
       ],
     );

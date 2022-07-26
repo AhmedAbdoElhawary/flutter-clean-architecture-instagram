@@ -4,10 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
-import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/story.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
@@ -35,15 +36,16 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).focusColor,
+      backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
         child: Column(
           children: [
             Expanded(child: Image.memory(widget.storyImage)),
             Container(
-              decoration: const BoxDecoration(
-                color: ColorManager.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(25.0)),
               ),
               child: listOfAddPost(),
             ),
@@ -65,8 +67,8 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
             height: 40,
           ),
           Text(StringsManager.create.tr(),
-              style:
-                  const TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
+              style: getMediumStyle(
+                  color: Theme.of(context).focusColor, fontSize: 20)),
           const Divider(),
           Padding(
             padding: const EdgeInsetsDirectional.only(bottom: 8.0),
@@ -95,10 +97,11 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
   Future<void> createPost(UserPersonalInfo personalInfo,
       FirestoreUserInfoCubit userCubit, BuildContext builder2context) async {
     if (isItDone) {
-      Story storyInfo = addStoryInfo(personalInfo);
-      setState(() {
-        isItDone = false;
-      });
+      String blurHash = await blurHashEncode(widget.storyImage);
+
+      Story storyInfo = addStoryInfo(personalInfo, blurHash);
+      setState(() => isItDone = false);
+
       StoryCubit storyCubit =
           BlocProvider.of<StoryCubit>(builder2context, listen: false);
 
@@ -106,12 +109,9 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
           .createStory(storyInfo, widget.storyImage)
           .then((_) async {
         if (storyCubit.storyId != '') {
-          await userCubit.updateStoriesPostsInfo(
-              userId: personalInfo.userId, storyId: storyCubit.storyId);
+          userCubit.updateMyStories(storyId: storyCubit.storyId);
           WidgetsBinding.instance.addPostFrameCallback((_) async {
-            setState(() {
-              isItDone = true;
-            });
+            setState(() => isItDone = true);
             final SharedPreferences sharePrefs =
                 await SharedPreferences.getInstance();
             sharePrefs.remove(myPersonalId);
@@ -126,13 +126,14 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
     }
   }
 
-  Story addStoryInfo(UserPersonalInfo personalInfo) {
+  Story addStoryInfo(UserPersonalInfo personalInfo, String blurHash) {
     return Story(
       publisherId: personalInfo.userId,
       datePublished: DateOfNow.dateOfNow(),
       caption: "",
       comments: [],
       likes: [],
+      blurHash: blurHash,
       isThatImage: widget.isThatImage,
     );
   }

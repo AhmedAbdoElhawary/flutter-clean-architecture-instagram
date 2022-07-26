@@ -19,12 +19,13 @@ class NotificationCubit extends Cubit<NotificationState> {
 
   static NotificationCubit get(BuildContext context) =>
       BlocProvider.of<NotificationCubit>(context);
-
+  List<CustomNotification> notifications = [];
   Future<void> getNotifications({required String userId}) async {
     emit(NotificationLoading());
     await _getNotificationsUseCase
         .call(params: userId)
         .then((List<CustomNotification> notifications) {
+      this.notifications = notifications;
       emit(NotificationLoaded(notifications: notifications));
     }).catchError((e) {
       emit(NotificationFailed(e.toString()));
@@ -42,12 +43,8 @@ class NotificationCubit extends Cubit<NotificationState> {
     });
   }
 
-  deleteNotification({
-    required NotificationCheck notificationCheck
-  }) async {
-    await _deleteNotificationUseCase
-        .call(params:notificationCheck)
-        .then((_) {
+  deleteNotification({required NotificationCheck notificationCheck}) async {
+    await _deleteNotificationUseCase.call(params: notificationCheck).then((_) {
       emit(NotificationDeleted());
     }).catchError((e) {
       emit(NotificationFailed(e.toString()));

@@ -16,7 +16,7 @@ class Comment {
     required this.whoCommentId,
     required this.datePublished,
     required this.theComment,
-     this.isLoading=false,
+    this.isLoading = false,
     this.commentUid = "",
     required this.postId,
     this.whoCommentInfo,
@@ -28,14 +28,14 @@ class Comment {
   static Comment fromSnapComment(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return Comment(
-      datePublished: snapshot.data()!["datePublished"] ?? "",
-      theComment: snapshot.data()!["theComment"] ?? "",
-      commentUid: snapshot.data()!["commentUid"] ?? "",
-      whoCommentId: snapshot.data()!["whoCommentId"] ?? "",
-      parentCommentId: snapshot.data()!["parentCommentId"] ?? "",
-      postId: snapshot.data()!['postId'] ?? "",
-      likes: snapshot.data()!['likes'] ?? [],
-      replies: snapshot.data()!["replies"] ?? [],
+      datePublished: snapshot.data()?["datePublished"] ?? "",
+      theComment: snapshot.data()?["theComment"] ?? "",
+      commentUid: snapshot.data()?["commentUid"] ?? "",
+      whoCommentId: snapshot.data()?["whoCommentId"] ?? "",
+      parentCommentId: snapshot.data()?["parentCommentId"] ?? "",
+      postId: snapshot.data()?['postId'] ?? "",
+      likes: snapshot.data()?['likes'] ?? [],
+      replies: snapshot.data()?["replies"] ?? [],
     );
   }
 
@@ -52,13 +52,13 @@ class Comment {
   static Comment fromSnapReply(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return Comment(
-      datePublished: snapshot.data()!["datePublished"] ?? "",
-      theComment: snapshot.data()!["theReply"] ?? "",
-      commentUid: snapshot.data()!["replyUid"] ?? "",
-      whoCommentId: snapshot.data()!["whoReplyId"] ?? "",
-      parentCommentId: snapshot.data()!["parentCommentId"] ?? "",
-      postId: snapshot.data()!['postId'] ?? "",
-      likes: snapshot.data()!['likes'] ?? [],
+      datePublished: snapshot.data()?["datePublished"] ?? "",
+      theComment: snapshot.data()?["theReply"] ?? "",
+      commentUid: snapshot.data()?["replyUid"] ?? "",
+      whoCommentId: snapshot.data()?["whoReplyId"] ?? "",
+      parentCommentId: snapshot.data()?["parentCommentId"] ?? "",
+      postId: snapshot.data()?['postId'] ?? "",
+      likes: snapshot.data()?['likes'] ?? [],
     );
   }
 

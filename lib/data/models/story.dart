@@ -14,6 +14,7 @@ class Story extends ParentPost {
     String caption = "",
     required List<dynamic> comments,
     required List<dynamic> likes,
+    required String blurHash,
     bool isThatImage = true,
   }) : super(
             datePublished: datePublished,
@@ -22,19 +23,21 @@ class Story extends ParentPost {
             publisherId: publisherId,
             isThatImage: isThatImage,
             caption: caption,
+            blurHash: blurHash,
             publisherInfo: publisherInfo);
 
   static Story fromSnap(
       {required DocumentSnapshot<Map<String, dynamic>> docSnap}) {
     return Story(
-      caption: docSnap.data()!["caption"] ?? "",
-      datePublished: docSnap.data()!["datePublished"] ?? "",
-      publisherId: docSnap.data()!["publisherId"] ?? "",
-      likes: docSnap.data()!["likes"] ?? [],
-      comments: docSnap.data()!["comments"] ?? [],
-      storyUid: docSnap.data()!["storyUid"] ?? "",
-      storyUrl: docSnap.data()!["storyUrl"] ?? "",
-      isThatImage: docSnap.data()!["isThatImage"] ?? true,
+      caption: docSnap.data()?["caption"] ?? "",
+      datePublished: docSnap.data()?["datePublished"] ?? "",
+      publisherId: docSnap.data()?["publisherId"] ?? "",
+      likes: docSnap.data()?["likes"] ?? [],
+      comments: docSnap.data()?["comments"] ?? [],
+      blurHash: docSnap.data()?["blurHash"] ?? "",
+      storyUid: docSnap.data()?["storyUid"] ?? "",
+      storyUrl: docSnap.data()?["storyUrl"] ?? "",
+      isThatImage: docSnap.data()?["isThatImage"] ?? true,
     );
   }
 
@@ -47,5 +50,6 @@ class Story extends ParentPost {
         'storyUid': storyUid,
         "storyUrl": storyUrl,
         "isThatImage": isThatImage,
+        "blurHash": blurHash,
       };
 }

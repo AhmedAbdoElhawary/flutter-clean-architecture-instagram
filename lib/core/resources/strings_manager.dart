@@ -99,6 +99,7 @@ class StringsManager {
   static const String followers = "followers";
   static const String follower = "follower";
   static const String following = "following";
+  static const String followings = "followings";
 
   static const String facebook = "facebook";
   static const String sendMessage = "sendMessage";

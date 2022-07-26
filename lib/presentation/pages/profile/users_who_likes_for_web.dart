@@ -7,8 +7,10 @@ import 'package:instagram/presentation/widgets/global/popup_widgets/common/head_
 
 class UsersWhoLikesForWeb extends StatelessWidget {
   final List<dynamic> usersIds;
+  final bool isThatMyPersonalId;
 
-  const UsersWhoLikesForWeb({Key? key, required this.usersIds})
+  const UsersWhoLikesForWeb({Key? key, required this.usersIds,    required this.isThatMyPersonalId,
+  })
       : super(key: key);
 
   @override
@@ -34,6 +36,7 @@ class UsersWhoLikesForWeb extends StatelessWidget {
                     showSearchBar: false,
                     usersIds: usersIds,
                     showColorfulCircle: false,
+                    isThatMyPersonalId: isThatMyPersonalId,
                   ),
                 ),
               ],

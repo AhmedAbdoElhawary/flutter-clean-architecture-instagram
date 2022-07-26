@@ -7,6 +7,7 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/pages/profile/users_who_likes_for_mobile.dart';
 import 'package:instagram/presentation/pages/profile/users_who_likes_for_web.dart';
+
 class CountOfLikes extends StatelessWidget {
   final Post postInfo;
   const CountOfLikes({Key? key, required this.postInfo}) : super(key: key);
@@ -23,14 +24,17 @@ class CountOfLikes extends StatelessWidget {
               builder: (context) => UsersWhoLikesForMobile(
                 showSearchBar: true,
                 usersIds: postInfo.likes,
+                isThatMyPersonalId: postInfo.publisherId == myPersonalId,
               ),
             ),
           );
         } else {
           Navigator.of(context).push(
             HeroDialogRoute(
-              builder: (context) =>
-                  UsersWhoLikesForWeb(usersIds: postInfo.likes),
+              builder: (context) => UsersWhoLikesForWeb(
+                usersIds: postInfo.likes,
+                isThatMyPersonalId: postInfo.publisherId == myPersonalId,
+              ),
             ),
           );
         }

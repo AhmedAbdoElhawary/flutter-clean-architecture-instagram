@@ -12,15 +12,12 @@ class CreateNewStory extends StatefulWidget {
 
 class _CreateNewStoryState extends State<CreateNewStory> {
   @override
-  Widget build(BuildContext context) {
-    return CustomGallery.normalDisplay(
-      appTheme: appStoryTheme(),
-      moveToPage: (SelectedImageDetails d) => moveToCreatePostPage(context, d),
-    );
-  }
+  Widget build(BuildContext context) => CustomGallery.normalDisplay(
+        appTheme: appStoryTheme(),
+        moveToPage: (SelectedImageDetails details) =>
+            moveToCreatePostPage(context, details, isThatStory: true),
+      );
 
-  AppTheme appStoryTheme() {
-    return AppTheme(
-        primaryColor: ColorManager.black, focusColor: ColorManager.white);
-  }
+  AppTheme appStoryTheme() => AppTheme(
+      primaryColor: ColorManager.black, focusColor: ColorManager.white);
 }

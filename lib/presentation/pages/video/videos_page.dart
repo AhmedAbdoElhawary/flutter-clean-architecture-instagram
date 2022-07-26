@@ -377,11 +377,15 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
   Widget numberOfLikes(Post videoInfo) {
     return InkWell(
       onTap: () async {
-        await Navigator.of(context).push(CupertinoPageRoute(
+        await Navigator.of(context).push(
+          CupertinoPageRoute(
             builder: (context) => UsersWhoLikesForMobile(
-                  showSearchBar: true,
-                  usersIds: videoInfo.likes,
-                )));
+              showSearchBar: true,
+              usersIds: videoInfo.likes,
+              isThatMyPersonalId: videoInfo.publisherId == myPersonalId,
+            ),
+          ),
+        );
         widget.stopVideo.value = false;
       },
       child: SizedBox(

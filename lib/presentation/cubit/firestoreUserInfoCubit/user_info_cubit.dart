@@ -17,7 +17,7 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreUserInfoState> {
   final UpdateUserInfoUseCase _updateUserInfoUseCase;
   final UploadProfileImageUseCase _uploadImageUseCase;
   final AddPostToUserUseCase _addPostToUserUseCase;
-  final AddStoryToUserUseCase _addStoryToUserUseCase;
+  // final AddStoryToUserUseCase _addStoryToUserUseCase;
   final GetUserFromUserNameUseCase _getUserFromUserNameUseCase;
   UserPersonalInfo? myPersonalInfo;
 
@@ -29,7 +29,7 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreUserInfoState> {
       this._addPostToUserUseCase,
       this._getAllUnFollowersUsersUseCase,
       this._getUserFromUserNameUseCase,
-      this._addStoryToUserUseCase,
+      // this._addStoryToUserUseCase,
       this._uploadImageUseCase)
       : super(CubitInitial());
 
@@ -66,6 +66,18 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreUserInfoState> {
     }).catchError((e) {
       emit(CubitGetUserInfoFailed(e.toString()));
     });
+  }
+
+  void updateMyFollowings({required dynamic userId, bool addThisUser = true}) {
+    if (myPersonalInfo != null) {
+      if (addThisUser) {
+        myPersonalInfo?.followedPeople.add(userId);
+      } else {
+        myPersonalInfo?.followedPeople.remove(userId);
+      }
+
+      emit(CubitMyPersonalInfoLoaded(myPersonalInfo!));
+    }
   }
 
   Future<void> getUserFromUserName(String userName) async {
@@ -110,17 +122,12 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreUserInfoState> {
     });
   }
 
-  Future<void> updateStoriesPostsInfo(
-      {required String userId, required String storyId}) async {
+  void updateMyStories({required String storyId}) {
     emit(CubitUserLoading());
-    await _addStoryToUserUseCase
-        .call(paramsOne: userId, paramsTwo: storyId)
-        .then((userInfo) {
-      myPersonalInfo = userInfo;
-      emit(CubitMyPersonalInfoLoaded(userInfo));
-    }).catchError((e) {
-      emit(CubitGetUserInfoFailed(e.toString()));
-    });
+    if (myPersonalInfo != null) {
+      myPersonalInfo!.stories.add(storyId);
+      emit(CubitMyPersonalInfoLoaded(myPersonalInfo!));
+    }
   }
 
   Future<void> uploadProfileImage(

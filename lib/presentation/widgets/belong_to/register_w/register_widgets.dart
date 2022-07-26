@@ -38,50 +38,88 @@ class _SignUpPageState extends State<RegisterWidgets> {
 
   Scaffold buildScaffold(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
         child: Center(
             child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                IconsAssets.instagramLogo,
-                color: Theme.of(context).focusColor,
-                height: 50,
-              ),
-              const SizedBox(height: 30),
-              CustomTextField(
-                  hint: StringsManager.phoneOrEmailOrUserName.tr(),
-                  controller: widget.emailController),
-              const SizedBox(height: 15),
-              CustomTextField(
-                  hint: StringsManager.password.tr(),
-                  controller: widget.passwordController),
-              if (!widget.isThatLogIn) ...[
-                const SizedBox(height: 15),
-                CustomTextField(
-                    hint: StringsManager.confirmPassword.tr(),
-                    controller: widget.confirmPasswordController),
-              ],
-              const SizedBox(height: 15),
-              widget.customTextButton,
-              const SizedBox(height: 15),
-              haveAccountRow(context),
-              const SizedBox(height: 8),
-              const OrText(),
-              TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    StringsManager.loginWithFacebook.tr(),
-                    style: getNormalStyle(color: ColorManager.blue),
-                  ))
-            ],
-          ),
+          child: isThatMobile ? buildColumn(context) : buildForWeb(context),
         )),
       ),
+    );
+  }
+
+  SizedBox buildForWeb(BuildContext context) {
+    return SizedBox(
+      width: 352,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: double.infinity,
+            height: 400,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey, width: 0.2),
+            ),
+            child: buildColumn(context),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            width: double.infinity,
+            height: 65,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey, width: 0.2),
+            ),
+            child: haveAccountRow(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Column buildColumn(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SvgPicture.asset(
+          IconsAssets.instagramLogo,
+          color: Theme.of(context).focusColor,
+          height: 50,
+        ),
+        const SizedBox(height: 30),
+        CustomTextField(
+            hint: StringsManager.phoneOrEmailOrUserName.tr(),
+            controller: widget.emailController),
+        SizedBox(height: isThatMobile ? 15 : 6.5),
+        CustomTextField(
+            hint: StringsManager.password.tr(),
+            controller: widget.passwordController),
+        if (!widget.isThatLogIn) ...[
+          const SizedBox(height: 15),
+          CustomTextField(
+              hint: StringsManager.confirmPassword.tr(),
+              controller: widget.confirmPasswordController),
+        ],
+        widget.customTextButton,
+        const SizedBox(height: 15),
+        if (isThatMobile) ...[
+          haveAccountRow(context),
+          const SizedBox(height: 8),
+          const OrText(),
+        ] else ...[
+          const SizedBox(height: 10),
+          const OrText(),
+          const SizedBox(height: 10),
+        ],
+        TextButton(
+            onPressed: () {},
+            child: Text(
+              StringsManager.loginWithFacebook.tr(),
+              style: getNormalStyle(color: ColorManager.blue),
+            ))
+      ],
     );
   }
 
@@ -93,7 +131,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
           widget.isThatLogIn
               ? StringsManager.noAccount.tr()
               : StringsManager.haveAccount.tr(),
-          style: getNormalStyle(fontSize: 13, color: ColorManager.grey),
+          style: getNormalStyle(fontSize: 13, color: ColorManager.black),
         ),
         const SizedBox(width: 4),
         register(context),

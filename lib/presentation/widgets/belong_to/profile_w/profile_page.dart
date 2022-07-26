@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -15,8 +16,8 @@ import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/profile/followers_info_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_videos_grid_view.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_grid_view.dart';
+import 'package:instagram/presentation/widgets/global/popup_widgets/web/follow_card.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../../../../data/models/user_personal_info.dart';
 import '../../global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import '../time_line_w/read_more_text.dart';
@@ -448,11 +449,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget personalNumbersInfo(
-      List usersInfo, String text, UserPersonalInfo userInfo) {
+      List<dynamic> usersIds, String text, UserPersonalInfo userInfo) {
     return Builder(builder: (builderContext) {
       List<Widget> userInfoWidgets = [
         Text(
-          "${usersInfo.length}",
+          "${usersIds.length}",
           style: getBoldStyle(
               color: Theme.of(context).focusColor,
               fontSize: isThatMobile ? 20 : 15),
@@ -464,20 +465,30 @@ class _ProfilePageState extends State<ProfilePage> {
       ];
       return GestureDetector(
         onTap: () async {
-          if (text != StringsManager.posts.tr()) {
-            await Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder: (context) => FollowersInfoPage(
-                    userInfo: userInfo,
-                    initialIndex: usersInfo == userInfo.followerPeople ? 0 : 1),
-              ),
-            );
-            BlocProvider.of<FirestoreUserInfoCubit>(context).getUserInfo(
-                userInfo.userId,
-                isThatMyPersonalId: widget.isThatMyPersonalId);
-            setState(() {
-              reBuild.value = true;
-            });
+          bool isThatPost = text != StringsManager.posts.tr();
+          bool isThatFollowers = text != StringsManager.followers.tr();
+
+          if (isThatPost) {
+            if (isThatMobile) {
+              await Navigator.of(context).push(
+                CupertinoPageRoute(
+                  builder: (context) => FollowersInfoPage(
+                      userInfo: userInfo,
+                      initialIndex:
+                          usersIds == userInfo.followerPeople ? 0 : 1),
+                ),
+              );
+            } else {
+              await Navigator.of(context).push(
+                HeroDialogRoute(
+                  builder: (context) => PopupFollowCard(
+                    usersIds: usersIds,
+                    isThatFollower: isThatFollowers,
+                    isThatMyPersonalId: userInfo.userId == myPersonalId,
+                  ),
+                ),
+              );
+            }
           }
         },
         child: isThatMobile

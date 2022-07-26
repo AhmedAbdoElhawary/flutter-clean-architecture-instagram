@@ -5,6 +5,7 @@ import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_of_post.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_posts_display.dart';
+import 'package:instagram/presentation/widgets/global/others/image_of_post.dart';
 
 class GetsPostInfoAndDisplay extends StatelessWidget {
   final String postId;
@@ -32,17 +33,29 @@ class GetsPostInfoAndDisplay extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is CubitPostsInfoLoaded) {
-            if (state.postsInfo[0].comments.length < 10) {
-              return CommentsOfPost(
-                postInfo: state.postsInfo[0],
+            if (isThatMobile) {
+              if (state.postsInfo[0].comments.length < 10) {
+                return CommentsOfPost(
+                  postInfo: state.postsInfo[0],
+                  textController: ValueNotifier(TextEditingController()),
+                  selectedCommentInfo: ValueNotifier(null),
+                  showImage: true,
+                );
+              } else {
+                return CustomPostsDisplay(
+                  postsInfo: state.postsInfo,
+                  showCatchUp: false,
+                );
+              }
+            } else {
+              return ImageOfPost(
+                postInfo: ValueNotifier(state.postsInfo[0]),
                 textController: ValueNotifier(TextEditingController()),
                 selectedCommentInfo: ValueNotifier(null),
-                showImage: true,
-              );
-            } else {
-              return CustomPostsDisplay(
-                postsInfo: state.postsInfo,
-                showCatchUp: false,
+                playTheVideo: true,
+                indexOfPost: 0,
+                popupWebContainer: true,
+                postsInfo: ValueNotifier(state.postsInfo),
               );
             }
           } else {

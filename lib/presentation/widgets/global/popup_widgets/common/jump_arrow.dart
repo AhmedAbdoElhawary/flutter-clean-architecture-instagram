@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 
-class JumpArrow extends StatelessWidget {
+class ArrowJump extends StatelessWidget {
   final bool isThatBack;
   final bool makeArrowBigger;
-  const JumpArrow(
-      {Key? key, this.isThatBack = true, this.makeArrowBigger = false})
-      : super(key: key);
+  const ArrowJump({
+    Key? key,
+    this.isThatBack = true,
+    this.makeArrowBigger = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    IconData icon = isThatBack
+        ? Icons.arrow_back_ios_rounded
+        : Icons.arrow_forward_ios_rounded;
+
     return Padding(
       padding: EdgeInsetsDirectional.only(
           start: isThatBack ? 10.0 : 0.0, end: isThatBack ? 0.0 : 10.0),
@@ -26,12 +32,7 @@ class JumpArrow extends StatelessWidget {
             borderRadius: BorderRadius.circular(50.0),
           ),
           child: Center(
-            child: Icon(
-                isThatBack
-                    ? Icons.arrow_back_ios_rounded
-                    : Icons.arrow_forward_ios_rounded,
-                color: ColorManager.black,
-                size: 15),
+            child: Icon(icon, color: ColorManager.black, size: 15),
           ),
         ),
       ),

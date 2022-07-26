@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:instagram/config/themes/app_theme.dart';
 import 'package:instagram/config/themes/theme_service.dart';
+import 'package:instagram/core/resources/assets_manager.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/pages/register/login_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/get_my_user_info.dart';
 import 'package:instagram/presentation/widgets/global/others/multi_bloc_provider.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyApp extends StatefulWidget {
@@ -49,7 +50,9 @@ class _MyAppState extends State<MyApp> {
       themeMode: ThemeOfApp().theme,
       home: AnimatedSplashScreen(
         centered: true,
-        splash: Lottie.asset('assets/splash_gif/instagram.json'),
+        splash: IconsAssets.splashIcon,
+        backgroundColor: ColorManager.white,
+        splashTransition: SplashTransition.scaleTransition,
         nextScreen: myId == null
             ? LoginPage(sharePrefs: widget.sharePrefs)
             : GetMyPersonalInfo(myPersonalId: myId!),

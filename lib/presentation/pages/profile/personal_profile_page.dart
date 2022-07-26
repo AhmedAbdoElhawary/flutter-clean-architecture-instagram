@@ -344,11 +344,10 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   createNewStory() async {
     Navigator.maybePop(context);
-    Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-        builder: (context) {
-          return const CreateNewStory();
-        },
-        maintainState: false));
+    Navigator.of(context, rootNavigator: true).push(
+      CupertinoPageRoute(
+          builder: (context) => const CreateNewStory(), maintainState: false),
+    );
 
     rebuildUserInfo.value = true;
   }

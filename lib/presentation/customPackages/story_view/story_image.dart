@@ -10,9 +10,7 @@ import 'utils.dart';
 /// cached to disk with default configurations of [DefaultCacheManager].
 class ImageLoader {
   ui.Codec? frames;
-
   String url;
-
   Map<String, dynamic>? requestHeaders;
 
   LoadState state = LoadState.loading; // by default
@@ -46,14 +44,17 @@ class ImageLoader {
 
         PaintingBinding.instance.instantiateImageCodec(imageBytes).then(
             (codec) {
+
           frames = codec;
           onComplete();
         }, onError: (error) {
+
           state = LoadState.failure;
           onComplete();
         });
       },
       onError: (error) {
+
         state = LoadState.failure;
         onComplete();
       },
@@ -66,9 +67,7 @@ class ImageLoader {
 /// forward animated media.
 class StoryImage extends StatefulWidget {
   final ImageLoader imageLoader;
-
   final BoxFit? fit;
-
   final StoryController? controller;
 
   StoryImage(
@@ -86,6 +85,7 @@ class StoryImage extends StatefulWidget {
     BoxFit fit = BoxFit.fitWidth,
     Key? key,
   }) {
+
     return StoryImage(
         ImageLoader(
           url,

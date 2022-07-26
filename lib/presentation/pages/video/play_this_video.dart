@@ -34,8 +34,11 @@ class _PlayThisVideoState extends State<PlayThisVideo> {
     if (widget.play) {
       _controller.play();
       _controller.setLooping(true);
+
       if (widget.withoutSound) {
         _controller.setVolume(0);
+      } else {
+        _controller.setVolume(1);
       }
     }
     super.initState();
@@ -47,12 +50,19 @@ class _PlayThisVideoState extends State<PlayThisVideo> {
       if (widget.play) {
         _controller.play();
         _controller.setLooping(true);
-        if (widget.withoutSound) {
-          _controller.setVolume(0);
-        }
+        setState(() {
+          if (widget.withoutSound) {
+            _controller.setVolume(0);
+          }
+        });
       } else {
         _controller.pause();
       }
+    }
+    if (widget.withoutSound) {
+      _controller.setVolume(0);
+    } else {
+      _controller.setVolume(1);
     }
     super.didUpdateWidget(oldWidget);
   }
