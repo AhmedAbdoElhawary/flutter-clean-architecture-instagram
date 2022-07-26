@@ -67,7 +67,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
   }
 
   Widget commentsList() {
-    return Flexible(child: blocBuilder());
+    return Expanded(child: blocBuilder());
   }
 
   Widget blocBuilder() {
@@ -160,7 +160,6 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
       shrinkWrap: true,
       primary: false,
       physics: const NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
         if (!showMeReplies.containsKey(index)) {
           showMeReplies[index] = false;
