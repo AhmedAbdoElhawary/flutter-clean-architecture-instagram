@@ -90,7 +90,7 @@ class _ImagesSliderState extends State<ImagesSlider> {
                       _controller.animateToPage(initPosition.value,
                           curve: Curves.easeInOut);
                     },
-                    child: const JumpArrow()),
+                    child: const ArrowJump()),
               if (initPositionValue < widget.imagesUrls.length - 1)
                 GestureDetector(
                   onTap: () {
@@ -98,7 +98,7 @@ class _ImagesSliderState extends State<ImagesSlider> {
                     _controller.animateToPage(initPosition.value,
                         curve: Curves.easeInOut);
                   },
-                  child: const JumpArrow(isThatBack: false),
+                  child: const ArrowJump(isThatBack: false),
                 ),
               slideCount(),
             ],
