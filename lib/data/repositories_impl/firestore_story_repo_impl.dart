@@ -13,8 +13,11 @@ class FirestoreStoryRepositoryImpl implements FirestoreStoryRepository {
     try {
       String postUrl = await FirebaseStoragePost.uploadFile(file, 'postsImage');
       storyInfo.storyUrl = postUrl;
-      String postUid = await FireStoreStory.createStory(storyInfo);
-      return postUid;
+      String storyUid = await FireStoreStory.createStory(storyInfo);
+      await FirestoreUser.updateUserStories(
+          userId: storyInfo.publisherId, storyId: storyUid);
+
+      return storyUid;
     } catch (e) {
       return Future.error(e.toString());
     }
