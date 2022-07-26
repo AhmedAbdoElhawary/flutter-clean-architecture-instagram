@@ -61,7 +61,7 @@ Total : 207 files, 8107 codes, 512 comments, 1158 blanks, all 9777 lines
 | [assets/icons/shop_white.svg](/assets/icons/shop_white.svg) | XML | 1 | 0 | 0 | 1 |
 | [assets/icons/video.svg](/assets/icons/video.svg) | XML | 1 | 0 | 0 | 1 |
 | [assets/icons/warning.svg](/assets/icons/warning.svg) | XML | 1 | 0 | 0 | 1 |
-| [assets/splash_gif/instagram.json](/assets/splash_gif/instagram.json) | JSON | 1 | 0 | 0 | 1 |
+| [assets/splash_gif/instagram.json](/assets/splash/instagram.json) | JSON | 1 | 0 | 0 | 1 |
 | [ios/Runner/AppDelegate.swift](/ios/Runner/AppDelegate.swift) | Swift | 12 | 0 | 2 | 14 |
 | [ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json](/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json) | JSON | 122 | 0 | 1 | 123 |
 | [ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json](/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json) | JSON | 23 | 0 | 1 | 24 |
