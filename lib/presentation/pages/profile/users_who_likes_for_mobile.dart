@@ -4,19 +4,18 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/pages/profile/users_who_likes.dart';
 
-class UsersWhoLikesForMobile extends StatefulWidget {
+class UsersWhoLikesForMobile extends StatelessWidget {
   final List<dynamic> usersIds;
   final bool showSearchBar;
+  final bool isThatMyPersonalId;
 
-  const UsersWhoLikesForMobile(
-      {Key? key, required this.showSearchBar, required this.usersIds})
-      : super(key: key);
+  const UsersWhoLikesForMobile({
+    Key? key,
+    required this.showSearchBar,
+    required this.usersIds,
+    required this.isThatMyPersonalId,
+  }) : super(key: key);
 
-  @override
-  State<UsersWhoLikesForMobile> createState() => _UsersWhoLikesForMobileState();
-}
-
-class _UsersWhoLikesForMobileState extends State<UsersWhoLikesForMobile> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -24,8 +23,9 @@ class _UsersWhoLikesForMobileState extends State<UsersWhoLikesForMobile> {
       child: Scaffold(
         appBar: isThatMobile ? buildAppBar(context) : null,
         body: UsersWhoLikes(
-          usersIds: widget.usersIds,
-          showSearchBar: widget.showSearchBar,
+          usersIds: usersIds,
+          showSearchBar: showSearchBar,
+          isThatMyPersonalId: isThatMyPersonalId,
         ),
       ),
     );
