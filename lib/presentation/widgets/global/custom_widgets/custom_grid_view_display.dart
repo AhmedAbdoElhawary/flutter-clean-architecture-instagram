@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +24,6 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_netw
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_posts_display.dart';
 import 'package:instagram/presentation/widgets/global/others/image_of_post.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 class _PositionDimension {
   final double positionTop;
@@ -90,7 +88,6 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
 
   bool isLiked = false;
   bool isTempLiked = false;
-  Uint8List? coverOfVideoForWeb;
   ValueNotifier<bool> isHeartAnimation = ValueNotifier(false);
 
   double widgetPositionLeft = 0;
@@ -100,20 +97,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   @override
   void initState() {
     isLiked = widget.postClickedInfo.likes.contains(myPersonalId);
-    if (!widget.postClickedInfo.isThatImage && !isThatMobile) {
-      createVideoCover();
-    }
     super.initState();
-  }
-
-  Future<void> createVideoCover() async {
-    final Uint8List? fileName = await VideoThumbnail.thumbnailData(
-      video: widget.postClickedInfo.postUrl,
-      imageFormat: ImageFormat.WEBP,
-      maxHeight: 200,
-      quality: 90,
-    );
-    if (fileName != null) setState(() => coverOfVideoForWeb = fileName);
   }
 
   @override
@@ -181,15 +165,11 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
       );
 
   Widget buildCardVideo() {
-    if (coverOfVideoForWeb != null) {
-      return Image.memory(coverOfVideoForWeb!, fit: BoxFit.cover);
-    } else {
-      return PlayThisVideo(
-        videoUrl: widget.postClickedInfo.postUrl,
-        play: widget.playThisVideo,
-        withoutSound: true,
-      );
-    }
+    return PlayThisVideo(
+      videoUrl: widget.postClickedInfo.postUrl,
+      play: widget.playThisVideo,
+      withoutSound: true,
+    );
   }
 
   Stack buildCardImage() {
