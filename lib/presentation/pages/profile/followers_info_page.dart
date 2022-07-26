@@ -105,29 +105,29 @@ class _TapBarView extends StatelessWidget {
   final CubitFollowersAndFollowingsLoaded state;
   final ValueNotifier<UserPersonalInfo> userInfo;
 
-  const _TapBarView({
-    Key? key,
-    required this.userInfo,
-    required this.state,
-  }) : super(key: key);
+  const _TapBarView({Key? key, required this.userInfo, required this.state})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+   bool isThatMyPersonalId=  userInfo.value.userId == myPersonalId;
+
     return TabBarView(
       children: [
         SingleChildScrollView(
           child: ShowMeTheUsers(
             usersInfo: state.followersAndFollowingsInfo.followersInfo,
-            userInfo: userInfo,
             emptyText: StringsManager.noFollowers.tr(),
+            isThatMyPersonalId:isThatMyPersonalId,
           ),
         ),
         SingleChildScrollView(
           child: ShowMeTheUsers(
             usersInfo: state.followersAndFollowingsInfo.followingsInfo,
             isThatFollower: false,
-            userInfo: userInfo,
             emptyText: StringsManager.noFollowings.tr(),
+            isThatMyPersonalId:isThatMyPersonalId,
+
           ),
         ),
       ],
