@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:instagram/core/utility/constant.dart';
 
 class StorySwipe extends StatefulWidget {
   final List<Widget> children;
@@ -44,6 +45,7 @@ class _StorySwipeState extends State<StorySwipe> {
         } else {
           value = widget.controller.page!;
         }
+
         return _SwipeWidget(
           index: index,
           pageNotifier: value,
@@ -82,17 +84,40 @@ class _SwipeWidget extends StatelessWidget {
     return Transform(
       alignment: isLeaving ? Alignment.centerRight : Alignment.centerLeft,
       transform: transform,
-      child: Stack(
-        children: [
-          child,
-          Positioned.fill(
-            child: Opacity(
-              opacity: opacity,
-              child: const SizedBox.shrink(),
-            ),
+      child:
+      // isThatMobile
+      //     ?
+      buildStack(opacity)
+          // : buildStackForWeb(context, opacity),
+    );
+  }
+  //
+  // Widget buildStackForWeb(BuildContext context, opacity) {
+  //   double widthOfScreen = MediaQuery.of(context).size.width;
+  //   double halfOfWidth = widthOfScreen / 2;
+  //   double heightOfStory =
+  //       (halfOfWidth < 515 ? widthOfScreen : halfOfWidth) + 50;
+  //   double widthOfStory =
+  //       (halfOfWidth < 515 ? halfOfWidth : halfOfWidth / 2) + 80;
+  //
+  //   return SizedBox(
+  //     height: heightOfStory,
+  //     width: widthOfStory,
+  //     child: buildStack(opacity),
+  //   );
+  // }
+
+  Stack buildStack(double opacity) {
+    return Stack(
+      children: [
+        child,
+        Positioned.fill(
+          child: Opacity(
+            opacity: opacity,
+            child: const SizedBox.shrink(),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
