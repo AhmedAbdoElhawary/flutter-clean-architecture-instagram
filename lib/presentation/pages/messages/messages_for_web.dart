@@ -60,20 +60,21 @@ class _MessagesForWebState extends State<MessagesForWeb> {
   }
 
   Widget chatting() {
-    return selectedTextingUser == null
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Center(
-                child: Text(
+    if (selectedTextingUser == null) {
+      return Expanded(
+        child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
                   "There is no selected massage",
                   style: getMediumStyle(color: ColorManager.black),
                 ),
-              ),
-            ],
-          )
-        : Expanded(
+              ],
+            ),
+      );
+    } else {
+      return Expanded(
             child: Column(
               children: [
                 appBarOfChatting(),
@@ -81,6 +82,7 @@ class _MessagesForWebState extends State<MessagesForWeb> {
               ],
             ),
           );
+    }
   }
 
   Widget chatMessages() {
