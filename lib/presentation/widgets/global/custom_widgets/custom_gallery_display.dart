@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram/core/functions/compress_image.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
+import 'package:instagram/presentation/pages/story/create_story.dart';
 
 class CustomGalleryDisplay extends StatefulWidget {
   const CustomGalleryDisplay({Key? key}) : super(key: key);
@@ -49,7 +50,8 @@ class _CustomGalleryDisplayState extends State<CustomGalleryDisplay> {
 }
 
 Future<void> moveToCreatePostPage(
-    BuildContext context, SelectedImageDetails details) async {
+    BuildContext context, SelectedImageDetails details,
+    {bool isThatStory = false}) async {
   List<Uint8List> selectedUint8Lists = [];
   if (details.selectedFiles != null && details.multiSelectionMode) {
     for (int i = 0; i < details.selectedFiles!.length; i++) {
@@ -67,12 +69,18 @@ Future<void> moveToCreatePostPage(
       : details.selectedFile;
   Uint8List bytesFile = file.readAsBytesSync();
   ByteData.view(bytesFile.buffer);
-
-  await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-      builder: (context) => CreatePostPage(
-          selectedFile: bytesFile,
-          multiSelectedFiles: selectedUint8Lists,
-          isThatImage: details.isThatImage,
-          aspectRatio: details.aspectRatio),
-      maintainState: false));
+  if (isThatStory) {
+    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+        builder: (context) => CreateStoryPage(
+            storyImage: bytesFile, isThatImage: details.isThatImage),
+        maintainState: false));
+  } else {
+    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+        builder: (context) => CreatePostPage(
+            selectedFile: bytesFile,
+            multiSelectedFiles: selectedUint8Lists,
+            isThatImage: details.isThatImage,
+            aspectRatio: details.aspectRatio),
+        maintainState: false));
+  }
 }
