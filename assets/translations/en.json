@@ -1,5 +1,5 @@
 {
-  "or": "Or",
+  "or": "OR",
   "less": "less",
   "reel": "Reel",
   "like": "Like",
@@ -17,6 +17,7 @@
   "send": "Send",
   "undo": "Undo",
   "done": "Done",
+  "followings": "Followings",
   "writeMessage": "Write a message...",
   "name": "Name",
   "likes": "Likes",
