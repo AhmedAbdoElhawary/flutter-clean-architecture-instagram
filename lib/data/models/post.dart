@@ -7,7 +7,6 @@ class Post extends ParentPost {
   List<dynamic> imagesUrls;
   String postUid;
   double aspectRatio;
-  String blurHash;
   Post({
     required String datePublished,
     required String publisherId,
@@ -16,36 +15,38 @@ class Post extends ParentPost {
     this.postUrl = "",
     required this.imagesUrls,
     required this.aspectRatio,
-    required this.blurHash,
     String caption = "",
     required List<dynamic> comments,
+    required String blurHash,
     required List<dynamic> likes,
     bool isThatImage = true,
   }) : super(
-            datePublished: datePublished,
-            likes: likes,
-            comments: comments,
-            publisherId: publisherId,
-            isThatImage: isThatImage,
-            caption: caption,
-            publisherInfo: publisherInfo);
+          datePublished: datePublished,
+          likes: likes,
+          comments: comments,
+          publisherId: publisherId,
+          isThatImage: isThatImage,
+          caption: caption,
+          blurHash: blurHash,
+          publisherInfo: publisherInfo,
+        );
 
   static Post fromQuery(
       {DocumentSnapshot<Map<String, dynamic>>? query,
       QueryDocumentSnapshot<Map<String, dynamic>>? doc}) {
     dynamic snap = query ?? doc;
     return Post(
-      caption: snap.data()!["caption"] ?? "",
-      datePublished: snap.data()!["datePublished"] ?? "",
-      publisherId: snap.data()!["publisherId"] ?? "",
-      likes: snap.data()!["likes"] ?? [],
-      comments: snap.data()!["comments"] ?? [],
-      blurHash: snap.data()!["blurHash"] ?? "",
-      imagesUrls: snap.data()!["imagesUrls"] ?? [],
-      postUid: snap.data()!["postUid"] ?? "",
-      aspectRatio: snap.data()!["aspectRatio"] ?? 0.0,
-      postUrl: snap.data()!["postUrl"] ?? "",
-      isThatImage: snap.data()!["isThatImage"] ?? true,
+      caption: snap.data()?["caption"] ?? "",
+      datePublished: snap.data()?["datePublished"] ?? "",
+      publisherId: snap.data()?["publisherId"] ?? "",
+      likes: snap.data()?["likes"] ?? [],
+      comments: snap.data()?["comments"] ?? [],
+      blurHash: snap.data()?["blurHash"] ?? "",
+      imagesUrls: snap.data()?["imagesUrls"] ?? [],
+      postUid: snap.data()?["postUid"] ?? "",
+      aspectRatio: snap.data()?["aspectRatio"] ?? 0.0,
+      postUrl: snap.data()?["postUrl"] ?? "",
+      isThatImage: snap.data()?["isThatImage"] ?? true,
     );
   }
 
