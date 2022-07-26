@@ -21,12 +21,13 @@ class FireStoreStory {
 
   static Future<List<UserPersonalInfo>> getStoriesInfo(
       List<UserPersonalInfo> usersInfo) async {
-    List<UserPersonalInfo> usersStoriesInfo = usersInfo;
+    List<Story> storiesInfo = [];
     List<String> storiesIds = [];
-    for (int i = 0; i < usersStoriesInfo.length; i++) {
-      List<dynamic> userStories = usersStoriesInfo[i].stories;
+    for (int i = 0; i < usersInfo.length; i++) {
+      storiesInfo = [];
+      List<dynamic> userStories = usersInfo[i].stories;
       if (userStories.isEmpty) {
-        usersStoriesInfo.removeAt(i);
+        usersInfo.removeAt(i);
         i--;
         continue;
       }
@@ -35,17 +36,16 @@ class FireStoreStory {
             await _fireStoreStoryCollection.doc(userStories[j]).get();
         if (snap.exists) {
           Story postReformat = Story.fromSnap(docSnap: snap);
-          postReformat.publisherInfo = usersStoriesInfo[i];
-          if (usersStoriesInfo[i].storiesInfo == null) {
-            usersStoriesInfo[i].storiesInfo = [postReformat];
-            storiesIds.add(postReformat.storyUid);
-          } else if (!storiesIds.contains(postReformat.storyUid)) {
-            usersStoriesInfo[i].storiesInfo!.add(postReformat);
+
+          postReformat.publisherInfo = usersInfo[i];
+          if (!storiesIds.contains(postReformat.storyUid)) {
+            storiesInfo.add(postReformat);
             storiesIds.add(postReformat.storyUid);
           }
         }
       }
+      usersInfo[i].storiesInfo = storiesInfo;
     }
-    return usersStoriesInfo;
+    return usersInfo;
   }
 }
