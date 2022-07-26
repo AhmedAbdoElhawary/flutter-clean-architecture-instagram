@@ -49,18 +49,6 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       return Future.error(e.toString());
     }
   }
-
-  @override
-  Future<UserPersonalInfo> updateUserStoriesInfo(
-      {required String userId, required String storyId}) async {
-    try {
-      await FirestoreUser.updateUserStories(userId: userId, storyId: storyId);
-      return await getPersonalInfo(userId);
-    } catch (e) {
-      return Future.error(e.toString());
-    }
-  }
-
   @override
   Future<String> uploadProfileImage(
       {required Uint8List photo,
