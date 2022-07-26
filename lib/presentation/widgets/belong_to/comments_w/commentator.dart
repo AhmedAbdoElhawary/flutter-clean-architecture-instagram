@@ -62,8 +62,7 @@ class _CommentInfoState extends State<CommentInfo> {
   Widget build(BuildContext context) {
     bool isLiked = widget.commentInfo.likes.contains(myPersonalId);
     return Padding(
-      padding:
-          EdgeInsetsDirectional.only(start: 10.0, end: isThatMobile ? 0 : 10),
+      padding: const EdgeInsetsDirectional.only(start: 10.0, end: 10),
       child: Column(
         children: [
           rowOfCommentator(context, isLiked, widget.commentInfo.theComment),
@@ -235,11 +234,16 @@ class _CommentInfoState extends State<CommentInfo> {
             padding: const EdgeInsetsDirectional.only(start: 20.0),
             child: InkWell(
               onTap: () {
-                Navigator.of(context).push(CupertinoPageRoute(
+                Navigator.of(context).push(
+                  CupertinoPageRoute(
                     builder: (context) => UsersWhoLikesForMobile(
-                          showSearchBar: false,
-                          usersIds: widget.commentInfo.likes,
-                        )));
+                      showSearchBar: false,
+                      usersIds: widget.commentInfo.likes,
+                      isThatMyPersonalId:
+                          widget.commentInfo.whoCommentId == myPersonalId,
+                    ),
+                  ),
+                );
               },
               child: Text(
                 "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like.tr() : StringsManager.likes.tr()}",
