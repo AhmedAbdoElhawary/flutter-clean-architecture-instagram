@@ -81,7 +81,7 @@ Total : 294 files, 15567 codes, 654 comments, 1970 blanks, all 18191 lines
 | [assets/icons/video.svg](/assets/icons/video.svg) | XML | 1 | 0 | 0 | 1 |
 | [assets/icons/video_point.svg](/assets/icons/video_point.svg) | XML | 1 | 0 | 0 | 1 |
 | [assets/icons/warning.svg](/assets/icons/warning.svg) | XML | 1 | 0 | 0 | 1 |
-| [assets/splash_gif/instagram.json](/assets/splash_gif/instagram.json) | JSON | 1 | 0 | 0 | 1 |
+| [assets/splash_gif/instagram.json](/assets/splash/instagram.json) | JSON | 1 | 0 | 0 | 1 |
 | [assets/translations/ar.json](/assets/translations/ar.json) | JSON | 90 | 0 | 0 | 90 |
 | [assets/translations/en.json](/assets/translations/en.json) | JSON | 92 | 0 | 0 | 92 |
 | [ios/Runner/AppDelegate.swift](/ios/Runner/AppDelegate.swift) | Swift | 12 | 0 | 2 | 14 |
@@ -180,7 +180,7 @@ Total : 294 files, 15567 codes, 654 comments, 1970 blanks, all 18191 lines
 | [lib/domain/use_cases/user/update_user_info.dart](/lib/domain/use_cases/user/update_user_info.dart) | Dart | 11 | 0 | 4 | 15 |
 | [lib/domain/use_cases/user/upload_profile_image_usecase.dart](/lib/domain/use_cases/user/upload_profile_image_usecase.dart) | Dart | 16 | 0 | 4 | 20 |
 | [lib/main.dart](/lib/main.dart) | Dart | 19 | 0 | 2 | 21 |
-| [lib/material_app.dart](/lib/material_app.dart) | Dart | 56 | 0 | 7 | 63 |
+| [lib/material_app.dart](/lib/app.dart) | Dart | 56 | 0 | 7 | 63 |
 | [lib/presentation/cubit/StoryCubit/story_cubit.dart](/lib/presentation/cubit/StoryCubit/story_cubit.dart) | Dart | 68 | 0 | 9 | 77 |
 | [lib/presentation/cubit/StoryCubit/story_state.dart](/lib/presentation/cubit/StoryCubit/story_state.dart) | Dart | 34 | 0 | 13 | 47 |
 | [lib/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart](/lib/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart) | Dart | 47 | 0 | 7 | 54 |
