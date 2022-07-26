@@ -23,7 +23,8 @@ class AppTheme {
         backgroundColor: ColorManager.lightBlack,
         selectedRowColor: ColorManager.lightGrey,
         toggleableActiveColor: ColorManager.darkWhite,
-        scaffoldBackgroundColor: ColorManager.customGreyForWeb,
+        scaffoldBackgroundColor:
+            isThatMobile ? ColorManager.white : ColorManager.customGreyForWeb,
         iconTheme: const IconThemeData(color: ColorManager.black38),
         errorColor: ColorManager.black,
         canvasColor: ColorManager.transparent,
