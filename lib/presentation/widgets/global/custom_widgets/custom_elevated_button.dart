@@ -22,6 +22,8 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsetsDirectional.all(3.0),
+      padding: const EdgeInsetsDirectional.all(20.0),
+      width: double.infinity,
       child: ElevatedButton(
           style: buttonStyle(),
           onPressed: () async => widget.onPressed(),
@@ -39,23 +41,16 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
     );
   }
 
-  Padding circularProgress() {
-    return const Padding(
-      padding: EdgeInsetsDirectional.all(3.0),
-      child: ClipOval(
+  Widget circularProgress() {
+    return const SizedBox(
+        height: 20,
+        width: 20,
         child: CircularProgressIndicator(
-          color: ColorManager.white,
-          strokeWidth: 3,
-        ),
-      ),
-    );
+            color: ColorManager.white, strokeWidth: 2));
   }
 
   ButtonStyle buttonStyle() {
     return ButtonStyle(
-        padding: MaterialStateProperty.all(
-          const EdgeInsetsDirectional.only(start: 140, end: 140),
-        ),
         backgroundColor: MaterialStateProperty.all<Color>(
             widget.isItDone ? ColorManager.blue : ColorManager.lightBlue));
   }
