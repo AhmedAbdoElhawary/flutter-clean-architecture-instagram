@@ -14,7 +14,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_text
 class RegisterWidgets extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final TextEditingController confirmPasswordController;
+  final TextEditingController? confirmPasswordController;
   final Widget customTextButton;
   final bool isThatLogIn;
   const RegisterWidgets({
@@ -23,7 +23,7 @@ class RegisterWidgets extends StatefulWidget {
     this.isThatLogIn = true,
     required this.passwordController,
     required this.customTextButton,
-    required this.confirmPasswordController,
+     this.confirmPasswordController,
   }) : super(key: key);
 
   @override
@@ -96,11 +96,11 @@ class _SignUpPageState extends State<RegisterWidgets> {
         CustomTextField(
             hint: StringsManager.password.tr(),
             controller: widget.passwordController),
-        if (!widget.isThatLogIn) ...[
-          const SizedBox(height: 15),
+        if (!widget.isThatLogIn&&widget.confirmPasswordController!=null) ...[
+          SizedBox(height: isThatMobile ? 15 : 7),
           CustomTextField(
               hint: StringsManager.confirmPassword.tr(),
-              controller: widget.confirmPasswordController),
+              controller: widget.confirmPasswordController!),
         ],
         widget.customTextButton,
         const SizedBox(height: 15),
