@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
@@ -104,9 +105,7 @@ class _ImageOfPostState extends State<ImageOfPost>
   }
 
   pushToProfilePage(Post postInfo) =>
-      Navigator.of(context).push(CupertinoPageRoute(
-        builder: (context) => WhichProfilePage(userId: postInfo.publisherId),
-      ));
+      pushToPage(context, page: WhichProfilePage(userId: postInfo.publisherId));
 
   Widget buildPostForMobile({required double bodyHeight}) {
     return SizedBox(
@@ -505,24 +504,19 @@ class _ImageOfPostState extends State<ImageOfPost>
           },
           onTap: () async {
             if (isThatMobile) {
-              Navigator.of(context).push(
-                CupertinoPageRoute(
-                  builder: (context) {
-                    return ValueListenableBuilder(
-                      valueListenable: initPosition,
-                      builder: (context, int positionValue, child) =>
-                          PictureViewer(
-                        blurHash: postInfo.blurHash,
-                        aspectRatio: postInfo.aspectRatio,
-                        isThatImage: postInfo.isThatImage,
-                        imageUrl: postInfo.postUrl.isNotEmpty
-                            ? postInfo.postUrl
-                            : postInfo.imagesUrls[positionValue],
-                      ),
-                    );
-                  },
-                ),
-              );
+              pushToPage(context,
+                  page: ValueListenableBuilder(
+                    valueListenable: initPosition,
+                    builder: (context, int positionValue, child) =>
+                        PictureViewer(
+                      blurHash: postInfo.blurHash,
+                      aspectRatio: postInfo.aspectRatio,
+                      isThatImage: postInfo.isThatImage,
+                      imageUrl: postInfo.postUrl.isNotEmpty
+                          ? postInfo.postUrl
+                          : postInfo.imagesUrls[positionValue],
+                    ),
+                  ));
             }
           },
           child: Padding(
@@ -684,11 +678,8 @@ class _ImageOfPostState extends State<ImageOfPost>
       return GestureDetector(
           onTap: () async {
             Navigator.maybePop(context);
-            await Navigator.of(context, rootNavigator: true)
-                .push(MaterialPageRoute(
-              maintainState: false,
-              builder: (context) => UpdatePostInfo(oldPostInfo: postInfoValue),
-            ));
+            await pushToPage(context,
+                page: UpdatePostInfo(oldPostInfo: postInfoValue));
           },
           child: textOfOrders(StringsManager.edit.tr()));
     });
@@ -708,7 +699,7 @@ class _ImageOfPostState extends State<ImageOfPost>
               valueListenable: widget.postInfo,
               builder: (context, Post postInfoValue, child) => GestureDetector(
                   onTap: () async {
-                    await followCubit.removeThisFollower(
+                    await followCubit.unFollowThisUser(
                         followingUserId: widget.postInfo.value.publisherId,
                         myPersonalId: myPersonalId);
                     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -938,12 +929,7 @@ class _ImageOfPostState extends State<ImageOfPost>
         child: iconsOfImagePost(IconsAssets.commentIcon),
         onTap: () {
           if (isThatMobile) {
-            Navigator.of(
-              context,
-            ).push(CupertinoPageRoute(
-              builder: (context) =>
-                  CommentsPageForMobile(postInfo: postInfoValue),
-            ));
+            pushToPage(context, page: CommentsPageForMobile(postInfo: postInfoValue));
           } else {
             if (!widget.popupWebContainer) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
