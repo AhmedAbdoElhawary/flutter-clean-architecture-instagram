@@ -52,7 +52,7 @@ class _GetUsersInfoState extends State<GetUsersInfo> {
               emptyText: widget.isThatFollowers
                   ? StringsManager.noFollowers.tr()
                   : StringsManager.noFollowings.tr(),
-              isThatMyPersonalId:widget.isThatMyPersonalId,
+              isThatMyPersonalId: widget.isThatMyPersonalId,
             );
           }
           if (state is CubitGettingSpecificUsersFailed) {
