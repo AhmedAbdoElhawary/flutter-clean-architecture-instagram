@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
@@ -91,9 +92,9 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
                       ),
                     ),
                     onTap: () {
-                      Navigator.of(context).push(CupertinoPageRoute(
-                          builder: (context) => WhichProfilePage(
-                              userId: stateUsersInfo[index].userId)));
+                      pushToPage(context,
+                          page: WhichProfilePage(
+                              userId: stateUsersInfo[index].userId),withoutRoot: false);
                     },
                   );
                 },
