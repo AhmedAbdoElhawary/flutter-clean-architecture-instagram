@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -88,20 +89,12 @@ class _ListOfMessagesState extends State<ListOfMessages> {
                     if (widget.userInfo != null) {
                       widget.userInfo!(usersInfo[index].userInfo!);
                     } else {
-                      Navigator.of(
-                        context,
-                        rootNavigator: true,
-                      ).push(
-                        CupertinoPageRoute(
-                          builder: (context) => BlocProvider<MessageBloc>(
-                            create: (context) => injector<MessageBloc>(),
-                            child: ChattingPage(
-                              userInfo: usersInfo[index].userInfo!,
-                            ),
-                          ),
-                          maintainState: false,
+                      pushToPage(context, page:  BlocProvider<MessageBloc>(
+                        create: (context) => injector<MessageBloc>(),
+                        child: ChattingPage(
+                          userInfo: usersInfo[index].userInfo!,
                         ),
-                      );
+                      ));
                     }
                   },
                 );
