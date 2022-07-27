@@ -20,7 +20,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   final SharedPreferences sharePrefs;
-
   const LoginPage({Key? key, required this.sharePrefs}) : super(key: key);
 
   @override
@@ -28,8 +27,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController passwordController = TextEditingController(text: "");
-  TextEditingController emailController = TextEditingController(text: "");
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   final AppPreferences _appPreferences = injector<AppPreferences>();
   RxBool isHeMovedToHome = false.obs;
   ValueNotifier<bool> isToastShowed = ValueNotifier(false);
@@ -51,7 +50,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return RegisterWidgets(
-      confirmPasswordController: TextEditingController(text: ""),
       customTextButton: customTextButton(),
       emailController: emailController,
       passwordController: passwordController,
