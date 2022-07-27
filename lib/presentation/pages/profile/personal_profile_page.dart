@@ -7,6 +7,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/themes/theme_service.dart';
 import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
@@ -105,8 +106,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
                   getData: getData,
                   userId: state.userPersonalInfo.userId,
                   userInfo: state.userPersonalInfo,
-                  widgetsAboveTapBars:
-                      widgetsAboveTapBars(state.userPersonalInfo),
+                  widgetsAboveTapBars: isThatMobile
+                      ? widgetsAboveTapBarsForMobile(state.userPersonalInfo)
+                      : widgetsAboveTapBarsForWeb(state.userPersonalInfo),
                 ),
               );
             } else if (state is CubitGetUserInfoFailed) {
@@ -270,16 +272,16 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     });
   }
 
-  List<Widget> widgetsAboveTapBars(UserPersonalInfo userInfo) {
+  List<Widget> widgetsAboveTapBarsForMobile(UserPersonalInfo userInfo) {
     return [
-      editProfile(userInfo),
+      editProfileButtonForMobile(userInfo),
       const SizedBox(width: 5),
       const RecommendationPeople(),
       const SizedBox(width: 10),
     ];
   }
 
-  Expanded editProfile(UserPersonalInfo userInfo) {
+  Expanded editProfileButtonForMobile(UserPersonalInfo userInfo) {
     return Expanded(
       child: Builder(builder: (buildContext) {
         return InkWell(
@@ -287,10 +289,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             Navigator.maybePop(context);
             Future.delayed(Duration.zero, () async {
               UserPersonalInfo? result =
-                  await Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(
-                          builder: (context) => EditProfilePage(userInfo),
-                          maintainState: false));
+                  await pushToPage(context, page: EditProfilePage(userInfo));
               if (result != null) {
                 rebuildUserInfo.value = true;
                 userInfo = result;
@@ -320,6 +319,39 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     );
   }
 
+  List<Widget> widgetsAboveTapBarsForWeb(UserPersonalInfo userInfo) {
+    return [
+      const SizedBox(width: 20),
+      editProfileButtonForWeb(),
+      const SizedBox(width: 10),
+      GestureDetector(
+        onTap: () {},
+        child: const Icon(Icons.settings_rounded, color: ColorManager.black),
+      ),
+    ];
+  }
+
+  Widget editProfileButtonForWeb() {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+        decoration: BoxDecoration(
+          color: ColorManager.transparent,
+          border: Border.all(
+            color: ColorManager.lowOpacityGrey,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(3),
+        ),
+        child: Text(
+          StringsManager.editProfile.tr(),
+          style: getMediumStyle(color: ColorManager.black),
+        ),
+      ),
+    );
+  }
+
   Widget createNewLive() {
     return InkWell(
       onTap: () {},
@@ -344,28 +376,15 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   createNewStory() async {
     Navigator.maybePop(context);
-    Navigator.of(context, rootNavigator: true).push(
-      CupertinoPageRoute(
-          builder: (context) => const CreateNewStory(), maintainState: false),
-    );
+    pushToPage(context, page: const CreateNewStory());
 
     rebuildUserInfo.value = true;
   }
 
   createNewPost() async {
     Navigator.maybePop(context);
-    await customGalleryDisplay();
+    await pushToPage(context, page: const CustomGalleryDisplay());
     rebuildUserInfo.value = true;
-  }
-
-  Future<void> customGalleryDisplay() async {
-    await Navigator.of(context, rootNavigator: true).push(
-      CupertinoPageRoute(
-          builder: (context) {
-            return const CustomGalleryDisplay();
-          },
-          maintainState: false),
-    );
   }
 
   Widget createPost() {
