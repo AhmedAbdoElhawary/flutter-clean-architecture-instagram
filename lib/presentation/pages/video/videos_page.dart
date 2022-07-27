@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/image_picker.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -230,12 +231,8 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
   }
 
   goToUserProfile(UserPersonalInfo personalInfo) async {
-    await Navigator.of(
-      context,
-    ).push(CupertinoPageRoute(
-      builder: (context) => WhichProfilePage(
-          userId: personalInfo.userId, userName: personalInfo.userName),
-    ));
+    await pushToPage(context, page: WhichProfilePage(
+        userId: personalInfo.userId, userName: personalInfo.userName),withoutRoot: false);
     widget.stopVideo.value = false;
   }
 
@@ -247,7 +244,7 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
             if (personalInfo.followerPeople.contains(myPersonalId) ||
                 isFollowedValue == null ||
                 isFollowedValue == true) {
-              BlocProvider.of<FollowCubit>(context).removeThisFollower(
+              BlocProvider.of<FollowCubit>(context).unFollowThisUser(
                   followingUserId: personalInfo.userId,
                   myPersonalId: myPersonalId);
               isFollowed.value = false;
@@ -357,9 +354,7 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
   }
 
   goToCommentPage(Post videoInfo) async {
-    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-        builder: (context) => CommentsPageForMobile(postInfo: videoInfo),
-        maintainState: false));
+    await pushToPage(context, page:  CommentsPageForMobile(postInfo: videoInfo));
     widget.stopVideo.value = false;
   }
 
@@ -377,15 +372,12 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
   Widget numberOfLikes(Post videoInfo) {
     return InkWell(
       onTap: () async {
-        await Navigator.of(context).push(
-          CupertinoPageRoute(
-            builder: (context) => UsersWhoLikesForMobile(
-              showSearchBar: true,
-              usersIds: videoInfo.likes,
-              isThatMyPersonalId: videoInfo.publisherId == myPersonalId,
-            ),
-          ),
-        );
+        await pushToPage(context, page: UsersWhoLikesForMobile(
+          showSearchBar: true,
+          usersIds: videoInfo.likes,
+          isThatMyPersonalId: videoInfo.publisherId == myPersonalId,
+        ),withoutRoot: false);
+
         widget.stopVideo.value = false;
       },
       child: SizedBox(
