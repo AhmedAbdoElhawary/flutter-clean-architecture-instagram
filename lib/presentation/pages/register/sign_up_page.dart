@@ -27,9 +27,9 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final isToastShowed = ValueNotifier(false);
-  final emailController = TextEditingController(text: "");
-  final passwordController = TextEditingController(text: "");
-  final confirmPasswordController = TextEditingController(text: "");
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   final AppPreferences _appPreferences = injector<AppPreferences>();
 
   @override
@@ -90,7 +90,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   moveToMain(CubitAuthConfirmed authState) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-     myPersonalId= authState.user.uid;
+      myPersonalId = authState.user.uid;
       Get.offAll(
         ResponsiveLayout(
           mobileScreenLayout: MobileScreenLayout(myPersonalId),
