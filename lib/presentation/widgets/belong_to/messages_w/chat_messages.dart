@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
@@ -403,12 +404,11 @@ class _ChatMessagesState extends State<ChatMessages>
   Widget sharedMessage(Message messageInfo, bool isThatMine) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(CupertinoPageRoute(
-          builder: (context) => GetsPostInfoAndDisplay(
-            postId: messageInfo.postId,
-            appBarText: StringsManager.post.tr(),
-          ),
-        ));
+        pushToPage(context,
+            page: GetsPostInfoAndDisplay(
+              postId: messageInfo.postId,
+              appBarText: StringsManager.post.tr(),
+            ),withoutRoot: false);
       },
       child: SizedBox(
         width: 240,
@@ -530,14 +530,10 @@ class _ChatMessagesState extends State<ChatMessages>
         child: messageInfo.messageUid.isNotEmpty
             ? GestureDetector(
                 onTap: () async {
-                  Navigator.of(context).push(
-                    CupertinoPageRoute(
-                      builder: (context) {
-                        return PictureViewer(
-                            blurHash: messageInfo.blurHash, imageUrl: imageUrl);
-                      },
-                    ),
-                  );
+                  pushToPage(context,
+                      page: PictureViewer(
+                          blurHash: messageInfo.blurHash, imageUrl: imageUrl),
+                      withoutRoot: false);
                 },
                 child: Hero(
                   tag: imageUrl,
@@ -1012,15 +1008,8 @@ class _ChatMessagesState extends State<ChatMessages>
   TextButton viewProfileButton(BuildContext context) {
     return TextButton(
       onPressed: () {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(CupertinoPageRoute(
-          builder: (context) => UserProfilePage(
-            userId: widget.userInfo.userId,
-          ),
-          maintainState: false,
-        ));
+        pushToPage(context,
+            page: UserProfilePage(userId: widget.userInfo.userId));
       },
       child: Text(StringsManager.viewProfile.tr(),
           style: TextStyle(
