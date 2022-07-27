@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -287,14 +288,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             fontSize: isWidthAboveMinimum ? 25 : 15,
                             fontWeight: FontWeight.w100),
                       ),
-                      const SizedBox(width: 20),
-                      customTransparentButton(),
-                      const SizedBox(width: 10),
-                      GestureDetector(
-                        onTap: () {},
-                        child: const Icon(Icons.settings_rounded,
-                            color: ColorManager.black),
-                      )
+                      ...widget.widgetsAboveTapBars,
                     ],
                   ),
                   Padding(
@@ -303,14 +297,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          personalNumbersInfo(userInfo.posts,
-                              StringsManager.posts.tr(), userInfo),
+                          personalNumbersInfo(userInfo.posts, userInfo,
+                              isThatFollowers: null),
                           const SizedBox(width: 20),
-                          personalNumbersInfo(userInfo.followerPeople,
-                              StringsManager.followers.tr(), userInfo),
+                          personalNumbersInfo(userInfo.followerPeople, userInfo,
+                              isThatFollowers: true),
                           const SizedBox(width: 20),
-                          personalNumbersInfo(userInfo.followedPeople,
-                              StringsManager.following.tr(), userInfo),
+                          personalNumbersInfo(userInfo.followedPeople, userInfo,
+                              isThatFollowers: false),
                         ],
                       ),
                     ),
@@ -329,27 +323,6 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     ];
-  }
-
-  Widget customTransparentButton() {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-        decoration: BoxDecoration(
-          color: ColorManager.transparent,
-          border: Border.all(
-            color: ColorManager.lowOpacityGrey,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(3),
-        ),
-        child: Text(
-          StringsManager.editProfile.tr(),
-          style: getMediumStyle(color: ColorManager.black),
-        ),
-      ),
-    );
   }
 
   List<Widget> widgetsAboveTapBarsForMobile(
@@ -433,12 +406,12 @@ class _ProfilePageState extends State<ProfilePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  personalNumbersInfo(
-                      userInfo.posts, StringsManager.posts.tr(), userInfo),
-                  personalNumbersInfo(userInfo.followerPeople,
-                      StringsManager.followers.tr(), userInfo),
-                  personalNumbersInfo(userInfo.followedPeople,
-                      StringsManager.following.tr(), userInfo),
+                  personalNumbersInfo(userInfo.posts, userInfo,
+                      isThatFollowers: null),
+                  personalNumbersInfo(userInfo.followerPeople, userInfo,
+                      isThatFollowers: true),
+                  personalNumbersInfo(userInfo.followedPeople, userInfo,
+                      isThatFollowers: false),
                 ],
               ),
             ],
@@ -448,8 +421,13 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget personalNumbersInfo(
-      List<dynamic> usersIds, String text, UserPersonalInfo userInfo) {
+  Widget personalNumbersInfo(List<dynamic> usersIds, UserPersonalInfo userInfo,
+      {bool? isThatFollowers}) {
+    String text = isThatFollowers == null
+        ? StringsManager.posts.tr()
+        : isThatFollowers
+            ? StringsManager.followers.tr()
+            : StringsManager.following.tr();
     return Builder(builder: (builderContext) {
       List<Widget> userInfoWidgets = [
         Text(
@@ -465,19 +443,13 @@ class _ProfilePageState extends State<ProfilePage> {
       ];
       return GestureDetector(
         onTap: () async {
-          bool isThatPost = text != StringsManager.posts.tr();
-          bool isThatFollowers = text != StringsManager.followers.tr();
-
-          if (isThatPost) {
+          if (isThatFollowers != null) {
             if (isThatMobile) {
-              await Navigator.of(context).push(
-                CupertinoPageRoute(
-                  builder: (context) => FollowersInfoPage(
+              await pushToPage(context,
+                  page: FollowersInfoPage(
                       userInfo: userInfo,
                       initialIndex:
-                          usersIds == userInfo.followerPeople ? 0 : 1),
-                ),
-              );
+                          usersIds == userInfo.followerPeople ? 0 : 1));
             } else {
               await Navigator.of(context).push(
                 HeroDialogRoute(
