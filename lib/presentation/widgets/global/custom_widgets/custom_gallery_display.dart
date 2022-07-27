@@ -5,6 +5,7 @@ import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/compress_image.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
@@ -70,17 +71,15 @@ Future<void> moveToCreatePostPage(
   Uint8List bytesFile = file.readAsBytesSync();
   ByteData.view(bytesFile.buffer);
   if (isThatStory) {
-    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-        builder: (context) => CreateStoryPage(
-            storyImage: bytesFile, isThatImage: details.isThatImage),
-        maintainState: false));
+    await pushToPage(context,
+        page: CreateStoryPage(
+            storyImage: bytesFile, isThatImage: details.isThatImage));
   } else {
-    await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-        builder: (context) => CreatePostPage(
+    await pushToPage(context,
+        page: CreatePostPage(
             selectedFile: bytesFile,
             multiSelectedFiles: selectedUint8Lists,
             isThatImage: details.isThatImage,
-            aspectRatio: details.aspectRatio),
-        maintainState: false));
+            aspectRatio: details.aspectRatio));
   }
 }
