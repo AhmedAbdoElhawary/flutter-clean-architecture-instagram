@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/widgets/svg_pictures.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -125,11 +126,7 @@ class CustomAppBar {
             height: 30,
           ),
           onPressed: () {
-            Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder: (context) => ActivityPage(),
-              ),
-            );
+            pushToPage(context, page: const ActivityPage(), withoutRoot: false);
           },
         ),
         IconButton(
@@ -139,14 +136,11 @@ class CustomAppBar {
             height: 22.5,
           ),
           onPressed: () {
-            Navigator.of(context, rootNavigator: true).push(
-              CupertinoPageRoute(
-                  builder: (context) => BlocProvider<UsersInfoCubit>(
-                        create: (context) => injector<UsersInfoCubit>(),
-                        child: const MessagesPage(),
-                      ),
-                  maintainState: false),
-            );
+            pushToPage(context,
+                page: BlocProvider<UsersInfoCubit>(
+                  create: (context) => injector<UsersInfoCubit>(),
+                  child: const MessagesPage(),
+                ));
           },
         ),
         const SizedBox(width: 5),
@@ -160,11 +154,7 @@ class CustomAppBar {
         _pushToCustomGallery(context);
         break;
       case 1:
-        Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-            builder: (context) {
-              return const CreateNewStory();
-            },
-            maintainState: false));
+        pushToPage(context, page: const CreateNewStory());
         break;
       case 2:
         _pushToCustomGallery(context);
@@ -174,13 +164,8 @@ class CustomAppBar {
   }
 
   static Future _pushToCustomGallery(BuildContext context) =>
-      Navigator.of(context, rootNavigator: true).push(
-        CupertinoPageRoute(
-            builder: (context) {
-              return const CustomGalleryDisplay();
-            },
-            maintainState: false),
-      );
+  pushToPage(context, page: const CustomGalleryDisplay());
+
 
   static AppBar chattingAppBar(
       UserPersonalInfo userInfo, BuildContext context) {
