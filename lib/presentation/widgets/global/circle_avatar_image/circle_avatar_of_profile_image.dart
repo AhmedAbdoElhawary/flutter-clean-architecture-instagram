@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
@@ -93,57 +94,49 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
 
   onPressedImage(BuildContext context) async {
     if (!widget.showColorfulCircle) {
-      await Navigator.of(context).push(
-        CupertinoPageRoute(
-          builder: (context) =>
-              WhichProfilePage(userId: widget.userInfo.userId),
-        ),
-      );
+      await pushToPage(context,
+          page: WhichProfilePage(userId: widget.userInfo.userId));
     } else {
       if (widget.userInfo.stories.isNotEmpty) {
-        Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
-          maintainState: false,
-          builder: (context) {
-            return BlocBuilder<StoryCubit, StoryState>(
-              bloc: StoryCubit.get(context)
-                ..getSpecificStoriesInfo(userInfo: widget.userInfo),
-              buildWhen: (previous, current) {
-                if (previous != current &&
-                    current is SpecificStoriesInfoLoaded) {
-                  return true;
-                }
-                if (previous != current && current is CubitStoryFailed) {
-                  return true;
-                }
-                return false;
-              },
-              builder: (context, state) {
-                if (state is SpecificStoriesInfoLoaded) {
-                 if (isThatMobile) {
-                    return StoryPage(
-                        user: state.userInfo,
-                        hashTag: "${widget.hashTag} for mobile",
-                        storiesOwnersInfo: [state.userInfo]);
-                  } else {
-                    return StoryPageForWeb(
-                        user: state.userInfo,
-                        hashTag: "${widget.hashTag} for web",
-                        storiesOwnersInfo: [state.userInfo]);
-                  }
-                } else {
-                  return Scaffold(
-                      body: Center(
-                    child: CustomCircularProgress(Theme.of(context).focusColor),
-                  ));
-                }
-              },
-            );
+        Widget page = BlocBuilder<StoryCubit, StoryState>(
+          bloc: StoryCubit.get(context)
+            ..getSpecificStoriesInfo(userInfo: widget.userInfo),
+          buildWhen: (previous, current) {
+            if (previous != current && current is SpecificStoriesInfoLoaded) {
+              return true;
+            }
+            if (previous != current && current is CubitStoryFailed) {
+              return true;
+            }
+            return false;
           },
-        ));
+          builder: (context, state) {
+            if (state is SpecificStoriesInfoLoaded) {
+              if (isThatMobile) {
+                return StoryPage(
+                    user: state.userInfo,
+                    hashTag: "${widget.hashTag} for mobile",
+                    storiesOwnersInfo: [state.userInfo]);
+              } else {
+                return StoryPageForWeb(
+                    user: state.userInfo,
+                    hashTag: "${widget.hashTag} for web",
+                    storiesOwnersInfo: [state.userInfo]);
+              }
+            } else {
+              return Scaffold(
+                  body: Center(
+                child: CustomCircularProgress(Theme.of(context).focusColor),
+              ));
+            }
+          },
+        );
+        pushToPage(context, page: page);
         setState(() {});
       }
     }
   }
+
   Widget buildStack(String profileImage, BuildContext context) {
     return widget.thisForStoriesLine
         ? stackOfImage(profileImage)

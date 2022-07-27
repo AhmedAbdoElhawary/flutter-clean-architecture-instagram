@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -153,9 +154,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
   }
 
   pushToProfilePage(Post postInfo) =>
-      Navigator.of(context).push(CupertinoPageRoute(
-        builder: (context) => WhichProfilePage(userId: postInfo.publisherId),
-      ));
+  pushToPage(context, page: WhichProfilePage(userId: postInfo.publisherId),withoutRoot: false);
 
   void _updateImageIndex(int index, _) {
     initPosition.value = index;

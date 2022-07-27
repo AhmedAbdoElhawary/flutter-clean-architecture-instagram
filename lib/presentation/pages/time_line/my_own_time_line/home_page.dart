@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -253,13 +254,7 @@ class _HomePageState extends State<HomePage> {
 
   createNewStory() async {
     Navigator.maybePop(context);
-    Navigator.of(context, rootNavigator: true).push(
-      CupertinoPageRoute(
-          builder: (context) {
-            return const CreateNewStory();
-          },
-          maintainState: false),
-    );
+    pushToPage(context, page: const CreateNewStory());
     reLoadData.value = true;
   }
 
@@ -363,25 +358,21 @@ class _HomePageState extends State<HomePage> {
                     tag: "${publisherInfo.userId.hashCode}",
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context, rootNavigator: true)
-                            .push(MaterialPageRoute(
-                          maintainState: false,
-                          builder: (context) {
-                            if (isThatMobile) {
-                              return StoryPage(
-                                  user: publisherInfo,
-                                  hashTag:
-                                      "${publisherInfo.userId.hashCode} for mobile",
-                                  storiesOwnersInfo: storiesOwnersInfo);
-                            } else {
-                              return StoryPageForWeb(
-                                  user: publisherInfo,
-                                  hashTag:
-                                      "${publisherInfo.userId.hashCode} for web",
-                                  storiesOwnersInfo: storiesOwnersInfo);
-                            }
-                          },
-                        ));
+                        Widget page;
+                        if (isThatMobile) {
+                          page = StoryPage(
+                              user: publisherInfo,
+                              hashTag:
+                                  "${publisherInfo.userId.hashCode} for mobile",
+                              storiesOwnersInfo: storiesOwnersInfo);
+                        } else {
+                          page = StoryPageForWeb(
+                              user: publisherInfo,
+                              hashTag:
+                                  "${publisherInfo.userId.hashCode} for web",
+                              storiesOwnersInfo: storiesOwnersInfo);
+                        }
+                        pushToPage(context, page: page);
                       },
                       child: CircleAvatarOfProfileImage(
                         userInfo: publisherInfo,
@@ -405,21 +396,14 @@ class _HomePageState extends State<HomePage> {
 
   moveToStoryPage(
           List<UserPersonalInfo> storiesOwnersInfo, UserPersonalInfo user) =>
-      Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-        maintainState: false,
-        builder: (context) =>
-            StoryPage(user: user, storiesOwnersInfo: storiesOwnersInfo),
-      ));
+      pushToPage(context,
+          page: StoryPage(user: user, storiesOwnersInfo: storiesOwnersInfo));
 
   Widget myOwnStory(BuildContext context,
       List<UserPersonalInfo> storiesOwnersInfo, double bodyHeight) {
     return GestureDetector(
       onTap: () async {
-        Navigator.of(context, rootNavigator: true).push(
-          CupertinoPageRoute(
-              builder: (context) => const CreateNewStory(),
-              maintainState: false),
-        );
+        pushToPage(context, page: const CreateNewStory());
         reLoadData.value = true;
       },
       child: Stack(

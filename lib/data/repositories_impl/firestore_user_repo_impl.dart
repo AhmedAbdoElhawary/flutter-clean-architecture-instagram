@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
 import 'package:instagram/data/datasourses/remote/user/message.dart';
 import 'package:instagram/data/models/message.dart';
@@ -49,6 +50,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       return Future.error(e.toString());
     }
   }
+
   @override
   Future<String> uploadProfileImage(
       {required Uint8List photo,
@@ -72,9 +74,15 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       required List<dynamic> followingsIds}) async {
     try {
       List<UserPersonalInfo> followersInfo =
-          await FirestoreUser.getSpecificUsersInfo(followersIds);
+          await FirestoreUser.getSpecificUsersInfo(
+              usersIds: followersIds,
+              fieldName: "followers",
+              userUid: myPersonalId);
       List<UserPersonalInfo> followingsInfo =
-          await FirestoreUser.getSpecificUsersInfo(followingsIds);
+          await FirestoreUser.getSpecificUsersInfo(
+              usersIds: followingsIds,
+              fieldName: "following",
+              userUid: myPersonalId);
       return FollowersAndFollowingsInfo(
           followersInfo: followersInfo, followingsInfo: followingsInfo);
     } catch (e) {
@@ -93,21 +101,24 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Future<void> removeThisFollower(
+  Future<void> unFollowThisUser(
       String followingUserId, String myPersonalId) async {
     try {
-      return await FirestoreUser.removeThisFollower(
+      return await FirestoreUser.unFollowThisUser(
           followingUserId, myPersonalId);
     } catch (e) {
       return Future.error(e.toString());
     }
   }
 
+  /// [fieldName] , [userUid] in case one of this users not exist, it will be deleted from the list in fireStore
+
   @override
-  Future<List<UserPersonalInfo>> getSpecificUsersInfo(
-      {required List<dynamic> usersIds}) async {
+  Future<List<UserPersonalInfo>> getSpecificUsersInfo({
+    required List<dynamic> usersIds,
+  }) async {
     try {
-      return await FirestoreUser.getSpecificUsersInfo(usersIds);
+      return await FirestoreUser.getSpecificUsersInfo(usersIds: usersIds);
     } catch (e) {
       return Future.error(e.toString());
     }
@@ -126,17 +137,18 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   @override
   Future<Message> sendMessage(
       {required Message messageInfo,
-       Uint8List? pathOfPhoto,
-  required String  pathOfRecorded}) async {
+      Uint8List? pathOfPhoto,
+      required String pathOfRecorded}) async {
     try {
-      if (pathOfPhoto!=null) {
-        String imageUrl = await FirebaseStoragePost.uploadFile(
-            pathOfPhoto, "messagesFiles");
+      if (pathOfPhoto != null) {
+        String imageUrl =
+            await FirebaseStoragePost.uploadFile(pathOfPhoto, "messagesFiles");
         messageInfo.imageUrl = imageUrl;
       }
       if (pathOfRecorded.isNotEmpty) {
         String recordedUrl = await FirebaseStoragePost.uploadFile(
-            pathOfPhoto!, "messagesFiles",postFile:File(pathOfRecorded) );
+            pathOfPhoto!, "messagesFiles",
+            postFile: File(pathOfRecorded));
         messageInfo.recordedUrl = recordedUrl;
       }
 

@@ -7,8 +7,8 @@ part 'follow_state.dart';
 
 class FollowCubit extends Cubit<FollowState> {
   FollowThisUserUseCase followThisUserUseCase;
-  RemoveThisFollowerUseCase removeThisFollowerUseCase;
-  FollowCubit(this.followThisUserUseCase, this.removeThisFollowerUseCase)
+  UnFollowThisUserUseCase unFollowThisUserUseCase;
+  FollowCubit(this.followThisUserUseCase, this.unFollowThisUserUseCase)
       : super(FollowInitial());
 
   static FollowCubit get(BuildContext context) => BlocProvider.of(context);
@@ -26,11 +26,11 @@ class FollowCubit extends Cubit<FollowState> {
     });
   }
 
-  Future<void> removeThisFollower(
+  Future<void> unFollowThisUser(
       {required String followingUserId, required String myPersonalId}) async {
     emit(CubitFollowThisUserLoading());
 
-    await removeThisFollowerUseCase
+    await unFollowThisUserUseCase
         .call(paramsOne: followingUserId, paramsTwo: myPersonalId)
         .then((_) {
       emit(CubitFollowThisUserLoaded());

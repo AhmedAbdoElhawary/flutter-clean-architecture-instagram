@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
@@ -65,74 +66,87 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        backgroundColor: Theme.of(context).primaryColor,
-        centerTitle: false,
-        title: const InstagramLogo(),
-        actions: [
-          IconButton(
-            icon: Icon(
-              _page == 0 ? Icons.home_rounded : Icons.home_outlined,
-              color: Theme.of(context).focusColor,
-              size: 32,
-            ),
-            onPressed: () => navigationTapped(0),
-          ),
-          const SizedBox(width: 5),
-          IconButton(
-            icon: icons(IconsAssets.messengerIcon, _page == 1),
-            onPressed: () => navigationTapped(1),
-          ),
-          const SizedBox(width: 5),
-          IconButton(
-            icon: icons(IconsAssets.addIcon, _page == 2),
-            onPressed: () => onPressedAdd(2),
-          ),
-          const SizedBox(width: 5),
-          IconButton(
-            icon: icons(IconsAssets.compass, _page == 3),
-            onPressed: () => navigationTapped(3),
-          ),
-          const SizedBox(width: 5),
-          PopupMenuButton<int>(
-            constraints: const BoxConstraints.tightFor(height: 360, width: 500),
-            position: PopupMenuPosition.under,
-            tooltip: "Show notifications",
-            elevation: 20,
-            color: Theme.of(context).splashColor,
-            offset: const Offset(90, 12),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            child: Icon(
-              _page == 4
-                  ? Icons.favorite_rounded
-                  : Icons.favorite_border_rounded,
-              color: Theme.of(context).focusColor,
-              size: 28,
-            ),
-            itemBuilder: (context) {
-              WidgetsBinding.instance.addPostFrameCallback((_) async {
-                await NotificationCubit.get(context)
-                    .getNotifications(userId: myPersonalId);
-              });
-              List<CustomNotification> notifications =
-                  NotificationCubit.get(context).notifications;
-
-              return List<PopupMenuEntry<int>>.generate(
-                notifications.length,
-                (index) => PopupMenuItem<int>(
-                  value: index,
-                  child: NotificationCardInfo(
-                      notificationInfo: notifications[index]),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: Container(
+          decoration: const BoxDecoration(boxShadow: [
+            BoxShadow(
+              color: ColorManager.appBarElationColor,
+              offset: Offset(0, 1.0),
+              blurRadius: 0,
+            )
+          ]),
+          child: AppBar(
+            elevation: 1,
+            backgroundColor: Theme.of(context).primaryColor,
+            centerTitle: false,
+            title: const InstagramLogo(),
+            actions: [
+              IconButton(
+                icon: Icon(
+                  _page == 0 ? Icons.home_rounded : Icons.home_outlined,
+                  color: Theme.of(context).focusColor,
+                  size: 32,
                 ),
-              );
-            },
+                onPressed: () => navigationTapped(0),
+              ),
+              const SizedBox(width: 5),
+              IconButton(
+                icon: icons(IconsAssets.messengerIcon, _page == 1),
+                onPressed: () => navigationTapped(1),
+              ),
+              const SizedBox(width: 5),
+              IconButton(
+                icon: icons(IconsAssets.addIcon, _page == 2),
+                onPressed: () => onPressedAdd(2),
+              ),
+              const SizedBox(width: 5),
+              IconButton(
+                icon: icons(IconsAssets.compass, _page == 3),
+                onPressed: () => navigationTapped(3),
+              ),
+              const SizedBox(width: 5),
+              PopupMenuButton<int>(
+                constraints:
+                    const BoxConstraints.tightFor(height: 360, width: 500),
+                position: PopupMenuPosition.under,
+                tooltip: "Show notifications",
+                elevation: 20,
+                color: Theme.of(context).splashColor,
+                offset: const Offset(90, 12),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                child: Icon(
+                  _page == 4
+                      ? Icons.favorite_rounded
+                      : Icons.favorite_border_rounded,
+                  color: Theme.of(context).focusColor,
+                  size: 28,
+                ),
+                itemBuilder: (context) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) async {
+                    await NotificationCubit.get(context)
+                        .getNotifications(userId: myPersonalId);
+                  });
+                  List<CustomNotification> notifications =
+                      NotificationCubit.get(context).notifications;
+
+                  return List<PopupMenuEntry<int>>.generate(
+                    notifications.length,
+                    (index) => PopupMenuItem<int>(
+                      value: index,
+                      child: NotificationCardInfo(
+                          notificationInfo: notifications[index]),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(width: 5),
+              buildPopupMenuButton(context),
+              const SizedBox(width: 10),
+            ],
           ),
-          const SizedBox(width: 5),
-          buildPopupMenuButton(context),
-          const SizedBox(width: 10),
-        ],
+        ),
       ),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),

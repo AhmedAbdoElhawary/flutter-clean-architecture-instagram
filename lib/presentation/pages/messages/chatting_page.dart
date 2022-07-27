@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/message.dart';
@@ -132,15 +133,8 @@ class _ChattingPageState extends State<ChattingPage>
   TextButton viewProfileButton(BuildContext context) {
     return TextButton(
       onPressed: () {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(CupertinoPageRoute(
-          builder: (context) => UserProfilePage(
-            userId: widget.userInfo.userId,
-          ),
-          maintainState: false,
-        ));
+        pushToPage(context,
+            page: UserProfilePage(userId: widget.userInfo.userId));
       },
       child: Text(StringsManager.viewProfile.tr(),
           style: TextStyle(

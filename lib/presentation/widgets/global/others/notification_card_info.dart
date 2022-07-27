@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -25,13 +26,9 @@ class NotificationCardInfo extends StatelessWidget {
 
     return InkWell(
       onTap: () async {
-        await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => WhichProfilePage(
-              userId: notificationInfo.senderId,
-            ),
-          ),
-        );
+        await pushToPage(context,
+            page: WhichProfilePage(userId: notificationInfo.senderId),
+            withoutRoot: false);
       },
       child: Padding(
         padding: EdgeInsetsDirectional.only(
@@ -65,13 +62,8 @@ class NotificationCardInfo extends StatelessWidget {
                         ..onTap = () async {
                           String userName =
                               hashOfUserName[1].replaceAll('@', '');
-                          await Navigator.of(
-                            context,
-                          ).push(CupertinoPageRoute(
-                              builder: (context) => WhichProfilePage(
-                                    userName: userName,
-                                  ),
-                              maintainState: false));
+                          await pushToPage(context,
+                              page: WhichProfilePage(userName: userName));
                         },
                     ),
                     TextSpan(
@@ -104,14 +96,12 @@ class NotificationCardInfo extends StatelessWidget {
                 } else {
                   appBarText = StringsManager.comments.tr();
                 }
-                if(isThatMobile){
-                  Navigator.of(context).push(CupertinoPageRoute(
-                    builder: (context) => GetsPostInfoAndDisplay(
-                      postId: notificationInfo.postId,
-                      appBarText: appBarText,
-                    ),
-                  ));
-                }else{
+                if (isThatMobile) {
+                  pushToPage(context, page: GetsPostInfoAndDisplay(
+                    postId: notificationInfo.postId,
+                    appBarText: appBarText,
+                  ),withoutRoot: false);
+                } else {
                   Navigator.of(context).push(HeroDialogRoute(
                     builder: (context) => GetsPostInfoAndDisplay(
                       postId: notificationInfo.postId,
@@ -119,7 +109,6 @@ class NotificationCardInfo extends StatelessWidget {
                     ),
                   ));
                 }
-
               },
               child: Image.network(notificationInfo.postImageUrl,
                   height: 45, width: 45),

@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram/config/routes/app_routes.dart';
+import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -17,6 +19,7 @@ import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
 import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_post_display.dart';
+import 'package:instagram/presentation/widgets/global/others/image_of_post.dart';
 
 class PostOfTimeLine extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
@@ -274,11 +277,25 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
       padding: const EdgeInsetsDirectional.only(start: 11.5),
       child: GestureDetector(
         onTap: () {
-          Navigator.of(
-            context,
-          ).push(CupertinoPageRoute(
-            builder: (context) => CommentsPageForMobile(postInfo: postInfo),
-          ));
+          if (isThatMobile) {
+            pushToPage(context, page:  CommentsPageForMobile(postInfo: postInfo));
+          } else {
+            Navigator.of(
+              context,
+            ).push(HeroDialogRoute(
+              builder: (context) => ImageOfPost(
+                postInfo:
+                    ValueNotifier(widget.postsInfo.value[widget.indexOfPost]),
+                playTheVideo: widget.playTheVideo,
+                indexOfPost: widget.indexOfPost,
+                postsInfo: widget.postsInfo,
+                reLoadData: widget.reLoadData,
+                popupWebContainer: true,
+                selectedCommentInfo: ValueNotifier(null),
+                textController: commentTextController,
+              ),
+            ));
+          }
         },
         child: Text(
           "${StringsManager.viewAll.tr()} $commentsLength ${commentsLength > 1 ? StringsManager.comments.tr() : StringsManager.comment.tr()}",

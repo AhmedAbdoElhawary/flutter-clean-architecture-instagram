@@ -32,7 +32,7 @@ abstract class FirestoreUserRepository {
 
   Future<void> followThisUser(String followingUserId, String myPersonalId);
 
-  Future<void> removeThisFollower(String followingUserId, String myPersonalId);
+  Future<void> unFollowThisUser(String followingUserId, String myPersonalId);
 
   Future<Message> sendMessage(
       {required Message messageInfo,

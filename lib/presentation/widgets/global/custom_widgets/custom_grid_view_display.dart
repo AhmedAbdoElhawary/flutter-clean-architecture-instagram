@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -205,18 +206,17 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
     customPostsInfo.removeWhere(
         (value) => value.postUid == widget.postClickedInfo.postUid);
     customPostsInfo.insert(0, widget.postClickedInfo);
-    Navigator.of(context).push(CupertinoPageRoute(
-      builder: (context) => Scaffold(
-        appBar: isThatMobile
-            ? CustomAppBar.oneTitleAppBar(
-                context,
-                widget.isThatProfile
-                    ? StringsManager.posts.tr()
-                    : StringsManager.explore.tr())
-            : null,
-        body: CustomPostsDisplay(postsInfo: widget.postsInfo),
-      ),
-    ));
+    pushToPage(context,
+        page: Scaffold(
+          appBar: isThatMobile
+              ? CustomAppBar.oneTitleAppBar(
+                  context,
+                  widget.isThatProfile
+                      ? StringsManager.posts.tr()
+                      : StringsManager.explore.tr())
+              : null,
+          body: CustomPostsDisplay(postsInfo: widget.postsInfo),
+        ));
   }
 
   void onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
@@ -315,19 +315,15 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
       isHeartAnimation.value = false;
     }
     if (viewProfileVisibility.value) {
-      Navigator.of(context).push(
-        CupertinoPageRoute(
-          builder: (context) {
-            if (widget.isThatProfile) {
-              return CommentsPageForMobile(postInfo: widget.postClickedInfo);
-            } else {
-              return WhichProfilePage(
-                userId: widget.postClickedInfo.publisherId,
-              );
-            }
-          },
-        ),
-      );
+      Widget page;
+      if (widget.isThatProfile) {
+        page = CommentsPageForMobile(postInfo: widget.postClickedInfo);
+      } else {
+        page = WhichProfilePage(
+          userId: widget.postClickedInfo.publisherId,
+        );
+      }
+      pushToPage(context, page: page, withoutRoot: false);
     }
     if (shareVisibility.value) draggableBottomSheet();
 

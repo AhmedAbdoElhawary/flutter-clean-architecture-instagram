@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
@@ -19,15 +20,12 @@ class CountOfLikes extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (isThatMobile) {
-          Navigator.of(context).push(
-            CupertinoPageRoute(
-              builder: (context) => UsersWhoLikesForMobile(
+          pushToPage(context,
+              page: UsersWhoLikesForMobile(
                 showSearchBar: true,
                 usersIds: postInfo.likes,
                 isThatMyPersonalId: postInfo.publisherId == myPersonalId,
-              ),
-            ),
-          );
+              ));
         } else {
           Navigator.of(context).push(
             HeroDialogRoute(

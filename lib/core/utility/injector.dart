@@ -221,8 +221,8 @@ Future<void> initializeDependencies() async {
   // follow useCases
   injector.registerSingleton<FollowThisUserUseCase>(
       FollowThisUserUseCase(injector()));
-  injector.registerSingleton<RemoveThisFollowerUseCase>(
-      RemoveThisFollowerUseCase(injector()));
+  injector.registerSingleton<UnFollowThisUserUseCase>(
+      UnFollowThisUserUseCase(injector()));
 
   // *
 

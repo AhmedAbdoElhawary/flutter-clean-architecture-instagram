@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -193,12 +194,8 @@ class _CommentInfoState extends State<CommentInfo> {
   GestureDetector profileImage(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(
-          context,
-        ).push(CupertinoPageRoute(
-          builder: (context) => WhichProfilePage(
-              userId: widget.commentInfo.whoCommentInfo!.userId),
-        ));
+        pushToPage(context, page:  WhichProfilePage(
+            userId: widget.commentInfo.whoCommentInfo!.userId),withoutRoot: false);
       },
       child: CircleAvatarOfProfileImage(
         userInfo: widget.commentInfo.whoCommentInfo!,
@@ -234,16 +231,13 @@ class _CommentInfoState extends State<CommentInfo> {
             padding: const EdgeInsetsDirectional.only(start: 20.0),
             child: InkWell(
               onTap: () {
-                Navigator.of(context).push(
-                  CupertinoPageRoute(
-                    builder: (context) => UsersWhoLikesForMobile(
-                      showSearchBar: false,
-                      usersIds: widget.commentInfo.likes,
-                      isThatMyPersonalId:
-                          widget.commentInfo.whoCommentId == myPersonalId,
-                    ),
-                  ),
-                );
+                pushToPage(context, page:  UsersWhoLikesForMobile(
+                  showSearchBar: false,
+                  usersIds: widget.commentInfo.likes,
+                  isThatMyPersonalId:
+                  widget.commentInfo.whoCommentId == myPersonalId,
+                ),withoutRoot: false);
+
               },
               child: Text(
                 "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like.tr() : StringsManager.likes.tr()}",
@@ -283,12 +277,8 @@ class _CommentInfoState extends State<CommentInfo> {
       BuildContext context, String hashTageOfUserName) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(
-          context,
-        ).push(CupertinoPageRoute(
-          builder: (context) => WhichProfilePage(
-              userId: widget.commentInfo.whoCommentInfo!.userId),
-        ));
+        pushToPage(context, page:  WhichProfilePage(
+            userId: widget.commentInfo.whoCommentInfo!.userId));
       },
       child: Text.rich(
         TextSpan(
@@ -308,13 +298,9 @@ class _CommentInfoState extends State<CommentInfo> {
                   ..onTap = () async {
                     List<String> hashTagName = hashTageOfUserName.split(" ");
                     String userName = hashTagName[0].replaceAll('@', '');
-                    await Navigator.of(
-                      context,
-                    ).push(CupertinoPageRoute(
-                        builder: (context) => WhichProfilePage(
-                              userName: userName,
-                            ),
-                        maintainState: false));
+                    await pushToPage(context, page: WhichProfilePage(
+                      userName: userName,
+                    ));
                   },
               ),
             TextSpan(
