@@ -3,6 +3,10 @@ import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
@@ -178,18 +182,12 @@ class CustomStoryGalleryDisplayState extends State<CustomStoryGalleryDisplay>
     );
   }
 
-  GestureDetector gestureDetector(
-      BuildContext context, Uint8List image, FutureBuilder<Uint8List?> listOfMedia) {
+  GestureDetector gestureDetector(BuildContext context, Uint8List image,
+      FutureBuilder<Uint8List?> listOfMedia) {
     return GestureDetector(
         onTap: () async {
-          Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-              builder: (context) {
-                return CreateStoryPage(
-                  isThatImage: true,
-                  storyImage: image,
-                );
-              },
-              maintainState: false));
+          pushToPage(context,
+              page: CreateStoryPage(isThatImage: true, storyImage: image));
         },
         child: listOfMedia);
   }
