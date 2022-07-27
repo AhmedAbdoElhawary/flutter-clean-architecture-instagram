@@ -53,5 +53,5 @@ class PopupFollowCard extends StatelessWidget {
   }
 
   Widget customDivider() =>
-      Container(color: ColorManager.grey, height: 1, width: double.infinity);
+      const Divider(color: ColorManager.grey, thickness: 0.2);
 }
