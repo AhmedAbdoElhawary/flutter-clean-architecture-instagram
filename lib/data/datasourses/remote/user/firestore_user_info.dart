@@ -44,20 +44,30 @@ class FirestoreUser {
     return usersInfo;
   }
 
-  static Future<List<UserPersonalInfo>> getSpecificUsersInfo(
-      List<dynamic> usersIds) async {
+  /// [fieldName] , [userUid] in case one of this users not exist, it will be deleted from the list in fireStore
+
+  static Future<List<UserPersonalInfo>> getSpecificUsersInfo({
+    String fieldName = "",
+    required List<dynamic> usersIds,
+    String userUid = "",
+  }) async {
     List<UserPersonalInfo> usersInfo = [];
     List<dynamic> ids = [];
-    for (int i = 0; i < usersIds.length; i++) {
-      if (!ids.contains(usersIds[i])) {
+    for (final userid in usersIds) {
+      if (!ids.contains(userid)) {
         DocumentSnapshot<Map<String, dynamic>> snap =
-            await _fireStoreUserCollection.doc(usersIds[i]).get();
+            await _fireStoreUserCollection.doc(userid).get();
         if (snap.exists) {
           UserPersonalInfo postReformat =
               UserPersonalInfo.fromDocSnap(snap.data());
           usersInfo.add(postReformat);
+        } else {
+          if (fieldName.isNotEmpty && userUid.isNotEmpty) {
+            await arrayRemoveOfField(
+                removeThisId: userid, userUid: userUid, fieldName: fieldName);
+          }
         }
-        ids.add(usersIds[i]);
+        ids.add(userid);
       }
     }
     return usersInfo;
@@ -153,13 +163,23 @@ class FirestoreUser {
     });
   }
 
-  static removeThisFollower(String followingUserId, String myPersonalId) async {
+  static unFollowThisUser(String followingUserId, String myPersonalId) async {
     await _fireStoreUserCollection.doc(followingUserId).update({
       'followers': FieldValue.arrayRemove([myPersonalId])
     });
 
     await _fireStoreUserCollection.doc(myPersonalId).update({
       'following': FieldValue.arrayRemove([followingUserId])
+    });
+  }
+
+  static arrayRemoveOfField({
+    required String fieldName,
+    required String removeThisId,
+    required String userUid,
+  }) async {
+    await _fireStoreUserCollection.doc(userUid).update({
+      fieldName: FieldValue.arrayRemove([removeThisId])
     });
   }
 
