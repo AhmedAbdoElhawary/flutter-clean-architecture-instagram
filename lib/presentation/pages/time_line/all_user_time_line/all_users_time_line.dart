@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
@@ -46,11 +47,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
         child: Center(
           child: TextField(
             onTap: () {
-              Navigator.of(context).push(
-                CupertinoPageRoute(
-                  builder: (context) => const SearchAboutUserPage(),
-                ),
-              );
+              pushToPage(context, page: const SearchAboutUserPage());
             },
             readOnly: true,
             decoration: InputDecoration(
