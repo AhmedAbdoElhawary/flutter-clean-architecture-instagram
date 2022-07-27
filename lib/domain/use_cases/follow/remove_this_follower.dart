@@ -1,14 +1,14 @@
 import 'package:instagram/core/use_case/use_case.dart';
 import 'package:instagram/domain/repositories/user_repository.dart';
 
-class RemoveThisFollowerUseCase
+class UnFollowThisUserUseCase
     implements UseCaseTwoParams<void, String, String> {
-  final FirestoreUserRepository _addNewUserRepository;
+  final FirestoreUserRepository _unFollowThisUserRepository;
 
-  RemoveThisFollowerUseCase(this._addNewUserRepository);
+  UnFollowThisUserUseCase(this._unFollowThisUserRepository);
 
   @override
   Future<void> call({required String paramsOne, required String paramsTwo}) {
-    return _addNewUserRepository.removeThisFollower(paramsOne, paramsTwo);
+    return _unFollowThisUserRepository.unFollowThisUser(paramsOne, paramsTwo);
   }
 }
