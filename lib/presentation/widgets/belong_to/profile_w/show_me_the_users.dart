@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
@@ -41,6 +42,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
 
   @override
   Widget build(BuildContext context) {
+    print("widget.usersInfo.length: ${widget.usersInfo.length}");
     if (widget.usersInfo.isNotEmpty) {
       return SingleChildScrollView(
         child: ListView.separated(
@@ -71,13 +73,8 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
 
     return InkWell(
       onTap: () async {
-        await Navigator.of(context).push(
-          CupertinoPageRoute(
-            builder: (context) => WhichProfilePage(
-              userId: userInfo.userId,
-            ),
-          ),
-        );
+        await pushToPage(context,
+            page: WhichProfilePage(userId: userInfo.userId),withoutRoot: false);
       },
       child: Padding(
         padding: const EdgeInsetsDirectional.only(start: 15, top: 15),
@@ -133,7 +130,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                     if (myPersonalInfo.followedPeople
                         .contains(userInfo.userId)) {
                       BlocProvider.of<FollowCubit>(followContext)
-                          .removeThisFollower(
+                          .unFollowThisUser(
                               followingUserId: userInfo.userId,
                               myPersonalId: myPersonalId);
                       BlocProvider.of<FirestoreUserInfoCubit>(context)
