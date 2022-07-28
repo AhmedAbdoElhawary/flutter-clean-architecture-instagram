@@ -34,6 +34,7 @@ class _MyAppState extends State<MyApp> {
     TargetPlatform platform = Theme.of(context).platform;
     isThatMobile =
         platform == TargetPlatform.iOS || platform == TargetPlatform.android;
+    isThatAndroid = platform == TargetPlatform.android;
     return MultiBlocs(materialApp(context));
   }
 
