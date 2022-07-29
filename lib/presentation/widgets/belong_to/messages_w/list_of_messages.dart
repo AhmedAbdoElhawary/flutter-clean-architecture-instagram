@@ -21,9 +21,11 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circ
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
 
 class ListOfMessages extends StatefulWidget {
-  final ValueChanged<UserPersonalInfo>? userInfo;
+  final ValueChanged<UserPersonalInfo>? selectChatting;
+  final UserPersonalInfo? additionalUser;
 
-  const ListOfMessages({Key? key, this.userInfo}) : super(key: key);
+  const ListOfMessages({Key? key, this.selectChatting, this.additionalUser})
+      : super(key: key);
 
   @override
   State<ListOfMessages> createState() => _ListOfMessagesState();
@@ -48,53 +50,69 @@ class _ListOfMessagesState extends State<ListOfMessages> {
           previous != current && current is CubitGettingChatUsersInfoLoaded,
       builder: (context, state) {
         if (state is CubitGettingChatUsersInfoLoaded) {
+          bool isThatUserExist = false;
+         if(widget.additionalUser!=null) {
+           state.usersInfo.where((element) {
+            bool check =
+                element.userInfo?.userId != widget.additionalUser?.userId;
+            if (!check) isThatUserExist = true;
+            return true;
+          }).toList();
+         }
+          SenderInfo senderInfo = SenderInfo(userInfo: widget.additionalUser);
           List<SenderInfo> usersInfo = state.usersInfo;
+
+          if (!isThatUserExist&&widget.additionalUser!=null) {
+            usersInfo.add(senderInfo);
+          }
           return ListView.separated(
               physics: const NeverScrollableScrollPhysics(),
               primary: false,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                Message theLastMessage = usersInfo[index].lastMessage;
+                Message? theLastMessage = usersInfo[index].lastMessage;
 
                 return ListTile(
-                  title: Text(
-                    usersInfo[index].userInfo!.name,
-                    style: getNormalStyle(color: Theme.of(context).focusColor),
-                  ),
-                  subtitle: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                            theLastMessage.message.isEmpty
-                                ? (theLastMessage.imageUrl.isEmpty
-                                    ? StringsManager.recordedSent.tr()
-                                    : StringsManager.photoSent.tr())
-                                : theLastMessage.message,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: getNormalStyle(color: ColorManager.grey)),
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                          DateOfNow.commentsDateOfNow(
-                              theLastMessage.datePublished),
-                          style: getNormalStyle(color: ColorManager.grey)),
-                    ],
-                  ),
-                  leading:CircleAvatarOfProfileImage(
+                  title: buildText(usersInfo, index, context),
+                  subtitle: theLastMessage != null
+                      ? Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                  theLastMessage.message.isEmpty
+                                      ? (theLastMessage.imageUrl.isEmpty
+                                          ? StringsManager.recordedSent.tr()
+                                          : StringsManager.photoSent.tr())
+                                      : theLastMessage.message,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style:
+                                      getNormalStyle(color: ColorManager.grey)),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                                DateOfNow.commentsDateOfNow(
+                                    theLastMessage.datePublished),
+                                style:
+                                    getNormalStyle(color: ColorManager.grey)),
+                          ],
+                        )
+                      : null,
+                  leading: CircleAvatarOfProfileImage(
                     bodyHeight: bodyHeight * 0.85,
                     userInfo: usersInfo[index].userInfo!,
                   ),
                   onTap: () {
-                    if (widget.userInfo != null) {
-                      widget.userInfo!(usersInfo[index].userInfo!);
+                    if (widget.selectChatting != null) {
+                      widget.selectChatting!(usersInfo[index].userInfo!);
                     } else {
-                      pushToPage(context, page:  BlocProvider<MessageBloc>(
-                        create: (context) => injector<MessageBloc>(),
-                        child: ChattingPage(
-                          userInfo: usersInfo[index].userInfo!,
-                        ),
-                      ));
+                      pushToPage(context,
+                          page: BlocProvider<MessageBloc>(
+                            create: (context) => injector<MessageBloc>(),
+                            child: ChattingPage(
+                              userInfo: usersInfo[index].userInfo!,
+                            ),
+                          ));
                     }
                   },
                 );
@@ -114,6 +132,13 @@ class _ListOfMessagesState extends State<ListOfMessages> {
               : const ThineLinearProgress();
         }
       },
+    );
+  }
+
+  Text buildText(List<SenderInfo> usersInfo, int index, BuildContext context) {
+    return Text(
+      usersInfo[index].userInfo!.name,
+      style: getNormalStyle(color: Theme.of(context).focusColor),
     );
   }
 }
