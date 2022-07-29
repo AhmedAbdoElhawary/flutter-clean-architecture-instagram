@@ -2,12 +2,12 @@
 name: Releases
 
 # Controls when the workflow will run
-on: 
+on:
   push:
-  # Triggers the workflow on push or pull request events but only for the tagged
+    # Triggers the workflow on push or pull request events but only for the tagged
     tags:
-    - '*'
-  
+      - '*'
+
   # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -32,5 +32,5 @@ jobs:
       - run: flutter build apk --debug
       - uses: ncipollo/release-action@v1
         with:
-         artifacts: "build/app/outputs/apk/debug/*.apk"
-         token: ${{ secrets.FIREBASE_TOKEN }}
+          artifacts: "build/app/outputs/apk/debug/*.apk"
+          token: ${{ secrets.FIREBASE_TOKEN }}
