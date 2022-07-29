@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,6 +12,8 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
+import 'package:instagram/presentation/customPackages/sliding_sheet/sheet_pop_container.dart';
+import 'package:instagram/presentation/customPackages/sliding_sheet/specs.dart';
 import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
@@ -24,7 +25,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_posts_display.dart';
 import 'package:instagram/presentation/widgets/global/others/image_of_post.dart';
-import 'package:sliding_sheet/sliding_sheet.dart';
+// import 'package:sliding_sheet/sliding_sheet.dart';
 
 class _PositionDimension {
   final double positionTop;
