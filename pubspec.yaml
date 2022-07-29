@@ -82,7 +82,13 @@ dependencies:
   simple_animations: ^4.2.0
   scroll_snap_list: ^0.9.1
   animated_splash_screen: ^1.2.0
-#  flutter_native_splash: ^2.2.6
+  image_cropper: ^2.0.3
+  dotted_border: ^2.0.0+2
+  ui_helper: ^1.1.0
+  extended_image: ^6.2.1
+  image: ^3.2.0
+
+  #  flutter_native_splash: ^2.2.6
 
   ## My package
   custom_gallery_display: ^0.2.7
