@@ -52,7 +52,6 @@ class ImageOfPost extends StatefulWidget {
   final VoidCallback? rebuildPreviousWidget;
   final bool popupWebContainer;
   final bool showSliderArrow;
-
   final ValueNotifier<TextEditingController> textController;
   final ValueNotifier<Comment?> selectedCommentInfo;
 
@@ -104,8 +103,13 @@ class _ImageOfPostState extends State<ImageOfPost>
         : buildPostForWeb(bodyHeight: 700);
   }
 
-  pushToProfilePage(Post postInfo) =>
-      pushToPage(context, page: WhichProfilePage(userId: postInfo.publisherId));
+  pushToProfilePage(Post postInfo) {
+    if(widget.popupWebContainer) {
+      Navigator.of(context).maybePop(
+      );
+    }
+    return pushToPage(context, page: WhichProfilePage(userId: postInfo.publisherId));
+  }
 
   Widget buildPostForMobile({required double bodyHeight}) {
     return SizedBox(

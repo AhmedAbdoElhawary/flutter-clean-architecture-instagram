@@ -17,6 +17,7 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc
 import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/pages/messages/chatting_page.dart';
+import 'package:instagram/presentation/screens/web_screen_layout.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/recommendation_people.dart';
@@ -188,7 +189,15 @@ class _ProfilePageState extends State<UserProfilePage> {
 
   Widget messageButtonForWeb() {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        setState(() => pageOfController = 1);
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) =>
+                WebScreenLayout(userInfoForMessagePage: userInfo),
+          ),
+        );
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
         decoration: BoxDecoration(
@@ -299,9 +308,7 @@ class _ProfilePageState extends State<UserProfilePage> {
       BlocProvider.of<NotificationCubit>(context)
           .createNotification(newNotification: createNotification(userInfo));
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   NotificationCheck createNotificationCheck(UserPersonalInfo userInfo) {

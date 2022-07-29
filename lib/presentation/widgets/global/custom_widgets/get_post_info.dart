@@ -10,10 +10,13 @@ import 'package:instagram/presentation/widgets/global/others/image_of_post.dart'
 class GetsPostInfoAndDisplay extends StatelessWidget {
   final String postId;
   final String appBarText;
-
-  const GetsPostInfoAndDisplay(
-      {Key? key, required this.postId, required this.appBarText})
-      : super(key: key);
+  final bool fromHeroRoute;
+  const GetsPostInfoAndDisplay({
+    Key? key,
+    required this.postId,
+    required this.appBarText,
+    this.fromHeroRoute = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

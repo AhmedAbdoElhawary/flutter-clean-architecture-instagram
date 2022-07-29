@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/core/utility/constant.dart';
 
 class CustomCircularProgress extends StatelessWidget {
   final Color color;
@@ -12,10 +14,12 @@ class CustomCircularProgress extends StatelessWidget {
       child: Transform.scale(
         scale: 0.50,
         child: ClipOval(
-          child: CircularProgressIndicator(
-            strokeWidth: 6,
-            color: color,
-          ),
+          child: isThatAndroid
+              ? CircularProgressIndicator(
+                  strokeWidth: 6,
+                  color: color,
+                )
+              : CupertinoActivityIndicator(color: color),
         ),
       ),
     );
@@ -28,8 +32,10 @@ class ThineCircularProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: CircularProgressIndicator(
-          strokeWidth: 1, color: Theme.of(context).focusColor),
+      child: isThatAndroid
+          ? CircularProgressIndicator(
+              strokeWidth: 1, color: Theme.of(context).focusColor)
+          : CupertinoActivityIndicator(color: Theme.of(context).focusColor),
     );
   }
 }

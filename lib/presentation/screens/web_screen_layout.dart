@@ -9,6 +9,7 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/core/widgets/svg_pictures.dart';
 import 'package:instagram/data/models/notification.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/messages/messages_for_web.dart';
@@ -20,21 +21,25 @@ import 'package:instagram/presentation/widgets/belong_to/screens_w.dart';
 import 'package:instagram/presentation/widgets/global/others/notification_card_info.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/web/new_post.dart';
 
+int pageOfController = 0;
+
 class WebScreenLayout extends StatefulWidget {
-  const WebScreenLayout({Key? key}) : super(key: key);
+  final Widget? body;
+  final UserPersonalInfo? userInfoForMessagePage;
+  const WebScreenLayout({Key? key, this.body, this.userInfoForMessagePage})
+      : super(key: key);
 
   @override
   State<WebScreenLayout> createState() => _WebScreenLayoutState();
 }
 
 class _WebScreenLayoutState extends State<WebScreenLayout> {
-  int _page = 0;
   late PageController pageController;
 
   @override
   void initState() {
     super.initState();
-    pageController = PageController(initialPage: 0);
+    pageController = PageController(initialPage: pageOfController);
   }
 
   @override
@@ -45,13 +50,19 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
 
   void onPageChanged(int page) {
     setState(() {
-      _page = page;
+      page = page;
     });
   }
 
   void navigationTapped(int page) {
-    pageController.jumpToPage(page);
-    setState(() => _page = page);
+    if (widget.body != null) {
+      setState(() => page = page);
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => const WebScreenLayout()));
+    } else {
+      pageController.jumpToPage(page);
+      setState(() => pageOfController = page);
+    }
   }
 
   void onPressedAdd(int page) {
@@ -60,49 +71,81 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
         builder: (context) => const PopupNewPost(),
       ),
     );
-    setState(() => _page = page);
+    setState(() => page = page);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: Container(
-          decoration: const BoxDecoration(boxShadow: [
-            BoxShadow(
-              color: ColorManager.appBarElationColor,
-              offset: Offset(0, 1.0),
-              blurRadius: 0,
-            )
-          ]),
-          child: AppBar(
-            elevation: 1,
-            backgroundColor: Theme.of(context).primaryColor,
-            centerTitle: false,
-            title: const InstagramLogo(),
-            actions: [
-              IconButton(
-                icon: Icon(
-                  _page == 0 ? Icons.home_rounded : Icons.home_outlined,
-                  color: Theme.of(context).focusColor,
-                  size: 32,
+      body: Column(
+        children: [
+          appBar(context),
+          Expanded(
+            child: widget.body ??
+                PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: homeScreenItems(),
+                  controller: pageController,
+                  onPageChanged: onPageChanged,
                 ),
-                onPressed: () => navigationTapped(0),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container appBar(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        border: const Border(
+          bottom: BorderSide(
+            color: ColorManager.lowOpacityGrey,
+            width: 1,
+          ),
+        ),
+      ),
+      child: Center(
+        child: SizedBox(
+          width: 960,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(width: 5),
+              const InstagramLogo(),
+              const Expanded(child: SizedBox(width: 1)),
+              Column(
+                children: [
+                  Center(
+                    child: IconButton(
+                      icon: Icon(
+                        pageOfController == 0
+                            ? Icons.home_rounded
+                            : Icons.home_outlined,
+                        color: Theme.of(context).focusColor,
+                        size: 32,
+                      ),
+                      onPressed: () => navigationTapped(0),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                ],
               ),
               const SizedBox(width: 5),
               IconButton(
-                icon: icons(IconsAssets.messengerIcon, _page == 1),
+                icon: icons(IconsAssets.messengerIcon, pageOfController == 1),
                 onPressed: () => navigationTapped(1),
               ),
               const SizedBox(width: 5),
               IconButton(
-                icon: icons(IconsAssets.addIcon, _page == 2),
+                icon: icons(IconsAssets.addIcon, pageOfController == 2),
                 onPressed: () => onPressedAdd(2),
               ),
               const SizedBox(width: 5),
               IconButton(
-                icon: icons(IconsAssets.compass, _page == 3),
+                icon: icons(IconsAssets.compass, pageOfController == 3),
                 onPressed: () => navigationTapped(3),
               ),
               const SizedBox(width: 5),
@@ -117,7 +160,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
                 child: Icon(
-                  _page == 4
+                  pageOfController == 4
                       ? Icons.favorite_rounded
                       : Icons.favorite_border_rounded,
                   color: Theme.of(context).focusColor,
@@ -143,16 +186,9 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
               ),
               const SizedBox(width: 5),
               buildPopupMenuButton(context),
-              const SizedBox(width: 10),
             ],
           ),
         ),
-      ),
-      body: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        children: homeScreenItems,
-        controller: pageController,
-        onPageChanged: onPageChanged,
       ),
     );
   }
@@ -223,13 +259,13 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
         ),
       ];
 
-  List<Widget> homeScreenItems = [
-    const _HomePage(),
-    const MessagesForWeb(),
-    const ShopPage(),
-    AllUsersTimeLinePage(),
-    const _PersonalProfilePage(),
-  ];
+  List<Widget> homeScreenItems() => [
+        const _HomePage(),
+        MessagesForWeb(selectedTextingUser: widget.userInfoForMessagePage),
+        const ShopPage(),
+        AllUsersTimeLinePage(),
+        const _PersonalProfilePage(),
+      ];
 
   SvgPicture icons(String icon, bool value) {
     return SvgPicture.asset(

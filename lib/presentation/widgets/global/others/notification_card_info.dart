@@ -106,6 +106,7 @@ class NotificationCardInfo extends StatelessWidget {
                     builder: (context) => GetsPostInfoAndDisplay(
                       postId: notificationInfo.postId,
                       appBarText: appBarText,
+                      fromHeroRoute: true,
                     ),
                   ));
                 }

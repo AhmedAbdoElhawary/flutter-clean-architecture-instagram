@@ -76,11 +76,15 @@ class FirestoreUser {
   static Future<List<SenderInfo>> extractUsersIds(
       {required List<SenderInfo> usersInfo}) async {
     for (int i = 0; i < usersInfo.length; i++) {
-      String userId = usersInfo[i].lastMessage.senderId != myPersonalId
-          ? usersInfo[i].lastMessage.senderId
-          : usersInfo[i].lastMessage.receiverId;
-      UserPersonalInfo userInfo = await getUserInfo(userId);
-      usersInfo[i].userInfo = userInfo;
+      if(usersInfo[i].lastMessage!=null){
+        String userId = usersInfo[i].lastMessage?.senderId != myPersonalId
+            ? usersInfo[i].lastMessage!.senderId
+            : usersInfo[i].lastMessage!.receiverId;
+        UserPersonalInfo userInfo = await getUserInfo(userId);
+        usersInfo[i].userInfo = userInfo;
+      }
+
+
     }
     return usersInfo;
   }

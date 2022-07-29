@@ -42,7 +42,6 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
 
   @override
   Widget build(BuildContext context) {
-    print("widget.usersInfo.length: ${widget.usersInfo.length}");
     if (widget.usersInfo.isNotEmpty) {
       return SingleChildScrollView(
         child: ListView.separated(
@@ -73,6 +72,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
 
     return InkWell(
       onTap: () async {
+        Navigator.of(context).maybePop();
         await pushToPage(context,
             page: WhichProfilePage(userId: userInfo.userId),withoutRoot: false);
       },

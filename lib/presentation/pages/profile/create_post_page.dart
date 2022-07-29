@@ -2,8 +2,6 @@ import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -156,48 +154,45 @@ class _CreatePostPageState extends State<CreatePostPage> {
         UserPersonalInfo? personalInfo = userCubit.myPersonalInfo;
 
         return ValueListenableBuilder(
-          valueListenable: isItDone,
-          builder: (context, bool isItDoneValue, child) => Builder(
-            builder: (builder2context) {
-              return !isItDoneValue
-                  ? const CustomCircularProgress(ColorManager.blue)
-                  : IconButton(
-                      onPressed: () async =>
-                          createPost(personalInfo!, userCubit, builder2context),
-                      icon: const Icon(
-                        Icons.check_rounded,
-                        size: 30,
-                        color: ColorManager.blue,
-                      ));
-            },
-          ),
-        );
+            valueListenable: isItDone,
+            builder: (context, bool isItDoneValue, child) => !isItDoneValue
+                ? const CustomCircularProgress(ColorManager.blue)
+                : IconButton(
+                    onPressed: () async =>
+                        createPost(personalInfo!, userCubit, builderContext),
+                    icon: const Icon(
+                      Icons.check_rounded,
+                      size: 30,
+                      color: ColorManager.blue,
+                    )));
       })
     ];
   }
 
   Future<void> createPost(UserPersonalInfo personalInfo,
       FirestoreUserInfoCubit userCubit, BuildContext builder2context) async {
-    isItDone.value = false;
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => setState(() => isItDone.value = false));
     String blurHash = await blurHashEncode(widget.selectedFile);
     Post postInfo = addPostInfo(personalInfo, blurHash);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      PostCubit postCubit =
-          BlocProvider.of<PostCubit>(builder2context, listen: false);
-      List<Uint8List>? selectedFiles =
-          widget.multiSelectedFiles ?? [widget.selectedFile];
-      await postCubit.createPost(postInfo, selectedFiles).then((_) async {
-        if (postCubit.postId != '') {
-          await userCubit.updateUserPostsInfo(
-              userId: personalInfo.userId, postId: postCubit.postId);
-          await postCubit.getPostsInfo(
-              postsIds: personalInfo.posts, isThatMyPosts: true);
-          isItDone.value = true;
-        }
-      });
-      Get.offAll(MobileScreenLayout(myPersonalId));
-    });
+    PostCubit postCubit =
+        BlocProvider.of<PostCubit>(builder2context, listen: false);
+    List<Uint8List>? selectedFiles =
+        widget.multiSelectedFiles ?? [widget.selectedFile];
+    await postCubit.createPost(postInfo, selectedFiles);
+    if (postCubit.postId != '') {
+      await userCubit.updateUserPostsInfo(
+          userId: personalInfo.userId, postId: postCubit.postId);
+      await postCubit.getPostsInfo(
+          postsIds: personalInfo.posts, isThatMyPosts: true);
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => setState(() => isItDone.value = true));
+    }
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => MobileScreenLayout(myPersonalId),
+        ),
+        (route) => false);
   }
 
   Post addPostInfo(UserPersonalInfo personalInfo, String blurHash) {
