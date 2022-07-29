@@ -4,10 +4,10 @@ import 'package:instagram/data/models/user_personal_info.dart';
 /// it can be sender or receiver
 class SenderInfo {
   UserPersonalInfo? userInfo;
-  Message lastMessage;
+  Message? lastMessage;
 
   SenderInfo({
     this.userInfo,
-    required this.lastMessage,
+    this.lastMessage,
   });
 }
