@@ -40,17 +40,13 @@ jobs:
           node-version: '10.x'
       - run: npm install
       - run: npm run build:prod
+      - run: flutter build web
       - uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-#        run: flutter build web
-#      - uses: FirebaseExtended/action-hosting-deploy@v0
-#        with:
-#          repoToken: '${{ secrets.FIREBASE_TOKEN }}'
-#          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
-#          projectId: el-instagram
+          repoToken: '${{ secrets.FIREBASE_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          projectId: el-instagram
 
       # Get the latst dependencies
       - run: flutter pub get
