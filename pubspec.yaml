@@ -91,7 +91,7 @@ dependencies:
   #  flutter_native_splash: ^2.2.6
 
   ## My package
-  custom_gallery_display: ^0.2.7
+  custom_gallery_display: ^0.2.8
 
 dev_dependencies:
   flutter_lints: ^1.0.0
