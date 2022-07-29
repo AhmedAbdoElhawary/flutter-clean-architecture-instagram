@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,6 +20,8 @@ import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
+import 'package:instagram/presentation/customPackages/sliding_sheet/sheet_pop_container.dart';
+import 'package:instagram/presentation/customPackages/sliding_sheet/specs.dart';
 import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
 import 'package:instagram/presentation/pages/time_line/my_own_time_line/update_post_info.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
@@ -41,7 +42,7 @@ import 'package:instagram/presentation/widgets/global/popup_widgets/common/jump_
 import 'package:instagram/presentation/widgets/global/popup_widgets/common/volume_icon.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/web/menu_card.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/web/share_post.dart';
-import 'package:sliding_sheet/sliding_sheet.dart';
+// import 'package:sliding_sheet/sliding_sheet.dart';
 
 class ImageOfPost extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
