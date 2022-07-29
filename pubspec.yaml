@@ -51,7 +51,9 @@ dependencies:
   shared_preferences: ^2.0.13
   sqflite: ^2.0.2
   flutter_animated_dialog: ^2.0.1
-  pull_to_refresh: ^2.0.0
+  pull_to_refresh:
+    git:
+      url: https://github.com/miquelbeltran/flutter_pulltorefresh
   scrollable_positioned_list: ^0.3.2
   carousel_slider: ^4.0.0
   inview_notifier_list: ^3.0.0
@@ -73,22 +75,18 @@ dependencies:
   get_storage: ^2.0.3
   photo_manager: ^2.1.4
   blurhash: ^1.0.0
-  sliding_sheet: ^0.5.2
   get: ^4.6.5
   firebase_core_web: ^1.6.6
   video_thumbnail: ^0.5.0
   permission_handler: ^9.2.0
   flutter_blurhash: ^0.7.0
   simple_animations: ^4.2.0
-  scroll_snap_list: ^0.9.1
   animated_splash_screen: ^1.2.0
   image_cropper: ^2.0.3
   dotted_border: ^2.0.0+2
   ui_helper: ^1.1.0
   extended_image: ^6.2.1
   image: ^3.2.0
-
-  #  flutter_native_splash: ^2.2.6
 
   ## My package
   custom_gallery_display: ^0.2.8
@@ -107,6 +105,7 @@ dev_dependencies:
 #    height: 400
 #    color: 0xFF000000
 #    fit: contain
+
 
 flutter_icons:
   android: true
