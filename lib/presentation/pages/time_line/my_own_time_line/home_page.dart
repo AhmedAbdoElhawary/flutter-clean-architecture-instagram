@@ -320,7 +320,7 @@ class _HomePageState extends State<HomePage> {
         decoration: BoxDecoration(
           color: ColorManager.white,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: ColorManager.lightGrey, width: 1),
+          border: Border.all(color: ColorManager.lowOpacityGrey, width: 1),
         ),
         child: child,
       ),
