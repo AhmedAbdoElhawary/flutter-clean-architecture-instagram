@@ -11,10 +11,11 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cu
 import 'package:instagram/presentation/widgets/belong_to/messages_w/chat_messages.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/list_of_messages.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
 class MessagesForWeb extends StatefulWidget {
-  const MessagesForWeb({Key? key}) : super(key: key);
+  UserPersonalInfo? selectedTextingUser;
+
+  MessagesForWeb({Key? key, this.selectedTextingUser}) : super(key: key);
 
   @override
   State<MessagesForWeb> createState() => _MessagesForWebState();
@@ -22,7 +23,6 @@ class MessagesForWeb extends StatefulWidget {
 
 class _MessagesForWebState extends State<MessagesForWeb> {
   late UserPersonalInfo myPersonalInfo;
-  UserPersonalInfo? selectedTextingUser;
 
   @override
   initState() {
@@ -60,35 +60,35 @@ class _MessagesForWebState extends State<MessagesForWeb> {
   }
 
   Widget chatting() {
-    if (selectedTextingUser == null) {
+    if (widget.selectedTextingUser == null) {
       return Expanded(
         child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "There is no selected massage",
-                  style: getMediumStyle(color: ColorManager.black),
-                ),
-              ],
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              "There is no selected massage",
+              style: getMediumStyle(color: ColorManager.black),
             ),
+          ],
+        ),
       );
     } else {
       return Expanded(
-            child: Column(
-              children: [
-                appBarOfChatting(),
-                Expanded(child: chatMessages()),
-              ],
-            ),
-          );
+        child: Column(
+          children: [
+            appBarOfChatting(),
+            Expanded(child: chatMessages()),
+          ],
+        ),
+      );
     }
   }
 
   Widget chatMessages() {
     return BlocProvider<MessageBloc>(
       create: (context) => injector<MessageBloc>(),
-      child: ChatMessages(userInfo: selectedTextingUser!),
+      child: ChatMessages(userInfo: widget.selectedTextingUser!),
     );
   }
 
@@ -103,7 +103,7 @@ class _MessagesForWebState extends State<MessagesForWeb> {
           ),
         ),
       ),
-      child: selectedTextingUser != null
+      child: widget.selectedTextingUser != null
           ? Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -112,12 +112,12 @@ class _MessagesForWebState extends State<MessagesForWeb> {
                     const SizedBox(width: 25),
                     CircleAvatarOfProfileImage(
                       bodyHeight: 350,
-                      userInfo: selectedTextingUser!,
+                      userInfo: widget.selectedTextingUser!,
                       showColorfulCircle: false,
                     ),
                     const SizedBox(width: 15),
                     Text(
-                      selectedTextingUser!.name,
+                      widget.selectedTextingUser!.name,
                       style: TextStyle(
                           color: Theme.of(context).focusColor,
                           fontSize: 16,
@@ -162,7 +162,9 @@ class _MessagesForWebState extends State<MessagesForWeb> {
         children: [
           appBarOfMessages(),
           SingleChildScrollView(
-            child: ListOfMessages(userInfo: selectChatting),
+            child: ListOfMessages(
+                selectChatting: selectChatting,
+                additionalUser: widget.selectedTextingUser),
           ),
         ],
       ),
@@ -171,8 +173,8 @@ class _MessagesForWebState extends State<MessagesForWeb> {
 
   void selectChatting(UserPersonalInfo userInfo) {
     setState(() {
-      selectedTextingUser = null;
-      selectedTextingUser = userInfo;
+      widget.selectedTextingUser = null;
+      widget.selectedTextingUser = userInfo;
     });
   }
 
