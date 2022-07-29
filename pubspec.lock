@@ -878,9 +878,11 @@ packages:
   pull_to_refresh:
     dependency: "direct main"
     description:
-      name: pull_to_refresh
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "6d7fbdd5b3cde242a474d66da312aac4aa892b9b"
+      url: "https://github.com/miquelbeltran/flutter_pulltorefresh"
+    source: git
     version: "2.0.0"
   quiver:
     dependency: transitive
@@ -924,13 +926,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.27.4"
-  scroll_snap_list:
-    dependency: "direct main"
-    description:
-      name: scroll_snap_list
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.9.1"
   scrollable_positioned_list:
     dependency: "direct main"
     description:
@@ -1013,13 +1008,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  sliding_sheet:
-    dependency: "direct main"
-    description:
-      name: sliding_sheet
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.2"
   source_span:
     dependency: transitive
     description:
