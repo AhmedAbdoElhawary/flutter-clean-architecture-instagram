@@ -207,17 +207,18 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
     customPostsInfo.removeWhere(
         (value) => value.postUid == widget.postClickedInfo.postUid);
     customPostsInfo.insert(0, widget.postClickedInfo);
+    Scaffold page= Scaffold(
+      appBar: isThatMobile
+          ? CustomAppBar.oneTitleAppBar(
+          context,
+          widget.isThatProfile
+              ? StringsManager.posts.tr()
+              : StringsManager.explore.tr())
+          : null,
+      body: CustomPostsDisplay(postsInfo: widget.postsInfo),
+    );
     pushToPage(context,
-        page: Scaffold(
-          appBar: isThatMobile
-              ? CustomAppBar.oneTitleAppBar(
-                  context,
-                  widget.isThatProfile
-                      ? StringsManager.posts.tr()
-                      : StringsManager.explore.tr())
-              : null,
-          body: CustomPostsDisplay(postsInfo: widget.postsInfo),
-        ));
+        page: page,withoutRoot: false);
   }
 
   void onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {

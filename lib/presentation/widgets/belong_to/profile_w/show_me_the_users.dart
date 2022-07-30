@@ -110,7 +110,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
               ],
             ),
           ),
-          const Spacer(),
+          // const Spacer(),
           followButton(userInfo, isThatFollower),
         ]),
       ),

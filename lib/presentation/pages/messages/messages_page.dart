@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/list_of_messages.dart';
 
-class MessagesPage extends StatelessWidget {
-  const MessagesPage({Key? key}) : super(key: key);
+class MessagesPageForMobile extends StatelessWidget {
+  const MessagesPageForMobile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

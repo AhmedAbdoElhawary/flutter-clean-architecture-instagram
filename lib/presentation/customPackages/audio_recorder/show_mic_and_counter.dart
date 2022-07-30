@@ -61,7 +61,7 @@ class ShowMicWithText extends StatelessWidget {
         if (shouldShowText)
           Expanded(
             child: Padding(
-              padding: const EdgeInsetsDirectional.only(start: 8, end: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: DefaultTextStyle(
                 overflow: TextOverflow.clip,
                 maxLines: 1,

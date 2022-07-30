@@ -119,7 +119,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget loadingWidget() {
     bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
-
     return SingleChildScrollView(
       child: Column(
         children: [

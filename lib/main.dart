@@ -30,10 +30,11 @@ EasyLocalization easyLocalization(Widget myApp) {
 Future<SharedPreferences> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
+      // I deleted private_keys in github project,
+      // so create your own firebase project and add your web private keys here and in web/index.html.
     await Firebase.initializeApp(
       // options: FirebaseOptions(
-      //   // I deleted private_keys in github project,
-      //   // so create your own firebase project and add your web private keys here and in web/index.html.
+
       //   apiKey: apiKey,
       //   appId: appId,
       //   messagingSenderId: messagingSenderId,
