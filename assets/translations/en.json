@@ -17,6 +17,8 @@
   "send": "Send",
   "undo": "Undo",
   "done": "Done",
+  "cancel": "Cancel",
+  "slideToCancel": " Slide to Cancel >",
   "followings": "Followings",
   "writeMessage": "Write a message...",
   "name": "Name",
