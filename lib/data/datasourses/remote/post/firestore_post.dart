@@ -49,16 +49,20 @@ class FirestorePost {
       condition = lengthOfData;
     }
     for (int i = 0; i < condition; i++) {
-      DocumentSnapshot<Map<String, dynamic>> snap =
-          await _fireStorePostCollection.doc(postsIds[i]).get();
-      if (snap.exists) {
-        Post postReformat = Post.fromQuery(query: snap);
-        UserPersonalInfo publisherInfo =
-            await FirestoreUser.getUserInfo(postReformat.publisherId);
-        postReformat.publisherInfo = publisherInfo;
-        postsInfo.add(postReformat);
-      } else {
-        FirestoreUser.removeUserPost(postId: postsIds[i]);
+      try {
+        DocumentSnapshot<Map<String, dynamic>> snap =
+            await _fireStorePostCollection.doc(postsIds[i]).get();
+        if (snap.exists) {
+          Post postReformat = Post.fromQuery(query: snap);
+          UserPersonalInfo publisherInfo =
+              await FirestoreUser.getUserInfo(postReformat.publisherId);
+          postReformat.publisherInfo = publisherInfo;
+          postsInfo.add(postReformat);
+        } else {
+          FirestoreUser.removeUserPost(postId: postsIds[i]);
+        }
+      } catch (e) {
+        continue;
       }
     }
     return postsInfo;
