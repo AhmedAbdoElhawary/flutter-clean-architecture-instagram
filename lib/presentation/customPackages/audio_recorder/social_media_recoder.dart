@@ -69,7 +69,6 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
       onHorizontalDragUpdate: (scrollEnd) {
         state.updateScrollValue(scrollEnd.globalPosition, context);
       },
-      onHorizontalDragEnd: (x) {},
       child: Container(
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -123,7 +122,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
           child: Stack(
             children: [
               Padding(
-                padding: EdgeInsetsDirectional.only(end: state.edge),
+                padding: EdgeInsetsDirectional.only(start: state.edge),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: soundRecordNotifier.isShow
