@@ -31,39 +31,33 @@ class _LockRecordState extends State<LockRecord> with TickerProviderStateMixin {
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeIn,
             opacity: widget.soundRecorderState.edge >= 50 ? 0 : 1,
-            child: Container(
-              height: 50 - widget.soundRecorderState.heightPosition < 0
-                  ? 0
-                  : 50 - widget.soundRecorderState.heightPosition,
-              color: Theme.of(context).focusColor,
-              child: Padding(
-                padding: const EdgeInsetsDirectional.all(8.0),
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: AnimatedOpacity(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeIn,
-                          opacity:
-                              widget.soundRecorderState.second % 2 != 0 ? 0 : 1,
-                          child: Icon(
-                            Icons.lock_outline_rounded,
-                            color: Theme.of(context).primaryColor,
-                          )),
-                    ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: AnimatedOpacity(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeIn,
-                          opacity:
-                              widget.soundRecorderState.second % 2 == 0 ? 0 : 1,
-                          child: Icon(Icons.lock_open_rounded,
-                              color: Theme.of(context).primaryColor)),
-                    ),
-                  ],
-                ),
+            child: Padding(
+              padding: const EdgeInsetsDirectional.all(8.0),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeIn,
+                        opacity:
+                            widget.soundRecorderState.second % 2 != 0 ? 0 : 1,
+                        child: Icon(
+                          Icons.lock_outline_rounded,
+                          color: Theme.of(context).focusColor,
+                        )),
+                  ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeIn,
+                        opacity:
+                            widget.soundRecorderState.second % 2 == 0 ? 0 : 1,
+                        child: Icon(Icons.lock_open_rounded,
+                            color: Theme.of(context).focusColor)),
+                  ),
+                ],
               ),
             ),
           ),
