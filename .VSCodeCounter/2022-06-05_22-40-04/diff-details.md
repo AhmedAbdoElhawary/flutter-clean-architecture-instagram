@@ -250,7 +250,7 @@ Total : 611 files, 3332 codes, 191 comments, 256 blanks, all 3779 lines
 | [lib/presentation/customPackages/story_view/utils.dart](/lib/presentation/customPackages/story_view/utils.dart) | Dart | 18 | 0 | 8 | 26 |
 | [lib/presentation/pages/comments/comments_page.dart](/lib/presentation/pages/comments/comments_for_mobile.dart) | Dart | 224 | 0 | 24 | 248 |
 | [lib/presentation/pages/messages/chatting_page.dart](/lib/presentation/pages/messages/chatting_page.dart) | Dart | 713 | 0 | 33 | 746 |
-| [lib/presentation/pages/messages/messages_page.dart](/lib/presentation/pages/messages/messages_page.dart) | Dart | 116 | 0 | 4 | 120 |
+| [lib/presentation/pages/messages/messages_page.dart](/lib/presentation/pages/messages/messages_page_for_mobile.dart) | Dart | 116 | 0 | 4 | 120 |
 | [lib/presentation/pages/profile/create_post_page.dart](/lib/presentation/pages/profile/create_post_page.dart) | Dart | 207 | 0 | 13 | 220 |
 | [lib/presentation/pages/profile/custom_gallery_page/camera_page.dart](/lib/presentation/pages/profile/custom_gallery_page/camera_page.dart) | Dart | 301 | 0 | 11 | 312 |
 | [lib/presentation/pages/profile/custom_gallery_page/gallery_of_story.dart](/lib/presentation/pages/profile/custom_gallery_page/gallery_of_story.dart) | Dart | 188 | 0 | 14 | 202 |
