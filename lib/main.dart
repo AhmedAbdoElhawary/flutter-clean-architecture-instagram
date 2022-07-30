@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:instagram/core/private_keys.dart';
+// import 'package:instagram/core/private_keys.dart';
 import 'package:instagram/core/resources/langauge_manager.dart';
 import 'package:instagram/app.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -30,16 +30,17 @@ EasyLocalization easyLocalization(Widget myApp) {
 Future<SharedPreferences> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
+      // I deleted private_keys in github project,
+      // so create your own firebase project and add your web private keys here and in web/index.html.
     await Firebase.initializeApp(
-      options: FirebaseOptions(
-        // I deleted private_keys in github project,
-        // so create your own firebase project and add your web private keys here and in web/index.html.
-        apiKey: apiKey,
-        appId: appId,
-        messagingSenderId: messagingSenderId,
-        projectId: projectId,
-        storageBucket: storageBucket,
-      ),
+      // options: FirebaseOptions(
+
+      //   apiKey: apiKey,
+      //   appId: appId,
+      //   messagingSenderId: messagingSenderId,
+      //   projectId: projectId,
+      //   storageBucket: storageBucket,
+      // ),
     );
   } else {
     await Firebase.initializeApp();
