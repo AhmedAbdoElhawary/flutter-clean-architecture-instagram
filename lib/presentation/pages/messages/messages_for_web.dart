@@ -163,8 +163,10 @@ class _MessagesForWebState extends State<MessagesForWeb> {
           appBarOfMessages(),
           SingleChildScrollView(
             child: ListOfMessages(
-                selectChatting: selectChatting,
-                additionalUser: widget.selectedTextingUser),
+              selectChatting: selectChatting,
+              additionalUser: widget.selectedTextingUser,
+              freezeListView: true,
+            ),
           ),
         ],
       ),

@@ -23,8 +23,12 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_line
 class ListOfMessages extends StatefulWidget {
   final ValueChanged<UserPersonalInfo>? selectChatting;
   final UserPersonalInfo? additionalUser;
-
-  const ListOfMessages({Key? key, this.selectChatting, this.additionalUser})
+  final bool freezeListView;
+  const ListOfMessages(
+      {Key? key,
+      this.selectChatting,
+      this.freezeListView = false,
+      this.additionalUser})
       : super(key: key);
 
   @override
@@ -51,24 +55,26 @@ class _ListOfMessagesState extends State<ListOfMessages> {
       builder: (context, state) {
         if (state is CubitGettingChatUsersInfoLoaded) {
           bool isThatUserExist = false;
-         if(widget.additionalUser!=null) {
-           state.usersInfo.where((element) {
-            bool check =
-                element.userInfo?.userId != widget.additionalUser?.userId;
-            if (!check) isThatUserExist = true;
-            return true;
-          }).toList();
-         }
+          if (widget.additionalUser != null) {
+            state.usersInfo.where((element) {
+              bool check =
+                  element.userInfo?.userId != widget.additionalUser?.userId;
+              if (!check) isThatUserExist = true;
+              return true;
+            }).toList();
+          }
           SenderInfo senderInfo = SenderInfo(userInfo: widget.additionalUser);
           List<SenderInfo> usersInfo = state.usersInfo;
 
-          if (!isThatUserExist&&widget.additionalUser!=null) {
+          if (!isThatUserExist && widget.additionalUser != null) {
             usersInfo.add(senderInfo);
           }
           return ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              primary: false,
-              shrinkWrap: true,
+              physics: widget.freezeListView
+                  ? const NeverScrollableScrollPhysics()
+                  : null,
+              primary: !widget.freezeListView,
+              shrinkWrap: widget.freezeListView,
               itemBuilder: (context, index) {
                 Message? theLastMessage = usersInfo[index].lastMessage;
 

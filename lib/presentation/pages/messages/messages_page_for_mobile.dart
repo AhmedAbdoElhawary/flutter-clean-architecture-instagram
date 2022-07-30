@@ -9,7 +9,7 @@ class MessagesPageForMobile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: isThatMobile ? buildAppBar(context) : null,
-      body: const SingleChildScrollView(child: ListOfMessages()),
+      body: const ListOfMessages(),
     );
   }
 
