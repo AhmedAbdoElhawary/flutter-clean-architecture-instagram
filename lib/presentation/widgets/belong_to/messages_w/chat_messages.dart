@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -162,7 +161,7 @@ class _ChatMessagesState extends State<ChatMessages>
         : buildMassagesForWeb(globalMessagesValue, context);
   }
 
-  Stack buildMassagesForMobile(
+  Widget buildMassagesForMobile(
       List<Message> globalMessagesValue, BuildContext context) {
     return Stack(
       children: [
@@ -170,9 +169,7 @@ class _ChatMessagesState extends State<ChatMessages>
             padding: const EdgeInsetsDirectional.only(
                 end: 10, start: 10, top: 10, bottom: 10),
             child: globalMessagesValue.isNotEmpty
-                ? isThatMobile
-                    ? notificationListenerForMobile(globalMessagesValue)
-                    : listViewForWeb(globalMessagesValue)
+                ? notificationListenerForMobile(globalMessagesValue)
                 : buildUserInfo(context)),
         Align(
             alignment: Alignment.bottomCenter,
@@ -408,7 +405,8 @@ class _ChatMessagesState extends State<ChatMessages>
             page: GetsPostInfoAndDisplay(
               postId: messageInfo.postId,
               appBarText: StringsManager.post.tr(),
-            ),withoutRoot: false);
+            ),
+            withoutRoot: false);
       },
       child: SizedBox(
         width: 240,
@@ -594,6 +592,7 @@ class _ChatMessagesState extends State<ChatMessages>
           ),
         ],
       );
+
   Widget fieldOfMessageForWeb() {
     return Align(
         alignment: Alignment.bottomCenter,
@@ -756,6 +755,8 @@ class _ChatMessagesState extends State<ChatMessages>
                   const SizedBox(width: 10),
                   SocialMediaRecorder(
                     showIcons: showIcons,
+                    slideToCancelText: StringsManager.slideToCancel.tr(),
+                    cancelText: StringsManager.cancel.tr(),
                     sendRequestFunction: (File soundFile) {
                       WidgetsBinding.instance.addPostFrameCallback((_) async {
                         records.value = soundFile.path;
@@ -778,7 +779,7 @@ class _ChatMessagesState extends State<ChatMessages>
                       child: Row(
                         children: [
                           pickPhoto(messageCubit),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 15),
                           pickSticker(),
                         ],
                       ),
@@ -889,7 +890,7 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  GestureDetector pickSticker() {
+  Widget pickSticker() {
     return GestureDetector(
       child: SvgPicture.asset(
         "assets/icons/sticker.svg",
@@ -900,31 +901,28 @@ class _ChatMessagesState extends State<ChatMessages>
   }
 
   Widget pickPhoto(MessageCubit messageCubit) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 7.0),
-      child: GestureDetector(
-        onTap: () async {
-          Uint8List? pickImage = await imageGalleryPicker();
-          if (pickImage != null) {
-            isMessageLoaded.value = true;
-            String blurHash = await blurHashEncode(pickImage);
-            newMessageInfo.value =
-                newMessage(blurHash: blurHash, isThatImage: true);
-            newMessageInfo.value!.localImage = pickImage;
+    return GestureDetector(
+      onTap: () async {
+        Uint8List? pickImage = await imageGalleryPicker();
+        if (pickImage != null) {
+          isMessageLoaded.value = true;
+          String blurHash = await blurHashEncode(pickImage);
+          newMessageInfo.value =
+              newMessage(blurHash: blurHash, isThatImage: true);
+          newMessageInfo.value!.localImage = pickImage;
 
-            messageCubit.sendMessage(
-                messageInfo: newMessage(blurHash: blurHash, isThatImage: true),
-                pathOfPhoto: pickImage);
-            scrollToLastIndex(context);
-          } else {
-            ToastShow.toast(StringsManager.noImageSelected.tr());
-          }
-        },
-        child: SvgPicture.asset(
-          isThatMobile ? IconsAssets.gallery : IconsAssets.galleryBold,
-          height: isThatMobile ? 23 : 26,
-          color: Theme.of(context).focusColor,
-        ),
+          messageCubit.sendMessage(
+              messageInfo: newMessage(blurHash: blurHash, isThatImage: true),
+              pathOfPhoto: pickImage);
+          scrollToLastIndex(context);
+        } else {
+          ToastShow.toast(StringsManager.noImageSelected.tr());
+        }
+      },
+      child: SvgPicture.asset(
+        isThatMobile ? IconsAssets.gallery : IconsAssets.galleryBold,
+        height: isThatMobile ? 23 : 26,
+        color: Theme.of(context).focusColor,
       ),
     );
   }
