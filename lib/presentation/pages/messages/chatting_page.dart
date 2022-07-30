@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -37,11 +36,13 @@ class _ChattingPageState extends State<ChattingPage>
             unSend.value = false;
             deleteThisMessage.value = null;
           },
-          child: buildBody()),
+          child: isThatMobile
+              ? ChatMessages(userInfo: widget.userInfo)
+              : buildBodyForWeb()),
     );
   }
 
-  Widget buildBody() {
+  Widget buildBodyForWeb() {
     return Column(
       children: [
         buildUserInfo(context),
