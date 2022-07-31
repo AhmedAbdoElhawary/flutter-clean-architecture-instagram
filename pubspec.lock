@@ -273,7 +273,7 @@ packages:
       name: custom_gallery_display
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.8"
+    version: "0.3.2"
   dartz:
     dependency: "direct main"
     description:
@@ -480,13 +480,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.6"
-  flutter_ringtone_player:
-    dependency: transitive
-    description:
-      name: flutter_ringtone_player
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.2.0"
   flutter_staggered_grid_view:
     dependency: "direct main"
     description:
