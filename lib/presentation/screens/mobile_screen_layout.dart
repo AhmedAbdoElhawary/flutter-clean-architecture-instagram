@@ -2,16 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
-import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
+import 'package:instagram/presentation/pages/messages/messages_page_for_mobile.dart';
 import 'package:instagram/presentation/pages/profile/personal_profile_page.dart';
 import 'package:instagram/presentation/pages/shop/shop_page.dart';
 import 'package:instagram/presentation/pages/time_line/all_user_time_line/all_users_time_line.dart';
 import 'package:instagram/presentation/pages/time_line/my_own_time_line/home_page.dart';
-import 'package:instagram/presentation/pages/video/videos_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/screens_w.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   final String userId;
@@ -22,7 +24,6 @@ class MobileScreenLayout extends StatefulWidget {
 }
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
-  ValueNotifier<bool> playReelVideo = ValueNotifier(false);
   ValueNotifier<bool> playHomeVideo = ValueNotifier(false);
   CupertinoTabController controller = CupertinoTabController();
   @override
@@ -32,43 +33,34 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: playReelVideo,
-      builder: (BuildContext context, bool value, __) {
-        return CupertinoTabScaffold(
-            tabBar: CupertinoTabBar(
-                backgroundColor:
-                    value ? ColorManager.black : Theme.of(context).primaryColor,
-                height: 40,
-                items: [
-                  navigationBarItem(IconsAssets.home, value),
-                  navigationBarItem(IconsAssets.search, value),
-                  navigationBarItem(IconsAssets.video, value),
-                  navigationBarItem(IconsAssets.shop, value),
-                  personalImageItem(),
-                ]),
-            controller: controller,
-            tabBuilder: (context, index) {
-              WidgetsBinding.instance.addPostFrameCallback((_) async {
-                playReelVideo.value = controller.index == 2 ? true : false;
-                playHomeVideo.value = controller.index == 0 ? true : false;
-              });
+    return CupertinoTabScaffold(
+        tabBar: CupertinoTabBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            height: 40,
+            items: [
+              navigationBarItem(IconsAssets.home),
+              navigationBarItem(IconsAssets.messengerIcon),
+              navigationBarItem(IconsAssets.addIcon, littleSmall: true),
+              navigationBarItem(IconsAssets.search),
+              personalImageItem(),
+            ]),
+        controller: controller,
+        tabBuilder: (context, index) {
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            playHomeVideo.value = controller.index == 0 ? true : false;
+          });
 
-              switch (index) {
-                case 0:
-                  return homePage();
-                case 1:
-                  return allUsersTimLinePage();
-                case 2:
-                  return videoPage(value);
-                case 3:
-                  return shopPage();
-                default:
-                  return personalProfilePage();
-              }
-            });
-      },
-    );
+          switch (index) {
+            case 0:
+              return homePage();
+            case 1:
+              return messagesPage();
+            case 3:
+              return allUsersTimLinePage();
+            default:
+              return personalProfilePage();
+          }
+        });
   }
 
   CupertinoTabView allUsersTimLinePage() => CupertinoTabView(
@@ -91,15 +83,14 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
         ),
       );
 
-  Widget videoPage(bool value) => CupertinoTabView(
-      builder: (context) => CupertinoPageScaffold(
-            child: BlocProvider<PostCubit>(
-              create: (context) => injector<PostCubit>(),
-              child: VideosPage(
-                stopVideo: ValueNotifier(value),
-              ),
-            ),
-          ));
+  Widget messagesPage() => CupertinoTabView(
+        builder: (context) => CupertinoPageScaffold(
+          child: BlocProvider<UsersInfoCubit>(
+            create: (context) => injector<UsersInfoCubit>(),
+            child: const MessagesPageForMobile(),
+          ),
+        ),
+      );
 
   Widget homePage() => CupertinoTabView(
         builder: (context) => CupertinoPageScaffold(
@@ -121,12 +112,21 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     );
   }
 
-  BottomNavigationBarItem navigationBarItem(String icon, bool value) {
+  BottomNavigationBarItem navigationBarItem(String icon,
+      {bool littleSmall = false}) {
     return BottomNavigationBarItem(
-      icon: SvgPicture.asset(
-        icon,
-        height: 25,
-        color: value ? ColorManager.white : Theme.of(context).focusColor,
+      icon: GestureDetector(
+        onTap: littleSmall
+            ? () {
+                pushToPage(context,
+                    page: const CustomGalleryDisplay(), withoutRoot: false);
+              }
+            : null,
+        child: SvgPicture.asset(
+          icon,
+          height: littleSmall ? 23 : 25,
+          color: Theme.of(context).focusColor,
+        ),
       ),
     );
   }
