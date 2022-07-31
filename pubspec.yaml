@@ -89,7 +89,7 @@ dependencies:
   image: ^3.2.0
 
   ## My package
-  custom_gallery_display: ^0.3.2
+  custom_gallery_display: ^0.3.3+1
 #    path: custom_gallery_display-1
 
 dev_dependencies:
