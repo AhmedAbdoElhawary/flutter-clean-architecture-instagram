@@ -22,9 +22,9 @@ class _CustomGalleryDisplayState extends State<CustomGalleryDisplay> {
   @override
   Widget build(BuildContext context) {
     return CustomGallery.instagramDisplay(
-      tabsNames: tapsNames(),
+      tabsTexts: tapsNames(),
       appTheme: appTheme(context),
-      moveToPage: (SelectedImageDetails d) => moveToCreatePostPage(context, d),
+      sendRequestFunction: (SelectedImagesDetails d) => moveToCreatePostPage(context, d),
     );
   }
 
@@ -36,22 +36,22 @@ class _CustomGalleryDisplayState extends State<CustomGalleryDisplay> {
         shimmerHighlightColor: Theme.of(context).textTheme.headline6!.color!);
   }
 
-  TabsNames tapsNames() {
-    return TabsNames(
-      deletingName: StringsManager.delete.tr(),
-      galleryName: StringsManager.gallery.tr(),
-      holdButtonName: StringsManager.pressAndHold.tr(),
-      limitingName: StringsManager.limitOfPhotos.tr(),
-      clearImagesName: StringsManager.clearSelectedImages.tr(),
-      notFoundingCameraName: StringsManager.noSecondaryCameraFound.tr(),
-      photoName: StringsManager.photo.tr(),
-      videoName: StringsManager.video.tr(),
+  TabsTexts tapsNames() {
+    return TabsTexts(
+      deletingText: StringsManager.delete.tr(),
+      galleryText: StringsManager.gallery.tr(),
+      holdButtonText: StringsManager.pressAndHold.tr(),
+      limitingText: StringsManager.limitOfPhotos.tr(),
+      clearImagesText: StringsManager.clearSelectedImages.tr(),
+      notFoundingCameraText: StringsManager.noSecondaryCameraFound.tr(),
+      photoText: StringsManager.photo.tr(),
+      videoText: StringsManager.video.tr(),
     );
   }
 }
 
 Future<void> moveToCreatePostPage(
-    BuildContext context, SelectedImageDetails details,
+    BuildContext context, SelectedImagesDetails details,
     {bool isThatStory = false}) async {
   List<Uint8List> selectedUint8Lists = [];
   if (details.selectedFiles != null && details.multiSelectionMode) {
