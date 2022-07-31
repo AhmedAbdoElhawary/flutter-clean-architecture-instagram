@@ -14,7 +14,7 @@ class _CreateNewStoryState extends State<CreateNewStory> {
   @override
   Widget build(BuildContext context) => CustomGallery.normalDisplay(
         appTheme: appStoryTheme(),
-        moveToPage: (SelectedImageDetails details) =>
+        sendRequestFunction: (SelectedImagesDetails details) =>
             moveToCreatePostPage(context, details, isThatStory: true),
       );
 
