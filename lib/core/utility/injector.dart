@@ -263,7 +263,6 @@ Future<void> initializeDependencies() async {
         injector(),
         injector(),
       ));
-  print("");
 
   injector.registerFactory<UsersInfoCubit>(
     () => UsersInfoCubit(injector(), injector(), injector()),
