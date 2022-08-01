@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:instagram/core/utility/constant.dart';
 import 'package:uuid/uuid.dart';
 import 'package:record/record.dart';
 import 'package:flutter/material.dart';
