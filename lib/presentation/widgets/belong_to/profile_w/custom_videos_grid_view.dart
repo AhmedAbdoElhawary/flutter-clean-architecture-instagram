@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
-import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/animated_dialog.dart';
