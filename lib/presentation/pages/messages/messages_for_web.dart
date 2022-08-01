@@ -12,6 +12,7 @@ import 'package:instagram/presentation/widgets/belong_to/messages_w/chat_message
 import 'package:instagram/presentation/widgets/belong_to/messages_w/list_of_messages.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 
+// ignore: must_be_immutable
 class MessagesForWeb extends StatefulWidget {
   UserPersonalInfo? selectedTextingUser;
 
