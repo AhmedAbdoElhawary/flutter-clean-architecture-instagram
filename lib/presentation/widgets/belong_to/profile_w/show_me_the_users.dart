@@ -36,7 +36,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
   late UserPersonalInfo myPersonalInfo;
   @override
   initState() {
-    myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
 
@@ -133,7 +133,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                           .unFollowThisUser(
                               followingUserId: userInfo.userId,
                               myPersonalId: myPersonalId);
-                      BlocProvider.of<FirestoreUserInfoCubit>(context)
+                      BlocProvider.of<UserInfoCubit>(context)
                           .updateMyFollowings(
                               userId: userInfo.userId, addThisUser: false);
                     } else {
@@ -141,7 +141,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                           .followThisUser(
                               followingUserId: userInfo.userId,
                               myPersonalId: myPersonalId);
-                      BlocProvider.of<FirestoreUserInfoCubit>(context)
+                      BlocProvider.of<UserInfoCubit>(context)
                           .updateMyFollowings(userId: userInfo.userId);
                     }
                   },
