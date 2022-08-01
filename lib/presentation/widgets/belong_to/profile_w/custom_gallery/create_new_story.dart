@@ -15,7 +15,7 @@ class _CreateNewStoryState extends State<CreateNewStory> {
   Widget build(BuildContext context) => CustomGallery.normalDisplay(
         appTheme: appStoryTheme(),
         sendRequestFunction: (SelectedImagesDetails details) =>
-            moveToCreatePostPage(context, details, isThatStory: true),
+            moveToCreationPage(context, details, isThatStory: true),
       );
 
   AppTheme appStoryTheme() => AppTheme(
