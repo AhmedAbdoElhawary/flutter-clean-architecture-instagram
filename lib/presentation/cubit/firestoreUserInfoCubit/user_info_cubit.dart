@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/domain/use_cases/user/add_post_to_user.dart';
-import 'package:instagram/domain/use_cases/user/add_story_to_user.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_all_users_info.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_user_from_user_name.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_user_info_usecase.dart';
@@ -11,7 +10,7 @@ import 'package:instagram/domain/use_cases/user/update_user_info.dart';
 import 'package:instagram/domain/use_cases/user/upload_profile_image_usecase.dart';
 part 'user_info_state.dart';
 
-class FirestoreUserInfoCubit extends Cubit<FirestoreUserInfoState> {
+class UserInfoCubit extends Cubit<FirestoreUserInfoState> {
   final GetUserInfoUseCase _getUserInfoUseCase;
   final GetAllUsersUseCase _getAllUnFollowersUsersUseCase;
   final UpdateUserInfoUseCase _updateUserInfoUseCase;
@@ -23,7 +22,7 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreUserInfoState> {
 
   UserPersonalInfo? userInfo;
 
-  FirestoreUserInfoCubit(
+  UserInfoCubit(
       this._getUserInfoUseCase,
       this._updateUserInfoUseCase,
       this._addPostToUserUseCase,
@@ -33,11 +32,11 @@ class FirestoreUserInfoCubit extends Cubit<FirestoreUserInfoState> {
       this._uploadImageUseCase)
       : super(CubitInitial());
 
-  static FirestoreUserInfoCubit get(BuildContext context) =>
+  static UserInfoCubit get(BuildContext context) =>
       BlocProvider.of(context);
 
   static getMyPersonalInfo(BuildContext context) =>
-      BlocProvider.of<FirestoreUserInfoCubit>(context).myPersonalInfo;
+      BlocProvider.of<UserInfoCubit>(context).myPersonalInfo;
 
   Future<void> getUserInfo(String userId,
       {bool isThatMyPersonalId = true}) async {

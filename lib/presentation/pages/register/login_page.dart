@@ -58,14 +58,14 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget customTextButton() {
     return Builder(builder: (context) {
-      FirestoreUserInfoCubit getUserCubit = FirestoreUserInfoCubit.get(context);
+      UserInfoCubit getUserCubit = UserInfoCubit.get(context);
 
       return blocBuilder(getUserCubit);
     });
   }
 
   BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState> blocBuilder(
-      FirestoreUserInfoCubit getUserCubit) {
+      UserInfoCubit getUserCubit) {
     return BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState>(
       buildWhen: (previous, current) => true,
       builder: (context, authState) =>
@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildBlocBuilder(context, FirebaseAuthCubitState authState,
-      FirestoreUserInfoCubit getUserCubit) {
+      UserInfoCubit getUserCubit) {
     return ValueListenableBuilder(
       valueListenable: isToastShowed,
       builder: (context, bool isToastShowedValue, child) {
@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   onAuthConfirmed(
-      FirestoreUserInfoCubit getUserCubit, FirebaseAuthCubit authCubit) {
+      UserInfoCubit getUserCubit, FirebaseAuthCubit authCubit) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await getUserCubit.getUserInfo(authCubit.user!.uid);
       String userId = authCubit.user!.uid;

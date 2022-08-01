@@ -110,15 +110,16 @@ class SnapSpec {
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  // ignore: avoid_renaming_method_parameters
+  bool operator ==(Object O) {
+    if (identical(this, O)) return true;
 
-    return o is SnapSpec &&
-        o.snap == snap &&
-        listEquals(o.snappings, snappings) &&
-        o.initialSnap == initialSnap &&
-        o.positioning == positioning &&
-        o.onSnap == onSnap;
+    return O is SnapSpec &&
+        O.snap == snap &&
+        listEquals(O.snappings, snappings) &&
+        O.initialSnap == initialSnap &&
+        O.positioning == positioning &&
+        O.onSnap == onSnap;
   }
 
   @override
@@ -166,14 +167,15 @@ class ScrollSpec {
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  // ignore: avoid_renaming_method_parameters
+  bool operator ==(Object obj) {
+    if (identical(this, obj)) return true;
 
-    return o is ScrollSpec &&
-        o.overscroll == overscroll &&
-        o.overscrollColor == overscrollColor &&
-        o.physics == physics &&
-        o.showScrollbar == showScrollbar;
+    return obj is ScrollSpec &&
+        obj.overscroll == overscroll &&
+        obj.overscrollColor == overscrollColor &&
+        obj.physics == physics &&
+        obj.showScrollbar == showScrollbar;
   }
 
   @override
@@ -220,6 +222,7 @@ class ParallaxSpec {
       'ParallaxSpec(enabled: $enabled, amount: $amount, extent: $endExtent)';
 
   @override
+  // ignore: avoid_renaming_method_parameters
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 

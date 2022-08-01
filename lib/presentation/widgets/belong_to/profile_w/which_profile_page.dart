@@ -20,7 +20,7 @@ class WhichProfilePage extends StatelessWidget {
     } else {
       return Builder(builder: (context) {
         UserPersonalInfo? myPersonalInfo =
-            FirestoreUserInfoCubit.get(context).myPersonalInfo;
+            UserInfoCubit.get(context).myPersonalInfo;
 
         return userName == myPersonalInfo!.userName
             ? PersonalProfilePage(

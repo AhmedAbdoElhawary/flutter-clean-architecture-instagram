@@ -1,9 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
-import 'package:instagram/core/resources/strings_manager.dart';
-import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/presentation/pages/activity/activity_for_mobile.dart';
 
 class ActivityForWeb extends StatelessWidget {
@@ -24,7 +21,7 @@ class ActivityForWeb extends StatelessWidget {
         width: 500,
       ),
       itemBuilder: (context) => [
-      PopupMenuItem<Widget>(
+      const PopupMenuItem<Widget>(
       child:ActivityPage(),
       ),
       ],

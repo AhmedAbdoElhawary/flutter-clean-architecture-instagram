@@ -26,7 +26,7 @@ class _ActivityPageState extends State<ActivityPage> {
 
   @override
   void initState() {
-    myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
 
@@ -42,10 +42,10 @@ class _ActivityPageState extends State<ActivityPage> {
         : buildBody(context);
   }
 
-  BlocBuilder<FirestoreUserInfoCubit, FirestoreUserInfoState> buildBody(
+  BlocBuilder<UserInfoCubit, FirestoreUserInfoState> buildBody(
       BuildContext context) {
-    return BlocBuilder<FirestoreUserInfoCubit, FirestoreUserInfoState>(
-      bloc: FirestoreUserInfoCubit.get(context)
+    return BlocBuilder<UserInfoCubit, FirestoreUserInfoState>(
+      bloc: UserInfoCubit.get(context)
         ..getAllUnFollowersUsers(myPersonalInfo),
       buildWhen: (previous, current) =>
           (previous != current && current is CubitAllUnFollowersUserLoaded),
@@ -145,7 +145,7 @@ class _ShowNotificationsState extends State<_ShowNotifications> {
 
   @override
   initState() {
-    myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
 

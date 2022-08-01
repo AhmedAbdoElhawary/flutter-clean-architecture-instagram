@@ -73,16 +73,15 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
           Padding(
             padding: const EdgeInsetsDirectional.only(bottom: 8.0),
             child: Builder(builder: (builderContext) {
-              FirestoreUserInfoCubit userCubit =
-                  BlocProvider.of<FirestoreUserInfoCubit>(builderContext,
-                      listen: false);
+              UserInfoCubit userCubit =
+                  BlocProvider.of<UserInfoCubit>(builderContext, listen: false);
               UserPersonalInfo? personalInfo = userCubit.myPersonalInfo;
 
               return Container(
                 margin: const EdgeInsetsDirectional.all(3.0),
                 child: CustomElevatedButton(
                   onPressed: () =>
-                      createPost(personalInfo!, userCubit, builderContext),
+                      createStory(personalInfo!, userCubit, builderContext),
                   isItDone: isItDone,
                   nameOfButton: StringsManager.share.tr(),
                 ),
@@ -94,35 +93,30 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
     );
   }
 
-  Future<void> createPost(UserPersonalInfo personalInfo,
-      FirestoreUserInfoCubit userCubit, BuildContext builder2context) async {
+  Future<void> createStory(UserPersonalInfo personalInfo,
+      UserInfoCubit userCubit, BuildContext builder2context) async {
     if (isItDone) {
       String blurHash = await blurHashEncode(widget.storyImage);
 
       Story storyInfo = addStoryInfo(personalInfo, blurHash);
       setState(() => isItDone = false);
 
-      StoryCubit storyCubit =
-          BlocProvider.of<StoryCubit>(builder2context, listen: false);
+      StoryCubit storyCubit = StoryCubit.get(context);
 
-      await storyCubit
-          .createStory(storyInfo, widget.storyImage)
-          .then((_) async {
-        if (storyCubit.storyId != '') {
-          userCubit.updateMyStories(storyId: storyCubit.storyId);
-          WidgetsBinding.instance.addPostFrameCallback((_) async {
-            setState(() => isItDone = true);
-            final SharedPreferences sharePrefs =
-                await SharedPreferences.getInstance();
-            sharePrefs.remove(myPersonalId);
-            Navigator.of(context).pushAndRemoveUntil(
-              CupertinoPageRoute(
-                  builder: (_) => MobileScreenLayout(myPersonalId)),
-              (route) => false,
-            );
-          });
-        }
-      });
+      await storyCubit.createStory(storyInfo, widget.storyImage);
+      if (storyCubit.storyId != '') {
+        userCubit.updateMyStories(storyId: storyCubit.storyId);
+        WidgetsBinding.instance
+            .addPostFrameCallback((_) => setState(() => isItDone = true));
+
+        final SharedPreferences sharePrefs =
+            await SharedPreferences.getInstance();
+        sharePrefs.remove(myPersonalId);
+        Navigator.of(context).pushAndRemoveUntil(
+          CupertinoPageRoute(builder: (_) => MobileScreenLayout(myPersonalId)),
+          (route) => false,
+        );
+      }
     }
   }
 

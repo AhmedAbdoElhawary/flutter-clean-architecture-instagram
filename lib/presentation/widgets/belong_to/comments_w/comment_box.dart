@@ -17,14 +17,14 @@ import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle
 
 class CommentBox extends StatefulWidget {
   final Post postInfo;
-  ValueNotifier<FocusNode> currentFocus;
+ final ValueNotifier<FocusNode> currentFocus;
   final bool isThatCommentScreen;
   final Comment? selectedCommentInfo;
   final UserPersonalInfo userPersonalInfo;
   final TextEditingController textController;
   final ValueChanged<bool> makeSelectedCommentNullable;
   final bool expandCommentBox;
-  CommentBox({
+  const CommentBox({
     Key? key,
     required this.currentFocus,
     this.expandCommentBox = false,

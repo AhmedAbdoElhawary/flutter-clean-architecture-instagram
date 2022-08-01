@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/config/routes/app_routes.dart';
@@ -16,7 +15,7 @@ import 'package:instagram/presentation/cubit/postInfoCubit/specific_users_posts_
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart';
 import 'package:instagram/presentation/pages/story/story_for_web.dart';
-import 'package:instagram/presentation/pages/story/stroy_page.dart';
+import 'package:instagram/presentation/pages/story/story_page_for_mobile.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/create_new_story.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_up_icon.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_of_post_for_time_line.dart';
@@ -49,8 +48,8 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> getData(int index) async {
     reLoadData.value = false;
-    FirestoreUserInfoCubit userCubit =
-        BlocProvider.of<FirestoreUserInfoCubit>(context, listen: false);
+    UserInfoCubit userCubit =
+        BlocProvider.of<UserInfoCubit>(context, listen: false);
     await userCubit.getUserInfo(widget.userId);
     personalInfo = userCubit.myPersonalInfo;
 
@@ -354,25 +353,27 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(width: 12),
                 itemBuilder: (BuildContext context, int index) {
                   UserPersonalInfo publisherInfo = storiesOwnersInfo[index];
+                  String hashTag = isThatMobile
+                      ? "${publisherInfo.userId.hashCode} for mobile"
+                      : "${publisherInfo.userId.hashCode} for web";
                   return Hero(
-                    tag: "${publisherInfo.userId.hashCode}",
+                    tag: hashTag,
                     child: GestureDetector(
                       onTap: () {
                         Widget page;
                         if (isThatMobile) {
-                          page = StoryPage(
+                          page = StoryPageForMobile(
                               user: publisherInfo,
-                              hashTag:
-                                  "${publisherInfo.userId.hashCode} for mobile",
+                              hashTag: hashTag,
                               storiesOwnersInfo: storiesOwnersInfo);
                         } else {
                           page = StoryPageForWeb(
                               user: publisherInfo,
-                              hashTag:
-                                  "${publisherInfo.userId.hashCode} for web",
+                              hashTag: hashTag,
                               storiesOwnersInfo: storiesOwnersInfo);
                         }
-                        pushToPage(context, page: page);
+                        pushToPage(context,
+                            page: page, withoutPageTransition: true);
                       },
                       child: CircleAvatarOfProfileImage(
                         userInfo: publisherInfo,
@@ -397,7 +398,8 @@ class _HomePageState extends State<HomePage> {
   moveToStoryPage(
           List<UserPersonalInfo> storiesOwnersInfo, UserPersonalInfo user) =>
       pushToPage(context,
-          page: StoryPage(user: user, storiesOwnersInfo: storiesOwnersInfo));
+          page: StoryPageForMobile(
+              user: user, storiesOwnersInfo: storiesOwnersInfo));
 
   Widget myOwnStory(BuildContext context,
       List<UserPersonalInfo> storiesOwnersInfo, double bodyHeight) {

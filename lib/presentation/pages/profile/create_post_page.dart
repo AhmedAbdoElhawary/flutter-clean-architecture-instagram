@@ -17,16 +17,14 @@ import 'package:instagram/presentation/screens/mobile_screen_layout.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
 class CreatePostPage extends StatefulWidget {
-  final Uint8List selectedFile;
-  final List<Uint8List>? multiSelectedFiles;
+  final List<Uint8List> multiSelectedFiles;
   final bool isThatImage;
   final double aspectRatio;
 
   const CreatePostPage({
-    required this.selectedFile,
     required this.aspectRatio,
     this.isThatImage = true,
-    this.multiSelectedFiles,
+    required this.multiSelectedFiles,
     Key? key,
   }) : super(key: key);
 
@@ -39,6 +37,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
   final isItDone = ValueNotifier(true);
 
   TextEditingController captionController = TextEditingController(text: "");
+  late UserPersonalInfo myPersonalInfo;
+  @override
+  void initState() {
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +65,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     child: widget.isThatImage
                         ? Stack(
                             children: [
-                              Image.memory(widget.selectedFile),
-                              if (widget.multiSelectedFiles != null)
+                              Image.memory(widget.multiSelectedFiles[0]),
+                              if (widget.multiSelectedFiles.length > 1)
                                 const Padding(
                                   padding: EdgeInsets.all(2.0),
                                   child: Align(
@@ -147,44 +151,34 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   List<Widget> actionsWidgets(BuildContext context) {
     return [
-      Builder(builder: (builderContext) {
-        FirestoreUserInfoCubit userCubit =
-            BlocProvider.of<FirestoreUserInfoCubit>(builderContext,
-                listen: false);
-        UserPersonalInfo? personalInfo = userCubit.myPersonalInfo;
-
-        return ValueListenableBuilder(
-            valueListenable: isItDone,
-            builder: (context, bool isItDoneValue, child) => !isItDoneValue
-                ? const CustomCircularProgress(ColorManager.blue)
-                : IconButton(
-                    onPressed: () async =>
-                        createPost(personalInfo!, userCubit, builderContext),
-                    icon: const Icon(
-                      Icons.check_rounded,
-                      size: 30,
-                      color: ColorManager.blue,
-                    )));
-      })
+      ValueListenableBuilder(
+        valueListenable: isItDone,
+        builder: (context, bool isItDoneValue, child) => !isItDoneValue
+            ? const CustomCircularProgress(ColorManager.blue)
+            : IconButton(
+                onPressed: () async => createPost(context),
+                icon: const Icon(
+                  Icons.check_rounded,
+                  size: 30,
+                  color: ColorManager.blue,
+                ),
+              ),
+      ),
     ];
   }
 
-  Future<void> createPost(UserPersonalInfo personalInfo,
-      FirestoreUserInfoCubit userCubit, BuildContext builder2context) async {
+  Future<void> createPost(BuildContext context) async {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => setState(() => isItDone.value = false));
-    String blurHash = await blurHashEncode(widget.selectedFile);
-    Post postInfo = addPostInfo(personalInfo, blurHash);
-    PostCubit postCubit =
-        BlocProvider.of<PostCubit>(builder2context, listen: false);
-    List<Uint8List>? selectedFiles =
-        widget.multiSelectedFiles ?? [widget.selectedFile];
-    await postCubit.createPost(postInfo, selectedFiles);
+    String blurHash = await blurHashEncode(widget.multiSelectedFiles[0]);
+    Post postInfo = addPostInfo(blurHash);
+    PostCubit postCubit = BlocProvider.of<PostCubit>(context, listen: false);
+    await postCubit.createPost(postInfo, widget.multiSelectedFiles);
     if (postCubit.postId != '') {
-      await userCubit.updateUserPostsInfo(
-          userId: personalInfo.userId, postId: postCubit.postId);
+      await UserInfoCubit.get(context)
+          .updateUserPostsInfo(userId: myPersonalId, postId: postCubit.postId);
       await postCubit.getPostsInfo(
-          postsIds: personalInfo.posts, isThatMyPosts: true);
+          postsIds: myPersonalInfo.posts, isThatMyPosts: true);
       WidgetsBinding.instance
           .addPostFrameCallback((_) => setState(() => isItDone.value = true));
     }
@@ -195,10 +189,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
         (route) => false);
   }
 
-  Post addPostInfo(UserPersonalInfo personalInfo, String blurHash) {
+  Post addPostInfo(String blurHash) {
     return Post(
       aspectRatio: widget.aspectRatio,
-      publisherId: personalInfo.userId,
+      publisherId: myPersonalId,
       datePublished: DateOfNow.dateOfNow(),
       caption: captionController.text,
       blurHash: blurHash,

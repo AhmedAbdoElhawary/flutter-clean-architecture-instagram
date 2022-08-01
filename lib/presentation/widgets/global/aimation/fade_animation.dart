@@ -24,13 +24,11 @@ class _FadeAnimationState extends State<FadeAnimation>
     animationController =
         AnimationController(duration: widget.duration, vsync: this);
     animationController.forward(from: 0.0);
-    print("animationController 1: ${animationController.value}");
   }
 
   @override
   void deactivate() {
     animationController.stop();
-    print("animationController 2: ${animationController.value}");
 
     super.deactivate();
   }
@@ -40,7 +38,6 @@ class _FadeAnimationState extends State<FadeAnimation>
     super.didUpdateWidget(oldWidget);
     if (oldWidget.child != widget.child) {
       animationController.forward(from: 0.0);
-      print("animationController 3: ${animationController.value}");
     }
   }
 

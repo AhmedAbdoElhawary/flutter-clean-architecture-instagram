@@ -151,8 +151,8 @@ class _PopupNewPostState extends State<PopupNewPost> {
               valueListenable: isItDone,
               builder: (context, bool isItDoneValue, child) => isItDoneValue
                   ? Builder(builder: (context) {
-                FirestoreUserInfoCubit userCubit =
-                BlocProvider.of<FirestoreUserInfoCubit>(context,
+                UserInfoCubit userCubit =
+                BlocProvider.of<UserInfoCubit>(context,
                     listen: false);
                 UserPersonalInfo? personalInfo = userCubit.myPersonalInfo;
 
@@ -176,7 +176,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
   }
 
   Future<void> onTapButton(UserPersonalInfo personalInfo,
-      FirestoreUserInfoCubit userCubit, BuildContext builder2context) async {
+      UserInfoCubit userCubit, BuildContext builder2context) async {
     if (createPostButton == CreatePostButton.share) {
       // double aspect = expandImage.value ? 6 / 8 : 1.0;
       if (!multiSelectionMode.value) {
@@ -226,7 +226,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
   }
 
   Future<void> createPost(UserPersonalInfo personalInfo,
-      FirestoreUserInfoCubit userCubit, BuildContext builder2context) async {
+      UserInfoCubit userCubit, BuildContext builder2context) async {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => setState(() => isItDone.value = false));
     String blurHash = await blurHashEncode(selectedImage.value!);

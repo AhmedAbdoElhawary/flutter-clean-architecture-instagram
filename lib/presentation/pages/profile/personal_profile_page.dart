@@ -63,9 +63,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   Future<void> getData() async {
     widget.userName.isNotEmpty
-        ? (await BlocProvider.of<FirestoreUserInfoCubit>(context)
+        ? (await BlocProvider.of<UserInfoCubit>(context)
             .getUserFromUserName(widget.userName))
-        : (await BlocProvider.of<FirestoreUserInfoCubit>(context)
+        : (await BlocProvider.of<UserInfoCubit>(context)
             .getUserInfo(widget.personalId));
     rebuildUserInfo.value = true;
   }
@@ -76,11 +76,11 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       child: ValueListenableBuilder(
         valueListenable: rebuildUserInfo,
         builder: (context, bool rebuildValue, child) =>
-            BlocBuilder<FirestoreUserInfoCubit, FirestoreUserInfoState>(
+            BlocBuilder<UserInfoCubit, FirestoreUserInfoState>(
           bloc: widget.userName.isNotEmpty
-              ? (BlocProvider.of<FirestoreUserInfoCubit>(context)
+              ? (BlocProvider.of<UserInfoCubit>(context)
                 ..getUserFromUserName(widget.userName))
-              : (BlocProvider.of<FirestoreUserInfoCubit>(context)
+              : (BlocProvider.of<UserInfoCubit>(context)
                 ..getUserInfo(widget.personalId)),
           buildWhen: (previous, current) {
             if (previous != current && current is CubitMyPersonalInfoLoaded) {

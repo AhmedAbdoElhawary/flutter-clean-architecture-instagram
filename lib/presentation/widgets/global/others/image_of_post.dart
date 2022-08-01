@@ -42,8 +42,8 @@ import 'package:instagram/presentation/widgets/global/popup_widgets/common/jump_
 import 'package:instagram/presentation/widgets/global/popup_widgets/common/volume_icon.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/web/menu_card.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/web/share_post.dart';
-// import 'package:sliding_sheet/sliding_sheet.dart';
 
+// ignore: must_be_immutable
 class ImageOfPost extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
   bool playTheVideo;
@@ -93,7 +93,7 @@ class _ImageOfPostState extends State<ImageOfPost>
   late UserPersonalInfo myPersonalInfo;
   @override
   void initState() {
-    myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
 

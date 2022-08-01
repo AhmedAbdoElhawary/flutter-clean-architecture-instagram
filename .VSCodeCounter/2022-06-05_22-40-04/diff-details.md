@@ -264,7 +264,7 @@ Total : 611 files, 3332 codes, 191 comments, 256 blanks, all 3779 lines
 | [lib/presentation/pages/register/sign_up_page.dart](/lib/presentation/pages/register/sign_up_page.dart) | Dart | 115 | 2 | 12 | 129 |
 | [lib/presentation/pages/shop/shop_page.dart](/lib/presentation/pages/shop/shop_page.dart) | Dart | 15 | 0 | 3 | 18 |
 | [lib/presentation/pages/story/create_story.dart](/lib/presentation/pages/story/create_story.dart) | Dart | 128 | 0 | 11 | 139 |
-| [lib/presentation/pages/story/stroy_page.dart](/lib/presentation/pages/story/stroy_page.dart) | Dart | 344 | 0 | 26 | 370 |
+| [lib/presentation/pages/story/stroy_page.dart](/lib/presentation/pages/story/story_page_for_mobile.dart) | Dart | 344 | 0 | 26 | 370 |
 | [lib/presentation/pages/time_line/all_user_time_line/all_users_time_line.dart](/lib/presentation/pages/time_line/all_user_time_line/all_users_time_line.dart) | Dart | 134 | 0 | 10 | 144 |
 | [lib/presentation/pages/time_line/all_user_time_line/search_about_user.dart](/lib/presentation/pages/time_line/all_user_time_line/search_about_user.dart) | Dart | 131 | 1 | 9 | 141 |
 | [lib/presentation/pages/time_line/my_own_time_line/home_page.dart](/lib/presentation/pages/time_line/my_own_time_line/home_page.dart) | Dart | 390 | 0 | 28 | 418 |

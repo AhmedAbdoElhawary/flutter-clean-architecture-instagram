@@ -48,7 +48,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
 
   @override
   initState() {
-    myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
 

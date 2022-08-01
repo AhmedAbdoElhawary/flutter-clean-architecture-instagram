@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/config/routes/app_routes.dart';
@@ -9,7 +8,7 @@ import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/pages/story/story_for_web.dart';
-import 'package:instagram/presentation/pages/story/stroy_page.dart';
+import 'package:instagram/presentation/pages/story/story_page_for_mobile.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -113,7 +112,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
           builder: (context, state) {
             if (state is SpecificStoriesInfoLoaded) {
               if (isThatMobile) {
-                return StoryPage(
+                return StoryPageForMobile(
                     user: state.userInfo,
                     hashTag: "${widget.hashTag} for mobile",
                     storiesOwnersInfo: [state.userInfo]);

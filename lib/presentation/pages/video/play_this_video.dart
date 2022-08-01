@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/core/utility/constant.dart';
 import 'package:video_player/video_player.dart';
 
 class PlayThisVideo extends StatefulWidget {

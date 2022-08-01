@@ -44,17 +44,14 @@ class ImageLoader {
 
         PaintingBinding.instance.instantiateImageCodec(imageBytes).then(
             (codec) {
-
           frames = codec;
           onComplete();
         }, onError: (error) {
-
           state = LoadState.failure;
           onComplete();
         });
       },
       onError: (error) {
-
         state = LoadState.failure;
         onComplete();
       },
@@ -85,15 +82,8 @@ class StoryImage extends StatefulWidget {
     BoxFit fit = BoxFit.fitWidth,
     Key? key,
   }) {
-
-    return StoryImage(
-        ImageLoader(
-          url,
-          requestHeaders: requestHeaders,
-        ),
-        controller: controller,
-        fit: fit,
-        key: key);
+    return StoryImage(ImageLoader(url, requestHeaders: requestHeaders),
+        controller: controller, fit: fit, key: key);
   }
 
   @override
