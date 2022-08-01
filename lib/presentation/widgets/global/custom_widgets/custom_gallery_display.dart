@@ -24,7 +24,8 @@ class _CustomGalleryDisplayState extends State<CustomGalleryDisplay> {
     return CustomGallery.instagramDisplay(
       tabsTexts: tapsNames(),
       appTheme: appTheme(context),
-      sendRequestFunction: (SelectedImagesDetails d) => moveToCreatePostPage(context, d),
+      sendRequestFunction: (SelectedImagesDetails d) =>
+          moveToCreationPage(context, d),
     );
   }
 
@@ -50,36 +51,36 @@ class _CustomGalleryDisplayState extends State<CustomGalleryDisplay> {
   }
 }
 
-Future<void> moveToCreatePostPage(
+Future<void> moveToCreationPage(
     BuildContext context, SelectedImagesDetails details,
     {bool isThatStory = false}) async {
   List<Uint8List> selectedUint8Lists = [];
   if (details.selectedFiles != null && details.multiSelectionMode) {
-    for (int i = 0; i < details.selectedFiles!.length; i++) {
-      final image = details.selectedFiles![i];
-      Uint8List bytesSelectedFiles = image.readAsBytesSync();
-      ByteData.view(bytesSelectedFiles.buffer);
+    for (final image in details.selectedFiles!) {
+      Uint8List bytesSelectedFiles = await image.readAsBytes();
       Uint8List convertedFile =
           (await compressImage(bytesSelectedFiles)) ?? bytesSelectedFiles;
       selectedUint8Lists.add(convertedFile);
     }
   }
 
-  File file = details.multiSelectionMode
+  File file = details.multiSelectionMode && details.selectedFiles != null
       ? details.selectedFiles![0]
       : details.selectedFile;
-  Uint8List bytesFile = file.readAsBytesSync();
-  ByteData.view(bytesFile.buffer);
+  Uint8List bytesFile = await file.readAsBytes();
   if (isThatStory) {
     await pushToPage(context,
         page: CreateStoryPage(
             storyImage: bytesFile, isThatImage: details.isThatImage));
   } else {
-    await pushToPage(context,
-        page: CreatePostPage(
-            selectedFile: bytesFile,
-            multiSelectedFiles: selectedUint8Lists,
-            isThatImage: details.isThatImage,
-            aspectRatio: details.aspectRatio));
+    await pushToPage(
+      context,
+      page: CreatePostPage(
+        multiSelectedFiles:
+            selectedUint8Lists.isNotEmpty ? selectedUint8Lists : [bytesFile],
+        isThatImage: details.isThatImage,
+        aspectRatio: details.aspectRatio,
+      ),
+    );
   }
 }
