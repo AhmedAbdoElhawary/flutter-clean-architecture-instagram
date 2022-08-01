@@ -17,7 +17,6 @@ class FirestoreStoryRepositoryImpl implements FirestoreStoryRepository {
       String storyUid = await FireStoreStory.createStory(storyInfo);
       await FirestoreUser.updateUserStories(
           userId: storyInfo.publisherId, storyId: storyUid);
-
       return storyUid;
     } catch (e) {
       return Future.error(e.toString());
