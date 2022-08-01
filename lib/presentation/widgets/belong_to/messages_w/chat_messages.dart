@@ -498,9 +498,7 @@ class _ChatMessagesState extends State<ChatMessages>
                 : "${messageInfo.message} ${messageInfo.userNameOfSharedPost}",
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: getNormalStyle(
-              color: ColorManager.black,
-            ),
+            style: getNormalStyle(color: Theme.of(context).focusColor),
           ),
         ],
       ),
