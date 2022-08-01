@@ -38,7 +38,7 @@ class _SendToUsersState extends State<SendToUsers> {
   late UserPersonalInfo myPersonalInfo;
   @override
   void initState() {
-    myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
 
