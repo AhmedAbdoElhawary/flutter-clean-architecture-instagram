@@ -217,7 +217,7 @@ Total : 319 files, 1357 codes, -96 comments, 36 blanks, all 1297 lines
 | [lib/presentation/pages/show_me_who_are_like.dart](/lib/presentation/pages/show_me_who_are_like.dart) | Dart | -69 | 0 | -7 | -76 |
 | [lib/presentation/pages/sign_up_page.dart](/lib/presentation/pages/sign_up_page.dart) | Dart | -168 | -11 | -11 | -190 |
 | [lib/presentation/pages/story/create_story.dart](/lib/presentation/pages/story/create_story.dart) | Dart | 118 | 0 | 11 | 129 |
-| [lib/presentation/pages/story/stroy_page.dart](/lib/presentation/pages/story/stroy_page.dart) | Dart | 339 | 0 | 27 | 366 |
+| [lib/presentation/pages/story/stroy_page.dart](/lib/presentation/pages/story/story_page_for_mobile.dart) | Dart | 339 | 0 | 27 | 366 |
 | [lib/presentation/pages/story_config.dart](/lib/presentation/pages/story_config.dart) | Dart | -134 | -2 | -12 | -148 |
 | [lib/presentation/pages/time_line/all_user_time_line/all_users_time_line.dart](/lib/presentation/pages/time_line/all_user_time_line/all_users_time_line.dart) | Dart | 109 | 4 | 8 | 121 |
 | [lib/presentation/pages/time_line/all_user_time_line/search_about_user.dart](/lib/presentation/pages/time_line/all_user_time_line/search_about_user.dart) | Dart | 127 | 1 | 9 | 137 |
