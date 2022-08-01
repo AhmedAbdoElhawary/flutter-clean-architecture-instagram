@@ -26,7 +26,7 @@ class _MessagesForWebState extends State<MessagesForWeb> {
 
   @override
   initState() {
-    myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
 
