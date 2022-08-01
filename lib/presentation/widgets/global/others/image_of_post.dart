@@ -93,7 +93,7 @@ class _ImageOfPostState extends State<ImageOfPost>
   late UserPersonalInfo myPersonalInfo;
   @override
   void initState() {
-    myPersonalInfo = FirestoreUserInfoCubit.getMyPersonalInfo(context);
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
 
