@@ -10,8 +10,6 @@ import 'story_image.dart';
 import 'story_video.dart';
 import 'story_controller.dart';
 import 'utils.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:octo_image/octo_image.dart';
 
 /// Indicates where the progress indicators should be placed.
 enum ProgressPosition { top, bottom }
