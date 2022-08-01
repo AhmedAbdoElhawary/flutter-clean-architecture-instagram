@@ -10,16 +10,11 @@ class FirestorePostRepositoryImpl implements FirestorePostRepository {
   Future<String> createPost(
       {required Post postInfo, required List<Uint8List> files}) async {
     try {
-      if (files.length == 1) {
+      for (int i = 0; i < files.length; i++) {
         String postUrl =
-            await FirebaseStoragePost.uploadFile(files[0], 'postsImage');
-        postInfo.postUrl = postUrl;
-      } else {
-        for (int i = 0; i < files.length; i++) {
-          String postUrl =
-              await FirebaseStoragePost.uploadFile(files[i], 'postsImage');
-          postInfo.imagesUrls.add(postUrl);
-        }
+            await FirebaseStoragePost.uploadFile(files[i], 'postsImage');
+        if (i == 0) postInfo.postUrl = postUrl;
+        postInfo.imagesUrls.add(postUrl);
       }
       String postUid = await FirestorePost.createPost(postInfo);
       return postUid;
