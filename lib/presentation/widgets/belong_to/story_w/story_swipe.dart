@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:instagram/core/utility/constant.dart';
 
 class StorySwipe extends StatefulWidget {
   final List<Widget> children;
