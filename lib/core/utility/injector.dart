@@ -44,7 +44,6 @@ import 'package:instagram/domain/use_cases/story/get_specific_stories.dart';
 import 'package:instagram/domain/use_cases/story/get_stories_info.dart';
 import 'package:instagram/domain/use_cases/user/add_new_user_usecase.dart';
 import 'package:instagram/domain/use_cases/user/add_post_to_user.dart';
-import 'package:instagram/domain/use_cases/user/add_story_to_user.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_all_users_info.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_followers_and_followings_usecase.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_specific_users_usecase.dart';
@@ -256,14 +255,13 @@ Future<void> initializeDependencies() async {
   injector.registerFactory<FirestoreAddNewUserCubit>(
     () => FirestoreAddNewUserCubit(injector()),
   );
-  injector.registerFactory<FirestoreUserInfoCubit>(() => FirestoreUserInfoCubit(
+  injector.registerFactory<UserInfoCubit>(() => UserInfoCubit(
         injector(),
         injector(),
         injector(),
         injector(),
         injector(),
         injector(),
-     // injector(),
       ));
   print("");
 
