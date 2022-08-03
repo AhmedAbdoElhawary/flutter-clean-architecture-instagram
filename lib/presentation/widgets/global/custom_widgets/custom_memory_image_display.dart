@@ -16,7 +16,9 @@ class MemoryImageDisplay extends StatefulWidget {
 class _NetworkImageDisplayState extends State<MemoryImageDisplay> {
   @override
   void didChangeDependencies() {
-    precacheImage(MemoryImage(widget.imagePath), context);
+    if (widget.imagePath.isNotEmpty) {
+      precacheImage(MemoryImage(widget.imagePath), context);
+    }
     super.didChangeDependencies();
   }
 
