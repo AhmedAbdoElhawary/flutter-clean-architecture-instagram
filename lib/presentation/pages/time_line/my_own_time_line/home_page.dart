@@ -28,9 +28,14 @@ import '../../../widgets/global/circle_avatar_image/circle_avatar_of_profile_ima
 class HomePage extends StatefulWidget {
   final String userId;
   final bool playVideo;
+  final ValueNotifier<bool> stopReelVideoValue;
 
-  const HomePage({Key? key, required this.userId, this.playVideo = true})
-      : super(key: key);
+  const HomePage({
+    Key? key,
+    required this.userId,
+    this.playVideo = true,
+    required this.stopReelVideoValue ,
+  }) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -86,7 +91,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
-      appBar: isThatMobile ? CustomAppBar.basicAppBar(context) : null,
+      appBar: isThatMobile ? CustomAppBar.basicAppBar(context,widget.stopReelVideoValue) : null,
       body: Center(
         child: blocBuilder(bodyHeight),
       ),
