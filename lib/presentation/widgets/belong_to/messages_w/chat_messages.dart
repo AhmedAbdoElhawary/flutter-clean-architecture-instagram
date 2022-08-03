@@ -420,7 +420,7 @@ class _ChatMessagesState extends State<ChatMessages>
                 Container(
                   color: Theme.of(context).toggleableActiveColor,
                   width: double.infinity,
-                  child: NetworkImageDisplay(
+                  child:NetworkImageDisplay(
                     blurHash: messageInfo.blurHash,
                     imageUrl: messageInfo.imageUrl,
                     height: 270,
