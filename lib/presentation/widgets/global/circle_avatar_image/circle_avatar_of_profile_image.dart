@@ -44,7 +44,9 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     with SingleTickerProviderStateMixin {
   @override
   void didChangeDependencies() {
-    precacheImage(NetworkImage(widget.userInfo.profileImageUrl), context);
+    if (widget.userInfo.profileImageUrl.isNotEmpty) {
+      precacheImage(NetworkImage(widget.userInfo.profileImageUrl), context);
+    }
 
     super.didChangeDependencies();
   }

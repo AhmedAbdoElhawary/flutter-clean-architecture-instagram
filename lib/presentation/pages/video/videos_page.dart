@@ -147,27 +147,27 @@ class VideosPageState extends State<VideosPage> {
                   stopVideo: stopVideoValue,
                 ),
               )),
-          _HorizontalButtons(videoInfo: videoInfo, stopVideo: widget.stopVideo),
           _VerticalButtons(videoInfo: videoInfo, stopVideo: widget.stopVideo),
+          _HorizontalButtons(videoInfo: videoInfo, stopVideo: widget.stopVideo),
         ]);
       },
     );
   }
 }
 
-class _VerticalButtons extends StatefulWidget {
+class _HorizontalButtons extends StatefulWidget {
   final ValueNotifier<Post> videoInfo;
   final ValueNotifier<bool> stopVideo;
 
-  const _VerticalButtons(
+  const _HorizontalButtons(
       {Key? key, required this.videoInfo, required this.stopVideo})
       : super(key: key);
 
   @override
-  State<_VerticalButtons> createState() => _VerticalButtonsState();
+  State<_HorizontalButtons> createState() => _HorizontalButtonsState();
 }
 
-class _VerticalButtonsState extends State<_VerticalButtons> {
+class _HorizontalButtonsState extends State<_HorizontalButtons> {
   ValueNotifier<bool?> isFollowed = ValueNotifier(null);
 
   @override
@@ -219,9 +219,7 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
                   )),
               const SizedBox(height: 10),
               Text(videoInfoValue.caption,
-                  style: getNormalStyle(
-                    color: ColorManager.white,
-                  )),
+                  style: getNormalStyle(color: ColorManager.white)),
             ],
           );
         },
@@ -230,8 +228,10 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
   }
 
   goToUserProfile(UserPersonalInfo personalInfo) async {
-    await pushToPage(context, page: WhichProfilePage(
-        userId: personalInfo.userId, userName: personalInfo.userName),withoutRoot: false);
+    await pushToPage(context,
+        page: WhichProfilePage(
+            userId: personalInfo.userId, userName: personalInfo.userName),
+        withoutRoot: false);
     widget.stopVideo.value = false;
   }
 
@@ -239,20 +239,21 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
     return ValueListenableBuilder(
       valueListenable: isFollowed,
       builder: (context, bool? isFollowedValue, child) => GestureDetector(
-          onTap: () {
+          onTap: () async {
             if (personalInfo.followerPeople.contains(myPersonalId) ||
                 isFollowedValue == null ||
                 isFollowedValue == true) {
-              BlocProvider.of<FollowCubit>(context).unFollowThisUser(
+              await BlocProvider.of<FollowCubit>(context).unFollowThisUser(
                   followingUserId: personalInfo.userId,
                   myPersonalId: myPersonalId);
               isFollowed.value = false;
             } else {
-              BlocProvider.of<FollowCubit>(context).followThisUser(
+              await BlocProvider.of<FollowCubit>(context).followThisUser(
                   followingUserId: personalInfo.userId,
                   myPersonalId: myPersonalId);
               isFollowed.value = true;
             }
+            setState(() {});
           },
           child: followText(personalInfo)),
     );
@@ -279,19 +280,19 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
   }
 }
 
-class _HorizontalButtons extends StatefulWidget {
+class _VerticalButtons extends StatefulWidget {
   final ValueNotifier<Post> videoInfo;
   final ValueNotifier<bool> stopVideo;
 
-  const _HorizontalButtons(
+  const _VerticalButtons(
       {Key? key, required this.videoInfo, required this.stopVideo})
       : super(key: key);
 
   @override
-  State<_HorizontalButtons> createState() => _HorizontalButtonsState();
+  State<_VerticalButtons> createState() => _VerticalButtonsState();
 }
 
-class _HorizontalButtonsState extends State<_HorizontalButtons> {
+class _VerticalButtonsState extends State<_VerticalButtons> {
   @override
   Widget build(BuildContext context) {
     return horizontalWidgets();
@@ -353,7 +354,7 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
   }
 
   goToCommentPage(Post videoInfo) async {
-    await pushToPage(context, page:  CommentsPageForMobile(postInfo: videoInfo));
+    await pushToPage(context, page: CommentsPageForMobile(postInfo: videoInfo));
     widget.stopVideo.value = false;
   }
 
@@ -371,11 +372,13 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
   Widget numberOfLikes(Post videoInfo) {
     return InkWell(
       onTap: () async {
-        await pushToPage(context, page: UsersWhoLikesForMobile(
-          showSearchBar: true,
-          usersIds: videoInfo.likes,
-          isThatMyPersonalId: videoInfo.publisherId == myPersonalId,
-        ),withoutRoot: false);
+        await pushToPage(context,
+            page: UsersWhoLikesForMobile(
+              showSearchBar: true,
+              usersIds: videoInfo.likes,
+              isThatMyPersonalId: videoInfo.publisherId == myPersonalId,
+            ),
+            withoutRoot: false);
 
         widget.stopVideo.value = false;
       },

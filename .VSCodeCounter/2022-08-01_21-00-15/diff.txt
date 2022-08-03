@@ -1,0 +1,91 @@
+Date : 2022-08-01 21:00:15
+Directory : d:\flutter-clean-architecture-instagram
+Total : 33 files,  -240 codes, 207 comments, -1 blanks, all -34 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| YAML     |          1 |         -1 |          1 |          0 |          0 |
+| Dart     |         32 |       -239 |        206 |         -1 |        -34 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                            | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                               |         33 |       -240 |        207 |         -1 |        -34 |
+| lib                                                                                                                             |         32 |       -239 |        206 |         -1 |        -34 |
+| lib\core                                                                                                                        |          2 |         -3 |         -2 |         -1 |         -6 |
+| lib\core\utility                                                                                                                |          2 |         -3 |         -2 |         -1 |         -6 |
+| lib\presentation                                                                                                                |         29 |       -237 |        207 |          0 |        -30 |
+| lib\presentation\cubit                                                                                                          |          1 |         -1 |          0 |          0 |         -1 |
+| lib\presentation\cubit\firestoreUserInfoCubit                                                                                   |          1 |         -1 |          0 |          0 |         -1 |
+| lib\presentation\customPackages                                                                                                 |          4 |       -207 |        206 |          0 |         -1 |
+| lib\presentation\customPackages\audio_recorder                                                                                  |          1 |         -1 |          0 |          0 |         -1 |
+| lib\presentation\customPackages\crop_image                                                                                      |          1 |       -204 |        203 |          0 |         -1 |
+| lib\presentation\customPackages\sliding_sheet                                                                                   |          1 |          0 |          3 |          0 |          3 |
+| lib\presentation\customPackages\story_view                                                                                      |          1 |         -2 |          0 |          0 |         -2 |
+| lib\presentation\pages                                                                                                          |         11 |        -13 |          1 |          0 |        -12 |
+| lib\presentation\pages\activity                                                                                                 |          1 |         -3 |          0 |          0 |         -3 |
+| lib\presentation\pages\messages                                                                                                 |          1 |          0 |          1 |          0 |          1 |
+| lib\presentation\pages\profile                                                                                                  |          1 |         -4 |          0 |          0 |         -4 |
+| lib\presentation\pages\profile\custom_gallery_page                                                                              |          1 |         -4 |          0 |          0 |         -4 |
+| lib\presentation\pages\story                                                                                                    |          2 |          0 |          0 |          0 |          0 |
+| lib\presentation\pages\time_line                                                                                                |          4 |         -4 |          0 |          0 |         -4 |
+| lib\presentation\pages\time_line\all_user_time_line                                                                             |          2 |         -2 |          0 |          0 |         -2 |
+| lib\presentation\pages\time_line\my_own_time_line                                                                               |          2 |         -2 |          0 |          0 |         -2 |
+| lib\presentation\pages\video                                                                                                    |          2 |         -2 |          0 |          0 |         -2 |
+| lib\presentation\widgets                                                                                                        |         13 |        -16 |          0 |          0 |        -16 |
+| lib\presentation\widgets\belong_to                                                                                              |          8 |         -9 |          0 |          0 |         -9 |
+| lib\presentation\widgets\belong_to\comments_w                                                                                   |          1 |         -1 |          0 |          0 |         -1 |
+| lib\presentation\widgets\belong_to\messages_w                                                                                   |          1 |         -1 |          0 |          0 |         -1 |
+| lib\presentation\widgets\belong_to\profile_w                                                                                    |          4 |         -5 |          0 |          0 |         -5 |
+| lib\presentation\widgets\belong_to\story_w                                                                                      |          1 |         -1 |          0 |          0 |         -1 |
+| lib\presentation\widgets\belong_to\time_line_w                                                                                  |          1 |         -1 |          0 |          0 |         -1 |
+| lib\presentation\widgets\global                                                                                                 |          5 |         -7 |          0 |          0 |         -7 |
+| lib\presentation\widgets\global\aimation                                                                                        |          1 |         -3 |          0 |          0 |         -3 |
+| lib\presentation\widgets\global\circle_avatar_image                                                                             |          1 |         -1 |          0 |          0 |         -1 |
+| lib\presentation\widgets\global\custom_widgets                                                                                  |          1 |         -1 |          0 |          0 |         -1 |
+| lib\presentation\widgets\global\others                                                                                          |          2 |         -2 |          0 |          0 |         -2 |
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                                        | language | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\flutter-clean-architecture-instagram\lib\core\utility\define_function.dart                                                   | Dart     |         -1 |         -1 |         -1 |         -3 |
+| d:\flutter-clean-architecture-instagram\lib\core\utility\injector.dart                                                          | Dart     |         -2 |         -1 |          0 |         -3 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\cubit\firestoreUserInfoCubit\user_info_cubit.dart                      | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\customPackages\audio_recorder\sound_recorder_notifier.dart             | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\customPackages\crop_image\cropper.dart                                 | Dart     |       -204 |        203 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\customPackages\sliding_sheet\specs.dart                                | Dart     |          0 |          3 |          0 |          3 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\customPackages\story_view\story_view.dart                              | Dart     |         -2 |          0 |          0 |         -2 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\pages\activity\activity_for_web.dart                                   | Dart     |         -3 |          0 |          0 |         -3 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\pages\messages\messages_for_web.dart                                   | Dart     |          0 |          1 |          0 |          1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\pages\profile\custom_gallery_page\gallery_of_story.dart                | Dart     |         -4 |          0 |          0 |         -4 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\pages\story\story_page_for_mobile.dart                                 | Dart     |        342 |          0 |         26 |        368 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\pages\story\stroy_page_for_mobile.dart                                 | Dart     |       -342 |          0 |        -26 |       -368 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\pages\time_line\all_user_time_line\all_users_time_line.dart            | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\pages\time_line\all_user_time_line\search_about_user.dart              | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\pages\time_line\my_own_time_line\home_page.dart                        | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\pages\time_line\my_own_time_line\update_post_info.dart                 | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\pages\video\play_this_video.dart                                       | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\pages\video\videos_page.dart                                           | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\widgets\belong_to\comments_w\commentator.dart                          | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\widgets\belong_to\messages_w\list_of_messages.dart                     | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\widgets\belong_to\profile_w\custom_videos_grid_view.dart               | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\widgets\belong_to\profile_w\profile_grid_view.dart                     | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\widgets\belong_to\profile_w\profile_page.dart                          | Dart     |         -2 |          0 |          0 |         -2 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\widgets\belong_to\profile_w\show_me_the_users.dart                     | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\widgets\belong_to\story_w\story_swipe.dart                             | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\widgets\belong_to\time_line_w\image_of_post_for_time_line.dart         | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\widgets\global\aimation\fade_animation.dart                            | Dart     |         -3 |          0 |          0 |         -3 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\widgets\global\circle_avatar_image\circle_avatar_of_profile_image.dart | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\widgets\global\custom_widgets\custom_gallery_display.dart              | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\widgets\global\others\count_of_likes.dart                              | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\presentation\widgets\global\others\notification_card_info.dart                      | Dart     |         -1 |          0 |          0 |         -1 |
+| d:\flutter-clean-architecture-instagram\lib\snapping.dart                                                                       | Dart     |          1 |          1 |          0 |          2 |
+| d:\flutter-clean-architecture-instagram\pubspec.yaml                                                                            | YAML     |         -1 |          1 |          0 |          0 |
+| Total                                                                                                                           |          |       -240 |        207 |         -1 |        -34 |
++---------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

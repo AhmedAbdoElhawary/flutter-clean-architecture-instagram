@@ -30,7 +30,9 @@ class _ImagesSliderState extends State<ImagesSlider> {
   final CarouselController _controller = CarouselController();
   @override
   void didChangeDependencies() {
-    widget.imagesUrls.map((url) => precacheImage(NetworkImage(url), context));
+    if (widget.imagesUrls.isNotEmpty) {
+      widget.imagesUrls.map((url) => precacheImage(NetworkImage(url), context));
+    }
     super.didChangeDependencies();
   }
 
@@ -51,7 +53,9 @@ class _ImagesSliderState extends State<ImagesSlider> {
               CarouselSlider(
                 carouselController: _controller,
                 items: widget.imagesUrls.map((url) {
-                  precacheImage(NetworkImage(url), context);
+                  if (url.toString().isNotEmpty) {
+                    precacheImage(NetworkImage(url), context);
+                  }
                   return Hero(
                     tag: url,
                     child: NetworkImageDisplay(

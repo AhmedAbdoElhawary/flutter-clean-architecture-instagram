@@ -1,18 +1,23 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/config/routes/app_routes.dart';
+import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/core/widgets/svg_pictures.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/activity/activity_for_mobile.dart';
+import 'package:instagram/presentation/pages/video/videos_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/create_new_story.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
 class CustomAppBar {
-  static AppBar basicAppBar(BuildContext context) {
+  static AppBar basicAppBar(
+      BuildContext context, ValueNotifier<bool> stopReelVideo) {
     return AppBar(
       backgroundColor: Theme.of(context).primaryColor,
       centerTitle: false,
@@ -21,9 +26,27 @@ class CustomAppBar {
       actions: [
         IconButton(
           icon: SvgPicture.asset(
-            IconsAssets.favorite,
+            IconsAssets.video,
             color: Theme.of(context).focusColor,
-            height: 30,
+            height: 24,
+          ),
+          onPressed: () {
+            pushToPage(
+              context,
+              page: BlocProvider<PostCubit>(
+                create: (context) => injector<PostCubit>(),
+                child: VideosPage(stopVideo: stopReelVideo),
+              ),
+              withoutRoot: false,
+            );
+          },
+        ),
+        const SizedBox(width: 1),
+        IconButton(
+          icon: Icon(
+            Icons.favorite_border_rounded,
+            color: Theme.of(context).focusColor,
+            size: 29,
           ),
           onPressed: () {
             pushToPage(context, page: const ActivityPage(), withoutRoot: false);
@@ -50,8 +73,7 @@ class CustomAppBar {
   }
 
   static Future _pushToCustomGallery(BuildContext context) =>
-  pushToPage(context, page: const CustomGalleryDisplay());
-
+      pushToPage(context, page: const CustomGalleryDisplay());
 
   static AppBar chattingAppBar(
       UserPersonalInfo userInfo, BuildContext context) {

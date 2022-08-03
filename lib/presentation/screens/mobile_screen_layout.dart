@@ -26,6 +26,8 @@ class MobileScreenLayout extends StatefulWidget {
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   ValueNotifier<bool> playHomeVideo = ValueNotifier(false);
   CupertinoTabController controller = CupertinoTabController();
+  ValueNotifier<bool> stopReelVideo = ValueNotifier(false);
+
   @override
   void initState() {
     super.initState();
@@ -47,6 +49,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
         controller: controller,
         tabBuilder: (context, index) {
           WidgetsBinding.instance.addPostFrameCallback((_) async {
+            stopReelVideo.value = controller.index != 0 ? true : false;
             playHomeVideo.value = controller.index == 0 ? true : false;
           });
 
@@ -55,6 +58,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               return homePage();
             case 1:
               return messagesPage();
+            case 2:
+              return galleryPage();
             case 3:
               return allUsersTimLinePage();
             default:
@@ -91,19 +96,26 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
           ),
         ),
       );
+  Widget galleryPage() => CupertinoTabView(
+    builder: (context) => const CupertinoPageScaffold(
+      child:CustomGalleryDisplay(),
+    ),
+  );
 
   Widget homePage() => CupertinoTabView(
-        builder: (context) => CupertinoPageScaffold(
-            child: BlocProvider<PostCubit>(
-          create: (context) => injector<PostCubit>(),
-          child: ValueListenableBuilder(
-            valueListenable: playHomeVideo,
-            builder: (context, bool playVideoValue, child) => HomePage(
-              userId: widget.userId,
-              playVideo: playVideoValue,
-            ),
+        builder: (context) => CupertinoPageScaffold(child: home()),
+      );
+
+  BlocProvider<PostCubit> home() => BlocProvider<PostCubit>(
+        create: (context) => injector<PostCubit>(),
+        child: ValueListenableBuilder(
+          valueListenable: playHomeVideo,
+          builder: (context, bool playVideoValue, child) => HomePage(
+            userId: widget.userId,
+            playVideo: playVideoValue,
+            stopReelVideoValue: stopReelVideo,
           ),
-        )),
+        ),
       );
 
   BottomNavigationBarItem personalImageItem() {
