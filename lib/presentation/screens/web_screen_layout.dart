@@ -283,7 +283,7 @@ class _HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<PostCubit>(
       create: (context) => injector<PostCubit>(),
-      child: HomePage(userId: myPersonalId),
+      child: HomePage(userId: myPersonalId,stopReelVideoValue: ValueNotifier(false)),
     );
   }
 }
