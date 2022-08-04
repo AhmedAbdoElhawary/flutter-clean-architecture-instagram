@@ -92,8 +92,8 @@ class _ChatMessagesState extends State<ChatMessages>
   }
 
   getLanguage() async {
-    AppPreferences _appPreferences = injector<AppPreferences>();
-    currentLanguage = await _appPreferences.getAppLanguage();
+    AppPreferences appPreferences = injector<AppPreferences>();
+    currentLanguage = await appPreferences.getAppLanguage();
   }
 
   @override
@@ -473,6 +473,7 @@ class _ChatMessagesState extends State<ChatMessages>
             backgroundImage: messageInfo.imageUrl.isNotEmpty
                 ? CachedNetworkImageProvider(messageInfo.profileImageUrl)
                 : null,
+            radius: 15,
             child: messageInfo.imageUrl.isEmpty
                 ? Icon(
                     Icons.person,
@@ -480,7 +481,6 @@ class _ChatMessagesState extends State<ChatMessages>
                     size: 15,
                   )
                 : null,
-            radius: 15,
           ),
           const SizedBox(width: 7),
           Text(
@@ -833,12 +833,12 @@ class _ChatMessagesState extends State<ChatMessages>
                   },
                   child: const CircleAvatar(
                       backgroundColor: ColorManager.darkBlue,
+                      radius: 18,
                       child: ClipOval(
                           child: Icon(
                         Icons.camera_alt,
                         color: ColorManager.white,
-                      )),
-                      radius: 18),
+                      ))),
                 ),
               ),
             ));
@@ -951,11 +951,11 @@ class _ChatMessagesState extends State<ChatMessages>
 
   CircleAvatar circleAvatarOfImage() {
     return CircleAvatar(
+        radius: 45,
         child: ClipOval(
             child: NetworkImageDisplay(
           imageUrl: widget.userInfo.profileImageUrl,
-        )),
-        radius: 45);
+        )));
   }
 
   Row userName() {
