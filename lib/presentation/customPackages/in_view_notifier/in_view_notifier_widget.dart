@@ -15,10 +15,10 @@ class InViewNotifierWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _InViewNotifierWidgetState createState() => _InViewNotifierWidgetState();
+  InViewNotifierWidgetState createState() => InViewNotifierWidgetState();
 }
 
-class _InViewNotifierWidgetState extends State<InViewNotifierWidget> {
+class InViewNotifierWidgetState extends State<InViewNotifierWidget> {
   late final InViewState state;
 
   @override
