@@ -51,8 +51,8 @@ class _CustomPostDisplayState extends State<CustomPostDisplay>
   }
 
   getLanguage() async {
-    AppPreferences _appPreferences = injector<AppPreferences>();
-    currentLanguage = await _appPreferences.getAppLanguage();
+    AppPreferences appPreferences = injector<AppPreferences>();
+    currentLanguage = await appPreferences.getAppLanguage();
   }
 
   Widget thePostsOfHomePage({required double bodyHeight}) {
