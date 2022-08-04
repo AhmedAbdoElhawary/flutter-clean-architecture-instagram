@@ -264,14 +264,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
         backgroundImage: isImageUpload && hasUserPhoto
             ? NetworkImage(widget.userInfo.profileImageUrl)
             : null,
+        radius: 50,
+        backgroundColor: Theme.of(context).focusColor,
         child: ClipOval(
             child: !isImageUpload
                 ? const ThineCircularProgress()
                 : (!hasUserPhoto
                     ? Icon(Icons.person, color: Theme.of(context).primaryColor)
                     : null)),
-        radius: 50,
-        backgroundColor: Theme.of(context).focusColor,
       ),
     );
   }
