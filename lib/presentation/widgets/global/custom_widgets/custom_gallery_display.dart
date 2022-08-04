@@ -3,13 +3,13 @@ import 'dart:typed_data';
 
 import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:export_video_frame/export_video_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/compress_image.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/pages/story/create_story.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class CustomGalleryDisplay extends StatefulWidget {
   const CustomGalleryDisplay({Key? key}) : super(key: key);
@@ -74,11 +74,11 @@ Future<void> moveToCreationPage(
             storyImage: bytesFile, isThatImage: details.isThatImage));
   } else {
     if (!details.isThatImage) {
-      Duration duration = const Duration(seconds: 1);
-      File image = await ExportVideoFrame.exportImageBySeconds(
-          details.selectedFile, duration, 0);
+      final convertImage = await VideoThumbnail.thumbnailData(
+        video: details.selectedFile.path,
+        imageFormat: ImageFormat.PNG,
+      );
       Uint8List convertVideo = await details.selectedFile.readAsBytes();
-      Uint8List convertImage = await image.readAsBytes();
       await pushToPage(context,
           page: CreatePostPage(
             aspectRatio: 1,
