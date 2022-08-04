@@ -16,10 +16,10 @@ class PlayThisVideo extends StatefulWidget {
       this.dispose = true})
       : super(key: key);
   @override
-  _PlayThisVideoState createState() => _PlayThisVideoState();
+  PlayThisVideoState createState() => PlayThisVideoState();
 }
 
-class _PlayThisVideoState extends State<PlayThisVideo> {
+class PlayThisVideoState extends State<PlayThisVideo> {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
 
