@@ -12,7 +12,7 @@ class WidgetData {
 
   @override
   String toString() {
-    return describeIdentity(this) + " id=$id";
+    return "${describeIdentity(this)} id=$id";
   }
 }
 
