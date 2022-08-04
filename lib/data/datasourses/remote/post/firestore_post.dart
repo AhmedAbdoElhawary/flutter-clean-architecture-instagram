@@ -54,10 +54,12 @@ class FirestorePost {
             await _fireStorePostCollection.doc(postsIds[i]).get();
         if (snap.exists) {
           Post postReformat = Post.fromQuery(query: snap);
-          UserPersonalInfo publisherInfo =
-              await FirestoreUser.getUserInfo(postReformat.publisherId);
-          postReformat.publisherInfo = publisherInfo;
-          postsInfo.add(postReformat);
+          if(postReformat.postUrl.isNotEmpty){
+            UserPersonalInfo publisherInfo =
+            await FirestoreUser.getUserInfo(postReformat.publisherId);
+            postReformat.publisherInfo = publisherInfo;
+            postsInfo.add(postReformat);
+          }
         } else {
           FirestoreUser.removeUserPost(postId: postsIds[i]);
         }
