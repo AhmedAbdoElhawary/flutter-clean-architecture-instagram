@@ -129,6 +129,7 @@ class _SendToUsersState extends State<SendToUsers> {
           backgroundImage: userInfo.profileImageUrl.isNotEmpty
               ? CachedNetworkImageProvider(userInfo.profileImageUrl)
               : null,
+          radius: 23,
           child: userInfo.profileImageUrl.isEmpty
               ? Icon(
                   Icons.person,
@@ -136,7 +137,6 @@ class _SendToUsersState extends State<SendToUsers> {
                   size: 10,
                 )
               : null,
-          radius: 23,
         ),
         const SizedBox(width: 15),
         Expanded(
