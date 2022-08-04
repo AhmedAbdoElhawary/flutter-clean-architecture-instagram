@@ -59,6 +59,8 @@ class FirestorePost {
             await FirestoreUser.getUserInfo(postReformat.publisherId);
             postReformat.publisherInfo = publisherInfo;
             postsInfo.add(postReformat);
+          }else{
+            await deletePost(postInfo: postReformat);
           }
         } else {
           FirestoreUser.removeUserPost(postId: postsIds[i]);
