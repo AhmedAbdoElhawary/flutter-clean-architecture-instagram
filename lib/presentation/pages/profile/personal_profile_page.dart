@@ -218,11 +218,11 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   }
 
   GestureDetector changeLanguage() {
-    final AppPreferences _appPreferences = injector<AppPreferences>();
+    final AppPreferences appPreferences = injector<AppPreferences>();
 
     return GestureDetector(
       onTap: () {
-        _appPreferences.changeAppLanguage();
+        appPreferences.changeAppLanguage();
         Phoenix.rebirth(context);
       },
       child: createSizedBox(StringsManager.changeLanguage.tr(),
