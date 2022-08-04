@@ -11,10 +11,10 @@ class LockRecord extends StatefulWidget {
     Key? key,
   }) : super(key: key);
   @override
-  _LockRecordState createState() => _LockRecordState();
+  LockRecordState createState() => LockRecordState();
 }
 
-class _LockRecordState extends State<LockRecord> with TickerProviderStateMixin {
+class LockRecordState extends State<LockRecord> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     /// If click the Button Then send show lock and un lock icon
