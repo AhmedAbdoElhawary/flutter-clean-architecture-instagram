@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:export_video_frame/export_video_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,6 +22,7 @@ import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile
 import 'package:instagram/presentation/widgets/belong_to/videos_w/reel_video_play.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 import '../../../core/utility/constant.dart';
 
 class VideosPage extends StatefulWidget {
@@ -88,11 +88,11 @@ class VideosPageState extends State<VideosPage> {
                 await ImagePicker().pickVideo(source: ImageSource.camera);
             if (pickedFile != null) {
               final File video = File(pickedFile.path);
-              var duration = const Duration(seconds: 1);
-              File image = await ExportVideoFrame.exportImageBySeconds(
-                  video, duration, 0);
+              final convertImage = await VideoThumbnail.thumbnailData(
+                video: video.path,
+                imageFormat: ImageFormat.PNG,
+              );
               Uint8List convertVideo = await video.readAsBytes();
-              Uint8List convertImage = await image.readAsBytes();
               pushToPage(context, page: CreatePostPage(
                 aspectRatio: 1,
                 multiSelectedFiles: [convertVideo],
