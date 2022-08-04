@@ -1,4 +1,5 @@
-import 'package:intl/intl.dart';
+
+import 'package:easy_localization/easy_localization.dart';
 
 class DateOfNow {
   static String dateOfNow() {
