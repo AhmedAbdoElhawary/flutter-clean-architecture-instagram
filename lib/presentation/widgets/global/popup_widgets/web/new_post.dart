@@ -619,16 +619,16 @@ class _PopupNewPostState extends State<PopupNewPost> {
         });
       },
       child: Container(
+        decoration: BoxDecoration(
+          color: ColorManager.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Icon(
           isThatBack
               ? Icons.arrow_back_ios_rounded
               : Icons.arrow_forward_ios_rounded,
           color: ColorManager.black,
           size: 20,
-        ),
-        decoration: BoxDecoration(
-          color: ColorManager.white,
-          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );
