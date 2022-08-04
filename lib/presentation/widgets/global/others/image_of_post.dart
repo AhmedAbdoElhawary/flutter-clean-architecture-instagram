@@ -180,7 +180,7 @@ class _ImageOfPostState extends State<ImageOfPost>
         commentButton(context, postInfoValue),
         ShareButton(postInfo: ValueNotifier(postInfoValue)),
         const Spacer(),
-        if (postInfoValue.imagesUrls.isNotEmpty && showScrollBar)
+        if (postInfoValue.imagesUrls.length > 1 && showScrollBar)
           scrollBar(postInfoValue),
         const Spacer(),
         const Spacer(),
