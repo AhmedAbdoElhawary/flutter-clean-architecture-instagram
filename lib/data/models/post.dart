@@ -7,11 +7,13 @@ class Post extends ParentPost {
   List<dynamic> imagesUrls;
   String postUid;
   double aspectRatio;
+  String coverOfVideoUrl;
   Post({
     required String datePublished,
     required String publisherId,
     UserPersonalInfo? publisherInfo,
     this.postUid = "",
+    this.coverOfVideoUrl = "",
     this.postUrl = "",
     required this.imagesUrls,
     required this.aspectRatio,
@@ -42,6 +44,7 @@ class Post extends ParentPost {
       likes: snap.data()?["likes"] ?? [],
       comments: snap.data()?["comments"] ?? [],
       blurHash: snap.data()?["blurHash"] ?? "",
+      coverOfVideoUrl: snap.data()?["coverOfVideoUrl"] ?? "",
       imagesUrls: snap.data()?["imagesUrls"] ?? [],
       postUid: snap.data()?["postUid"] ?? "",
       aspectRatio: snap.data()?["aspectRatio"] ?? 0.0,
@@ -62,5 +65,6 @@ class Post extends ParentPost {
         'postUid': postUid,
         "postUrl": postUrl,
         "isThatImage": isThatImage,
+        "coverOfVideoUrl": coverOfVideoUrl,
       };
 }
