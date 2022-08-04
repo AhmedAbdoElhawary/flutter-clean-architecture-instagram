@@ -27,10 +27,10 @@ class StoryPageForMobile extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _StoryPageForMobileState createState() => _StoryPageForMobileState();
+  StoryPageForMobileState createState() => StoryPageForMobileState();
 }
 
-class _StoryPageForMobileState extends State<StoryPageForMobile> {
+class StoryPageForMobileState extends State<StoryPageForMobile> {
   late PageController controller;
 
   @override
@@ -83,10 +83,10 @@ class StoryWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _StoryWidgetState createState() => _StoryWidgetState();
+  StoryWidgetState createState() => StoryWidgetState();
 }
 
-class _StoryWidgetState extends State<StoryWidget> {
+class StoryWidgetState extends State<StoryWidget> {
   final SharedPreferences _sharePrefs = injector<SharedPreferences>();
 
   bool shownThem = true;
