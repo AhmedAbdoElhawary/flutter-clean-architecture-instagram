@@ -14,7 +14,7 @@ import 'package:instagram/presentation/customPackages/story_view/story_controlle
 import 'package:instagram/presentation/customPackages/story_view/story_view.dart';
 import 'package:instagram/presentation/customPackages/story_view/utils.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/common/jump_arrow.dart';
-import 'package:instagram/snapping.dart';
+import 'package:instagram/presentation/customPackages/snapping.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StoryPageForWeb extends StatefulWidget {

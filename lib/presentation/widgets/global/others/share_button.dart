@@ -65,7 +65,7 @@ class _ShareButtonState extends State<ShareButton> {
       context,
       builder: (BuildContext context) => SlidingSheetDialog(
         cornerRadius: 16,
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).splashColor,
         snapSpec: const SnapSpec(
           initialSnap: 1,
           snappings: [.4, 1, .7],
