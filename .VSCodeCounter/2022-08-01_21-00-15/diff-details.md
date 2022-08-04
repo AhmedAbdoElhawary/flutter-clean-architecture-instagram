@@ -42,7 +42,7 @@ Total : 33 files,  -240 codes, 207 comments, -1 blanks, all -34 lines
 | [lib/presentation/widgets/global/custom_widgets/custom_gallery_display.dart](/lib/presentation/widgets/global/custom_widgets/custom_gallery_display.dart) | Dart | -1 | 0 | 0 | -1 |
 | [lib/presentation/widgets/global/others/count_of_likes.dart](/lib/presentation/widgets/global/others/count_of_likes.dart) | Dart | -1 | 0 | 0 | -1 |
 | [lib/presentation/widgets/global/others/notification_card_info.dart](/lib/presentation/widgets/global/others/notification_card_info.dart) | Dart | -1 | 0 | 0 | -1 |
-| [lib/snapping.dart](/lib/snapping.dart) | Dart | 1 | 1 | 0 | 2 |
+| [lib/snapping.dart](/lib/presentation/customPackages/snapping.dart) | Dart | 1 | 1 | 0 | 2 |
 | [pubspec.yaml](/pubspec.yaml) | YAML | -1 | 1 | 0 | 0 |
 
 [Summary](results.md) / [Details](details.md) / [Diff Summary](diff.md) / Diff Details
