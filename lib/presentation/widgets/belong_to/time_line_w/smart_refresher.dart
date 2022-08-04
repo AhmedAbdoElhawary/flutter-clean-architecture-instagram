@@ -85,9 +85,9 @@ class _SmarterRefreshState extends State<SmarterRefresh>
       scrollDirection: Axis.vertical,
       onRefresh: onSmarterRefresh,
       onLoading: onSmarterLoading,
-      child: widget.child,
       footer: customFooter(),
       header: customHeader(),
+      child: widget.child,
     );
   }
 
@@ -169,14 +169,14 @@ class _SmarterRefreshState extends State<SmarterRefresh>
   Container customCircleProgress(BuildContext context) {
     return Container(
       color: Theme.of(context).primaryColor,
+      alignment: Alignment.center,
       child: FadeTransition(
         opacity: _scaleController,
         child: ScaleTransition(
-          child: circularProgressIndicator(context),
           scale: _scaleController,
+          child: circularProgressIndicator(context),
         ),
       ),
-      alignment: Alignment.center,
     );
   }
 
