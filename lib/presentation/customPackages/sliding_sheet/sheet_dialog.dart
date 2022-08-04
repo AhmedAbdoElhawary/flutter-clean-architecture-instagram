@@ -133,7 +133,7 @@ class SlidingSheetScrollController extends ScrollController {
   bool get animating => controller?.isAnimating == true;
   bool get inInteraction => inDrag || animating;
 
-  _SlidingSheetScrollPosition? _currentPosition;
+  SlidingSheetScrollPosition? _currentPosition;
 
   AnimationController? controller;
 
@@ -212,12 +212,12 @@ class SlidingSheetScrollController extends ScrollController {
   }
 
   @override
-  _SlidingSheetScrollPosition createScrollPosition(
+  SlidingSheetScrollPosition createScrollPosition(
       ScrollPhysics physics,
       ScrollContext context,
       ScrollPosition? oldPosition,
       ) {
-    return _currentPosition = _SlidingSheetScrollPosition(
+    return _currentPosition = SlidingSheetScrollPosition(
       this,
       physics: physics,
       context: context,
@@ -239,9 +239,9 @@ class SlidingSheetScrollController extends ScrollController {
   }
 }
 
-class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
+class SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
   final SlidingSheetScrollController scrollController;
-  _SlidingSheetScrollPosition(
+  SlidingSheetScrollPosition(
       this.scrollController, {
         required ScrollPhysics physics,
         required ScrollContext context,
