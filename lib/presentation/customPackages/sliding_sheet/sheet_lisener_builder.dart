@@ -23,10 +23,10 @@ class SheetListenerBuilder extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SheetListenerBuilderState createState() => _SheetListenerBuilderState();
+  SheetListenerBuilderState createState() => SheetListenerBuilderState();
 }
 
-class _SheetListenerBuilderState extends State<SheetListenerBuilder> {
+class SheetListenerBuilderState extends State<SheetListenerBuilder> {
   SheetState _state = SheetState.inital();
 
   late final ValueNotifier<SheetState> _notifier = SheetState.notifier(context)
