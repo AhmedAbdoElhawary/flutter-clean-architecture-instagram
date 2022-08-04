@@ -23,7 +23,7 @@ class NetworkImageDisplay extends StatefulWidget {
 class _NetworkImageDisplayState extends State<NetworkImageDisplay> {
   @override
   void didChangeDependencies() {
-    if(widget.imageUrl.isNotEmpty) {
+    if (widget.imageUrl.isNotEmpty) {
       precacheImage(NetworkImage(widget.imageUrl), context);
     }
     super.didChangeDependencies();
