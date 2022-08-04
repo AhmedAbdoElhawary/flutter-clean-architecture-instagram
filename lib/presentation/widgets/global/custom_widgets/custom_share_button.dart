@@ -39,6 +39,9 @@ class _CustomShareButtonState extends State<CustomShareButton> {
         return InkWell(
           onTap: () async {
             for (final selectedUser in widget.selectedUsersInfo) {
+              if (!widget.postInfo.isThatImage) {
+                // q
+              }
               await messageCubit.sendMessage(
                 messageInfo:
                     createSharedMessage(widget.postInfo.blurHash, selectedUser),
@@ -48,7 +51,6 @@ class _CustomShareButtonState extends State<CustomShareButton> {
                     messageInfo: createCaptionMessage(selectedUser));
               }
             }
-
             Navigator.of(context).maybePop();
             widget.clearTexts(true);
           },
@@ -71,6 +73,11 @@ class _CustomShareButtonState extends State<CustomShareButton> {
 
   Message createSharedMessage(
       String blurHash, UserPersonalInfo userInfoWhoIShared) {
+    String imageUrl = widget.postInfo.isThatImage
+        ? widget.postInfo.imagesUrls.length > 1
+            ? widget.postInfo.imagesUrls[0]
+            : widget.postInfo.postUrl
+        : widget.postInfo.coverOfVideoUrl;
     return Message(
       datePublished: DateOfNow.dateOfNow(),
       message: widget.postInfo.caption,
@@ -78,10 +85,9 @@ class _CustomShareButtonState extends State<CustomShareButton> {
       blurHash: blurHash,
       receiverId: userInfoWhoIShared.userId,
       isThatImage: true,
+      isThatVideo: !widget.postInfo.isThatImage,
       postId: widget.postInfo.postUid,
-      imageUrl: widget.postInfo.imagesUrls.length > 1
-          ? widget.postInfo.imagesUrls[0]
-          : widget.postInfo.postUrl,
+      imageUrl: imageUrl,
       isThatPost: true,
       profileImageUrl: widget.publisherInfo.profileImageUrl,
       multiImages: widget.postInfo.imagesUrls.length > 1,
