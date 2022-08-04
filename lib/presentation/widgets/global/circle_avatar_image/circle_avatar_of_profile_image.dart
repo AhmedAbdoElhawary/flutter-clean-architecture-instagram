@@ -186,6 +186,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
       backgroundImage: profileImage.isNotEmpty
           ? CachedNetworkImageProvider(profileImage)
           : null,
+      radius: widget.bodyHeight * .046,
       child: profileImage.isEmpty
           ? Icon(
               Icons.person,
@@ -193,7 +194,6 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
               size: widget.bodyHeight * 0.07,
             )
           : null,
-      radius: widget.bodyHeight * .046,
     );
   }
 
