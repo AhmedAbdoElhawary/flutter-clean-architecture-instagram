@@ -42,7 +42,7 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    // _controller.dispose();
     super.dispose();
   }
 

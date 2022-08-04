@@ -20,11 +20,12 @@ class CreatePostPage extends StatefulWidget {
   final List<Uint8List> multiSelectedFiles;
   final bool isThatImage;
   final double aspectRatio;
-
+  final Uint8List? coverOfVideoBytes;
   const CreatePostPage({
     required this.aspectRatio,
     this.isThatImage = true,
     required this.multiSelectedFiles,
+    this.coverOfVideoBytes,
     Key? key,
   }) : super(key: key);
 
@@ -46,6 +47,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   @override
   Widget build(BuildContext context) {
+    Uint8List image = widget.coverOfVideoBytes != null
+        ? widget.coverOfVideoBytes!
+        : widget.multiSelectedFiles[0];
     return BlocProvider<PostCubit>(
       create: (context) => injector<PostCubit>(),
       child: Scaffold(
@@ -60,29 +64,37 @@ class _CreatePostPageState extends State<CreatePostPage> {
               child: Row(
                 children: [
                   SizedBox(
-                    height: 70,
-                    width: 70,
-                    child: widget.isThatImage
-                        ? Stack(
-                            children: [
-                              Image.memory(widget.multiSelectedFiles[0]),
-                              if (widget.multiSelectedFiles.length > 1)
-                                const Padding(
-                                  padding: EdgeInsets.all(2.0),
-                                  child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Icon(
-                                      Icons.copy_rounded,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                  ),
-                                )
-                            ],
-                          )
-                        : const Center(
-                            child: Icon(Icons.slow_motion_video_sharp)),
-                  ),
+                      height: 70,
+                      width: 70,
+                      child: Stack(
+                        children: [
+                          Image.memory(image),
+                          if (widget.multiSelectedFiles.length > 1)
+                            const Padding(
+                              padding: EdgeInsets.all(2.0),
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: Icon(
+                                  Icons.copy_rounded,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                          if (!widget.isThatImage)
+                            const Padding(
+                              padding: EdgeInsets.all(2.0),
+                              child: Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Icon(
+                                  Icons.slow_motion_video_sharp,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                        ],
+                      )),
                   const SizedBox(width: 10),
                   Expanded(
                     child: TextFormField(
@@ -170,10 +182,20 @@ class _CreatePostPageState extends State<CreatePostPage> {
   Future<void> createPost(BuildContext context) async {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => setState(() => isItDone.value = false));
-    String blurHash = await blurHashEncode(widget.multiSelectedFiles[0]);
-    Post postInfo = addPostInfo(blurHash);
+    String blurHash;
+    Post postInfo;
+    if (!widget.isThatImage && widget.coverOfVideoBytes != null) {
+      blurHash = await blurHashEncode(widget.coverOfVideoBytes!);
+      postInfo = addPostInfo(blurHash);
+    } else {
+      blurHash = await blurHashEncode(widget.multiSelectedFiles[0]);
+      postInfo = addPostInfo(blurHash);
+    }
+
     PostCubit postCubit = BlocProvider.of<PostCubit>(context, listen: false);
-    await postCubit.createPost(postInfo, widget.multiSelectedFiles);
+    await postCubit.createPost(postInfo, widget.multiSelectedFiles,
+        coverOfVideo: widget.coverOfVideoBytes);
+
     if (postCubit.postId != '') {
       await UserInfoCubit.get(context)
           .updateUserPostsInfo(userId: myPersonalId, postId: postCubit.postId);

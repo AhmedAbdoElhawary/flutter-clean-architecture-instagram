@@ -309,6 +309,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.3"
+  export_video_frame:
+    dependency: "direct main"
+    description:
+      name: export_video_frame
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.7"
   extended_image:
     dependency: "direct main"
     description:
@@ -686,6 +693,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.4"
+  media_info:
+    dependency: transitive
+    description:
+      name: media_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.0"
   meta:
     dependency: transitive
     description:
@@ -693,6 +707,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  mime:
+    dependency: transitive
+    description:
+      name: mime
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   nested:
     dependency: transitive
     description:

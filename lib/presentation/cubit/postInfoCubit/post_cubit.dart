@@ -32,11 +32,11 @@ class PostCubit extends Cubit<PostState> {
 
   static PostCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future<void> createPost(Post postInfo, List<Uint8List> files) async {
+  Future<void> createPost(Post postInfo, List<Uint8List> files,{Uint8List? coverOfVideo}) async {
     postId= '';
     emit(CubitPostLoading());
     await _createPostUseCase
-        .call(paramsOne: postInfo, paramsTwo: files)
+        .call(paramsOne: postInfo, paramsTwo: files,paramsThree: coverOfVideo)
         .then((postId) {
       this.postId = postId;
       emit(CubitPostLoaded(postId));

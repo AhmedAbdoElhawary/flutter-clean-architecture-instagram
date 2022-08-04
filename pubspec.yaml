@@ -88,6 +88,7 @@ dependencies:
   extended_image: ^6.2.1
   image: ^3.2.0
   photofilters: ^3.0.1
+  export_video_frame: ^0.0.7
 
   ## My package
   custom_gallery_display: ^0.3.4

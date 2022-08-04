@@ -1,10 +1,12 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:export_video_frame/export_video_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:instagram/config/routes/app_routes.dart';
-import 'package:instagram/core/functions/image_picker.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -15,12 +17,12 @@ import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
+import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/pages/profile/users_who_likes_for_mobile.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/videos_w/reel_video_play.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../../../core/utility/constant.dart';
 
 class VideosPage extends StatefulWidget {
@@ -82,10 +84,24 @@ class VideosPageState extends State<VideosPage> {
       AppBar(backgroundColor: ColorManager.transparent, actions: [
         IconButton(
           onPressed: () async {
-            Uint8List? pickVideo = await videoCameraPicker();
-            if (pickVideo == null) {
-              ToastShow.toast(StringsManager.noImageSelected.tr());
+            final XFile? pickedFile =
+                await ImagePicker().pickVideo(source: ImageSource.camera);
+            if (pickedFile != null) {
+              final File video = File(pickedFile.path);
+              var duration = const Duration(seconds: 1);
+              File image = await ExportVideoFrame.exportImageBySeconds(
+                  video, duration, 0);
+              Uint8List covertVideo = await video.readAsBytes();
+              Uint8List covertImage = await image.readAsBytes();
+              pushToPage(context, page: CreatePostPage(
+                aspectRatio: 1,
+                multiSelectedFiles: [covertVideo],
+                isThatImage: false,
+                coverOfVideoBytes: covertImage,
+              ));
+
             }
+            // ToastShow.toast(StringsManager.noImageSelected.tr());
           },
           icon:
               const Icon(Icons.camera_alt, size: 30, color: ColorManager.white),
@@ -441,3 +457,87 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
     );
   }
 }
+
+class DisplayImages extends StatelessWidget {
+  final Uint8List selectedFile;
+  const DisplayImages({
+    Key? key,
+    required this.selectedFile,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Image')),
+      body: SizedBox(width: double.infinity, child: Image.memory(selectedFile)),
+    );
+  }
+}
+
+// class DisplayVideo extends StatefulWidget {
+//   final File video;
+//   final double aspectRatio;
+//   const DisplayVideo({
+//     Key? key,
+//     required this.video,
+//     required this.aspectRatio,
+//   }) : super(key: key);
+//
+//   @override
+//   State<DisplayVideo> createState() => _DisplayVideoState();
+// }
+//
+// class _DisplayVideoState extends State<DisplayVideo> {
+//   late VideoPlayerController _controller;
+//   late Future<void> _initializeVideoPlayerFuture;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _controller = VideoPlayerController.file(widget.video);
+//     _initializeVideoPlayerFuture = _controller.initialize();
+//     _controller.setLooping(true);
+//   }
+//
+//   @override
+//   void dispose() {
+//     _controller.dispose();
+//     super.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text('Video')),
+//       body: FutureBuilder(
+//         future: _initializeVideoPlayerFuture,
+//         builder: (context, snapshot) {
+//           if (snapshot.connectionState == ConnectionState.done) {
+//             return AspectRatio(
+//               aspectRatio: _controller.value.aspectRatio,
+//               child: VideoPlayer(_controller),
+//             );
+//           } else {
+//             return const Center(
+//               child: CircularProgressIndicator(),
+//             );
+//           }
+//         },
+//       ),
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: () {
+//           setState(() {
+//             if (_controller.value.isPlaying) {
+//               _controller.pause();
+//             } else {
+//               _controller.play();
+//             }
+//           });
+//         },
+//         child: Icon(
+//           _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -420,23 +420,36 @@ class _ChatMessagesState extends State<ChatMessages>
                 Container(
                   color: Theme.of(context).toggleableActiveColor,
                   width: double.infinity,
-                  child:NetworkImageDisplay(
+                  child: NetworkImageDisplay(
                     blurHash: messageInfo.blurHash,
-                    imageUrl: messageInfo.imageUrl,
+                    imageUrl:messageInfo.imageUrl ,
                     height: 270,
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Icon(
-                      Icons.collections_rounded,
-                      size: 20,
-                      color: Colors.white,
+                if (messageInfo.multiImages)
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Icon(
+                        Icons.collections_rounded,
+                        size: 20,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
+                if (messageInfo.isThatVideo)
+                  const Padding(
+                    padding: EdgeInsets.all(2.0),
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Icon(
+                        Icons.slow_motion_video_sharp,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ),
+                  ),
               ],
             ),
             _createActionBar(messageInfo),
