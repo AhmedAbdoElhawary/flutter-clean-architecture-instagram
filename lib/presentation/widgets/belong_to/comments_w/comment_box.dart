@@ -136,9 +136,9 @@ class _CommentBoxState extends State<CommentBox> {
   }
 
   Future<void> postTheComment(UserPersonalInfo myPersonalInfo) async {
-    final _whitespaceRE = RegExp(r"\s+");
+    final whitespaceRE = RegExp(r"\s+");
     String textWithOneSpaces =
-        widget.textController.text.replaceAll(_whitespaceRE, " ");
+        widget.textController.text.replaceAll(whitespaceRE, " ");
 
     if (widget.selectedCommentInfo == null) {
       CommentsInfoCubit commentsInfoCubit =
