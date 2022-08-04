@@ -91,17 +91,15 @@ class VideosPageState extends State<VideosPage> {
               var duration = const Duration(seconds: 1);
               File image = await ExportVideoFrame.exportImageBySeconds(
                   video, duration, 0);
-              Uint8List covertVideo = await video.readAsBytes();
-              Uint8List covertImage = await image.readAsBytes();
+              Uint8List convertVideo = await video.readAsBytes();
+              Uint8List convertImage = await image.readAsBytes();
               pushToPage(context, page: CreatePostPage(
                 aspectRatio: 1,
-                multiSelectedFiles: [covertVideo],
+                multiSelectedFiles: [convertVideo],
                 isThatImage: false,
-                coverOfVideoBytes: covertImage,
+                coverOfVideoBytes: convertImage,
               ));
-
             }
-            // ToastShow.toast(StringsManager.noImageSelected.tr());
           },
           icon:
               const Icon(Icons.camera_alt, size: 30, color: ColorManager.white),
@@ -457,87 +455,3 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
     );
   }
 }
-
-class DisplayImages extends StatelessWidget {
-  final Uint8List selectedFile;
-  const DisplayImages({
-    Key? key,
-    required this.selectedFile,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Image')),
-      body: SizedBox(width: double.infinity, child: Image.memory(selectedFile)),
-    );
-  }
-}
-
-// class DisplayVideo extends StatefulWidget {
-//   final File video;
-//   final double aspectRatio;
-//   const DisplayVideo({
-//     Key? key,
-//     required this.video,
-//     required this.aspectRatio,
-//   }) : super(key: key);
-//
-//   @override
-//   State<DisplayVideo> createState() => _DisplayVideoState();
-// }
-//
-// class _DisplayVideoState extends State<DisplayVideo> {
-//   late VideoPlayerController _controller;
-//   late Future<void> _initializeVideoPlayerFuture;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _controller = VideoPlayerController.file(widget.video);
-//     _initializeVideoPlayerFuture = _controller.initialize();
-//     _controller.setLooping(true);
-//   }
-//
-//   @override
-//   void dispose() {
-//     _controller.dispose();
-//     super.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Video')),
-//       body: FutureBuilder(
-//         future: _initializeVideoPlayerFuture,
-//         builder: (context, snapshot) {
-//           if (snapshot.connectionState == ConnectionState.done) {
-//             return AspectRatio(
-//               aspectRatio: _controller.value.aspectRatio,
-//               child: VideoPlayer(_controller),
-//             );
-//           } else {
-//             return const Center(
-//               child: CircularProgressIndicator(),
-//             );
-//           }
-//         },
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: () {
-//           setState(() {
-//             if (_controller.value.isPlaying) {
-//               _controller.pause();
-//             } else {
-//               _controller.play();
-//             }
-//           });
-//         },
-//         child: Icon(
-//           _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-//         ),
-//       ),
-//     );
-//   }
-// }
