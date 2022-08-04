@@ -68,11 +68,11 @@ class _ChattingPageState extends State<ChattingPage>
 
   CircleAvatar circleAvatarOfImage() {
     return CircleAvatar(
+        radius: 45,
         child: ClipOval(
             child: NetworkImageDisplay(
           imageUrl: widget.userInfo.profileImageUrl,
-        )),
-        radius: 45);
+        )));
   }
 
   Row userName() {

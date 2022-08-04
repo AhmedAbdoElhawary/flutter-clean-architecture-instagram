@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:octo_image/octo_image.dart';
 
 class MemoryImageDisplay extends StatefulWidget {
   final Uint8List imagePath;
@@ -27,13 +26,15 @@ class _NetworkImageDisplayState extends State<MemoryImageDisplay> {
     return buildOctoImage();
   }
 
-  OctoImage buildOctoImage() {
-    return OctoImage(
-      image: MemoryImage(widget.imagePath),
-      errorBuilder: (context, url, error) => buildError(),
-      fit: BoxFit.cover,
+  Widget buildOctoImage() {
+    return Container(
       width: double.infinity,
-      placeholderBuilder: (context) => Center(child: buildSizedBox()),
+      color: ColorManager.black26,
+      child: Image.memory(widget.imagePath,
+        errorBuilder: (context, url, error) => buildError(),
+        fit: BoxFit.cover,
+        width: double.infinity,
+      ),
     );
   }
 
@@ -42,13 +43,6 @@ class _NetworkImageDisplayState extends State<MemoryImageDisplay> {
       width: double.infinity,
       child: Icon(Icons.warning_amber_rounded,
           size: 50, color: Theme.of(context).focusColor),
-    );
-  }
-
-  Widget buildSizedBox() {
-    return Container(
-      width: double.infinity,
-      color: ColorManager.black26,
     );
   }
 }

@@ -30,10 +30,10 @@ class StoryPageForWeb extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _StoryPageForWebState createState() => _StoryPageForWebState();
+  StoryPageForWebState createState() => StoryPageForWebState();
 }
 
-class _StoryPageForWebState extends State<StoryPageForWeb> {
+class StoryPageForWebState extends State<StoryPageForWeb> {
   int currentPage = 0;
   late ScrollController _scrollPageController;
   double initialPage = 0;
@@ -153,10 +153,10 @@ class StoryWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _StoryWidgetState createState() => _StoryWidgetState();
+  StoryWidgetState createState() => StoryWidgetState();
 }
 
-class _StoryWidgetState extends State<StoryWidget> {
+class StoryWidgetState extends State<StoryWidget> {
   final SharedPreferences _sharePrefs = injector<SharedPreferences>();
 
   final storyItems = <StoryItem>[];

@@ -11,19 +11,19 @@ class FireStoreMessage {
     required String chatId,
     required Message message,
   }) async {
-    DocumentReference<Map<String, dynamic>> _fireChatsCollection =
+    DocumentReference<Map<String, dynamic>> fireChatsCollection =
         _fireStoreUserCollection.doc(userId).collection("chats").doc(chatId);
-    _fireChatsCollection.set(message.toMap());
+    fireChatsCollection.set(message.toMap());
 
-    CollectionReference<Map<String, dynamic>> _fireMessagesCollection =
-        _fireChatsCollection.collection("messages");
+    CollectionReference<Map<String, dynamic>> fireMessagesCollection =
+        fireChatsCollection.collection("messages");
 
     DocumentReference<Map<String, dynamic>> messageRef =
-        await _fireMessagesCollection.add(message.toMap());
+        await fireMessagesCollection.add(message.toMap());
 
     message.messageUid = messageRef.id;
 
-    await _fireMessagesCollection
+    await fireMessagesCollection
         .doc(messageRef.id)
         .update({"messageUid": messageRef.id});
     return message;
@@ -34,16 +34,16 @@ class FireStoreMessage {
     required String chatId,
     required Message message,
   }) async {
-    DocumentReference<Map<String, dynamic>> _fireChatsCollection =
+    DocumentReference<Map<String, dynamic>> fireChatsCollection =
         _fireStoreUserCollection
             .doc(myPersonalId)
             .collection("chats")
             .doc(chatId != myPersonalId ? chatId : userId);
-    await _fireChatsCollection.set(message.toMap());
+    await fireChatsCollection.set(message.toMap());
   }
 
   static Stream<List<Message>> getMessages({required String receiverId}) {
-    Stream<QuerySnapshot<Map<String, dynamic>>> _snapshotsMessages =
+    Stream<QuerySnapshot<Map<String, dynamic>>> snapshotsMessages =
         _fireStoreUserCollection
             .doc(myPersonalId)
             .collection("chats")
@@ -51,7 +51,7 @@ class FireStoreMessage {
             .collection("messages")
             .orderBy("datePublished", descending: false)
             .snapshots();
-    return _snapshotsMessages.map((snapshot) =>
+    return snapshotsMessages.map((snapshot) =>
         snapshot.docs.map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
           return Message.fromJson(doc);
         }).toList());

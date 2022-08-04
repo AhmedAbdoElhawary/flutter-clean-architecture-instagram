@@ -115,24 +115,24 @@ class SoundRecordNotifier extends ChangeNotifier {
 
   /// used to get the current store path
   Future<String> getFilePath() async {
-    String _sdPath = "";
+    String sdPath = "";
     if (Platform.isIOS) {
       Directory tempDir = await getTemporaryDirectory();
-      _sdPath = initialStorePathRecord.isEmpty
+      sdPath = initialStorePathRecord.isEmpty
           ? tempDir.path
           : initialStorePathRecord;
     } else {
-      _sdPath = initialStorePathRecord.isEmpty
+      sdPath = initialStorePathRecord.isEmpty
           ? "/storage/emulated/0/new_record_sound"
           : initialStorePathRecord;
     }
-    var d = Directory(_sdPath);
+    var d = Directory(sdPath);
     if (!d.existsSync()) {
       d.createSync(recursive: true);
     }
     var uuid = const Uuid();
     String uid = uuid.v1();
-    String storagePath = _sdPath + "/" + uid + _getSoundExtension();
+    String storagePath = "$sdPath/$uid${_getSoundExtension()}";
     mPath = storagePath;
     return storagePath;
   }

@@ -52,10 +52,10 @@ class InViewNotifier extends StatefulWidget {
         super(key: key);
 
   @override
-  _InViewNotifierState createState() => _InViewNotifierState();
+  InViewNotifierState createState() => InViewNotifierState();
 }
 
-class _InViewNotifierState extends State<InViewNotifier> {
+class InViewNotifierState extends State<InViewNotifier> {
   InViewState? _inViewState;
   StreamController<ScrollNotification>? _streamController;
 

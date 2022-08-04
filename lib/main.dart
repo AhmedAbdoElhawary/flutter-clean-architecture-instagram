@@ -1,7 +1,7 @@
+import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -9,7 +9,6 @@ import 'package:get_storage/get_storage.dart';
 // import 'package:instagram/core/private_keys.dart';
 import 'package:instagram/core/resources/langauge_manager.dart';
 import 'package:instagram/app.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/utility/injector.dart';
 
@@ -22,9 +21,9 @@ Future<void> main() async {
 
 EasyLocalization easyLocalization(Widget myApp) {
   return EasyLocalization(
-      child: Phoenix(child: myApp),
       supportedLocales: const [arabicLocal, englishLocal],
-      path: assetPathLocalisations);
+      path: assetPathLocalisations,
+      child: Phoenix(child: myApp),);
 }
 
 Future<SharedPreferences> init() async {
@@ -44,7 +43,7 @@ Future<SharedPreferences> init() async {
     );
   } else {
     await Firebase.initializeApp();
-    await PhotoManager.requestPermissionExtend();
+    await CustomGalleryPermissions.requestPermissionExtend();
   }
   await EasyLocalization.ensureInitialized();
   await initializeDependencies();

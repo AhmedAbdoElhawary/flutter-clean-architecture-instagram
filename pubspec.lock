@@ -281,13 +281,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.1"
-  dotted_border:
-    dependency: "direct main"
-    description:
-      name: dotted_border
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0+2"
   easy_localization:
     dependency: "direct main"
     description:
@@ -366,7 +359,7 @@ packages:
     source: hosted
     version: "4.5.0"
   firebase_core_web:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: firebase_core_web
       url: "https://pub.dartlang.org"
@@ -398,13 +391,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_animated_dialog:
-    dependency: "direct main"
-    description:
-      name: flutter_animated_dialog
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
   flutter_bloc:
     dependency: "direct main"
     description:
@@ -540,7 +526,7 @@ packages:
     source: hosted
     version: "4.0.1"
   image:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: image
       url: "https://pub.dartlang.org"
@@ -616,13 +602,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  lottie:
-    dependency: "direct main"
-    description:
-      name: lottie
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.4.1"
   matcher:
     dependency: transitive
     description:
@@ -666,7 +645,7 @@ packages:
     source: hosted
     version: "2.0.9"
   path:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path
       url: "https://pub.dartlang.org"
@@ -687,7 +666,7 @@ packages:
     source: hosted
     version: "1.0.1"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.dartlang.org"
@@ -748,14 +727,14 @@ packages:
       name: permission_handler
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "10.0.0"
+    version: "9.2.0"
   permission_handler_android:
     dependency: transitive
     description:
       name: permission_handler_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "10.0.0"
+    version: "9.0.2+1"
   permission_handler_apple:
     dependency: transitive
     description:
@@ -785,7 +764,7 @@ packages:
     source: hosted
     version: "5.0.0"
   photo_manager:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: photo_manager
       url: "https://pub.dartlang.org"
@@ -813,7 +792,7 @@ packages:
     source: hosted
     version: "4.2.4"
   provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: provider
       url: "https://pub.dartlang.org"
@@ -848,42 +827,21 @@ packages:
       name: record
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.3.2"
-  record_linux:
-    dependency: transitive
-    description:
-      name: record_linux
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.2"
-  record_macos:
-    dependency: transitive
-    description:
-      name: record_macos
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.1"
+    version: "3.0.4"
   record_platform_interface:
     dependency: transitive
     description:
       name: record_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0"
+    version: "0.2.0"
   record_web:
     dependency: transitive
     description:
       name: record_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0"
-  record_windows:
-    dependency: transitive
-    description:
-      name: record_windows
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.1"
+    version: "0.2.1"
   rxdart:
     dependency: transitive
     description:
@@ -961,13 +919,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  simple_animations:
-    dependency: "direct main"
-    description:
-      name: simple_animations
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.2.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -981,7 +932,7 @@ packages:
     source: hosted
     version: "1.8.2"
   sqflite:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: sqflite
       url: "https://pub.dartlang.org"
@@ -1051,7 +1002,7 @@ packages:
     source: hosted
     version: "1.3.1"
   uuid:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: uuid
       url: "https://pub.dartlang.org"

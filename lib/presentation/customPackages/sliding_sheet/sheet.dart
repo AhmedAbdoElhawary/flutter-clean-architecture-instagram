@@ -933,7 +933,6 @@ class SlidingSheetState extends State<SlidingSheet>
         constraints: BoxConstraints(maxWidth: widget.maxWidth),
         child: SizedBox.expand(
           child: ValueListenableBuilder(
-            child: sheet,
             valueListenable: extent!.currentExtent2,
             builder: (context, dynamic extent, sheet) {
               final translation = () {
@@ -976,6 +975,7 @@ class SlidingSheetState extends State<SlidingSheet>
                 ),
               );
             },
+            child: sheet,
           ),
         ),
       ),

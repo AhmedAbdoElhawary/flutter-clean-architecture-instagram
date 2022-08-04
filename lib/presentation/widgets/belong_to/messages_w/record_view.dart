@@ -14,10 +14,10 @@ class RecordView extends StatefulWidget {
       : super(key: key);
 
   @override
-  _RecordViewState createState() => _RecordViewState();
+  RecordViewState createState() => RecordViewState();
 }
 
-class _RecordViewState extends State<RecordView> {
+class RecordViewState extends State<RecordView> {
   int? _totalDuration;
   int? _currentDuration;
   int _reverseDuration = 0;

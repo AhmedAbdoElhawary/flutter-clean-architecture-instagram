@@ -33,7 +33,7 @@ class CustomAppBar {
             color: Theme.of(context).splashColor,
             offset: const Offset(90, 8),
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             child: SvgPicture.asset(
               IconsAssets.add2Icon,
               color: Theme.of(context).focusColor,
@@ -49,7 +49,7 @@ class CustomAppBar {
                       child: Text(
                         StringsManager.post.tr(),
                         style:
-                        getMediumStyle(color: Theme.of(context).focusColor),
+                            getMediumStyle(color: Theme.of(context).focusColor),
                       ),
                     ),
                     const SizedBox(width: 25),
@@ -65,7 +65,7 @@ class CustomAppBar {
                       child: Text(
                         StringsManager.story.tr(),
                         style:
-                        getMediumStyle(color: Theme.of(context).focusColor),
+                            getMediumStyle(color: Theme.of(context).focusColor),
                       ),
                     ),
                     SvgPicture.asset(
@@ -84,7 +84,7 @@ class CustomAppBar {
                       child: Text(
                         StringsManager.reel.tr(),
                         style:
-                        getMediumStyle(color: Theme.of(context).focusColor),
+                            getMediumStyle(color: Theme.of(context).focusColor),
                       ),
                     ),
                     SvgPicture.asset(
@@ -103,7 +103,7 @@ class CustomAppBar {
                       child: Text(
                         StringsManager.live.tr(),
                         style:
-                        getMediumStyle(color: Theme.of(context).focusColor),
+                            getMediumStyle(color: Theme.of(context).focusColor),
                       ),
                     ),
                     SvgPicture.asset(
@@ -164,7 +164,6 @@ class CustomAppBar {
   static Future _pushToCustomGallery(BuildContext context) =>
       pushToPage(context, page: const CustomGalleryDisplay());
 
-
   static AppBar chattingAppBar(
       UserPersonalInfo userInfo, BuildContext context) {
     return AppBar(
@@ -173,11 +172,13 @@ class CustomAppBar {
       title: Row(
         children: [
           CircleAvatar(
-              child: ClipOval(
-                  child: NetworkImageDisplay(
-                    imageUrl: userInfo.profileImageUrl,
-                  )),
-              radius: 17),
+            radius: 17,
+            child: ClipOval(
+              child: NetworkImageDisplay(
+                imageUrl: userInfo.profileImageUrl,
+              ),
+            ),
+          ),
           const SizedBox(width: 15),
           Text(
             userInfo.name,
@@ -218,10 +219,10 @@ class CustomAppBar {
       title: logoOfInstagram
           ? const InstagramLogo()
           : Text(
-        text,
-        style: getMediumStyle(
-            color: Theme.of(context).focusColor, fontSize: 20),
-      ),
+              text,
+              style: getMediumStyle(
+                  color: Theme.of(context).focusColor, fontSize: 20),
+            ),
     );
   }
 

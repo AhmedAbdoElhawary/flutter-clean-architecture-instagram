@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/customPackages/story_view/story_image_for_web.dart';
@@ -188,6 +188,10 @@ class StoryItem {
     return StoryItem(
       ClipRRect(
         key: key,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(roundedTop ? 8 : 0),
+          bottom: Radius.circular(roundedBottom ? 8 : 0),
+        ),
         child: Container(
           color: ColorManager.black,
           child: Stack(
@@ -216,17 +220,13 @@ class StoryItem {
                 child: Align(
                   alignment: Alignment.bottomLeft,
                   child: SizedBox(
-                    child: caption ?? const SizedBox(),
                     width: double.infinity,
+                    child: caption ?? const SizedBox(),
                   ),
                 ),
               ),
             ],
           ),
-        ),
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(roundedTop ? 8 : 0),
-          bottom: Radius.circular(roundedBottom ? 8 : 0),
         ),
       ),
       blurHashBackground: blurHash,
@@ -373,8 +373,8 @@ class StoryItem {
           child: Align(
             alignment: Alignment.bottomLeft,
             child: SizedBox(
-              child: caption ?? const SizedBox(),
               width: double.infinity,
+              child: caption ?? const SizedBox(),
             ),
           ),
         ),
@@ -596,11 +596,11 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
       _animationController!.stop();
 
       // get last showing
-      final _last = _currentStory;
+      final last = _currentStory;
 
-      if (_last != null) {
-        _last.shown = true;
-        if (_last != widget.storyItems.last) {
+      if (last != null) {
+        last.shown = true;
+        if (last != widget.storyItems.last) {
           _beginPlay();
         }
       }
@@ -716,12 +716,12 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
               alignment: Alignment.centerLeft,
               heightFactor: 1,
               child: SizedBox(
+                  width: 70,
                   child: GestureDetector(
                     onTap: () {
                       widget.controller.previous();
                     },
-                  ),
-                  width: 70),
+                  )),
             ),
           ],
         ],

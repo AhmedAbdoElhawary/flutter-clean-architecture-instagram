@@ -29,11 +29,12 @@ class SocialMediaRecorder extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
+
   @override
-  _SocialMediaRecorder createState() => _SocialMediaRecorder();
+  SocialMediaRecorderS createState() => SocialMediaRecorderS();
 }
 
-class _SocialMediaRecorder extends State<SocialMediaRecorder> {
+class SocialMediaRecorderS extends State<SocialMediaRecorder> {
   late SoundRecordNotifier soundRecordNotifier;
 
   @override

@@ -16,10 +16,10 @@ class StorySwipe extends StatefulWidget {
   }
 
   @override
-  _StorySwipeState createState() => _StorySwipeState();
+  StorySwipeState createState() => StorySwipeState();
 }
 
-class _StorySwipeState extends State<StorySwipe> {
+class StorySwipeState extends State<StorySwipe> {
   double currentPageValue = 0.0;
 
   @override
