@@ -5,8 +5,8 @@ import 'package:instagram/core/functions/compress_image.dart';
 import 'package:instagram/core/utility/constant.dart';
 
 Future<Uint8List?> imageCameraPicker() async {
-  final ImagePicker _picker = ImagePicker();
-  final XFile? image = await _picker.pickImage(
+  final ImagePicker picker = ImagePicker();
+  final XFile? image = await picker.pickImage(
       source: ImageSource.camera, maxWidth: double.infinity, maxHeight: 300);
   if (image != null) {
 
@@ -23,8 +23,8 @@ Future<Uint8List?> imageCameraPicker() async {
 }
 
 Future<Uint8List?> imageGalleryPicker() async {
-  final ImagePicker _picker = ImagePicker();
-  final XFile? image = await _picker.pickImage(
+  final ImagePicker picker = ImagePicker();
+  final XFile? image = await picker.pickImage(
       source: ImageSource.gallery, maxWidth: double.infinity, maxHeight: 300);
   if (image != null) {
     Uint8List photo = await image.readAsBytes();
@@ -40,8 +40,8 @@ Future<Uint8List?> imageGalleryPicker() async {
 }
 
 Future<Uint8List?> videoCameraPicker() async {
-  final ImagePicker _picker = ImagePicker();
-  final XFile? video = await _picker.pickVideo(source: ImageSource.camera);
+  final ImagePicker picker = ImagePicker();
+  final XFile? video = await picker.pickVideo(source: ImageSource.camera);
   if (video != null) {
     Uint8List videoFile = await video.readAsBytes();
     return videoFile;
