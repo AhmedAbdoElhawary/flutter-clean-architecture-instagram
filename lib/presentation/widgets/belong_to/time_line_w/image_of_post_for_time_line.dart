@@ -227,9 +227,9 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
   }
 
   Future<void> postTheComment(UserPersonalInfo userInfo) async {
-    final _whitespaceRE = RegExp(r"\s+");
+    final whitespaceRE = RegExp(r"\s+");
     String textWithOneSpaces =
-        commentTextController.value.text.replaceAll(_whitespaceRE, " ");
+        commentTextController.value.text.replaceAll(whitespaceRE, " ");
 
     CommentsInfoCubit commentsInfoCubit =
         BlocProvider.of<CommentsInfoCubit>(context);
