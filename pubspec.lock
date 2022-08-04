@@ -21,7 +21,7 @@ packages:
       name: archive
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.3.0"
+    version: "3.3.1"
   args:
     dependency: transitive
     description:
@@ -217,21 +217,21 @@ packages:
       name: cloud_firestore
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.1"
+    version: "3.4.3"
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.5.10"
+    version: "5.7.0"
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.6.19"
+    version: "2.8.3"
   collection:
     dependency: transitive
     description:
@@ -309,27 +309,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.3"
-  export_video_frame:
-    dependency: "direct main"
-    description:
-      name: export_video_frame
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.7"
-  extended_image:
-    dependency: "direct main"
-    description:
-      name: extended_image
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.2.1"
-  extended_image_library:
-    dependency: transitive
-    description:
-      name: extended_image_library
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.3.0"
   fake_async:
     dependency: transitive
     description:
@@ -357,63 +336,63 @@ packages:
       name: firebase_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.4.1"
+    version: "3.6.2"
   firebase_auth_platform_interface:
     dependency: transitive
     description:
       name: firebase_auth_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.3.1"
+    version: "6.5.2"
   firebase_auth_web:
     dependency: transitive
     description:
       name: firebase_auth_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.3.19"
+    version: "4.2.2"
   firebase_core:
     dependency: "direct main"
     description:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.19.1"
+    version: "1.20.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
       name: firebase_core_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.4.3"
+    version: "4.5.0"
   firebase_core_web:
     dependency: "direct main"
     description:
       name: firebase_core_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.6"
+    version: "1.7.1"
   firebase_storage:
     dependency: "direct main"
     description:
       name: firebase_storage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "10.3.1"
+    version: "10.3.4"
   firebase_storage_platform_interface:
     dependency: transitive
     description:
       name: firebase_storage_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.10"
+    version: "4.1.12"
   firebase_storage_web:
     dependency: transitive
     description:
       name: firebase_storage_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.19"
+    version: "3.3.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -453,7 +432,7 @@ packages:
       name: flutter_image_compress
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -467,7 +446,7 @@ packages:
       name: flutter_lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "2.0.1"
   flutter_localizations:
     dependency: transitive
     description: flutter
@@ -486,7 +465,7 @@ packages:
       name: flutter_plugin_android_lifecycle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.6"
+    version: "2.0.7"
   flutter_staggered_grid_view:
     dependency: "direct main"
     description:
@@ -500,7 +479,7 @@ packages:
       name: flutter_svg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1+1"
+    version: "1.1.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -552,14 +531,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.4"
-  http_client_helper:
-    dependency: transitive
-    description:
-      name: http_client_helper
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.3"
+    version: "0.13.5"
   http_parser:
     dependency: transitive
     description:
@@ -580,28 +552,7 @@ packages:
       name: image_crop
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0"
-  image_cropper:
-    dependency: "direct main"
-    description:
-      name: image_cropper
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.3"
-  image_cropper_for_web:
-    dependency: transitive
-    description:
-      name: image_cropper_for_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.4"
-  image_cropper_platform_interface:
-    dependency: transitive
-    description:
-      name: image_cropper_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
+    version: "0.4.1"
   image_picker:
     dependency: "direct main"
     description:
@@ -629,21 +580,14 @@ packages:
       name: image_picker_ios
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.5+5"
+    version: "0.8.5+6"
   image_picker_platform_interface:
     dependency: transitive
     description:
       name: image_picker_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.0"
-  image_picker_web:
-    dependency: "direct main"
-    description:
-      name: image_picker_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
+    version: "2.6.1"
   intl:
     dependency: transitive
     description:
@@ -671,14 +615,14 @@ packages:
       name: lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "2.0.0"
   lottie:
     dependency: "direct main"
     description:
       name: lottie
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.0"
+    version: "1.4.1"
   matcher:
     dependency: transitive
     description:
@@ -693,13 +637,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.4"
-  media_info:
-    dependency: transitive
-    description:
-      name: media_info
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.7.0"
   meta:
     dependency: transitive
     description:
@@ -707,13 +644,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
-  mime:
-    dependency: transitive
-    description:
-      name: mime
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
   nested:
     dependency: transitive
     description:
@@ -748,14 +678,14 @@ packages:
       name: path_drawing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   path_parsing:
     dependency: transitive
     description:
       name: path_parsing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   path_provider:
     dependency: transitive
     description:
@@ -769,14 +699,14 @@ packages:
       name: path_provider_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.16"
+    version: "2.0.17"
   path_provider_ios:
     dependency: transitive
     description:
       name: path_provider_ios
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.10"
+    version: "2.0.11"
   path_provider_linux:
     dependency: transitive
     description:
@@ -804,7 +734,7 @@ packages:
       name: path_provider_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   pedantic:
     dependency: transitive
     description:
@@ -818,14 +748,14 @@ packages:
       name: permission_handler
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.2.0"
+    version: "10.0.0"
   permission_handler_android:
     dependency: transitive
     description:
       name: permission_handler_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.0.2+1"
+    version: "10.0.0"
   permission_handler_apple:
     dependency: transitive
     description:
@@ -861,13 +791,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.4"
-  photofilters:
-    dependency: "direct main"
-    description:
-      name: photofilters
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.1"
   platform:
     dependency: transitive
     description:
@@ -925,28 +848,49 @@ packages:
       name: record
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.4"
+    version: "4.3.2"
+  record_linux:
+    dependency: transitive
+    description:
+      name: record_linux
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
+  record_macos:
+    dependency: transitive
+    description:
+      name: record_macos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.1"
   record_platform_interface:
     dependency: transitive
     description:
       name: record_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
+    version: "0.4.0"
   record_web:
     dependency: transitive
     description:
       name: record_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.1"
+    version: "0.4.0"
+  record_windows:
+    dependency: transitive
+    description:
+      name: record_windows
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.1"
   rxdart:
     dependency: transitive
     description:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.27.4"
+    version: "0.27.5"
   scrollable_positioned_list:
     dependency: "direct main"
     description:
@@ -1042,7 +986,7 @@ packages:
       name: sqflite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.2+1"
+    version: "2.0.3"
   sqflite_common:
     dependency: transitive
     description:
@@ -1106,13 +1050,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.1"
-  ui_helper:
-    dependency: "direct main"
-    description:
-      name: ui_helper
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0"
   uuid:
     dependency: transitive
     description:
@@ -1147,7 +1084,7 @@ packages:
       name: video_player_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.6"
+    version: "2.3.8"
   video_player_avfoundation:
     dependency: transitive
     description:
@@ -1168,14 +1105,14 @@ packages:
       name: video_player_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.10"
+    version: "2.0.12"
   video_thumbnail:
     dependency: "direct main"
     description:
       name: video_thumbnail
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.0"
+    version: "0.5.2"
   win32:
     dependency: transitive
     description:

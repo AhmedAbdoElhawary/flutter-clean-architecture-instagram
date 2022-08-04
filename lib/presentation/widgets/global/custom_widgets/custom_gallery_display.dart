@@ -9,6 +9,7 @@ import 'package:instagram/core/functions/compress_image.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/pages/story/create_story.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class CustomGalleryDisplay extends StatefulWidget {
   const CustomGalleryDisplay({Key? key}) : super(key: key);
@@ -72,14 +73,29 @@ Future<void> moveToCreationPage(
         page: CreateStoryPage(
             storyImage: bytesFile, isThatImage: details.isThatImage));
   } else {
-    await pushToPage(
-      context,
-      page: CreatePostPage(
-        multiSelectedFiles:
-            selectedUint8Lists.isNotEmpty ? selectedUint8Lists : [bytesFile],
-        isThatImage: details.isThatImage,
-        aspectRatio: details.aspectRatio,
-      ),
-    );
+    if (!details.isThatImage) {
+      final convertImage = await VideoThumbnail.thumbnailData(
+        video: details.selectedFile.path,
+        imageFormat: ImageFormat.PNG,
+      );
+      Uint8List convertVideo = await details.selectedFile.readAsBytes();
+      await pushToPage(context,
+          page: CreatePostPage(
+            aspectRatio: 1,
+            multiSelectedFiles: [convertVideo],
+            isThatImage: false,
+            coverOfVideoBytes: convertImage,
+          ));
+    } else {
+      await pushToPage(
+        context,
+        page: CreatePostPage(
+          multiSelectedFiles:
+              selectedUint8Lists.isNotEmpty ? selectedUint8Lists : [bytesFile],
+          isThatImage: details.isThatImage,
+          aspectRatio: details.aspectRatio,
+        ),
+      );
+    }
   }
 }
