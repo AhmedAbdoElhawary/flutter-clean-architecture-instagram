@@ -18,6 +18,7 @@
     <string name="common_open_on_phone">Öppna på mobilen</string>
     <string name="common_signin_button_text">Logga in</string>
     <string name="common_signin_button_text_long">Logga in med Google</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"Länk kopierad till Urklipp"</string>
     <string name="exo_download_completed">Nedladdningen är klar</string>
     <string name="exo_download_description">Ladda ned</string>
     <string name="exo_download_downloading">Laddar ned</string>
@@ -27,5 +28,8 @@
     <string name="exo_download_paused_for_network">Nedladdningar väntar på nätverket</string>
     <string name="exo_download_paused_for_wifi">Nedladdningar väntar på wifi</string>
     <string name="exo_download_removing">Nedladdningar tas bort</string>
+    <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Kopiera länk"</string>
+    <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Öppna i webbläsaren"</string>
+    <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Dela länk"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>
