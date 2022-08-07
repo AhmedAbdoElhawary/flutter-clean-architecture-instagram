@@ -18,6 +18,7 @@
     <string name="common_open_on_phone">فون پر کھولیں</string>
     <string name="common_signin_button_text">سائن ان کریں</string>
     <string name="common_signin_button_text_long">‏Google کے ساتھ سائن ان کریں</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"لنک کلپ بورڈ پر کاپی ہو گیا"</string>
     <string name="exo_download_completed">ڈاؤن لوڈ مکمل ہو گیا</string>
     <string name="exo_download_description">ڈاؤن لوڈ کریں</string>
     <string name="exo_download_downloading">ڈاؤن لوڈ ہو رہا ہے</string>
@@ -27,5 +28,8 @@
     <string name="exo_download_paused_for_network">ڈاؤن لوڈز نیٹ ورک کے منتظر ہیں</string>
     <string name="exo_download_paused_for_wifi">ڈاؤن لوڈز WiFi کے منتظر ہیں</string>
     <string name="exo_download_removing">ڈاؤن لوڈز کو ہٹایا جا رہا ہے</string>
+    <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"لنک کاپی کریں"</string>
+    <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"براؤزر میں کھولیں"</string>
+    <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"لنک کا اشتراک کریں"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"+999"</string>
 </resources>
