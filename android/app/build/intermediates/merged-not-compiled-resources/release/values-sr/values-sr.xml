@@ -18,6 +18,7 @@
     <string name="common_open_on_phone">Отвори на телефону</string>
     <string name="common_signin_button_text">Пријави ме</string>
     <string name="common_signin_button_text_long">Пријави ме на Google</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"Линк је копиран у привремену меморију"</string>
     <string name="exo_download_completed">Преузимање је завршено</string>
     <string name="exo_download_description">Преузми</string>
     <string name="exo_download_downloading">Преузима се</string>
@@ -27,5 +28,8 @@
     <string name="exo_download_paused_for_network">Преузимања чекају на мрежу</string>
     <string name="exo_download_paused_for_wifi">Преузимања чекају на WiFi</string>
     <string name="exo_download_removing">Преузимања се уклањају</string>
+    <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Копирај линк"</string>
+    <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Отвори у прегледачу"</string>
+    <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Дели линк"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>
