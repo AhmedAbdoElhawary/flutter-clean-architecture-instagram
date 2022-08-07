@@ -78,17 +78,15 @@ dependencies:
   flutter_blurhash: ^0.7.0
   uuid: ^3.0.6
   path_provider: ^2.0.11
-
   animated_splash_screen: ^1.3.0
-#  photofilters: ^3.0.1
   path: ^1.8.1
   provider: ^6.0.3
 
 
   ## My package
-  custom_gallery_display: ^0.3.4
-#  custom_gallery_display:
-#    path: C:\Users\ahmed\custom_gallery_display-1
+#  custom_gallery_display: ^0.3.6
+  custom_gallery_display:
+    path: D:\custom_gallery_8_5\custom_gallery_display
 
 dev_dependencies:
   flutter_lints: ^2.0.1
