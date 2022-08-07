@@ -18,6 +18,7 @@
     <string name="common_open_on_phone">Buksan sa telepono</string>
     <string name="common_signin_button_text">Mag-sign in</string>
     <string name="common_signin_button_text_long">Mag-sign in sa Google</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"Nakopya sa clipboard ang link"</string>
     <string name="exo_download_completed">Tapos na ang pag-download</string>
     <string name="exo_download_description">I-download</string>
     <string name="exo_download_downloading">Nagda-download</string>
@@ -27,5 +28,8 @@
     <string name="exo_download_paused_for_network">Naghihintay ng network ang pag-download</string>
     <string name="exo_download_paused_for_wifi">Naghihintay ng WiFi ang mga pag-download</string>
     <string name="exo_download_removing">Inaalis ang mga na-download</string>
+    <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Kopyahin ang link"</string>
+    <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Buksan sa browser"</string>
+    <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Ibahagi ang link"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>
