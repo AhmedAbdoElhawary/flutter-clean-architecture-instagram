@@ -18,6 +18,7 @@
     <string name="common_open_on_phone">Telefonda ochish</string>
     <string name="common_signin_button_text">Kirish</string>
     <string name="common_signin_button_text_long">Google orqali kirish</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"Havoladan vaqtinchalik xotiraga nusxa olindi"</string>
     <string name="exo_download_completed">Yuklab olindi</string>
     <string name="exo_download_description">Yuklab olish</string>
     <string name="exo_download_downloading">Yuklab olinmoqda</string>
@@ -27,5 +28,8 @@
     <string name="exo_download_paused_for_network">Yuklanmalar internetga ulanishni kutmoqda</string>
     <string name="exo_download_paused_for_wifi">Yuklanmalar Wi-Fi aloqasini kutmoqda</string>
     <string name="exo_download_removing">Yuklanmalar olib tashlanmoqda</string>
+    <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Havoladan nusxa olish"</string>
+    <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Brauzerda ochish"</string>
+    <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Havolani ulashish"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>
