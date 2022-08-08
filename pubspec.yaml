@@ -84,9 +84,9 @@ dependencies:
 
 
   ## My package
-#  custom_gallery_display: ^0.3.6
-  custom_gallery_display:
-    path: D:\custom_gallery_8_5\custom_gallery_display
+  custom_gallery_display: ^0.3.7
+#  custom_gallery_display:
+#    path: D:\day_8_6\custom_gallery_display
 
 dev_dependencies:
   flutter_lints: ^2.0.1
