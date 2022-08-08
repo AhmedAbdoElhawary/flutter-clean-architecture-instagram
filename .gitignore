@@ -15,9 +15,9 @@
 *.iws
 .idea/
 
-lib/core/private_keys.dart
+#lib/core/private_keys.dart
 **/app/google-services.json
-**/web/index.html/
+#**/web/index.html/
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
