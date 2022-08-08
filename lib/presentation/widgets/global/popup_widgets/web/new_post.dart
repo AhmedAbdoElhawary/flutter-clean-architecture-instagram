@@ -35,7 +35,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
   final imagesControllerNotifier = ValueNotifier(false);
 
   ScrollController imagesController = ScrollController();
-  final _cropKey = GlobalKey<CropState>();
+  final _cropKey = GlobalKey<WebCustomCropState>();
   int indexOfSelectedImage = 0;
   CreatePostButton createPostButton = CreatePostButton.none;
   TextEditingController textController = TextEditingController();
@@ -364,7 +364,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
           child: ValueListenableBuilder(
             valueListenable: imageAspectRatio,
             builder: (context, double imageAspectRatioValue, child) =>
-                Crop.memory(
+                WebCustomCrop.memory(
                   selectedImageValue,
                   key: _cropKey,
                   aspectRatio: imageAspectRatioValue,
