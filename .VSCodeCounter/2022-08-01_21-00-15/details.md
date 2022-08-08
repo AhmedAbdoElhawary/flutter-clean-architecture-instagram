@@ -372,7 +372,7 @@ Total : 384 files,  25464 codes, 2217 comments, 3175 blanks, all 30856 lines
 | [lib/presentation/widgets/global/popup_widgets/web/menu_card.dart](/lib/presentation/widgets/global/popup_widgets/web/menu_card.dart) | Dart | 59 | 0 | 6 | 65 |
 | [lib/presentation/widgets/global/popup_widgets/web/new_post.dart](/lib/presentation/widgets/global/popup_widgets/web/new_post.dart) | Dart | 695 | 66 | 30 | 791 |
 | [lib/presentation/widgets/global/popup_widgets/web/share_post.dart](/lib/presentation/widgets/global/popup_widgets/web/share_post.dart) | Dart | 200 | 1 | 14 | 215 |
-| [lib/presentation/widgets/try_point_scrol_circle.dart](/lib/presentation/widgets/try_point_scrol_circle.dart) | Dart | 0 | 186 | 0 | 186 |
+| [lib/presentation/widgets/try_point_scrol_circle.dart](/lib/try_point_scrol_circle.dart) | Dart | 0 | 186 | 0 | 186 |
 | [lib/snapping.dart](/lib/presentation/customPackages/snapping.dart) | Dart | 287 | 90 | 70 | 447 |
 | [out/404.html](/out/404.html) | HTML | 32 | 0 | 2 | 34 |
 | [out/index.html](/out/index.html) | HTML | 79 | 6 | 5 | 90 |
