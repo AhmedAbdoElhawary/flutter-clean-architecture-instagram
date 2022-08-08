@@ -18,6 +18,7 @@
     <string name="common_open_on_phone">Vula kufoni</string>
     <string name="common_signin_button_text">Ngena ngemvume</string>
     <string name="common_signin_button_text_long">Ngena ngemvume nge-Google</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"Isixhumanisi sikopishelwe ku-clipboard"</string>
     <string name="exo_download_completed">Ukulanda kuqedile</string>
     <string name="exo_download_description">Landa</string>
     <string name="exo_download_downloading">Iyalanda</string>
@@ -27,5 +28,8 @@
     <string name="exo_download_paused_for_network">Ukulanda kulinde inethiwekhi</string>
     <string name="exo_download_paused_for_wifi">Ukulanda kulinde i-WiFi</string>
     <string name="exo_download_removing">Kususwa okulandiwe</string>
+    <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Kopisha isixhumanisi"</string>
+    <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Vula kusiphequluli"</string>
+    <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Yabelana ngesixhumanisi"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>

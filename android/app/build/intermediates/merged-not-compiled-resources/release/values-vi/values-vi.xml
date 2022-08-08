@@ -18,6 +18,7 @@
     <string name="common_open_on_phone">Mở trên điện thoại</string>
     <string name="common_signin_button_text">Đăng nhập</string>
     <string name="common_signin_button_text_long">Đăng nhập bằng Google</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"Đã sao chép đường liên kết vào bảng nhớ tạm"</string>
     <string name="exo_download_completed">Đã hoàn tất tải xuống</string>
     <string name="exo_download_description">Tải xuống</string>
     <string name="exo_download_downloading">Đang tải xuống</string>
@@ -27,5 +28,8 @@
     <string name="exo_download_paused_for_network">Đang chờ có mạng để tải xuống</string>
     <string name="exo_download_paused_for_wifi">Đang chờ có Wi-Fi để tải xuống</string>
     <string name="exo_download_removing">Đang xóa các mục đã tải xuống</string>
+    <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Sao chép đường liên kết"</string>
+    <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Mở trong trình duyệt"</string>
+    <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Chia sẻ liên kết"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>

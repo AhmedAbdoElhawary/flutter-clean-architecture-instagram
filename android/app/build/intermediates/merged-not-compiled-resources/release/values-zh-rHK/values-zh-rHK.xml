@@ -18,6 +18,7 @@
     <string name="common_open_on_phone">在手機開啟</string>
     <string name="common_signin_button_text">登入</string>
     <string name="common_signin_button_text_long">透過 Google 登入</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"連結已複製到剪貼簿"</string>
     <string name="exo_download_completed">下載完畢</string>
     <string name="exo_download_description">下載</string>
     <string name="exo_download_downloading">正在下載</string>
@@ -27,5 +28,8 @@
     <string name="exo_download_paused_for_network">正在等待網絡連線以下載檔案</string>
     <string name="exo_download_paused_for_wifi">正在等待 Wi-Fi 連線以下載檔案</string>
     <string name="exo_download_removing">正在移除下載內容</string>
+    <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"複製連結"</string>
+    <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"在瀏覽器中開啟"</string>
+    <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"分享連結"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>

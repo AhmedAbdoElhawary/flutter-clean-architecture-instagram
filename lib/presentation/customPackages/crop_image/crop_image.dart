@@ -17,7 +17,7 @@ enum _CropAction { none, moving, cropping, scaling }
 
 enum _CropHandleSide { none, topLeft, topRight, bottomLeft, bottomRight }
 
-class Crop extends StatefulWidget {
+class WebCustomCrop extends StatefulWidget {
   final ImageProvider image;
   final double? aspectRatio;
   final double maximumScale;
@@ -25,7 +25,7 @@ class Crop extends StatefulWidget {
   final ImageErrorListener? onImageError;
   final ValueChanged<bool>? scrollCustomList;
 
-  const Crop({
+  const WebCustomCrop({
     Key? key,
     required this.image,
     this.aspectRatio,
@@ -35,7 +35,7 @@ class Crop extends StatefulWidget {
     this.onImageError,
   }) : super(key: key);
 
-  Crop.file(
+  WebCustomCrop.file(
     File file, {
     Key? key,
     double scale = 1.0,
@@ -46,7 +46,7 @@ class Crop extends StatefulWidget {
     this.onImageError,
   })  : image = FileImage(file, scale: scale),
         super(key: key);
-  Crop.memory(
+  WebCustomCrop.memory(
     Uint8List byte, {
     Key? key,
     double scale = 1.0,
@@ -58,7 +58,7 @@ class Crop extends StatefulWidget {
   })  : image = MemoryImage(byte, scale: scale),
         super(key: key);
 
-  Crop.asset(
+  WebCustomCrop.asset(
     String assetName, {
     Key? key,
     AssetBundle? bundle,
@@ -72,13 +72,13 @@ class Crop extends StatefulWidget {
         super(key: key);
 
   @override
-  State<StatefulWidget> createState() => CropState();
+  State<StatefulWidget> createState() => WebCustomCropState();
 
-  static CropState? of(BuildContext context) =>
-      context.findAncestorStateOfType<CropState>();
+  static WebCustomCropState? of(BuildContext context) =>
+      context.findAncestorStateOfType<WebCustomCropState>();
 }
 
-class CropState extends State<Crop> with TickerProviderStateMixin, Drag {
+class WebCustomCropState extends State<WebCustomCrop> with TickerProviderStateMixin, Drag {
   final _surfaceKey = GlobalKey();
 
   late final AnimationController _activeController;
@@ -150,7 +150,7 @@ class CropState extends State<Crop> with TickerProviderStateMixin, Drag {
   }
 
   @override
-  void didUpdateWidget(Crop oldWidget) {
+  void didUpdateWidget(WebCustomCrop oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.image != oldWidget.image) {
