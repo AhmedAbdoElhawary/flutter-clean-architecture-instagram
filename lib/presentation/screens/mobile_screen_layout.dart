@@ -95,9 +95,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       builder: (context) => CupertinoPageScaffold(
             child: BlocProvider<PostCubit>(
               create: (context) => injector<PostCubit>(),
-              child: VideosPage(
-                stopVideo: ValueNotifier(value),
-              ),
+              child: VideosPage(stopVideo: playReelVideo),
             ),
           ));
 

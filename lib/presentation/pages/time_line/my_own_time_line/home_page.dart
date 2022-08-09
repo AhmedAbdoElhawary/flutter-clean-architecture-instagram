@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
         BlocProvider.of<UserInfoCubit>(context, listen: false);
     await userCubit.getUserInfo(widget.userId);
     personalInfo = userCubit.myPersonalInfo;
-
+    if (!mounted) return;
     List usersIds = personalInfo!.followedPeople;
 
     SpecificUsersPostsCubit usersPostsCubit =
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
     List usersPostsIds = usersPostsCubit.usersPostsInfo;
 
     postsIds = personalInfo!.posts + usersPostsIds;
-
+    if (!mounted) return;
     PostCubit postCubit = PostCubit.get(context);
     await postCubit
         .getPostsInfo(
@@ -168,10 +168,7 @@ class _HomePageState extends State<HomePage> {
                           ? isInView && widget.playVideo
                           : isInView;
                       return columnOfWidgets(
-                        bodyHeight,
-                        index,
-                        checkForPlatform,
-                      );
+                          bodyHeight, index, checkForPlatform);
                     },
                   );
                 },

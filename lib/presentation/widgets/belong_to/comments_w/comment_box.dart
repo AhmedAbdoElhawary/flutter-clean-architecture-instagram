@@ -13,11 +13,12 @@ import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
+import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 
 class CommentBox extends StatefulWidget {
   final Post postInfo;
- final ValueNotifier<FocusNode> currentFocus;
+  final ValueNotifier<FocusNode> currentFocus;
   final bool isThatCommentScreen;
   final Comment? selectedCommentInfo;
   final UserPersonalInfo userPersonalInfo;
@@ -152,9 +153,14 @@ class _CommentBoxState extends State<CommentBox> {
       await ReplyInfoCubit.get(context)
           .replyOnThisComment(replyInfo: replyInfo);
       widget.makeSelectedCommentNullable(false);
+      if (!mounted) return;
+      await PostCubit.get(context).updatePostInfo(postInfo: widget.postInfo);
     }
+    if (!mounted) return;
+
     BlocProvider.of<NotificationCubit>(context).createNotification(
         newNotification: createNotification(textWithOneSpaces, myPersonalInfo));
+    setState(() {});
   }
 
   CustomNotification createNotification(

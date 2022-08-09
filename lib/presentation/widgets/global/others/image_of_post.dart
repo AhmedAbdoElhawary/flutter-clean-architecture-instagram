@@ -80,7 +80,7 @@ class _ImageOfPostState extends State<ImageOfPost>
   ValueNotifier<bool> isSaved = ValueNotifier(false);
   ValueNotifier<int> initPosition = ValueNotifier(0);
   bool showCommentBox = false;
-  bool soundOn = true;
+  bool isSoundOn = true;
 
   bool isLiked = false;
   bool isHeartAnimation = false;
@@ -243,6 +243,7 @@ class _ImageOfPostState extends State<ImageOfPost>
         int index =
             isThatBack ? widget.indexOfPost - 1 : widget.indexOfPost + 1;
         await Navigator.of(context).maybePop();
+        if (!mounted) return;
         Navigator.of(context).push(
           HeroDialogRoute(
             builder: (context) => ImageOfPost(
@@ -538,28 +539,29 @@ class _ImageOfPostState extends State<ImageOfPost>
                         ),
                       ))
                 : Stack(
-                    alignment: Alignment.bottomCenter,
+                    alignment: Alignment.center,
                     children: [
                       PlayThisVideo(
                           videoUrl: postInfo.postUrl,
                           play: widget.playTheVideo,
-                          withoutSound: !soundOn),
+                          withoutSound: !isSoundOn),
                       if (!widget.playTheVideo)
-                        const Align(
+                        Align(
                           alignment: Alignment.center,
                           child: Icon(
                             Icons.play_arrow_rounded,
                             color: ColorManager.white,
-                            size: 200,
+                            size: isThatMobile ? 100 : 200,
                           ),
                         ),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Align(
-                          alignment: Alignment.bottomRight,
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
                           child: GestureDetector(
-                            onTap: () => setState(() => soundOn = !soundOn),
-                            child: VolumeIcon(isVolumeOn: soundOn),
+                            onTap: () => setState(() => isSoundOn = !isSoundOn),
+                            child: VolumeIcon(isVolumeOn: isSoundOn),
                           ),
                         ),
                       )
