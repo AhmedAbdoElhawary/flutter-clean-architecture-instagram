@@ -184,8 +184,11 @@ class _PopupNewPostState extends State<PopupNewPost> {
         // Uint8List? croppedImage = await cropImage(selectedImage.value!);
         if (selectedImage.value != null) {
           selectedImages.value = [selectedImage.value!];
+          // String pathFile=File.fromRawPath( selectedImage.value!).path;
+          // Uint8List? croppedImage=await croppedImageForWeb(builder2context,pathFile);
+          // selectedImage.value =croppedImage;
+
           setState(() {
-            selectedImage.value = selectedImage.value!;
           });
           // SelectedImageDetails details = SelectedImageDetails(
           //   selectedFile: croppedImage,
