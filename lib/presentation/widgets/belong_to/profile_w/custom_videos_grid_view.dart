@@ -51,7 +51,6 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
 
   Widget createGridTileWidget(Post postInfo) => Builder(
         builder: (context) => GestureDetector(
-          onTap: () {},
           onLongPress: () {
             _popupDialog = _createPopupDialog(postInfo);
             Overlay.of(context)!.insert(_popupDialog!);
