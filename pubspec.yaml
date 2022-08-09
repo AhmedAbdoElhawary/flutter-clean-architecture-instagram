@@ -37,7 +37,7 @@ dependencies:
 
 # Don't upgrade blog to the latest version.
   bloc: ^7.0.3
-   flutter_bloc: ^7.0.1
+  flutter_bloc: ^7.0.1
   cloud_firestore: ^3.4.3
   cupertino_icons: ^1.0.5
   firebase_auth: ^3.6.2
