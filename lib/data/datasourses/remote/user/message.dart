@@ -11,8 +11,13 @@ class FireStoreMessage {
     required String chatId,
     required Message message,
   }) async {
+    DocumentReference<Map<String, dynamic>> userCollection =
+        _fireStoreUserCollection.doc(userId);
+    if (userId != myPersonalId) {
+      userCollection.update({"numberOfNewMessages": FieldValue.increment(1)});
+    }
     DocumentReference<Map<String, dynamic>> fireChatsCollection =
-        _fireStoreUserCollection.doc(userId).collection("chats").doc(chatId);
+        userCollection.collection("chats").doc(chatId);
     fireChatsCollection.set(message.toMap());
 
     CollectionReference<Map<String, dynamic>> fireMessagesCollection =
