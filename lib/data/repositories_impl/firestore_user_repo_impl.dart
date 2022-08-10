@@ -157,9 +157,10 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
           chatId: messageInfo.receiverId,
           message: messageInfo);
       await FireStoreMessage.sendMessage(
-          userId: messageInfo.receiverId,
-          chatId: messageInfo.senderId,
-          message: messageInfo);
+        userId: messageInfo.receiverId,
+        chatId: messageInfo.senderId,
+        message: messageInfo,
+      );
 
       return myMessageInfo;
     } catch (e) {

@@ -13,6 +13,8 @@ import 'package:instagram/presentation/pages/time_line/my_own_time_line/home_pag
 import 'package:instagram/presentation/pages/video/videos_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/screens_w.dart';
 
+ValueNotifier<bool> playMainReelVideos = ValueNotifier(false);
+
 class MobileScreenLayout extends StatefulWidget {
   final String userId;
   const MobileScreenLayout(this.userId, {Key? key}) : super(key: key);
@@ -22,7 +24,6 @@ class MobileScreenLayout extends StatefulWidget {
 }
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
-  ValueNotifier<bool> playReelVideo = ValueNotifier(false);
   ValueNotifier<bool> playHomeVideo = ValueNotifier(false);
   CupertinoTabController controller = CupertinoTabController();
   @override
@@ -33,7 +34,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: playReelVideo,
+      valueListenable: playMainReelVideos,
       builder: (BuildContext context, bool value, __) {
         return CupertinoTabScaffold(
             tabBar: CupertinoTabBar(
@@ -50,7 +51,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             controller: controller,
             tabBuilder: (context, index) {
               WidgetsBinding.instance.addPostFrameCallback((_) async {
-                playReelVideo.value = controller.index == 2 ? true : false;
+                playMainReelVideos.value = controller.index == 2 ? true : false;
                 playHomeVideo.value = controller.index == 0 ? true : false;
               });
 
@@ -95,7 +96,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       builder: (context) => CupertinoPageScaffold(
             child: BlocProvider<PostCubit>(
               create: (context) => injector<PostCubit>(),
-              child: VideosPage(stopVideo: playReelVideo),
+              child: VideosPage(stopVideo: playMainReelVideos),
             ),
           ));
 

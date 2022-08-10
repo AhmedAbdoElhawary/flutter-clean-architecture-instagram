@@ -5,16 +5,14 @@ import 'package:video_player/video_player.dart';
 class PlayThisVideo extends StatefulWidget {
   final String videoUrl;
   final bool play;
-  final bool dispose;
   final bool withoutSound;
 
-  const PlayThisVideo(
-      {Key? key,
-      required this.videoUrl,
-      this.withoutSound = false,
-      required this.play,
-      this.dispose = true})
-      : super(key: key);
+  const PlayThisVideo({
+    Key? key,
+    required this.videoUrl,
+    this.withoutSound = false,
+    required this.play,
+  }) : super(key: key);
   @override
   PlayThisVideoState createState() => PlayThisVideoState();
 }

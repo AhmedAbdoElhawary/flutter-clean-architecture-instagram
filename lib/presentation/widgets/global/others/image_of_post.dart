@@ -28,7 +28,6 @@ import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_of_p
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_slider.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_viewer.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/points_scroll_bar.dart';
 import 'package:instagram/presentation/widgets/global/aimation/like_popup_animation.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
@@ -501,23 +500,6 @@ class _ImageOfPostState extends State<ImageOfPost>
                 postInfo.likes.add(myPersonalId);
               }
             });
-          },
-          onTap: () async {
-            if (isThatMobile) {
-              pushToPage(context,
-                  page: ValueListenableBuilder(
-                    valueListenable: initPosition,
-                    builder: (context, int positionValue, child) =>
-                        PictureViewer(
-                      blurHash: postInfo.blurHash,
-                      aspectRatio: postInfo.aspectRatio,
-                      isThatImage: postInfo.isThatImage,
-                      imageUrl: postInfo.postUrl.isNotEmpty
-                          ? postInfo.postUrl
-                          : postInfo.imagesUrls[positionValue],
-                    ),
-                  ));
-            }
           },
           child: Padding(
             padding: const EdgeInsetsDirectional.only(top: 8.0),

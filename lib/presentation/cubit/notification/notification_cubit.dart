@@ -34,6 +34,7 @@ class NotificationCubit extends Cubit<NotificationState> {
 
   Future<void> createNotification(
       {required CustomNotification newNotification}) async {
+
     await _createNotificationUseCase
         .call(params: newNotification)
         .then((notificationUid) {

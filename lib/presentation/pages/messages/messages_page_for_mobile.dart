@@ -23,7 +23,7 @@ class MessagesPageForMobile extends StatelessWidget {
               Icons.add,
               color: Theme.of(context).focusColor,
               size: 30,
-            ))
+            ),)
       ],
     );
   }

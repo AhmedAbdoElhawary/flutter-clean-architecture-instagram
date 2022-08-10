@@ -15,20 +15,24 @@ class UserPersonalInfo extends Equatable {
   List<dynamic> stories;
   List<Story>? storiesInfo;
   List<dynamic> charactersOfName;
-
-  UserPersonalInfo(
-      {required this.followedPeople,
-      required this.followerPeople,
-      required this.posts,
-      required this.stories,
-      required this.charactersOfName,
-      this.storiesInfo,
-      this.name = "",
-      this.bio = "",
-      this.email = "",
-      this.profileImageUrl = "",
-      this.userName = "",
-      this.userId = ""});
+  int numberOfNewNotifications;
+  int numberOfNewMessages;
+  UserPersonalInfo({
+    required this.followedPeople,
+    required this.followerPeople,
+    required this.posts,
+    required this.stories,
+    required this.charactersOfName,
+    this.storiesInfo,
+    this.name = "",
+    this.bio = "",
+    this.email = "",
+    this.profileImageUrl = "",
+    this.userName = "",
+    this.userId = "",
+    this.numberOfNewNotifications = 0,
+    this.numberOfNewMessages = 0,
+  });
 
   static UserPersonalInfo fromDocSnap(Map<String, dynamic>? snap) {
     return UserPersonalInfo(
@@ -43,6 +47,8 @@ class UserPersonalInfo extends Equatable {
       posts: snap?["posts"] ?? [],
       stories: snap?["stories"] ?? [],
       charactersOfName: snap?["charactersOfName"] ?? [],
+      numberOfNewNotifications: snap?["numberOfNewNotifications"] ?? 0,
+      numberOfNewMessages: snap?["numberOfNewMessages"] ?? 0,
     );
   }
 
@@ -59,6 +65,8 @@ class UserPersonalInfo extends Equatable {
       'profileImageUrl': profileImageUrl,
       'charactersOfName': charactersOfName,
       'uid': userId,
+      'numberOfNewNotifications': numberOfNewNotifications,
+      'numberOfNewMessages': numberOfNewMessages,
     };
   }
 
@@ -75,5 +83,8 @@ class UserPersonalInfo extends Equatable {
         posts,
         stories,
         storiesInfo,
+        charactersOfName,
+        numberOfNewNotifications,
+        numberOfNewMessages,
       ];
 }

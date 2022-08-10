@@ -32,11 +32,12 @@ class PostCubit extends Cubit<PostState> {
 
   static PostCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future<void> createPost(Post postInfo, List<Uint8List> files,{Uint8List? coverOfVideo}) async {
-    postId= '';
+  Future<void> createPost(Post postInfo, List<Uint8List> files,
+      {Uint8List? coverOfVideo}) async {
+    postId = '';
     emit(CubitPostLoading());
     await _createPostUseCase
-        .call(paramsOne: postInfo, paramsTwo: files,paramsThree: coverOfVideo)
+        .call(paramsOne: postInfo, paramsTwo: files, paramsThree: coverOfVideo)
         .then((postId) {
       this.postId = postId;
       emit(CubitPostLoaded(postId));
@@ -66,9 +67,12 @@ class PostCubit extends Cubit<PostState> {
     });
   }
 
-  Future<void> getAllPostInfo() async {
+  Future<void> getAllPostInfo(
+      {bool isVideosWantedOnly = false, String skippedVideoUid = ""}) async {
     emit(CubitPostLoading());
-    await _getAllPostInfoUseCase.call(params: null).then((allPostsInfo) {
+    await _getAllPostInfoUseCase
+        .call(paramsOne: isVideosWantedOnly, paramsTwo: skippedVideoUid)
+        .then((allPostsInfo) {
       this.allPostsInfo = allPostsInfo;
       emit(CubitAllPostsLoaded(allPostsInfo));
     }).catchError((e) {

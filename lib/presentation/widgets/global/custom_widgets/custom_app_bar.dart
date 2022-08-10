@@ -26,7 +26,7 @@ class CustomAppBar {
       title: const InstagramLogo(),
       actions: [
         Padding(
-          padding: const EdgeInsetsDirectional.only(end: 10.0),
+          padding: const EdgeInsetsDirectional.only(end: 13.0),
           child: PopupMenuButton<int>(
             position: PopupMenuPosition.under,
             elevation: 20,
@@ -117,29 +117,35 @@ class CustomAppBar {
             ],
           ),
         ),
-        IconButton(
-          icon: SvgPicture.asset(
-            IconsAssets.favorite,
-            color: Theme.of(context).focusColor,
-            height: 30,
+        Padding(
+          padding: const EdgeInsetsDirectional.only(end: 13.0),
+          child: GestureDetector(
+            child: SvgPicture.asset(
+              IconsAssets.favorite,
+              color: Theme.of(context).focusColor,
+              height: 30,
+            ),
+            onTap: () {
+              pushToPage(context, page: const ActivityPage(), withoutRoot: false);
+            },
           ),
-          onPressed: () {
-            pushToPage(context, page: const ActivityPage(), withoutRoot: false);
-          },
         ),
-        IconButton(
-          icon: SvgPicture.asset(
-            IconsAssets.messengerIcon,
-            color: Theme.of(context).focusColor,
-            height: 22.5,
+        Padding(
+          padding: const EdgeInsetsDirectional.only(end: 5.0),
+          child: GestureDetector(
+            child: SvgPicture.asset(
+              IconsAssets.messengerIcon,
+              color: Theme.of(context).focusColor,
+              height: 22.5,
+            ),
+            onTap: () {
+              pushToPage(context,
+                  page: BlocProvider<UsersInfoCubit>(
+                    create: (context) => injector<UsersInfoCubit>(),
+                    child: const MessagesPageForMobile(),
+                  ));
+            },
           ),
-          onPressed: () {
-            pushToPage(context,
-                page: BlocProvider<UsersInfoCubit>(
-                  create: (context) => injector<UsersInfoCubit>(),
-                  child: const MessagesPageForMobile(),
-                ));
-          },
         ),
         const SizedBox(width: 5),
       ],
