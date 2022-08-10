@@ -81,6 +81,7 @@ dependencies:
   animated_splash_screen: ^1.3.0
   path: ^1.8.1
   provider: ^6.0.3
+  firebase_messaging: ^12.0.1
 
   ## My package
   custom_gallery_display: ^0.3.7
