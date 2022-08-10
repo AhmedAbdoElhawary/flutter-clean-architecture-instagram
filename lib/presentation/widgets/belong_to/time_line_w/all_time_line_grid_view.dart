@@ -35,6 +35,15 @@ class AllTimeLineGridView extends StatefulWidget {
 class _CustomGridViewState extends State<AllTimeLineGridView> {
   int indexOfPostsVideo = 0;
   int indexOfPostsImage = 0;
+  late Post postInfo;
+  late int lengthOfGrid;
+  @override
+  void initState() {
+    lengthOfGrid =
+        widget.postsImagesInfo.length + widget.postsVideosInfo.length;
+    super.initState();
+  }
+
   @override
   void didUpdateWidget(covariant AllTimeLineGridView oldWidget) {
     if (oldWidget.reloadData.value) {
@@ -53,10 +62,8 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
           crossAxisSpacing: isThatMobile ? 1.5 : 30,
           mainAxisSpacing: isThatMobile ? 1.5 : 30,
           crossAxisCount: 3,
-          itemCount:
-              widget.postsImagesInfo.length + widget.postsVideosInfo.length,
+          itemCount: lengthOfGrid,
           itemBuilder: (context, index) {
-            Post postInfo;
             if (indexOfPostsVideo >= widget.postsVideosInfo.length &&
                 indexOfPostsImage < widget.postsImagesInfo.length) {
               postInfo = widget.postsImagesInfo[indexOfPostsImage];
@@ -97,6 +104,10 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
             double num2 =
                 (firstCondition || (secondCondition && index != 0)) ? 2 : 1;
             int num1 = (isThatMobile ? 1 : num2).toInt();
+            if (index == lengthOfGrid - 1) {
+              num2 = !postInfo.isThatImage ? 2 : num2;
+            }
+
             return StaggeredTile.count(num1, num2);
           },
         ),
