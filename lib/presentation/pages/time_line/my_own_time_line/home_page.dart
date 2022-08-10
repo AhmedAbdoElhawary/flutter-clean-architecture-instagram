@@ -226,9 +226,7 @@ class _HomePageState extends State<HomePage> {
             child: buildPost, internalPadding: false, verticalPadding: true);
   }
 
-  reloadTheData() {
-    reLoadData.value = true;
-  }
+  reloadTheData() => reLoadData.value = true;
 
   Widget circularProgress() {
     return const ThineCircularProgress();
