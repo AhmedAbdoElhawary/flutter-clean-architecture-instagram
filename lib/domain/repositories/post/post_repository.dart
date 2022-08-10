@@ -6,7 +6,7 @@ abstract class FirestorePostRepository {
       {required Post postInfo, required List<Uint8List> files,required Uint8List? coverOfVideo});
   Future<List<Post>> getPostsInfo(
       {required List<dynamic> postsIds, required int lengthOfCurrentList});
-  Future<List<Post>> getAllPostsInfo();
+  Future<List<Post>> getAllPostsInfo({bool isVideosWantedOnly=false,String skippedVideoUid = ""});
   Future<List> getSpecificUsersPosts(List<dynamic> usersIds);
   Future<void> putLikeOnThisPost(
       {required String postId, required String userId});
