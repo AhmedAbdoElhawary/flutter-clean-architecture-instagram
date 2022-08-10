@@ -2,13 +2,15 @@ import 'package:instagram/data/models/post.dart';
 import 'package:instagram/domain/repositories/post/post_repository.dart';
 import 'package:instagram/core/use_case/use_case.dart';
 
-class GetAllPostsInfoUseCase implements UseCase<List<Post>, void> {
+class GetAllPostsInfoUseCase
+    implements UseCaseTwoParams<List<Post>, bool, String> {
   final FirestorePostRepository _getPostRepository;
 
   GetAllPostsInfoUseCase(this._getPostRepository);
 
   @override
-  Future<List<Post>> call({required void params}) {
+  Future<List<Post>> call(
+      {required bool paramsOne, required String paramsTwo}) {
     return _getPostRepository.getAllPostsInfo();
   }
 }
