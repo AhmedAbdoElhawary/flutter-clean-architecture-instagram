@@ -76,15 +76,13 @@ class FirestoreUser {
   static Future<List<SenderInfo>> extractUsersIds(
       {required List<SenderInfo> usersInfo}) async {
     for (int i = 0; i < usersInfo.length; i++) {
-      if(usersInfo[i].lastMessage!=null){
+      if (usersInfo[i].lastMessage != null) {
         String userId = usersInfo[i].lastMessage?.senderId != myPersonalId
             ? usersInfo[i].lastMessage!.senderId
             : usersInfo[i].lastMessage!.receiverId;
         UserPersonalInfo userInfo = await getUserInfo(userId);
         usersInfo[i].userInfo = userInfo;
       }
-
-
     }
     return usersInfo;
   }
@@ -93,8 +91,12 @@ class FirestoreUser {
       {required String userId}) async {
     List<SenderInfo> allUsers = [];
 
+    DocumentReference<Map<String, dynamic>> userCollection =
+        _fireStoreUserCollection.doc(userId);
+    userCollection.update({'numberOfNewMessages': 0});
     QuerySnapshot<Map<String, dynamic>> snap =
-        await _fireStoreUserCollection.doc(userId).collection("chats").get();
+        await userCollection.collection("chats").get();
+
     for (int i = 0; i < snap.docs.length; i++) {
       QueryDocumentSnapshot<Map<String, dynamic>> doc = snap.docs[i];
       Message messageInfo = Message.fromJson(doc);
