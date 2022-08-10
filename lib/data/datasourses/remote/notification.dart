@@ -7,10 +7,12 @@ class FirestoreNotification {
       FirebaseFirestore.instance.collection('users');
   static Future<String> createNotification(
       CustomNotification newNotification) async {
+    DocumentReference<Map<String, dynamic>> userCollection =
+        _fireStoreUserCollection.doc(newNotification.receiverId);
+    userCollection
+        .update({"numberOfNewNotifications": FieldValue.increment(1)});
     CollectionReference<Map<String, dynamic>> collection =
-        _fireStoreUserCollection
-            .doc(newNotification.receiverId)
-            .collection("notifications");
+        userCollection.collection("notifications");
     DocumentReference<Map<String, dynamic>> addingCollection =
         await collection.add(newNotification.toMap());
 
@@ -22,10 +24,11 @@ class FirestoreNotification {
 
   static Future<List<CustomNotification>> getNotifications(
       {required String userId}) async {
-    QuerySnapshot<Map<String, dynamic>> snap = await _fireStoreUserCollection
-        .doc(userId)
-        .collection("notifications")
-        .get();
+    DocumentReference<Map<String, dynamic>> userCollection =
+        _fireStoreUserCollection.doc(userId);
+    userCollection.update({"numberOfNewNotifications": 0});
+    QuerySnapshot<Map<String, dynamic>> snap =
+        await userCollection.collection("notifications").get();
     List<CustomNotification> notifications = [];
     for (final doc in snap.docs) {
       final notification = CustomNotification.fromJson(doc.data());
