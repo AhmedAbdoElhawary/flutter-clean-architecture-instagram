@@ -27,8 +27,9 @@ import '../../../core/utility/constant.dart';
 
 class VideosPage extends StatefulWidget {
   final ValueNotifier<bool> stopVideo;
-
-  const VideosPage({Key? key, required this.stopVideo}) : super(key: key);
+  final Post? clickedVideo;
+  const VideosPage({Key? key, required this.stopVideo, this.clickedVideo})
+      : super(key: key);
 
   @override
   VideosPageState createState() => VideosPageState();
@@ -46,7 +47,12 @@ class VideosPageState extends State<VideosPage> {
           valueListenable: rebuildUserInfo,
           builder: (context, bool rebuildValue, child) =>
               BlocBuilder<PostCubit, PostState>(
-                bloc: BlocProvider.of<PostCubit>(context)..getAllPostInfo(),
+                bloc: BlocProvider.of<PostCubit>(context)
+                  ..getAllPostInfo(
+                      isVideosWantedOnly: true,
+                      skippedVideoUid: widget.clickedVideo != null
+                          ? widget.clickedVideo!.postUid
+                          : ""),
                 buildWhen: (previous, current) {
                   if (previous != current && current is CubitAllPostsLoaded) {
                     return true;
@@ -80,31 +86,35 @@ class VideosPageState extends State<VideosPage> {
     );
   }
 
-  AppBar appBar() =>
-      AppBar(backgroundColor: ColorManager.transparent, actions: [
-        IconButton(
-          onPressed: () async {
-            final XFile? pickedFile =
-                await ImagePicker().pickVideo(source: ImageSource.camera);
-            if (pickedFile != null) {
-              final File video = File(pickedFile.path);
-              final convertImage = await VideoThumbnail.thumbnailData(
-                video: video.path,
-                imageFormat: ImageFormat.PNG,
-              );
-              Uint8List convertVideo = await video.readAsBytes();
-              pushToPage(context, page: CreatePostPage(
-                aspectRatio: 1,
-                multiSelectedFiles: [convertVideo],
-                isThatImage: false,
-                coverOfVideoBytes: convertImage,
-              ));
-            }
-          },
-          icon:
-              const Icon(Icons.camera_alt, size: 30, color: ColorManager.white),
-        )
-      ]);
+  AppBar appBar() => AppBar(
+        backgroundColor: ColorManager.transparent,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final XFile? pickedFile =
+                  await ImagePicker().pickVideo(source: ImageSource.camera);
+              if (pickedFile != null) {
+                final File video = File(pickedFile.path);
+                final convertImage = await VideoThumbnail.thumbnailData(
+                  video: video.path,
+                  imageFormat: ImageFormat.PNG,
+                );
+                Uint8List convertVideo = await video.readAsBytes();
+                if (!mounted) return;
+                pushToPage(context,
+                    page: CreatePostPage(
+                      aspectRatio: 1,
+                      multiSelectedFiles: [convertVideo],
+                      isThatImage: false,
+                      coverOfVideoBytes: convertImage,
+                    ));
+              }
+            },
+            icon: const Icon(Icons.camera_alt,
+                size: 30, color: ColorManager.white),
+          )
+        ],
+      );
   Widget loadingWidget() {
     return Stack(
       children: [
@@ -143,14 +153,12 @@ class VideosPageState extends State<VideosPage> {
     );
   }
 
-  Widget buildBody(List<Post> postsInfo) {
-    List<Post> videosPostsInfo =
-        postsInfo.where((element) => element.isThatImage == false).toList();
+  Widget buildBody(List<Post> videosInfo) {
     return PageView.builder(
       scrollDirection: Axis.vertical,
-      itemCount: videosPostsInfo.length,
+      itemCount: videosInfo.length,
       itemBuilder: (context, index) {
-        ValueNotifier<Post> videoInfo = ValueNotifier(videosPostsInfo[index]);
+        ValueNotifier<Post> videoInfo = ValueNotifier(videosInfo[index]);
         return Stack(children: [
           SizedBox(
               height: double.infinity,
