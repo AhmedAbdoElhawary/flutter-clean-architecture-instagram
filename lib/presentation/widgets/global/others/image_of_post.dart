@@ -71,7 +71,7 @@ class ImageOfPost extends StatefulWidget {
 }
 
 class _ImageOfPostState extends State<ImageOfPost>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   final ValueNotifier<TextEditingController> commentTextController =
       ValueNotifier(TextEditingController());
   ValueChanged<Post>? selectedPostInfo;
@@ -84,10 +84,31 @@ class _ImageOfPostState extends State<ImageOfPost>
   bool isLiked = false;
   bool isHeartAnimation = false;
   late UserPersonalInfo myPersonalInfo;
+  TransformationController controller = TransformationController();
+  late AnimationController animationController;
+  Animation<Matrix4>? animation;
+  OverlayEntry? entry;
+
   @override
   void initState() {
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    )
+      ..addListener(() => controller.value = animation!.value)
+      ..addStatusListener((status) {
+        entry?.remove();
+        entry = null;
+      });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -512,14 +533,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                         updateImageIndex: _updateImageIndex,
                         showPointsScrollBar: widget.popupWebContainer,
                       )
-                    : Hero(
-                        tag: postInfo.postUrl,
-                        child: NetworkImageDisplay(
-                          blurHash: postInfo.blurHash,
-                          aspectRatio: postInfo.aspectRatio,
-                          imageUrl: postInfo.postUrl,
-                        ),
-                      ))
+                    : buildSingleImage(postInfo))
                 : Stack(
                     alignment: Alignment.center,
                     children: [
@@ -563,6 +577,52 @@ class _ImageOfPostState extends State<ImageOfPost>
         ),
       ],
     );
+  }
+
+  Builder buildSingleImage(Post postInfo) {
+    return Builder(builder: (context) {
+      return InteractiveViewer(
+        transformationController: controller,
+        panEnabled: false,
+        clipBehavior: Clip.none,
+        minScale: 1,
+        maxScale: 4,
+        onInteractionStart: (details) {
+          if (details.pointerCount < 2) return;
+          makeImageUnbounded(context, postInfo);
+        },
+        onInteractionEnd: (details) => resetAnimation(),
+        child: NetworkImageDisplay(
+          blurHash: postInfo.blurHash,
+          aspectRatio: postInfo.aspectRatio,
+          imageUrl: postInfo.postUrl,
+        ),
+      );
+    });
+  }
+
+  void makeImageUnbounded(BuildContext context, Post postInfo) {
+    final renderBox = context.findRenderObject() as RenderBox;
+    final offset = renderBox.localToGlobal(Offset.zero);
+    final size = MediaQuery.of(context).size;
+    entry = OverlayEntry(
+      builder: (context) => Positioned(
+          left: offset.dx,
+          top: offset.dy,
+          width: size.width,
+          child: buildSingleImage(postInfo)),
+    );
+    final overlay = Overlay.of(context)!;
+    overlay.insert(entry!);
+  }
+
+  void resetAnimation() {
+    animation = Matrix4Tween(
+      begin: controller.value,
+      end: Matrix4.identity(),
+    ).animate(CurvedAnimation(
+        parent: animationController, curve: Curves.easeInOutQuart));
+    animationController.forward(from: 0);
   }
 
   void _updateImageIndex(int index, _) {
