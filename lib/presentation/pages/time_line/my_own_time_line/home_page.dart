@@ -48,8 +48,10 @@ class _HomePageState extends State<HomePage> {
   bool rebuild = true;
   List postsIds = [];
   ValueNotifier<List<Post>> postsInfo = ValueNotifier([]);
+  List<UserPersonalInfo>? storiesOwnersInfo;
 
   Future<void> getData(int index) async {
+    storiesOwnersInfo = null;
     reLoadData.value = false;
     UserInfoCubit userCubit =
         BlocProvider.of<UserInfoCubit>(context, listen: false);
@@ -147,6 +149,7 @@ class _HomePageState extends State<HomePage> {
           InViewNotifierList(
         onRefreshData: getData,
         postsIds: postsIds,
+        physics: const BouncingScrollPhysics(),
         isThatEndOfList: isThatEndOfList,
         initialInViewIds: const ['0'],
         isInViewPortCondition:
@@ -181,11 +184,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget columnOfWidgets(double bodyHeight, int index, bool playTheVideo) {
+    double storiesHeight = isThatMobile ? 672 : 500;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         if (index == 0) ...[
-          storiesLines(isThatMobile ? 672 : 500),
+          storiesOwnersInfo != null
+              ? buildUsersStories(bodyHeight, context)
+              : storiesLines(storiesHeight),
           if (isThatMobile) customDivider(),
         ] else ...[
           if (isThatMobile) divider(),
@@ -255,6 +261,13 @@ class _HomePageState extends State<HomePage> {
     reLoadData.value = true;
   }
 
+  Widget buildUsersStories(double bodyHeight, BuildContext context) {
+    Widget stories = buildStories(bodyHeight, context, storiesOwnersInfo!);
+    return isThatMobile
+        ? stories
+        : roundedContainer(child: stories, isThatStory: true);
+  }
+
   Widget storiesLines(double bodyHeight) {
     List<dynamic> usersStoriesIds =
         personalInfo!.followedPeople + personalInfo!.followerPeople;
@@ -281,12 +294,8 @@ class _HomePageState extends State<HomePage> {
         },
         builder: (context, state) {
           if (state is CubitStoriesInfoLoaded) {
-            List<UserPersonalInfo> storiesOwnersInfo = state.storiesOwnersInfo;
-            Widget stories =
-                buildStories(bodyHeight, context, storiesOwnersInfo);
-            return isThatMobile
-                ? stories
-                : roundedContainer(child: stories, isThatStory: true);
+            storiesOwnersInfo = state.storiesOwnersInfo;
+            return buildUsersStories(bodyHeight, context);
           } else if (state is CubitStoryFailed) {
             ToastShow.toastStateError(state);
             return Center(
