@@ -25,7 +25,6 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubi
 import 'package:instagram/presentation/customPackages/audio_recorder/social_media_recoder.dart';
 import 'package:instagram/presentation/pages/profile/user_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/record_view.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/picture_viewer.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
@@ -422,7 +421,7 @@ class _ChatMessagesState extends State<ChatMessages>
                   width: double.infinity,
                   child: NetworkImageDisplay(
                     blurHash: messageInfo.blurHash,
-                    imageUrl:messageInfo.imageUrl ,
+                    imageUrl: messageInfo.imageUrl,
                     height: 270,
                   ),
                 ),
@@ -534,30 +533,22 @@ class _ChatMessagesState extends State<ChatMessages>
 
   SizedBox imageMessage(Message messageInfo, String imageUrl) {
     return SizedBox(
-        height: isThatMobile ? 150 : 300,
-        width: isThatMobile ? 90 : 210,
-        child: messageInfo.messageUid.isNotEmpty
-            ? GestureDetector(
-                onTap: () async {
-                  pushToPage(context,
-                      page: PictureViewer(
-                          blurHash: messageInfo.blurHash, imageUrl: imageUrl),
-                      withoutRoot: false);
-                },
-                child: Hero(
-                  tag: imageUrl,
-                  child: NetworkImageDisplay(
-                    blurHash: messageInfo.blurHash,
-                    imageUrl: imageUrl,
-                  ),
-                ),
-              )
-            : ValueListenableBuilder(
-                valueListenable: newMessageInfo,
-                builder: (context, Message? newMessageValue, child) =>
-                    Image.memory(newMessageValue!.localImage!,
-                        fit: BoxFit.cover),
-              ));
+      height: isThatMobile ? 150 : 300,
+      width: isThatMobile ? 90 : 210,
+      child: messageInfo.messageUid.isNotEmpty
+          ? Hero(
+              tag: imageUrl,
+              child: NetworkImageDisplay(
+                blurHash: messageInfo.blurHash,
+                imageUrl: imageUrl,
+              ),
+            )
+          : ValueListenableBuilder(
+              valueListenable: newMessageInfo,
+              builder: (context, Message? newMessageValue, child) =>
+                  Image.memory(newMessageValue!.localImage!, fit: BoxFit.cover),
+            ),
+    );
   }
 
   Text textMessage(String message, bool isThatMine) {
@@ -826,6 +817,7 @@ class _ChatMessagesState extends State<ChatMessages>
                           messageInfo:
                               newMessage(blurHash: blurHash, isThatImage: true),
                           pathOfPhoto: pickImage);
+
                       scrollToLastIndex(context);
                     } else {
                       ToastShow.toast(StringsManager.noImageSelected.tr());
