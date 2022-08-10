@@ -54,12 +54,12 @@ class FirestorePost {
             await _fireStorePostCollection.doc(postsIds[i]).get();
         if (snap.exists) {
           Post postReformat = Post.fromQuery(query: snap);
-          if(postReformat.postUrl.isNotEmpty){
+          if (postReformat.postUrl.isNotEmpty) {
             UserPersonalInfo publisherInfo =
-            await FirestoreUser.getUserInfo(postReformat.publisherId);
+                await FirestoreUser.getUserInfo(postReformat.publisherId);
             postReformat.publisherInfo = publisherInfo;
             postsInfo.add(postReformat);
-          }else{
+          } else {
             await deletePost(postInfo: postReformat);
           }
         } else {
@@ -84,12 +84,19 @@ class FirestorePost {
     }
   }
 
-  static Future<List<Post>> getAllPostsInfo() async {
+  static Future<List<Post>> getAllPostsInfo(
+      {bool isVideosWantedOnly = false, String skippedVideoUid = ""}) async {
     List<Post> allPosts = [];
-    QuerySnapshot<Map<String, dynamic>> snap =
-        await _fireStorePostCollection.get();
-
+    QuerySnapshot<Map<String, dynamic>> snap;
+    if (isVideosWantedOnly) {
+      snap = await _fireStorePostCollection
+          .where("isThatImage", isEqualTo: false)
+          .get();
+    } else {
+      snap = await _fireStorePostCollection.get();
+    }
     for (final doc in snap.docs) {
+      if (skippedVideoUid == doc.id) continue;
       Post postReformat = Post.fromQuery(doc: doc);
       UserPersonalInfo publisherInfo =
           await FirestoreUser.getUserInfo(postReformat.publisherId);
