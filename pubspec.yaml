@@ -84,7 +84,7 @@ dependencies:
   firebase_messaging: ^12.0.1
 
   ## My package
-  custom_gallery_display: ^0.3.7
+  custom_gallery_display: ^0.3.8
 #  custom_gallery_display:
 #    path: D:\day_8_6\custom_gallery_display
 
