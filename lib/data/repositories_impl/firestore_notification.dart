@@ -1,4 +1,4 @@
-import 'package:instagram/data/datasourses/remote/notification.dart';
+import 'package:instagram/data/datasourses/remote/notification/firebase_notification.dart';
 import 'package:instagram/data/models/notification.dart';
 import 'package:instagram/domain/entities/notification_check.dart';
 import 'package:instagram/domain/repositories/firestore_notification.dart';
