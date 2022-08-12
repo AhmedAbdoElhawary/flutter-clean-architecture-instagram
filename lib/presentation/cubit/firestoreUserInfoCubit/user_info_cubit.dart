@@ -16,7 +16,6 @@ class UserInfoCubit extends Cubit<FirestoreUserInfoState> {
   final UpdateUserInfoUseCase _updateUserInfoUseCase;
   final UploadProfileImageUseCase _uploadImageUseCase;
   final AddPostToUserUseCase _addPostToUserUseCase;
-  // final AddStoryToUserUseCase _addStoryToUserUseCase;
   final GetUserFromUserNameUseCase _getUserFromUserNameUseCase;
   UserPersonalInfo? myPersonalInfo;
 
@@ -28,21 +27,22 @@ class UserInfoCubit extends Cubit<FirestoreUserInfoState> {
       this._addPostToUserUseCase,
       this._getAllUnFollowersUsersUseCase,
       this._getUserFromUserNameUseCase,
-      // this._addStoryToUserUseCase,
       this._uploadImageUseCase)
       : super(CubitInitial());
 
-  static UserInfoCubit get(BuildContext context) =>
-      BlocProvider.of(context);
+  static UserInfoCubit get(BuildContext context) => BlocProvider.of(context);
 
   static getMyPersonalInfo(BuildContext context) =>
       BlocProvider.of<UserInfoCubit>(context).myPersonalInfo;
 
-  Future<void> getUserInfo(String userId,
-      {bool isThatMyPersonalId = true}) async {
+  Future<void> getUserInfo(
+    String userId, {
+    bool isThatMyPersonalId = true,
+    bool getDeviceToken = false,
+  }) async {
     emit(CubitUserLoading());
     await _getUserInfoUseCase
-        .call(params: userId)
+        .call(paramsOne: userId,paramsTwo: getDeviceToken)
         .then((UserPersonalInfo userInfo) {
       if (isThatMyPersonalId) {
         myPersonalInfo = userInfo;

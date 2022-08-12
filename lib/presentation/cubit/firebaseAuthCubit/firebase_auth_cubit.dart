@@ -42,9 +42,12 @@ class FirebaseAuthCubit extends Cubit<FirebaseAuthCubitState> {
     });
   }
 
-  Future<void> signOut() async {
+  Future<void> signOut(
+      {required String userId, required String? deviceToken}) async {
     emit(CubitAuthConfirming());
-    await signOutAuthUseCase.call(params: null).then((value) async {
+    await signOutAuthUseCase
+        .call(paramsOne: userId, paramsTwo: deviceToken)
+        .then((value) async {
       emit(CubitAuthSignOut());
     }).catchError((e) {
       emit(CubitAuthFailed(e.toString()));

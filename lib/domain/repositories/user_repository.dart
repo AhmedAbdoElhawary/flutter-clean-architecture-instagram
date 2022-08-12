@@ -7,7 +7,8 @@ import 'package:instagram/data/models/user_personal_info.dart';
 abstract class FirestoreUserRepository {
   Future<void> addNewUser(UserPersonalInfo newUserInfo);
 
-  Future<UserPersonalInfo> getPersonalInfo(String userId);
+  Future<UserPersonalInfo> getPersonalInfo(
+      {required String userId, bool getDeviceToken = false});
   Future<List<UserPersonalInfo>> getAllUnFollowersUsers(
       UserPersonalInfo myPersonalInfo);
 
@@ -35,8 +36,8 @@ abstract class FirestoreUserRepository {
 
   Future<Message> sendMessage(
       {required Message messageInfo,
-       Uint8List? pathOfPhoto,
-        required String pathOfRecorded});
+      Uint8List? pathOfPhoto,
+      required String pathOfRecorded});
 
   Stream<List<Message>> getMessages({required String receiverId});
   Stream<List<UserPersonalInfo>> searchAboutUser({required String name});
