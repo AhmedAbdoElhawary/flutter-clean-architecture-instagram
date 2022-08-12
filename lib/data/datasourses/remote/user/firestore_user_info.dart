@@ -11,7 +11,7 @@ class FirestoreUser {
   static final _fireStoreUserCollection =
       FirebaseFirestore.instance.collection('users');
 
-  static createUser(UserPersonalInfo newUserInfo) async {
+  static Future<void> createUser(UserPersonalInfo newUserInfo) async {
     await _fireStoreUserCollection
         .doc(newUserInfo.userId)
         .set(newUserInfo.toMap());
