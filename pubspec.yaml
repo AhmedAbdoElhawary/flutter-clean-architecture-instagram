@@ -82,6 +82,10 @@ dependencies:
   path: ^1.8.1
   provider: ^6.0.3
   firebase_messaging: ^12.0.1
+  agora_rtc_engine: ^5.3.0
+  overlay_support: ^2.0.1
+  http: ^0.13.5
+  flutter_local_notifications: ^9.7.0
 
   ## My package
   custom_gallery_display: ^0.3.8
