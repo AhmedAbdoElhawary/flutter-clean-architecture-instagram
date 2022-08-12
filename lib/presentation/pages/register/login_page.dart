@@ -94,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
   onAuthConfirmed(
       UserInfoCubit getUserCubit, FirebaseAuthCubit authCubit) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await getUserCubit.getUserInfo(authCubit.user!.uid);
+      await getUserCubit.getUserInfo(authCubit.user!.uid,getDeviceToken: true);
       String userId = authCubit.user!.uid;
         isUserIdReady.value = true;
       if (!isHeMovedToHome.value) {
