@@ -53,6 +53,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   @override
   void initState() {
     darkTheme.value = ThemeMode.dark == ThemeOfApp().theme;
+
     super.initState();
   }
 
@@ -266,7 +267,10 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         child: createSizedBox(StringsManager.logOut.tr(),
             icon: Icons.logout_rounded),
         onTap: () async {
-          authCubit.signOut();
+          String? token = sharePrefs.getString("deviceToken");
+
+          await authCubit.signOut(
+              userId: widget.personalId, deviceToken: token);
         },
       );
     });
