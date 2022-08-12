@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+//import 'package:instagram/core/private_keys.dart';
 
 class DeviceNotification{
  static Future<void> sendPopupNotification({
@@ -15,7 +16,8 @@ class DeviceNotification{
           headers: <String, String>{
             'Content-Type': 'application/json',
             'Authorization':
-            'key=AAAA5lCz-i8:APA91bHpr30q3RMS-xIJpQXaKq5SJ7DfK32CAjS9AiHbzuR04EL6Ci8NLSikXEoi112-X6y7_0AcwPjl0NWNt3osiV2mAQtyBKc77uD8k-rLrq6YG430wWO95ruE7EXAsOgPgCFPDRXt',
+           // notificationKey her
+            "",
           },
           body: jsonEncode(
             <String, dynamic>{
