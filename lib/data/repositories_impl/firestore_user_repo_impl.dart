@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
+import 'package:instagram/data/datasourses/remote/notification/firebase_notification.dart';
 import 'package:instagram/data/datasourses/remote/user/message.dart';
 import 'package:instagram/data/models/message.dart';
 import 'package:instagram/data/models/sender_info.dart';
@@ -14,16 +15,26 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   @override
   Future<void> addNewUser(UserPersonalInfo newUserInfo) async {
     try {
-      return await FirestoreUser.createUser(newUserInfo);
+      await FirestoreUser.createUser(newUserInfo);
+      await FirestoreNotification.createNewDeviceToken(
+          userId: newUserInfo.userId, myPersonalInfo: newUserInfo);
     } catch (e) {
       return Future.error(e.toString());
     }
   }
 
   @override
-  Future<UserPersonalInfo> getPersonalInfo(String userId) async {
+  Future<UserPersonalInfo> getPersonalInfo(
+      {required String userId, bool getDeviceToken = false}) async {
     try {
-      return await FirestoreUser.getUserInfo(userId);
+      UserPersonalInfo myPersonalInfo = await FirestoreUser.getUserInfo(userId);
+      if (getDeviceToken) {
+        UserPersonalInfo updateInfo =
+            await FirestoreNotification.createNewDeviceToken(
+                userId: userId, myPersonalInfo: myPersonalInfo);
+        myPersonalInfo = updateInfo;
+      }
+      return myPersonalInfo;
     } catch (e) {
       return Future.error(e.toString());
     }
@@ -34,7 +45,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       {required UserPersonalInfo userInfo}) async {
     try {
       await FirestoreUser.updateUserInfo(userInfo);
-      return getPersonalInfo(userInfo.userId);
+      return getPersonalInfo(userId: userInfo.userId);
     } catch (e) {
       return Future.error(e.toString());
     }
@@ -45,7 +56,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       {required String userId, required String postId}) async {
     try {
       await FirestoreUser.updateUserPosts(userId: userId, postId: postId);
-      return await getPersonalInfo(userId);
+      return await getPersonalInfo(userId: userId);
     } catch (e) {
       return Future.error(e.toString());
     }
