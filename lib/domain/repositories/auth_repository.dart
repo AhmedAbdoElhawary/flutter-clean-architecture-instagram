@@ -5,5 +5,5 @@ import '../entities/unregistered_user.dart';
 abstract class FirebaseAuthRepository {
   Future<User> signUp(UnRegisteredUser newUserInfo);
   Future<User> logIn(RegisteredUser userInfo);
-  Future<void> signOut();
+  Future<void> signOut({required String userId, required String? deviceToken});
 }
