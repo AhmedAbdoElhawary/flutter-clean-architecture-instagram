@@ -31,6 +31,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     myId = widget.sharePrefs.getString("myPersonalId");
+    if (myId != null) myPersonalId = myId!;
+
     /// It's prefer to the here not in data_sources to avoid bugs when push notification.
     requestPermission();
     if (isThatMobile) loadFCM();
@@ -50,7 +52,6 @@ class _MyAppState extends State<MyApp> {
       provisional: false,
       sound: true,
     );
-
   }
 
   void listenFCM() async {
@@ -85,7 +86,7 @@ class _MyAppState extends State<MyApp> {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
@@ -94,7 +95,6 @@ class _MyAppState extends State<MyApp> {
       sound: true,
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -121,10 +121,12 @@ class _MyAppState extends State<MyApp> {
         splash: IconsAssets.splashIcon,
         backgroundColor: ColorManager.white,
         splashTransition: SplashTransition.scaleTransition,
-        nextScreen: myId == null
+        nextScreen:myId == null
             ? LoginPage(sharePrefs: widget.sharePrefs)
-            : GetMyPersonalInfo(myPersonalId: myId!),
+            :  GetMyPersonalInfo(myPersonalId: myId!),
       ),
     );
   }
+
+
 }
