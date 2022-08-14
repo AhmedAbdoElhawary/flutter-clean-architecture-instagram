@@ -108,7 +108,7 @@ class _ActivityPageState extends State<ActivityPage> {
                   ),
                 );
               }
-              return const ThineCircularProgress();
+              return const Center(child:  ThineCircularProgress());
             },
           ),
         );
