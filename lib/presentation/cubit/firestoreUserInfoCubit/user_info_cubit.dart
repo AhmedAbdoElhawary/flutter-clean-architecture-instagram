@@ -17,7 +17,7 @@ class UserInfoCubit extends Cubit<FirestoreUserInfoState> {
   final UploadProfileImageUseCase _uploadImageUseCase;
   final AddPostToUserUseCase _addPostToUserUseCase;
   final GetUserFromUserNameUseCase _getUserFromUserNameUseCase;
-  UserPersonalInfo? myPersonalInfo;
+  late UserPersonalInfo myPersonalInfo;
 
   UserPersonalInfo? userInfo;
 
@@ -32,7 +32,7 @@ class UserInfoCubit extends Cubit<FirestoreUserInfoState> {
 
   static UserInfoCubit get(BuildContext context) => BlocProvider.of(context);
 
-  static getMyPersonalInfo(BuildContext context) =>
+  static UserPersonalInfo getMyPersonalInfo(BuildContext context) =>
       BlocProvider.of<UserInfoCubit>(context).myPersonalInfo;
 
   Future<void> getUserInfo(
@@ -42,7 +42,7 @@ class UserInfoCubit extends Cubit<FirestoreUserInfoState> {
   }) async {
     emit(CubitUserLoading());
     await _getUserInfoUseCase
-        .call(paramsOne: userId,paramsTwo: getDeviceToken)
+        .call(paramsOne: userId, paramsTwo: getDeviceToken)
         .then((UserPersonalInfo userInfo) {
       if (isThatMyPersonalId) {
         myPersonalInfo = userInfo;
@@ -68,22 +68,20 @@ class UserInfoCubit extends Cubit<FirestoreUserInfoState> {
   }
 
   void updateMyFollowings({required dynamic userId, bool addThisUser = true}) {
-    if (myPersonalInfo != null) {
-      if (addThisUser) {
-        myPersonalInfo?.followedPeople.add(userId);
-      } else {
-        myPersonalInfo?.followedPeople.remove(userId);
-      }
-
-      emit(CubitMyPersonalInfoLoaded(myPersonalInfo!));
+    if (addThisUser) {
+      myPersonalInfo.followedPeople.add(userId);
+    } else {
+      myPersonalInfo.followedPeople.remove(userId);
     }
+
+    emit(CubitMyPersonalInfoLoaded(myPersonalInfo));
   }
 
   Future<void> getUserFromUserName(String userName) async {
     emit(CubitUserLoading());
     await _getUserFromUserNameUseCase.call(params: userName).then((userInfo) {
       if (userInfo != null) {
-        if (myPersonalInfo!.userName == userName) {
+        if (myPersonalInfo.userName == userName) {
           myPersonalInfo = userInfo;
           emit(CubitMyPersonalInfoLoaded(userInfo));
         } else {
@@ -123,10 +121,8 @@ class UserInfoCubit extends Cubit<FirestoreUserInfoState> {
 
   void updateMyStories({required String storyId}) {
     emit(CubitUserLoading());
-    if (myPersonalInfo != null) {
-      myPersonalInfo!.stories.add(storyId);
-      emit(CubitMyPersonalInfoLoaded(myPersonalInfo!));
-    }
+    myPersonalInfo.stories.add(storyId);
+    emit(CubitMyPersonalInfoLoaded(myPersonalInfo));
   }
 
   Future<void> uploadProfileImage(
@@ -138,8 +134,8 @@ class UserInfoCubit extends Cubit<FirestoreUserInfoState> {
         .call(
             paramsOne: photo, paramsTwo: userId, paramsThree: previousImageUrl)
         .then((imageUrl) {
-      myPersonalInfo!.profileImageUrl = imageUrl;
-      emit(CubitMyPersonalInfoLoaded(myPersonalInfo!));
+      myPersonalInfo.profileImageUrl = imageUrl;
+      emit(CubitMyPersonalInfoLoaded(myPersonalInfo));
     }).catchError((e) {
       emit(CubitGetUserInfoFailed(e.toString()));
     });
