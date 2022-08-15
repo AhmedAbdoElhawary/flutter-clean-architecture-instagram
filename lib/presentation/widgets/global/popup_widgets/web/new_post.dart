@@ -158,7 +158,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
 
                 return GestureDetector(
                   onTap: () =>
-                      onTapButton(personalInfo!, userCubit, context),
+                      onTapButton(personalInfo, userCubit, context),
                   child: Text(
                     createPostButton == CreatePostButton.share
                         ? "Share"
@@ -234,6 +234,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
         .addPostFrameCallback((_) => setState(() => isItDone.value = false));
     String blurHash = await blurHashEncode(selectedImage.value!);
     Post postInfo = addPostInfo(personalInfo, blurHash);
+            if (!mounted) return;
 
     PostCubit postCubit =
     BlocProvider.of<PostCubit>(builder2context, listen: false);
@@ -246,6 +247,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
       WidgetsBinding.instance
           .addPostFrameCallback((_) => setState(() => isItDone.value = true));
     }
+            if (!mounted) return;
 
     Navigator.of(context).maybePop();
   }
