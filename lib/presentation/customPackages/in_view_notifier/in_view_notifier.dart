@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'in_view_state.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/smart_refresher.dart';
 import 'package:flutter/foundation.dart';
+// ignore: depend_on_referenced_packages
 import 'package:stream_transform/stream_transform.dart';
 
 import 'widget_data.dart';
