@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:instagram/core/app_prefs.dart';
+import 'package:instagram/data/repositories_impl/calling_rooms_repo_impl.dart';
 import 'package:instagram/data/repositories_impl/firebase_auth_repository_impl.dart';
 import 'package:instagram/data/repositories_impl/firestore_notification.dart';
 import 'package:instagram/data/repositories_impl/firestore_story_repo_impl.dart';
@@ -8,6 +9,7 @@ import 'package:instagram/data/repositories_impl/post/comment/firestore_comment_
 import 'package:instagram/data/repositories_impl/post/comment/firestore_reply_repo_impl.dart';
 import 'package:instagram/data/repositories_impl/post/firestore_post_repo_impl.dart';
 import 'package:instagram/domain/repositories/auth_repository.dart';
+import 'package:instagram/domain/repositories/calling_rooms_repository.dart';
 import 'package:instagram/domain/repositories/firestore_notification.dart';
 import 'package:instagram/domain/repositories/post/comment/comment_repository.dart';
 import 'package:instagram/domain/repositories/post/comment/reply_repository.dart';
@@ -17,6 +19,12 @@ import 'package:instagram/domain/repositories/user_repository.dart';
 import 'package:instagram/domain/use_cases/auth/log_in_auth_usecase.dart';
 import 'package:instagram/domain/use_cases/auth/sign_out_auth_usecase.dart';
 import 'package:instagram/domain/use_cases/auth/sign_up_auth_usecase.dart';
+import 'package:instagram/domain/use_cases/calling_rooms/cancel_joining_to_room.dart';
+import 'package:instagram/domain/use_cases/calling_rooms/create_calling_room.dart';
+import 'package:instagram/domain/use_cases/calling_rooms/delete_the_room.dart';
+import 'package:instagram/domain/use_cases/calling_rooms/get_calling_status.dart';
+import 'package:instagram/domain/use_cases/calling_rooms/get_users_info_in_room.dart';
+import 'package:instagram/domain/use_cases/calling_rooms/join_to_calling_room.dart';
 import 'package:instagram/domain/use_cases/follow/follow_this_user.dart';
 import 'package:instagram/domain/use_cases/follow/remove_this_follower.dart';
 import 'package:instagram/domain/use_cases/notification/create_notification_use_case.dart';
@@ -53,14 +61,17 @@ import 'package:instagram/domain/use_cases/user/message/add_message.dart';
 import 'package:instagram/domain/use_cases/user/message/delete_message.dart';
 import 'package:instagram/domain/use_cases/user/message/get_chat_users_info.dart';
 import 'package:instagram/domain/use_cases/user/message/get_messages.dart';
+import 'package:instagram/domain/use_cases/user/my_personal_info.dart';
 import 'package:instagram/domain/use_cases/user/search_about_user.dart';
 import 'package:instagram/domain/use_cases/user/update_user_info.dart';
 import 'package:instagram/domain/use_cases/user/upload_profile_image_usecase.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
+import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.dart';
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/myPersonalInfo/my_personal_info_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
@@ -118,6 +129,8 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<FirestoreNotificationRepository>(
     FirestoreNotificationRepoImpl(),
   );
+  // calling rooms repository
+  injector.registerSingleton<CallingRoomsRepository>(CallingRoomsRepoImpl());
   // *
   /// ==============================================================================================>
 
@@ -158,6 +171,8 @@ Future<void> initializeDependencies() async {
 
   injector.registerSingleton<GetChatUsersInfoAddMessageUseCase>(
       GetChatUsersInfoAddMessageUseCase(injector()));
+
+  injector.registerSingleton<GetMyInfoUseCase>(GetMyInfoUseCase(injector()));
 
   // message use case
   injector.registerSingleton<AddMessageUseCase>(AddMessageUseCase(injector()));
@@ -242,6 +257,23 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<DeleteNotificationUseCase>(
       DeleteNotificationUseCase(injector()));
   // *
+  // calling rooms useCases
+  injector.registerSingleton<CreateCallingRoomUseCase>(
+      CreateCallingRoomUseCase(injector()));
+  // join room useCases
+  injector.registerSingleton<JoinToCallingRoomUseCase>(
+      JoinToCallingRoomUseCase(injector()));
+  // cancel room useCases
+  injector.registerSingleton<CancelJoiningToRoomUseCase>(
+      CancelJoiningToRoomUseCase(injector()));
+  injector.registerSingleton<GetCallingStatusUseCase>(
+      GetCallingStatusUseCase(injector()));
+
+  injector.registerSingleton<GetUsersInfoInRoomUseCase>(
+      GetUsersInfoInRoomUseCase(injector()));
+
+  injector.registerSingleton<DeleteTheRoomUseCase>(
+      DeleteTheRoomUseCase(injector()));
 
   /// ==============================================================================================>
 
@@ -269,8 +301,11 @@ Future<void> initializeDependencies() async {
   );
 
   injector.registerFactory<SearchAboutUserBloc>(
-    () => SearchAboutUserBloc(injector()),
-  );
+      () => SearchAboutUserBloc(injector()));
+
+  injector.registerFactory<MyPersonalInfoBloc>(
+      () => MyPersonalInfoBloc(injector()));
+
   // message searchAboutUser
   injector.registerFactory<MessageCubit>(
     () => MessageCubit(injector(), injector()),
@@ -326,6 +361,18 @@ Future<void> initializeDependencies() async {
   // notification Blocs
   injector.registerFactory<NotificationCubit>(
     () => NotificationCubit(injector(), injector(), injector()),
+  );
+  // *
+  // calling rooms cubit
+  injector.registerFactory<CallingRoomsCubit>(
+    () => CallingRoomsCubit(
+      injector(),
+      injector(),
+      injector(),
+      injector(),
+      injector(),
+      injector(),
+    ),
   );
   // *
 }
