@@ -13,7 +13,7 @@ import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
-import 'package:instagram/presentation/screens/mobile_screen_layout.dart';
+import 'package:instagram/presentation/widgets/belong_to/register_w/popup_calling.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
 class CreatePostPage extends StatefulWidget {
@@ -206,7 +206,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     }
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (context) => MobileScreenLayout(myPersonalId),
+          builder: (context) => PopupCalling(myPersonalId),
         ),
         (route) => false);
   }
