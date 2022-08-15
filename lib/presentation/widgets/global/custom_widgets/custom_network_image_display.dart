@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
+// ignore: depend_on_referenced_packages
 import 'package:octo_image/octo_image.dart';
 
 class NetworkImageDisplay extends StatefulWidget {
