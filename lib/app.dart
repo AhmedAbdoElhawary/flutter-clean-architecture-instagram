@@ -34,10 +34,11 @@ class _MyAppState extends State<MyApp> {
     if (myId != null) myPersonalId = myId!;
 
     /// It's prefer to the here not in data_sources to avoid bugs when push notification.
-    requestPermission();
-    if (isThatMobile) loadFCM();
-    listenFCM();
-
+    if (isThatMobile) {
+      requestPermission();
+      listenFCM();
+      loadFCM();
+    }
     super.initState();
   }
 
@@ -121,12 +122,10 @@ class _MyAppState extends State<MyApp> {
         splash: IconsAssets.splashIcon,
         backgroundColor: ColorManager.white,
         splashTransition: SplashTransition.scaleTransition,
-        nextScreen:myId == null
+        nextScreen: myId == null
             ? LoginPage(sharePrefs: widget.sharePrefs)
-            :  GetMyPersonalInfo(myPersonalId: myId!),
+            : GetMyPersonalInfo(myPersonalId: myId!),
       ),
     );
   }
-
-
 }
