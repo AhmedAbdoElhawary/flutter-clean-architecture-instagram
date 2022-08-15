@@ -16,7 +16,7 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cu
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instagram/presentation/pages/activity/activity_for_mobile.dart';
 import 'package:instagram/presentation/pages/messages/messages_page_for_mobile.dart';
-import 'package:instagram/presentation/pages/messages/video_call_page.dart';
+import 'package:instagram/presentation/pages/messages/wait_call_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/create_new_story.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
