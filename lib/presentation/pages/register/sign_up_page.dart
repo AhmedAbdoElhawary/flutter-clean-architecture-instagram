@@ -8,9 +8,9 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/domain/entities/unregistered_user.dart';
 import 'package:instagram/core/utility/injector.dart';
-import 'package:instagram/presentation/screens/mobile_screen_layout.dart';
 import 'package:instagram/presentation/screens/responsive_layout.dart';
 import 'package:instagram/presentation/screens/web_screen_layout.dart';
+import 'package:instagram/presentation/widgets/belong_to/register_w/popup_calling.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/register_widgets.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
 import '../../../data/models/user_personal_info.dart';
@@ -93,7 +93,7 @@ class _SignUpPageState extends State<SignUpPage> {
       myPersonalId = authState.user.uid;
       Get.offAll(
         ResponsiveLayout(
-          mobileScreenLayout: MobileScreenLayout(myPersonalId),
+          mobileScreenLayout: PopupCalling(myPersonalId),
           webScreenLayout: const WebScreenLayout(),
         ),
       );
