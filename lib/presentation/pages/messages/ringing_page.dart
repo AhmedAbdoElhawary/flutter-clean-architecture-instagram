@@ -81,6 +81,7 @@ class CallingRingingPage extends StatelessWidget {
                 await CallingRoomsCubit.get(context)
                     .cancelJoiningToRoom(userId: myPersonalInfo.userId);
                 clearMoving();
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).maybePop();
               },
               child: const CircleAvatar(
