@@ -699,6 +699,7 @@ class _ChatMessagesState extends State<ChatMessages>
                           messageInfo:
                               newMessage(blurHash: blurHash, isThatImage: true),
                           pathOfPhoto: pickImage);
+                      if (!mounted) return;
 
                       scrollToLastIndex(context);
                     } else {
@@ -799,6 +800,8 @@ class _ChatMessagesState extends State<ChatMessages>
           messageCubit.sendMessage(
               messageInfo: newMessage(blurHash: blurHash, isThatImage: true),
               pathOfPhoto: pickImage);
+          if (!mounted) return;
+
           scrollToLastIndex(context);
         } else {
           ToastShow.toast(StringsManager.noImageSelected.tr());
