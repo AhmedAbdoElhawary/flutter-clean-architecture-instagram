@@ -10,9 +10,9 @@ import 'package:instagram/domain/entities/registered_user.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instagram/presentation/screens/mobile_screen_layout.dart';
 import 'package:instagram/presentation/screens/responsive_layout.dart';
 import 'package:instagram/presentation/screens/web_screen_layout.dart';
+import 'package:instagram/presentation/widgets/belong_to/register_w/popup_calling.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/register_widgets.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
 import 'package:instagram/core/functions/toast_show.dart';
@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
           await widget.sharePrefs.setString("myPersonalId", myPersonalId);
           Get.offAll(
             ResponsiveLayout(
-              mobileScreenLayout: MobileScreenLayout(myPersonalId),
+              mobileScreenLayout: PopupCalling(myPersonalId),
               webScreenLayout: const WebScreenLayout(),
             ),
           );

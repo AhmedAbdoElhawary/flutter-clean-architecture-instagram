@@ -11,7 +11,7 @@ class PersonalImageIcon extends StatelessWidget {
     return BlocBuilder<UserInfoCubit, FirestoreUserInfoState>(
         builder: (context, state) {
       UserInfoCubit userCubit = UserInfoCubit.get(context);
-      String userImage = userCubit.myPersonalInfo!.profileImageUrl;
+      String userImage = userCubit.myPersonalInfo.profileImageUrl;
 
       return CircleAvatar(
           radius: 14,

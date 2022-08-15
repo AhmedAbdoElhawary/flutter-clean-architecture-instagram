@@ -17,6 +17,48 @@ class FirestoreUser {
         .set(newUserInfo.toMap());
   }
 
+  // update channelId for user
+  static Future<bool> updateChannelId(
+      {required String userId,
+      required String myPersonalId,
+      required String channelId}) async {
+    await _fireStoreUserCollection
+        .doc(myPersonalId)
+        .update({"channelId": channelId});
+
+    DocumentSnapshot<Map<String, dynamic>> collection =
+        await _fireStoreUserCollection.doc(userId).get();
+    UserPersonalInfo userInfo = UserPersonalInfo.fromDocSnap(collection.data());
+    if (userInfo.channelId.isEmpty) {
+      await _fireStoreUserCollection
+          .doc(userId)
+          .update({"channelId": channelId});
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Future<void> clearChannelsIds(
+      {required String userId, required String myPersonalId}) async {
+    await _fireStoreUserCollection.doc(myPersonalId).update({"channelId": ""});
+    await _fireStoreUserCollection.doc(userId).update({"channelId": ""});
+  }
+
+  static Stream<bool> getCallingStatus({required String userId}) {
+    Stream<DocumentSnapshot<Map<String, dynamic>>> snapSearch =
+        _fireStoreUserCollection.doc(userId).snapshots();
+
+    return snapSearch.map((snapshot) {
+      UserPersonalInfo userInfo = UserPersonalInfo.fromDocSnap(snapshot.data());
+      return userInfo.channelId.isNotEmpty;
+    });
+  }
+
+  static Future<void> cancelJoiningToRoom(String userId) async {
+    await _fireStoreUserCollection.doc(userId).update({"channelId": ""});
+  }
+
   static Future<UserPersonalInfo> getUserInfo(String userId) async {
     DocumentSnapshot<Map<String, dynamic>> snap =
         await _fireStoreUserCollection.doc(userId).get();
@@ -24,6 +66,18 @@ class FirestoreUser {
       return UserPersonalInfo.fromDocSnap(snap.data());
     } else {
       return Future.error(StringsManager.userNotExist.tr());
+    }
+  }
+
+  /// For notifications in home app bar and video chat either wise, i get my info from [getUserInfo]
+  static Stream<UserPersonalInfo> getMyPersonalInfoInReelTime() {
+    if (myPersonalId.isNotEmpty) {
+      Stream<DocumentSnapshot<Map<String, dynamic>>> snapshotsInfo =
+          _fireStoreUserCollection.doc(myPersonalId).snapshots();
+      return snapshotsInfo
+          .map((snapshot) => UserPersonalInfo.fromDocSnap(snapshot.data()));
+    } else {
+      return Stream.error("No personal id");
     }
   }
 

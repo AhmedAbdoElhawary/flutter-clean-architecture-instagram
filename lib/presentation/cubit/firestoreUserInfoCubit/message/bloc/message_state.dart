@@ -9,8 +9,6 @@ abstract class MessageBlocState extends Equatable {
 
 class MessageBlocInitial extends MessageBlocState {}
 
-class MessageBlocLoading extends MessageBlocState {}
-
 class MessageBlocLoaded extends MessageBlocState {
   final List<Message> messages;
 

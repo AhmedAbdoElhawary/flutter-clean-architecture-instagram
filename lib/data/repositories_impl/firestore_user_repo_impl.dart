@@ -228,4 +228,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       return Future.error(e.toString());
     }
   }
+
+  @override
+  Stream<UserPersonalInfo> getMyPersonalInfo()=> FirestoreUser.getMyPersonalInfoInReelTime();
 }

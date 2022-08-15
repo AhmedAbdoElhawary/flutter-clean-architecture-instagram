@@ -13,7 +13,6 @@ import 'package:instagram/presentation/pages/time_line/my_own_time_line/home_pag
 import 'package:instagram/presentation/pages/video/videos_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/screens_w.dart';
 
-ValueNotifier<bool> playMainReelVideos = ValueNotifier(false);
 
 class MobileScreenLayout extends StatefulWidget {
   final String userId;
@@ -25,6 +24,8 @@ class MobileScreenLayout extends StatefulWidget {
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   ValueNotifier<bool> playHomeVideo = ValueNotifier(false);
+  ValueNotifier<bool> playMainReelVideos = ValueNotifier(false);
+
   CupertinoTabController controller = CupertinoTabController();
   @override
   void initState() {
@@ -115,9 +116,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       );
 
   BottomNavigationBarItem personalImageItem() {
-    return const BottomNavigationBarItem(
-      icon: PersonalImageIcon(),
-    );
+    return const BottomNavigationBarItem(icon: PersonalImageIcon());
   }
 
   BottomNavigationBarItem navigationBarItem(String icon, bool value,

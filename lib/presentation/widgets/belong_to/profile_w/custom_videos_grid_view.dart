@@ -21,6 +21,8 @@ class CustomVideosGridView extends StatefulWidget {
 }
 
 class _CustomVideosGridViewState extends State<CustomVideosGridView> {
+  OverlayEntry? _popupDialog;
+
   @override
   Widget build(BuildContext context) {
     bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
@@ -47,7 +49,6 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
           ));
   }
 
-  OverlayEntry? _popupDialog;
 
   Widget createGridTileWidget(Post postInfo) => Builder(
         builder: (context) => GestureDetector(

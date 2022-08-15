@@ -14,7 +14,7 @@ import 'package:instagram/data/models/story.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instagram/presentation/screens/mobile_screen_layout.dart';
+import 'package:instagram/presentation/widgets/belong_to/register_w/popup_calling.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -81,7 +81,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
                 margin: const EdgeInsetsDirectional.all(3.0),
                 child: CustomElevatedButton(
                   onPressed: () =>
-                      createStory(personalInfo!, userCubit, builderContext),
+                      createStory(personalInfo, userCubit, builderContext),
                   isItDone: isItDone,
                   nameOfButton: StringsManager.share.tr(),
                 ),
@@ -113,7 +113,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
             await SharedPreferences.getInstance();
         sharePrefs.remove(myPersonalId);
         Navigator.of(context).pushAndRemoveUntil(
-          CupertinoPageRoute(builder: (_) => MobileScreenLayout(myPersonalId)),
+          CupertinoPageRoute(builder: (_) => PopupCalling(myPersonalId)),
           (route) => false,
         );
       }

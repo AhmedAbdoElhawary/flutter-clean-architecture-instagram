@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
+import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.dart';
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/myPersonalInfo/my_personal_info_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
@@ -79,6 +82,19 @@ class MultiBlocs extends StatelessWidget {
       ),
       BlocProvider<NotificationCubit>(
         create: (context) => injector<NotificationCubit>(),
+      ),
+      BlocProvider<CallingRoomsCubit>(
+        create: (context) => injector<CallingRoomsCubit>(),
+      ),
+      BlocProvider<MyPersonalInfoBloc>(
+        create: (context1) {
+          if (myPersonalId.isNotEmpty) {
+            return injector<MyPersonalInfoBloc>()
+              ..add(LoadMyPersonalInfo());
+          } else {
+            return injector<MyPersonalInfoBloc>();
+          }
+        },
       ),
     ], child: materialApp);
   }

@@ -18,6 +18,7 @@ class UserPersonalInfo extends Equatable {
   List<dynamic> charactersOfName;
   int numberOfNewNotifications;
   int numberOfNewMessages;
+  String channelId;
   UserPersonalInfo({
     required this.followedPeople,
     required this.followerPeople,
@@ -27,6 +28,7 @@ class UserPersonalInfo extends Equatable {
     required this.devicesTokens,
     this.storiesInfo,
     this.name = "",
+    this.channelId = "",
     this.bio = "",
     this.email = "",
     this.profileImageUrl = "",
@@ -52,7 +54,7 @@ class UserPersonalInfo extends Equatable {
       numberOfNewNotifications: snap?["numberOfNewNotifications"] ?? 0,
       numberOfNewMessages: snap?["numberOfNewMessages"] ?? 0,
       devicesTokens: snap?["devicesTokens"] ?? [],
-
+      channelId: snap?["channelId"] ?? "",
     );
   }
 
@@ -72,7 +74,7 @@ class UserPersonalInfo extends Equatable {
       'numberOfNewNotifications': numberOfNewNotifications,
       'numberOfNewMessages': numberOfNewMessages,
       'devicesTokens': devicesTokens,
-
+      'channelId': channelId,
     };
   }
 
@@ -93,5 +95,6 @@ class UserPersonalInfo extends Equatable {
         numberOfNewNotifications,
         numberOfNewMessages,
         devicesTokens,
+        channelId,
       ];
 }

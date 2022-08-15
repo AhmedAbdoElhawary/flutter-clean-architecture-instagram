@@ -40,6 +40,9 @@ abstract class FirestoreUserRepository {
       required String pathOfRecorded});
 
   Stream<List<Message>> getMessages({required String receiverId});
+
+  Stream<UserPersonalInfo> getMyPersonalInfo();
+
   Stream<List<UserPersonalInfo>> searchAboutUser({required String name});
   Future<void> deleteMessage(
       {required Message messageInfo, Message? replacedMessage});
