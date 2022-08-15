@@ -7,10 +7,10 @@ import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instagram/presentation/screens/mobile_screen_layout.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/presentation/screens/responsive_layout.dart';
 import 'package:instagram/presentation/screens/web_screen_layout.dart';
+import 'package:instagram/presentation/widgets/belong_to/register_w/popup_calling.dart';
 
 class GetMyPersonalInfo extends StatefulWidget {
   final String myPersonalId;
@@ -43,7 +43,7 @@ class _GetMyPersonalInfoState extends State<GetMyPersonalInfo> {
               myPersonalId = widget.myPersonalId;
               Get.offAll(
                 ResponsiveLayout(
-                  mobileScreenLayout: MobileScreenLayout(myPersonalId),
+                  mobileScreenLayout: PopupCalling(myPersonalId),
                   webScreenLayout: const WebScreenLayout(),
                 ),
               );
