@@ -22,7 +22,7 @@ class WhichProfilePage extends StatelessWidget {
         UserPersonalInfo? myPersonalInfo =
             UserInfoCubit.get(context).myPersonalInfo;
 
-        return userName == myPersonalInfo!.userName
+        return userName == myPersonalInfo.userName
             ? PersonalProfilePage(
                 userName: userName,
                 personalId: userId,
