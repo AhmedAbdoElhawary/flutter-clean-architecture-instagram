@@ -5,7 +5,6 @@ abstract class FirestoreNotificationRepository {
   Future<String> createNotification(
       {required CustomNotification newNotification});
   Future<List<CustomNotification>> getNotifications({required String userId});
-  Future<void> deleteNotification({
-    required NotificationCheck notificationCheck
-  });
+  Future<void> deleteNotification(
+      {required NotificationCheck notificationCheck});
 }
