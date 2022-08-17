@@ -41,8 +41,8 @@ class RecordViewState extends State<RecordView> {
             children: [
               GestureDetector(
                 child: _isPlaying
-                    ? buildIcon(Icons.pause_sharp,theColor)
-                    : buildIcon(Icons.play_arrow_rounded,theColor),
+                    ? buildIcon(Icons.pause_sharp, theColor)
+                    : buildIcon(Icons.play_arrow_rounded, theColor),
                 onTap: () => _onPlay(urlRecord: widget.urlRecord),
               ),
               const SizedBox(width: 10),
@@ -54,7 +54,9 @@ class RecordViewState extends State<RecordView> {
                   barHeight: 3,
                   thumbRadius: 6.0,
                   baseBarColor: widget.isThatMine
-                      ? (isThatMobile?ColorManager.darkWhite:ColorManager.veryLowOpacityGrey)
+                      ? (isThatMobile
+                          ? ColorManager.darkWhite
+                          : ColorManager.veryLowOpacityGrey)
                       : ColorManager.veryLowOpacityGrey,
                   progressBarColor: theColor,
                   progress: Duration(microseconds: _currentDuration ?? 0),
@@ -82,9 +84,8 @@ class RecordViewState extends State<RecordView> {
     return "${datesSeparated[0]}:${datesSeparated[1]}";
   }
 
-  Icon buildIcon(IconData icon,Color theColor) => Icon(icon,
-      color:theColor,
-      size: 30);
+  Icon buildIcon(IconData icon, Color theColor) =>
+      Icon(icon, color: theColor, size: 30);
 
   Future<void> _onPlay({required String urlRecord}) async {
     if (!_isPlaying) {
