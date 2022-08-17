@@ -329,7 +329,6 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       editProfileButtonForWeb(),
       const SizedBox(width: 10),
       GestureDetector(
-        onTap: () {},
         child: const Icon(Icons.settings_rounded, color: ColorManager.black),
       ),
     ];
@@ -337,7 +336,6 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   Widget editProfileButtonForWeb() {
     return GestureDetector(
-      onTap: () {},
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
         decoration: BoxDecoration(
