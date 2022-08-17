@@ -20,7 +20,7 @@ class MessageCubit extends Cubit<MessageState> {
 
   Future<void> sendMessage(
       {required Message messageInfo,
-        Uint8List? pathOfPhoto,
+      Uint8List? pathOfPhoto,
       String pathOfRecorded = ""}) async {
     emit(SendMessageLoading());
     await _addMessageUseCase

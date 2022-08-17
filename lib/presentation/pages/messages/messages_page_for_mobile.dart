@@ -18,12 +18,13 @@ class MessagesPageForMobile extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColor,
       actions: [
         IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.add,
-              color: Theme.of(context).focusColor,
-              size: 30,
-            ),)
+          onPressed: () {},
+          icon: Icon(
+            Icons.add,
+            color: Theme.of(context).focusColor,
+            size: 30,
+          ),
+        )
       ],
     );
   }
