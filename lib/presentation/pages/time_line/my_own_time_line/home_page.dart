@@ -29,11 +29,8 @@ class HomePage extends StatefulWidget {
   final String userId;
   final bool playVideo;
 
-  const HomePage({
-    Key? key,
-    required this.userId,
-    this.playVideo = true,
-  }) : super(key: key);
+  const HomePage({Key? key, required this.userId, this.playVideo = true})
+      : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
