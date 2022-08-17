@@ -92,8 +92,7 @@ class MultiBlocs extends StatelessWidget {
       BlocProvider<MyPersonalInfoBloc>(
         create: (context1) {
           if (myPersonalId.isNotEmpty) {
-            return injector<MyPersonalInfoBloc>()
-              ..add(LoadMyPersonalInfo());
+            return injector<MyPersonalInfoBloc>()..add(LoadMyPersonalInfo());
           } else {
             return injector<MyPersonalInfoBloc>();
           }
