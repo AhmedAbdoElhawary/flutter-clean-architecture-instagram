@@ -324,7 +324,8 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
         page = WhichProfilePage(
           userId: widget.postClickedInfo.publisherId,
         );
-      }
+      }    if(!mounted)return;
+
       pushToPage(context, page: page, withoutRoot: false);
     }
     if (shareVisibility.value) draggableBottomSheet();
