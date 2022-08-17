@@ -96,10 +96,12 @@ class NotificationCardInfo extends StatelessWidget {
                   appBarText = StringsManager.comments.tr();
                 }
                 if (isThatMobile) {
-                  pushToPage(context, page: GetsPostInfoAndDisplay(
-                    postId: notificationInfo.postId,
-                    appBarText: appBarText,
-                  ),withoutRoot: false);
+                  pushToPage(context,
+                      page: GetsPostInfoAndDisplay(
+                        postId: notificationInfo.postId,
+                        appBarText: appBarText,
+                      ),
+                      withoutRoot: false);
                 } else {
                   Navigator.of(context).push(HeroDialogRoute(
                     builder: (context) => GetsPostInfoAndDisplay(
