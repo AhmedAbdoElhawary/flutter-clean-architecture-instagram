@@ -538,7 +538,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                     alignment: Alignment.center,
                     children: [
                       PlayThisVideo(
-                          videoUrl: postInfo.postUrl,
+                          videoInfo: postInfo,
                           play: widget.playTheVideo,
                           withoutSound: !isSoundOn),
                       if (!widget.playTheVideo)
