@@ -81,9 +81,9 @@ class SnapSpec {
   /// private
   static bool isSnap(double? snap) =>
       snap == expanded ||
-          snap == headerFooterSnap ||
-          snap == headerSnap ||
-          snap == footerSnap;
+      snap == headerFooterSnap ||
+      snap == headerSnap ||
+      snap == footerSnap;
 
   double get minSnap => snappings.first;
   double get maxSnap => snappings.last;
@@ -125,10 +125,10 @@ class SnapSpec {
   @override
   int get hashCode {
     return snap.hashCode ^
-    snappings.hashCode ^
-    initialSnap.hashCode ^
-    positioning.hashCode ^
-    onSnap.hashCode;
+        snappings.hashCode ^
+        initialSnap.hashCode ^
+        positioning.hashCode ^
+        onSnap.hashCode;
   }
 }
 
@@ -181,9 +181,9 @@ class ScrollSpec {
   @override
   int get hashCode {
     return overscroll.hashCode ^
-    overscrollColor.hashCode ^
-    physics.hashCode ^
-    showScrollbar.hashCode;
+        overscrollColor.hashCode ^
+        physics.hashCode ^
+        showScrollbar.hashCode;
   }
 }
 

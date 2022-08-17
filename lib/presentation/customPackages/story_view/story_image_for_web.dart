@@ -55,7 +55,6 @@ class StoryImageForWebState extends State<StoryImageForWeb> {
         }
       });
     }
-
   }
 
   @override
