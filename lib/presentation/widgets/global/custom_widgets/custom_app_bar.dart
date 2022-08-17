@@ -115,7 +115,6 @@ class CustomAppBar {
     return Padding(
       padding: const EdgeInsetsDirectional.only(end: 13.0),
       child: PopupMenuButton<int>(
-        position: PopupMenuPosition.under,
         elevation: 20,
         color: Theme.of(context).splashColor,
         offset: const Offset(90, 8),
