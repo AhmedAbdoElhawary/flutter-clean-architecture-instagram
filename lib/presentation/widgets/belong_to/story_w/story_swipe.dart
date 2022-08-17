@@ -81,14 +81,14 @@ class _SwipeWidget extends StatelessWidget {
     transform.setEntry(3, 2, 0.001);
     transform.rotateY(-degToRad(rotationY!).toDouble());
     return Transform(
-      alignment: isLeaving ? Alignment.centerRight : Alignment.centerLeft,
-      transform: transform,
-      child:
-      // isThatMobile
-      //     ?
-      buildStack(opacity)
-          // : buildStackForWeb(context, opacity),
-    );
+        alignment: isLeaving ? Alignment.centerRight : Alignment.centerLeft,
+        transform: transform,
+        child:
+            // isThatMobile
+            //     ?
+            buildStack(opacity)
+        // : buildStackForWeb(context, opacity),
+        );
   }
   //
   // Widget buildStackForWeb(BuildContext context, opacity) {
