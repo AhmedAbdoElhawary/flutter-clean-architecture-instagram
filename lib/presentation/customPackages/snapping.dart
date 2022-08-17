@@ -26,6 +26,7 @@ class ScrollSnapList extends StatefulWidget {
   final double itemSize;
 
   @override
+  // ignore: overridden_fields
   final Key? key;
 
   final Key? listViewKey;
