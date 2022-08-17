@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +45,7 @@ class SharedMessage extends StatelessWidget {
               alignment: Alignment.topCenter,
               children: [
                 Container(
-                  color:Theme.of(context).textTheme.subtitle2!.color,
+                  color: Theme.of(context).textTheme.subtitle2!.color,
                   width: double.infinity,
                   child: NetworkImageDisplay(
                     blurHash: messageInfo.blurHash,
@@ -104,10 +103,10 @@ class SharedMessage extends StatelessWidget {
             radius: 15,
             child: messageInfo.imageUrl.isEmpty
                 ? Icon(
-              Icons.person,
-              color: Theme.of(context).primaryColor,
-              size: 15,
-            )
+                    Icons.person,
+                    color: Theme.of(context).primaryColor,
+                    size: 15,
+                  )
                 : null,
           ),
           const SizedBox(width: 7),
@@ -128,7 +127,7 @@ class SharedMessage extends StatelessWidget {
       height: 50,
       width: double.infinity,
       padding: const EdgeInsetsDirectional.only(bottom: 5, top: 5, start: 15),
-      color:Theme.of(context).textTheme.subtitle2!.color,
+      color: Theme.of(context).textTheme.subtitle2!.color,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
