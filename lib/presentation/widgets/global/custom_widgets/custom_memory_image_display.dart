@@ -30,7 +30,8 @@ class _NetworkImageDisplayState extends State<MemoryImageDisplay> {
     return Container(
       width: double.infinity,
       color: ColorManager.black26,
-      child: Image.memory(widget.imagePath,
+      child: Image.memory(
+        widget.imagePath,
         errorBuilder: (context, url, error) => buildError(),
         fit: BoxFit.cover,
         width: double.infinity,
