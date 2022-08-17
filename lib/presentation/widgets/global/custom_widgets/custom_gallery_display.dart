@@ -68,9 +68,8 @@ Future<void> moveToCreationPage(
       ? details.selectedFiles![0]
       : details.selectedFile;
   Uint8List bytesFile = await file.readAsBytes();
-  
-  if (isThatStory) {
 
+  if (isThatStory) {
     // ignore: use_build_context_synchronously
     await pushToPage(context,
         page: CreateStoryPage(
@@ -82,7 +81,7 @@ Future<void> moveToCreationPage(
         imageFormat: ImageFormat.PNG,
       );
       Uint8List convertVideo = await details.selectedFile.readAsBytes();
-      
+
       // ignore: use_build_context_synchronously
       await pushToPage(context,
           page: CreatePostPage(
