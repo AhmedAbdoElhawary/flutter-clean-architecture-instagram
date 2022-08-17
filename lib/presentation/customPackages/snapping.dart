@@ -188,11 +188,10 @@ class ScrollSnapListState extends State<ScrollSnapList> {
 
     return child;
   }
+
   double _calcCardLocation(
       {double? pixel, required double itemSize, int? index}) {
-
-    int cardIndex =
-        index ?? ((pixel! - itemSize / 2) / itemSize).ceil();
+    int cardIndex = index ?? ((pixel! - itemSize / 2) / itemSize).ceil();
 
     if (cardIndex < 0) {
       cardIndex = 0;

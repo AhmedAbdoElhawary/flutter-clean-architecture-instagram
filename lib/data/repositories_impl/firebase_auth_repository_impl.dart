@@ -19,11 +19,13 @@ class FirebaseAuthRepositoryImpl implements FirebaseAuthRepository {
   }
 
   @override
-  Future<void> signOut({required String userId, required String? deviceToken}) async {
+  Future<void> signOut(
+      {required String userId, required String? deviceToken}) async {
     try {
       await FirebaseAuthentication.signOut();
-      await FirestoreNotification.deleteDeviceToken(userId: userId, deviceToken: deviceToken);
-      return ;
+      await FirestoreNotification.deleteDeviceToken(
+          userId: userId, deviceToken: deviceToken);
+      return;
     } catch (e) {
       return Future.error(e.toString());
     }

@@ -151,9 +151,8 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
               ),
               const SizedBox(width: 5),
               PopupMenuButton<int>(
-                constraints:
-                    const BoxConstraints.tightFor(height: 360, width: 500),
-                position: PopupMenuPosition.under,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 500, vertical: 360),
                 tooltip: "Show notifications",
                 elevation: 20,
                 color: Theme.of(context).splashColor,
@@ -196,9 +195,8 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
 
   PopupMenuButton<int> buildPopupMenuButton(BuildContext context) {
     return PopupMenuButton<int>(
-      constraints: const BoxConstraints.tightFor(width: 180),
+      padding: const EdgeInsets.symmetric(horizontal: 180),
       tooltip: "Show profile menu",
-      position: PopupMenuPosition.under,
       elevation: 20,
       color: Theme.of(context).splashColor,
       offset: const Offset(90, 12),

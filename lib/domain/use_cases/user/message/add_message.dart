@@ -13,8 +13,8 @@ class AddMessageUseCase
   @override
   Future<Message> call(
       {required Message paramsOne,
-       Uint8List? paramsTwo,
-        required String paramsThree}) {
+      Uint8List? paramsTwo,
+      required String paramsThree}) {
     return _addPostToUserRepository.sendMessage(
         messageInfo: paramsOne,
         pathOfPhoto: paramsTwo,

@@ -37,7 +37,8 @@ class GetsPostInfoAndDisplay extends StatelessWidget {
         builder: (context, state) {
           if (state is CubitPostsInfoLoaded) {
             if (isThatMobile) {
-              if (state.postsInfo.isNotEmpty&&state.postsInfo[0].comments.length < 10) {
+              if (state.postsInfo.isNotEmpty &&
+                  state.postsInfo[0].comments.length < 10) {
                 return CommentsOfPost(
                   postInfo: state.postsInfo[0],
                   textController: ValueNotifier(TextEditingController()),

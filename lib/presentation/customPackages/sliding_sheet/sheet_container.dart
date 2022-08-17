@@ -49,12 +49,12 @@ class SheetContainer extends StatelessWidget {
       boxShadow: boxShadows ??
           (elevation > 0.0
               ? [
-            BoxShadow(
-              color: shadowColor ?? Colors.black12,
-              blurRadius: elevation,
-              spreadRadius: 0,
-            )
-          ]
+                  BoxShadow(
+                    color: shadowColor ?? Colors.black12,
+                    blurRadius: elevation,
+                    spreadRadius: 0,
+                  )
+                ]
               : const []),
     );
 
@@ -101,7 +101,7 @@ class ElevatedContainer extends StatelessWidget {
 
     return SheetListenerBuilder(
       buildWhen: (oldState, newState) =>
-      elevateWhen(oldState) != elevateWhen(newState),
+          elevateWhen(oldState) != elevateWhen(newState),
       builder: (context, state) {
         return SheetContainer(
           shadowColor: shadowColor,

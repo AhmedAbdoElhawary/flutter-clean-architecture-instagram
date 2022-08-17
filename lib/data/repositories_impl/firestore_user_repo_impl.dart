@@ -230,5 +230,6 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Stream<UserPersonalInfo> getMyPersonalInfo()=> FirestoreUser.getMyPersonalInfoInReelTime();
+  Stream<UserPersonalInfo> getMyPersonalInfo() =>
+      FirestoreUser.getMyPersonalInfoInReelTime();
 }

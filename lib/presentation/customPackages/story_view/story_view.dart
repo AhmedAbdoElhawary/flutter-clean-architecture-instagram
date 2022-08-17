@@ -365,7 +365,7 @@ class StoryItem {
               top: Radius.circular(roundedTop ? 8 : 0),
               bottom: Radius.circular(roundedBottom ? 8 : 0),
             ),
-            image: DecorationImage(image: image, fit:BoxFit.cover)),
+            image: DecorationImage(image: image, fit: BoxFit.cover)),
         child: Container(
           margin: const EdgeInsetsDirectional.only(bottom: 16),
           padding: const EdgeInsetsDirectional.only(

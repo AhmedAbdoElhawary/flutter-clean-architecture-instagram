@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
@@ -16,7 +15,7 @@ class PopupMenuCard extends StatelessWidget {
           color: ColorManager.white,
           elevation: 2,
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(

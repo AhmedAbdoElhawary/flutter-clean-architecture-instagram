@@ -115,7 +115,6 @@ class CustomAppBar {
     return Padding(
       padding: const EdgeInsetsDirectional.only(end: 13.0),
       child: PopupMenuButton<int>(
-        position: PopupMenuPosition.under,
         elevation: 20,
         color: Theme.of(context).splashColor,
         offset: const Offset(90, 8),
@@ -258,11 +257,11 @@ class CustomAppBar {
             UserPersonalInfo myPersonalInfo =
                 UserInfoCubit.getMyPersonalInfo(context);
             amICalling = true;
-              pushToPage(context,
-                  page: VideoCallPage(
-                      userInfo: userInfo, myPersonalInfo: myPersonalInfo),
-                  withoutRoot: false,
-                  withoutPageTransition: true);
+            pushToPage(context,
+                page: VideoCallPage(
+                    userInfo: userInfo, myPersonalInfo: myPersonalInfo),
+                withoutRoot: false,
+                withoutPageTransition: true);
           },
           child: SvgPicture.asset(
             IconsAssets.videoPoint,

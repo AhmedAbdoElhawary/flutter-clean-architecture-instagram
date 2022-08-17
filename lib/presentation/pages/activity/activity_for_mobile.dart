@@ -45,8 +45,7 @@ class _ActivityPageState extends State<ActivityPage> {
   BlocBuilder<UserInfoCubit, FirestoreUserInfoState> buildBody(
       BuildContext context) {
     return BlocBuilder<UserInfoCubit, FirestoreUserInfoState>(
-      bloc: UserInfoCubit.get(context)
-        ..getAllUnFollowersUsers(myPersonalInfo),
+      bloc: UserInfoCubit.get(context)..getAllUnFollowersUsers(myPersonalInfo),
       buildWhen: (previous, current) =>
           (previous != current && current is CubitAllUnFollowersUserLoaded),
       builder: (context, unFollowersState) {
@@ -108,7 +107,7 @@ class _ActivityPageState extends State<ActivityPage> {
                   ),
                 );
               }
-              return const Center(child:  ThineCircularProgress());
+              return const Center(child: ThineCircularProgress());
             },
           ),
         );

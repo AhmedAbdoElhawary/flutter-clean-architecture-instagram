@@ -9,9 +9,11 @@ class UsersWhoLikesForWeb extends StatelessWidget {
   final List<dynamic> usersIds;
   final bool isThatMyPersonalId;
 
-  const UsersWhoLikesForWeb({Key? key, required this.usersIds,    required this.isThatMyPersonalId,
-  })
-      : super(key: key);
+  const UsersWhoLikesForWeb({
+    Key? key,
+    required this.usersIds,
+    required this.isThatMyPersonalId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

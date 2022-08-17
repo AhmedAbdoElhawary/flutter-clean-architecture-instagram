@@ -193,8 +193,10 @@ class _CommentInfoState extends State<CommentInfo> {
   GestureDetector profileImage(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        pushToPage(context, page:  WhichProfilePage(
-            userId: widget.commentInfo.whoCommentInfo!.userId),withoutRoot: false);
+        pushToPage(context,
+            page: WhichProfilePage(
+                userId: widget.commentInfo.whoCommentInfo!.userId),
+            withoutRoot: false);
       },
       child: CircleAvatarOfProfileImage(
         userInfo: widget.commentInfo.whoCommentInfo!,
@@ -230,13 +232,14 @@ class _CommentInfoState extends State<CommentInfo> {
             padding: const EdgeInsetsDirectional.only(start: 20.0),
             child: InkWell(
               onTap: () {
-                pushToPage(context, page:  UsersWhoLikesForMobile(
-                  showSearchBar: false,
-                  usersIds: widget.commentInfo.likes,
-                  isThatMyPersonalId:
-                  widget.commentInfo.whoCommentId == myPersonalId,
-                ),withoutRoot: false);
-
+                pushToPage(context,
+                    page: UsersWhoLikesForMobile(
+                      showSearchBar: false,
+                      usersIds: widget.commentInfo.likes,
+                      isThatMyPersonalId:
+                          widget.commentInfo.whoCommentId == myPersonalId,
+                    ),
+                    withoutRoot: false);
               },
               child: Text(
                 "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like.tr() : StringsManager.likes.tr()}",
@@ -276,8 +279,9 @@ class _CommentInfoState extends State<CommentInfo> {
       BuildContext context, String hashTageOfUserName) {
     return GestureDetector(
       onTap: () {
-        pushToPage(context, page:  WhichProfilePage(
-            userId: widget.commentInfo.whoCommentInfo!.userId));
+        pushToPage(context,
+            page: WhichProfilePage(
+                userId: widget.commentInfo.whoCommentInfo!.userId));
       },
       child: Text.rich(
         TextSpan(
@@ -297,9 +301,10 @@ class _CommentInfoState extends State<CommentInfo> {
                   ..onTap = () async {
                     List<String> hashTagName = hashTageOfUserName.split(" ");
                     String userName = hashTagName[0].replaceAll('@', '');
-                    await pushToPage(context, page: WhichProfilePage(
-                      userName: userName,
-                    ));
+                    await pushToPage(context,
+                        page: WhichProfilePage(
+                          userName: userName,
+                        ));
                   },
               ),
             TextSpan(

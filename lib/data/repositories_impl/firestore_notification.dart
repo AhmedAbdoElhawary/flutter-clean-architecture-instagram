@@ -24,11 +24,11 @@ class FirestoreNotificationRepoImpl implements FirestoreNotificationRepository {
   }
 
   @override
-  Future<void> deleteNotification({
-    required NotificationCheck notificationCheck
-  }) {
+  Future<void> deleteNotification(
+      {required NotificationCheck notificationCheck}) {
     try {
-      return FirestoreNotification.deleteNotification(notificationCheck: notificationCheck);
+      return FirestoreNotification.deleteNotification(
+          notificationCheck: notificationCheck);
     } catch (e) {
       return Future.error(e.toString());
     }

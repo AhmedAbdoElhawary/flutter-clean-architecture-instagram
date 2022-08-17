@@ -9,7 +9,6 @@ Future<Uint8List?> imageCameraPicker() async {
   final XFile? image = await picker.pickImage(
       source: ImageSource.camera, maxWidth: double.infinity, maxHeight: 300);
   if (image != null) {
-
     Uint8List photo = await image.readAsBytes();
     if (isThatMobile) {
       Uint8List? compressPhoto = await compressImage(photo);

@@ -245,6 +245,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
 
     BlocProvider.of<NotificationCubit>(context).createNotification(
         newNotification: createNotification(textWithOneSpaces, userInfo));
+
     /// To rebuild number of comments
     setState(() {});
   }

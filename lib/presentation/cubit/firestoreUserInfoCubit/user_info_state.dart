@@ -26,6 +26,7 @@ class CubitAllUnFollowersUserLoaded extends FirestoreUserInfoState {
 
   CubitAllUnFollowersUserLoaded(this.usersInfo);
 }
+
 // all user info loading
 class CubitAllUnFollowersUserLoading extends FirestoreUserInfoState {}
 

@@ -8,7 +8,7 @@ class ColorManager {
 
   static const Color customGrey = Color(0xffdcdcdc);
   static const Color customGreyForWeb = Color(0x17eeeee9);
-  static const Color appBarElationColor =  Color.fromARGB(137, 222, 222, 222);
+  static const Color appBarElationColor = Color.fromARGB(137, 222, 222, 222);
 
   static const Color lowOpacityGrey = Color(0x2A3E3E2F);
   static const Color veryLowOpacityGrey = Color(0x16444439);

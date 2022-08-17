@@ -23,7 +23,7 @@ class RegisterWidgets extends StatefulWidget {
     this.isThatLogIn = true,
     required this.passwordController,
     required this.customTextButton,
-     this.confirmPasswordController,
+    this.confirmPasswordController,
   }) : super(key: key);
 
   @override
@@ -96,7 +96,8 @@ class _SignUpPageState extends State<RegisterWidgets> {
         CustomTextField(
             hint: StringsManager.password.tr(),
             controller: widget.passwordController),
-        if (!widget.isThatLogIn&&widget.confirmPasswordController!=null) ...[
+        if (!widget.isThatLogIn &&
+            widget.confirmPasswordController != null) ...[
           SizedBox(height: isThatMobile ? 15 : 7),
           CustomTextField(
               hint: StringsManager.confirmPassword.tr(),

@@ -1,7 +1,7 @@
 {
   "hosting": {
-    "site": "flutter-instagram-web",
-    "public": "build/web",
+    "site": "instagram-web-v1",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",

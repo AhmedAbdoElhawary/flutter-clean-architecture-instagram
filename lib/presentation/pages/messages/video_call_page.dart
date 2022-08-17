@@ -11,14 +11,20 @@ import 'package:instagram/domain/entities/calling_status.dart';
 import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+enum UserCallingType { sender, receiver }
+
 class CallPage extends StatefulWidget {
   final String channelName;
   final UserInfoInCallingRoom userInfo;
-
+  final UserCallingType userCallingType;
   final ClientRole role;
 
   const CallPage(
-      {Key? key, required this.channelName, required this.role,required this.userInfo})
+      {Key? key,
+      required this.channelName,
+      required this.userCallingType,
+      required this.role,
+      required this.userInfo})
       : super(key: key);
 
   @override
@@ -61,6 +67,10 @@ class CallPageState extends State<CallPage> {
   Future<void> _handleCameraAndMic(Permission permission) async =>
       await permission.request();
 
+  /// Create your own app id with agora with "testing mode"
+  /// it's very simple, just go to https://www.agora.io/en/ and create your own project and get your own app id in [agoraAppId]
+  /// Again, don't make it with secure mode ,You will lose the creation of several channels.
+  /// Make it with "testing mode"
   Future<void> initialize() async {
     if (agoraAppId.isEmpty) {
       setState(() {
@@ -154,8 +164,20 @@ class CallPageState extends State<CallPage> {
   }
 
   /// Video layout wrapper
+  bool enter = false;
   Widget _viewRows() {
     final views = _getRenderViews();
+    if (views.length > 1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+            enter = true;
+          }));
+    }
+    if (widget.userCallingType == UserCallingType.receiver &&
+        views.length == 1 &&
+        enter) {
+      Navigator.of(context).maybePop();
+    }
+
     switch (views.length) {
       case 1:
         return Column(
@@ -239,8 +261,8 @@ class CallPageState extends State<CallPage> {
 
   void _onCallEnd(BuildContext context) {
     setState(() => amICalling = false);
-      CallingRoomsCubit.get(context).deleteTheRoom(
-          channelId: widget.channelName, userId: widget.userInfo.userId);
+    CallingRoomsCubit.get(context).deleteTheRoom(
+        channelId: widget.channelName, userId: widget.userInfo.userId);
 
     Navigator.of(context).maybePop();
   }
@@ -269,7 +291,7 @@ class CallPageState extends State<CallPage> {
             // _panel(),
             if (views.length == 1) ...[
               Positioned(
-                top: 0,
+                top: 30,
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Row(

@@ -1,6 +1,6 @@
 {
-    "name": "instagram",
-    "short_name": "instagram",
+    "name": "again_instagram",
+    "short_name": "again_instagram",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

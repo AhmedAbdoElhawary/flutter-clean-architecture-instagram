@@ -73,8 +73,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget buildBlocBuilder(context, FirebaseAuthCubitState authState,
-      UserInfoCubit getUserCubit) {
+  Widget buildBlocBuilder(
+      context, FirebaseAuthCubitState authState, UserInfoCubit getUserCubit) {
     return ValueListenableBuilder(
       valueListenable: isToastShowed,
       builder: (context, bool isToastShowedValue, child) {
@@ -82,21 +82,20 @@ class _LoginPageState extends State<LoginPage> {
         if (authState is CubitAuthConfirmed) {
           onAuthConfirmed(getUserCubit, authCubit);
         } else if (authState is CubitAuthFailed && !isToastShowedValue) {
-              isToastShowed.value = true;
-              isUserIdReady.value = true;
-              ToastShow.toastStateError(authState);
+          isToastShowed.value = true;
+          isUserIdReady.value = true;
+          ToastShow.toastStateError(authState);
         }
         return loginButton(authCubit);
       },
     );
   }
 
-  onAuthConfirmed(
-      UserInfoCubit getUserCubit, FirebaseAuthCubit authCubit) {
+  onAuthConfirmed(UserInfoCubit getUserCubit, FirebaseAuthCubit authCubit) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await getUserCubit.getUserInfo(authCubit.user!.uid,getDeviceToken: true);
+      await getUserCubit.getUserInfo(authCubit.user!.uid, getDeviceToken: true);
       String userId = authCubit.user!.uid;
-        isUserIdReady.value = true;
+      isUserIdReady.value = true;
       if (!isHeMovedToHome.value) {
         myPersonalId = userId;
         if (myPersonalId.isNotEmpty) {

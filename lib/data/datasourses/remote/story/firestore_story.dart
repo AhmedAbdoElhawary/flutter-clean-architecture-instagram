@@ -35,16 +35,14 @@ class FireStoreStory {
         DocumentSnapshot<Map<String, dynamic>> snap =
             await _fireStoreStoryCollection.doc(userStories[j]).get();
         if (snap.exists) {
-
           Story postReformat = Story.fromSnap(docSnap: snap);
-          if(postReformat.storyUrl.isNotEmpty){
+          if (postReformat.storyUrl.isNotEmpty) {
             postReformat.publisherInfo = usersInfo[i];
             if (!storiesIds.contains(postReformat.storyUid)) {
               storiesInfo.add(postReformat);
               storiesIds.add(postReformat.storyUid);
             }
           }
-
         }
       }
       usersInfo[i].storiesInfo = storiesInfo;

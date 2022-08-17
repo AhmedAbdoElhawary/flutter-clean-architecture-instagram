@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-//import 'package:instagram/core/private_keys.dart';
+import 'package:instagram/core/private_keys.dart';
 
-class DeviceNotification{
- static Future<void> sendPopupNotification({
+class DeviceNotification {
+  static Future<void> sendPopupNotification({
     required List<dynamic> devicesTokens,
     required String body,
     required String title,
@@ -15,9 +15,7 @@ class DeviceNotification{
           Uri.parse('https://fcm.googleapis.com/fcm/send'),
           headers: <String, String>{
             'Content-Type': 'application/json',
-            'Authorization':
-           // notificationKey her
-            "",
+            'Authorization': notificationKey,
           },
           body: jsonEncode(
             <String, dynamic>{

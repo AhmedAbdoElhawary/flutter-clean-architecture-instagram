@@ -44,9 +44,11 @@ class FirestorePostRepositoryImpl implements FirestorePostRepository {
   }
 
   @override
-  Future<List<Post>> getAllPostsInfo({bool isVideosWantedOnly=false,String skippedVideoUid = ""}) async {
+  Future<List<Post>> getAllPostsInfo(
+      {bool isVideosWantedOnly = false, String skippedVideoUid = ""}) async {
     try {
-      return await FirestorePost.getAllPostsInfo(isVideosWantedOnly: isVideosWantedOnly);
+      return await FirestorePost.getAllPostsInfo(
+          isVideosWantedOnly: isVideosWantedOnly);
     } catch (e) {
       return Future.error(e.toString());
     }

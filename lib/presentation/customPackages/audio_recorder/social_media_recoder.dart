@@ -29,7 +29,6 @@ class SocialMediaRecorder extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-
   @override
   SocialMediaRecorderS createState() => SocialMediaRecorderS();
 }

@@ -82,9 +82,8 @@ class StoryVideoState extends State<StoryVideo> {
 
     widget.videoLoader.loadVideo(() {
       if (widget.videoLoader.state == LoadState.success) {
-       File convertedFile= File.fromRawPath(widget.videoLoader.videoFile!);
-        playerController =
-            VideoPlayerController.file(convertedFile);
+        File convertedFile = File.fromRawPath(widget.videoLoader.videoFile!);
+        playerController = VideoPlayerController.file(convertedFile);
 
         playerController!.initialize().then((v) {
           setState(() {});

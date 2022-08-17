@@ -30,7 +30,7 @@ class ImageLoader {
         .getFileStream(url, headers: requestHeaders as Map<String, String>?);
 
     fileStream.listen(
-      (fileResponse) {
+      (fileResponse) async {
         if (fileResponse is! FileInfo) return;
         // the reason for this is that, when the cache manager fetches
         // the image again from network, the provided `onComplete` should
@@ -43,8 +43,11 @@ class ImageLoader {
 
         state = LoadState.success;
 
-        PaintingBinding.instance.instantiateImageCodec(imageBytes).then(
-            (codec) {
+        ui.ImmutableBuffer immutable =
+            await ui.ImmutableBuffer.fromUint8List(imageBytes);
+        PaintingBinding.instance
+            .instantiateImageCodecFromBuffer(immutable)
+            .then((codec) {
           frames = codec;
           onComplete();
         }, onError: (error) {

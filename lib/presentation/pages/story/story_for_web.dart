@@ -79,55 +79,55 @@ class StoryPageForWebState extends State<StoryPageForWeb> {
         children: [
           Expanded(
               child: ScrollSnapList(
-                itemBuilder: (_, index) {
-                  if (index == widget.storiesOwnersInfo.length) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return SizedBox(
-                    width: widthOfStory,
-                    child: Center(
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          SizedBox(
-                            height: heightOfStory,
-                            width: widthOfStory,
-                            child: StoryWidget(
-                              storiesOwnersInfo: widget.storiesOwnersInfo,
-                              user: widget.storiesOwnersInfo[index],
-                              scrollControl: _scrollPageController,
-                              currentPage: ValueNotifier(currentPage),
-                              indexOfPage: ValueNotifier(index),
-                              hashTag: "${widget.hashTag} , $index",
-                            ),
-                          ),
-                        ],
+            itemBuilder: (_, index) {
+              if (index == widget.storiesOwnersInfo.length) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return SizedBox(
+                width: widthOfStory,
+                child: Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        height: heightOfStory,
+                        width: widthOfStory,
+                        child: StoryWidget(
+                          storiesOwnersInfo: widget.storiesOwnersInfo,
+                          user: widget.storiesOwnersInfo[index],
+                          scrollControl: _scrollPageController,
+                          currentPage: ValueNotifier(currentPage),
+                          indexOfPage: ValueNotifier(index),
+                          hashTag: "${widget.hashTag} , $index",
+                        ),
                       ),
-                    ),
-                  );
-                },
-                onItemFocus: (pos) {
-                  setState(() {
-                    currentPage = pos;
-                  });
-                  if (kDebugMode) {
-                    print('Done! $pos');
-                  }
-                },
-                itemSize: widthOfStory,
-                listController: _scrollPageController,
-                initialIndex: initialPage,
-                dynamicItemSize: true,
-                scrollDirection: Axis.horizontal,
-                onReachEnd: () {
-                  if (kDebugMode) {
-                    print('Done!');
-                  }
-                },
-                itemCount: widget.storiesOwnersInfo.length,
-              )),
+                    ],
+                  ),
+                ),
+              );
+            },
+            onItemFocus: (pos) {
+              setState(() {
+                currentPage = pos;
+              });
+              if (kDebugMode) {
+                print('Done! $pos');
+              }
+            },
+            itemSize: widthOfStory,
+            listController: _scrollPageController,
+            initialIndex: initialPage,
+            dynamicItemSize: true,
+            scrollDirection: Axis.horizontal,
+            onReachEnd: () {
+              if (kDebugMode) {
+                print('Done!');
+              }
+            },
+            itemCount: widget.storiesOwnersInfo.length,
+          )),
         ],
       ),
     );
@@ -222,7 +222,6 @@ class StoryWidgetState extends State<StoryWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     if (widget.currentPage.value == widget.indexOfPage.value) {
       opacityLevel.value = 1;
       return buildFullStory();
@@ -273,41 +272,41 @@ class StoryWidgetState extends State<StoryWidget> {
                       child: ValueListenableBuilder(
                         valueListenable: storyController,
                         builder: (context, StoryController storyControllerValue,
-                            child) =>
+                                child) =>
                             StoryView(
-                              inline: true,
-                              opacityLevel: opacityLevelValue,
-                              progressPosition: ProgressPosition.top,
-                              storyItems: storyItems,
-                              controller: storyControllerValue,
-                              onComplete: handleCompleted,
-                              onVerticalSwipeComplete: (direction) {
-                                if (isThatMobile &&
-                                    (direction == Direction.down ||
-                                        direction == Direction.up)) {
-                                  Navigator.of(context).maybePop();
-                                }
-                              },
-                              onStoryShow: (storyItem) {
-                                final currentIndexOfOfStory =
+                          inline: true,
+                          opacityLevel: opacityLevelValue,
+                          progressPosition: ProgressPosition.top,
+                          storyItems: storyItems,
+                          controller: storyControllerValue,
+                          onComplete: handleCompleted,
+                          onVerticalSwipeComplete: (direction) {
+                            if (isThatMobile &&
+                                (direction == Direction.down ||
+                                    direction == Direction.up)) {
+                              Navigator.of(context).maybePop();
+                            }
+                          },
+                          onStoryShow: (storyItem) {
+                            final currentIndexOfOfStory =
                                 storyItems.indexOf(storyItem);
-                                WidgetsBinding.instance.addPostFrameCallback((_) {
-                                  setState(() {
-                                    isFirstStory.value = 0 == currentIndexOfOfStory;
-                                    isLastStory.value = storyItems.length - 1 ==
-                                        currentIndexOfOfStory;
-                                  });
-                                });
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              setState(() {
+                                isFirstStory.value = 0 == currentIndexOfOfStory;
+                                isLastStory.value = storyItems.length - 1 ==
+                                    currentIndexOfOfStory;
+                              });
+                            });
 
-                                if (isLastStory.value) {
-                                  _sharePrefs.setBool(widget.user.userId, true);
-                                }
-                                if (currentIndexOfOfStory > 0) {
-                                  date.value = widget
-                                      .user.storiesInfo![currentIndexOfOfStory];
-                                }
-                              },
-                            ),
+                            if (isLastStory.value) {
+                              _sharePrefs.setBool(widget.user.userId, true);
+                            }
+                            if (currentIndexOfOfStory > 0) {
+                              date.value = widget
+                                  .user.storiesInfo![currentIndexOfOfStory];
+                            }
+                          },
+                        ),
                       ),
                     ),
                     AnimatedOpacity(
@@ -317,11 +316,11 @@ class StoryWidgetState extends State<StoryWidget> {
                         valueListenable: date,
                         builder: (context, Story? value, child) =>
                             ProfileWidget(
-                              storyController: storyController,
-                              user: widget.user,
-                              storyInfo: value!,
-                              hashTag: widget.hashTag,
-                            ),
+                          storyController: storyController,
+                          user: widget.user,
+                          storyInfo: value!,
+                          hashTag: widget.hashTag,
+                        ),
                       ),
                     ),
                     AnimatedOpacity(
@@ -333,68 +332,68 @@ class StoryWidgetState extends State<StoryWidget> {
                           padding: const EdgeInsetsDirectional.all(15.0),
                           child: widget.user.userId == myPersonalId
                               ? const Icon(
-                            Icons.delete_rounded,
-                            color: Colors.white,
-                            size: 25,
-                          )
+                                  Icons.delete_rounded,
+                                  color: Colors.white,
+                                  size: 25,
+                                )
                               : Row(children: [
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(35),
-                                  border: Border.all(
-                                    color: Colors
-                                        .white, //                   <--- border color
-                                    width: 0.5,
-                                  ),
-                                ),
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                height: 40,
-                                child: Padding(
-                                  padding:
-                                  const EdgeInsetsDirectional.only(
-                                      start: 8.0, end: 20),
-                                  child: Center(
-                                    child: TextFormField(
-                                      keyboardType:
-                                      TextInputType.multiline,
-                                      cursorColor: Colors.teal,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1,
-                                      onTap: () {
-                                        storyController.value.pause();
-                                      },
-                                      showCursor: true,
-                                      maxLines: null,
-                                      decoration:
-                                      const InputDecoration.collapsed(
-                                          hintText: StringsManager
-                                              .sendMessage,
-                                          border: InputBorder.none,
-                                          hintStyle: TextStyle(
-                                              color: Colors.grey)),
-                                      autofocus: false,
-                                      cursorWidth: 1.5,
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(35),
+                                        border: Border.all(
+                                          color: Colors
+                                              .white, //                   <--- border color
+                                          width: 0.5,
+                                        ),
+                                      ),
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      height: 40,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsetsDirectional.only(
+                                                start: 8.0, end: 20),
+                                        child: Center(
+                                          child: TextFormField(
+                                            keyboardType:
+                                                TextInputType.multiline,
+                                            cursorColor: Colors.teal,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                            onTap: () {
+                                              storyController.value.pause();
+                                            },
+                                            showCursor: true,
+                                            maxLines: null,
+                                            decoration:
+                                                const InputDecoration.collapsed(
+                                                    hintText: StringsManager
+                                                        .sendMessage,
+                                                    border: InputBorder.none,
+                                                    hintStyle: TextStyle(
+                                                        color: Colors.grey)),
+                                            autofocus: false,
+                                            cursorWidth: 1.5,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 25),
-                            SvgPicture.asset(
-                              IconsAssets.loveIcon,
-                              width: .5,
-                              color: Colors.white,
-                              height: 25,
-                            ),
-                            const SizedBox(width: 25),
-                            SvgPicture.asset(
-                              IconsAssets.send2Icon,
-                              color: Colors.white,
-                              height: 23,
-                            ),
-                          ]),
+                                  const SizedBox(width: 25),
+                                  SvgPicture.asset(
+                                    IconsAssets.loveIcon,
+                                    width: .5,
+                                    color: Colors.white,
+                                    height: 25,
+                                  ),
+                                  const SizedBox(width: 25),
+                                  SvgPicture.asset(
+                                    IconsAssets.send2Icon,
+                                    color: Colors.white,
+                                    height: 23,
+                                  ),
+                                ]),
                         ),
                       ),
                     ),
@@ -407,7 +406,9 @@ class StoryWidgetState extends State<StoryWidget> {
         if (widget.currentPage.value == widget.indexOfPage.value) ...[
           if (!(widget.currentPage.value == 0 && isFirstStory.value))
             buildJumpArrow(),
-          if (!(widget.currentPage.value >= widget.storiesOwnersInfo.length - 1&&isLastStory.value))
+          if (!(widget.currentPage.value >=
+                  widget.storiesOwnersInfo.length - 1 &&
+              isLastStory.value))
             buildJumpArrow(isThatBack: false),
         ],
       ],
@@ -432,7 +433,7 @@ class StoryWidgetState extends State<StoryWidget> {
         storyController.value.previous();
       },
       child: SizedBox(
-        // width: widthOfStory + 100,
+          // width: widthOfStory + 100,
           child: ArrowJump(isThatBack: isThatBack)),
     );
   }
@@ -456,46 +457,46 @@ class ProfileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Material(
-    type: MaterialType.transparency,
-    child: Container(
-      margin: const EdgeInsetsDirectional.only(
-          start: 16, end: 16, top: 20, bottom: 20),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          if (hashTag.isEmpty) ...[
-            buildCircleAvatar()
-          ] else ...[
-            Hero(
-              tag: hashTag,
-              child: buildCircleAvatar(),
-            ),
-          ],
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(height: 5),
-                Text(
-                  user.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+        type: MaterialType.transparency,
+        child: Container(
+          margin: const EdgeInsetsDirectional.only(
+              start: 16, end: 16, top: 20, bottom: 20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              if (hashTag.isEmpty) ...[
+                buildCircleAvatar()
+              ] else ...[
+                Hero(
+                  tag: hashTag,
+                  child: buildCircleAvatar(),
                 ),
-                Text(
-                  DateOfNow.commentsDateOfNow(storyInfo.datePublished),
-                  style: const TextStyle(color: Colors.white38),
-                )
               ],
-            ),
-          ),
-          ValueListenableBuilder(
-            valueListenable: isPlaying,
-            builder: (context, bool isPlayingValue, child) =>
-                GestureDetector(
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const SizedBox(height: 5),
+                    Text(
+                      user.name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      DateOfNow.commentsDateOfNow(storyInfo.datePublished),
+                      style: const TextStyle(color: Colors.white38),
+                    )
+                  ],
+                ),
+              ),
+              ValueListenableBuilder(
+                valueListenable: isPlaying,
+                builder: (context, bool isPlayingValue, child) =>
+                    GestureDetector(
                   onTap: () {
                     if (isPlaying.value) {
                       storyController.value.pause();
@@ -511,11 +512,11 @@ class ProfileWidget extends StatelessWidget {
                           : Icons.play_arrow_rounded,
                       color: Colors.white),
                 ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
   CircleAvatar buildCircleAvatar() {
     return CircleAvatar(
       radius: 24,

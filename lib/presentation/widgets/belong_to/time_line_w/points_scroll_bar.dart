@@ -8,7 +8,7 @@ class PointsScrollBar extends StatelessWidget {
   const PointsScrollBar({
     Key? key,
     required this.photoCount,
-     this.makePointsWhite=false,
+    this.makePointsWhite = false,
     required this.activePhotoIndex,
   }) : super(key: key);
 

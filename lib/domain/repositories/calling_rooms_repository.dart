@@ -6,7 +6,7 @@ abstract class CallingRoomsRepository {
       {required UserPersonalInfo myPersonalInfo,
       required String callToThisUserId});
 
-   Stream<bool> getCallingStatus({required String userId});
+  Stream<bool> getCallingStatus({required String userId});
 
   Future<String> joinToRoom(
       {required String channelId, required UserPersonalInfo userInfo});
@@ -15,6 +15,6 @@ abstract class CallingRoomsRepository {
 
   Future<List<UserInfoInCallingRoom>> getUsersInfoInThisRoom(
       {required String channelId});
-  Future<void> deleteTheRoom({required String channelId,required String userId});
-
-  }
+  Future<void> deleteTheRoom(
+      {required String channelId, required String userId});
+}

@@ -51,7 +51,6 @@ class _CustomShareButtonState extends State<CustomShareButton> {
                     messageInfo: createCaptionMessage(selectedUser));
               }
             }
-            if (!mounted) return;
             Navigator.of(context).maybePop();
             widget.clearTexts(true);
           },

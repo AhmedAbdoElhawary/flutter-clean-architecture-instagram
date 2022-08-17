@@ -49,7 +49,6 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
           ));
   }
 
-
   Widget createGridTileWidget(Post postInfo) => Builder(
         builder: (context) => GestureDetector(
           onLongPress: () {

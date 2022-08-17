@@ -11,10 +11,6 @@ class CallingRoomsInitial extends CallingRoomsState {}
 
 class CallingRoomsLoading extends CallingRoomsState {}
 
-class CallingStatusCanceled extends CallingRoomsState {}
-
-class CallingStatusProgress extends CallingRoomsState {}
-
 class UsersInfoInRoomLoaded extends CallingRoomsState {
   final List<UserInfoInCallingRoom> usersInfo;
 
