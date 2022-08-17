@@ -8,7 +8,6 @@ import 'package:instagram/domain/entities/calling_status.dart';
 import 'package:instagram/domain/use_cases/calling_rooms/cancel_joining_to_room.dart';
 import 'package:instagram/domain/use_cases/calling_rooms/create_calling_room.dart';
 import 'package:instagram/domain/use_cases/calling_rooms/delete_the_room.dart';
-import 'package:instagram/domain/use_cases/calling_rooms/get_calling_status.dart';
 import 'package:instagram/domain/use_cases/calling_rooms/get_users_info_in_room.dart';
 import 'package:instagram/domain/use_cases/calling_rooms/join_to_calling_room.dart';
 
@@ -18,14 +17,12 @@ class CallingRoomsCubit extends Cubit<CallingRoomsState> {
   final JoinToCallingRoomUseCase _joinToRoomUseCase;
   final CreateCallingRoomUseCase _createCallingRoomUseCase;
   final CancelJoiningToRoomUseCase _cancelJoiningToRoomUseCase;
-  final GetCallingStatusUseCase _getCallingStatusUseCase;
   final GetUsersInfoInRoomUseCase _getUsersInfoInRoomUseCase;
   final DeleteTheRoomUseCase _deleteTheRoomUseCase;
   CallingRoomsCubit(
     this._createCallingRoomUseCase,
     this._joinToRoomUseCase,
     this._cancelJoiningToRoomUseCase,
-    this._getCallingStatusUseCase,
     this._deleteTheRoomUseCase,
     this._getUsersInfoInRoomUseCase,
   ) : super(CallingRoomsInitial());
@@ -51,16 +48,6 @@ class CallingRoomsCubit extends Cubit<CallingRoomsState> {
       emit(UsersInfoInRoomLoaded(usersInfo: usersInfo));
     }).catchError((e) {
       emit(CallingRoomsFailed(e.toString()));
-    });
-  }
-
-  Stream<void> getCallingStatus({required String userId}) async* {
-    yield _getCallingStatusUseCase.call(params: userId).listen((event) {
-      if (event) {
-        emit(CallingStatusProgress());
-      } else {
-        emit(CallingStatusCanceled());
-      }
     });
   }
 
