@@ -257,11 +257,11 @@ class CustomAppBar {
             UserPersonalInfo myPersonalInfo =
                 UserInfoCubit.getMyPersonalInfo(context);
             amICalling = true;
-              pushToPage(context,
-                  page: VideoCallPage(
-                      userInfo: userInfo, myPersonalInfo: myPersonalInfo),
-                  withoutRoot: false,
-                  withoutPageTransition: true);
+            pushToPage(context,
+                page: VideoCallPage(
+                    userInfo: userInfo, myPersonalInfo: myPersonalInfo),
+                withoutRoot: false,
+                withoutPageTransition: true);
           },
           child: SvgPicture.asset(
             IconsAssets.videoPoint,
