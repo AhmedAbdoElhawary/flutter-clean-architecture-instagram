@@ -21,6 +21,7 @@ import 'package:instagram/presentation/pages/profile/users_who_likes_for_mobile.
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/videos_w/reel_video_play.dart';
 import 'package:instagram/core/functions/toast_show.dart';
+import 'package:instagram/presentation/widgets/global/others/share_button.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import '../../../core/utility/constant.dart';
@@ -215,7 +216,7 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       GestureDetector(
-                        onTap: () => goToUserProfile(personalInfo!),
+                        onTap: () => goToUserProfile(personalInfo),
                         child: CircleAvatar(
                           radius: 18,
                           backgroundColor: ColorManager.white,
@@ -336,13 +337,7 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
                 commentButton(videoInfoValue),
                 buildSizedBox(),
                 numberOfComment(videoInfoValue),
-                GestureDetector(
-                  child: SvgPicture.asset(
-                    IconsAssets.send1Icon,
-                    color: ColorManager.white,
-                    height: 25,
-                  ),
-                ),
+                ShareButton(postInfo: widget.videoInfo),
                 sizedBox(),
                 GestureDetector(
                   child: SvgPicture.asset(
