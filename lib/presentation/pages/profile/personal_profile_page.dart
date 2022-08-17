@@ -82,7 +82,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
               ? (BlocProvider.of<UserInfoCubit>(context)
                 ..getUserFromUserName(widget.userName))
               : (BlocProvider.of<UserInfoCubit>(context)
-                ..getUserInfo(widget.personalId,getDeviceToken: true)),
+                ..getUserInfo(widget.personalId, getDeviceToken: true)),
           buildWhen: (previous, current) {
             if (previous != current && current is CubitMyPersonalInfoLoaded) {
               return true;
