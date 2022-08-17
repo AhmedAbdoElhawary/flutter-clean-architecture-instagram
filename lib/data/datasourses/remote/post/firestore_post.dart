@@ -85,7 +85,8 @@ class FirestorePost {
   }
 
   static Future<List<Post>> getAllPostsInfo(
-      {bool isVideosWantedOnly = false, String skippedVideoUid = ""}) async {
+      {required bool isVideosWantedOnly,
+      required String skippedVideoUid}) async {
     List<Post> allPosts = [];
     QuerySnapshot<Map<String, dynamic>> snap;
     if (isVideosWantedOnly) {

@@ -36,7 +36,7 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
       padding: const EdgeInsetsDirectional.all(3.0),
       child: Text(
         widget.nameOfButton,
-        style: Theme.of(context).textTheme.bodyText2,
+        style: Theme.of(context).textTheme.bodyText1,
       ),
     );
   }

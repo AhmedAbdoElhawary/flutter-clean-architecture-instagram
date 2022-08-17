@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +6,6 @@ import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/widgets/svg_pictures.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
-import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
@@ -17,7 +15,6 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_c
 import 'package:instagram/presentation/pages/activity/activity_for_mobile.dart';
 import 'package:instagram/presentation/pages/messages/messages_page_for_mobile.dart';
 import 'package:instagram/presentation/pages/messages/wait_call_page.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/create_new_story.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
@@ -111,112 +108,22 @@ class CustomAppBar {
     );
   }
 
-  static Padding _addList(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(end: 13.0),
-      child: PopupMenuButton<int>(
-        elevation: 20,
-        color: Theme.of(context).splashColor,
-        offset: const Offset(90, 8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+  static GestureDetector _addList(BuildContext context) {
+    return GestureDetector(
+      onTap: () => _pushToCustomGallery(context),
+      child: Padding(
+        padding: const EdgeInsetsDirectional.only(end: 13.0),
         child: SvgPicture.asset(
           IconsAssets.add2Icon,
           color: Theme.of(context).focusColor,
           height: 22.5,
         ),
-        onSelected: (item) => onSelected(context, item),
-        itemBuilder: (context) => [
-          PopupMenuItem<int>(
-            value: 0,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    StringsManager.post.tr(),
-                    style: getMediumStyle(color: Theme.of(context).focusColor),
-                  ),
-                ),
-                const SizedBox(width: 25),
-                const Icon(Icons.grid_on_sharp),
-              ],
-            ),
-          ),
-          PopupMenuItem<int>(
-            value: 1,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    StringsManager.story.tr(),
-                    style: getMediumStyle(color: Theme.of(context).focusColor),
-                  ),
-                ),
-                SvgPicture.asset(
-                  IconsAssets.addInstagramStoryIcon,
-                  color: Theme.of(context).focusColor,
-                  height: 25,
-                ),
-              ],
-            ),
-          ),
-          PopupMenuItem<int>(
-            value: 2,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    StringsManager.reel.tr(),
-                    style: getMediumStyle(color: Theme.of(context).focusColor),
-                  ),
-                ),
-                SvgPicture.asset(
-                  IconsAssets.videoIcon,
-                  color: Theme.of(context).focusColor,
-                  height: 25,
-                ),
-              ],
-            ),
-          ),
-          PopupMenuItem<int>(
-            value: 3,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    StringsManager.live.tr(),
-                    style: getMediumStyle(color: Theme.of(context).focusColor),
-                  ),
-                ),
-                SvgPicture.asset(
-                  IconsAssets.instagramHighlightStoryIcon,
-                  color: Theme.of(context).focusColor,
-                  height: 25,
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
 
-  static void onSelected(BuildContext context, int item) {
-    switch (item) {
-      case 0:
-        _pushToCustomGallery(context);
-        break;
-      case 1:
-        pushToPage(context, page: const CreateNewStory());
-        break;
-      case 2:
-        _pushToCustomGallery(context);
-        break;
-      case 3:
-    }
-  }
-
-  static Future _pushToCustomGallery(BuildContext context) =>
-      pushToPage(context, page: const CustomGalleryDisplay());
+  static Future<void> _pushToCustomGallery(BuildContext context) async =>
+      await pushToPage(context, page: const CustomGalleryDisplay());
 
   static AppBar chattingAppBar(
       UserPersonalInfo userInfo, BuildContext context) {

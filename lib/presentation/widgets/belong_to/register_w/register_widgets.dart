@@ -132,7 +132,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
           widget.isThatLogIn
               ? StringsManager.noAccount.tr()
               : StringsManager.haveAccount.tr(),
-          style: getNormalStyle(fontSize: 13, color: ColorManager.black),
+          style: getNormalStyle(fontSize: 13, color: Theme.of(context).focusColor),
         ),
         const SizedBox(width: 4),
         register(context),
@@ -162,7 +162,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
       widget.isThatLogIn
           ? StringsManager.signUp.tr()
           : StringsManager.logIn.tr(),
-      style: getBoldStyle(fontSize: 13, color: Theme.of(context).focusColor),
+      style: getBoldStyle(fontSize: 13, color: ColorManager.blue),
     );
   }
 }

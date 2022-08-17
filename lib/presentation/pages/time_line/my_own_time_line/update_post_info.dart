@@ -181,7 +181,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                         imageUrl: postUrl,
                       ),
                     ))
-              : PlayThisVideo(videoUrl: postInfo.postUrl, play: false),
+              : PlayThisVideo(videoInfo: postInfo, play: false),
         ),
       ),
       Padding(
