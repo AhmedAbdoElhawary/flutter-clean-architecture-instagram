@@ -50,7 +50,8 @@ class _CustomShareButtonState extends State<CustomShareButton> {
                 messageCubit.sendMessage(
                     messageInfo: createCaptionMessage(selectedUser));
               }
-            }    if(!mounted)return;
+            }
+            if (!mounted) return;
 
             Navigator.of(context).maybePop();
             widget.clearTexts(true);
