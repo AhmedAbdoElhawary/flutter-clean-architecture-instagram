@@ -37,5 +37,4 @@ class MessageBloc extends Bloc<MessageEvent, MessageBlocState> {
       UpdateMessages event) async* {
     yield MessageBlocLoaded(messages: event.messages);
   }
-
 }
