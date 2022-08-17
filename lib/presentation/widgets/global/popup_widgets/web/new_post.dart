@@ -239,6 +239,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
       isThatImage: true,
     );
   }
+
   Flexible buildBody() {
     return Flexible(
       child: (selectedImage.value != null &&
