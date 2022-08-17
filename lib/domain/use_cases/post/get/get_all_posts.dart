@@ -11,6 +11,7 @@ class GetAllPostsInfoUseCase
   @override
   Future<List<Post>> call(
       {required bool paramsOne, required String paramsTwo}) {
-    return _getPostRepository.getAllPostsInfo();
+    return _getPostRepository.getAllPostsInfo(
+        isVideosWantedOnly: paramsOne, skippedVideoUid: paramsTwo);
   }
 }
