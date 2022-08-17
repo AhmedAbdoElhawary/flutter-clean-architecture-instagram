@@ -16,7 +16,7 @@ class CustomPostDisplay extends StatefulWidget {
   final ValueNotifier<TextEditingController> textController;
   final ValueNotifier<Comment?> selectedCommentInfo;
 
-   const CustomPostDisplay({
+  const CustomPostDisplay({
     Key? key,
     this.reLoadData,
     required this.textController,
