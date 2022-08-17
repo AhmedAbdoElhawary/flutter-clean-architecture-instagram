@@ -8,11 +8,11 @@ class ActivityForWeb extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  PopupMenuButton<Widget>(
-      elevation: 20,color:Theme.of(context).splashColor ,
+    return PopupMenuButton<Widget>(
+      elevation: 20,
+      color: Theme.of(context).splashColor,
       offset: const Offset(90, 8),
-      shape:
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       child: SvgPicture.asset(
         IconsAssets.add2Icon,
         color: Theme.of(context).focusColor,
@@ -20,11 +20,10 @@ class ActivityForWeb extends StatelessWidget {
         width: 500,
       ),
       itemBuilder: (context) => [
-      const PopupMenuItem<Widget>(
-      child:ActivityPage(),
-      ),
+        const PopupMenuItem<Widget>(
+          child: ActivityPage(),
+        ),
       ],
     );
   }
-
 }
