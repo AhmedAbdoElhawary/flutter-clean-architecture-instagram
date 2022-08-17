@@ -117,7 +117,8 @@ class _ChattingPageState extends State<ChattingPage>
         Text(
           "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr()}",
           style: TextStyle(
-              color: Theme.of(context).textTheme.subtitle2!.color, fontSize: 13),
+              color: Theme.of(context).textTheme.subtitle2!.color,
+              fontSize: 13),
         ),
         const SizedBox(
           width: 15,
@@ -125,7 +126,8 @@ class _ChattingPageState extends State<ChattingPage>
         Text(
           "${widget.userInfo.posts.length} ${StringsManager.posts.tr()}",
           style: TextStyle(
-              fontSize: 13, color: Theme.of(context).textTheme.subtitle2!.color),
+              fontSize: 13,
+              color: Theme.of(context).textTheme.subtitle2!.color),
         ),
       ],
     );
