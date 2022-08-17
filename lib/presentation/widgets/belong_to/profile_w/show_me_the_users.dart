@@ -73,7 +73,8 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
       onTap: () async {
         Navigator.of(context).maybePop();
         await pushToPage(context,
-            page: WhichProfilePage(userId: userInfo.userId),withoutRoot: false);
+            page: WhichProfilePage(userId: userInfo.userId),
+            withoutRoot: false);
       },
       child: Padding(
         padding: const EdgeInsetsDirectional.only(start: 15, top: 15),
