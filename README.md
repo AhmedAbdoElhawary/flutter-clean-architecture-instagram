@@ -153,11 +153,11 @@ Double check install instructions for both
 
 
 ## What's Next?
- - [ ] Notificaitons for likes, comments, follows, etc
+ - [x] Notificaitons for likes, comments, follows, etc
  - [ ] Caching of Profiles, Images, Etc.
- - [ ] Calling video and voice in chat
+ - [x] Calling video and voice in chat
  - [ ] Add stickers on chat
- - [ ] Send post to chats
+ - [x] Send post to chats
  - [x] control in dimension of selected image & video from gallery
  - [x] Custom gallery display
  - [ ] Filters support for images
@@ -167,9 +167,9 @@ Double check install instructions for both
  - [ ] Turn off commenting of a post
  - [ ] Hide Like count of a post
  - [ ] Archive a post
- - [ ] share post
+ - [x] share post
  - [ ] Live support
- - [ ] Make like, comment and share of animation container post touchy when longPressed on post
+ - [x] Make like, comment and share of animation container post touchy when longPressed on post
  - [ ] Create store screens
  - [ ] Make it stable for web & desktop
  - [ ] Clean-up more code
