@@ -700,7 +700,7 @@ class _ChatMessagesState extends State<ChatMessages>
                           messageInfo:
                               newMessage(blurHash: blurHash, isThatImage: true),
                           pathOfPhoto: pickImage);
-                      if(!mounted)return;
+                      if (!mounted) return;
 
                       scrollToLastIndex(context);
                     } else {
@@ -800,7 +800,8 @@ class _ChatMessagesState extends State<ChatMessages>
 
           messageCubit.sendMessage(
               messageInfo: newMessage(blurHash: blurHash, isThatImage: true),
-              pathOfPhoto: pickImage);    if(!mounted)return;
+              pathOfPhoto: pickImage);
+          if (!mounted) return;
 
           scrollToLastIndex(context);
         } else {
@@ -877,7 +878,8 @@ class _ChatMessagesState extends State<ChatMessages>
         Text(
           "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr()}",
           style: TextStyle(
-              color: Theme.of(context).textTheme.subtitle2!.color, fontSize: 13),
+              color: Theme.of(context).textTheme.subtitle2!.color,
+              fontSize: 13),
         ),
         const SizedBox(
           width: 15,
@@ -885,7 +887,8 @@ class _ChatMessagesState extends State<ChatMessages>
         Text(
           "${widget.userInfo.posts.length} ${StringsManager.posts.tr()}",
           style: TextStyle(
-              fontSize: 13, color:Theme.of(context).textTheme.subtitle2!.color),
+              fontSize: 13,
+              color: Theme.of(context).textTheme.subtitle2!.color),
         ),
       ],
     );
