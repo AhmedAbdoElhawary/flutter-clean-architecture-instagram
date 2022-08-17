@@ -78,7 +78,8 @@ class WebCustomCrop extends StatefulWidget {
       context.findAncestorStateOfType<WebCustomCropState>();
 }
 
-class WebCustomCropState extends State<WebCustomCrop> with TickerProviderStateMixin, Drag {
+class WebCustomCropState extends State<WebCustomCrop>
+    with TickerProviderStateMixin, Drag {
   final _surfaceKey = GlobalKey();
 
   late final AnimationController _activeController;
@@ -146,7 +147,6 @@ class WebCustomCropState extends State<WebCustomCrop> with TickerProviderStateMi
   void didChangeDependencies() {
     _getImage();
     super.didChangeDependencies();
-
   }
 
   @override
