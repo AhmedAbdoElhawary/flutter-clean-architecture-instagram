@@ -66,6 +66,7 @@ import 'package:instagram/domain/use_cases/user/search_about_user.dart';
 import 'package:instagram/domain/use_cases/user/update_user_info.dart';
 import 'package:instagram/domain/use_cases/user/upload_profile_image_usecase.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
+import 'package:instagram/presentation/cubit/callingRooms/bloc/calling_status_bloc.dart';
 import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.dart';
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
@@ -371,8 +372,9 @@ Future<void> initializeDependencies() async {
       injector(),
       injector(),
       injector(),
-      injector(),
     ),
   );
+  injector
+      .registerFactory<CallingStatusBloc>(() => CallingStatusBloc(injector()));
   // *
 }
