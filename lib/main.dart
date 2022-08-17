@@ -54,6 +54,7 @@ Future<SharedPreferences> init() async {
   if (!kIsWeb) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
+
       DeviceOrientation.portraitUp,
     ]);
   }
