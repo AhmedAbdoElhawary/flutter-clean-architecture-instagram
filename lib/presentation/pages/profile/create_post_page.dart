@@ -191,12 +191,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
       blurHash = await blurHashEncode(widget.multiSelectedFiles[0]);
       postInfo = addPostInfo(blurHash);
     }
+    if (!mounted) return;
 
     PostCubit postCubit = BlocProvider.of<PostCubit>(context, listen: false);
     await postCubit.createPost(postInfo, widget.multiSelectedFiles,
         coverOfVideo: widget.coverOfVideoBytes);
 
     if (postCubit.postId != '') {
+      if (!mounted) return;
+
       await UserInfoCubit.get(context)
           .updateUserPostsInfo(userId: myPersonalId, postId: postCubit.postId);
       await postCubit.getPostsInfo(
@@ -204,6 +207,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
       WidgetsBinding.instance
           .addPostFrameCallback((_) => setState(() => isItDone.value = true));
     }
+    if (!mounted) return;
+
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) => PopupCalling(myPersonalId),
