@@ -10,7 +10,7 @@ import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.da
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/pages/messages/video_call_page.dart';
 
-class CallingRingingPage extends StatefulWidget {
+class CallingRingingPage extends StatelessWidget {
   final String channelId;
   final VoidCallback clearMoving;
   const CallingRingingPage(
@@ -18,25 +18,14 @@ class CallingRingingPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<CallingRingingPage> createState() => _CallingRingingPageState();
-}
-
-class _CallingRingingPageState extends State<CallingRingingPage> {
-  bool pop = false;
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.grey,
       body: SafeArea(
         child: BlocBuilder<CallingRoomsCubit, CallingRoomsState>(
           bloc: CallingRoomsCubit.get(context)
-            ..getUsersInfoInThisRoom(channelId: widget.channelId),
+            ..getUsersInfoInThisRoom(channelId: channelId),
           builder: (context, state) {
-            if (pop) {
-              WidgetsBinding.instance.addPostFrameCallback((_) async {
-                Navigator.of(context).maybePop();
-              });
-            }
             if (state is UsersInfoInRoomLoaded) {
               return callingLoadingPage(state.usersInfo[0], context);
             } else {
@@ -91,8 +80,7 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
                     UserInfoCubit.getMyPersonalInfo(context);
                 await CallingRoomsCubit.get(context)
                     .cancelJoiningToRoom(userId: myPersonalInfo.userId);
-                widget.clearMoving();
-                if (!mounted) return;
+                clearMoving();
                 Navigator.of(context).maybePop();
               },
               child: const CircleAvatar(
@@ -110,21 +98,18 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
                 UserPersonalInfo myPersonalInfo =
                     UserInfoCubit.getMyPersonalInfo(context);
                 await CallingRoomsCubit.get(context).joinToRoom(
-                    channelId: widget.channelId, userInfo: myPersonalInfo);
-                if (!mounted) return;
-
-                await pushToPage(
-                  context,
-                  page: CallPage(
-                    channelName: widget.channelId,
-                    role: ClientRole.Broadcaster,
-                    userInfo: userInfo,
-                    userCallingType: UserCallingType.receiver,
-                  ),
-                  withoutRoot: false,
-                );
-                WidgetsBinding.instance
-                    .addPostFrameCallback((_) => setState(() => pop = true));
+                    channelId: channelId, userInfo: myPersonalInfo.userId);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  pushToPage(
+                    context,
+                    page: CallPage(
+                      channelName: channelId,
+                      role: ClientRole.Broadcaster,
+                      userInfo: userInfo,
+                    ),
+                    withoutRoot: false,
+                  );
+                });
               },
               child: const CircleAvatar(
                 radius: 32,
