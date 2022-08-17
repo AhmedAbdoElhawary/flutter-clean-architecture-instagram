@@ -9,7 +9,8 @@ class CreateStoryUseCase implements UseCaseTwoParams<String, Story, Uint8List> {
   CreateStoryUseCase(this._createStoryRepository);
 
   @override
-  Future<String> call({required Story paramsOne, required Uint8List paramsTwo}) {
+  Future<String> call(
+      {required Story paramsOne, required Uint8List paramsTwo}) {
     return _createStoryRepository.createStory(
         storyInfo: paramsOne, file: paramsTwo);
   }
