@@ -158,7 +158,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
 
                 return GestureDetector(
                   onTap: () =>
-                      onTapButton(personalInfo!, userCubit, context),
+                      onTapButton(personalInfo, userCubit, context),
                   child: Text(
                     createPostButton == CreatePostButton.share
                         ? "Share"
@@ -175,50 +175,25 @@ class _PopupNewPostState extends State<PopupNewPost> {
     );
   }
 
+  /// it's not work yet.
   Future<void> onTapButton(UserPersonalInfo personalInfo,
       UserInfoCubit userCubit, BuildContext builder2context) async {
     if (createPostButton == CreatePostButton.share) {
-      // double aspect = expandImage.value ? 6 / 8 : 1.0;
       if (!multiSelectionMode.value) {
-        // File? image = File.fromRawPath(selectedImage.value!);
-        // Uint8List? croppedImage = await cropImage(selectedImage.value!);
         if (selectedImage.value != null) {
           selectedImages.value = [selectedImage.value!];
-          // String pathFile=File.fromRawPath( selectedImage.value!).path;
-          // Uint8List? croppedImage=await croppedImageForWeb(builder2context,pathFile);
-          // selectedImage.value =croppedImage;
-
           setState(() {
           });
-          // SelectedImageDetails details = SelectedImageDetails(
-          //   selectedFile: croppedImage,
-          //   multiSelectionMode: false,
-          //   aspectRatio: aspect,
-          // );
-          // widget.moveToPage(details);
         }
       } else {
         List<Uint8List> selectedImages = [];
         for (int i = 0; i < this.selectedImages.value.length; i++) {
-          // Uint8List? croppedImage =
-          //     await cropImage();
-          // if (this.selectedImages.value[i] != null) {
           selectedImages.add(this.selectedImages.value[i]);
-          // }
         }
         this.selectedImages.value = selectedImages;
         setState(() {
           selectedImage.value = selectedImages[0];
         });
-        // if (selectedImages.isNotEmpty) {
-        //   SelectedImageDetails details = SelectedImageDetails(
-        //     selectedFile: selectedImages[0],
-        //     selectedFiles: selectedImages,
-        //     multiSelectionMode: true,
-        //     aspectRatio: aspect,
-        //   );
-        //   widget.moveToPage(details);
-        // }
       }
       await createPost(personalInfo, userCubit, builder2context);
     } else {
@@ -234,6 +209,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
         .addPostFrameCallback((_) => setState(() => isItDone.value = false));
     String blurHash = await blurHashEncode(selectedImage.value!);
     Post postInfo = addPostInfo(personalInfo, blurHash);
+    if(!mounted)return;
 
     PostCubit postCubit =
     BlocProvider.of<PostCubit>(builder2context, listen: false);
@@ -246,7 +222,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
       WidgetsBinding.instance
           .addPostFrameCallback((_) => setState(() => isItDone.value = true));
     }
-
+    if(!mounted)return;
     Navigator.of(context).maybePop();
   }
 
@@ -265,45 +241,6 @@ class _PopupNewPostState extends State<PopupNewPost> {
       isThatImage: true,
     );
   }
-  //
-  // Future<Uint8List?> cropImage(Uint8List image) async {
-  //   // cropKey.currentState!.area.
-  //   // area.;
-  //
-  //   // return await ImageProcessor.cropSquare(image, false,  scale.toInt());
-  //   // bool result = await ImageCrop.requestPermissions();
-  //   // print("2222222222222222222222222222222");
-  //   //
-  //   // if(!result){
-  //   //   await ImageCrop.requestPermissions();
-  //   // }
-  //   // final scale = _cropKey.currentState!.scale;
-  //   final size = _cropKey.currentContext!.size;
-  //   final scale = _cropKey.currentState!.area!.size;
-  //
-  //   img.Image? src = img.decodeImage(image);
-  //   if (src != null && size != null) {
-  //     var cropSize = min(size.width, size.height).toInt();
-  //     int offsetX = size.width.toInt();
-  //     int offsetY = 0;
-  //     img.Image destImage = img.copyCrop(src, offsetX + 20, offsetY,
-  //         (scale.width).toInt(), (scale.height).toInt());
-  //     List<int> jpg = img.encodeJpg(destImage);
-  //     print("size: $size");
-  //     print("src: ${src.height}");
-  //     print("src: ${src.width}");
-  //     print("src: ${src.xOffset}");
-  //     print("src: ${src.yOffset}");
-  //     print("cropSize: $cropSize");
-  //     print("offsetX: $offsetX");
-  //     print("offsetY: $offsetY");
-  //     print("destImage: $destImage");
-  //     print("scale: ${(scale.width).toInt()}");
-  //     print("scale: ${(scale.height).toInt()}");
-  //
-  //     return Uint8List.fromList(jpg);
-  //   }
-  // }
 
   Flexible buildBody() {
     return Flexible(
