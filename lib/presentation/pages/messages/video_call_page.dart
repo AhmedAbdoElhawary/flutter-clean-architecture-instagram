@@ -66,6 +66,7 @@ class CallPageState extends State<CallPage> {
 
   Future<void> _handleCameraAndMic(Permission permission) async =>
       await permission.request();
+
   /// Create your own app id with agora with "testing mode"
   /// it's very simple, just go to https://www.agora.io/en/ and create your own project and get your own app id in [agoraAppId]
   /// Again, don't make it with secure mode ,You will lose the creation of several channels.

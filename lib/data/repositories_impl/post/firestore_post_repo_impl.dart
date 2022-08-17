@@ -49,7 +49,8 @@ class FirestorePostRepositoryImpl implements FirestorePostRepository {
       required String skippedVideoUid}) async {
     try {
       return await FirestorePost.getAllPostsInfo(
-          isVideosWantedOnly: isVideosWantedOnly,skippedVideoUid: skippedVideoUid);
+          isVideosWantedOnly: isVideosWantedOnly,
+          skippedVideoUid: skippedVideoUid);
     } catch (e) {
       return Future.error(e.toString());
     }

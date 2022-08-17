@@ -16,6 +16,7 @@ class DeviceNotification {
             Uri.parse('https://fcm.googleapis.com/fcm/send'),
             headers: <String, String>{
               'Content-Type': 'application/json',
+
               /// conect with cloud messaging and get server key from project settings here
               /// replace the points with your key  "key=...." and set it in [notificationKey]
               'Authorization': notificationKey,

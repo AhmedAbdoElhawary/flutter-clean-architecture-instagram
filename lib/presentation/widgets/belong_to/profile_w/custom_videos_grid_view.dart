@@ -19,7 +19,6 @@ class CustomVideosGridView extends StatefulWidget {
 }
 
 class _CustomVideosGridViewState extends State<CustomVideosGridView> {
-
   @override
   Widget build(BuildContext context) {
     bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
