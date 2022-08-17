@@ -473,7 +473,7 @@ class SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
     );
 
     double lastDelta = 0;
-    void _tick() {
+    void tick() {
       final double delta = ballisticController.value - lastDelta;
       lastDelta = ballisticController.value;
       extent.addPixelDelta(delta);
@@ -502,7 +502,7 @@ class SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
       }
     }
 
-    ballisticController.addListener(_tick);
+    ballisticController.addListener(tick);
     await ballisticController.animateWith(simulation);
     ballisticController.dispose();
 
