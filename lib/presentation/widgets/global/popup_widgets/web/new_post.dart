@@ -137,11 +137,11 @@ class _PopupNewPostState extends State<PopupNewPost> {
                 child: Text(
                   // there is no multi language in real instagram (web version)
                   selectedImage.value == null ||
-                      createPostButton == CreatePostButton.share
+                          createPostButton == CreatePostButton.share
                       ? 'Create new post'
                       : 'Crop',
                   style:
-                  getMediumStyle(color: ColorManager.black, fontSize: 17),
+                      getMediumStyle(color: ColorManager.black, fontSize: 17),
                 ),
               ),
             ),
@@ -151,22 +151,22 @@ class _PopupNewPostState extends State<PopupNewPost> {
               valueListenable: isItDone,
               builder: (context, bool isItDoneValue, child) => isItDoneValue
                   ? Builder(builder: (context) {
-                UserInfoCubit userCubit =
-                BlocProvider.of<UserInfoCubit>(context,
-                    listen: false);
-                UserPersonalInfo? personalInfo = userCubit.myPersonalInfo;
+                      UserInfoCubit userCubit = BlocProvider.of<UserInfoCubit>(
+                          context,
+                          listen: false);
+                      UserPersonalInfo? personalInfo = userCubit.myPersonalInfo;
 
-                return GestureDetector(
-                  onTap: () =>
-                      onTapButton(personalInfo, userCubit, context),
-                  child: Text(
-                    createPostButton == CreatePostButton.share
-                        ? "Share"
-                        : "Next",
-                    style: getNormalStyle(color: ColorManager.blue),
-                  ),
-                );
-              })
+                      return GestureDetector(
+                        onTap: () =>
+                            onTapButton(personalInfo, userCubit, context),
+                        child: Text(
+                          createPostButton == CreatePostButton.share
+                              ? "Share"
+                              : "Next",
+                          style: getNormalStyle(color: ColorManager.blue),
+                        ),
+                      );
+                    })
                   : const ThineCircularProgress(),
             ),
           ],
@@ -182,8 +182,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
       if (!multiSelectionMode.value) {
         if (selectedImage.value != null) {
           selectedImages.value = [selectedImage.value!];
-          setState(() {
-          });
+          setState(() {});
         }
       } else {
         List<Uint8List> selectedImages = [];
@@ -209,10 +208,10 @@ class _PopupNewPostState extends State<PopupNewPost> {
         .addPostFrameCallback((_) => setState(() => isItDone.value = false));
     String blurHash = await blurHashEncode(selectedImage.value!);
     Post postInfo = addPostInfo(personalInfo, blurHash);
-    if(!mounted)return;
+    if (!mounted) return;
 
     PostCubit postCubit =
-    BlocProvider.of<PostCubit>(builder2context, listen: false);
+        BlocProvider.of<PostCubit>(builder2context, listen: false);
     await postCubit.createPost(postInfo, selectedImages.value);
     if (postCubit.postId != '') {
       await userCubit.updateUserPostsInfo(
@@ -222,7 +221,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
       WidgetsBinding.instance
           .addPostFrameCallback((_) => setState(() => isItDone.value = true));
     }
-    if(!mounted)return;
+    if (!mounted) return;
     Navigator.of(context).maybePop();
   }
 
@@ -245,39 +244,39 @@ class _PopupNewPostState extends State<PopupNewPost> {
   Flexible buildBody() {
     return Flexible(
       child: (selectedImage.value != null &&
-          createPostButton == CreatePostButton.share)
+              createPostButton == CreatePostButton.share)
           ? Row(
-        children: [
-          Flexible(
-            flex: 3,
-            child: buildValueListenable(),
-          ),
-          Container(
-            color: ColorManager.white,
-            height: double.infinity,
-            width: 350,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: TextFormField(
-                controller: textController,
-                cursorColor: ColorManager.teal,
-                keyboardType: TextInputType.multiline,
-                maxLines: 2200,
-                style: getNormalStyle(color: ColorManager.black),
-                decoration: InputDecoration(
-                  hintText: 'Add a caption',
-                  hintStyle: getNormalStyle(color: ColorManager.grey),
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
+              children: [
+                Flexible(
+                  flex: 3,
+                  child: buildValueListenable(),
                 ),
-                onChanged: (_) => setState(() {}),
-              ),
-            ),
-          ),
-        ],
-      )
+                Container(
+                  color: ColorManager.white,
+                  height: double.infinity,
+                  width: 350,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: TextFormField(
+                      controller: textController,
+                      cursorColor: ColorManager.teal,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 2200,
+                      style: getNormalStyle(color: ColorManager.black),
+                      decoration: InputDecoration(
+                        hintText: 'Add a caption',
+                        hintStyle: getNormalStyle(color: ColorManager.grey),
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                      ),
+                      onChanged: (_) => setState(() {}),
+                    ),
+                  ),
+                ),
+              ],
+            )
           : buildValueListenable(),
     );
   }
@@ -286,9 +285,9 @@ class _PopupNewPostState extends State<PopupNewPost> {
     return ValueListenableBuilder(
       valueListenable: selectedImage,
       builder: (context, Uint8List? selectedImageValue, child) =>
-      selectedImageValue != null
-          ? buildSelectedImage(selectedImageValue)
-          : buildSelectImage(),
+          selectedImageValue != null
+              ? buildSelectedImage(selectedImageValue)
+              : buildSelectImage(),
     );
   }
 
@@ -305,10 +304,10 @@ class _PopupNewPostState extends State<PopupNewPost> {
             valueListenable: imageAspectRatio,
             builder: (context, double imageAspectRatioValue, child) =>
                 WebCustomCrop.memory(
-                  selectedImageValue,
-                  key: _cropKey,
-                  aspectRatio: imageAspectRatioValue,
-                ),
+              selectedImageValue,
+              key: _cropKey,
+              aspectRatio: imageAspectRatioValue,
+            ),
           ),
         ),
         // to avoid moving image
@@ -353,68 +352,68 @@ class _PopupNewPostState extends State<PopupNewPost> {
             ValueListenableBuilder(
               valueListenable: expandImage,
               builder: (context, bool expandImageValue, child) =>
-              expandImageValue
-                  ? Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(165, 58, 58, 58),
-                    border: Border.all(
-                      color: const Color.fromARGB(45, 250, 250, 250),
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(height: 8),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            imageAspectRatio.value = 1;
-                          });
-                        },
-                        child: SizedBox(
-                          child: Text("1:1",
-                              style: getNormalStyle(
-                                  color: ColorManager.white)),
-                        ),
-                      ),
-                      const Divider(
-                          color: ColorManager.white, thickness: 1),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            imageAspectRatio.value = 4 / 5;
-                          });
-                        },
-                        child: SizedBox(
-                          child: Text("4:5",
-                              style: getNormalStyle(
-                                  color: ColorManager.white)),
-                        ),
-                      ),
-                      const Divider(
-                          color: ColorManager.white, thickness: 1),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            imageAspectRatio.value = 16 / 9;
-                          });
-                        },
-                        child: SizedBox(
-                          child: Text("16:9",
-                              style: getNormalStyle(
-                                  color: ColorManager.white)),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                    ],
-                  ),
-                ),
-              )
-                  : const SizedBox(),
+                  expandImageValue
+                      ? Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                            width: 100,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(165, 58, 58, 58),
+                              border: Border.all(
+                                color: const Color.fromARGB(45, 250, 250, 250),
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(height: 8),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      imageAspectRatio.value = 1;
+                                    });
+                                  },
+                                  child: SizedBox(
+                                    child: Text("1:1",
+                                        style: getNormalStyle(
+                                            color: ColorManager.white)),
+                                  ),
+                                ),
+                                const Divider(
+                                    color: ColorManager.white, thickness: 1),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      imageAspectRatio.value = 4 / 5;
+                                    });
+                                  },
+                                  child: SizedBox(
+                                    child: Text("4:5",
+                                        style: getNormalStyle(
+                                            color: ColorManager.white)),
+                                  ),
+                                ),
+                                const Divider(
+                                    color: ColorManager.white, thickness: 1),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      imageAspectRatio.value = 16 / 9;
+                                    });
+                                  },
+                                  child: SizedBox(
+                                    child: Text("16:9",
+                                        style: getNormalStyle(
+                                            color: ColorManager.white)),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                              ],
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
@@ -497,47 +496,47 @@ class _PopupNewPostState extends State<PopupNewPost> {
       valueListenable: multiSelectionMode,
       builder: (context, bool multiValue, child) => multiValue
           ? Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(165, 58, 58, 58),
-            border: Border.all(
-              color: const Color.fromARGB(45, 250, 250, 250),
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: ValueListenableBuilder(
-            valueListenable: showLeftArrow,
-            builder: (context, bool showLeftArrowValue, child) => Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Visibility(
-                  visible: showLeftArrowValue,
-                  child: Row(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(165, 58, 58, 58),
+                  border: Border.all(
+                    color: const Color.fromARGB(45, 250, 250, 250),
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ValueListenableBuilder(
+                  valueListenable: showLeftArrow,
+                  builder: (context, bool showLeftArrowValue, child) => Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const SizedBox(width: 10),
-                      buildJumpButton(true, showLeftArrowValue),
-                      const SizedBox(width: 5),
+                      Visibility(
+                        visible: showLeftArrowValue,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(width: 10),
+                            buildJumpButton(true, showLeftArrowValue),
+                            const SizedBox(width: 5),
+                          ],
+                        ),
+                      ),
+                      buildImagesList(),
+                      if (!showLeftArrowValue &&
+                          selectedImages.value.length > 5) ...[
+                        const SizedBox(width: 10),
+                        buildJumpButton(false, showLeftArrowValue),
+                      ],
+                      if (selectedImages.value.length <= 10) ...[
+                        const SizedBox(width: 15),
+                        buildAddIcon(),
+                        const SizedBox(width: 15),
+                      ]
                     ],
                   ),
                 ),
-                buildImagesList(),
-                if (!showLeftArrowValue &&
-                    selectedImages.value.length > 5) ...[
-                  const SizedBox(width: 10),
-                  buildJumpButton(false, showLeftArrowValue),
-                ],
-                if (selectedImages.value.length <= 10) ...[
-                  const SizedBox(width: 15),
-                  buildAddIcon(),
-                  const SizedBox(width: 15),
-                ]
-              ],
-            ),
-          ),
-        ),
-      )
+              ),
+            )
           : const SizedBox(),
     );
   }
@@ -588,60 +587,60 @@ class _PopupNewPostState extends State<PopupNewPost> {
                   valueListenable: selectedImage,
                   builder: (context, Uint8List? selectedImageValue, child) =>
                       Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          Image.memory(selectedImages.value[i],
-                              width: 100, height: 100, fit: BoxFit.cover),
-                          if (selectedImages.value[i] == selectedImageValue) ...[
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(2.5),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      selectedImages.value.removeAt(i);
-                                      if (selectedImages.value.isNotEmpty) {
-                                        int prevIndex = i != 0 ? i - 1 : i;
-                                        indexOfSelectedImage = prevIndex;
+                    alignment: Alignment.topRight,
+                    children: [
+                      Image.memory(selectedImages.value[i],
+                          width: 100, height: 100, fit: BoxFit.cover),
+                      if (selectedImages.value[i] == selectedImageValue) ...[
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.5),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedImages.value.removeAt(i);
+                                  if (selectedImages.value.isNotEmpty) {
+                                    int prevIndex = i != 0 ? i - 1 : i;
+                                    indexOfSelectedImage = prevIndex;
 
-                                        selectedImage.value =
+                                    selectedImage.value =
                                         selectedImages.value[prevIndex];
-                                      } else {
-                                        selectedImage.value = null;
-                                      }
-                                    });
-                                  },
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                        color: ColorManager.black54,
-                                        shape: BoxShape.circle),
-                                    child: const Icon(Icons.close_rounded,
-                                        color: ColorManager.white, size: 20),
-                                  ),
-                                ),
+                                  } else {
+                                    selectedImage.value = null;
+                                  }
+                                });
+                              },
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                    color: ColorManager.black54,
+                                    shape: BoxShape.circle),
+                                child: const Icon(Icons.close_rounded,
+                                    color: ColorManager.white, size: 20),
                               ),
                             ),
-                          ] else ...[
-                            Align(
-                              alignment: Alignment.center,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedImage.value = selectedImages.value[i];
-                                    indexOfSelectedImage = i;
-                                  });
-                                },
-                                child: Container(
-                                  color: ColorManager.black54,
-                                  width: 100,
-                                  height: 100.4,
-                                ),
-                              ),
+                          ),
+                        ),
+                      ] else ...[
+                        Align(
+                          alignment: Alignment.center,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedImage.value = selectedImages.value[i];
+                                indexOfSelectedImage = i;
+                              });
+                            },
+                            child: Container(
+                              color: ColorManager.black54,
+                              width: 100,
+                              height: 100.4,
                             ),
-                          ],
-                        ],
-                      ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -706,7 +705,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
       child: ElevatedButton(
         style: ButtonStyle(
             backgroundColor:
-            MaterialStateProperty.all<Color>(ColorManager.blue)),
+                MaterialStateProperty.all<Color>(ColorManager.blue)),
         onPressed: () => pickAnotherImage(),
         child: Text(
           'Select from computer',
