@@ -68,8 +68,7 @@ class _PopupSharePostState extends State<PopupSharePost> {
                           for (int i = 0;
                               i < selectedUsersInfo.value.length;
                               i++)
-                            buildContainer(
-                                selectedUsersInfo.value[i].name, i),
+                            buildContainer(selectedUsersInfo.value[i].name, i),
                           Flexible(
                             child: messageField(searchTextController,
                                 StringsManager.search.tr()),

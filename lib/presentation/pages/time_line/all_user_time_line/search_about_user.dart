@@ -93,7 +93,8 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
                     onTap: () {
                       pushToPage(context,
                           page: WhichProfilePage(
-                              userId: stateUsersInfo[index].userId),withoutRoot: false);
+                              userId: stateUsersInfo[index].userId),
+                          withoutRoot: false);
                     },
                   );
                 },
