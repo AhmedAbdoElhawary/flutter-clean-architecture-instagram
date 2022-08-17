@@ -340,10 +340,10 @@ class _ChatMessagesState extends State<ChatMessages>
           builder: (_, __) => Container(
                 decoration: BoxDecoration(
                   color: messageInfo.isThatPost
-                      ? (Theme.of(context).selectedRowColor)
+                      ? (Theme.of(context).textTheme.subtitle1!.color)
                       : (isThatMine
                           ? _colorTween.value
-                          : Theme.of(context).selectedRowColor),
+                          : Theme.of(context).textTheme.subtitle1!.color),
                   borderRadius: BorderRadiusDirectional.only(
                     bottomStart: Radius.circular(isThatMine ? 20 : 0),
                     bottomEnd: Radius.circular(isThatMine ? 0 : 20),
@@ -383,7 +383,7 @@ class _ChatMessagesState extends State<ChatMessages>
       child: Container(
         decoration: BoxDecoration(
           color: isThatMine
-              ? Theme.of(context).selectedRowColor
+              ? Theme.of(context).textTheme.subtitle1!.color
               : ColorManager.white,
           borderRadius: const BorderRadiusDirectional.all(Radius.circular(25)),
           border: isThatMine
@@ -655,6 +655,7 @@ class _ChatMessagesState extends State<ChatMessages>
                       scrollToLastIndex(context);
                     },
                   ),
+                  const SizedBox(width: 15),
                   ValueListenableBuilder(
                     valueListenable: appearIcons,
                     builder: (context, bool appearIconsValue, child) =>
@@ -699,6 +700,7 @@ class _ChatMessagesState extends State<ChatMessages>
                           messageInfo:
                               newMessage(blurHash: blurHash, isThatImage: true),
                           pathOfPhoto: pickImage);
+                      if(!mounted)return;
 
                       scrollToLastIndex(context);
                     } else {
@@ -798,7 +800,8 @@ class _ChatMessagesState extends State<ChatMessages>
 
           messageCubit.sendMessage(
               messageInfo: newMessage(blurHash: blurHash, isThatImage: true),
-              pathOfPhoto: pickImage);
+              pathOfPhoto: pickImage);    if(!mounted)return;
+
           scrollToLastIndex(context);
         } else {
           ToastShow.toast(StringsManager.noImageSelected.tr());
@@ -874,7 +877,7 @@ class _ChatMessagesState extends State<ChatMessages>
         Text(
           "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr()}",
           style: TextStyle(
-              color: Theme.of(context).toggleableActiveColor, fontSize: 13),
+              color: Theme.of(context).textTheme.subtitle2!.color, fontSize: 13),
         ),
         const SizedBox(
           width: 15,
@@ -882,7 +885,7 @@ class _ChatMessagesState extends State<ChatMessages>
         Text(
           "${widget.userInfo.posts.length} ${StringsManager.posts.tr()}",
           style: TextStyle(
-              fontSize: 13, color: Theme.of(context).toggleableActiveColor),
+              fontSize: 13, color:Theme.of(context).textTheme.subtitle2!.color),
         ),
       ],
     );
