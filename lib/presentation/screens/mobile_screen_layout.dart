@@ -13,7 +13,6 @@ import 'package:instagram/presentation/pages/time_line/my_own_time_line/home_pag
 import 'package:instagram/presentation/pages/video/videos_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/screens_w.dart';
 
-
 class MobileScreenLayout extends StatefulWidget {
   final String userId;
   const MobileScreenLayout(this.userId, {Key? key}) : super(key: key);
@@ -41,7 +40,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             tabBar: CupertinoTabBar(
                 backgroundColor:
                     value ? ColorManager.black : Theme.of(context).primaryColor,
-                height: 40,
+                   iconSize: 40, 
+                 
                 items: [
                   navigationBarItem(IconsAssets.home, value),
                   navigationBarItem(IconsAssets.search, value),

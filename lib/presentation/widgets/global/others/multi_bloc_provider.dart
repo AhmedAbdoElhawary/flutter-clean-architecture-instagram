@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
+import 'package:instagram/presentation/cubit/callingRooms/bloc/calling_status_bloc.dart';
 import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.dart';
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
@@ -20,7 +21,6 @@ import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/re
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
 import '../../../../core/utility/injector.dart';
-import '../../../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../../../cubit/postInfoCubit/post_cubit.dart';
 
 // ignore: must_be_immutable
@@ -85,6 +85,9 @@ class MultiBlocs extends StatelessWidget {
       ),
       BlocProvider<CallingRoomsCubit>(
         create: (context) => injector<CallingRoomsCubit>(),
+      ),
+      BlocProvider<CallingStatusBloc>(
+        create: (context) => injector<CallingStatusBloc>(),
       ),
       BlocProvider<MyPersonalInfoBloc>(
         create: (context1) {
