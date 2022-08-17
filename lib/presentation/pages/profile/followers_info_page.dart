@@ -110,7 +110,7 @@ class _TapBarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   bool isThatMyPersonalId=  userInfo.value.userId == myPersonalId;
+    bool isThatMyPersonalId = userInfo.value.userId == myPersonalId;
 
     return TabBarView(
       children: [
@@ -118,7 +118,7 @@ class _TapBarView extends StatelessWidget {
           child: ShowMeTheUsers(
             usersInfo: state.followersAndFollowingsInfo.followersInfo,
             emptyText: StringsManager.noFollowers.tr(),
-            isThatMyPersonalId:isThatMyPersonalId,
+            isThatMyPersonalId: isThatMyPersonalId,
           ),
         ),
         SingleChildScrollView(
@@ -126,8 +126,7 @@ class _TapBarView extends StatelessWidget {
             usersInfo: state.followersAndFollowingsInfo.followingsInfo,
             isThatFollower: false,
             emptyText: StringsManager.noFollowings.tr(),
-            isThatMyPersonalId:isThatMyPersonalId,
-
+            isThatMyPersonalId: isThatMyPersonalId,
           ),
         ),
       ],
