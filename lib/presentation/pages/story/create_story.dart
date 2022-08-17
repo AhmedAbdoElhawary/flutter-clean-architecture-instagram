@@ -100,7 +100,6 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
 
       Story storyInfo = addStoryInfo(personalInfo, blurHash);
       setState(() => isItDone = false);
-      if (!mounted) return;
 
       StoryCubit storyCubit = StoryCubit.get(context);
 
@@ -113,8 +112,6 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
         final SharedPreferences sharePrefs =
             await SharedPreferences.getInstance();
         sharePrefs.remove(myPersonalId);
-        if (!mounted) return;
-
         Navigator.of(context).pushAndRemoveUntil(
           CupertinoPageRoute(builder: (_) => PopupCalling(myPersonalId)),
           (route) => false,
