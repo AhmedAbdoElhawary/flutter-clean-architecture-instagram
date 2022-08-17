@@ -46,7 +46,7 @@ class SharedMessage extends StatelessWidget {
               alignment: Alignment.topCenter,
               children: [
                 Container(
-                  color: Theme.of(context).toggleableActiveColor,
+                  color:Theme.of(context).textTheme.subtitle2!.color,
                   width: double.infinity,
                   child: NetworkImageDisplay(
                     blurHash: messageInfo.blurHash,
@@ -93,7 +93,7 @@ class SharedMessage extends StatelessWidget {
           bottom: 5, top: 5, end: 10, start: 15),
       height: 50,
       width: double.infinity,
-      color: Theme.of(context).toggleableActiveColor,
+      color: Theme.of(context).textTheme.subtitle2!.color,
       child: Row(
         children: [
           CircleAvatar(
@@ -128,7 +128,7 @@ class SharedMessage extends StatelessWidget {
       height: 50,
       width: double.infinity,
       padding: const EdgeInsetsDirectional.only(bottom: 5, top: 5, start: 15),
-      color: Theme.of(context).toggleableActiveColor,
+      color:Theme.of(context).textTheme.subtitle2!.color,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
