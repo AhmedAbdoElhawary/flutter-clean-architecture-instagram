@@ -23,7 +23,7 @@ class CommentsOfPost extends StatefulWidget {
   final ValueNotifier<Comment?> selectedCommentInfo;
   final ValueNotifier<TextEditingController> textController;
 
-  final Post postInfo;
+  final ValueNotifier<Post> postInfo;
   final bool showImage;
 
   const CommentsOfPost({
@@ -79,7 +79,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
   }
 
   CommentsInfoCubit blocAction() => BlocProvider.of<CommentsInfoCubit>(context)
-    ..getSpecificComments(postId: widget.postInfo.postUid);
+    ..getSpecificComments(postId: widget.postInfo.value.postUid);
 
   bool buildBlocWhen(CommentsInfoState previous, CommentsInfoState current) =>
       previous != current && current is CubitCommentsInfoLoaded;
@@ -127,8 +127,8 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
                     CustomPostDisplay(
                       playTheVideo: true,
                       indexOfPost: 0,
-                      postsInfo: ValueNotifier([widget.postInfo]),
-                      postInfo: ValueNotifier(widget.postInfo),
+                      postsInfo: ValueNotifier([widget.postInfo.value]),
+                      postInfo: widget.postInfo,
                       textController: widget.textController,
                       selectedCommentInfo: widget.selectedCommentInfo,
                     ),
@@ -137,8 +137,8 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
                           start: 11.5, top: 5.0),
                       child: Text(
                         DateOfNow.chattingDateOfNow(
-                            widget.postInfo.datePublished,
-                            widget.postInfo.datePublished),
+                            widget.postInfo.value.datePublished,
+                            widget.postInfo.value.datePublished),
                         style: getNormalStyle(
                             color: Theme.of(context).bottomAppBarColor),
                       ),
@@ -218,7 +218,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
       return Container(
         width: double.infinity,
         height: 45,
-        color: const Color.fromARGB(18, 59, 59, 59),
+        color: Theme.of(context).splashColor,
         child: Center(
           child: Padding(
             padding: const EdgeInsetsDirectional.only(start: 10.0, end: 17),
