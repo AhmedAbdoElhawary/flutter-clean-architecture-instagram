@@ -129,7 +129,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
                 builder: (context, TextEditingController textValue, child) =>
                     CommentBox(
                   isThatCommentScreen: false,
-                  postInfo: widget.postInfo.value,
+                  postInfo: widget.postInfo,
                   textController: textValue,
                   userPersonalInfo: widget.postInfo.value.publisherInfo!,
                   currentFocus: ValueNotifier(FocusScopeNode()),
@@ -266,6 +266,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
       personalUserName: myPersonalInfo.userName,
       personalProfileImageUrl: myPersonalInfo.profileImageUrl,
       isThatLike: false,
+      senderName: myPersonalInfo.userName,
     );
   }
 
@@ -289,7 +290,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
         onTap: () {
           if (isThatMobile) {
             pushToPage(context,
-                page: CommentsPageForMobile(postInfo: postInfo));
+                page: CommentsPageForMobile(postInfo: widget.postInfo));
           } else {
             Navigator.of(
               context,
