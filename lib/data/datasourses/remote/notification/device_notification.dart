@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:instagram/core/private_keys.dart';
 
@@ -35,7 +36,7 @@ class DeviceNotification {
             ),
           );
         } catch (e, s) {
-          print(s);
+          if (kDebugMode) print(s);
         }
       }
     } catch (e) {
