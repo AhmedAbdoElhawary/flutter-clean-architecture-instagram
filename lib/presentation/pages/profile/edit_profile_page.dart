@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -11,6 +12,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
 import '../../../core/functions/toast_show.dart';
@@ -37,6 +39,8 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   bool isImageUpload = true;
   bool reBuild = false;
+  bool userNameChanging = false;
+  bool validateEdits = true;
 
   @override
   void initState() {
@@ -124,49 +128,59 @@ class _EditProfilePageState extends State<EditProfilePage> {
   List<Widget> actionsWidgets(
       dynamic getUserState, UserInfoCubit updateUserCubit) {
     return [
-      getUserState is! CubitMyPersonalInfoLoaded
-          ? Transform.scale(
-              scaleY: 1,
-              scaleX: 1.2,
-              child: const CustomCircularProgress(ColorManager.blue))
-          : IconButton(
-              onPressed: () async {
-                reBuild = true;
-                List<dynamic> charactersOfName = [];
-                String name = widget.nameController.text.toLowerCase();
-                for (int i = 0; i < name.length; i++) {
-                  charactersOfName =
-                      charactersOfName + [name.substring(0, i + 1)];
-                }
-                UserPersonalInfo updatedUserInfo = UserPersonalInfo(
-                  followerPeople: widget.userInfo.followerPeople,
-                  followedPeople: widget.userInfo.followedPeople,
-                  posts: widget.userInfo.posts,
-                  userName: widget.userNameController.text,
-                  name: widget.nameController.text,
-                  bio: widget.bioController.text,
-                  profileImageUrl: widget.userInfo.profileImageUrl,
-                  email: widget.userInfo.email,
-                  charactersOfName: charactersOfName,
-                  stories: widget.userInfo.stories,
-                  userId: widget.userInfo.userId,
-                  devicesTokens: widget.userInfo.devicesTokens,
-                );
-                await updateUserCubit
-                    .updateUserInfo(updatedUserInfo)
-                    .whenComplete(() {
-                  Future.delayed(Duration.zero, () {
-                    Navigator.of(context).maybePop(widget.userInfo);
-                    reBuild = false;
+      if (validateEdits) ...[
+        getUserState is! CubitMyPersonalInfoLoaded
+            ? Transform.scale(
+                scaleY: 1,
+                scaleX: 1.2,
+                child: const CustomCircularProgress(ColorManager.blue))
+            : IconButton(
+                onPressed: () async {
+                  reBuild = true;
+                  List<dynamic> charactersOfName = [];
+                  String name = widget.nameController.text.toLowerCase();
+                  for (int i = 0; i < name.length; i++) {
+                    charactersOfName =
+                        charactersOfName + [name.substring(0, i + 1)];
+                  }
+                  UserPersonalInfo updatedUserInfo = UserPersonalInfo(
+                    followerPeople: widget.userInfo.followerPeople,
+                    followedPeople: widget.userInfo.followedPeople,
+                    posts: widget.userInfo.posts,
+                    userName: widget.userNameController.text,
+                    name: widget.nameController.text,
+                    bio: widget.bioController.text,
+                    profileImageUrl: widget.userInfo.profileImageUrl,
+                    email: widget.userInfo.email,
+                    charactersOfName: charactersOfName,
+                    stories: widget.userInfo.stories,
+                    userId: widget.userInfo.userId,
+                    devicesTokens: widget.userInfo.devicesTokens,
+                  );
+                  await updateUserCubit
+                      .updateUserInfo(updatedUserInfo)
+                      .whenComplete(() {
+                    Future.delayed(Duration.zero, () {
+                      Navigator.of(context).maybePop(widget.userInfo);
+                      reBuild = false;
+                    });
                   });
-                });
-              },
-              icon: const Icon(
-                Icons.check_rounded,
-                size: 30,
-                color: ColorManager.blue,
-              ))
+                },
+                icon: checkIcon(false),
+              )
+      ] else
+        ...[
+          Padding(
+            padding: const EdgeInsetsDirectional.only(end: 8.5),
+            child: checkIcon(true),
+          )
+        ],
     ];
+  }
+
+  Icon checkIcon(bool light) {
+    return Icon(Icons.check_rounded,
+        size: 30, color: light ? ColorManager.lightBlue : ColorManager.blue);
   }
 
   Expanded circleAvatarAndTextFields(
@@ -221,7 +235,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         )),
         textFormField(widget.nameController, StringsManager.name.tr()),
         const SizedBox(height: 10),
-        textFormField(widget.userNameController, StringsManager.username.tr()),
+        userNameTextField(context),
         const SizedBox(height: 10),
         textFormField(widget.pronounsController, StringsManager.pronouns.tr()),
         const SizedBox(height: 10),
@@ -231,8 +245,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         const SizedBox(height: 15),
         const Divider(),
         const SizedBox(height: 8),
-        InkWell(
-          onTap: () {},
+        GestureDetector(
           child: Text(
             StringsManager.personalInformationSettings.tr(),
             style: getNormalStyle(fontSize: 18, color: ColorManager.blue),
@@ -241,6 +254,29 @@ class _EditProfilePageState extends State<EditProfilePage> {
         const SizedBox(height: 8),
         const Divider(),
       ],
+    );
+  }
+
+  BlocBuilder<SearchAboutUserBloc, SearchAboutUserState> userNameTextField(
+      BuildContext context) {
+    return BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
+      bloc: BlocProvider.of<SearchAboutUserBloc>(context)
+        ..add(FindSpecificUser(widget.userNameController.text,
+            searchForSingleLetter: true)),
+      buildWhen: (previous, current) =>
+          previous != current && (current is SearchAboutUserBlocLoaded),
+      builder: (context, state) {
+        List<UserPersonalInfo> usersWithSameUserName = [];
+        if (state is SearchAboutUserBlocLoaded) {
+          usersWithSameUserName = state.users;
+        }
+        bool isIExist = usersWithSameUserName.contains(widget.userInfo);
+        return userNameTextFormField(
+          widget.userNameController,
+          StringsManager.username.tr(),
+          uniqueUserName:isIExist|| usersWithSameUserName.isEmpty,
+        );
+      },
     );
   }
 
@@ -254,10 +290,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     ));
   }
 
-  InkWell studentCircleAvatarImage() {
+  Widget studentCircleAvatarImage() {
     bool hasUserPhoto = widget.userInfo.profileImageUrl.isNotEmpty;
-    return InkWell(
-      onTap: () async {},
+    return GestureDetector(
       child: CircleAvatar(
         backgroundImage: isImageUpload && hasUserPhoto
             ? NetworkImage(widget.userInfo.profileImageUrl)
@@ -282,6 +317,59 @@ class _EditProfilePageState extends State<EditProfilePage> {
       decoration: InputDecoration(
         labelText: text,
         labelStyle: getNormalStyle(color: ColorManager.grey),
+        errorStyle: getNormalStyle(color: ColorManager.red),
+      ),
+    );
+  }
+
+  TextFormField userNameTextFormField(
+      TextEditingController controller, String text,
+      {required bool uniqueUserName}) {
+    return TextFormField(
+      cursorColor: ColorManager.teal,
+      controller: controller,
+      style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
+      decoration: InputDecoration(
+        labelText: text,
+        suffixIcon: !userNameChanging
+            ? null
+            : (uniqueUserName&&validateEdits ? rightIcon() : wrongIcon()),
+        labelStyle: getNormalStyle(
+            color: !uniqueUserName ? ColorManager.red : ColorManager.grey),
+        errorText: uniqueUserName&&validateEdits ? null : "This user name is already exist",
+        errorStyle: getNormalStyle(color: ColorManager.red),
+      ),
+      onChanged: (value) {
+        setState(() {
+          if (uniqueUserName) {
+            validateEdits = true;
+          } else if (!uniqueUserName) {
+            validateEdits = false;
+          }
+          if(value.isEmpty){
+            validateEdits = false;
+          }
+          userNameChanging = value != widget.userInfo.userName;
+        });
+      },
+    );
+  }
+
+  Icon rightIcon() {
+    return const Icon(
+      Icons.check_circle,
+      color: ColorManager.green,
+      size: 30,
+    );
+  }
+
+  Transform wrongIcon() {
+    return Transform.rotate(
+      angle: pi / 3.6,
+      child: const Icon(
+        Icons.add_circle_rounded,
+        color: ColorManager.red,
+        size: 30,
       ),
     );
   }
