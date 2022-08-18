@@ -8,16 +8,14 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/presentation/customPackages/sliding_sheet/sheet_pop_container.dart';
-import 'package:instagram/presentation/customPackages/sliding_sheet/specs.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/send_to_users.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/web/share_post.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
 
 class ShareButton extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
-  final bool showOnlyBottomSheet;
-  const ShareButton(
-      {Key? key, required this.postInfo, this.showOnlyBottomSheet = false})
+  final Widget? shareWidget;
+  const ShareButton({Key? key, required this.postInfo, this.shareWidget})
       : super(key: key);
 
   @override
@@ -28,40 +26,27 @@ class _ShareButtonState extends State<ShareButton> {
   final _bottomSheetMessageTextController = TextEditingController();
   final _bottomSheetSearchTextController = TextEditingController();
   @override
-  void initState() {
-    if (widget.showOnlyBottomSheet) {
-      if (isThatMobile) {
-        WidgetsBinding.instance
-            .addPostFrameCallback((_) async => await draggableBottomSheet());
-      } else {
-        Navigator.of(context).push(
-          heroDialogRoute(),
-        );
-      }
-    }
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return shareButton();
   }
 
-  Padding shareButton() {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 15.0),
-      child: GestureDetector(
-        child: iconsOfImagePost(IconsAssets.send1Icon, lowHeight: true),
-        onTap: () async {
-          if (isThatMobile) {
-            return draggableBottomSheet();
-          } else {
-            Navigator.of(context).push(
-              heroDialogRoute(),
-            );
+  Widget shareButton() {
+    return GestureDetector(
+      onTap: () async {
+        if (isThatMobile) {
+          if (widget.shareWidget != null) {
+            await Navigator.of(context).maybePop();
           }
-        },
-      ),
+          return await draggableBottomSheet();
+        } else {
+          Navigator.of(context).push(heroDialogRoute());
+        }
+      },
+      child: widget.shareWidget ??
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 15.0),
+            child: iconsOfImagePost(IconsAssets.send1Icon, lowHeight: true),
+          ),
     );
   }
 
@@ -93,9 +78,8 @@ class _ShareButtonState extends State<ShareButton> {
           snappings: [.4, 1, .7],
         ),
         builder: buildSheet,
-        headerBuilder: (context, state) => Material(
-          child: upperWidgets(context),
-        ),
+        headerBuilder: (context, state) =>
+            Material(child: upperWidgets(context)),
       ),
     );
   }
@@ -125,7 +109,7 @@ class _ShareButtonState extends State<ShareButton> {
         width: double.infinity,
         height: 35,
         decoration: BoxDecoration(
-            color: Theme.of(context).shadowColor,
+            color: Theme.of(context).chipTheme.backgroundColor,
             borderRadius: BorderRadius.circular(10)),
         child: TextFormField(
           cursorColor: ColorManager.teal,
@@ -133,10 +117,10 @@ class _ShareButtonState extends State<ShareButton> {
           controller: _bottomSheetSearchTextController,
           textAlign: TextAlign.start,
           decoration: InputDecoration(
-              prefixIcon: const Icon(
+              prefixIcon: Icon(
                 Icons.search,
                 size: 20,
-                color: ColorManager.lowOpacityGrey,
+                color: Theme.of(context).textTheme.headline1!.color!,
               ),
               contentPadding: const EdgeInsetsDirectional.all(12),
               hintText: StringsManager.search.tr(),
