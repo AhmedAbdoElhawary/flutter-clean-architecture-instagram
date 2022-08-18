@@ -39,14 +39,12 @@ class CallPageState extends State<CallPage> {
 
   @override
   void dispose() {
-    // clear users
     _users.clear();
     _dispose();
     super.dispose();
   }
 
   Future<void> _dispose() async {
-    // destroy sdk
     await _engine.leaveChannel();
     await _engine.destroy();
   }
@@ -54,7 +52,6 @@ class CallPageState extends State<CallPage> {
   @override
   void initState() {
     super.initState();
-    // initialize agora sdk
     WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
     initialize();
   }
@@ -288,7 +285,6 @@ class CallPageState extends State<CallPage> {
           alignment: Alignment.center,
           children: <Widget>[
             _viewRows(),
-            // _panel(),
             if (views.length == 1) ...[
               Positioned(
                 top: 30,
@@ -296,7 +292,6 @@ class CallPageState extends State<CallPage> {
                   width: MediaQuery.of(context).size.width,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    // mainAxisSize: MainAxisSize.max,
                     children: [
                       const SizedBox(width: 10),
                       const Icon(Icons.video_camera_back_rounded,
