@@ -330,6 +330,7 @@ class _ProfilePageState extends State<UserProfilePage> {
       personalProfileImageUrl: myPersonalInfo.profileImageUrl,
       isThatLike: false,
       isThatPost: false,
+      senderName: myPersonalInfo.userName,
     );
   }
 
