@@ -34,7 +34,7 @@ class CommentInfo extends StatefulWidget {
   ValueNotifier<TextEditingController> textController;
   final ValueNotifier<ValueChanged<Comment>>? selectedCommentInfo;
   final ValueChanged<bool> rebuildCallback;
-  final Post postInfo;
+  final ValueNotifier<Post> postInfo;
   ValueNotifier<FocusNode> currentFocus;
 
   CommentInfo(
@@ -349,7 +349,7 @@ class _CommentInfoState extends State<CommentInfo> {
             widget.commentInfo.likes.remove(myPersonalId);
             //for notification
             BlocProvider.of<NotificationCubit>(context).deleteNotification(
-                notificationCheck: createNotificationCheck(widget.postInfo));
+                notificationCheck: createNotificationCheck(widget.postInfo.value));
           } else {
             if (widget.isThatReply) {
               BlocProvider.of<ReplyLikesCubit>(context).putLikeOnThisReply(
@@ -385,16 +385,18 @@ class _CommentInfoState extends State<CommentInfo> {
   CustomNotification createNotification(Comment commentInfo) {
     return CustomNotification(
       text: "liked your comment:${commentInfo.theComment}",
-      postId: widget.postInfo.postUid,
-      postImageUrl: widget.postInfo.imagesUrls.length > 1
-          ? widget.postInfo.imagesUrls[0]
-          : widget.postInfo.postUrl,
+      postId: widget.postInfo.value.postUid,
+      postImageUrl: widget.postInfo.value.imagesUrls.length > 1
+          ? widget.postInfo.value.imagesUrls[0]
+          : widget.postInfo.value.postUrl,
       time: DateOfNow.dateOfNow(),
       senderId: myPersonalId,
-      receiverId: widget.postInfo.publisherId,
+      receiverId: widget.postInfo.value.publisherId,
       personalUserName: widget.myPersonalInfo.userName,
       personalProfileImageUrl: widget.myPersonalInfo.profileImageUrl,
       isThatLike: false,
+      senderName: widget.myPersonalInfo.userName,
+
     );
   }
 }
