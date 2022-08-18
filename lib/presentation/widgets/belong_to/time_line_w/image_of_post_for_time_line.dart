@@ -25,6 +25,8 @@ class PostOfTimeLine extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
   final bool playTheVideo;
   final VoidCallback reLoadData;
+  final ValueChanged<int> removeThisPost;
+
   final int indexOfPost;
   final ValueNotifier<List<Post>> postsInfo;
 
@@ -35,6 +37,7 @@ class PostOfTimeLine extends StatefulWidget {
     required this.indexOfPost,
     required this.playTheVideo,
     required this.postsInfo,
+    required this.removeThisPost,
   }) : super(key: key);
 
   @override
@@ -73,6 +76,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
               playTheVideo: widget.playTheVideo,
               reLoadData: widget.reLoadData,
               textController: commentTextController,
+              removeThisPost: widget.removeThisPost,
               selectedCommentInfo: ValueNotifier(null),
             ),
             Column(
@@ -296,6 +300,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
                 playTheVideo: widget.playTheVideo,
                 indexOfPost: widget.indexOfPost,
                 postsInfo: widget.postsInfo,
+                removeThisPost: widget.removeThisPost,
                 reLoadData: widget.reLoadData,
                 popupWebContainer: true,
                 selectedCommentInfo: ValueNotifier(null),
