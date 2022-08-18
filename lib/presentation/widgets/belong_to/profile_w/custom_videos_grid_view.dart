@@ -50,7 +50,8 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
           postClickedInfo: postInfo,
           postsInfo: widget.postsInfo,
           isThatProfile: true,
-          postClickedWidget: PlayThisVideo(videoInfo: postInfo, play: false),
+          postClickedWidget: PlayThisVideo(
+              videoInfo: postInfo, play: false, showImageCover: true),
         ),
       );
 }
