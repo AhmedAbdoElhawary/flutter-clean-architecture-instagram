@@ -3,13 +3,15 @@ import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/domain/repositories/user_repository.dart';
 
 class SearchAboutUserUseCase
-    implements StreamUseCase<List<UserPersonalInfo>, String> {
+    implements StreamUseCaseTwoParams<List<UserPersonalInfo>, String, bool> {
   final FirestoreUserRepository _addPostToUserRepository;
 
   SearchAboutUserUseCase(this._addPostToUserRepository);
 
   @override
-  Stream<List<UserPersonalInfo>> call({required String params}) {
-    return _addPostToUserRepository.searchAboutUser(name: params);
+  Stream<List<UserPersonalInfo>> call(
+      {required String paramsOne, required bool paramsTwo}) {
+    return _addPostToUserRepository.searchAboutUser(
+        name: paramsOne, searchForSingleLetter: paramsTwo);
   }
 }
