@@ -18,25 +18,27 @@ class SearchAboutUserBloc
     SearchAboutUserEvent event,
   ) async* {
     if (event is FindSpecificUser) {
-      yield* _mapLoadmessagesToState(event.name);
+      yield* _mapLoadSearchToState(event.name, event.searchForSingleLetter);
     } else if (event is UpdateUser) {
-      yield* _mapUpdatemessagesToState(event);
+      yield* _mapUpdateSearchToState(event);
     }
   }
 
   static SearchAboutUserBloc get(BuildContext context) =>
       BlocProvider.of(context);
 
-  Stream<SearchAboutUserState> _mapLoadmessagesToState(
-      String receiverId) async* {
-    _searchAboutUserUseCase.call(params: receiverId).listen(
+  Stream<SearchAboutUserState> _mapLoadSearchToState(
+      String receiverId, bool searchForSingleLetter) async* {
+    _searchAboutUserUseCase
+        .call(paramsOne: receiverId, paramsTwo: searchForSingleLetter)
+        .listen(
           (users) => add(
             UpdateUser(users),
           ),
         );
   }
 
-  Stream<SearchAboutUserState> _mapUpdatemessagesToState(
+  Stream<SearchAboutUserState> _mapUpdateSearchToState(
       UpdateUser event) async* {
     yield SearchAboutUserBlocLoaded(users: event.users);
   }
