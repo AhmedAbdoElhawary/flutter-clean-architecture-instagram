@@ -51,6 +51,7 @@ class ImageOfPost extends StatefulWidget {
   final bool showSliderArrow;
   final ValueNotifier<TextEditingController> textController;
   final ValueNotifier<Comment?> selectedCommentInfo;
+  final ValueChanged<int>? removeThisPost;
 
   ImageOfPost({
     Key? key,
@@ -64,6 +65,7 @@ class ImageOfPost extends StatefulWidget {
     this.rebuildPreviousWidget,
     required this.indexOfPost,
     required this.postsInfo,
+    this.removeThisPost,
   }) : super(key: key);
 
   @override
@@ -272,6 +274,7 @@ class _ImageOfPostState extends State<ImageOfPost>
               postsInfo: widget.postsInfo,
               rebuildPreviousWidget: widget.rebuildPreviousWidget,
               reLoadData: widget.reLoadData,
+              removeThisPost: widget.removeThisPost,
               popupWebContainer: true,
               showSliderArrow: true,
               selectedCommentInfo: widget.selectedCommentInfo,
@@ -646,7 +649,10 @@ class _ImageOfPostState extends State<ImageOfPost>
       context: context,
       builder: (BuildContext context) {
         return CustomBottomSheet(
-          headIcon: shareThisPost(),
+          headIcon: ShareButton(
+            postInfo: widget.postInfo,
+            shareWidget: shareWidget(),
+          ),
           bodyText: widget.postInfo.value.publisherId == myPersonalId
               ? ordersOfMyPost()
               : ordersOfOtherUser(),
@@ -661,24 +667,17 @@ class _ImageOfPostState extends State<ImageOfPost>
         ),
       );
 
-  GestureDetector shareThisPost() {
-    return GestureDetector(
-      onTap: () async {
-        await Navigator.of(context).maybePop();
-         ShareButton(postInfo: widget.postInfo,showOnlyBottomSheet: true,);
-
-      },
-      child: Column(
-        children: [
-          SvgPicture.asset(
-            IconsAssets.shareCircle,
-            height: 50,
-            color: Theme.of(context).focusColor,
-          ),
-          const SizedBox(height: 10),
-          buildText(StringsManager.share.tr()),
-        ],
-      ),
+  Column shareWidget() {
+    return Column(
+      children: [
+        SvgPicture.asset(
+          IconsAssets.shareCircle,
+          height: 50,
+          color: Theme.of(context).focusColor,
+        ),
+        const SizedBox(height: 10),
+        buildText(StringsManager.share.tr()),
+      ],
     );
   }
 
@@ -707,14 +706,13 @@ class _ImageOfPostState extends State<ImageOfPost>
     return BlocBuilder<PostCubit, PostState>(builder: (context, state) {
       return GestureDetector(
           onTap: () async {
-            Navigator.maybePop(context);
+            Navigator.of(context).maybePop();
             await PostCubit.get(context)
                 .deletePostInfo(postInfo: postInfoValue);
-            WidgetsBinding.instance.addPostFrameCallback((_) async {
-              setState(() {
-                widget.postsInfo.value.removeAt(widget.indexOfPost);
-              });
-            });
+            if (widget.reLoadData != null) widget.reLoadData!();
+            if (widget.removeThisPost != null) {
+              widget.removeThisPost!(widget.indexOfPost);
+            }
           },
           child: textOfOrders(StringsManager.delete.tr()));
     });
@@ -738,33 +736,43 @@ class _ImageOfPostState extends State<ImageOfPost>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GestureDetector(child: textOfOrders(StringsManager.hide.tr())),
-          Builder(builder: (context) {
-            FollowCubit followCubit = BlocProvider.of<FollowCubit>(context);
-            return ValueListenableBuilder(
-              valueListenable: widget.postInfo,
-              builder: (context, Post postInfoValue, child) => GestureDetector(
-                  onTap: () async {
-                    await followCubit.unFollowThisUser(
-                        followingUserId: widget.postInfo.value.publisherId,
-                        myPersonalId: myPersonalId);
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      setState(() {
-                        if (widget.reLoadData != null) {
-                          widget.reLoadData!();
-                        }
-                        widget.postsInfo.value.remove(postInfoValue);
-                      });
-                    });
-                  },
-                  child: textOfOrders(StringsManager.unfollow.tr())),
-            );
-          }),
-          Container(height: 10)
-        ],
+        children: [hideButton(), unFollowButton(), const SizedBox(height: 10)],
       ),
     );
+  }
+
+  Builder unFollowButton() {
+    return Builder(builder: (context) {
+      FollowCubit followCubit = BlocProvider.of<FollowCubit>(context);
+      UserPersonalInfo myPersonalInfo =
+          UserInfoCubit.getMyPersonalInfo(context);
+      List iFollowThem = myPersonalInfo.followedPeople;
+      return ValueListenableBuilder(
+        valueListenable: widget.postInfo,
+        builder: (context, Post postInfoValue, child) => GestureDetector(
+            onTap: () async {
+              await Navigator.of(context).maybePop();
+              await followCubit.unFollowThisUser(
+                  followingUserId: widget.postInfo.value.publisherId,
+                  myPersonalId: myPersonalId);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                setState(() {
+                  if (widget.reLoadData != null) widget.reLoadData!();
+                  if (widget.removeThisPost != null) {
+                    widget.removeThisPost!(widget.indexOfPost);
+                  }
+                });
+              });
+            },
+            child: textOfOrders(iFollowThem.contains(postInfoValue.publisherId)
+                ? StringsManager.unfollow.tr()
+                : StringsManager.follow.tr())),
+      );
+    });
+  }
+
+  GestureDetector hideButton() {
+    return GestureDetector(child: textOfOrders(StringsManager.hide.tr()));
   }
 
   Widget textOfOrders(String text) {
@@ -829,6 +837,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                     playTheVideo: true,
                     indexOfPost: widget.indexOfPost,
                     postsInfo: widget.postsInfo,
+                    removeThisPost: widget.removeThisPost,
                     rebuildPreviousWidget: widget.rebuildPreviousWidget,
                     reLoadData: widget.reLoadData,
                     popupWebContainer: true,
