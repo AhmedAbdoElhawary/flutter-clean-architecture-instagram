@@ -14,13 +14,14 @@ class CustomGridViewDisplay extends StatefulWidget {
   final bool isThatProfile;
   final int index;
   final bool playThisVideo;
-
+  final ValueChanged<int>? removeThisPost;
   CustomGridViewDisplay(
       {required this.index,
       required this.postsInfo,
       this.isThatProfile = true,
       this.playThisVideo = false,
       required this.postClickedInfo,
+      this.removeThisPost,
       Key? key})
       : super(key: key);
 
@@ -67,6 +68,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
             postInfo: ValueNotifier(widget.postClickedInfo),
             playTheVideo: widget.playThisVideo,
             indexOfPost: widget.index,
+            removeThisPost: widget.removeThisPost,
             postsInfo: ValueNotifier(widget.postsInfo),
             popupWebContainer: true,
             showSliderArrow: true,

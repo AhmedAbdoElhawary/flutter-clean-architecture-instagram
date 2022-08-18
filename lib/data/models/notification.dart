@@ -8,7 +8,7 @@ class CustomNotification extends NotificationCheck {
   String personalUserName;
   String postImageUrl;
   String personalProfileImageUrl;
-
+  String senderName;
   CustomNotification({
     required this.text,
     required String senderId,
@@ -21,6 +21,7 @@ class CustomNotification extends NotificationCheck {
     required this.personalUserName,
     this.notificationUid = "",
     required this.personalProfileImageUrl,
+    required this.senderName,
   }) : super(
             receiverId: receiverId,
             isThatPost: isThatPost,
@@ -40,6 +41,7 @@ class CustomNotification extends NotificationCheck {
       postId: snap?["postId"] ?? "",
       senderId: snap?["senderId"] ?? "",
       isThatLike: snap?["isThatLike"] ?? true,
+      senderName: snap?["senderName"] ?? "",
     );
   }
 
@@ -54,5 +56,6 @@ class CustomNotification extends NotificationCheck {
         "postId": postId,
         "senderId": senderId,
         "isThatLike": isThatLike,
+        "senderName": senderName,
       };
 }

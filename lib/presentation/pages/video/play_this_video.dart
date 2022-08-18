@@ -8,10 +8,13 @@ class PlayThisVideo extends StatefulWidget {
   final Post videoInfo;
   final bool play;
   final bool withoutSound;
+  final bool showImageCover;
+
   const PlayThisVideo({
     Key? key,
     required this.videoInfo,
     this.withoutSound = false,
+    this.showImageCover = false,
     required this.play,
   }) : super(key: key);
   @override
@@ -73,7 +76,7 @@ class PlayThisVideoState extends State<PlayThisVideo> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.videoInfo.coverOfVideoUrl.isNotEmpty && !widget.play) {
+    if (widget.videoInfo.coverOfVideoUrl.isNotEmpty && widget.showImageCover) {
       return AspectRatio(
         aspectRatio: 0.65,
         child: NetworkImageDisplay(

@@ -8,7 +8,6 @@ import 'package:instagram/domain/entities/calling_status.dart';
 import 'package:instagram/domain/use_cases/calling_rooms/cancel_joining_to_room.dart';
 import 'package:instagram/domain/use_cases/calling_rooms/create_calling_room.dart';
 import 'package:instagram/domain/use_cases/calling_rooms/delete_the_room.dart';
-import 'package:instagram/domain/use_cases/calling_rooms/get_calling_status.dart';
 import 'package:instagram/domain/use_cases/calling_rooms/get_users_info_in_room.dart';
 import 'package:instagram/domain/use_cases/calling_rooms/join_to_calling_room.dart';
 

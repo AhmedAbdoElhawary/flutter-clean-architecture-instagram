@@ -13,6 +13,7 @@ import 'package:instagram/presentation/widgets/belong_to/profile_w/show_me_the_u
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/others/notification_card_info.dart';
 
+/// Not clean enough
 class ActivityPage extends StatefulWidget {
   const ActivityPage({Key? key}) : super(key: key);
 
@@ -34,9 +35,7 @@ class _ActivityPageState extends State<ActivityPage> {
   Widget build(BuildContext context) {
     return isThatMobile
         ? Scaffold(
-            appBar: AppBar(
-              title: const Text('Activity'),
-            ),
+            appBar: AppBar(title: Text(StringsManager.activity.tr())),
             body: buildBody(context),
           )
         : buildBody(context);
@@ -49,16 +48,16 @@ class _ActivityPageState extends State<ActivityPage> {
       buildWhen: (previous, current) =>
           (previous != current && current is CubitAllUnFollowersUserLoaded),
       builder: (context, unFollowersState) {
-        return SingleChildScrollView(
-          child: BlocBuilder<NotificationCubit, NotificationState>(
-            bloc: NotificationCubit.get(context)
-              ..getNotifications(userId: myPersonalId),
-            buildWhen: (previous, current) =>
-                (previous != current && current is NotificationLoaded),
-            builder: (context, notificationState) {
-              if (unFollowersState is CubitAllUnFollowersUserLoaded &&
-                  notificationState is NotificationLoaded) {
-                return Column(
+        return BlocBuilder<NotificationCubit, NotificationState>(
+          bloc: NotificationCubit.get(context)
+            ..getNotifications(userId: myPersonalId),
+          buildWhen: (previous, current) =>
+              (previous != current && current is NotificationLoaded),
+          builder: (context, notificationState) {
+            if (unFollowersState is CubitAllUnFollowersUserLoaded &&
+                notificationState is NotificationLoaded) {
+              return SingleChildScrollView(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -76,10 +75,12 @@ class _ActivityPageState extends State<ActivityPage> {
                       ),
                     ],
                   ],
-                );
-              } else if (notificationState is NotificationFailed &&
-                  unFollowersState is CubitAllUnFollowersUserLoaded) {
-                return Column(
+                ),
+              );
+            } else if (notificationState is NotificationFailed &&
+                unFollowersState is CubitAllUnFollowersUserLoaded) {
+              return SingleChildScrollView(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -91,25 +92,27 @@ class _ActivityPageState extends State<ActivityPage> {
                       isThatMyPersonalId: true,
                     ),
                   ],
-                );
-              } else if (unFollowersState is CubitGetUserInfoFailed &&
-                  notificationState is NotificationLoaded) {
-                return _ShowNotifications(
+                ),
+              );
+            } else if (unFollowersState is CubitGetUserInfoFailed &&
+                notificationState is NotificationLoaded) {
+              return SingleChildScrollView(
+                child: _ShowNotifications(
                   notifications: notificationState.notifications,
-                );
-              } else if (notificationState is NotificationFailed &&
-                  unFollowersState is CubitGetUserInfoFailed) {
-                ToastShow.toast(notificationState.error);
-                return Center(
-                  child: Text(
-                    StringsManager.somethingWrong.tr(),
-                    style: getNormalStyle(color: Theme.of(context).focusColor),
-                  ),
-                );
-              }
-              return const Center(child: ThineCircularProgress());
-            },
-          ),
+                ),
+              );
+            } else if (notificationState is NotificationFailed &&
+                unFollowersState is CubitGetUserInfoFailed) {
+              ToastShow.toast(notificationState.error);
+              return Center(
+                child: Text(
+                  StringsManager.somethingWrong.tr(),
+                  style: getNormalStyle(color: Theme.of(context).focusColor),
+                ),
+              );
+            }
+            return const Center(child: ThineCircularProgress());
+          },
         );
       },
     );

@@ -125,6 +125,11 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
       playTheVideo: playTheVideo,
       postsInfo: postsInfo,
       reLoadData: () {},
+      removeThisPost: removeThisPost,
     );
+  }
+
+  void removeThisPost(int index) {
+    setState(() => postsInfo.value.removeAt(index));
   }
 }

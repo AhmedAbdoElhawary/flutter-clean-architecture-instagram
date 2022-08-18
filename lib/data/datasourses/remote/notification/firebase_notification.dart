@@ -48,7 +48,7 @@ class FirestoreNotification {
       await DeviceNotification.sendPopupNotification(
           devicesTokens: tokens,
           body: newNotification.text,
-          title: newNotification.senderId);
+          title: newNotification.senderName);
     }
     return await _createNotification(newNotification);
   }

@@ -40,7 +40,7 @@ class GetsPostInfoAndDisplay extends StatelessWidget {
               if (state.postsInfo.isNotEmpty &&
                   state.postsInfo[0].comments.length < 10) {
                 return CommentsOfPost(
-                  postInfo: state.postsInfo[0],
+                  postInfo: ValueNotifier(state.postsInfo[0]),
                   textController: ValueNotifier(TextEditingController()),
                   selectedCommentInfo: ValueNotifier(null),
                   showImage: true,
@@ -60,6 +60,7 @@ class GetsPostInfoAndDisplay extends StatelessWidget {
                 indexOfPost: 0,
                 popupWebContainer: true,
                 postsInfo: ValueNotifier(state.postsInfo),
+
               );
             }
           } else {

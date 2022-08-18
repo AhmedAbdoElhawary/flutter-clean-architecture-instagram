@@ -50,4 +50,8 @@ class _CustomGridViewState extends State<ProfileGridView> {
             style: Theme.of(context).textTheme.bodyText1,
           ));
   }
+
+  void  removeThisPost(int index) {
+    setState(() => widget.postsInfo.removeAt(index));
+  }
 }

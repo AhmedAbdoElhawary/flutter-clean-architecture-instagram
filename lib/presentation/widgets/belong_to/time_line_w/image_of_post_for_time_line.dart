@@ -25,6 +25,8 @@ class PostOfTimeLine extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
   final bool playTheVideo;
   final VoidCallback reLoadData;
+  final ValueChanged<int> removeThisPost;
+
   final int indexOfPost;
   final ValueNotifier<List<Post>> postsInfo;
 
@@ -35,6 +37,7 @@ class PostOfTimeLine extends StatefulWidget {
     required this.indexOfPost,
     required this.playTheVideo,
     required this.postsInfo,
+    required this.removeThisPost,
   }) : super(key: key);
 
   @override
@@ -73,6 +76,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
               playTheVideo: widget.playTheVideo,
               reLoadData: widget.reLoadData,
               textController: commentTextController,
+              removeThisPost: widget.removeThisPost,
               selectedCommentInfo: ValueNotifier(null),
             ),
             Column(
@@ -125,7 +129,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
                 builder: (context, TextEditingController textValue, child) =>
                     CommentBox(
                   isThatCommentScreen: false,
-                  postInfo: widget.postInfo.value,
+                  postInfo: widget.postInfo,
                   textController: textValue,
                   userPersonalInfo: widget.postInfo.value.publisherInfo!,
                   currentFocus: ValueNotifier(FocusScopeNode()),
@@ -262,6 +266,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
       personalUserName: myPersonalInfo.userName,
       personalProfileImageUrl: myPersonalInfo.profileImageUrl,
       isThatLike: false,
+      senderName: myPersonalInfo.userName,
     );
   }
 
@@ -285,7 +290,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
         onTap: () {
           if (isThatMobile) {
             pushToPage(context,
-                page: CommentsPageForMobile(postInfo: postInfo));
+                page: CommentsPageForMobile(postInfo: widget.postInfo));
           } else {
             Navigator.of(
               context,
@@ -296,6 +301,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
                 playTheVideo: widget.playTheVideo,
                 indexOfPost: widget.indexOfPost,
                 postsInfo: widget.postsInfo,
+                removeThisPost: widget.removeThisPost,
                 reLoadData: widget.reLoadData,
                 popupWebContainer: true,
                 selectedCommentInfo: ValueNotifier(null),

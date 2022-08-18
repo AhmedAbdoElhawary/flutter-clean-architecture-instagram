@@ -24,6 +24,8 @@ class AppTheme {
       scaffoldBackgroundColor:
           isThatMobile ? ColorManager.white : ColorManager.customGreyForWeb,
       iconTheme: const IconThemeData(color: ColorManager.black38),
+      chipTheme:
+      const ChipThemeData(backgroundColor: ColorManager.veryLowOpacityGrey),
       errorColor: ColorManager.black,
       canvasColor: ColorManager.transparent,
       splashColor: ColorManager.white,
@@ -64,6 +66,8 @@ class AppTheme {
       dividerColor: ColorManager.grey,
       bottomAppBarColor: ColorManager.grey,
       iconTheme: const IconThemeData(color: ColorManager.white),
+      chipTheme:
+          const ChipThemeData(backgroundColor: ColorManager.lightDarkGray),
       backgroundColor: ColorManager.darkGray,
       errorColor: ColorManager.grey,
       disabledColor: ColorManager.white,
