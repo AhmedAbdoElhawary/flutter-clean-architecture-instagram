@@ -17,7 +17,7 @@ import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 
 class CommentBox extends StatefulWidget {
-  final Post postInfo;
+  final ValueNotifier<Post> postInfo;
   final ValueNotifier<FocusNode> currentFocus;
   final bool isThatCommentScreen;
   final Comment? selectedCommentInfo;
@@ -147,6 +147,14 @@ class _CommentBoxState extends State<CommentBox> {
       await commentsInfoCubit.addComment(
           commentInfo: newCommentInfo(myPersonalInfo, textWithOneSpaces));
       widget.makeSelectedCommentNullable(true);
+
+      /// Just to recount the number of comments in the previous page
+      if (widget.isThatCommentScreen) {
+        setState(() {
+          dynamic lastComment = widget.postInfo.value.comments.last;
+          widget.postInfo.value.comments.add(lastComment);
+        });
+      }
     } else {
       Comment replyInfo = newReplyInfo(widget.selectedCommentInfo!,
           myPersonalInfo.userId, textWithOneSpaces);
@@ -154,7 +162,8 @@ class _CommentBoxState extends State<CommentBox> {
           .replyOnThisComment(replyInfo: replyInfo);
       widget.makeSelectedCommentNullable(false);
       if (!mounted) return;
-      await PostCubit.get(context).updatePostInfo(postInfo: widget.postInfo);
+      await PostCubit.get(context)
+          .updatePostInfo(postInfo: widget.postInfo.value);
     }
     if (!mounted) return;
 
@@ -167,14 +176,15 @@ class _CommentBoxState extends State<CommentBox> {
       String textWithOneSpaces, UserPersonalInfo myPersonalInfo) {
     return CustomNotification(
       text: "commented: $textWithOneSpaces",
-      postId: widget.postInfo.postUid,
-      postImageUrl: widget.postInfo.postUrl,
+      postId: widget.postInfo.value.postUid,
+      postImageUrl: widget.postInfo.value.postUrl,
       time: DateOfNow.dateOfNow(),
       senderId: myPersonalId,
-      receiverId: widget.postInfo.publisherId,
+      receiverId: widget.postInfo.value.publisherId,
       personalUserName: myPersonalInfo.userName,
       personalProfileImageUrl: myPersonalInfo.profileImageUrl,
       isThatLike: false,
+      senderName: myPersonalInfo.userName,
     );
   }
 
@@ -207,7 +217,7 @@ class _CommentBoxState extends State<CommentBox> {
       theComment: textWithOneSpaces,
       whoCommentId: myPersonalInfo.userId,
       datePublished: DateOfNow.dateOfNow(),
-      postId: widget.postInfo.postUid,
+      postId: widget.postInfo.value.postUid,
       likes: [],
       replies: [],
     );
