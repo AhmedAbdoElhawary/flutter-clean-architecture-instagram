@@ -15,7 +15,10 @@ import 'package:instagram/presentation/widgets/global/popup_widgets/web/share_po
 
 class ShareButton extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
-  const ShareButton({Key? key, required this.postInfo}) : super(key: key);
+  final bool showOnlyBottomSheet;
+  const ShareButton(
+      {Key? key, required this.postInfo, this.showOnlyBottomSheet = false})
+      : super(key: key);
 
   @override
   State<ShareButton> createState() => _ShareButtonState();
@@ -24,6 +27,21 @@ class ShareButton extends StatefulWidget {
 class _ShareButtonState extends State<ShareButton> {
   final _bottomSheetMessageTextController = TextEditingController();
   final _bottomSheetSearchTextController = TextEditingController();
+  @override
+  void initState() {
+    if (widget.showOnlyBottomSheet) {
+      if (isThatMobile) {
+        WidgetsBinding.instance
+            .addPostFrameCallback((_) async => await draggableBottomSheet());
+      } else {
+        Navigator.of(context).push(
+          heroDialogRoute(),
+        );
+      }
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return shareButton();
@@ -39,15 +57,19 @@ class _ShareButtonState extends State<ShareButton> {
             return draggableBottomSheet();
           } else {
             Navigator.of(context).push(
-              HeroDialogRoute(
-                builder: (context) => PopupSharePost(
-                  postInfo: widget.postInfo.value,
-                  publisherInfo: widget.postInfo.value.publisherInfo!,
-                ),
-              ),
+              heroDialogRoute(),
             );
           }
         },
+      ),
+    );
+  }
+
+  HeroDialogRoute<dynamic> heroDialogRoute() {
+    return HeroDialogRoute(
+      builder: (context) => PopupSharePost(
+        postInfo: widget.postInfo.value,
+        publisherInfo: widget.postInfo.value.publisherInfo!,
       ),
     );
   }
