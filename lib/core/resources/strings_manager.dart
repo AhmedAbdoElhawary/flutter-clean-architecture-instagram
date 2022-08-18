@@ -79,6 +79,7 @@ class StringsManager {
   static const String hide = "hide";
   static const String unfollow = "unfollow";
   static const String delete = "delete";
+
   static const String edit = "edit";
   static const String hideLikeCount = "hideLikeCount";
   static const String turnOffCommenting = "turnOffCommenting";
