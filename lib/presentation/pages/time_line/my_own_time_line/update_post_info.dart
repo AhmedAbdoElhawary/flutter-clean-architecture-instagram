@@ -181,26 +181,28 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                         imageUrl: postUrl,
                       ),
                     ))
-              : PlayThisVideo(videoInfo: postInfo, play: false),
+              : PlayThisVideo(
+                  videoInfo: postInfo, play: false, showImageCover: true),
         ),
       ),
-      Padding(
-        padding: const EdgeInsets.only(top: 10.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ValueListenableBuilder(
-              valueListenable: initPosition,
-              builder: (BuildContext context, int value, Widget? child) =>
-                  PointsScrollBar(
-                photoCount: postInfo.imagesUrls.length,
-                activePhotoIndex: value,
+      if (postInfo.imagesUrls.length > 1)
+        Padding(
+          padding: const EdgeInsets.only(top: 10.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ValueListenableBuilder(
+                valueListenable: initPosition,
+                builder: (BuildContext context, int value, Widget? child) =>
+                    PointsScrollBar(
+                  photoCount: postInfo.imagesUrls.length,
+                  activePhotoIndex: value,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
     ];
   }
 }
