@@ -48,9 +48,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(isThatMobile ? 5.0 : 1.0),
       borderSide: BorderSide(
-          color: isThatMobile
-              ? Theme.of(context).textTheme.headline1!.color!
-              : ColorManager.grey,
+          color: isThatMobile ? Theme.of(context).dividerColor : ColorManager.grey,
           width: isThatMobile ? 1.0 : 0.3),
     );
   }
