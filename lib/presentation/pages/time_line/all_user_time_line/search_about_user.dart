@@ -40,12 +40,8 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
       body: BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
         bloc: BlocProvider.of<SearchAboutUserBloc>(context)
           ..add(FindSpecificUser(_textController.value.text)),
-        buildWhen: (previous, current) {
-          if (previous != current && (current is SearchAboutUserBlocLoaded)) {
-            return true;
-          }
-          return false;
-        },
+        buildWhen: (previous, current) =>
+            previous != current && (current is SearchAboutUserBlocLoaded),
         builder: (context, state) {
           if (state is SearchAboutUserBlocLoaded) {
             List<UserPersonalInfo> stateUsersInfo = state.users;
