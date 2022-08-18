@@ -9,8 +9,8 @@ abstract class SearchAboutUserEvent extends Equatable {
 
 class FindSpecificUser extends SearchAboutUserEvent {
   final String name;
-
-  const FindSpecificUser(this.name);
+  final bool searchForSingleLetter;
+  const FindSpecificUser(this.name, {this.searchForSingleLetter = false});
   @override
   List<Object> get props => [name];
 }

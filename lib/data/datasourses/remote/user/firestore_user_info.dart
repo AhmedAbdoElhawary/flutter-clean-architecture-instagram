@@ -266,13 +266,18 @@ class FirestoreUser {
   }
 
   static Stream<List<UserPersonalInfo>> searchAboutUser(
-      {required String name}) {
+      {required String name, required bool searchForSingleLetter}) {
     name = name.toLowerCase();
-    Stream<QuerySnapshot<Map<String, dynamic>>> snapSearch =
-        _fireStoreUserCollection
-            .where("charactersOfName", arrayContains: name)
-            .snapshots();
-
+    Stream<QuerySnapshot<Map<String, dynamic>>> snapSearch;
+    if (searchForSingleLetter) {
+      snapSearch = _fireStoreUserCollection
+          .where("userName", isEqualTo: name)
+          .snapshots();
+    } else {
+      snapSearch = _fireStoreUserCollection
+          .where("charactersOfName", arrayContains: name)
+          .snapshots();
+    }
     return snapSearch.map((snapshot) => snapshot.docs.map((doc) {
           UserPersonalInfo userInfo = UserPersonalInfo.fromDocSnap(doc.data());
           return userInfo;

@@ -43,7 +43,7 @@ abstract class FirestoreUserRepository {
 
   Stream<UserPersonalInfo> getMyPersonalInfo();
 
-  Stream<List<UserPersonalInfo>> searchAboutUser({required String name});
+  Stream<List<UserPersonalInfo>> searchAboutUser({required String name,required bool searchForSingleLetter});
   Future<void> deleteMessage(
       {required Message messageInfo, Message? replacedMessage});
   Future<List<SenderInfo>> getChatUserInfo({required String userId});

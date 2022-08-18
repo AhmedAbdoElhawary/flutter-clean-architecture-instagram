@@ -184,8 +184,8 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       FireStoreMessage.getMessages(receiverId: receiverId);
 
   @override
-  Stream<List<UserPersonalInfo>> searchAboutUser({required String name}) =>
-      FirestoreUser.searchAboutUser(name: name);
+  Stream<List<UserPersonalInfo>> searchAboutUser({required String name,required bool searchForSingleLetter}) =>
+      FirestoreUser.searchAboutUser(name: name,searchForSingleLetter: searchForSingleLetter);
 
   @override
   Future<void> deleteMessage(
