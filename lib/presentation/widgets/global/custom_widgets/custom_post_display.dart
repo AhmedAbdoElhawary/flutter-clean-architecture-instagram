@@ -15,6 +15,7 @@ class CustomPostDisplay extends StatefulWidget {
   final ValueNotifier<List<Post>> postsInfo;
   final ValueNotifier<TextEditingController> textController;
   final ValueNotifier<Comment?> selectedCommentInfo;
+  final ValueChanged<int>? removeThisPost;
 
   const CustomPostDisplay({
     Key? key,
@@ -25,6 +26,7 @@ class CustomPostDisplay extends StatefulWidget {
     required this.indexOfPost,
     required this.playTheVideo,
     required this.postsInfo,
+    this.removeThisPost,
   }) : super(key: key);
 
   @override
@@ -70,6 +72,7 @@ class _CustomPostDisplayState extends State<CustomPostDisplay>
               reLoadData: widget.reLoadData,
               indexOfPost: widget.indexOfPost,
               postsInfo: widget.postsInfo,
+              removeThisPost: widget.removeThisPost,
               textController: widget.textController,
               selectedCommentInfo: widget.selectedCommentInfo,
               rebuildPreviousWidget: () => setState(() {}),
