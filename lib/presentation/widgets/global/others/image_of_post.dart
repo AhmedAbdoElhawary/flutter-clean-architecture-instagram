@@ -181,7 +181,7 @@ class _ImageOfPostState extends State<ImageOfPost>
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: CommentBox(
-            postInfo: postInfoValue,
+            postInfo: widget.postInfo,
             selectedCommentInfo: widget.selectedCommentInfo.value,
             textController: widget.textController.value,
             userPersonalInfo: myPersonalInfo,
@@ -364,7 +364,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                             child: SizedBox(
                               height: double.infinity,
                               child: CommentsOfPost(
-                                postInfo: postInfoValue,
+                                postInfo: widget.postInfo,
                                 selectedCommentInfo: widget.selectedCommentInfo,
                                 textController: widget.textController,
                               ),
@@ -486,6 +486,7 @@ class _ImageOfPostState extends State<ImageOfPost>
       receiverId: postInfo.publisherId,
       personalUserName: myPersonalInfo.userName,
       personalProfileImageUrl: myPersonalInfo.profileImageUrl,
+      senderName: myPersonalInfo.userName,
     );
   }
 
@@ -823,7 +824,7 @@ class _ImageOfPostState extends State<ImageOfPost>
         onTap: () {
           if (isThatMobile) {
             pushToPage(context,
-                page: CommentsPageForMobile(postInfo: postInfoValue));
+                page: CommentsPageForMobile(postInfo: widget.postInfo));
           } else {
             if (!widget.popupWebContainer) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
