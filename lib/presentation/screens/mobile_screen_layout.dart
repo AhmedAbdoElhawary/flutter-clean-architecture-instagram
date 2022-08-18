@@ -40,7 +40,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             tabBar: CupertinoTabBar(
                 backgroundColor:
                     value ? ColorManager.black : Theme.of(context).primaryColor,
-                iconSize: 40,
+                height: 45,
+                border: Border.all(color: ColorManager.transparent),
                 items: [
                   navigationBarItem(IconsAssets.home, value),
                   navigationBarItem(IconsAssets.search, value),
