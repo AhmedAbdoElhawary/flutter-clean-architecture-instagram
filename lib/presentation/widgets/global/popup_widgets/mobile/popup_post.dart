@@ -218,7 +218,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
     if (viewProfileVisibility.value) {
       Widget page;
       if (widget.isThatProfile) {
-        page = CommentsPageForMobile(postInfo: widget.postClickedInfo);
+        page = CommentsPageForMobile(postInfo: ValueNotifier(widget.postClickedInfo));
       } else {
         page = WhichProfilePage(
           userId: widget.postClickedInfo.publisherId,
