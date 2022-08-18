@@ -7,7 +7,7 @@ import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_of_post.dart';
 
 class CommentsPageForMobile extends StatefulWidget {
-  final Post postInfo;
+  final ValueNotifier<Post> postInfo;
 
   const CommentsPageForMobile({Key? key, required this.postInfo})
       : super(key: key);
