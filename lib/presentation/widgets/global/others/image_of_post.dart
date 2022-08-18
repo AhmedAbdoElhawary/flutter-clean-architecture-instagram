@@ -239,7 +239,6 @@ class _ImageOfPostState extends State<ImageOfPost>
       child: Scaffold(
         backgroundColor: ColorManager.black38,
         body: GestureDetector(
-          onTap: () {},
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -664,6 +663,11 @@ class _ImageOfPostState extends State<ImageOfPost>
 
   GestureDetector shareThisPost() {
     return GestureDetector(
+      onTap: () async {
+        await Navigator.of(context).maybePop();
+         ShareButton(postInfo: widget.postInfo,showOnlyBottomSheet: true,);
+
+      },
       child: Column(
         children: [
           SvgPicture.asset(
