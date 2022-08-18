@@ -221,6 +221,7 @@ class _HomePageState extends State<HomePage> {
         playTheVideo: playTheVideo,
         indexOfPost: index,
         reLoadData: reloadTheData,
+        removeThisPost: removeThisPost,
       ),
     );
     return isThatMobile
@@ -228,7 +229,13 @@ class _HomePageState extends State<HomePage> {
         : roundedContainer(
             child: buildPost, internalPadding: false, verticalPadding: true);
   }
-
+  void removeThisPost(int index) {
+    setState(() {
+      postsIds.removeAt(index);
+      postsInfo.value.removeAt(index);
+      reLoadData.value = true;
+    });
+  }
   reloadTheData() => reLoadData.value = true;
 
   Widget circularProgress() {
