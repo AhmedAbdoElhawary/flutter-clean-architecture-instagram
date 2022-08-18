@@ -49,6 +49,12 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
     * Text
     * Image (gallery & camera)
     * Voice
+    
+#### New features
+* Push Notificaitons
+* Calling video in chat
+* Send post to chats
+
 ## SnapShots
 
 ### |--------- Login page ----------|----------- Stories ------------|---------- List of posts ------- |
