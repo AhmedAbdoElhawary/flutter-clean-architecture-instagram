@@ -41,6 +41,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
     return buildScaffold(context);
   }
 
+
   Scaffold buildScaffold(BuildContext context) {
     double height = MediaQuery.of(context).size.height - 50;
     return Scaffold(
