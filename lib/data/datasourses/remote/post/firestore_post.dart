@@ -11,14 +11,15 @@ class FirestorePost {
   static final _fireStorePostCollection =
       FirebaseFirestore.instance.collection('posts');
 
-  static Future<String> createPost(Post postInfo) async {
+  static Future<Post> createPost(Post postInfo) async {
     DocumentReference<Map<String, dynamic>> postRef =
         await _fireStorePostCollection.add(postInfo.toMap());
 
     await _fireStorePostCollection
         .doc(postRef.id)
         .update({"postUid": postRef.id});
-    return postRef.id;
+    postInfo.postUid = postRef.id;
+    return postInfo;
   }
 
   static Future<void> deletePost({required Post postInfo}) async {
