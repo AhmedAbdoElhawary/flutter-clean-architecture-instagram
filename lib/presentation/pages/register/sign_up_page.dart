@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/app_prefs.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/domain/entities/unregistered_user.dart';
+import 'package:instagram/domain/entities/registered_user.dart';
 import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/screens/responsive_layout.dart';
 import 'package:instagram/presentation/screens/web_screen_layout.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/popup_calling.dart';
@@ -18,6 +22,18 @@ import '../../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../../cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 import '../../../core/functions/toast_show.dart';
 
+class TextsControllers {
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final TextEditingController fullNameController;
+
+  TextsControllers({
+    required this.emailController,
+    required this.passwordController,
+    required this.fullNameController,
+  });
+}
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
@@ -26,11 +42,67 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final isToastShowed = ValueNotifier(false);
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  final fullNameController = TextEditingController();
   final AppPreferences _appPreferences = injector<AppPreferences>();
+  final bool validateControllers = false;
+  bool validateEmail=false;
+  bool validatePassword=false;
+
+  @override
+  void didChangeDependencies() {
+    _appPreferences.getLocal().then((local) => {context.setLocale(local)});
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RegisterWidgets(
+      fullNameController: fullNameController,
+      customTextButton: customTextButton(),
+      emailController: emailController,
+      passwordController: passwordController,
+      isThatLogIn: false,
+        validateEmail: validateEmail,
+      validatePassword: validatePassword,
+    );
+  }
+
+  Widget customTextButton() {
+    return CustomElevatedButton(
+      isItDone: true,
+      nameOfButton: StringsManager.next.tr(),
+      blueColor: validatePassword && validateEmail ? true : false,
+      onPressed: () async {
+        if(validatePassword && validateEmail){
+          TextsControllers textsControllers = TextsControllers(
+            emailController: emailController,
+            passwordController: passwordController,
+            fullNameController: fullNameController,
+          );
+          pushToPage(context, page: UserNamePage(textsControllers));
+        }
+
+      },
+    );
+  }
+}
+
+class UserNamePage extends StatefulWidget {
+  final TextsControllers textsControllers;
+  const UserNamePage(this.textsControllers, {Key? key}) : super(key: key);
+
+  @override
+  State<UserNamePage> createState() => _UserNamePageState();
+}
+
+class _UserNamePageState extends State<UserNamePage> {
+  final userNameController = TextEditingController();
+  final AppPreferences _appPreferences = injector<AppPreferences>();
+  final isToastShowed = ValueNotifier(false);
+  bool validateEdits = false;
+  bool isFieldEmpty = true;
 
   @override
   void didChangeDependencies() {
@@ -46,12 +118,121 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return RegisterWidgets(
-      confirmPasswordController: confirmPasswordController,
-      customTextButton: customTextButton(),
-      emailController: emailController,
-      passwordController: passwordController,
-      isThatLogIn: false,
+    return Scaffold(
+      body: SafeArea(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const SizedBox(height: 100),
+          Text(
+            StringsManager.createUserName.tr(),
+            style: getMediumStyle(
+                color: Theme.of(context).focusColor, fontSize: 15),
+          ),
+          const SizedBox(height: 10),
+          Center(
+            child: Text(
+              StringsManager.addUserName.tr(),
+              style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
+            ),
+          ),
+          Text(
+            StringsManager.youCanChangeUserNameLater.tr(),
+            style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
+          ),
+          const SizedBox(height: 30),
+          userNameTextField(context),
+          customTextButton(),
+        ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  BlocBuilder<SearchAboutUserBloc, SearchAboutUserState> userNameTextField(
+      BuildContext context) {
+    return BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
+      bloc: BlocProvider.of<SearchAboutUserBloc>(context)
+        ..add(FindSpecificUser(userNameController.text,
+            searchForSingleLetter: true)),
+      buildWhen: (previous, current) =>
+          previous != current && (current is SearchAboutUserBlocLoaded),
+      builder: (context, state) {
+        List<UserPersonalInfo> usersWithSameUserName = [];
+        if (state is SearchAboutUserBlocLoaded) {
+          usersWithSameUserName = state.users;
+        }
+        WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+              validateEdits = usersWithSameUserName.isEmpty;
+              if (userNameController.text.isEmpty) {
+                validateEdits = false;
+                isFieldEmpty = true;
+              } else {
+                isFieldEmpty = false;
+              }
+            }));
+
+        return customTextField(validateEdits);
+      },
+    );
+  }
+
+  Padding customTextField(bool uniqueUserName) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 20, end: 20),
+      child: SizedBox(
+        height: isThatMobile ? null : 37,
+        width: double.infinity,
+        child: TextFormField(
+          controller: userNameController,
+          cursorColor: ColorManager.teal,
+          style:
+              getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
+          decoration: InputDecoration(
+            hintText: StringsManager.username.tr(),
+            hintStyle: isThatMobile
+                ? getNormalStyle(color: Theme.of(context).indicatorColor)
+                : getNormalStyle(color: ColorManager.black54, fontSize: 12),
+            fillColor: const Color.fromARGB(48, 232, 232, 232),
+            filled: true,
+            focusedBorder: outlineInputBorder(),
+            suffixIcon: isFieldEmpty
+                ? null
+                : (uniqueUserName ? rightIcon() : wrongIcon()),
+            enabledBorder: outlineInputBorder(),
+            contentPadding: EdgeInsets.symmetric(
+                horizontal: 10, vertical: isThatMobile ? 15 : 5),
+            errorText: isFieldEmpty || uniqueUserName
+                ? null
+                : StringsManager.thisUserNameExist.tr(),
+            errorStyle: getNormalStyle(color: ColorManager.red),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Icon rightIcon() {
+    return const Icon(Icons.check_rounded, color: ColorManager.green, size: 27);
+  }
+
+  Widget wrongIcon() {
+    return const Icon(
+      Icons.close_rounded,
+      color: ColorManager.red,
+      size: 27,
+    );
+  }
+
+  OutlineInputBorder outlineInputBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(isThatMobile ? 5.0 : 1.0),
+      borderSide: BorderSide(
+          color: ColorManager.lightGrey, width: isThatMobile ? 1.0 : 0.3),
     );
   }
 
@@ -74,12 +255,15 @@ class _SignUpPageState extends State<SignUpPage> {
             return CustomElevatedButton(
               isItDone: authState is! CubitAuthConfirming,
               nameOfButton: StringsManager.signUp.tr(),
+              blueColor: validateEdits,
               onPressed: () async {
-                isToastShowed.value = false;
-                await authCubit.signUp(UnRegisteredUser(
-                    email: emailController.text,
-                    password: passwordController.text,
-                    confirmPassword: confirmPasswordController.text));
+                if (validateEdits) {
+                  isToastShowed.value = false;
+                  await authCubit.signUp(RegisteredUser(
+                    email: widget.textsControllers.emailController.text,
+                    password: widget.textsControllers.passwordController.text,
+                  ));
+                }
               },
             );
           },
@@ -112,19 +296,16 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   addNewUser(CubitAuthConfirmed authState, FirestoreAddNewUserCubit userCubit) {
-    // ignore: todo
-    // TODO ----> we need to get more details from user in the first to change this view
-
-    String name = authState.user.email!.split('@')[0];
+    String fullName = widget.textsControllers.fullNameController.text;
     List<dynamic> charactersOfName = [];
-    String nameOfLower = name.toLowerCase();
+    String nameOfLower = fullName.toLowerCase();
 
     for (int i = 0; i < nameOfLower.length; i++) {
       charactersOfName = charactersOfName + [nameOfLower.substring(0, i + 1)];
     }
-    String userName = "${name}4263";
+    String userName = userNameController.text;
     UserPersonalInfo newUserInfo = UserPersonalInfo(
-      name: name,
+      name: fullName,
       charactersOfName: charactersOfName,
       email: authState.user.email!,
       userName: userName,

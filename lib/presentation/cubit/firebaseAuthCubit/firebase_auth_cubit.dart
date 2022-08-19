@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/domain/entities/registered_user.dart';
-import 'package:instagram/domain/entities/unregistered_user.dart';
 import 'package:instagram/domain/use_cases/auth/log_in_auth_usecase.dart';
 import '../../../domain/use_cases/auth/sign_out_auth_usecase.dart';
 import '../../../domain/use_cases/auth/sign_up_auth_usecase.dart';
@@ -21,7 +20,7 @@ class FirebaseAuthCubit extends Cubit<FirebaseAuthCubitState> {
   static FirebaseAuthCubit get(BuildContext context) =>
       BlocProvider.of(context);
 
-  Future<User?> signUp(UnRegisteredUser newUserInfo) async {
+  Future<User?> signUp(RegisteredUser newUserInfo) async {
     emit(CubitAuthConfirming());
     await signUpAuthUseCase(params: newUserInfo).then((newUser) {
       emit(CubitAuthConfirmed(newUser));

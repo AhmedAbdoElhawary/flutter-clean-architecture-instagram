@@ -14,16 +14,21 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_text
 class RegisterWidgets extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final TextEditingController? confirmPasswordController;
+  final TextEditingController? fullNameController;
   final Widget customTextButton;
   final bool isThatLogIn;
-  const RegisterWidgets({
+  bool validateEmail;
+  bool validatePassword;
+
+   RegisterWidgets({
     Key? key,
     required this.emailController,
     this.isThatLogIn = true,
     required this.passwordController,
     required this.customTextButton,
-    this.confirmPasswordController,
+    this.fullNameController,
+    this.validateEmail = false,
+    this.validatePassword = false,
   }) : super(key: key);
 
   @override
@@ -37,12 +42,15 @@ class _SignUpPageState extends State<RegisterWidgets> {
   }
 
   Scaffold buildScaffold(BuildContext context) {
+    double height = MediaQuery.of(context).size.height - 50;
     return Scaffold(
       body: SafeArea(
         child: Center(
             child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: isThatMobile ? buildColumn(context) : buildForWeb(context),
+          child: isThatMobile
+              ? buildColumn(context, height: height)
+              : buildForWeb(context),
         )),
       ),
     );
@@ -77,50 +85,75 @@ class _SignUpPageState extends State<RegisterWidgets> {
       ),
     );
   }
-
-  Column buildColumn(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SvgPicture.asset(
-          IconsAssets.instagramLogo,
-          color: Theme.of(context).focusColor,
-          height: 50,
-        ),
-        const SizedBox(height: 30),
-        CustomTextField(
-            hint: StringsManager.phoneOrEmailOrUserName.tr(),
-            controller: widget.emailController),
-        SizedBox(height: isThatMobile ? 15 : 6.5),
-        CustomTextField(
-            hint: StringsManager.password.tr(),
-            controller: widget.passwordController),
-        if (!widget.isThatLogIn &&
-            widget.confirmPasswordController != null) ...[
-          SizedBox(height: isThatMobile ? 15 : 7),
+  Widget buildColumn(BuildContext context, {double height = 400}) {
+    return SizedBox(
+      height: height,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (!widget.isThatLogIn) const Spacer(),
+          SvgPicture.asset(
+            IconsAssets.instagramLogo,
+            color: Theme.of(context).focusColor,
+            height: 50,
+          ),
+          const SizedBox(height: 30),
           CustomTextField(
-              hint: StringsManager.confirmPassword.tr(),
-              controller: widget.confirmPasswordController!),
+            hint: StringsManager.email.tr(),
+            controller: widget.emailController,
+            isThatEmail: true,
+            validate:widget. validateEmail,
+          ),
+          SizedBox(height: isThatMobile ? 15 : 6.5),
+          if (!widget.isThatLogIn && widget.fullNameController != null) ...[
+            CustomTextField(
+                hint: StringsManager.fullName.tr(),
+                controller: widget.fullNameController!),
+            SizedBox(height: isThatMobile ? 15 : 6.5),
+          ],
+          CustomTextField(
+            hint: StringsManager.password.tr(),
+            controller: widget.passwordController,
+            isThatEmail: false,
+            validate:widget. validatePassword,
+          ),
+          widget.customTextButton,
+          const SizedBox(height: 15),
+          if (!widget.isThatLogIn) ...[
+            const Spacer(),
+            const Spacer(),
+          ],
+          if (isThatMobile) ...[
+            const SizedBox(height: 8),
+            if (!widget.isThatLogIn) ...[
+              const Divider(color: ColorManager.lightGrey, height: 1),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 15.0, left: 15.0, right: 15.0, bottom: 6.5),
+                child: haveAccountRow(context),
+              ),
+            ] else ...[
+              haveAccountRow(context),
+              const OrText(),
+            ],
+          ] else ...[
+            const SizedBox(height: 10),
+            const OrText(),
+            const SizedBox(height: 10),
+          ],
+          if (widget.isThatLogIn) ...[
+            TextButton(
+              onPressed: () {},
+              child: Text(
+                StringsManager.loginWithFacebook.tr(),
+                style: getNormalStyle(color: ColorManager.blue),
+              ),
+            ),
+          ],
         ],
-        widget.customTextButton,
-        const SizedBox(height: 15),
-        if (isThatMobile) ...[
-          haveAccountRow(context),
-          const SizedBox(height: 8),
-          const OrText(),
-        ] else ...[
-          const SizedBox(height: 10),
-          const OrText(),
-          const SizedBox(height: 10),
-        ],
-        TextButton(
-            onPressed: () {},
-            child: Text(
-              StringsManager.loginWithFacebook.tr(),
-              style: getNormalStyle(color: ColorManager.blue),
-            ))
-      ],
+      ),
     );
   }
 

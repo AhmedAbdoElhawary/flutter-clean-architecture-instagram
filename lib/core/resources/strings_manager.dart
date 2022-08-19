@@ -18,6 +18,15 @@ class StringsManager {
   static const String cancel = "cancel";
 
   static const String block = "block";
+  static const String next = "next";
+  static const String thisUserNameExist = "thisUserNameExist";
+
+  static const String createUserName = "createUserName";
+  static const String addUserName = "addUserName";
+  static const String youCanChangeUserNameLater = "youCanChangeUserNameLater";
+
+  static const String fullName = "fullName";
+
   static const String reply = "reply";
   static const String unSend = "unSend";
   static const String send = "send";
@@ -146,6 +155,8 @@ class StringsManager {
   static const String clickRetry = "clickRetry";
   static const String underWork = "underWork";
   static const String phoneOrEmailOrUserName = "phoneOrEmailOrUserName";
+  static const String email = "email";
+
   static const String loginWithFacebook = "loginWithFacebook";
   static const String comments = "comments";
   static const String comment = "comment";

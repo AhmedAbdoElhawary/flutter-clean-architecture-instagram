@@ -1,9 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/datasourses/remote/notification/firebase_notification.dart';
 import 'package:instagram/domain/entities/registered_user.dart';
-import 'package:instagram/domain/entities/unregistered_user.dart';
 import 'package:instagram/domain/repositories/auth_repository.dart';
 import '../datasourses/remote/firebase_auth.dart';
 
@@ -32,11 +29,8 @@ class FirebaseAuthRepositoryImpl implements FirebaseAuthRepository {
   }
 
   @override
-  Future<User> signUp(UnRegisteredUser newUserInfo) async {
+  Future<User> signUp(RegisteredUser newUserInfo) async {
     try {
-      if (newUserInfo.password != newUserInfo.confirmPassword) {
-        throw StringsManager.passwordWrong.tr();
-      }
       User userId = await FirebaseAuthentication.signUp(
           email: newUserInfo.email, password: newUserInfo.password);
       return userId;

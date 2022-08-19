@@ -6,8 +6,15 @@ import 'package:instagram/core/utility/constant.dart';
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String hint;
-  const CustomTextField(
-      {required this.controller, required this.hint, Key? key})
+  final bool? isThatEmail;
+  bool validate;
+
+   CustomTextField(
+      {required this.controller,
+      required this.hint,
+      this.isThatEmail,
+      this.validate = false,
+      Key? key})
       : super(key: key);
 
   @override
@@ -15,6 +22,28 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
+  String? errorMassage;
+  @override
+  void initState() {
+    widget.controller.addListener(() {
+      setState(() {
+        if (widget.controller.text.isNotEmpty) {
+          errorMassage = widget.isThatEmail != null
+              ? (widget.isThatEmail == true
+                  ? _validateEmail()
+                  : _validatePassword())
+              : null;
+        } else {
+          widget.validate=false;
+
+          errorMassage = null;
+        }
+      });
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -36,6 +65,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
             filled: true,
             focusedBorder: outlineInputBorder(),
             enabledBorder: outlineInputBorder(),
+            errorStyle: getNormalStyle(color: ColorManager.red),
+            errorText: errorMassage,
             contentPadding: EdgeInsets.symmetric(
                 horizontal: 10, vertical: isThatMobile ? 15 : 5),
           ),
@@ -44,12 +75,36 @@ class _CustomTextFieldState extends State<CustomTextField> {
     );
   }
 
+  String? _validateEmail() {
+    RegExp regex = RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+    if (!regex.hasMatch(widget.controller.text)) {
+      widget.validate=true;
+      return 'Please make sure your email address is valid';
+    } else {
+      widget.validate=false;
+
+      return null;
+    }
+  }
+
+  String? _validatePassword() {
+    if (widget.controller.text.length < 6) {
+      widget.validate=true;
+
+      return 'Password must be at least 6 characters';
+    } else {
+      widget.validate=false;
+
+      return null;
+    }
+  }
+
   OutlineInputBorder outlineInputBorder() {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(isThatMobile ? 5.0 : 1.0),
       borderSide: BorderSide(
-          color: isThatMobile ? Theme.of(context).dividerColor : ColorManager.grey,
-          width: isThatMobile ? 1.0 : 0.3),
+          color: ColorManager.lightGrey, width: isThatMobile ? 1.0 : 0.3),
     );
   }
 }
