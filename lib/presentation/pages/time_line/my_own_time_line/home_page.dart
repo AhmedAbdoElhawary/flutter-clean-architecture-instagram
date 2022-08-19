@@ -126,9 +126,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         builder: (BuildContext context, PostState state) {
           if (state is CubitMyPersonalPostsLoaded) {
             postsInfo.value = state.postsInfo;
-            return postsInfo.value.isNotEmpty
+            return
+              postsInfo.value.isNotEmpty
                 ? inViewNotifier(bodyHeight)
-                : _WelcomeCards(onRefreshData: getData);
+                :
+            _WelcomeCards(onRefreshData: getData);
           } else if (state is CubitPostFailed) {
             ToastShow.toastStateError(state);
             return Center(
@@ -496,7 +498,7 @@ class _WelcomeCardsState extends State<_WelcomeCards>
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return welcomeCards();
   }
 
   Widget welcomeCards() {
@@ -684,9 +686,7 @@ class _WelcomeCardsState extends State<_WelcomeCards>
             GestureDetector(
               onTap: () async {
                 FollowCubit followCubit = FollowCubit.get(context);
-                pageController.nextPage(
-                    duration: const Duration(milliseconds: 350),
-                    curve: Curves.easeIn);
+
                 if (isIFollowHim) {
                   await followCubit.unFollowThisUser(
                       followingUserId: userInfo.userId,
@@ -698,7 +698,10 @@ class _WelcomeCardsState extends State<_WelcomeCards>
                       myPersonalId: myPersonalId);
                   userInfo.followerPeople.add(myPersonalId);
                 }
-                setState(() {});
+                setState(() => _selectedIndex++);
+                pageController.animateToPage(_selectedIndex,
+                    duration: const Duration(milliseconds: 350),
+                    curve: Curves.easeIn);
               },
               child: followButton(isIFollowHim),
             ),
