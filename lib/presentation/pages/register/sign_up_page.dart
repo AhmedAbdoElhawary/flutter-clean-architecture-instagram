@@ -70,20 +70,30 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget customTextButton() {
-    return CustomElevatedButton(
-      isItDone: true,
-      nameOfButton: StringsManager.next.tr(),
-      blueColor: validatePassword.value && validateEmail.value ? true : false,
-      onPressed: () async {
-        if (validatePassword.value && validateEmail.value) {
-          TextsControllers textsControllers = TextsControllers(
-            emailController: emailController,
-            passwordController: passwordController,
-            fullNameController: fullNameController,
+    return ValueListenableBuilder(
+      valueListenable: validateEmail,
+      builder: (context, bool validateEmailValue, child) =>
+          ValueListenableBuilder(
+        valueListenable: validatePassword,
+        builder: (context, bool validatePasswordValue, child) {
+          bool validate = validatePasswordValue && validateEmailValue;
+          return CustomElevatedButton(
+            isItDone: true,
+            nameOfButton: StringsManager.next.tr(),
+            blueColor: validate ? true : false,
+            onPressed: () async {
+              if (validate) {
+                TextsControllers textsControllers = TextsControllers(
+                  emailController: emailController,
+                  passwordController: passwordController,
+                  fullNameController: fullNameController,
+                );
+                pushToPage(context, page: UserNamePage(textsControllers));
+              }
+            },
           );
-          pushToPage(context, page: UserNamePage(textsControllers));
-        }
-      },
+        },
+      ),
     );
   }
 }
