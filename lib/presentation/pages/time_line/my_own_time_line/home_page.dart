@@ -496,7 +496,7 @@ class _WelcomeCardsState extends State<_WelcomeCards>
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return welcomeCards();
   }
 
   Widget welcomeCards() {
