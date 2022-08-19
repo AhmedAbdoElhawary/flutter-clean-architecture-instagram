@@ -5,6 +5,7 @@ import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
 import 'package:instagram/data/datasourses/remote/notification/firebase_notification.dart';
 import 'package:instagram/data/datasourses/remote/user/message.dart';
 import 'package:instagram/data/models/message.dart';
+import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/sender_info.dart';
 import 'package:instagram/data/models/specific_users_info.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
@@ -53,9 +54,9 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
 
   @override
   Future<UserPersonalInfo> updateUserPostsInfo(
-      {required String userId, required String postId}) async {
+      {required String userId, required Post postInfo}) async {
     try {
-      await FirestoreUser.updateUserPosts(userId: userId, postId: postId);
+      await FirestoreUser.updateUserPosts(userId: userId, postInfo: postInfo);
       return await getPersonalInfo(userId: userId);
     } catch (e) {
       return Future.error(e.toString());
@@ -184,8 +185,10 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       FireStoreMessage.getMessages(receiverId: receiverId);
 
   @override
-  Stream<List<UserPersonalInfo>> searchAboutUser({required String name,required bool searchForSingleLetter}) =>
-      FirestoreUser.searchAboutUser(name: name,searchForSingleLetter: searchForSingleLetter);
+  Stream<List<UserPersonalInfo>> searchAboutUser(
+          {required String name, required bool searchForSingleLetter}) =>
+      FirestoreUser.searchAboutUser(
+          name: name, searchForSingleLetter: searchForSingleLetter);
 
   @override
   Future<void> deleteMessage(
@@ -232,4 +235,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   @override
   Stream<UserPersonalInfo> getMyPersonalInfo() =>
       FirestoreUser.getMyPersonalInfoInReelTime();
+
+  @override
+  Stream<List<UserPersonalInfo>> getAllUsers() => FirestoreUser.getAllUsers();
 }
