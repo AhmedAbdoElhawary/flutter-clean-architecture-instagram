@@ -7,13 +7,12 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String hint;
   final bool? isThatEmail;
-  bool validate;
-
-   CustomTextField(
+  final ValueNotifier<bool>? validate;
+  const CustomTextField(
       {required this.controller,
       required this.hint,
       this.isThatEmail,
-      this.validate = false,
+       this.validate,
       Key? key})
       : super(key: key);
 
@@ -34,7 +33,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   : _validatePassword())
               : null;
         } else {
-          widget.validate=false;
+          if (widget.validate != null) widget.validate!.value = false;
 
           errorMassage = null;
         }
@@ -79,10 +78,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
     RegExp regex = RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
     if (!regex.hasMatch(widget.controller.text)) {
-      widget.validate=true;
+      widget.validate!.value = true;
       return 'Please make sure your email address is valid';
     } else {
-      widget.validate=false;
+      widget.validate!.value = false;
 
       return null;
     }
@@ -90,11 +89,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   String? _validatePassword() {
     if (widget.controller.text.length < 6) {
-      widget.validate=true;
+      widget.validate!.value = true;
 
       return 'Password must be at least 6 characters';
     } else {
-      widget.validate=false;
+      widget.validate!.value = false;
 
       return null;
     }
