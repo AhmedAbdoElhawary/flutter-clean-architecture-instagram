@@ -19,6 +19,7 @@ class UserPersonalInfo extends Equatable {
   int numberOfNewNotifications;
   int numberOfNewMessages;
   String channelId;
+  List<dynamic> lastThreePostUrls;
   UserPersonalInfo({
     required this.followedPeople,
     required this.followerPeople,
@@ -26,6 +27,7 @@ class UserPersonalInfo extends Equatable {
     required this.stories,
     required this.charactersOfName,
     required this.devicesTokens,
+    required this.lastThreePostUrls,
     this.storiesInfo,
     this.name = "",
     this.channelId = "",
@@ -55,6 +57,7 @@ class UserPersonalInfo extends Equatable {
       numberOfNewMessages: snap?["numberOfNewMessages"] ?? 0,
       devicesTokens: snap?["devicesTokens"] ?? [],
       channelId: snap?["channelId"] ?? "",
+      lastThreePostUrls: snap?["lastThreePostUrls"] ?? [],
     );
   }
 
@@ -75,6 +78,7 @@ class UserPersonalInfo extends Equatable {
       'numberOfNewMessages': numberOfNewMessages,
       'devicesTokens': devicesTokens,
       'channelId': channelId,
+      'lastThreePostUrls': lastThreePostUrls,
     };
   }
 
@@ -96,5 +100,6 @@ class UserPersonalInfo extends Equatable {
         numberOfNewMessages,
         devicesTokens,
         channelId,
+        lastThreePostUrls,
       ];
 }

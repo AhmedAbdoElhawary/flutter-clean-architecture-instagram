@@ -9,9 +9,9 @@ import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/myPersonalInfo/my_personal_info_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/pages/activity/activity_for_mobile.dart';
 import 'package:instagram/presentation/pages/messages/messages_page_for_mobile.dart';
 import 'package:instagram/presentation/pages/messages/wait_call_page.dart';
@@ -35,7 +35,7 @@ class CustomAppBar {
   }
 
   static Widget _messengerButton(BuildContext context) {
-    return BlocBuilder<MyPersonalInfoBloc, MyPersonalInfoState>(
+    return BlocBuilder<UsersInfoReelTimeBloc,UsersInfoReelTimeState>(
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsetsDirectional.only(end: 5.0),
@@ -80,7 +80,7 @@ class CustomAppBar {
   }
 
   static Widget _favoriteButton(BuildContext context) {
-    return BlocBuilder<MyPersonalInfoBloc, MyPersonalInfoState>(
+    return BlocBuilder<UsersInfoReelTimeBloc,UsersInfoReelTimeState>(
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsetsDirectional.only(end: 13.0),

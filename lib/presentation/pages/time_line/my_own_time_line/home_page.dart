@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/config/routes/app_routes.dart';
@@ -10,6 +11,8 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
+import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
@@ -21,6 +24,8 @@ import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_u
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_of_post_for_time_line.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../../data/models/user_personal_info.dart';
 import '../../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../../../widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
@@ -36,7 +41,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   ValueNotifier<bool> isThatEndOfList = ValueNotifier(false);
   UserPersonalInfo? personalInfo;
   ValueNotifier<bool> reLoadData = ValueNotifier(false);
@@ -123,16 +128,16 @@ class _HomePageState extends State<HomePage> {
             postsInfo.value = state.postsInfo;
             return postsInfo.value.isNotEmpty
                 ? inViewNotifier(bodyHeight)
-                : emptyMessage();
+                : _WelcomeCards(onRefreshData: getData);
           } else if (state is CubitPostFailed) {
             ToastShow.toastStateError(state);
             return Center(
                 child: Text(
-              StringsManager.noPosts.tr(),
+              StringsManager.somethingWrong.tr(),
               style: getNormalStyle(color: Theme.of(context).focusColor),
             ));
           } else {
-            return circularProgress();
+            return const ThineCircularProgress();
           }
         },
       ),
@@ -229,6 +234,7 @@ class _HomePageState extends State<HomePage> {
         : roundedContainer(
             child: buildPost, internalPadding: false, verticalPadding: true);
   }
+
   void removeThisPost(int index) {
     setState(() {
       postsIds.removeAt(index);
@@ -236,34 +242,8 @@ class _HomePageState extends State<HomePage> {
       reLoadData.value = true;
     });
   }
+
   reloadTheData() => reLoadData.value = true;
-
-  Widget circularProgress() {
-    return const ThineCircularProgress();
-  }
-
-  Widget emptyMessage() {
-    return Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          StringsManager.noPosts.tr(),
-          style: getNormalStyle(color: Theme.of(context).focusColor),
-        ),
-        Text(
-          StringsManager.tryAddPost.tr(),
-          style: getNormalStyle(color: Theme.of(context).focusColor),
-        ),
-      ],
-    ));
-  }
-
-  createNewStory() async {
-    Navigator.maybePop(context);
-    pushToPage(context, page: const CreateNewStory());
-    reLoadData.value = true;
-  }
 
   Widget buildUsersStories(double bodyHeight, BuildContext context) {
     Widget stories = buildStories(bodyHeight, context, storiesOwnersInfo!);
@@ -456,6 +436,340 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _WelcomeCards extends StatefulWidget {
+  final AsyncValueSetter<int> onRefreshData;
+
+  const _WelcomeCards({Key? key, required this.onRefreshData})
+      : super(key: key);
+
+  @override
+  State<_WelcomeCards> createState() => _WelcomeCardsState();
+}
+
+class _WelcomeCardsState extends State<_WelcomeCards>
+    with TickerProviderStateMixin {
+  late AnimationController _aniController, _scaleController, _footerController;
+  PageController pageController = PageController(viewportFraction: 0.7);
+  final _refreshController = ValueNotifier(RefreshController());
+  int _selectedIndex = 0;
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
+
+  init() {
+    pageController.addListener(() {
+      int pos = pageController.page!.round();
+      if (_selectedIndex != pos) setState(() => _selectedIndex = pos);
+    });
+    _aniController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 2000));
+    _scaleController =
+        AnimationController(value: 1, vsync: this, upperBound: 1);
+    _footerController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 2000));
+    _refreshController.value.headerMode!.addListener(() {
+      if (_refreshController.value.headerStatus == RefreshStatus.idle) {
+        _scaleController.value = 0.0;
+        _aniController.reset();
+      } else if (_refreshController.value.headerStatus ==
+          RefreshStatus.refreshing) {
+        _aniController.repeat();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshController.dispose();
+    _scaleController.dispose();
+    _footerController.dispose();
+    _aniController.dispose();
+    pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+
+  Widget welcomeCards() {
+    return SizedBox(
+      height: double.maxFinite,
+      child: ValueListenableBuilder(
+        valueListenable: _refreshController,
+        builder: (_, RefreshController value, __) {
+          return SmartRefresher(
+            enablePullUp: false,
+            enablePullDown: true,
+            enableTwoLevel: false,
+            controller: value,
+            scrollDirection: Axis.vertical,
+            onRefresh: onSmarterRefresh,
+            header: customHeader(),
+            child: suggestionsFriends(),
+          );
+        },
+      ),
+    );
+  }
+
+  onSmarterRefresh() {
+    widget.onRefreshData(0).whenComplete(() {
+      _refreshController.value.refreshCompleted();
+      _refreshController.value.loadComplete();
+    });
+  }
+
+  Widget suggestionsFriends() {
+    return Column(
+      children: [
+        ...welcomeTexts(),
+        Flexible(
+          child: BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState>(
+            bloc: UsersInfoReelTimeBloc.get(context)
+              ..add(LoadAllUsersInfoInfo()),
+            builder: (context, state) {
+              if (state is AllUsersInfoLoaded) {
+                List<UserPersonalInfo> users = state.allUsersInfoInReelTime;
+                if (users.isEmpty) {
+                  return emptyText();
+                } else {
+                  return PageView.builder(
+                    itemCount: users.length,
+                    controller: pageController,
+                    physics: const BouncingScrollPhysics(),
+                    onPageChanged: (index) {
+                      setState(() => _selectedIndex = index);
+                    },
+                    itemBuilder: (context, index) {
+                      bool active = _selectedIndex == index;
+                      return userCardInfo(active, users[index]);
+                    },
+                  );
+                }
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  List<Widget> welcomeTexts() => [
+        Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Text(
+            StringsManager.welcomeToInstagram.tr(),
+            style: getMediumStyle(color: ColorManager.black, fontSize: 22),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 5.0),
+          child: Text(
+            StringsManager.followPeopleToSee.tr(),
+            style: getNormalStyle(color: ColorManager.black54, fontSize: 14),
+          ),
+        ),
+        Center(
+          child: Text(
+            StringsManager.videosTheyShare.tr(),
+            style: getNormalStyle(color: ColorManager.black54, fontSize: 14),
+          ),
+        ),
+      ];
+
+  Widget userCardInfo(bool active, UserPersonalInfo userInfo) {
+    final double margin = active ? 0 : 25;
+    double width = MediaQuery.of(context).size.width - 120;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: SizedBox(
+          height: 330,
+          width: width,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeOutQuint,
+            margin: EdgeInsets.only(top: margin, bottom: margin),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: ColorManager.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: ColorManager.grey.withOpacity(.15),
+                    spreadRadius: 10,
+                    blurRadius: 10,
+                    offset: const Offset(0, 1),
+                  ),
+                ]),
+            child: buildUserBrief(userInfo),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget emptyText() {
+    return Center(
+      child: Text(
+        StringsManager.noUsers.tr(),
+        style: getNormalStyle(color: Theme.of(context).focusColor),
+      ),
+    );
+  }
+
+  Widget buildUserBrief(UserPersonalInfo userInfo) {
+    List lastThreePostUrls = userInfo.lastThreePostUrls.length >= 3
+        ? userInfo.lastThreePostUrls.sublist(0, 3)
+        : userInfo.lastThreePostUrls;
+    bool isIFollowHim = userInfo.followerPeople.contains(myPersonalId);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatarOfProfileImage(
+                userInfo: userInfo, bodyHeight: 900, showColorfulCircle: false),
+            const SizedBox(height: 10),
+            Text(
+              userInfo.userName,
+              style: getNormalStyle(color: ColorManager.black),
+            ),
+            Text(
+              userInfo.name,
+              style: getNormalStyle(color: ColorManager.black54),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (lastThreePostUrls.isEmpty) ...[
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 30.0),
+                      child: Text(
+                        StringsManager.noPosts.tr(),
+                        style:
+                            getNormalStyle(color: Theme.of(context).focusColor),
+                      ),
+                    ),
+                  ),
+                ] else ...[
+                  ...lastThreePostUrls.map(
+                    (imageUrl) {
+                      return Padding(
+                        padding: const EdgeInsetsDirectional.only(end: 1),
+                        child: SizedBox(
+                            height: 70,
+                            width: 70,
+                            child: NetworkImageDisplay(imageUrl: imageUrl)),
+                      );
+                    },
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: 37),
+            GestureDetector(
+              onTap: () async {
+                FollowCubit followCubit = FollowCubit.get(context);
+                pageController.nextPage(
+                    duration: const Duration(milliseconds: 350),
+                    curve: Curves.easeIn);
+                if (isIFollowHim) {
+                  await followCubit.unFollowThisUser(
+                      followingUserId: userInfo.userId,
+                      myPersonalId: myPersonalId);
+                  userInfo.followerPeople.remove(myPersonalId);
+                } else {
+                  await followCubit.followThisUser(
+                      followingUserId: userInfo.userId,
+                      myPersonalId: myPersonalId);
+                  userInfo.followerPeople.add(myPersonalId);
+                }
+                setState(() {});
+              },
+              child: followButton(isIFollowHim),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container followButton(bool isIFollowHim) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: isIFollowHim ? ColorManager.white : ColorManager.blue,
+        border: Border.all(
+          color:
+              isIFollowHim ? ColorManager.lightGrey : ColorManager.transparent,
+          width: 0,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: ColorManager.grey.withOpacity(.1),
+            spreadRadius: 3,
+            blurRadius: 3,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: isIFollowHim
+          ? Text(StringsManager.following.tr(),
+              style: getNormalStyle(color: ColorManager.black))
+          : Text(StringsManager.follow.tr(),
+              style: getNormalStyle(color: ColorManager.white)),
+    );
+  }
+
+  CustomHeader customHeader() {
+    return CustomHeader(
+      refreshStyle: RefreshStyle.Behind,
+      onOffsetChange: (offset) {
+        if (_refreshController.value.headerMode!.value !=
+            RefreshStatus.refreshing) {
+          _scaleController.value = offset / 150.0;
+        }
+      },
+      builder: (context, mode) {
+        return customCircleProgress(context);
+      },
+    );
+  }
+
+  Container customCircleProgress(BuildContext context) {
+    return Container(
+      color: Theme.of(context).primaryColor,
+      alignment: Alignment.center,
+      child: FadeTransition(
+        opacity: _scaleController,
+        child: ScaleTransition(
+          scale: _scaleController,
+          child: circularProgressIndicator(context),
+        ),
+      ),
+    );
+  }
+
+  CircularProgressIndicator circularProgressIndicator(BuildContext context) {
+    return CircularProgressIndicator(
+      strokeWidth: 1.5,
+      color: Theme.of(context).iconTheme.color,
+      backgroundColor: Theme.of(context).dividerColor,
     );
   }
 }

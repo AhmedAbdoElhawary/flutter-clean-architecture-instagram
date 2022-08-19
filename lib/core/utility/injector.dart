@@ -52,6 +52,7 @@ import 'package:instagram/domain/use_cases/story/get_specific_stories.dart';
 import 'package:instagram/domain/use_cases/story/get_stories_info.dart';
 import 'package:instagram/domain/use_cases/user/add_new_user_usecase.dart';
 import 'package:instagram/domain/use_cases/user/add_post_to_user.dart';
+import 'package:instagram/domain/use_cases/user/getUserInfo/get_all_un_followers_info.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_all_users_info.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_followers_and_followings_usecase.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_specific_users_usecase.dart';
@@ -72,10 +73,10 @@ import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cub
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/myPersonalInfo/my_personal_info_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comment_likes/comment_likes_cubit.dart';
@@ -164,8 +165,8 @@ Future<void> initializeDependencies() async {
 
   injector.registerSingleton<GetUserFromUserNameUseCase>(
       GetUserFromUserNameUseCase(injector()));
-  injector
-      .registerSingleton<GetAllUsersUseCase>(GetAllUsersUseCase(injector()));
+  injector.registerSingleton<GetAllUnFollowersUseCase>(
+      GetAllUnFollowersUseCase(injector()));
 
   injector.registerSingleton<SearchAboutUserUseCase>(
       SearchAboutUserUseCase(injector()));
@@ -276,6 +277,9 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<DeleteTheRoomUseCase>(
       DeleteTheRoomUseCase(injector()));
 
+  injector
+      .registerSingleton<GetAllUsersUseCase>(GetAllUsersUseCase(injector()));
+
   /// ==============================================================================================>
 
   // auth Blocs
@@ -304,8 +308,8 @@ Future<void> initializeDependencies() async {
   injector.registerFactory<SearchAboutUserBloc>(
       () => SearchAboutUserBloc(injector()));
 
-  injector.registerFactory<MyPersonalInfoBloc>(
-      () => MyPersonalInfoBloc(injector()));
+  injector.registerFactory<UsersInfoReelTimeBloc>(
+      () => UsersInfoReelTimeBloc(injector(), injector()));
 
   // message searchAboutUser
   injector.registerFactory<MessageCubit>(

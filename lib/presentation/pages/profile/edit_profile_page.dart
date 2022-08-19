@@ -156,6 +156,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     stories: widget.userInfo.stories,
                     userId: widget.userInfo.userId,
                     devicesTokens: widget.userInfo.devicesTokens,
+                    lastThreePostUrls: widget.userInfo.lastThreePostUrls,
                   );
                   await updateUserCubit
                       .updateUserInfo(updatedUserInfo)

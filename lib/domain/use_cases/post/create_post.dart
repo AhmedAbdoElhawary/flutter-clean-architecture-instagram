@@ -4,13 +4,13 @@ import 'package:instagram/core/use_case/use_case.dart';
 import '../../repositories/post/post_repository.dart';
 
 class CreatePostUseCase
-    implements UseCaseThreeParams<String, Post, List<Uint8List>, Uint8List?> {
+    implements UseCaseThreeParams<Post, Post, List<Uint8List>, Uint8List?> {
   final FirestorePostRepository _createPostRepository;
 
   CreatePostUseCase(this._createPostRepository);
 
   @override
-  Future<String> call(
+  Future<Post> call(
       {required Post paramsOne,
       required List<Uint8List> paramsTwo,
       required Uint8List? paramsThree}) {

@@ -1,9 +1,10 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/domain/use_cases/user/add_post_to_user.dart';
-import 'package:instagram/domain/use_cases/user/getUserInfo/get_all_users_info.dart';
+import 'package:instagram/domain/use_cases/user/getUserInfo/get_all_un_followers_info.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_user_from_user_name.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_user_info_usecase.dart';
 import 'package:instagram/domain/use_cases/user/update_user_info.dart';
@@ -12,7 +13,7 @@ part 'user_info_state.dart';
 
 class UserInfoCubit extends Cubit<FirestoreUserInfoState> {
   final GetUserInfoUseCase _getUserInfoUseCase;
-  final GetAllUsersUseCase _getAllUnFollowersUsersUseCase;
+  final GetAllUnFollowersUseCase _getAllUnFollowersUsersUseCase;
   final UpdateUserInfoUseCase _updateUserInfoUseCase;
   final UploadProfileImageUseCase _uploadImageUseCase;
   final AddPostToUserUseCase _addPostToUserUseCase;
@@ -55,6 +56,7 @@ class UserInfoCubit extends Cubit<FirestoreUserInfoState> {
       emit(CubitGetUserInfoFailed(e.toString()));
     });
   }
+
 
   Future<void> getAllUnFollowersUsers(UserPersonalInfo myPersonalInfo) async {
     emit(CubitAllUnFollowersUserLoading());
@@ -107,10 +109,10 @@ class UserInfoCubit extends Cubit<FirestoreUserInfoState> {
   }
 
   Future<void> updateUserPostsInfo(
-      {required String userId, required String postId}) async {
+      {required String userId, required Post postInfo}) async {
     emit(CubitUserLoading());
     await _addPostToUserUseCase
-        .call(paramsOne: userId, paramsTwo: postId)
+        .call(paramsOne: userId, paramsTwo: postInfo)
         .then((userInfo) {
       myPersonalInfo = userInfo;
       emit(CubitMyPersonalInfoLoaded(userInfo));

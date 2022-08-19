@@ -136,6 +136,7 @@ class _SignUpPageState extends State<SignUpPage> {
       posts: const [],
       stories: const [],
       devicesTokens: const [],
+      lastThreePostUrls: const [],
     );
     userCubit.addNewUser(newUserInfo);
   }

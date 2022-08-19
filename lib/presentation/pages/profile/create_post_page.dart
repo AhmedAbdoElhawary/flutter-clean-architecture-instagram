@@ -197,11 +197,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
     await postCubit.createPost(postInfo, widget.multiSelectedFiles,
         coverOfVideo: widget.coverOfVideoBytes);
 
-    if (postCubit.postId != '') {
+    if (postCubit.newPostInfo != null) {
       if (!mounted) return;
 
       await UserInfoCubit.get(context)
-          .updateUserPostsInfo(userId: myPersonalId, postId: postCubit.postId);
+          .updateUserPostsInfo(userId: myPersonalId, postInfo: postCubit.newPostInfo!);
       await postCubit.getPostsInfo(
           postsIds: myPersonalInfo.posts, isThatMyPosts: true);
       WidgetsBinding.instance

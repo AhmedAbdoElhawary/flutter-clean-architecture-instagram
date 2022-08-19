@@ -16,7 +16,7 @@ class PostCubit extends Cubit<PostState> {
   final UpdatePostUseCase _updatePostUseCase;
   final DeletePostUseCase _deletePostUseCase;
 
-  String postId = '';
+  Post? newPostInfo;
   List<Post>? myPostsInfo;
   List<Post>? userPostsInfo;
 
@@ -34,14 +34,14 @@ class PostCubit extends Cubit<PostState> {
 
   Future<void> createPost(Post postInfo, List<Uint8List> files,
       {Uint8List? coverOfVideo}) async {
-    postId = '';
+    newPostInfo = null;
     emit(CubitPostLoading());
     await _createPostUseCase
         .call(paramsOne: postInfo, paramsTwo: files, paramsThree: coverOfVideo)
-        .then((postId) {
-      this.postId = postId;
-      emit(CubitPostLoaded(postId));
-      return postId;
+        .then((postInfo) {
+      newPostInfo = postInfo;
+      emit(CubitPostLoaded(postInfo));
+      return postInfo;
     }).catchError((e) {
       emit(CubitPostFailed(e));
     });

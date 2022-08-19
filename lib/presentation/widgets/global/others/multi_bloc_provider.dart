@@ -8,10 +8,10 @@ import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cub
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/myPersonalInfo/my_personal_info_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comment_likes/comment_likes_cubit.dart';
@@ -89,12 +89,12 @@ class MultiBlocs extends StatelessWidget {
       BlocProvider<CallingStatusBloc>(
         create: (context) => injector<CallingStatusBloc>(),
       ),
-      BlocProvider<MyPersonalInfoBloc>(
+      BlocProvider<UsersInfoReelTimeBloc>(
         create: (context1) {
           if (myPersonalId.isNotEmpty) {
-            return injector<MyPersonalInfoBloc>()..add(LoadMyPersonalInfo());
+            return injector<UsersInfoReelTimeBloc>()..add(LoadMyPersonalInfo());
           } else {
-            return injector<MyPersonalInfoBloc>();
+            return injector<UsersInfoReelTimeBloc>();
           }
         },
       ),
