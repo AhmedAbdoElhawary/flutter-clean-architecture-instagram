@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/myPersonalInfo/my_personal_info_bloc.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/pages/messages/ringing_page.dart';
 import 'package:instagram/presentation/screens/mobile_screen_layout.dart';
 
@@ -22,7 +22,7 @@ class _PopupCallingState extends State<PopupCalling> {
   bool isHeMoved = false;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MyPersonalInfoBloc, MyPersonalInfoState>(
+    return BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState>(
       builder: (context, state) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (state is MyPersonalInfoLoaded &&
