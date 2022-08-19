@@ -281,15 +281,19 @@ class _UserNamePageState extends State<UserNamePage> {
     });
   }
 
+  bool isItMoved = false;
   moveToMain(CubitAuthConfirmed authState) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       myPersonalId = authState.user.uid;
-      Get.offAll(
-        ResponsiveLayout(
-          mobileScreenLayout: PopupCalling(myPersonalId),
-          webScreenLayout: const WebScreenLayout(),
-        ),
-      );
+      if (!isItMoved) {
+        Get.offAll(
+          ResponsiveLayout(
+            mobileScreenLayout: PopupCalling(myPersonalId),
+            webScreenLayout: const WebScreenLayout(),
+          ),
+        );
+        isItMoved = true;
+      }
     });
   }
 
