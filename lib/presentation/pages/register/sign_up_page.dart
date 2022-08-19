@@ -47,8 +47,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final fullNameController = TextEditingController();
   final AppPreferences _appPreferences = injector<AppPreferences>();
   final bool validateControllers = false;
-  bool validateEmail=false;
-  bool validatePassword=false;
+  ValueNotifier<bool> validateEmail = ValueNotifier(false);
+  ValueNotifier<bool> validatePassword = ValueNotifier(false);
 
   @override
   void didChangeDependencies() {
@@ -64,27 +64,36 @@ class _SignUpPageState extends State<SignUpPage> {
       emailController: emailController,
       passwordController: passwordController,
       isThatLogIn: false,
-        validateEmail: validateEmail,
+      validateEmail: validateEmail,
       validatePassword: validatePassword,
     );
   }
 
   Widget customTextButton() {
-    return CustomElevatedButton(
-      isItDone: true,
-      nameOfButton: StringsManager.next.tr(),
-      blueColor: validatePassword && validateEmail ? true : false,
-      onPressed: () async {
-        if(validatePassword && validateEmail){
-          TextsControllers textsControllers = TextsControllers(
-            emailController: emailController,
-            passwordController: passwordController,
-            fullNameController: fullNameController,
+    return ValueListenableBuilder(
+      valueListenable: validateEmail,
+      builder: (context, bool validateEmailValue, child) =>
+          ValueListenableBuilder(
+        valueListenable: validatePassword,
+        builder: (context, bool validatePasswordValue, child) {
+          bool validate = validatePasswordValue && validateEmailValue;
+          return CustomElevatedButton(
+            isItDone: true,
+            nameOfButton: StringsManager.next.tr(),
+            blueColor: validate ? true : false,
+            onPressed: () async {
+              if (validate) {
+                TextsControllers textsControllers = TextsControllers(
+                  emailController: emailController,
+                  passwordController: passwordController,
+                  fullNameController: fullNameController,
+                );
+                pushToPage(context, page: UserNamePage(textsControllers));
+              }
+            },
           );
-          pushToPage(context, page: UserNamePage(textsControllers));
-        }
-
-      },
+        },
+      ),
     );
   }
 }
@@ -123,30 +132,30 @@ class _UserNamePageState extends State<UserNamePage> {
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(height: 100),
-          Text(
-            StringsManager.createUserName.tr(),
-            style: getMediumStyle(
-                color: Theme.of(context).focusColor, fontSize: 15),
-          ),
-          const SizedBox(height: 10),
-          Center(
-            child: Text(
-              StringsManager.addUserName.tr(),
-              style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
-            ),
-          ),
-          Text(
-            StringsManager.youCanChangeUserNameLater.tr(),
-            style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
-          ),
-          const SizedBox(height: 30),
-          userNameTextField(context),
-          customTextButton(),
-        ],
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 100),
+              Text(
+                StringsManager.createUserName.tr(),
+                style: getMediumStyle(
+                    color: Theme.of(context).focusColor, fontSize: 15),
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: Text(
+                  StringsManager.addUserName.tr(),
+                  style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
+                ),
+              ),
+              Text(
+                StringsManager.youCanChangeUserNameLater.tr(),
+                style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
+              ),
+              const SizedBox(height: 30),
+              userNameTextField(context),
+              customTextButton(),
+            ],
           ),
         ),
       ),

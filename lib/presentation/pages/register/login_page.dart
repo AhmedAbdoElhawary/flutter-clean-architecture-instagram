@@ -33,8 +33,8 @@ class _LoginPageState extends State<LoginPage> {
   RxBool isHeMovedToHome = false.obs;
   ValueNotifier<bool> isToastShowed = ValueNotifier(false);
   ValueNotifier<bool> isUserIdReady = ValueNotifier(true);
-  bool validateEmail = false;
-  bool validatePassword = false;
+  ValueNotifier<bool> validateEmail = ValueNotifier(false);
+  ValueNotifier<bool> validatePassword = ValueNotifier(false);
 
   @override
   void didChangeDependencies() {
@@ -122,19 +122,30 @@ class _LoginPageState extends State<LoginPage> {
     return ValueListenableBuilder(
       valueListenable: isUserIdReady,
       builder: (context, bool isUserIdReadyValue, child) =>
-          CustomElevatedButton(
-        isItDone: isUserIdReadyValue,
-        nameOfButton: StringsManager.logIn.tr(),
-        blueColor: validateEmail && validatePassword,
-        onPressed: () async {
-          if (validateEmail && validatePassword) {
-            isUserIdReady.value = false;
-            isToastShowed.value = false;
-            await authCubit.logIn(RegisteredUser(
-                email: emailController.text,
-                password: passwordController.text));
-          }
-        },
+          ValueListenableBuilder(
+        valueListenable: validateEmail,
+        builder: (context, bool validateEmailValue, child) =>
+            ValueListenableBuilder(
+          valueListenable: validatePassword,
+          builder: (context, bool validatePasswordValue, child) {
+            bool validate = validatePasswordValue && validateEmailValue;
+
+            return CustomElevatedButton(
+            isItDone: isUserIdReadyValue,
+            nameOfButton: StringsManager.logIn.tr(),
+            blueColor: validate,
+            onPressed: () async {
+              if (validate) {
+                isUserIdReady.value = false;
+                isToastShowed.value = false;
+                await authCubit.logIn(RegisteredUser(
+                    email: emailController.text,
+                    password: passwordController.text));
+              }
+            },
+          );
+          },
+        ),
       ),
     );
   }

@@ -17,18 +17,18 @@ class RegisterWidgets extends StatefulWidget {
   final TextEditingController? fullNameController;
   final Widget customTextButton;
   final bool isThatLogIn;
-  bool validateEmail;
-  bool validatePassword;
+  final ValueNotifier<bool> validateEmail;
+  final ValueNotifier<bool> validatePassword;
 
-   RegisterWidgets({
+  const RegisterWidgets({
     Key? key,
     required this.emailController,
     this.isThatLogIn = true,
     required this.passwordController,
     required this.customTextButton,
     this.fullNameController,
-    this.validateEmail = false,
-    this.validatePassword = false,
+    required this.validateEmail,
+    required this.validatePassword,
   }) : super(key: key);
 
   @override
@@ -40,6 +40,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
   Widget build(BuildContext context) {
     return buildScaffold(context);
   }
+
 
   Scaffold buildScaffold(BuildContext context) {
     double height = MediaQuery.of(context).size.height - 50;
@@ -85,6 +86,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
       ),
     );
   }
+
   Widget buildColumn(BuildContext context, {double height = 400}) {
     return SizedBox(
       height: height,
@@ -104,7 +106,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
             hint: StringsManager.email.tr(),
             controller: widget.emailController,
             isThatEmail: true,
-            validate:widget. validateEmail,
+            validate: widget.validateEmail,
           ),
           SizedBox(height: isThatMobile ? 15 : 6.5),
           if (!widget.isThatLogIn && widget.fullNameController != null) ...[
@@ -117,7 +119,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
             hint: StringsManager.password.tr(),
             controller: widget.passwordController,
             isThatEmail: false,
-            validate:widget. validatePassword,
+            validate: widget.validatePassword,
           ),
           widget.customTextButton,
           const SizedBox(height: 15),

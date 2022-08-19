@@ -7,13 +7,12 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String hint;
   final bool? isThatEmail;
-  bool validate;
-
-   CustomTextField(
+  final ValueNotifier<bool>? validate;
+  const CustomTextField(
       {required this.controller,
       required this.hint,
       this.isThatEmail,
-      this.validate = false,
+      this.validate,
       Key? key})
       : super(key: key);
 
@@ -26,19 +25,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   void initState() {
     widget.controller.addListener(() {
-      setState(() {
-        if (widget.controller.text.isNotEmpty) {
-          errorMassage = widget.isThatEmail != null
-              ? (widget.isThatEmail == true
-                  ? _validateEmail()
-                  : _validatePassword())
-              : null;
-        } else {
-          widget.validate=false;
-
-          errorMassage = null;
-        }
-      });
+      if (widget.controller.text.isNotEmpty) {
+        errorMassage = widget.isThatEmail != null
+            ? (widget.isThatEmail == true
+                ? _validateEmail()
+                : _validatePassword())
+            : null;
+      } else {
+        errorMassage = null;
+      }
     });
 
     super.initState();
@@ -78,24 +73,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
   String? _validateEmail() {
     RegExp regex = RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+
     if (!regex.hasMatch(widget.controller.text)) {
-      widget.validate=true;
+      setState(() => widget.validate!.value = false);
       return 'Please make sure your email address is valid';
     } else {
-      widget.validate=false;
-
+      setState(() => widget.validate!.value = true);
       return null;
     }
   }
 
   String? _validatePassword() {
     if (widget.controller.text.length < 6) {
-      widget.validate=true;
-
+      setState(() => widget.validate!.value = false);
       return 'Password must be at least 6 characters';
     } else {
-      widget.validate=false;
-
+      setState(() => widget.validate!.value = true);
       return null;
     }
   }
