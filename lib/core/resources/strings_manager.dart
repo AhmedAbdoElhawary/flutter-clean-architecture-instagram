@@ -37,8 +37,8 @@ class StringsManager {
   static const String slideToCancel = "slideToCancel";
 
   static const String welcomeToInstagram = "welcomeToInstagram";
-  static const String followPeopleToSee = "slideToCancel";
-  static const String videosTheyShare = "slideToCancel";
+  static const String followPeopleToSee = "followPeopleToSee";
+  static const String videosTheyShare = "videosTheyShare";
 
   static const String name = "name";
   static const String writeMessage = "writeMessage";
