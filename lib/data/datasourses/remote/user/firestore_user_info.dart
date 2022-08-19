@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/message.dart';
+import 'package:instagram/data/models/post.dart';
 import 'package:instagram/data/models/sender_info.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import '../../../../core/utility/constant.dart';
@@ -98,6 +99,18 @@ class FirestoreUser {
     return usersInfo;
   }
 
+  static Stream<List<UserPersonalInfo>> getAllUsers() {
+    Stream<QuerySnapshot<Map<String, dynamic>>> snapshots =
+        _fireStoreUserCollection.snapshots();
+    return snapshots.map((snapshot) {
+      List<UserPersonalInfo> usersInfo = [];
+      for (final doc in snapshot.docs) {
+        usersInfo.add(UserPersonalInfo.fromDocSnap(doc.data()));
+      }
+      return usersInfo;
+    });
+  }
+
   /// [fieldName] , [userUid] in case one of this users not exist, it will be deleted from the list in fireStore
 
   static Future<List<UserPersonalInfo>> getSpecificUsersInfo({
@@ -187,11 +200,32 @@ class FirestoreUser {
     return userPersonalInfo;
   }
 
-  static updateUserPosts(
-      {required String userId, required String postId}) async {
-    await _fireStoreUserCollection.doc(userId).update({
-      'posts': FieldValue.arrayUnion([postId])
+  static Future<void> updateUserPosts(
+      {required String userId, required Post postInfo}) async {
+    DocumentReference<Map<String, dynamic>> collection =
+        _fireStoreUserCollection.doc(userId);
+    await collection.update({
+      'posts': FieldValue.arrayUnion([postInfo.postUid]),
     });
+    return await _updateThreeLastPostUrl(userId, postInfo);
+  }
+
+  static Future<void> _updateThreeLastPostUrl(
+      String userId, Post postInfo) async {
+    DocumentReference<Map<String, dynamic>> collection =
+        _fireStoreUserCollection.doc(userId);
+    Map<String, dynamic>? snap = (await collection.get()).data();
+    List<dynamic> lastPosts = snap?["lastThreePostUrls"] ??= [];
+    if (lastPosts.length == 3) lastPosts.removeLast();
+    if (postInfo.isThatImage) {
+      lastPosts.add(postInfo.postUrl);
+    } else {
+      if (postInfo.coverOfVideoUrl.isEmpty) return;
+      lastPosts.add(postInfo.coverOfVideoUrl);
+    }
+    lastPosts.add(postInfo.postUrl);
+    return await collection
+        .update({'lastThreePostUrls': FieldValue.arrayUnion(lastPosts)});
   }
 
   static removeUserPost({required String postId}) async {
