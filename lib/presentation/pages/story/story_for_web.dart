@@ -229,20 +229,6 @@ class StoryWidgetState extends State<StoryWidget> {
       storyController.value.pause();
       return ClipRRect(
           borderRadius: BorderRadius.circular(10), child: storyItems[0].view);
-      // return Material(
-      //   type: MaterialType.transparency,
-      //   child: ValueListenableBuilder(
-      //     valueListenable: storyController,
-      //     builder: (context, StoryController storyControllerValue, child) =>
-      //         StoryView(
-      //       inline: true,
-      //       opacityLevel: 0,
-      //       progressPosition: ProgressPosition.top,
-      //       storyItems: storyItems,
-      //       controller: storyControllerValue,
-      //     ),
-      //   ),
-      // );
     }
   }
 
