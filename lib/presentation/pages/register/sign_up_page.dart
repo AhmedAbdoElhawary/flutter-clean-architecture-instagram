@@ -112,6 +112,7 @@ class _UserNamePageState extends State<UserNamePage> {
   final isToastShowed = ValueNotifier(false);
   bool validateEdits = false;
   bool isFieldEmpty = true;
+  bool isItMoved = false;
 
   @override
   void didChangeDependencies() {
@@ -281,7 +282,6 @@ class _UserNamePageState extends State<UserNamePage> {
     });
   }
 
-  bool isItMoved = false;
   moveToMain(CubitAuthConfirmed authState) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       myPersonalId = authState.user.uid;
