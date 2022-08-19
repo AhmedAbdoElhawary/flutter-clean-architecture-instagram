@@ -19,9 +19,9 @@ class CubitDeletePostLoading extends PostState {}
 class CubitDeletePostLoaded extends PostState {}
 
 class CubitPostLoaded extends PostState {
-  String postId;
+  Post postInfo;
 
-  CubitPostLoaded(this.postId);
+  CubitPostLoaded(this.postInfo);
 }
 
 class CubitMyPersonalPostsLoaded extends PostState {
