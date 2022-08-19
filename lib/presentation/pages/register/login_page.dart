@@ -36,7 +36,6 @@ class _LoginPageState extends State<LoginPage> {
   ValueNotifier<bool> validateEmail = ValueNotifier(false);
   ValueNotifier<bool> validatePassword = ValueNotifier(false);
 
-
   @override
   void didChangeDependencies() {
     _appPreferences.getLocal().then((local) => {context.setLocale(local)});
@@ -123,19 +122,30 @@ class _LoginPageState extends State<LoginPage> {
     return ValueListenableBuilder(
       valueListenable: isUserIdReady,
       builder: (context, bool isUserIdReadyValue, child) =>
-          CustomElevatedButton(
-        isItDone: isUserIdReadyValue,
-        nameOfButton: StringsManager.logIn.tr(),
-        blueColor: validateEmail.value && validatePassword.value,
-        onPressed: () async {
-          if (validateEmail.value && validatePassword.value) {
-            isUserIdReady.value = false;
-            isToastShowed.value = false;
-            await authCubit.logIn(RegisteredUser(
-                email: emailController.text,
-                password: passwordController.text));
-          }
-        },
+          ValueListenableBuilder(
+        valueListenable: validateEmail,
+        builder: (context, bool validateEmailValue, child) =>
+            ValueListenableBuilder(
+          valueListenable: validatePassword,
+          builder: (context, bool validatePasswordValue, child) {
+            bool validate = validatePasswordValue && validateEmailValue;
+
+            return CustomElevatedButton(
+            isItDone: isUserIdReadyValue,
+            nameOfButton: StringsManager.logIn.tr(),
+            blueColor: validate,
+            onPressed: () async {
+              if (validate) {
+                isUserIdReady.value = false;
+                isToastShowed.value = false;
+                await authCubit.logIn(RegisteredUser(
+                    email: emailController.text,
+                    password: passwordController.text));
+              }
+            },
+          );
+          },
+        ),
       ),
     );
   }
