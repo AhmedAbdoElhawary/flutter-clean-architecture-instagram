@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:instagram/data/models/post.dart';
 
 abstract class FirestorePostRepository {
-  Future<String> createPost(
+  Future<Post> createPost(
       {required Post postInfo,
       required List<Uint8List> files,
       required Uint8List? coverOfVideo});
