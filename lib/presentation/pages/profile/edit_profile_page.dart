@@ -169,13 +169,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 },
                 icon: checkIcon(false),
               )
-      ] else
-        ...[
-          Padding(
-            padding: const EdgeInsetsDirectional.only(end: 8.5),
-            child: checkIcon(true),
-          )
-        ],
+      ] else ...[
+        Padding(
+          padding: const EdgeInsetsDirectional.only(end: 8.5),
+          child: checkIcon(true),
+        )
+      ],
     ];
   }
 
@@ -272,12 +271,57 @@ class _EditProfilePageState extends State<EditProfilePage> {
           usersWithSameUserName = state.users;
         }
         bool isIExist = usersWithSameUserName.contains(widget.userInfo);
+        WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+              validateEdits = isIExist || usersWithSameUserName.isEmpty;
+              userNameChanging =
+                  widget.userNameController.text != widget.userInfo.userName;
+            }));
         return userNameTextFormField(
           widget.userNameController,
           StringsManager.username.tr(),
-          uniqueUserName:isIExist|| usersWithSameUserName.isEmpty,
+          uniqueUserName: validateEdits,
         );
       },
+    );
+  }
+
+  TextFormField userNameTextFormField(
+      TextEditingController controller, String text,
+      {required bool uniqueUserName}) {
+    return TextFormField(
+      cursorColor: ColorManager.teal,
+      controller: controller,
+      style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
+      decoration: InputDecoration(
+        labelText: text,
+        suffixIcon: !userNameChanging
+            ? null
+            : (uniqueUserName && validateEdits ? rightIcon() : wrongIcon()),
+        labelStyle: getNormalStyle(
+            color: !uniqueUserName ? ColorManager.red : ColorManager.grey),
+        errorText: uniqueUserName && validateEdits
+            ? null
+            : StringsManager.thisUserNameExist.tr(),
+        errorStyle: getNormalStyle(color: ColorManager.red),
+      ),
+      onChanged: (value) {
+        if (value.isEmpty) setState(() => validateEdits = false);
+      },
+    );
+  }
+
+  Icon rightIcon() {
+    return const Icon(Icons.check_circle, color: ColorManager.green, size: 27);
+  }
+
+  Transform wrongIcon() {
+    return Transform.rotate(
+      angle: pi / 3.6,
+      child: const Icon(
+        Icons.add_circle_rounded,
+        color: ColorManager.red,
+        size: 27,
+      ),
     );
   }
 
@@ -319,58 +363,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
         labelText: text,
         labelStyle: getNormalStyle(color: ColorManager.grey),
         errorStyle: getNormalStyle(color: ColorManager.red),
-      ),
-    );
-  }
-
-  TextFormField userNameTextFormField(
-      TextEditingController controller, String text,
-      {required bool uniqueUserName}) {
-    return TextFormField(
-      cursorColor: ColorManager.teal,
-      controller: controller,
-      style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
-      decoration: InputDecoration(
-        labelText: text,
-        suffixIcon: !userNameChanging
-            ? null
-            : (uniqueUserName&&validateEdits ? rightIcon() : wrongIcon()),
-        labelStyle: getNormalStyle(
-            color: !uniqueUserName ? ColorManager.red : ColorManager.grey),
-        errorText: uniqueUserName&&validateEdits ? null : "This user name is already exist",
-        errorStyle: getNormalStyle(color: ColorManager.red),
-      ),
-      onChanged: (value) {
-        setState(() {
-          if (uniqueUserName) {
-            validateEdits = true;
-          } else if (!uniqueUserName) {
-            validateEdits = false;
-          }
-          if(value.isEmpty){
-            validateEdits = false;
-          }
-          userNameChanging = value != widget.userInfo.userName;
-        });
-      },
-    );
-  }
-
-  Icon rightIcon() {
-    return const Icon(
-      Icons.check_circle,
-      color: ColorManager.green,
-      size: 30,
-    );
-  }
-
-  Transform wrongIcon() {
-    return Transform.rotate(
-      angle: pi / 3.6,
-      child: const Icon(
-        Icons.add_circle_rounded,
-        color: ColorManager.red,
-        size: 30,
       ),
     );
   }
