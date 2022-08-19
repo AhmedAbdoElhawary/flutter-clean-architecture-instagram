@@ -105,7 +105,8 @@ class FirestoreUser {
     return snapshots.map((snapshot) {
       List<UserPersonalInfo> usersInfo = [];
       for (final doc in snapshot.docs) {
-        usersInfo.add(UserPersonalInfo.fromDocSnap(doc.data()));
+        UserPersonalInfo userInfo = UserPersonalInfo.fromDocSnap(doc.data());
+        if (userInfo.userId != myPersonalId) usersInfo.add(userInfo);
       }
       return usersInfo;
     });
