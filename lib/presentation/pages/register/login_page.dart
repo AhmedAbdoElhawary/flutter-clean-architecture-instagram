@@ -33,8 +33,9 @@ class _LoginPageState extends State<LoginPage> {
   RxBool isHeMovedToHome = false.obs;
   ValueNotifier<bool> isToastShowed = ValueNotifier(false);
   ValueNotifier<bool> isUserIdReady = ValueNotifier(true);
-  bool validateEmail = false;
-  bool validatePassword = false;
+  ValueNotifier<bool> validateEmail = ValueNotifier(false);
+  ValueNotifier<bool> validatePassword = ValueNotifier(false);
+
 
   @override
   void didChangeDependencies() {
@@ -125,9 +126,9 @@ class _LoginPageState extends State<LoginPage> {
           CustomElevatedButton(
         isItDone: isUserIdReadyValue,
         nameOfButton: StringsManager.logIn.tr(),
-        blueColor: validateEmail && validatePassword,
+        blueColor: validateEmail.value && validatePassword.value,
         onPressed: () async {
-          if (validateEmail && validatePassword) {
+          if (validateEmail.value && validatePassword.value) {
             isUserIdReady.value = false;
             isToastShowed.value = false;
             await authCubit.logIn(RegisteredUser(
