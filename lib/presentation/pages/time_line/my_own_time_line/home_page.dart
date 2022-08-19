@@ -684,9 +684,7 @@ class _WelcomeCardsState extends State<_WelcomeCards>
             GestureDetector(
               onTap: () async {
                 FollowCubit followCubit = FollowCubit.get(context);
-                pageController.nextPage(
-                    duration: const Duration(milliseconds: 350),
-                    curve: Curves.easeIn);
+
                 if (isIFollowHim) {
                   await followCubit.unFollowThisUser(
                       followingUserId: userInfo.userId,
@@ -699,6 +697,9 @@ class _WelcomeCardsState extends State<_WelcomeCards>
                   userInfo.followerPeople.add(myPersonalId);
                 }
                 setState(() {});
+                pageController.nextPage(
+                    duration: const Duration(milliseconds: 350),
+                    curve: Curves.easeIn);
               },
               child: followButton(isIFollowHim),
             ),
