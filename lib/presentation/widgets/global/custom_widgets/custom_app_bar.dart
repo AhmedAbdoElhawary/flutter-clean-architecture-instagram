@@ -137,6 +137,8 @@ class CustomAppBar {
             child: ClipOval(
               child: NetworkImageDisplay(
                 imageUrl: userInfo.profileImageUrl,
+                cachingWidth: 68,
+                cachingHeight: 68,
               ),
             ),
           ),
