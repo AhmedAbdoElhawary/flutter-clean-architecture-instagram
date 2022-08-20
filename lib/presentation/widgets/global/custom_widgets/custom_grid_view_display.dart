@@ -93,6 +93,8 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
       alignment: Alignment.topCenter,
       children: [
         NetworkImageDisplay(
+          cachingHeight: 238,
+          cachingWidth: 238,
           blurHash: widget.postClickedInfo.blurHash,
           imageUrl: isThatMultiImages
               ? widget.postClickedInfo.imagesUrls[0]
