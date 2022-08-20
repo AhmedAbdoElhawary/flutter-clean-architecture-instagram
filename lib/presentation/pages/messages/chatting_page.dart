@@ -72,7 +72,9 @@ class _ChattingPageState extends State<ChattingPage>
         child: ClipOval(
             child: NetworkImageDisplay(
           imageUrl: widget.userInfo.profileImageUrl,
-        )));
+              cachingWidth:238 ,
+              cachingHeight:238 ,
+        ),),);
   }
 
   Row userName() {
