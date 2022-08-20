@@ -113,7 +113,7 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: context.supportedLocales,
       localizationsDelegates: context.localizationDelegates,
       debugShowCheckedModeBanner: false,
-      title: 'instagram',
+      title: 'Instagram',
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: ThemeOfApp().theme,

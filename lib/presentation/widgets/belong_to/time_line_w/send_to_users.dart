@@ -127,7 +127,7 @@ class _SendToUsersState extends State<SendToUsers> {
         CircleAvatar(
           backgroundColor: ColorManager.customGrey,
           backgroundImage: userInfo.profileImageUrl.isNotEmpty
-              ? CachedNetworkImageProvider(userInfo.profileImageUrl)
+              ? CachedNetworkImageProvider(userInfo.profileImageUrl,maxWidth: 92,maxHeight: 92)
               : null,
           radius: 23,
           child: userInfo.profileImageUrl.isEmpty
