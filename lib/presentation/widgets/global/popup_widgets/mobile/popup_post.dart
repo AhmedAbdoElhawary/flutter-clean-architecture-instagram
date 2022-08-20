@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
@@ -218,7 +219,8 @@ class _PopupPostCardState extends State<PopupPostCard> {
     if (viewProfileVisibility.value) {
       Widget page;
       if (widget.isThatProfile) {
-        page = CommentsPageForMobile(postInfo: ValueNotifier(widget.postClickedInfo));
+        page = CommentsPageForMobile(
+            postInfo: ValueNotifier(widget.postClickedInfo));
       } else {
         page = WhichProfilePage(
           userId: widget.postClickedInfo.publisherId,
@@ -284,7 +286,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
                   color: ColorManager.grey,
                   borderRadius: BorderRadius.circular(5),
                   image: DecorationImage(
-                    image: NetworkImage(postImageUrl),
+                    image: CachedNetworkImageProvider(postImageUrl,maxWidth: 100,maxHeight: 90),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -419,6 +421,9 @@ class _PopupPostCardState extends State<PopupPostCard> {
                           color: Theme.of(context).primaryColor,
                           width: double.infinity,
                           child: NetworkImageDisplay(
+                            cachingWidth: 680,
+                            cachingHeight:
+                                postInfo.aspectRatio == 1 ? 906 : 680,
                             blurHash: postInfo.blurHash,
                             imageUrl: postInfo.postUrl.isNotEmpty
                                 ? postInfo.postUrl
