@@ -10,7 +10,7 @@ import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/animated_dialog.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -114,8 +114,8 @@ class _PopupPostCardState extends State<PopupPostCard> {
           ? CustomAppBar.oneTitleAppBar(
               context,
               widget.isThatProfile
-                  ? StringsManager.posts.tr()
-                  : StringsManager.explore.tr())
+                  ? StringsManager.posts.tr
+                  : StringsManager.explore.tr)
           : null,
       body: CustomPostsDisplay(postsInfo: widget.postsInfo),
     );
@@ -134,7 +134,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
           details.globalPosition.dx > lovePosition.positionLeft &&
           details.globalPosition.dx < lovePosition.positionRight) {
         messageText =
-            isLiked ? StringsManager.unLike.tr() : StringsManager.like.tr();
+            isLiked ? StringsManager.unLike.tr : StringsManager.like.tr;
         widgetPositionLeft = lovePosition.positionLeft -
             lovePosition.positionCenter -
             (isLiked ? 15 : 7);
@@ -145,8 +145,8 @@ class _PopupPostCardState extends State<PopupPostCard> {
           details.globalPosition.dx > commentPosition.positionLeft &&
           details.globalPosition.dx < commentPosition.positionRight) {
         messageText = widget.isThatProfile
-            ? StringsManager.comment.tr()
-            : StringsManager.viewProfile.tr();
+            ? StringsManager.comment.tr
+            : StringsManager.viewProfile.tr;
         widgetPositionLeft =
             commentPosition.positionLeft - commentPosition.positionCenter - 30;
         viewProfileVisibility.value = true;
@@ -155,7 +155,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
           details.globalPosition.dy < sharePosition.positionBottom &&
           details.globalPosition.dx > sharePosition.positionLeft &&
           details.globalPosition.dx < sharePosition.positionRight) {
-        messageText = StringsManager.share.tr();
+        messageText = StringsManager.share.tr;
         widgetPositionLeft =
             sharePosition.positionLeft - sharePosition.positionCenter - 12;
         shareVisibility.value = true;
@@ -164,7 +164,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
           details.globalPosition.dy < menuPosition.positionBottom &&
           details.globalPosition.dx > menuPosition.positionLeft &&
           details.globalPosition.dx < menuPosition.positionRight) {
-        messageText = StringsManager.menu.tr();
+        messageText = StringsManager.menu.tr;
         widgetPositionLeft =
             menuPosition.positionLeft - menuPosition.positionCenter - 15;
         menuVisibility.value = true;
@@ -286,7 +286,8 @@ class _PopupPostCardState extends State<PopupPostCard> {
                   color: ColorManager.grey,
                   borderRadius: BorderRadius.circular(5),
                   image: DecorationImage(
-                    image: CachedNetworkImageProvider(postImageUrl,maxWidth: 100,maxHeight: 90),
+                    image: CachedNetworkImageProvider(postImageUrl,
+                        maxWidth: 100, maxHeight: 90),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -298,7 +299,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
                 controller: _bottomSheetMessageTextController,
                 cursorColor: ColorManager.teal,
                 decoration: InputDecoration(
-                  hintText: StringsManager.writeMessage.tr(),
+                  hintText: StringsManager.writeMessage.tr,
                   hintStyle: const TextStyle(
                     color: ColorManager.grey,
                   ),
@@ -333,7 +334,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
                     color: ColorManager.lowOpacityGrey,
                   ),
                   contentPadding: const EdgeInsetsDirectional.all(12),
-                  hintText: StringsManager.search.tr(),
+                  hintText: StringsManager.search.tr,
                   hintStyle: Theme.of(context).textTheme.headline1,
                   border: InputBorder.none),
               onChanged: (_) => setState(() {}),
