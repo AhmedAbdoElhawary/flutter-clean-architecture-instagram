@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/config/routes/app_routes.dart';
@@ -64,14 +64,14 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
                         if (stateUsersInfo[index]
                             .followerPeople
                             .contains(myPersonalId)) ...[
-                          Text(StringsManager.youFollowHim.tr(),
+                          Text(StringsManager.youFollowHim.tr,
                               style: getNormalStyle(
                                   fontSize: 10,
                                   color: Theme.of(context).disabledColor)),
                         ] else if (stateUsersInfo[index]
                             .followedPeople
                             .contains(myPersonalId)) ...[
-                          Text(StringsManager.followers.tr(),
+                          Text(StringsManager.followers.tr,
                               style: getNormalStyle(
                                   fontSize: 10,
                                   color: Theme.of(context).disabledColor)),
@@ -126,7 +126,7 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
           textAlign: TextAlign.start,
           decoration: InputDecoration(
               contentPadding: const EdgeInsetsDirectional.all(12.5),
-              hintText: StringsManager.search.tr(),
+              hintText: StringsManager.search.tr,
               hintStyle: Theme.of(context).textTheme.headline1,
               border: InputBorder.none),
           onChanged: (_) => setState(() {}),
