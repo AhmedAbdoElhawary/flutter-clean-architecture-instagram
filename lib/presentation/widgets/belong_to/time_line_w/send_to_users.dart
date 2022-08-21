@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/functions/toast_show.dart';
@@ -77,7 +77,7 @@ class _SendToUsersState extends State<SendToUsers> {
                         publisherInfo: widget.publisherInfo,
                         messageTextController: widget.messageTextController,
                         selectedUsersInfo: selectedUsersValue,
-                        textOfButton: StringsManager.done.tr(),
+                        textOfButton: StringsManager.done.tr,
                       ),
                   ],
                 );
@@ -89,7 +89,7 @@ class _SendToUsersState extends State<SendToUsers> {
         }
         if (state is CubitGettingSpecificUsersFailed) {
           ToastShow.toastStateError(state);
-          return Text(StringsManager.somethingWrong.tr());
+          return Text(StringsManager.somethingWrong.tr);
         } else {
           return isThatMobile
               ? const ThineLinearProgress()
@@ -127,7 +127,8 @@ class _SendToUsersState extends State<SendToUsers> {
         CircleAvatar(
           backgroundColor: ColorManager.customGrey,
           backgroundImage: userInfo.profileImageUrl.isNotEmpty
-              ? CachedNetworkImageProvider(userInfo.profileImageUrl,maxWidth: 92,maxHeight: 92)
+              ? CachedNetworkImageProvider(userInfo.profileImageUrl,
+                  maxWidth: 92, maxHeight: 92)
               : null,
           radius: 23,
           child: userInfo.profileImageUrl.isEmpty
@@ -201,9 +202,9 @@ class _SendToUsersState extends State<SendToUsers> {
   Widget whichContainerOfText(BuildContext context, bool selectedUserValue) {
     return !selectedUserValue
         ? containerOfFollowText(
-            context, StringsManager.send.tr(), selectedUserValue)
+            context, StringsManager.send.tr, selectedUserValue)
         : containerOfFollowText(
-            context, StringsManager.undo.tr(), selectedUserValue);
+            context, StringsManager.undo.tr, selectedUserValue);
   }
 
   Widget containerOfFollowText(
