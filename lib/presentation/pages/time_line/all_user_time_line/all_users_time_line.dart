@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -53,7 +53,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
                 contentPadding: const EdgeInsetsDirectional.all(2.0),
                 prefixIcon: Icon(Icons.search_rounded,
                     color: Theme.of(context).focusColor),
-                hintText: StringsManager.search.tr(),
+                hintText: StringsManager.search.tr,
                 hintStyle: Theme.of(context).textTheme.headline1,
                 border: InputBorder.none),
           ),
@@ -112,7 +112,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
             ToastShow.toastStateError(state);
             return Center(
                 child: Text(
-              StringsManager.noPosts.tr(),
+              StringsManager.noPosts.tr,
               style: getNormalStyle(
                   color: Theme.of(context).focusColor, fontSize: 20),
             ));
