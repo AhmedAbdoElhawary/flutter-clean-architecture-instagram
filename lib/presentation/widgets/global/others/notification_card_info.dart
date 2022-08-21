@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/config/routes/app_routes.dart';
@@ -91,9 +91,9 @@ class NotificationCardInfo extends StatelessWidget {
                 String appBarText;
                 if (notificationInfo.isThatPost &&
                     notificationInfo.isThatLike) {
-                  appBarText = StringsManager.post.tr();
+                  appBarText = StringsManager.post.tr;
                 } else {
-                  appBarText = StringsManager.comments.tr();
+                  appBarText = StringsManager.comments.tr;
                 }
                 if (isThatMobile) {
                   pushToPage(context,
