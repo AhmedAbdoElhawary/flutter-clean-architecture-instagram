@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -128,7 +128,7 @@ class _CommentInfoState extends State<CommentInfo> {
             return Text(state.toString(),
                 style: Theme.of(context).textTheme.bodyText1);
           } else {
-            return textOfLoading(context, StringsManager.loading.tr());
+            return textOfLoading(context, StringsManager.loading.tr);
           }
         });
   }
@@ -166,7 +166,7 @@ class _CommentInfoState extends State<CommentInfo> {
                 });
               },
               child: Text(
-                "${StringsManager.view.tr()} ${widget.commentInfo.replies!.length} ${StringsManager.more.tr()} ${widget.commentInfo.replies!.length > 1 ? StringsManager.replies.tr() : StringsManager.reply.tr()}",
+                "${StringsManager.view.tr} ${widget.commentInfo.replies!.length} ${StringsManager.more.tr} ${widget.commentInfo.replies!.length > 1 ? StringsManager.replies.tr : StringsManager.reply.tr}",
                 style: getNormalStyle(color: Theme.of(context).indicatorColor),
               ),
             ),
@@ -242,7 +242,7 @@ class _CommentInfoState extends State<CommentInfo> {
                     withoutRoot: false);
               },
               child: Text(
-                "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like.tr() : StringsManager.likes.tr()}",
+                "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like.tr : StringsManager.likes.tr}",
                 style: Theme.of(context).textTheme.headline1,
               ),
             ),
@@ -267,7 +267,7 @@ class _CommentInfoState extends State<CommentInfo> {
             });
           },
           child: Text(
-            StringsManager.reply.tr(),
+            StringsManager.reply.tr,
             style: Theme.of(context).textTheme.headline1,
           ),
         ),
@@ -349,7 +349,8 @@ class _CommentInfoState extends State<CommentInfo> {
             widget.commentInfo.likes.remove(myPersonalId);
             //for notification
             BlocProvider.of<NotificationCubit>(context).deleteNotification(
-                notificationCheck: createNotificationCheck(widget.postInfo.value));
+                notificationCheck:
+                    createNotificationCheck(widget.postInfo.value));
           } else {
             if (widget.isThatReply) {
               BlocProvider.of<ReplyLikesCubit>(context).putLikeOnThisReply(
@@ -396,7 +397,6 @@ class _CommentInfoState extends State<CommentInfo> {
       personalProfileImageUrl: widget.myPersonalInfo.profileImageUrl,
       isThatLike: false,
       senderName: widget.myPersonalInfo.userName,
-
     );
   }
 }
