@@ -1,15 +1,14 @@
 import 'dart:async';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+
+import 'package:get/get.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/themes/theme_service.dart';
-import 'package:instagram/core/app_prefs.dart';
+import 'package:instagram/core/translations/app_lang.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -114,7 +113,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
               );
             } else if (state is CubitGetUserInfoFailed) {
               ToastShow.toastStateError(state);
-              return Text(StringsManager.noPosts.tr(),
+              return Text(StringsManager.noPosts.tr,
                   style: Theme.of(context).textTheme.bodyText1);
             } else {
               return const ThineCircularProgress();
@@ -169,7 +168,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         builder: (context, bool themeValue, child) {
           Color themeOfApp =
               themeValue ? ColorManager.white : ColorManager.black;
-          return Text(StringsManager.create.tr(),
+          return Text(StringsManager.create.tr,
               style: getBoldStyle(color: themeOfApp, fontSize: 17));
         });
   }
@@ -218,16 +217,21 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     );
   }
 
-  GestureDetector changeLanguage() {
-    final AppPreferences appPreferences = injector<AppPreferences>();
+  GetBuilder<AppLanguage> changeLanguage() {
+    return GetBuilder<AppLanguage>(
+      init: AppLanguage(),
+      builder: (controller) {
+        return GestureDetector(
+          onTap: () {
+            controller.changeLanguage();
+            Phoenix.rebirth(context);
+            Get.updateLocale(Locale(controller.appLocale));
 
-    return GestureDetector(
-      onTap: () {
-        appPreferences.changeAppLanguage();
-        Phoenix.rebirth(context);
+          },
+          child: createSizedBox(StringsManager.changeLanguage.tr,
+              icon: Icons.language_rounded),
+        );
       },
-      child: createSizedBox(StringsManager.changeLanguage.tr(),
-          icon: Icons.language_rounded),
     );
   }
 
@@ -239,7 +243,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         ThemeOfApp().saveThemeToBox(!ThemeOfApp().loadThemeFromBox());
         darkTheme.value = ThemeMode.dark == ThemeOfApp().theme;
       },
-      child: createSizedBox(StringsManager.changeTheme.tr(),
+      child: createSizedBox(StringsManager.changeTheme.tr,
           icon: Icons.brightness_4_outlined),
     );
   }
@@ -259,12 +263,12 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           );
         });
       } else if (state is CubitAuthConfirming) {
-        ToastShow.toast(StringsManager.loading.tr());
+        ToastShow.toast(StringsManager.loading.tr);
       } else if (state is CubitAuthFailed) {
         ToastShow.toastStateError(state);
       }
       return GestureDetector(
-        child: createSizedBox(StringsManager.logOut.tr(),
+        child: createSizedBox(StringsManager.logOut.tr,
             icon: Icons.logout_rounded),
         onTap: () async {
           String? token = sharePrefs.getString("deviceToken");
@@ -310,7 +314,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             ),
             child: Center(
               child: Text(
-                StringsManager.editProfile.tr(),
+                StringsManager.editProfile.tr,
                 style: TextStyle(
                     fontSize: 17.0,
                     color: Theme.of(context).focusColor,
@@ -347,7 +351,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           borderRadius: BorderRadius.circular(3),
         ),
         child: Text(
-          StringsManager.editProfile.tr(),
+          StringsManager.editProfile.tr,
           style: getMediumStyle(color: ColorManager.black),
         ),
       ),
@@ -357,7 +361,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Widget createNewLive() {
     return InkWell(
       onTap: () {},
-      child: createSizedBox(StringsManager.live.tr(),
+      child: createSizedBox(StringsManager.live.tr,
           nameOfPath: IconsAssets.instagramHighlightStoryIcon),
     );
   }
@@ -365,14 +369,14 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Widget createStory() {
     return InkWell(
         onTap: () async => createNewStory(),
-        child: createSizedBox(StringsManager.story.tr(),
+        child: createSizedBox(StringsManager.story.tr,
             nameOfPath: IconsAssets.addInstagramStoryIcon));
   }
 
   Widget createVideo() {
     return InkWell(
         onTap: () async => createNewPost(),
-        child: createSizedBox(StringsManager.reel.tr(),
+        child: createSizedBox(StringsManager.reel.tr,
             nameOfPath: IconsAssets.videoIcon));
   }
 
@@ -392,7 +396,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Widget createPost() {
     return InkWell(
         onTap: () => createNewPost(),
-        child: createSizedBox(StringsManager.post.tr()));
+        child: createSizedBox(StringsManager.post.tr));
   }
 
   Widget createSizedBox(String text,
