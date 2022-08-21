@@ -1,5 +1,4 @@
 import 'package:get_it/get_it.dart';
-import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/data/repositories_impl/calling_rooms_repo_impl.dart';
 import 'package:instagram/data/repositories_impl/firebase_auth_repository_impl.dart';
 import 'package:instagram/data/repositories_impl/firestore_notification.dart';
@@ -94,10 +93,7 @@ Future<void> initializeDependencies() async {
   // shared prefs instance
   final sharedPrefs = await SharedPreferences.getInstance();
 
-  injector.registerSingleton<SharedPreferences>(sharedPrefs);
-
-  // app prefs instance
-  injector.registerSingleton<AppPreferences>(AppPreferences(injector()));
+  injector.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
 
   // Repository
 
