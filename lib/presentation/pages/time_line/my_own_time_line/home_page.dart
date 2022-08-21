@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -126,16 +126,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         builder: (BuildContext context, PostState state) {
           if (state is CubitMyPersonalPostsLoaded) {
             postsInfo.value = state.postsInfo;
-            return
-              postsInfo.value.isNotEmpty
+            return postsInfo.value.isNotEmpty
                 ? inViewNotifier(bodyHeight)
-                :
-            _WelcomeCards(onRefreshData: getData);
+                : _WelcomeCards(onRefreshData: getData);
           } else if (state is CubitPostFailed) {
             ToastShow.toastStateError(state);
             return Center(
                 child: Text(
-              StringsManager.somethingWrong.tr(),
+              StringsManager.somethingWrong.tr,
               style: getNormalStyle(color: Theme.of(context).focusColor),
             ));
           } else {
@@ -175,7 +173,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           ? isInView && widget.playVideo
                           : isInView;
                       return columnOfWidgets(
-                          bodyHeight, index, checkForPlatform);
+                          bodyHeight, index, checkForPlatform,isInView);
                     },
                   );
                 },
@@ -187,7 +185,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  Widget columnOfWidgets(double bodyHeight, int index, bool playTheVideo) {
+  Widget columnOfWidgets(double bodyHeight, int index, bool playTheVideo, bool isInView) {
     double storiesHeight = isThatMobile ? 672 : 500;
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -286,7 +284,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ToastShow.toastStateError(state);
             return Center(
                 child: Text(
-              StringsManager.somethingWrong.tr(),
+              StringsManager.somethingWrong.tr,
               style: getNormalStyle(color: Theme.of(context).focusColor),
             ));
           } else {
@@ -374,7 +372,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         thisForStoriesLine: true,
                         nameOfCircle: index == 0 &&
                                 publisherInfo.userId == personalInfo!.userId
-                            ? StringsManager.yourStory.tr()
+                            ? StringsManager.yourStory.tr
                             : "",
                       ),
                     ),
@@ -408,7 +406,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             bodyHeight: bodyHeight,
             moveTextMore: true,
             thisForStoriesLine: true,
-            nameOfCircle: StringsManager.yourStory.tr(),
+            nameOfCircle: StringsManager.yourStory.tr,
           ),
           Positioned(
             top: bodyHeight * .0525,
@@ -570,21 +568,26 @@ class _WelcomeCardsState extends State<_WelcomeCards>
         Padding(
           padding: const EdgeInsets.all(30.0),
           child: Text(
-            StringsManager.welcomeToInstagram.tr(),
-            style: getMediumStyle(color: ColorManager.black, fontSize: 22),
+            StringsManager.welcomeToInstagram.tr,
+            style: getMediumStyle(
+                color: Theme.of(context).focusColor, fontSize: 22),
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 5.0),
           child: Text(
-            StringsManager.followPeopleToSee.tr(),
-            style: getNormalStyle(color: ColorManager.black54, fontSize: 14),
+            StringsManager.followPeopleToSee.tr,
+            style: getNormalStyle(
+                color: Theme.of(context).textTheme.headline4!.color!,
+                fontSize: 14),
           ),
         ),
         Center(
           child: Text(
-            StringsManager.videosTheyShare.tr(),
-            style: getNormalStyle(color: ColorManager.black54, fontSize: 14),
+            StringsManager.videosTheyShare.tr,
+            style: getNormalStyle(
+                color: Theme.of(context).textTheme.headline4!.color!,
+                fontSize: 14),
           ),
         ),
       ];
@@ -604,7 +607,7 @@ class _WelcomeCardsState extends State<_WelcomeCards>
             margin: EdgeInsets.only(top: margin, bottom: margin),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: ColorManager.white,
+                color: Theme.of(context).splashColor,
                 boxShadow: [
                   BoxShadow(
                     color: ColorManager.grey.withOpacity(.15),
@@ -623,7 +626,7 @@ class _WelcomeCardsState extends State<_WelcomeCards>
   Widget emptyText() {
     return Center(
       child: Text(
-        StringsManager.noUsers.tr(),
+        StringsManager.noUsers.tr,
         style: getNormalStyle(color: Theme.of(context).focusColor),
       ),
     );
@@ -646,11 +649,12 @@ class _WelcomeCardsState extends State<_WelcomeCards>
             const SizedBox(height: 10),
             Text(
               userInfo.userName,
-              style: getNormalStyle(color: ColorManager.black),
+              style: getNormalStyle(color: Theme.of(context).focusColor),
             ),
             Text(
               userInfo.name,
-              style: getNormalStyle(color: ColorManager.black54),
+              style: getNormalStyle(
+                  color: Theme.of(context).textTheme.headline4!.color!),
             ),
             const SizedBox(height: 20),
             Row(
@@ -659,9 +663,9 @@ class _WelcomeCardsState extends State<_WelcomeCards>
                 if (lastThreePostUrls.isEmpty) ...[
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30.0),
+                      padding: const EdgeInsets.symmetric(vertical: 20.0),
                       child: Text(
-                        StringsManager.noPosts.tr(),
+                        StringsManager.noPosts.tr,
                         style:
                             getNormalStyle(color: Theme.of(context).focusColor),
                       ),
@@ -675,7 +679,11 @@ class _WelcomeCardsState extends State<_WelcomeCards>
                         child: SizedBox(
                             height: 70,
                             width: 70,
-                            child: NetworkImageDisplay(imageUrl: imageUrl)),
+                            child: NetworkImageDisplay(
+                              imageUrl: imageUrl,
+                              cachingWidth: 140,
+                              cachingHeight: 140,
+                            )),
                       );
                     },
                   ),
@@ -686,7 +694,6 @@ class _WelcomeCardsState extends State<_WelcomeCards>
             GestureDetector(
               onTap: () async {
                 FollowCubit followCubit = FollowCubit.get(context);
-
                 if (isIFollowHim) {
                   await followCubit.unFollowThisUser(
                       followingUserId: userInfo.userId,
@@ -698,10 +705,6 @@ class _WelcomeCardsState extends State<_WelcomeCards>
                       myPersonalId: myPersonalId);
                   userInfo.followerPeople.add(myPersonalId);
                 }
-                setState(() => _selectedIndex++);
-                pageController.animateToPage(_selectedIndex,
-                    duration: const Duration(milliseconds: 350),
-                    curve: Curves.easeIn);
               },
               child: followButton(isIFollowHim),
             ),
@@ -716,25 +719,27 @@ class _WelcomeCardsState extends State<_WelcomeCards>
       padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
-        color: isIFollowHim ? ColorManager.white : ColorManager.blue,
+        color:
+            isIFollowHim ? Theme.of(context).primaryColor : ColorManager.blue,
         border: Border.all(
-          color:
-              isIFollowHim ? ColorManager.lightGrey : ColorManager.transparent,
+          color: isIFollowHim
+              ? Theme.of(context).bottomAppBarColor
+              : ColorManager.transparent,
           width: 0,
         ),
         boxShadow: [
           BoxShadow(
             color: ColorManager.grey.withOpacity(.1),
-            spreadRadius: 3,
-            blurRadius: 3,
+            spreadRadius: 2,
+            blurRadius: 2,
             offset: const Offset(0, 1),
           ),
         ],
       ),
       child: isIFollowHim
-          ? Text(StringsManager.following.tr(),
-              style: getNormalStyle(color: ColorManager.black))
-          : Text(StringsManager.follow.tr(),
+          ? Text(StringsManager.following.tr,
+              style: getNormalStyle(color: Theme.of(context).focusColor))
+          : Text(StringsManager.follow.tr,
               style: getNormalStyle(color: ColorManager.white)),
     );
   }
@@ -762,17 +767,9 @@ class _WelcomeCardsState extends State<_WelcomeCards>
         opacity: _scaleController,
         child: ScaleTransition(
           scale: _scaleController,
-          child: circularProgressIndicator(context),
+          child: const ThineCircularProgress(),
         ),
       ),
-    );
-  }
-
-  CircularProgressIndicator circularProgressIndicator(BuildContext context) {
-    return CircularProgressIndicator(
-      strokeWidth: 1.5,
-      color: Theme.of(context).iconTheme.color,
-      backgroundColor: Theme.of(context).dividerColor,
     );
   }
 }
