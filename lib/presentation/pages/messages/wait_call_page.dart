@@ -1,5 +1,5 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -67,7 +67,7 @@ class VideoCallPage extends StatelessWidget {
                     return Center(child: Text('${userInfo.name} is Busy...'));
                   } else {
                     return Center(
-                      child: Text(StringsManager.somethingWrong.tr()),
+                      child: Text(StringsManager.somethingWrong.tr),
                     );
                   }
                 } else if (callingRoomState is CallingRoomsLoaded) {
