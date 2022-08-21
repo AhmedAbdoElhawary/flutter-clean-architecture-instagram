@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -213,7 +213,7 @@ class _ProfilePageState extends State<ProfilePage> {
               if (isWidthAboveMinimum) ...[
                 const SizedBox(width: 8),
                 Text(
-                  StringsManager.postsCap.tr(),
+                  StringsManager.postsCap.tr,
                 ),
               ],
             ],
@@ -230,7 +230,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               if (isWidthAboveMinimum) ...[
                 const SizedBox(width: 8),
-                Text(StringsManager.reels.tr()),
+                Text(StringsManager.reels.tr),
               ],
             ],
           ),
@@ -245,7 +245,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               if (isWidthAboveMinimum) ...[
                 const SizedBox(width: 8),
-                Text(StringsManager.videos.tr()),
+                Text(StringsManager.videos.tr),
               ],
             ],
           ),
@@ -421,10 +421,10 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget personalNumbersInfo(List<dynamic> usersIds, UserPersonalInfo userInfo,
       {bool? isThatFollowers}) {
     String text = isThatFollowers == null
-        ? StringsManager.posts.tr()
+        ? StringsManager.posts.tr
         : isThatFollowers
-            ? StringsManager.followers.tr()
-            : StringsManager.following.tr();
+            ? StringsManager.followers.tr
+            : StringsManager.following.tr;
     return Builder(builder: (builderContext) {
       List<Widget> userInfoWidgets = [
         Text(
