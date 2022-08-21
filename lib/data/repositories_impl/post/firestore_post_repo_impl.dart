@@ -15,13 +15,13 @@ class FirestorePostRepositoryImpl implements FirestorePostRepository {
     try {
       for (int i = 0; i < files.length; i++) {
         String postUrl =
-            await FirebaseStoragePost.uploadFile(files[i], 'postsImage');
+            await FirebaseStoragePost.uploadData(data: files[i],folderName:  'postsImage');
         if (i == 0) postInfo.postUrl = postUrl;
         postInfo.imagesUrls.add(postUrl);
       }
       if (coverOfVideo != null) {
         String coverOfVideoUrl =
-            await FirebaseStoragePost.uploadFile(coverOfVideo, 'postsVideo');
+            await FirebaseStoragePost.uploadData(data: coverOfVideo,folderName:  'postsVideo');
         postInfo.coverOfVideoUrl = coverOfVideoUrl;
       }
       Post newPostInfo = await FirestorePost.createPost(postInfo);
