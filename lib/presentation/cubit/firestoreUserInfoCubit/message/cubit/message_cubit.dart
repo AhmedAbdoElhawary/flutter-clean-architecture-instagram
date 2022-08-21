@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
@@ -21,13 +22,13 @@ class MessageCubit extends Cubit<MessageState> {
   Future<void> sendMessage(
       {required Message messageInfo,
       Uint8List? pathOfPhoto,
-      String pathOfRecorded = ""}) async {
+        File? recordFile}) async {
     emit(SendMessageLoading());
     await _addMessageUseCase
         .call(
             paramsOne: messageInfo,
             paramsTwo: pathOfPhoto,
-            paramsThree: pathOfRecorded)
+            paramsThree: recordFile)
         .then((messageInfo) {
       emit(SendMessageLoaded(messageInfo));
     }).catchError((e) {
