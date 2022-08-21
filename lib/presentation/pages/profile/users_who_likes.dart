@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/functions/toast_show.dart';
@@ -33,7 +33,7 @@ class UsersWhoLikes extends StatelessWidget {
         if (state is CubitGettingSpecificUsersLoaded) {
           return ShowMeTheUsers(
             usersInfo: state.specificUsersInfo,
-            emptyText: StringsManager.noUsers.tr(),
+            emptyText: StringsManager.noUsers.tr,
             showColorfulCircle: showColorfulCircle,
             isThatMyPersonalId: isThatMyPersonalId,
           );
@@ -41,7 +41,7 @@ class UsersWhoLikes extends StatelessWidget {
         if (state is CubitGettingSpecificUsersFailed) {
           ToastShow.toastStateError(state);
           return Center(
-            child: Text(StringsManager.somethingWrong.tr(),
+            child: Text(StringsManager.somethingWrong.tr,
                 style: Theme.of(context).textTheme.bodyText1),
           );
         } else {
