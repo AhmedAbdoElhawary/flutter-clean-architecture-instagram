@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/translations/app_lang.dart';
 import 'package:instagram/data/models/message.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/get_post_info.dart';
@@ -12,12 +13,10 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/get_post_in
 class SharedMessage extends StatelessWidget {
   final Message messageInfo;
   final bool isThatMine;
-  final String currentLanguage;
   const SharedMessage({
     Key? key,
     required this.messageInfo,
     required this.isThatMine,
-    required this.currentLanguage,
   }) : super(key: key);
 
   @override
@@ -31,7 +30,7 @@ class SharedMessage extends StatelessWidget {
         pushToPage(context,
             page: GetsPostInfoAndDisplay(
               postId: messageInfo.postId,
-              appBarText: StringsManager.post.tr(),
+              appBarText: StringsManager.post.tr,
             ),
             withoutRoot: false);
       },
@@ -132,14 +131,18 @@ class SharedMessage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            currentLanguage == 'en'
-                ? "${messageInfo.userNameOfSharedPost} ${messageInfo.message}"
-                : "${messageInfo.message} ${messageInfo.userNameOfSharedPost}",
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: getNormalStyle(color: Theme.of(context).focusColor),
-          ),
+          GetBuilder<AppLanguage>(
+              init: AppLanguage(),
+              builder: (controller) {
+                return Text(
+                  controller.appLocale == 'en'
+                      ? "${messageInfo.userNameOfSharedPost} ${messageInfo.message}"
+                      : "${messageInfo.message} ${messageInfo.userNameOfSharedPost}",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: getNormalStyle(color: Theme.of(context).focusColor),
+                );
+              }),
         ],
       ),
     );
