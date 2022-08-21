@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/config/routes/app_routes.dart';
@@ -161,11 +161,11 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
 
     return !myPersonalInfo.followedPeople.contains(userInfo.userId)
         ? containerOfFollowText(
-            text: StringsManager.follow.tr(),
+            text: StringsManager.follow.tr,
             isThatFollower: false,
           )
         : containerOfFollowText(
-            text: StringsManager.following.tr(),
+            text: StringsManager.following.tr,
             isThatFollower: true,
           );
   }
