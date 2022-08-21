@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
 import 'package:instagram/data/models/comment.dart';
@@ -57,7 +57,7 @@ class FirestoreReply {
     if (snap.exists) {
       return Comment.fromSnapReply(snap);
     } else {
-      return Future.error(StringsManager.userNotExist.tr());
+      return Future.error(StringsManager.userNotExist.tr);
     }
   }
 }
