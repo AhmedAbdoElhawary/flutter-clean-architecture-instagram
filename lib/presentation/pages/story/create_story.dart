@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,7 +66,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
             color: Theme.of(context).focusColor,
             height: 40,
           ),
-          Text(StringsManager.create.tr(),
+          Text(StringsManager.create.tr,
               style: getMediumStyle(
                   color: Theme.of(context).focusColor, fontSize: 20)),
           const Divider(),
@@ -83,7 +83,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
                   onPressed: () =>
                       createStory(personalInfo, userCubit, builderContext),
                   isItDone: isItDone,
-                  nameOfButton: StringsManager.share.tr(),
+                  nameOfButton: StringsManager.share.tr,
                 ),
               );
             }),
