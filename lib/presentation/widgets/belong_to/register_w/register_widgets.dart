@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,7 +40,6 @@ class _SignUpPageState extends State<RegisterWidgets> {
   Widget build(BuildContext context) {
     return buildScaffold(context);
   }
-
 
   Scaffold buildScaffold(BuildContext context) {
     double height = MediaQuery.of(context).size.height - 50;
@@ -103,7 +102,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
           ),
           const SizedBox(height: 30),
           CustomTextField(
-            hint: StringsManager.email.tr(),
+            hint: StringsManager.email.tr,
             controller: widget.emailController,
             isThatEmail: true,
             validate: widget.validateEmail,
@@ -111,12 +110,12 @@ class _SignUpPageState extends State<RegisterWidgets> {
           SizedBox(height: isThatMobile ? 15 : 6.5),
           if (!widget.isThatLogIn && widget.fullNameController != null) ...[
             CustomTextField(
-                hint: StringsManager.fullName.tr(),
+                hint: StringsManager.fullName.tr,
                 controller: widget.fullNameController!),
             SizedBox(height: isThatMobile ? 15 : 6.5),
           ],
           CustomTextField(
-            hint: StringsManager.password.tr(),
+            hint: StringsManager.password.tr,
             controller: widget.passwordController,
             isThatEmail: false,
             validate: widget.validatePassword,
@@ -149,7 +148,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
             TextButton(
               onPressed: () {},
               child: Text(
-                StringsManager.loginWithFacebook.tr(),
+                StringsManager.loginWithFacebook.tr,
                 style: getNormalStyle(color: ColorManager.blue),
               ),
             ),
@@ -165,8 +164,8 @@ class _SignUpPageState extends State<RegisterWidgets> {
       children: [
         Text(
           widget.isThatLogIn
-              ? StringsManager.noAccount.tr()
-              : StringsManager.haveAccount.tr(),
+              ? StringsManager.noAccount.tr
+              : StringsManager.haveAccount.tr,
           style:
               getNormalStyle(fontSize: 13, color: Theme.of(context).focusColor),
         ),
@@ -195,9 +194,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
 
   Text registerText() {
     return Text(
-      widget.isThatLogIn
-          ? StringsManager.signUp.tr()
-          : StringsManager.logIn.tr(),
+      widget.isThatLogIn ? StringsManager.signUp.tr : StringsManager.logIn.tr,
       style: getBoldStyle(fontSize: 13, color: ColorManager.blue),
     );
   }
