@@ -1,4 +1,4 @@
-{
+const Map<String, String> en = {
   "or": "OR",
   "less": "less",
   "reel": "Reel",
@@ -131,4 +131,4 @@
   "shareThisProfile": "Share this profile",
   "editProfile": "Edit profile",
   "changeProfilePhoto": "Change profile photo"
-}
+};
