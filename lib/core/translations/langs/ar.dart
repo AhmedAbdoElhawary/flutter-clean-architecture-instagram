@@ -1,4 +1,4 @@
-{
+const Map<String, String> ar = {
   "or": "أو",
   "less": "أقل",
   "reel": "ريل",
@@ -131,4 +131,4 @@
   "shareThisProfile": "مشاركه هذا الحساب",
   "editProfile": "تعديل الحساب",
   "changeProfilePhoto": "تغير صوره الحساب"
-}
+};
