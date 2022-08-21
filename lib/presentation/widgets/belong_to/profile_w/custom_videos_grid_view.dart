@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/post.dart';
@@ -40,7 +40,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
             }).toList())
         : Center(
             child: Text(
-            StringsManager.noPosts.tr(),
+            StringsManager.noPosts.tr,
             style: Theme.of(context).textTheme.bodyText1,
           ));
   }
