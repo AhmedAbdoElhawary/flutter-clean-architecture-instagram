@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
@@ -103,7 +103,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
 
   Widget whenBuildFailed(BuildContext context, state) {
     ToastShow.toastStateError(state);
-    return Text(StringsManager.somethingWrong.tr(),
+    return Text(StringsManager.somethingWrong.tr,
         style: getNormalStyle(color: Theme.of(context).focusColor));
   }
 
@@ -191,7 +191,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
   Widget noCommentText(BuildContext context) {
     return Center(
       child: Text(
-        StringsManager.noComments.tr(),
+        StringsManager.noComments.tr,
         style: getBoldStyle(
             fontSize: 20,
             color: Theme.of(context).focusColor,
@@ -226,7 +226,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
               children: [
                 Expanded(
                   child: Text(
-                      "${StringsManager.replyingTo.tr()} ${widget.selectedCommentInfo.value!.whoCommentInfo!.userName}",
+                      "${StringsManager.replyingTo.tr} ${widget.selectedCommentInfo.value!.whoCommentInfo!.userName}",
                       style: getNormalStyle(
                           color: Theme.of(context).disabledColor)),
                 ),
