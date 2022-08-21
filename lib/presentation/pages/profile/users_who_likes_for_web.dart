@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -31,7 +31,7 @@ class UsersWhoLikesForWeb extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(
               children: [
-                TheHeadWidgets(text: StringsManager.likes.tr()),
+                TheHeadWidgets(text: StringsManager.likes.tr),
                 customDivider(),
                 Expanded(
                   child: UsersWhoLikes(
