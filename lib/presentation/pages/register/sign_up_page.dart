@@ -1,16 +1,12 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:instagram/config/routes/app_routes.dart';
-import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/domain/entities/registered_user.dart';
-import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/screens/responsive_layout.dart';
 import 'package:instagram/presentation/screens/web_screen_layout.dart';
@@ -45,16 +41,9 @@ class _SignUpPageState extends State<SignUpPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final fullNameController = TextEditingController();
-  final AppPreferences _appPreferences = injector<AppPreferences>();
   final bool validateControllers = false;
   ValueNotifier<bool> validateEmail = ValueNotifier(false);
   ValueNotifier<bool> validatePassword = ValueNotifier(false);
-
-  @override
-  void didChangeDependencies() {
-    _appPreferences.getLocal().then((local) => {context.setLocale(local)});
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +68,7 @@ class _SignUpPageState extends State<SignUpPage> {
           bool validate = validatePasswordValue && validateEmailValue;
           return CustomElevatedButton(
             isItDone: true,
-            nameOfButton: StringsManager.next.tr(),
+            nameOfButton: StringsManager.next.tr,
             blueColor: validate ? true : false,
             onPressed: () async {
               if (validate) {
@@ -108,17 +97,10 @@ class UserNamePage extends StatefulWidget {
 
 class _UserNamePageState extends State<UserNamePage> {
   final userNameController = TextEditingController();
-  final AppPreferences _appPreferences = injector<AppPreferences>();
   final isToastShowed = ValueNotifier(false);
   bool validateEdits = false;
   bool isFieldEmpty = true;
   bool isItMoved = false;
-
-  @override
-  void didChangeDependencies() {
-    _appPreferences.getLocal().then((local) => {context.setLocale(local)});
-    super.didChangeDependencies();
-  }
 
   @override
   dispose() {
@@ -138,19 +120,19 @@ class _UserNamePageState extends State<UserNamePage> {
             children: [
               const SizedBox(height: 100),
               Text(
-                StringsManager.createUserName.tr(),
+                StringsManager.createUserName.tr,
                 style: getMediumStyle(
                     color: Theme.of(context).focusColor, fontSize: 15),
               ),
               const SizedBox(height: 10),
               Center(
                 child: Text(
-                  StringsManager.addUserName.tr(),
+                  StringsManager.addUserName.tr,
                   style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
                 ),
               ),
               Text(
-                StringsManager.youCanChangeUserNameLater.tr(),
+                StringsManager.youCanChangeUserNameLater.tr,
                 style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
               ),
               const SizedBox(height: 30),
@@ -203,7 +185,7 @@ class _UserNamePageState extends State<UserNamePage> {
           style:
               getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
           decoration: InputDecoration(
-            hintText: StringsManager.username.tr(),
+            hintText: StringsManager.username.tr,
             hintStyle: isThatMobile
                 ? getNormalStyle(color: Theme.of(context).indicatorColor)
                 : getNormalStyle(color: ColorManager.black54, fontSize: 12),
@@ -218,7 +200,7 @@ class _UserNamePageState extends State<UserNamePage> {
                 horizontal: 10, vertical: isThatMobile ? 15 : 5),
             errorText: isFieldEmpty || uniqueUserName
                 ? null
-                : StringsManager.thisUserNameExist.tr(),
+                : StringsManager.thisUserNameExist.tr,
             errorStyle: getNormalStyle(color: ColorManager.red),
           ),
         ),
@@ -264,7 +246,7 @@ class _UserNamePageState extends State<UserNamePage> {
             }
             return CustomElevatedButton(
               isItDone: authState is! CubitAuthConfirming,
-              nameOfButton: StringsManager.signUp.tr(),
+              nameOfButton: StringsManager.signUp.tr,
               blueColor: validateEdits,
               onPressed: () async {
                 if (validateEdits) {
