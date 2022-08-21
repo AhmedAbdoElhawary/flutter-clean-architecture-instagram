@@ -1,13 +1,9 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/state_manager.dart';
-import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/domain/entities/registered_user.dart';
-import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/screens/responsive_layout.dart';
@@ -29,18 +25,11 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  final AppPreferences _appPreferences = injector<AppPreferences>();
   RxBool isHeMovedToHome = false.obs;
   ValueNotifier<bool> isToastShowed = ValueNotifier(false);
   ValueNotifier<bool> isUserIdReady = ValueNotifier(true);
   ValueNotifier<bool> validateEmail = ValueNotifier(false);
   ValueNotifier<bool> validatePassword = ValueNotifier(false);
-
-  @override
-  void didChangeDependencies() {
-    _appPreferences.getLocal().then((local) => {context.setLocale(local)});
-    super.didChangeDependencies();
-  }
 
   @override
   dispose() {
@@ -111,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           );
         } else {
-          ToastShow.toast(StringsManager.somethingWrong.tr());
+          ToastShow.toast(StringsManager.somethingWrong.tr);
         }
       }
       isHeMovedToHome.value = true;
@@ -131,19 +120,19 @@ class _LoginPageState extends State<LoginPage> {
             bool validate = validatePasswordValue && validateEmailValue;
 
             return CustomElevatedButton(
-            isItDone: isUserIdReadyValue,
-            nameOfButton: StringsManager.logIn.tr(),
-            blueColor: validate,
-            onPressed: () async {
-              if (validate) {
-                isUserIdReady.value = false;
-                isToastShowed.value = false;
-                await authCubit.logIn(RegisteredUser(
-                    email: emailController.text,
-                    password: passwordController.text));
-              }
-            },
-          );
+              isItDone: isUserIdReadyValue,
+              nameOfButton: StringsManager.logIn.tr,
+              blueColor: validate,
+              onPressed: () async {
+                if (validate) {
+                  isUserIdReady.value = false;
+                  isToastShowed.value = false;
+                  await authCubit.logIn(RegisteredUser(
+                      email: emailController.text,
+                      password: passwordController.text));
+                }
+              },
+            );
           },
         ),
       ),
