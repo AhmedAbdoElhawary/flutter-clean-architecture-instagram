@@ -1,13 +1,14 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
 import 'package:instagram/config/themes/app_theme.dart';
 import 'package:instagram/config/themes/theme_service.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/translations/app_lang.dart';
+import 'package:instagram/core/translations/translations.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/pages/register/login_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/get_my_user_info.dart';
@@ -30,6 +31,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+
     myId = widget.sharePrefs.getString("myPersonalId");
     if (myId != null) myPersonalId = myId!;
 
@@ -46,11 +48,11 @@ class _MyAppState extends State<MyApp> {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     await messaging.requestPermission(
       alert: true,
-      announcement: false,
+      announcement: true,
       badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
+      carPlay: true,
+      criticalAlert: true,
+      provisional: true,
       sound: true,
     );
   }
@@ -107,25 +109,30 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget materialApp(BuildContext context) {
-    return GetMaterialApp(
-      navigatorKey: navigatorKey,
-      locale: context.locale,
-      supportedLocales: context.supportedLocales,
-      localizationsDelegates: context.localizationDelegates,
-      debugShowCheckedModeBanner: false,
-      title: 'Instagram',
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: ThemeOfApp().theme,
-      home: AnimatedSplashScreen(
-        centered: true,
-        splash: IconsAssets.splashIcon,
-        backgroundColor: ColorManager.white,
-        splashTransition: SplashTransition.scaleTransition,
-        nextScreen: myId == null
-            ? LoginPage(sharePrefs: widget.sharePrefs)
-            : GetMyPersonalInfo(myPersonalId: myId!),
-      ),
+    return GetBuilder<AppLanguage>(
+      init: AppLanguage(),
+      builder: (controller) {
+        return GetMaterialApp(
+          translations: Translation(),
+          locale: Locale(controller.appLocale),
+          fallbackLocale: const Locale('en'),
+          navigatorKey: navigatorKey,
+          debugShowCheckedModeBanner: false,
+          title: 'Instagram',
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
+          themeMode: ThemeOfApp().theme,
+          home: AnimatedSplashScreen(
+            centered: true,
+            splash: IconsAssets.splashIcon,
+            backgroundColor: ColorManager.white,
+            splashTransition: SplashTransition.scaleTransition,
+            nextScreen: myId == null
+                ? LoginPage(sharePrefs: widget.sharePrefs)
+                : GetMyPersonalInfo(myPersonalId: myId!),
+          ),
+        );
+      }
     );
   }
 }
