@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -67,7 +67,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
             height: 27,
           )),
       title: Text(
-        StringsManager.editInfo.tr(),
+        StringsManager.editInfo.tr,
         style:
             getMediumStyle(color: Theme.of(context).focusColor, fontSize: 20),
       ),
@@ -135,7 +135,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                   style: getNormalStyle(
                       color: Theme.of(context).focusColor, fontSize: 15),
                   decoration: InputDecoration(
-                    hintText: StringsManager.writeACaption.tr(),
+                    hintText: StringsManager.writeACaption.tr,
                     focusedBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: ColorManager.blue),
                     ),
