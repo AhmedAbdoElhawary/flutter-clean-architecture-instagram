@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/config/routes/app_routes.dart';
@@ -86,8 +86,8 @@ class _ListOfMessagesState extends State<ListOfMessages> {
                               child: Text(
                                   theLastMessage.message.isEmpty
                                       ? (theLastMessage.imageUrl.isEmpty
-                                          ? StringsManager.recordedSent.tr()
-                                          : StringsManager.photoSent.tr())
+                                          ? StringsManager.recordedSent.tr
+                                          : StringsManager.photoSent.tr)
                                       : theLastMessage.message,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
