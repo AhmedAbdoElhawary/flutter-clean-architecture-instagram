@@ -70,7 +70,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       required String previousImageUrl}) async {
     try {
       String imageUrl =
-          await FirebaseStoragePost.uploadFile(photo, 'personalImage');
+          await FirebaseStoragePost.uploadData(data: photo,folderName:  'personalImage');
       await FirestoreUser.updateProfileImage(
           imageUrl: imageUrl, userId: userId);
       await FirebaseStoragePost.deleteImageFromStorage(previousImageUrl);
@@ -150,24 +150,25 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   Future<Message> sendMessage(
       {required Message messageInfo,
       Uint8List? pathOfPhoto,
-      required String pathOfRecorded}) async {
+      required File? recordFile}) async {
     try {
       if (pathOfPhoto != null) {
         String imageUrl =
-            await FirebaseStoragePost.uploadFile(pathOfPhoto, "messagesFiles");
+            await FirebaseStoragePost.uploadData(data: pathOfPhoto,folderName:  "messagesFiles");
         messageInfo.imageUrl = imageUrl;
       }
-      if (pathOfRecorded.isNotEmpty) {
+      if (recordFile!=null) {
         String recordedUrl = await FirebaseStoragePost.uploadFile(
-            pathOfPhoto!, "messagesFiles",
-            postFile: File(pathOfRecorded));
+          folderName: "messagesFiles",
+            postFile: recordFile);
         messageInfo.recordedUrl = recordedUrl;
-      }
 
+      }
       Message myMessageInfo = await FireStoreMessage.sendMessage(
           userId: messageInfo.senderId,
           chatId: messageInfo.receiverId,
           message: messageInfo);
+
       await FireStoreMessage.sendMessage(
         userId: messageInfo.receiverId,
         chatId: messageInfo.senderId,
