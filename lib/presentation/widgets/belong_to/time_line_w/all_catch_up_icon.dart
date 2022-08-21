@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
@@ -41,10 +41,10 @@ class AllCatchUpIcon extends StatelessWidget {
           },
         ),
         const SizedBox(height: 5),
-        Text(StringsManager.allCaughtUp.tr(),
+        Text(StringsManager.allCaughtUp.tr,
             style: Theme.of(context).textTheme.headline3),
         const SizedBox(height: 15),
-        Text(StringsManager.noMorePostToday.tr(),
+        Text(StringsManager.noMorePostToday.tr,
             style: Theme.of(context).textTheme.headline1),
       ],
     );
