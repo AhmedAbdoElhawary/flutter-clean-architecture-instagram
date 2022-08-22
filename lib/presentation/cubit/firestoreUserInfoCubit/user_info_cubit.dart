@@ -11,7 +11,7 @@ import 'package:instagram/domain/use_cases/user/update_user_info.dart';
 import 'package:instagram/domain/use_cases/user/upload_profile_image_usecase.dart';
 part 'user_info_state.dart';
 
-class UserInfoCubit extends Cubit<FirestoreUserInfoState> {
+class UserInfoCubit extends Cubit<UserInfoState> {
   final GetUserInfoUseCase _getUserInfoUseCase;
   final GetAllUnFollowersUseCase _getAllUnFollowersUsersUseCase;
   final UpdateUserInfoUseCase _updateUserInfoUseCase;
