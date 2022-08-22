@@ -1,42 +1,42 @@
 part of '../firestoreUserInfoCubit/user_info_cubit.dart';
 
-abstract class FirestoreUserInfoState {}
+abstract class UserInfoState {}
 
-class CubitInitial extends FirestoreUserInfoState {}
+class CubitInitial extends UserInfoState {}
 
-class CubitUserLoading extends FirestoreUserInfoState {}
+class CubitUserLoading extends UserInfoState {}
 
-class CubitImageLoading extends FirestoreUserInfoState {}
+class CubitImageLoading extends UserInfoState {}
 
-class CubitImageLoaded extends FirestoreUserInfoState {
+class CubitImageLoaded extends UserInfoState {
   String imageUrl;
 
   CubitImageLoaded(this.imageUrl);
 }
 
-class CubitMyPersonalInfoLoaded extends FirestoreUserInfoState {
+class CubitMyPersonalInfoLoaded extends UserInfoState {
   UserPersonalInfo userPersonalInfo;
 
   CubitMyPersonalInfoLoaded(this.userPersonalInfo);
 }
 
 // all user info loaded
-class CubitAllUnFollowersUserLoaded extends FirestoreUserInfoState {
+class CubitAllUnFollowersUserLoaded extends UserInfoState {
   List<UserPersonalInfo> usersInfo;
 
   CubitAllUnFollowersUserLoaded(this.usersInfo);
 }
 
 // all user info loading
-class CubitAllUnFollowersUserLoading extends FirestoreUserInfoState {}
+class CubitAllUnFollowersUserLoading extends UserInfoState {}
 
-class CubitUserLoaded extends FirestoreUserInfoState {
+class CubitUserLoaded extends UserInfoState {
   UserPersonalInfo userPersonalInfo;
 
   CubitUserLoaded(this.userPersonalInfo);
 }
 
-class CubitGetUserInfoFailed extends FirestoreUserInfoState {
+class CubitGetUserInfoFailed extends UserInfoState {
   final String error;
   CubitGetUserInfoFailed(this.error);
 }
