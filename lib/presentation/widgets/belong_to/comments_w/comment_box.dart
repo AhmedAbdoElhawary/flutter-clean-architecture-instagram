@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
@@ -84,7 +84,7 @@ class _CommentBoxState extends State<CommentBox> {
                   style: Theme.of(context).textTheme.bodyText1,
                   maxLines: widget.expandCommentBox ? 1 : null,
                   decoration: InputDecoration.collapsed(
-                      hintText: StringsManager.addComment.tr(),
+                      hintText: StringsManager.addComment.tr,
                       hintStyle: TextStyle(
                           color: Theme.of(context).bottomAppBarColor)),
                   autofocus: false,
@@ -121,7 +121,7 @@ class _CommentBoxState extends State<CommentBox> {
                     }
                   },
                   child: Text(
-                    StringsManager.post.tr(),
+                    StringsManager.post.tr,
                     style: getNormalStyle(
                         color: widget.textController.text.isNotEmpty
                             ? ColorManager.blue

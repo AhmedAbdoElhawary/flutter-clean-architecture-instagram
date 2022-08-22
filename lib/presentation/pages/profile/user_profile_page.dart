@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -111,7 +111,7 @@ class _ProfilePageState extends State<UserProfilePage> {
           } else if (state is CubitGetUserInfoFailed) {
             ToastShow.toastStateError(state);
             return Text(
-              StringsManager.somethingWrong.tr(),
+              StringsManager.somethingWrong.tr,
               style: Theme.of(context).textTheme.bodyText1,
             );
           } else {
@@ -141,19 +141,19 @@ class _ProfilePageState extends State<UserProfilePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          textOfBottomSheet(StringsManager.report.tr()),
+          textOfBottomSheet(StringsManager.report.tr),
           const SizedBox(height: 15),
-          textOfBottomSheet(StringsManager.block.tr()),
+          textOfBottomSheet(StringsManager.block.tr),
           const SizedBox(height: 15),
-          textOfBottomSheet(StringsManager.aboutThisAccount.tr()),
+          textOfBottomSheet(StringsManager.aboutThisAccount.tr),
           const SizedBox(height: 15),
-          textOfBottomSheet(StringsManager.restrict.tr()),
+          textOfBottomSheet(StringsManager.restrict.tr),
           const SizedBox(height: 15),
-          textOfBottomSheet(StringsManager.hideYourStory.tr()),
+          textOfBottomSheet(StringsManager.hideYourStory.tr),
           const SizedBox(height: 15),
-          textOfBottomSheet(StringsManager.copyProfileURL.tr()),
+          textOfBottomSheet(StringsManager.copyProfileURL.tr),
           const SizedBox(height: 15),
-          textOfBottomSheet(StringsManager.shareThisProfile.tr()),
+          textOfBottomSheet(StringsManager.shareThisProfile.tr),
           const SizedBox(height: 15),
         ],
       ),
@@ -209,7 +209,7 @@ class _ProfilePageState extends State<UserProfilePage> {
           borderRadius: BorderRadius.circular(3),
         ),
         child: Text(
-          StringsManager.message.tr(),
+          StringsManager.message.tr,
           style: getMediumStyle(color: ColorManager.black),
         ),
       ),
@@ -231,7 +231,7 @@ class _ProfilePageState extends State<UserProfilePage> {
                     size: 18,
                   )
                 : Text(
-                    StringsManager.follow.tr(),
+                    StringsManager.follow.tr,
                     style: getMediumStyle(color: ColorManager.white),
                   ));
         return GestureDetector(
@@ -268,12 +268,12 @@ class _ProfilePageState extends State<UserProfilePage> {
     return !myPersonalInfo.followedPeople.contains(userInfo.userId)
         ? containerOfFollowText(
             text: isThatFollower
-                ? StringsManager.followBack.tr()
-                : StringsManager.follow.tr(),
+                ? StringsManager.followBack.tr
+                : StringsManager.follow.tr,
             isThatFollowers: false,
             isItLoading: isFollowLoading)
         : containerOfFollowText(
-            text: StringsManager.following.tr(),
+            text: StringsManager.following.tr,
             isThatFollowers: true,
             isItLoading: isFollowLoading);
   }
@@ -345,7 +345,7 @@ class _ProfilePageState extends State<UserProfilePage> {
               ));
         },
         child: containerOfFollowText(
-            text: StringsManager.message.tr(),
+            text: StringsManager.message.tr,
             isThatFollowers: true,
             isItLoading: false),
       ),

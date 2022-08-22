@@ -1,11 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instagram/config/routes/app_routes.dart';
-import 'package:instagram/core/app_prefs.dart';
 import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/functions/image_picker.dart';
@@ -14,8 +13,8 @@ import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/translations/app_lang.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/message.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
@@ -66,11 +65,8 @@ class _ChatMessagesState extends State<ChatMessages>
     }
   }
 
-  String currentLanguage = 'en';
-
   @override
   void initState() {
-    getLanguage();
     _colorAnimationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _colorTween = ColorTween(begin: Colors.purple, end: Colors.blue)
@@ -86,11 +82,6 @@ class _ChatMessagesState extends State<ChatMessages>
       isMessageLoaded.value = false;
     }
     super.didUpdateWidget(oldWidget);
-  }
-
-  getLanguage() async {
-    AppPreferences appPreferences = injector<AppPreferences>();
-    currentLanguage = await appPreferences.getAppLanguage();
   }
 
   @override
@@ -326,7 +317,6 @@ class _ChatMessagesState extends State<ChatMessages>
             ? SharedMessage(
                 messageInfo: messageInfo,
                 isThatMine: isThatMine,
-                currentLanguage: currentLanguage,
               )
             : (messageInfo.isThatImage
                 ? imageMessage(messageInfo, imageUrl)
@@ -371,7 +361,6 @@ class _ChatMessagesState extends State<ChatMessages>
             ? SharedMessage(
                 messageInfo: messageInfo,
                 isThatMine: isThatMine,
-                currentLanguage: currentLanguage,
               )
             : (messageInfo.isThatImage
                 ? imageMessage(messageInfo, imageUrl)
@@ -578,7 +567,7 @@ class _ChatMessagesState extends State<ChatMessages>
                             : MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(StringsManager.reply.tr(),
+                          Text(StringsManager.reply.tr,
                               style: getBoldStyle(
                                   color: Theme.of(context).focusColor,
                                   fontSize: 15)),
@@ -600,7 +589,7 @@ class _ChatMessagesState extends State<ChatMessages>
                                         replacedMessage: replacedMessage);
                                   }
                                 },
-                                child: Text(StringsManager.unSend.tr(),
+                                child: Text(StringsManager.unSend.tr,
                                     style: getBoldStyle(
                                         color: Theme.of(context).focusColor,
                                         fontSize: 15))),
@@ -634,44 +623,53 @@ class _ChatMessagesState extends State<ChatMessages>
             if (textValue.text.isNotEmpty) {
               return sendButton(messageCubit, textValue);
             } else {
-              return Row(
-                children: [
-                  const SizedBox(width: 10),
-                  SocialMediaRecorder(
-                    showIcons: showIcons,
-                    slideToCancelText: StringsManager.slideToCancel.tr(),
-                    cancelText: StringsManager.cancel.tr(),
-                    sendRequestFunction: (File soundFile) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) async {
-                        records.value = soundFile.path;
-                        MessageCubit messageCubit = MessageCubit.get(context);
-                        newMessageInfo.value = newMessage();
-                        isMessageLoaded.value = true;
-                        await messageCubit.sendMessage(
-                            messageInfo: newMessage(),
-                            pathOfRecorded: soundFile.path);
-                        newMessageInfo.value = null;
-                      });
-                      scrollToLastIndex(context);
-                    },
-                  ),
-                  const SizedBox(width: 15),
-                  ValueListenableBuilder(
-                    valueListenable: appearIcons,
-                    builder: (context, bool appearIconsValue, child) =>
-                        Visibility(
-                      visible: appearIconsValue,
-                      child: Row(
-                        children: [
-                          pickPhoto(messageCubit),
-                          const SizedBox(width: 15),
-                          pickSticker(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
+              return GetBuilder<AppLanguage>(
+                  init: AppLanguage(),
+                  builder: (controller) {
+                    return Row(
+                      children: [
+                        const SizedBox(width: 10),
+                        SocialMediaRecorder(
+                          showIcons: showIcons,
+                          slideToCancelText: StringsManager.slideToCancel.tr,
+                          cancelText: StringsManager.cancel.tr,
+                          sendRequestFunction: (File soundFile) async {
+                            records.value = soundFile.path;
+                            MessageCubit messageCubit =
+                                MessageCubit.get(context);
+                            newMessageInfo.value = newMessage();
+                            isMessageLoaded.value = true;
+                            await messageCubit.sendMessage(
+                                messageInfo: newMessage(),
+                                recordFile: soundFile);
+                            newMessageInfo.value = null;
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              setState(() {});
+                            });
+
+                            if (!mounted) return;
+                            scrollToLastIndex(context);
+                          },
+                        ),
+                        if (controller.appLocale == 'en')
+                          const SizedBox(width: 10),
+                        ValueListenableBuilder(
+                          valueListenable: appearIcons,
+                          builder: (context, bool appearIconsValue, child) =>
+                              Visibility(
+                            visible: appearIconsValue,
+                            child: Row(
+                              children: [
+                                pickPhoto(messageCubit),
+                                const SizedBox(width: 15),
+                                pickSticker(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  });
             }
           },
         )
@@ -704,7 +702,7 @@ class _ChatMessagesState extends State<ChatMessages>
 
                       scrollToLastIndex(context);
                     } else {
-                      ToastShow.toast(StringsManager.noImageSelected.tr());
+                      ToastShow.toast(StringsManager.noImageSelected.tr);
                     }
                   },
                   child: const CircleAvatar(
@@ -735,7 +733,7 @@ class _ChatMessagesState extends State<ChatMessages>
               cursorColor: ColorManager.teal,
               maxLines: null,
               decoration: InputDecoration.collapsed(
-                  hintText: StringsManager.messageP.tr(),
+                  hintText: StringsManager.messageP.tr,
                   hintStyle: const TextStyle(color: ColorManager.grey)),
               autofocus: false,
               controller: textValue,
@@ -765,7 +763,7 @@ class _ChatMessagesState extends State<ChatMessages>
             }
           },
           child: Text(
-            StringsManager.send.tr(),
+            StringsManager.send.tr,
             style: getMediumStyle(
               color: textValue.text.isNotEmpty
                   ? const Color.fromARGB(255, 33, 150, 243)
@@ -805,7 +803,7 @@ class _ChatMessagesState extends State<ChatMessages>
 
           scrollToLastIndex(context);
         } else {
-          ToastShow.toast(StringsManager.noImageSelected.tr());
+          ToastShow.toast(StringsManager.noImageSelected.tr);
         }
       },
       child: SvgPicture.asset(
@@ -876,7 +874,7 @@ class _ChatMessagesState extends State<ChatMessages>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr()}",
+          "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr}",
           style: TextStyle(
               color: Theme.of(context).textTheme.subtitle2!.color,
               fontSize: 13),
@@ -885,7 +883,7 @@ class _ChatMessagesState extends State<ChatMessages>
           width: 15,
         ),
         Text(
-          "${widget.userInfo.posts.length} ${StringsManager.posts.tr()}",
+          "${widget.userInfo.posts.length} ${StringsManager.posts.tr}",
           style: TextStyle(
               fontSize: 13,
               color: Theme.of(context).textTheme.subtitle2!.color),
@@ -900,7 +898,7 @@ class _ChatMessagesState extends State<ChatMessages>
         pushToPage(context,
             page: UserProfilePage(userId: widget.userInfo.userId));
       },
-      child: Text(StringsManager.viewProfile.tr(),
+      child: Text(StringsManager.viewProfile.tr,
           style: TextStyle(
               color: Theme.of(context).focusColor,
               fontWeight: FontWeight.normal)),

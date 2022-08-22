@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/message.dart';
 import 'package:instagram/data/models/post.dart';
@@ -66,7 +66,7 @@ class FirestoreUser {
     if (snap.exists) {
       return UserPersonalInfo.fromDocSnap(snap.data());
     } else {
-      return Future.error(StringsManager.userNotExist.tr());
+      return Future.error(StringsManager.userNotExist.tr);
     }
   }
 
@@ -76,7 +76,10 @@ class FirestoreUser {
       Stream<DocumentSnapshot<Map<String, dynamic>>> snapshotsInfo =
           _fireStoreUserCollection.doc(myPersonalId).snapshots();
       return snapshotsInfo
-          .map((snapshot) => UserPersonalInfo.fromDocSnap(snapshot.data()));
+          .map((snapshot) {
+        UserPersonalInfo info=UserPersonalInfo.fromDocSnap(snapshot.data());
+            return info;
+          });
     } else {
       return Stream.error("No personal id");
     }

@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -131,7 +131,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
         Widget child;
         switch (mode) {
           case LoadStatus.failed:
-            child = Text(StringsManager.clickRetry.tr(),
+            child = Text(StringsManager.clickRetry.tr,
                 style: Theme.of(context).textTheme.bodyText1);
             break;
           case LoadStatus.noMore:

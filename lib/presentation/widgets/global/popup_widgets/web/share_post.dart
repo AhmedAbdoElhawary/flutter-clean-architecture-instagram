@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/post.dart';
@@ -50,7 +50,7 @@ class _PopupSharePostState extends State<PopupSharePost> {
               children: [
                 customDivider(
                   child: TheHeadWidgets(
-                    text: StringsManager.share.tr(),
+                    text: StringsManager.share.tr,
                     makeIconsBigger: true,
                   ),
                 ),
@@ -70,8 +70,8 @@ class _PopupSharePostState extends State<PopupSharePost> {
                               i++)
                             buildContainer(selectedUsersInfo.value[i].name, i),
                           Flexible(
-                            child: messageField(searchTextController,
-                                StringsManager.search.tr()),
+                            child: messageField(
+                                searchTextController, StringsManager.search.tr),
                           ),
                         ],
                       ),
@@ -153,7 +153,7 @@ class _PopupSharePostState extends State<PopupSharePost> {
                 start: 20, bottom: 10, end: 20, top: 20),
             child: selectedUsersInfo.value.isNotEmpty
                 ? messageField(
-                    messageTextController, StringsManager.writeMessage.tr())
+                    messageTextController, StringsManager.writeMessage.tr)
                 : null,
           ),
         ),
@@ -170,7 +170,7 @@ class _PopupSharePostState extends State<PopupSharePost> {
               publisherInfo: widget.publisherInfo,
               messageTextController: messageTextController,
               selectedUsersInfo: selectedUsersValue,
-              textOfButton: StringsManager.send.tr(),
+              textOfButton: StringsManager.send.tr,
             ),
           ),
         ),

@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
@@ -37,7 +37,7 @@ class CountOfLikes extends StatelessWidget {
         }
       },
       child: Text(
-          '$likes ${likes > 1 ? StringsManager.likes.tr() : StringsManager.like.tr()}',
+          '$likes ${likes > 1 ? StringsManager.likes.tr : StringsManager.like.tr}',
           textAlign: TextAlign.left,
           style: Theme.of(context).textTheme.headline2),
     );

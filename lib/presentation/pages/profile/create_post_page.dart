@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/functions/blur_hash.dart';
@@ -104,7 +104,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                           color: Theme.of(context).focusColor, fontSize: 15),
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: StringsManager.writeACaption.tr(),
+                        hintText: StringsManager.writeACaption.tr,
                         hintStyle: TextStyle(
                             color: Theme.of(context).bottomAppBarColor),
                       ),
@@ -114,14 +114,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
               ),
             ),
             const Divider(),
-            buildText(StringsManager.tagPeople.tr()),
+            buildText(StringsManager.tagPeople.tr),
             const Divider(),
-            buildText(StringsManager.addLocation.tr()),
+            buildText(StringsManager.addLocation.tr),
             const Divider(),
-            buildText(StringsManager.alsoPostTo.tr()),
+            buildText(StringsManager.alsoPostTo.tr),
             Row(
               children: [
-                Expanded(child: buildText(StringsManager.facebook.tr())),
+                Expanded(child: buildText(StringsManager.facebook.tr)),
                 Switch(
                   value: isSwitched,
                   onChanged: (value) {
@@ -155,7 +155,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
         iconTheme: IconThemeData(color: Theme.of(context).focusColor),
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          StringsManager.newPost.tr(),
+          StringsManager.newPost.tr,
           style: getNormalStyle(color: Theme.of(context).focusColor),
         ),
         actions: actionsWidgets(context));
@@ -200,8 +200,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
     if (postCubit.newPostInfo != null) {
       if (!mounted) return;
 
-      await UserInfoCubit.get(context)
-          .updateUserPostsInfo(userId: myPersonalId, postInfo: postCubit.newPostInfo!);
+      await UserInfoCubit.get(context).updateUserPostsInfo(
+          userId: myPersonalId, postInfo: postCubit.newPostInfo!);
       await postCubit.getPostsInfo(
           postsIds: myPersonalInfo.posts, isThatMyPosts: true);
       WidgetsBinding.instance

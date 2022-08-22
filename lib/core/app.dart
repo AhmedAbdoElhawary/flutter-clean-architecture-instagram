@@ -1,17 +1,19 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
 import 'package:instagram/config/themes/app_theme.dart';
 import 'package:instagram/config/themes/theme_service.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/translations/app_lang.dart';
+import 'package:instagram/core/translations/translations.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/pages/register/login_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/get_my_user_info.dart';
 import 'package:instagram/presentation/widgets/global/others/multi_bloc_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyApp extends StatefulWidget {
@@ -33,6 +35,8 @@ class _MyAppState extends State<MyApp> {
     myId = widget.sharePrefs.getString("myPersonalId");
     if (myId != null) myPersonalId = myId!;
 
+    WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
+
     /// It's prefer to the here not in data_sources to avoid bugs when push notification.
     if (isThatMobile) {
       requestPermission();
@@ -42,6 +46,14 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  Future<void> onJoin() async {
+    await _handleCameraAndMic(Permission.camera);
+    await _handleCameraAndMic(Permission.microphone);
+  }
+
+  Future<void> _handleCameraAndMic(Permission permission) async =>
+      await permission.request();
+
   void requestPermission() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     await messaging.requestPermission(
@@ -49,7 +61,7 @@ class _MyAppState extends State<MyApp> {
       announcement: false,
       badge: true,
       carPlay: false,
-      criticalAlert: false,
+      criticalAlert: true,
       provisional: false,
       sound: true,
     );
@@ -64,16 +76,27 @@ class _MyAppState extends State<MyApp> {
           notification.hashCode,
           notification.title,
           notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              icon: 'launch_background',
-            ),
-          ),
+          payload: notification.body,
+          NotificationDetails(android: androidNotificationDetails()),
         );
       }
     });
+  }
+
+  AndroidNotificationDetails androidNotificationDetails() {
+    return AndroidNotificationDetails(
+      channel.id,
+      channel.name,
+      icon: 'launch_background',
+      importance: Importance.max,
+      enableLights: true,
+      playSound: true,
+      color: const Color.fromARGB(255, 0, 0, 0),
+      priority: Priority.high,
+      showWhen: true,
+      setAsGroupSummary: true,
+      sound: const RawResourceAndroidNotificationSound('notification'),
+    );
   }
 
   void loadFCM() async {
@@ -82,6 +105,9 @@ class _MyAppState extends State<MyApp> {
       'High Importance Notifications',
       importance: Importance.high,
       enableVibration: true,
+      playSound: true,
+      showBadge: true,
+      sound: RawResourceAndroidNotificationSound('notification'),
     );
 
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -107,25 +133,29 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget materialApp(BuildContext context) {
-    return GetMaterialApp(
-      navigatorKey: navigatorKey,
-      locale: context.locale,
-      supportedLocales: context.supportedLocales,
-      localizationsDelegates: context.localizationDelegates,
-      debugShowCheckedModeBanner: false,
-      title: 'instagram',
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: ThemeOfApp().theme,
-      home: AnimatedSplashScreen(
-        centered: true,
-        splash: IconsAssets.splashIcon,
-        backgroundColor: ColorManager.white,
-        splashTransition: SplashTransition.scaleTransition,
-        nextScreen: myId == null
-            ? LoginPage(sharePrefs: widget.sharePrefs)
-            : GetMyPersonalInfo(myPersonalId: myId!),
-      ),
-    );
+    return GetBuilder<AppLanguage>(
+        init: AppLanguage(),
+        builder: (controller) {
+          return GetMaterialApp(
+            translations: Translation(),
+            locale: Locale(controller.appLocale),
+            fallbackLocale: const Locale('en'),
+            navigatorKey: navigatorKey,
+            debugShowCheckedModeBanner: false,
+            title: 'Instagram',
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: ThemeOfApp().theme,
+            home: AnimatedSplashScreen(
+              centered: true,
+              splash: IconsAssets.splashIcon,
+              backgroundColor: ColorManager.white,
+              splashTransition: SplashTransition.scaleTransition,
+              nextScreen: myId == null
+                  ? LoginPage(sharePrefs: widget.sharePrefs)
+                  : GetMyPersonalInfo(myPersonalId: myId!),
+            ),
+          );
+        });
   }
 }

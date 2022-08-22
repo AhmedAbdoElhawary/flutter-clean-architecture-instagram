@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
@@ -35,7 +35,7 @@ class _CommentsPageForMobileState extends State<CommentsPageForMobile> {
       iconTheme: IconThemeData(color: Theme.of(context).focusColor),
       backgroundColor: Theme.of(context).primaryColor,
       title: Text(
-        StringsManager.comments.tr(),
+        StringsManager.comments.tr,
         style: getNormalStyle(color: Theme.of(context).focusColor),
       ),
     );

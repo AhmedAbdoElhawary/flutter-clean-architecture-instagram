@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -677,7 +677,7 @@ class _ImageOfPostState extends State<ImageOfPost>
           color: Theme.of(context).focusColor,
         ),
         const SizedBox(height: 10),
-        buildText(StringsManager.share.tr()),
+        buildText(StringsManager.share.tr),
       ],
     );
   }
@@ -691,11 +691,11 @@ class _ImageOfPostState extends State<ImageOfPost>
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            textOfOrders(StringsManager.archive.tr()),
+            textOfOrders(StringsManager.archive.tr),
             deletePost(postInfoValue),
             editPost(postInfoValue),
-            textOfOrders(StringsManager.hideLikeCount.tr()),
-            textOfOrders(StringsManager.turnOffCommenting.tr()),
+            textOfOrders(StringsManager.hideLikeCount.tr),
+            textOfOrders(StringsManager.turnOffCommenting.tr),
             Container(height: 10)
           ],
         ),
@@ -715,7 +715,7 @@ class _ImageOfPostState extends State<ImageOfPost>
               widget.removeThisPost!(widget.indexOfPost);
             }
           },
-          child: textOfOrders(StringsManager.delete.tr()));
+          child: textOfOrders(StringsManager.delete.tr));
     });
   }
 
@@ -727,7 +727,7 @@ class _ImageOfPostState extends State<ImageOfPost>
             await pushToPage(context,
                 page: UpdatePostInfo(oldPostInfo: postInfoValue));
           },
-          child: textOfOrders(StringsManager.edit.tr()));
+          child: textOfOrders(StringsManager.edit.tr));
     });
   }
 
@@ -766,14 +766,14 @@ class _ImageOfPostState extends State<ImageOfPost>
               });
             },
             child: textOfOrders(iFollowThem.contains(postInfoValue.publisherId)
-                ? StringsManager.unfollow.tr()
-                : StringsManager.follow.tr())),
+                ? StringsManager.unfollow.tr
+                : StringsManager.follow.tr)),
       );
     });
   }
 
   GestureDetector hideButton() {
-    return GestureDetector(child: textOfOrders(StringsManager.hide.tr()));
+    return GestureDetector(child: textOfOrders(StringsManager.hide.tr));
   }
 
   Widget textOfOrders(String text) {

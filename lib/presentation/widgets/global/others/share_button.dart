@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
@@ -15,7 +15,12 @@ import 'package:sliding_sheet/sliding_sheet.dart';
 class ShareButton extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
   final Widget? shareWidget;
-  const ShareButton({Key? key, required this.postInfo, this.shareWidget})
+  final bool isThatForVideoPage;
+  const ShareButton(
+      {Key? key,
+      required this.postInfo,
+      this.shareWidget,
+      this.isThatForVideoPage = false})
       : super(key: key);
 
   @override
@@ -44,8 +49,9 @@ class _ShareButtonState extends State<ShareButton> {
       },
       child: widget.shareWidget ??
           Padding(
-            padding: const EdgeInsetsDirectional.only(start: 15.0),
-            child: iconsOfImagePost(IconsAssets.send1Icon, lowHeight: true),
+            padding: EdgeInsetsDirectional.only(
+                start: widget.isThatForVideoPage ? 0 : 15.0),
+            child: iconsOfImagePost(IconsAssets.send1Icon),
           ),
     );
   }
@@ -59,11 +65,15 @@ class _ShareButtonState extends State<ShareButton> {
     );
   }
 
-  SvgPicture iconsOfImagePost(String path, {bool lowHeight = false}) {
+  SvgPicture iconsOfImagePost(
+    String path,
+  ) {
     return SvgPicture.asset(
       path,
-      color: Theme.of(context).focusColor,
-      height: lowHeight ? 22 : 28,
+      color: widget.isThatForVideoPage
+          ? ColorManager.white
+          : Theme.of(context).focusColor,
+      height: !widget.isThatForVideoPage ? 22 : 25,
     );
   }
 
@@ -123,7 +133,7 @@ class _ShareButtonState extends State<ShareButton> {
                 color: Theme.of(context).textTheme.headline1!.color!,
               ),
               contentPadding: const EdgeInsetsDirectional.all(12),
-              hintText: StringsManager.search.tr(),
+              hintText: StringsManager.search.tr,
               hintStyle: Theme.of(context).textTheme.headline1,
               border: InputBorder.none),
           onChanged: (_) => setState(() {}),
@@ -138,7 +148,7 @@ class _ShareButtonState extends State<ShareButton> {
         controller: _bottomSheetMessageTextController,
         cursorColor: ColorManager.teal,
         decoration: InputDecoration(
-          hintText: StringsManager.writeMessage.tr(),
+          hintText: StringsManager.writeMessage.tr,
           hintStyle: const TextStyle(
             color: ColorManager.grey,
           ),

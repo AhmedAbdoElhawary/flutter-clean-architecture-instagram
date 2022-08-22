@@ -5,13 +5,16 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:octo_image/octo_image.dart';
 
 class NetworkImageDisplay extends StatefulWidget {
-  final String imageUrl;
-  final String blurHash;
+  final int cachingHeight, cachingWidth;
+  final String imageUrl, blurHash;
   final double aspectRatio;
   final double? height;
+
   const NetworkImageDisplay({
     Key? key,
     required this.imageUrl,
+    this.cachingHeight = 720,
+    this.cachingWidth = 720,
     this.height,
     this.blurHash = "",
     this.aspectRatio = 0,
@@ -22,6 +25,11 @@ class NetworkImageDisplay extends StatefulWidget {
 }
 
 class _NetworkImageDisplayState extends State<NetworkImageDisplay> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   void didChangeDependencies() {
     if (widget.imageUrl.isNotEmpty) {
@@ -45,8 +53,12 @@ class _NetworkImageDisplayState extends State<NetworkImageDisplay> {
   }
 
   Widget buildOctoImage({double? height = double.infinity}) {
+    int cachingHeight = widget.cachingHeight;
+    int cachingWidth = widget.cachingWidth;
+    if (widget.aspectRatio != 1 && cachingHeight == 720) cachingHeight = 960;
     return OctoImage(
-      image: CachedNetworkImageProvider(widget.imageUrl),
+      image: CachedNetworkImageProvider(widget.imageUrl,
+          maxWidth: cachingWidth, maxHeight: cachingHeight),
       errorBuilder: (context, url, error) => buildError(),
       fit: BoxFit.cover,
       width: double.infinity,

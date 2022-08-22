@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/functions/toast_show.dart';
@@ -35,7 +35,7 @@ class _ActivityPageState extends State<ActivityPage> {
   Widget build(BuildContext context) {
     return isThatMobile
         ? Scaffold(
-            appBar: AppBar(title: Text(StringsManager.activity.tr())),
+            appBar: AppBar(title: Text(StringsManager.activity.tr)),
             body: buildBody(context),
           )
         : buildBody(context);
@@ -70,7 +70,7 @@ class _ActivityPageState extends State<ActivityPage> {
                       ShowMeTheUsers(
                         usersInfo: unFollowersState.usersInfo,
                         showColorfulCircle: false,
-                        emptyText: StringsManager.noActivity.tr(),
+                        emptyText: StringsManager.noActivity.tr,
                         isThatMyPersonalId: true,
                       ),
                     ],
@@ -88,7 +88,7 @@ class _ActivityPageState extends State<ActivityPage> {
                     ShowMeTheUsers(
                       usersInfo: unFollowersState.usersInfo,
                       showColorfulCircle: false,
-                      emptyText: StringsManager.noActivity.tr(),
+                      emptyText: StringsManager.noActivity.tr,
                       isThatMyPersonalId: true,
                     ),
                   ],
@@ -106,7 +106,7 @@ class _ActivityPageState extends State<ActivityPage> {
               ToastShow.toast(notificationState.error);
               return Center(
                 child: Text(
-                  StringsManager.somethingWrong.tr(),
+                  StringsManager.somethingWrong.tr,
                   style: getNormalStyle(color: Theme.of(context).focusColor),
                 ),
               );
@@ -122,7 +122,7 @@ class _ActivityPageState extends State<ActivityPage> {
     return Padding(
       padding: const EdgeInsetsDirectional.all(15),
       child: Text(
-        StringsManager.suggestionsForYou.tr(),
+        StringsManager.suggestionsForYou.tr,
         style:
             getMediumStyle(color: Theme.of(context).focusColor, fontSize: 16),
       ),
@@ -170,7 +170,7 @@ class _ShowNotificationsState extends State<_ShowNotifications> {
     } else {
       return Center(
         child: Text(
-          StringsManager.noActivity.tr(),
+          StringsManager.noActivity.tr,
           style: Theme.of(context).textTheme.bodyText1,
         ),
       );

@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/functions/toast_show.dart';
@@ -50,14 +50,14 @@ class _GetUsersInfoState extends State<GetUsersInfo> {
             return ShowMeTheUsers(
               usersInfo: state.specificUsersInfo,
               emptyText: widget.isThatFollowers
-                  ? StringsManager.noFollowers.tr()
-                  : StringsManager.noFollowings.tr(),
+                  ? StringsManager.noFollowers.tr
+                  : StringsManager.noFollowings.tr,
               isThatMyPersonalId: widget.isThatMyPersonalId,
             );
           }
           if (state is CubitGettingSpecificUsersFailed) {
             ToastShow.toastStateError(state);
-            return Text(StringsManager.somethingWrong.tr());
+            return Text(StringsManager.somethingWrong.tr);
           } else {
             return const ThineCircularProgress();
           }

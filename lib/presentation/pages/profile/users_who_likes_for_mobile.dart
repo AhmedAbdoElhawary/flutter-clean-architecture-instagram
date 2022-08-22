@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
@@ -35,7 +35,7 @@ class UsersWhoLikesForMobile extends StatelessWidget {
     return AppBar(
       elevation: 0,
       backgroundColor: Theme.of(context).primaryColor,
-      title: Text(StringsManager.likes.tr(),
+      title: Text(StringsManager.likes.tr,
           style: Theme.of(context).textTheme.bodyText1),
     );
   }

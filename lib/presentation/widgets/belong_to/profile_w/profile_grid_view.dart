@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -46,12 +46,12 @@ class _CustomGridViewState extends State<ProfileGridView> {
           )
         : Center(
             child: Text(
-            StringsManager.noPosts.tr(),
+            StringsManager.noPosts.tr,
             style: Theme.of(context).textTheme.bodyText1,
           ));
   }
 
-  void  removeThisPost(int index) {
+  void removeThisPost(int index) {
     setState(() => widget.postsInfo.removeAt(index));
   }
 }

@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/functions/toast_show.dart';
@@ -63,7 +63,7 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
               }
               if (state is CubitGettingSpecificUsersFailed) {
                 ToastShow.toastStateError(state);
-                return Text(StringsManager.somethingWrong.tr());
+                return Text(StringsManager.somethingWrong.tr);
               } else {
                 return const ThineCircularProgress();
               }
@@ -85,10 +85,10 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
         tabs: [
           Tab(
               icon: buildText(context,
-                  "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr()}")),
+                  "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr}")),
           Tab(
               icon: buildText(context,
-                  "${widget.userInfo.followedPeople.length} ${StringsManager.following.tr()}")),
+                  "${widget.userInfo.followedPeople.length} ${StringsManager.following.tr}")),
         ],
       ),
       title: buildText(context, widget.userInfo.userName),
@@ -117,7 +117,7 @@ class _TapBarView extends StatelessWidget {
         SingleChildScrollView(
           child: ShowMeTheUsers(
             usersInfo: state.followersAndFollowingsInfo.followersInfo,
-            emptyText: StringsManager.noFollowers.tr(),
+            emptyText: StringsManager.noFollowers.tr,
             isThatMyPersonalId: isThatMyPersonalId,
           ),
         ),
@@ -125,7 +125,7 @@ class _TapBarView extends StatelessWidget {
           child: ShowMeTheUsers(
             usersInfo: state.followersAndFollowingsInfo.followingsInfo,
             isThatFollower: false,
-            emptyText: StringsManager.noFollowings.tr(),
+            emptyText: StringsManager.noFollowings.tr,
             isThatMyPersonalId: isThatMyPersonalId,
           ),
         ),

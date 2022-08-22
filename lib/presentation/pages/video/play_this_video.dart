@@ -80,6 +80,8 @@ class PlayThisVideoState extends State<PlayThisVideo> {
       return AspectRatio(
         aspectRatio: 0.65,
         child: NetworkImageDisplay(
+          cachingWidth: 238,
+          cachingHeight: 430,
           blurHash: widget.videoInfo.blurHash,
           imageUrl: widget.videoInfo.coverOfVideoUrl,
         ),

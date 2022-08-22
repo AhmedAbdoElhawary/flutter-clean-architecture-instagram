@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -68,11 +68,15 @@ class _ChattingPageState extends State<ChattingPage>
 
   CircleAvatar circleAvatarOfImage() {
     return CircleAvatar(
-        radius: 45,
-        child: ClipOval(
-            child: NetworkImageDisplay(
+      radius: 45,
+      child: ClipOval(
+        child: NetworkImageDisplay(
           imageUrl: widget.userInfo.profileImageUrl,
-        )));
+          cachingWidth: 238,
+          cachingHeight: 238,
+        ),
+      ),
+    );
   }
 
   Row userName() {
@@ -115,7 +119,7 @@ class _ChattingPageState extends State<ChattingPage>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr()}",
+          "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr}",
           style: TextStyle(
               color: Theme.of(context).textTheme.subtitle2!.color,
               fontSize: 13),
@@ -124,7 +128,7 @@ class _ChattingPageState extends State<ChattingPage>
           width: 15,
         ),
         Text(
-          "${widget.userInfo.posts.length} ${StringsManager.posts.tr()}",
+          "${widget.userInfo.posts.length} ${StringsManager.posts.tr}",
           style: TextStyle(
               fontSize: 13,
               color: Theme.of(context).textTheme.subtitle2!.color),
@@ -139,7 +143,7 @@ class _ChattingPageState extends State<ChattingPage>
         pushToPage(context,
             page: UserProfilePage(userId: widget.userInfo.userId));
       },
-      child: Text(StringsManager.viewProfile.tr(),
+      child: Text(StringsManager.viewProfile.tr,
           style: TextStyle(
               color: Theme.of(context).focusColor,
               fontWeight: FontWeight.normal)),

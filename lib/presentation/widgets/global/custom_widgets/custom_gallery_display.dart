@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:custom_gallery_display/custom_gallery_display.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/compress_image.dart';
@@ -39,14 +39,14 @@ class _CustomGalleryDisplayState extends State<CustomGalleryDisplay> {
 
   TabsTexts tapsNames() {
     return TabsTexts(
-      deletingText: StringsManager.delete.tr(),
-      galleryText: StringsManager.gallery.tr(),
-      holdButtonText: StringsManager.pressAndHold.tr(),
-      limitingText: StringsManager.limitOfPhotos.tr(),
-      clearImagesText: StringsManager.clearSelectedImages.tr(),
-      notFoundingCameraText: StringsManager.noSecondaryCameraFound.tr(),
-      photoText: StringsManager.photo.tr(),
-      videoText: StringsManager.video.tr(),
+      deletingText: StringsManager.delete.tr,
+      galleryText: StringsManager.gallery.tr,
+      holdButtonText: StringsManager.pressAndHold.tr,
+      limitingText: StringsManager.limitOfPhotos.tr,
+      clearImagesText: StringsManager.clearSelectedImages.tr,
+      notFoundingCameraText: StringsManager.noSecondaryCameraFound.tr,
+      photoText: StringsManager.photo.tr,
+      videoText: StringsManager.video.tr,
     );
   }
 }

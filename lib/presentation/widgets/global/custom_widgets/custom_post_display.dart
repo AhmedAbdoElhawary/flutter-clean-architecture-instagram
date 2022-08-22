@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:instagram/core/app_prefs.dart';
-import 'package:instagram/core/utility/injector.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:instagram/core/translations/app_lang.dart';
 import 'package:instagram/data/models/comment.dart';
 import 'package:instagram/data/models/post.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_text.dart';
@@ -35,11 +35,9 @@ class CustomPostDisplay extends StatefulWidget {
 
 class _CustomPostDisplayState extends State<CustomPostDisplay>
     with TickerProviderStateMixin {
-  String currentLanguage = 'en';
 
   @override
   void initState() {
-    getLanguage();
     super.initState();
   }
 
@@ -51,12 +49,6 @@ class _CustomPostDisplayState extends State<CustomPostDisplay>
         mediaQuery.padding.top;
     return thePostsOfHomePage(bodyHeight: bodyHeight);
   }
-
-  getLanguage() async {
-    AppPreferences appPreferences = injector<AppPreferences>();
-    currentLanguage = await appPreferences.getAppLanguage();
-  }
-
   Widget thePostsOfHomePage({required double bodyHeight}) {
     return SizedBox(
       width: double.infinity,
@@ -88,23 +80,28 @@ class _CustomPostDisplayState extends State<CustomPostDisplay>
       Post postInfoValue, double bodyHeight, BuildContext context) {
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 11.5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (postInfoValue.likes.isNotEmpty)
-            CountOfLikes(postInfo: postInfoValue),
-          const SizedBox(height: 5),
-          if (currentLanguage == 'en') ...[
-            ReadMore(
-                "${postInfoValue.publisherInfo!.name} ${postInfoValue.caption}",
-                2),
-          ] else ...[
-            ReadMore(
-                "${postInfoValue.caption} ${postInfoValue.publisherInfo!.name}",
-                2),
-          ],
-        ],
+      child:  GetBuilder<AppLanguage>(
+          init: AppLanguage(),
+        builder: (AppLanguage controller) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (postInfoValue.likes.isNotEmpty)
+                CountOfLikes(postInfo: postInfoValue),
+              const SizedBox(height: 5),
+              if (controller.appLocale == 'en') ...[
+                ReadMore(
+                    "${postInfoValue.publisherInfo!.name} ${postInfoValue.caption}",
+                    2),
+              ] else ...[
+                ReadMore(
+                    "${postInfoValue.caption} ${postInfoValue.publisherInfo!.name}",
+                    2),
+              ],
+            ],
+          );
+        }
       ),
     );
   }

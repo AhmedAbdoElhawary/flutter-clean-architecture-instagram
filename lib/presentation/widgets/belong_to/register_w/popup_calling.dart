@@ -23,18 +23,19 @@ class _PopupCallingState extends State<PopupCalling> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState>(
+      bloc: UsersInfoReelTimeBloc.get(context)..add(LoadMyPersonalInfo()),
       builder: (context, state) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (state is MyPersonalInfoLoaded &&
               !amICalling &&
               state.myPersonalInfoInReelTime.channelId.isNotEmpty) {
             if (!isHeMoved) {
+              isHeMoved = true;
               pushToPage(context,
                   page: CallingRingingPage(
                       channelId: state.myPersonalInfoInReelTime.channelId,
                       clearMoving: clearMoving),
                   withoutRoot: false);
-              isHeMoved = true;
             }
           }
         });

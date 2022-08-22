@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -118,7 +118,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               height: 27,
             )),
         title: Text(
-          StringsManager.editProfile.tr(),
+          StringsManager.editProfile.tr,
           style:
               getMediumStyle(color: Theme.of(context).focusColor, fontSize: 20),
         ),
@@ -225,29 +225,29 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 });
               });
             } else {
-              ToastShow.toast(StringsManager.noImageSelected.tr());
+              ToastShow.toast(StringsManager.noImageSelected.tr);
             }
           },
           child: Text(
-            StringsManager.changeProfilePhoto.tr(),
+            StringsManager.changeProfilePhoto.tr,
             style: getNormalStyle(fontSize: 18, color: ColorManager.blue),
           ),
         )),
-        textFormField(widget.nameController, StringsManager.name.tr()),
+        textFormField(widget.nameController, StringsManager.name.tr),
         const SizedBox(height: 10),
         userNameTextField(context),
         const SizedBox(height: 10),
-        textFormField(widget.pronounsController, StringsManager.pronouns.tr()),
+        textFormField(widget.pronounsController, StringsManager.pronouns.tr),
         const SizedBox(height: 10),
-        textFormField(widget.websiteController, StringsManager.website.tr()),
+        textFormField(widget.websiteController, StringsManager.website.tr),
         const SizedBox(height: 10),
-        textFormField(widget.bioController, StringsManager.bio.tr()),
+        textFormField(widget.bioController, StringsManager.bio.tr),
         const SizedBox(height: 15),
         const Divider(),
         const SizedBox(height: 8),
         GestureDetector(
           child: Text(
-            StringsManager.personalInformationSettings.tr(),
+            StringsManager.personalInformationSettings.tr,
             style: getNormalStyle(fontSize: 18, color: ColorManager.blue),
           ),
         ),
@@ -278,7 +278,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             }));
         return userNameTextFormField(
           widget.userNameController,
-          StringsManager.username.tr(),
+          StringsManager.username.tr,
           uniqueUserName: validateEdits,
         );
       },
@@ -301,7 +301,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             color: !uniqueUserName ? ColorManager.red : ColorManager.grey),
         errorText: uniqueUserName && validateEdits
             ? null
-            : StringsManager.thisUserNameExist.tr(),
+            : StringsManager.thisUserNameExist.tr,
         errorStyle: getNormalStyle(color: ColorManager.red),
       ),
       onChanged: (value) {

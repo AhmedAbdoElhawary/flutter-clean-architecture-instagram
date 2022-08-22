@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/config/routes/app_routes.dart';
@@ -174,7 +174,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
                   controller: commentTextController.value,
                   cursorColor: ColorManager.teal,
                   decoration: InputDecoration(
-                    hintText: StringsManager.addComment.tr(),
+                    hintText: StringsManager.addComment.tr,
                     hintStyle: TextStyle(
                         color: Theme.of(context).bottomAppBarColor,
                         fontSize: 14),
@@ -215,7 +215,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
                       }
                     },
                     child: Text(
-                      StringsManager.post.tr(),
+                      StringsManager.post.tr,
                       style: getNormalStyle(
                           color: commentTextController.value.text.isNotEmpty
                               ? ColorManager.blue
@@ -311,7 +311,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
           }
         },
         child: Text(
-          "${StringsManager.viewAll.tr()} $commentsLength ${commentsLength > 1 ? StringsManager.comments.tr() : StringsManager.comment.tr()}",
+          "${StringsManager.viewAll.tr} $commentsLength ${commentsLength > 1 ? StringsManager.comments.tr : StringsManager.comment.tr}",
           style: Theme.of(context).textTheme.headline1,
         ),
       ),

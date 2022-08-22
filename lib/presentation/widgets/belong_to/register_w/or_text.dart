@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -19,7 +19,7 @@ class OrText extends StatelessWidget {
           color: ColorManager.grey,
         )),
         Text(
-          StringsManager.or.tr(),
+          StringsManager.or.tr,
           style: getBoldStyle(color: Theme.of(context).disabledColor),
         ),
         const Expanded(

@@ -6,8 +6,8 @@ const String arabic = "ar";
 const String english = "en";
 const String assetPathLocalisations = "assets/translations";
 
-const Locale arabicLocal = Locale("ar");
-const Locale englishLocal = Locale("en");
+const Locale arabicLocal = Locale("ar","SA");
+const Locale englishLocal = Locale("en","US");
 
 extension LanguageTypeExtension on LanguageType {
   String getValue() {

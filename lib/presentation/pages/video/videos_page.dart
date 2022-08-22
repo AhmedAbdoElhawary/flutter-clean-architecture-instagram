@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -75,7 +75,7 @@ class VideosPageState extends State<VideosPage> {
                     ToastShow.toastStateError(state);
                     return Center(
                         child: Text(
-                      StringsManager.noVideos.tr(),
+                      StringsManager.noVideos.tr,
                       style: TextStyle(
                           color: Theme.of(context).focusColor, fontSize: 20),
                     ));
@@ -195,10 +195,10 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
 
   @override
   Widget build(BuildContext context) {
-    return verticalWidgets();
+    return horizontalWidgets();
   }
 
-  Widget verticalWidgets() {
+  Widget horizontalWidgets() {
     return Padding(
       padding:
           const EdgeInsetsDirectional.only(end: 25.0, bottom: 20, start: 15),
@@ -295,8 +295,8 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
             (isFollowedValue == null &&
                         personalInfo.followerPeople.contains(myPersonalId)) ||
                     (isFollowedValue != null && isFollowedValue)
-                ? StringsManager.following.tr()
-                : StringsManager.follow.tr(),
+                ? StringsManager.following.tr
+                : StringsManager.follow.tr,
             style: const TextStyle(color: ColorManager.white),
           ),
         ));
@@ -318,10 +318,10 @@ class _VerticalButtons extends StatefulWidget {
 class _VerticalButtonsState extends State<_VerticalButtons> {
   @override
   Widget build(BuildContext context) {
-    return horizontalWidgets();
+    return verticalWidgets();
   }
 
-  Padding horizontalWidgets() {
+  Padding verticalWidgets() {
     return Padding(
       padding: const EdgeInsetsDirectional.only(end: 15.0, bottom: 8),
       child: Align(
@@ -337,7 +337,8 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
                 commentButton(videoInfoValue),
                 buildSizedBox(),
                 numberOfComment(videoInfoValue),
-                ShareButton(postInfo: widget.videoInfo),
+                ShareButton(
+                    postInfo: widget.videoInfo, isThatForVideoPage: true),
                 sizedBox(),
                 GestureDetector(
                   child: SvgPicture.asset(
@@ -371,7 +372,8 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
   }
 
   goToCommentPage(Post videoInfo) async {
-    await pushToPage(context, page: CommentsPageForMobile(postInfo: ValueNotifier(videoInfo)));
+    await pushToPage(context,
+        page: CommentsPageForMobile(postInfo: ValueNotifier(videoInfo)));
     widget.stopVideo.value = false;
   }
 

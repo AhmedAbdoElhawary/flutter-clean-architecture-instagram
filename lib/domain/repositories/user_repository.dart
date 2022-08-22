@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:instagram/data/models/message.dart';
 import 'package:instagram/data/models/post.dart';
@@ -42,7 +43,7 @@ abstract class FirestoreUserRepository {
   Future<Message> sendMessage(
       {required Message messageInfo,
       Uint8List? pathOfPhoto,
-      required String pathOfRecorded});
+      required File? recordFile});
 
   Stream<List<Message>> getMessages({required String receiverId});
 
