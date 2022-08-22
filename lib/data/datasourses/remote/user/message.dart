@@ -3,6 +3,7 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/datasourses/remote/notification/device_notification.dart';
 import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
 import 'package:instagram/data/models/message.dart';
+import 'package:instagram/data/models/push_notification.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 
 class FireStoreMessage {
@@ -19,8 +20,8 @@ class FireStoreMessage {
     if (userId != myPersonalId) {
       userCollection.update({"numberOfNewMessages": FieldValue.increment(1)});
       UserPersonalInfo receiverInfo = await FirestoreUser.getUserInfo(userId);
-      List tokens = receiverInfo.devicesTokens;
-      if (tokens.isNotEmpty) {
+      String token = receiverInfo.deviceToken;
+      if (token.isNotEmpty) {
         String body = message.message.isNotEmpty
             ? message.message
             : (message.isThatImage
@@ -28,8 +29,14 @@ class FireStoreMessage {
                 : (message.isThatPost
                     ? "Share with you a post"
                     : "Send message"));
-        await DeviceNotification.sendPopupNotification(
-            devicesTokens: tokens, body: body, title: message.senderId);
+        PushNotification detail = PushNotification(
+          title: message.senderId,
+          body: body,
+          deviceToken: token,
+          notificationRoute: "message",
+          routeParameterId: message.senderId,
+        );
+        await DeviceNotification.sendPopupNotification(pushNotification: detail);
       }
     }
     return await _sendMessage(userId: userId, chatId: chatId, message: message);
