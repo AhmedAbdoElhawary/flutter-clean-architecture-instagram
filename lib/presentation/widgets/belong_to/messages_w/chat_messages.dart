@@ -13,6 +13,7 @@ import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/translations/app_lang.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/message.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
@@ -622,47 +623,53 @@ class _ChatMessagesState extends State<ChatMessages>
             if (textValue.text.isNotEmpty) {
               return sendButton(messageCubit, textValue);
             } else {
-              return Row(
-                children: [
-                  const SizedBox(width: 10),
-                  SocialMediaRecorder(
-                    showIcons: showIcons,
-                    slideToCancelText: StringsManager.slideToCancel.tr,
-                    cancelText: StringsManager.cancel.tr,
-                    sendRequestFunction: (File soundFile) async {
-                      records.value = soundFile.path;
-                      print("records.value: ${records.value}");
-                      MessageCubit messageCubit = MessageCubit.get(context);
-                      newMessageInfo.value = newMessage();
-                      isMessageLoaded.value = true;
-                      await messageCubit.sendMessage(
-                          messageInfo: newMessage(),
-                          recordFile: soundFile);
-                      newMessageInfo.value = null;
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        setState(() {});
-                      });
+              return GetBuilder<AppLanguage>(
+                  init: AppLanguage(),
+                  builder: (controller) {
+                    return Row(
+                      children: [
+                        const SizedBox(width: 10),
+                        SocialMediaRecorder(
+                          showIcons: showIcons,
+                          slideToCancelText: StringsManager.slideToCancel.tr,
+                          cancelText: StringsManager.cancel.tr,
+                          sendRequestFunction: (File soundFile) async {
+                            records.value = soundFile.path;
+                            MessageCubit messageCubit =
+                                MessageCubit.get(context);
+                            newMessageInfo.value = newMessage();
+                            isMessageLoaded.value = true;
+                            await messageCubit.sendMessage(
+                                messageInfo: newMessage(),
+                                recordFile: soundFile);
+                            newMessageInfo.value = null;
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              setState(() {});
+                            });
 
-                      if (!mounted) return;
-                      scrollToLastIndex(context);
-                    },
-                  ),
-                  ValueListenableBuilder(
-                    valueListenable: appearIcons,
-                    builder: (context, bool appearIconsValue, child) =>
-                        Visibility(
-                      visible: appearIconsValue,
-                      child: Row(
-                        children: [
-                          pickPhoto(messageCubit),
-                          const SizedBox(width: 15),
-                          pickSticker(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
+                            if (!mounted) return;
+                            scrollToLastIndex(context);
+                          },
+                        ),
+                        if (controller.appLocale == 'en')
+                          const SizedBox(width: 10),
+                        ValueListenableBuilder(
+                          valueListenable: appearIcons,
+                          builder: (context, bool appearIconsValue, child) =>
+                              Visibility(
+                            visible: appearIconsValue,
+                            child: Row(
+                              children: [
+                                pickPhoto(messageCubit),
+                                const SizedBox(width: 15),
+                                pickSticker(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  });
             }
           },
         )
