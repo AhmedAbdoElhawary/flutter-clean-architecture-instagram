@@ -35,11 +35,11 @@ class UsersInfoReelTimeBloc
     } else if (event is UpdateMyPersonalInfo) {
       yield* _mapUpdateMyInfoToState(event);
     }
-    if (event is LoadAllUsersInfoInfo) {
-      yield* _mapLoadUsersInfoToState();
-    } else if (event is UpdateAllUsersInfoInfo) {
-      yield* _mapUpdateUsersInfoToState(event);
-    }
+    // if (event is LoadAllUsersInfoInfo) {
+    //   yield* _mapLoadUsersInfoToState();
+    // } else if (event is UpdateAllUsersInfoInfo) {
+    //   yield* _mapUpdateUsersInfoToState(event);
+    // }
   }
 
   Stream<UsersInfoReelTimeState> _mapLoadMyInfoToState() async* {
