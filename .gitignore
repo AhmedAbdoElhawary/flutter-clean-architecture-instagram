@@ -19,7 +19,7 @@ migrate_working_dir/
 lib/core/private_keys.dart
 **/app/google-services.json
 **/web/index.html
-lib/presentation/widgets/try.dart
+lib/presentation/widgets/global/try
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
