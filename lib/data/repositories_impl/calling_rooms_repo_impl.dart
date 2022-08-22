@@ -19,8 +19,9 @@ class CallingRoomsRepoImpl implements CallingRoomsRepository {
           channelId: channelId,
           myPersonalId: myPersonalInfo.userId);
       if (!isUserAvailable) {
-        throw Exception('Busy');
-      } else {
+        throw Exception("Busy");
+      }
+      else {
         return channelId;
       }
     } catch (e) {
