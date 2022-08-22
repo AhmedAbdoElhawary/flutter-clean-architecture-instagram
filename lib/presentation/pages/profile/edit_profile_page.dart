@@ -54,7 +54,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserInfoCubit, FirestoreUserInfoState>(
+    return BlocBuilder<UserInfoCubit, UserInfoState>(
       buildWhen: (previous, current) {
         if (previous != current && (current is CubitMyPersonalInfoLoaded)) {
           return true;
@@ -88,7 +88,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Scaffold buildScaffold(BuildContext context,
-      FirestoreUserInfoState getUserState, UserInfoCubit updateUserCubit) {
+      UserInfoState getUserState, UserInfoCubit updateUserCubit) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: isThatMobile
@@ -102,7 +102,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  AppBar buildAppBar(BuildContext context, FirestoreUserInfoState getUserState,
+  AppBar buildAppBar(BuildContext context, UserInfoState getUserState,
       UserInfoCubit updateUserCubit) {
     return AppBar(
         iconTheme: IconThemeData(color: Theme.of(context).focusColor),
@@ -155,7 +155,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     charactersOfName: charactersOfName,
                     stories: widget.userInfo.stories,
                     userId: widget.userInfo.userId,
-                    devicesTokens: widget.userInfo.devicesTokens,
+                    deviceToken: widget.userInfo.deviceToken,
                     lastThreePostUrls: widget.userInfo.lastThreePostUrls,
                   );
                   await updateUserCubit
