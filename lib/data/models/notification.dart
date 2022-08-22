@@ -23,11 +23,12 @@ class CustomNotification extends NotificationCheck {
     required this.personalProfileImageUrl,
     required this.senderName,
   }) : super(
-            receiverId: receiverId,
-            isThatPost: isThatPost,
-            isThatLike: isThatLike,
-            postId: postId,
-            senderId: senderId);
+          receiverId: receiverId,
+          isThatPost: isThatPost,
+          isThatLike: isThatLike,
+          postId: postId,
+          senderId: senderId,
+        );
   static CustomNotification fromJson(Map<String, dynamic>? snap) {
     return CustomNotification(
       notificationUid: snap?["notificationUid"] ?? "",
@@ -45,7 +46,7 @@ class CustomNotification extends NotificationCheck {
     );
   }
 
-  Map<String, dynamic> toMap() => {
+   Map<String, dynamic> toMap() => {
         "text": text,
         "time": time,
         "receiverId": receiverId,

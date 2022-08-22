@@ -115,8 +115,7 @@ class _ListOfMessagesState extends State<ListOfMessages> {
                           page: BlocProvider<MessageBloc>(
                             create: (context) => injector<MessageBloc>(),
                             child: ChattingPage(
-                              userInfo: usersInfo[index].userInfo!,
-                            ),
+                                userInfo: usersInfo[index].userInfo!),
                           ));
                     }
                   },

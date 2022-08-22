@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/toast_show.dart';
+import 'package:instagram/core/my_app/notifications_permissions.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
@@ -46,7 +47,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   UserPersonalInfo? personalInfo;
   ValueNotifier<bool> reLoadData = ValueNotifier(false);
   Post? selectedPostInfo;
-  int? centerItemIndex;
   bool rebuild = true;
   List postsIds = [];
   ValueNotifier<List<Post>> postsInfo = ValueNotifier([]);
@@ -81,16 +81,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   @override
+  void initState() {
+    getData(0);
+
+    /// It's prefer to the here not in data_sources to avoid bugs when push notification.
+    if (isThatMobile) {
+      WidgetsBinding.instance.addPostFrameCallback(
+          (_) async => await notificationPermissions(context));
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final bodyHeight = mediaQuery.size.height -
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
-    centerItemIndex ??= ((bodyHeight / 2) / bodyHeight).floor();
-    if (rebuild) {
-      getData(0);
-      rebuild = false;
-    }
 
     return Scaffold(
       appBar: isThatMobile ? CustomAppBar.basicAppBar(context) : null,
@@ -173,7 +180,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           ? isInView && widget.playVideo
                           : isInView;
                       return columnOfWidgets(
-                          bodyHeight, index, checkForPlatform,isInView);
+                          bodyHeight, index, checkForPlatform, isInView);
                     },
                   );
                 },
@@ -185,7 +192,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  Widget columnOfWidgets(double bodyHeight, int index, bool playTheVideo, bool isInView) {
+  Widget columnOfWidgets(
+      double bodyHeight, int index, bool playTheVideo, bool isInView) {
     double storiesHeight = isThatMobile ? 672 : 500;
     return Column(
       mainAxisSize: MainAxisSize.min,

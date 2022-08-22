@@ -1,22 +1,25 @@
 import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:instagram/core/private_keys.dart';
-import 'package:instagram/core/app.dart';
+import 'package:instagram/core/my_app/app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/utility/injector.dart';
 
-Future<void> main() async {
-  final sharePrefs = await init();
-
-  Widget myApp =Phoenix(child:  MyApp(sharePrefs: sharePrefs));
-  runApp(myApp);
+Future<void> _onBackgroundMessage(RemoteMessage message) async {
+  if (kDebugMode) print("onBackgroundMessage: $message");
 }
 
+Future<void> main() async {
+  final sharePrefs = await init();
+  Widget myApp = Phoenix(child: MyApp(sharePrefs: sharePrefs));
+  runApp(myApp);
+}
 
 Future<SharedPreferences> init() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +42,8 @@ Future<SharedPreferences> init() async {
     await Firebase.initializeApp();
     await CustomGalleryPermissions.requestPermissionExtend();
   }
+  FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
+
   await initializeDependencies();
   await GetStorage.init();
   if (!kIsWeb) {

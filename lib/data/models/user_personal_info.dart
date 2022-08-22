@@ -12,7 +12,7 @@ class UserPersonalInfo extends Equatable {
   List<dynamic> followedPeople;
   List<dynamic> followerPeople;
   List<dynamic> posts;
-  List<dynamic> devicesTokens;
+  String deviceToken;
   List<dynamic> stories;
   List<Story>? storiesInfo;
   List<dynamic> charactersOfName;
@@ -26,11 +26,11 @@ class UserPersonalInfo extends Equatable {
     required this.posts,
     required this.stories,
     required this.charactersOfName,
-    required this.devicesTokens,
     required this.lastThreePostUrls,
     this.storiesInfo,
     this.name = "",
     this.channelId = "",
+    this.deviceToken = "",
     this.bio = "",
     this.email = "",
     this.profileImageUrl = "",
@@ -55,32 +55,30 @@ class UserPersonalInfo extends Equatable {
       charactersOfName: snap?["charactersOfName"] ?? [],
       numberOfNewNotifications: snap?["numberOfNewNotifications"] ?? 0,
       numberOfNewMessages: snap?["numberOfNewMessages"] ?? 0,
-      devicesTokens: snap?["devicesTokens"] ?? [],
+      deviceToken: snap?["deviceToken"] ?? "",
       channelId: snap?["channelId"] ?? "",
       lastThreePostUrls: snap?["lastThreePostUrls"] ?? [],
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'following': followedPeople,
-      'followers': followerPeople,
-      'posts': posts,
-      'stories': stories,
-      'name': name,
-      'userName': userName,
-      'bio': bio,
-      'email': email,
-      'profileImageUrl': profileImageUrl,
-      'charactersOfName': charactersOfName,
-      'uid': userId,
-      'numberOfNewNotifications': numberOfNewNotifications,
-      'numberOfNewMessages': numberOfNewMessages,
-      'devicesTokens': devicesTokens,
-      'channelId': channelId,
-      'lastThreePostUrls': lastThreePostUrls,
-    };
-  }
+  Map<String, dynamic> toMap() => {
+        'following': followedPeople,
+        'followers': followerPeople,
+        'posts': posts,
+        'stories': stories,
+        'name': name,
+        'userName': userName,
+        'bio': bio,
+        'email': email,
+        'profileImageUrl': profileImageUrl,
+        'charactersOfName': charactersOfName,
+        'uid': userId,
+        'numberOfNewNotifications': numberOfNewNotifications,
+        'numberOfNewMessages': numberOfNewMessages,
+        'deviceToken': deviceToken,
+        'channelId': channelId,
+        'lastThreePostUrls': lastThreePostUrls,
+      };
 
   @override
   List<Object?> get props => [
@@ -98,7 +96,7 @@ class UserPersonalInfo extends Equatable {
         charactersOfName,
         numberOfNewNotifications,
         numberOfNewMessages,
-        devicesTokens,
+        deviceToken,
         channelId,
         lastThreePostUrls,
       ];

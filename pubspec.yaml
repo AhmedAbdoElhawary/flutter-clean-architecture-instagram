@@ -74,6 +74,7 @@ dependencies:
   #  firebase_core_web: ^1.7.1
   video_thumbnail: ^0.5.2
   permission_handler: ^9.2.0
+  overlay_support: ^2.0.1
   flutter_blurhash: ^0.7.0
   uuid: ^3.0.6
   path_provider: ^2.0.11 #
