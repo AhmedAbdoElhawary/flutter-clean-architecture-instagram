@@ -8,7 +8,7 @@ class PersonalImageIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserInfoCubit, FirestoreUserInfoState>(
+    return BlocBuilder<UserInfoCubit, UserInfoState>(
         builder: (context, state) {
       UserInfoCubit userCubit = UserInfoCubit.get(context);
       String userImage = userCubit.myPersonalInfo.profileImageUrl;
