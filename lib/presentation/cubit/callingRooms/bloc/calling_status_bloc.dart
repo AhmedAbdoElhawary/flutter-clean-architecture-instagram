@@ -27,8 +27,8 @@ class CallingStatusBloc extends Bloc<CallingStatusEvent, CallingStatusState> {
 
   Stream<CallingStatusState> _mapLoadInfoToState(String userIAmCalling) async* {
     _getCallingStatusUseCase.call(params: userIAmCalling).listen(
-      (myPersonalInfo) {
-        add(UpdateCallingStatus(myPersonalInfo));
+      (isHeOnLine) {
+        add(UpdateCallingStatus(isHeOnLine));
       },
     ).onError((e) async* {
       yield CallingStatusFailed(e.toString());
