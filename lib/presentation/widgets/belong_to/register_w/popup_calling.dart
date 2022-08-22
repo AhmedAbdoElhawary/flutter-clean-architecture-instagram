@@ -20,6 +20,7 @@ class PopupCalling extends StatefulWidget {
 
 class _PopupCallingState extends State<PopupCalling> {
   bool isHeMoved = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState>(
