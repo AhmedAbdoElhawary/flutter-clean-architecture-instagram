@@ -18,11 +18,9 @@ class FirestoreNotification {
 
     String? token = await FirebaseMessaging.instance.getToken();
 
-    if (token != null && !myPersonalInfo.devicesTokens.contains(token)) {
-      await _fireStoreUserCollection.doc(userId).update({
-        'devicesTokens': FieldValue.arrayUnion([token])
-      });
-      myPersonalInfo.devicesTokens.add(token);
+    if (token != null && !(myPersonalInfo.deviceToken == token)) {
+      await _fireStoreUserCollection.doc(userId).update({'deviceToken': token});
+      myPersonalInfo.deviceToken = token;
       await sharePrefs.setString("deviceToken", token);
     }
     return myPersonalInfo;
@@ -30,9 +28,9 @@ class FirestoreNotification {
 
   static Future<void> deleteDeviceToken(
       {required String userId, required String? deviceToken}) async {
-    await _fireStoreUserCollection.doc(userId).update({
-      'devicesTokens': FieldValue.arrayRemove([deviceToken])
-    });
+    await _fireStoreUserCollection
+        .doc(userId)
+        .update({'deviceToken': deviceToken});
   }
 
   static Future<String> createNotification(
@@ -43,12 +41,10 @@ class FirestoreNotification {
         .update({"numberOfNewNotifications": FieldValue.increment(1)});
     UserPersonalInfo receiverInfo =
         await FirestoreUser.getUserInfo(newNotification.receiverId);
-    List tokens = receiverInfo.devicesTokens;
-    if (tokens.isNotEmpty) {
-      await DeviceNotification.sendPopupNotification(
-          devicesTokens: tokens,
-          body: newNotification.text,
-          title: newNotification.senderName);
+    String token = receiverInfo.deviceToken;
+    if (token.isNotEmpty) {
+      await DeviceNotification.pushNotification(
+          customNotification: newNotification, token: token);
     }
     return await _createNotification(newNotification);
   }
