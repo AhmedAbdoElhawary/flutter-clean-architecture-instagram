@@ -1,19 +1,25 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/config/routes/app_routes.dart';
+import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/message.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instagram/presentation/pages/profile/user_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/chat_messages.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
 class ChattingPage extends StatefulWidget {
-  final UserPersonalInfo userInfo;
-
-  const ChattingPage({Key? key, required this.userInfo}) : super(key: key);
+  final UserPersonalInfo? userInfo;
+  final String userId;
+  const ChattingPage({Key? key, this.userInfo, this.userId = ""})
+      : super(key: key);
 
   @override
   State<ChattingPage> createState() => _ChattingPageState();
@@ -27,51 +33,75 @@ class _ChattingPageState extends State<ChattingPage>
 
   @override
   Widget build(BuildContext context) {
+    return widget.userInfo != null
+        ? scaffold(widget.userInfo!)
+        : getUserInfo(context);
+  }
+
+  BlocBuilder<UserInfoCubit, UserInfoState> getUserInfo(BuildContext context) {
+    return BlocBuilder<UserInfoCubit, UserInfoState>(
+      bloc: UserInfoCubit.get(context)
+        ..getUserInfo(widget.userId, isThatMyPersonalId: false),
+      buildWhen: (previous, current) =>
+          previous != current && current is CubitGettingChatUsersInfoLoaded,
+      builder: (context, state) {
+        if (state is CubitUserLoaded) {
+          return scaffold(state.userPersonalInfo);
+        } else if (state is CubitGetUserInfoFailed) {
+          ToastShow.toast(state.error);
+          return Center(child: Text(StringsManager.somethingWrong.tr));
+        } else {
+          return const ThineCircularProgress();
+        }
+      },
+    );
+  }
+
+  Scaffold scaffold(UserPersonalInfo userInfo) {
     return Scaffold(
-      appBar: isThatMobile
-          ? CustomAppBar.chattingAppBar(widget.userInfo, context)
-          : null,
+      appBar:
+          isThatMobile ? CustomAppBar.chattingAppBar(userInfo, context) : null,
       body: GestureDetector(
           onTap: () {
             unSend.value = false;
             deleteThisMessage.value = null;
           },
           child: isThatMobile
-              ? ChatMessages(userInfo: widget.userInfo)
-              : buildBodyForWeb()),
+              ? ChatMessages(userInfo: userInfo)
+              : buildBodyForWeb(userInfo)),
     );
   }
 
-  Widget buildBodyForWeb() {
+  Widget buildBodyForWeb(UserPersonalInfo userInfo) {
     return Column(
       children: [
-        buildUserInfo(context),
-        ChatMessages(userInfo: widget.userInfo),
+        buildUserInfo(userInfo),
+        ChatMessages(userInfo: userInfo),
       ],
     );
   }
 
-  Column buildUserInfo(BuildContext context) {
+  Column buildUserInfo(UserPersonalInfo userInfo) {
     return Column(
       children: [
-        circleAvatarOfImage(),
+        circleAvatarOfImage(userInfo),
         const SizedBox(height: 10),
-        nameOfUser(),
+        nameOfUser(userInfo),
         const SizedBox(height: 5),
-        userName(),
+        userName(userInfo),
         const SizedBox(height: 5),
-        someInfoOfUser(),
-        viewProfileButton(context),
+        someInfoOfUser(userInfo),
+        viewProfileButton(userInfo),
       ],
     );
   }
 
-  CircleAvatar circleAvatarOfImage() {
+  CircleAvatar circleAvatarOfImage(UserPersonalInfo userInfo) {
     return CircleAvatar(
       radius: 45,
       child: ClipOval(
         child: NetworkImageDisplay(
-          imageUrl: widget.userInfo.profileImageUrl,
+          imageUrl: userInfo.profileImageUrl,
           cachingWidth: 238,
           cachingHeight: 238,
         ),
@@ -79,12 +109,12 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Row userName() {
+  Row userName(UserPersonalInfo userInfo) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          widget.userInfo.userName,
+          userInfo.userName,
           style: TextStyle(
               color: Theme.of(context).focusColor,
               fontSize: 14,
@@ -104,9 +134,9 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Text nameOfUser() {
+  Text nameOfUser(UserPersonalInfo userInfo) {
     return Text(
-      widget.userInfo.name,
+      userInfo.name,
       style: TextStyle(
           color: Theme.of(context).focusColor,
           fontSize: 16,
@@ -114,12 +144,12 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Row someInfoOfUser() {
+  Row someInfoOfUser(UserPersonalInfo userInfo) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr}",
+          "${userInfo.followerPeople.length} ${StringsManager.followers.tr}",
           style: TextStyle(
               color: Theme.of(context).textTheme.subtitle2!.color,
               fontSize: 13),
@@ -128,7 +158,7 @@ class _ChattingPageState extends State<ChattingPage>
           width: 15,
         ),
         Text(
-          "${widget.userInfo.posts.length} ${StringsManager.posts.tr}",
+          "${userInfo.posts.length} ${StringsManager.posts.tr}",
           style: TextStyle(
               fontSize: 13,
               color: Theme.of(context).textTheme.subtitle2!.color),
@@ -137,11 +167,10 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  TextButton viewProfileButton(BuildContext context) {
+  TextButton viewProfileButton(UserPersonalInfo userInfo) {
     return TextButton(
       onPressed: () {
-        pushToPage(context,
-            page: UserProfilePage(userId: widget.userInfo.userId));
+        pushToPage(context, page: UserProfilePage(userId: userInfo.userId));
       },
       child: Text(StringsManager.viewProfile.tr,
           style: TextStyle(
