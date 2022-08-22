@@ -76,7 +76,10 @@ class FirestoreUser {
       Stream<DocumentSnapshot<Map<String, dynamic>>> snapshotsInfo =
           _fireStoreUserCollection.doc(myPersonalId).snapshots();
       return snapshotsInfo
-          .map((snapshot) => UserPersonalInfo.fromDocSnap(snapshot.data()));
+          .map((snapshot) {
+        UserPersonalInfo info=UserPersonalInfo.fromDocSnap(snapshot.data());
+            return info;
+          });
     } else {
       return Stream.error("No personal id");
     }
