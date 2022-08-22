@@ -26,10 +26,6 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   ValueNotifier<bool> playMainReelVideos = ValueNotifier(false);
 
   CupertinoTabController controller = CupertinoTabController();
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
