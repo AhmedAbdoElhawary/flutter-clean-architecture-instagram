@@ -76,7 +76,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       child: ValueListenableBuilder(
         valueListenable: rebuildUserInfo,
         builder: (context, bool rebuildValue, child) =>
-            BlocBuilder<UserInfoCubit, FirestoreUserInfoState>(
+            BlocBuilder<UserInfoCubit, UserInfoState>(
           bloc: widget.userName.isNotEmpty
               ? (BlocProvider.of<UserInfoCubit>(context)
                 ..getUserFromUserName(widget.userName))
