@@ -1,9 +1,7 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/domain/entities/calling_status.dart';
@@ -42,14 +40,13 @@ class VideoCallPage extends StatelessWidget {
                 if (state is CallingStatusLoaded &&
                     state.callingStatus == false &&
                     callingRoomState is CallingRoomsLoaded) {
+                  CallingRoomsCubit.get(context).deleteTheRoom(
+                      channelId: callingRoomState.channelId,
+                      userId: userInfo.userId);
                   WidgetsBinding.instance.addPostFrameCallback((_) async {
-                    CallingRoomsCubit.get(context).deleteTheRoom(
-                        channelId: callingRoomState.channelId,
-                        userId: userInfo.userId);
-
                     await Future.delayed(const Duration(seconds: 2))
                         .then((value) {
-                      Navigator.of(callingRoomContext).maybePop();
+                      Navigator.of(context).maybePop();
                     });
                   });
                   return const Center(
@@ -60,15 +57,13 @@ class VideoCallPage extends StatelessWidget {
                   WidgetsBinding.instance.addPostFrameCallback((_) async {
                     await Future.delayed(const Duration(seconds: 1))
                         .then((value) {
-                      Navigator.of(callingRoomContext).maybePop();
+                      Navigator.of(context).maybePop();
                     });
                   });
                   if (callingRoomState.error == "Busy") {
                     return Center(child: Text('${userInfo.name} is Busy...'));
                   } else {
-                    return Center(
-                      child: Text(StringsManager.somethingWrong.tr),
-                    );
+                    return const Center(child: Text("Call ended..."));
                   }
                 } else if (callingRoomState is CallingRoomsLoaded) {
                   return CallPage(
