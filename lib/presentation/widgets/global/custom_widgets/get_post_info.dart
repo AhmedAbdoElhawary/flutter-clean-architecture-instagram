@@ -60,7 +60,6 @@ class GetsPostInfoAndDisplay extends StatelessWidget {
                 indexOfPost: 0,
                 popupWebContainer: true,
                 postsInfo: ValueNotifier(state.postsInfo),
-
               );
             }
           } else {
