@@ -311,7 +311,6 @@ class _UserNamePageState extends State<UserNamePage> {
       followedPeople: const [],
       posts: const [],
       stories: const [],
-      devicesTokens: const [],
       lastThreePostUrls: const [],
     );
     userCubit.addNewUser(newUserInfo);
