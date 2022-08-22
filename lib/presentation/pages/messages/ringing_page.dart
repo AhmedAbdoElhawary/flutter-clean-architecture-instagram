@@ -24,6 +24,11 @@ class CallingRingingPage extends StatefulWidget {
 class _CallingRingingPageState extends State<CallingRingingPage> {
   bool pop = false;
   @override
+  void dispose() {
+    widget.clearMoving();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.grey,
@@ -33,7 +38,8 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
             ..getUsersInfoInThisRoom(channelId: widget.channelId),
           builder: (context, state) {
             if (pop) {
-              WidgetsBinding.instance.addPostFrameCallback((_) async {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                setState(() => pop = false);
                 Navigator.of(context).maybePop();
               });
             }
@@ -91,7 +97,6 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
                     UserInfoCubit.getMyPersonalInfo(context);
                 await CallingRoomsCubit.get(context)
                     .cancelJoiningToRoom(userId: myPersonalInfo.userId);
-                widget.clearMoving();
                 if (!mounted) return;
                 Navigator.of(context).maybePop();
               },
