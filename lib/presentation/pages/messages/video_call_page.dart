@@ -9,7 +9,6 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/domain/entities/calling_status.dart';
 import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 enum UserCallingType { sender, receiver }
 
@@ -52,17 +51,8 @@ class CallPageState extends State<CallPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
     initialize();
   }
-
-  Future<void> onJoin() async {
-    await _handleCameraAndMic(Permission.camera);
-    await _handleCameraAndMic(Permission.microphone);
-  }
-
-  Future<void> _handleCameraAndMic(Permission permission) async =>
-      await permission.request();
 
   /// Create your own app id with agora with "testing mode"
   /// it's very simple, just go to https://www.agora.io/en/ and create your own project and get your own app id in [agoraAppId]
@@ -172,6 +162,8 @@ class CallPageState extends State<CallPage> {
     if (widget.userCallingType == UserCallingType.receiver &&
         views.length == 1 &&
         enter) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => setState(() => amICalling = false));
       Navigator.of(context).maybePop();
     }
 
