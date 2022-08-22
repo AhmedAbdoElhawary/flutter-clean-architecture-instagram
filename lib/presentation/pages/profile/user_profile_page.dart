@@ -74,7 +74,7 @@ class _ProfilePageState extends State<UserProfilePage> {
     return ValueListenableBuilder(
       valueListenable: rebuildUserInfo,
       builder: (context, bool rebuildUserInfoValue, child) =>
-          BlocBuilder<UserInfoCubit, FirestoreUserInfoState>(
+          BlocBuilder<UserInfoCubit, UserInfoState>(
         bloc: widget.userName.isNotEmpty
             ? (BlocProvider.of<UserInfoCubit>(context)
               ..getUserFromUserName(widget.userName))
@@ -167,7 +167,7 @@ class _ProfilePageState extends State<UserProfilePage> {
   }
 
   List<Widget> widgetsAboveTapBarsForMobile(
-      FirestoreUserInfoState userInfoState) {
+      UserInfoState userInfoState) {
     return [
       followButton(userInfoState),
       const SizedBox(width: 5),
@@ -178,7 +178,7 @@ class _ProfilePageState extends State<UserProfilePage> {
     ];
   }
 
-  List<Widget> widgetsAboveTapBarsForWeb(FirestoreUserInfoState userInfoState) {
+  List<Widget> widgetsAboveTapBarsForWeb(UserInfoState userInfoState) {
     return [
       const SizedBox(width: 20),
       messageButtonForWeb(),
@@ -278,7 +278,7 @@ class _ProfilePageState extends State<UserProfilePage> {
             isItLoading: isFollowLoading);
   }
 
-  Widget followButton(FirestoreUserInfoState userInfoState) {
+  Widget followButton(UserInfoState userInfoState) {
     return BlocBuilder<FollowCubit, FollowState>(
       builder: (context, stateOfFollow) {
         return Expanded(
