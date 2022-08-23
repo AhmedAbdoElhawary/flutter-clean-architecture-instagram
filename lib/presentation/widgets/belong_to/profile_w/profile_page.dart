@@ -122,8 +122,8 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           tabBarIcons(),
           Shimmer.fromColors(
-            baseColor: Theme.of(context).textTheme.headline5!.color!,
-            highlightColor: Theme.of(context).textTheme.headline6!.color!,
+            baseColor: Theme.of(context).textTheme.headlineSmall!.color!,
+            highlightColor: Theme.of(context).textTheme.titleLarge!.color!,
             child: GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -307,7 +307,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Text(userInfo.name,
-                      style: Theme.of(context).textTheme.headline2),
+                      style: Theme.of(context).textTheme.displayMedium),
                   const SizedBox(height: 5),
                   Text(userInfo.bio,
                       style: getNormalStyle(
@@ -349,7 +349,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(userInfo.name,
-                      style: Theme.of(context).textTheme.headline2),
+                      style: Theme.of(context).textTheme.displayMedium),
                   ReadMore(userInfo.bio, 4),
                   const SizedBox(height: 10),
                   Row(
