@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 
 class PersonalImageIcon extends StatelessWidget {
@@ -8,19 +8,20 @@ class PersonalImageIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserInfoCubit, UserInfoState>(
-        builder: (context, state) {
-      UserInfoCubit userCubit = UserInfoCubit.get(context);
-      String userImage = userCubit.myPersonalInfo.profileImageUrl;
-
-      return CircleAvatar(
-          radius: 14,
-          backgroundImage:
-              userImage.isNotEmpty ? NetworkImage(userImage) : null,
-          backgroundColor: Theme.of(context).hintColor,
-          child: userImage.isEmpty
-              ? const Icon(Icons.person, color: ColorManager.white)
-              : null);
+    return Builder(builder: (context) {
+      UserPersonalInfo userCubit = UserInfoCubit.getMyPersonalInfo(context);
+      String userImage = userCubit.profileImageUrl;
+      if (userImage.isNotEmpty) {
+        return CircleAvatar(
+            radius: 14,
+            backgroundImage: NetworkImage(userImage),
+            backgroundColor: Theme.of(context).hintColor);
+      } else {
+        return CircleAvatar(
+            radius: 14,
+            backgroundColor: Theme.of(context).hintColor,
+            child: const Icon(Icons.person, color: ColorManager.white));
+      }
     });
   }
 }
