@@ -346,7 +346,7 @@ class StoryWidgetState extends State<StoryWidget> {
                                             cursorColor: Colors.teal,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .bodyText1,
+                                                .bodyLarge,
                                             onTap: () {
                                               storyController.value.pause();
                                             },
