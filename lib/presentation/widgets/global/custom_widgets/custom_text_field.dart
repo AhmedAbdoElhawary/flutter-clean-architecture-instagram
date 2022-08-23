@@ -39,7 +39,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
