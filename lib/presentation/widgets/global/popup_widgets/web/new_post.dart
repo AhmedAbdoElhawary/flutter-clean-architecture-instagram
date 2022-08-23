@@ -212,7 +212,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
     PostCubit postCubit =
         BlocProvider.of<PostCubit>(builder2context, listen: false);
     await postCubit.createPost(postInfo, selectedImages.value);
-    if (postCubit.newPostInfo !=null) {
+    if (postCubit.newPostInfo != null) {
       await userCubit.updateUserPostsInfo(
           userId: personalInfo.userId, postInfo: postCubit.newPostInfo!);
       await postCubit.getPostsInfo(
