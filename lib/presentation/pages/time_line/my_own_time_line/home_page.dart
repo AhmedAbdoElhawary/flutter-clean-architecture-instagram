@@ -588,7 +588,7 @@ class _WelcomeCardsState extends State<_WelcomeCards>
           child: Text(
             StringsManager.followPeopleToSee.tr,
             style: getNormalStyle(
-                color: Theme.of(context).textTheme.headline4!.color!,
+                color: Theme.of(context).textTheme.headlineMedium!.color!,
                 fontSize: 14),
           ),
         ),
@@ -596,7 +596,7 @@ class _WelcomeCardsState extends State<_WelcomeCards>
           child: Text(
             StringsManager.videosTheyShare.tr,
             style: getNormalStyle(
-                color: Theme.of(context).textTheme.headline4!.color!,
+                color: Theme.of(context).textTheme.headlineMedium!.color!,
                 fontSize: 14),
           ),
         ),
@@ -664,7 +664,7 @@ class _WelcomeCardsState extends State<_WelcomeCards>
             Text(
               userInfo.name,
               style: getNormalStyle(
-                  color: Theme.of(context).textTheme.headline4!.color!),
+                  color: Theme.of(context).textTheme.headlineMedium!.color!),
             ),
             const SizedBox(height: 20),
             Row(
