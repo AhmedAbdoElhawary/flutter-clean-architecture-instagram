@@ -8,7 +8,6 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/message.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instagram/presentation/pages/profile/user_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/chat_messages.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
@@ -43,15 +42,17 @@ class _ChattingPageState extends State<ChattingPage>
       bloc: UserInfoCubit.get(context)
         ..getUserInfo(widget.userId, isThatMyPersonalId: false),
       buildWhen: (previous, current) =>
-          previous != current && current is CubitGettingChatUsersInfoLoaded,
+          previous != current && current is CubitUserLoaded,
       builder: (context, state) {
         if (state is CubitUserLoaded) {
           return scaffold(state.userPersonalInfo);
         } else if (state is CubitGetUserInfoFailed) {
           ToastShow.toast(state.error);
-          return Center(child: Text(StringsManager.somethingWrong.tr));
+
+          return Scaffold(
+              body: Center(child: Text(StringsManager.somethingWrong.tr)));
         } else {
-          return const ThineCircularProgress();
+          return const Scaffold(body: ThineCircularProgress());
         }
       },
     );
