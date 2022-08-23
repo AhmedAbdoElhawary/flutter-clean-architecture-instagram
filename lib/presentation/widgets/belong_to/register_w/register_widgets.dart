@@ -19,6 +19,7 @@ class RegisterWidgets extends StatefulWidget {
   final bool isThatLogIn;
   final ValueNotifier<bool> validateEmail;
   final ValueNotifier<bool> validatePassword;
+  final ValueNotifier<bool>? rememberPassword;
 
   const RegisterWidgets({
     Key? key,
@@ -27,6 +28,7 @@ class RegisterWidgets extends StatefulWidget {
     required this.passwordController,
     required this.customTextButton,
     this.fullNameController,
+    this.rememberPassword,
     required this.validateEmail,
     required this.validatePassword,
   }) : super(key: key);
@@ -120,6 +122,31 @@ class _SignUpPageState extends State<RegisterWidgets> {
             isThatEmail: false,
             validate: widget.validatePassword,
           ),
+          if (!widget.isThatLogIn) ...[
+            Flexible(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 4, vertical: 15),
+                child: Row(
+                  children: [
+                    ValueListenableBuilder(
+                      valueListenable: widget.rememberPassword!,
+                      builder: (context, bool rememberPasswordValue, child) =>
+                          Checkbox(
+                              value: rememberPasswordValue,
+                              activeColor: ColorManager.blue,
+                              onChanged: (value) => widget.rememberPassword!
+                                  .value = !rememberPasswordValue),
+                    ),
+                    Text(
+                      StringsManager.rememberPassword.tr,
+                      style: getNormalStyle(color: ColorManager.grey),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
           widget.customTextButton,
           const SizedBox(height: 15),
           if (!widget.isThatLogIn) ...[
