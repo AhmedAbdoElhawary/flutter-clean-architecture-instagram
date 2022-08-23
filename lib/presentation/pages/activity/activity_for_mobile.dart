@@ -171,7 +171,7 @@ class _ShowNotificationsState extends State<_ShowNotifications> {
       return Center(
         child: Text(
           StringsManager.noActivity.tr,
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       );
     }
