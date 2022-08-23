@@ -45,20 +45,18 @@ Future<void> _listenFCM(BuildContext context) async {
     }
   });
 
-
-
   /// When app is close
   FirebaseMessaging.instance.getInitialMessage().then((value) async {
-    if (value != null)await _handleMessage(context, value);
+    if (value != null) await _handleMessage(context, value);
   });
 
   /// When app is onBackground
   FirebaseMessaging.onMessageOpenedApp
-      .listen((m) async =>await _handleMessage(context, m));
+      .listen((m) async => await _handleMessage(context, m));
 }
 
-Future<void> _handleMessage(BuildContext context, RemoteMessage message) async{
- await _pushToPage(
+Future<void> _handleMessage(BuildContext context, RemoteMessage message) async {
+  await _pushToPage(
       route: message.data["route"],
       routeParameterId: message.data["routeParameterId"],
       context);
