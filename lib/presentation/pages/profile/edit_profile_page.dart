@@ -87,8 +87,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Scaffold buildScaffold(BuildContext context,
-      UserInfoState getUserState, UserInfoCubit updateUserCubit) {
+  Scaffold buildScaffold(BuildContext context, UserInfoState getUserState,
+      UserInfoCubit updateUserCubit) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: isThatMobile
