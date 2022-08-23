@@ -106,7 +106,6 @@ Future<void> _pushToPage(BuildContext context,
         .joinToRoom(channelId: routeParameterId, userInfo: myPersonalInfo);
     page = CallPage(
       channelName: routeParameterId,
-
       role: ClientRole.Broadcaster,
       userCallingId: userCallingId,
       userCallingType: UserCallingType.receiver,
