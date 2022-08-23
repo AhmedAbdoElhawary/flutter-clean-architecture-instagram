@@ -60,7 +60,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
       return Center(
         child: Text(
           widget.emptyText,
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       );
     }
@@ -96,14 +96,14 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
               children: [
                 Text(
                   userInfo.userName,
-                  style: Theme.of(context).textTheme.headline2,
+                  style: Theme.of(context).textTheme.displayMedium,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
                 const SizedBox(height: 5),
                 Text(
                   userInfo.name,
-                  style: Theme.of(context).textTheme.headline1,
+                  style: Theme.of(context).textTheme.displayLarge,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 )
