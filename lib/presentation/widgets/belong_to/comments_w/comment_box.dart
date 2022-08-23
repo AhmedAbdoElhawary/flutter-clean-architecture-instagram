@@ -81,7 +81,7 @@ class _CommentBoxState extends State<CommentBox> {
                   keyboardType: TextInputType.multiline,
                   cursorColor: ColorManager.teal,
                   focusNode: widget.currentFocus.value,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                   maxLines: widget.expandCommentBox ? 1 : null,
                   decoration: InputDecoration.collapsed(
                       hintText: StringsManager.addComment.tr,
