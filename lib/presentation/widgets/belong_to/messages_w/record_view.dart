@@ -35,7 +35,7 @@ class RecordViewState extends State<RecordView> {
         ? Center(
             child: Text(
             StringsManager.noRecordsYet,
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyLarge,
           ))
         : Row(
             children: [
