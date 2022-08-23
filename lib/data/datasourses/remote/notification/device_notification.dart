@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:instagram/core/private_keys.dart';
 import 'package:instagram/data/models/notification.dart';
 import 'package:instagram/data/models/push_notification.dart';
+import 'package:instagram/core/utility/private_keys.dart';
 
 class DeviceNotification {
   static Future<void> pushNotification(

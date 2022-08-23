@@ -39,10 +39,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 20, end: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: SizedBox(
         height: isThatMobile ? null : 37,
         width: double.infinity,

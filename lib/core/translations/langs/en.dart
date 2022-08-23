@@ -15,6 +15,7 @@ const Map<String, String> en = {
   "posting": "Posting",
   "unSend": "UnSend",
   "send": "Send",
+  "rememberPassword": "Remember password",
   "undo": "Undo",
   "done": "Done",
   "cancel": "Cancel",

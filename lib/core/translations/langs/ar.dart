@@ -18,6 +18,7 @@ const Map<String, String> ar = {
   "posting": "يتم النشر",
   "done": "تم",
   "undo": "إلغاء",
+  "rememberPassword": "تذكر كلمه السر",
   "welcomeToInstagram": "أهلا بك إلى إنستجرام",
   "followPeopleToSee": "تابع الأشخاص لرؤية صورهم",
   "videosTheyShare": "والفيديوهات التي يشاركونها.",

@@ -44,6 +44,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final bool validateControllers = false;
   ValueNotifier<bool> validateEmail = ValueNotifier(false);
   ValueNotifier<bool> validatePassword = ValueNotifier(false);
+  ValueNotifier<bool> rememberPassword = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
@@ -55,33 +56,41 @@ class _SignUpPageState extends State<SignUpPage> {
       isThatLogIn: false,
       validateEmail: validateEmail,
       validatePassword: validatePassword,
+      rememberPassword: rememberPassword,
     );
   }
 
   Widget customTextButton() {
     return ValueListenableBuilder(
-      valueListenable: validateEmail,
-      builder: (context, bool validateEmailValue, child) =>
+      valueListenable: rememberPassword,
+      builder: (context, bool rememberPasswordValue, child) =>
           ValueListenableBuilder(
-        valueListenable: validatePassword,
-        builder: (context, bool validatePasswordValue, child) {
-          bool validate = validatePasswordValue && validateEmailValue;
-          return CustomElevatedButton(
-            isItDone: true,
-            nameOfButton: StringsManager.next.tr,
-            blueColor: validate ? true : false,
-            onPressed: () async {
-              if (validate) {
-                TextsControllers textsControllers = TextsControllers(
-                  emailController: emailController,
-                  passwordController: passwordController,
-                  fullNameController: fullNameController,
-                );
-                pushToPage(context, page: UserNamePage(textsControllers));
-              }
-            },
-          );
-        },
+        valueListenable: validateEmail,
+        builder: (context, bool validateEmailValue, child) =>
+            ValueListenableBuilder(
+          valueListenable: validatePassword,
+          builder: (context, bool validatePasswordValue, child) {
+            bool validate = validatePasswordValue &&
+                validateEmailValue &&
+                rememberPasswordValue;
+            return CustomElevatedButton(
+              isItDone: true,
+              isThatSignIn: true,
+              nameOfButton: StringsManager.next.tr,
+              blueColor: validate ? true : false,
+              onPressed: () async {
+                if (validate) {
+                  TextsControllers textsControllers = TextsControllers(
+                    emailController: emailController,
+                    passwordController: passwordController,
+                    fullNameController: fullNameController,
+                  );
+                  pushToPage(context, page: UserNamePage(textsControllers));
+                }
+              },
+            );
+          },
+        ),
       ),
     );
   }
