@@ -41,8 +41,7 @@ class _ActivityPageState extends State<ActivityPage> {
         : buildBody(context);
   }
 
-  BlocBuilder<UserInfoCubit, UserInfoState> buildBody(
-      BuildContext context) {
+  BlocBuilder<UserInfoCubit, UserInfoState> buildBody(BuildContext context) {
     return BlocBuilder<UserInfoCubit, UserInfoState>(
       bloc: UserInfoCubit.get(context)..getAllUnFollowersUsers(myPersonalInfo),
       buildWhen: (previous, current) =>
