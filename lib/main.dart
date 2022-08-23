@@ -11,12 +11,17 @@ import 'package:instagram/core/my_app/app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/utility/injector.dart';
 
-Future<void> _onBackgroundMessage(RemoteMessage message) async {
-  if (kDebugMode) print("onBackgroundMessage: $message");
+Future<void> backgroundHandler(RemoteMessage message) async {
+  if (kDebugMode) {
+    print(message.data.toString());
+    print(message.notification!.title);
+  }
 }
 
 Future<void> main() async {
   final sharePrefs = await init();
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+
   Widget myApp = Phoenix(child: MyApp(sharePrefs: sharePrefs));
   runApp(myApp);
 }
@@ -42,7 +47,6 @@ Future<SharedPreferences> init() async {
     await Firebase.initializeApp();
     await CustomGalleryPermissions.requestPermissionExtend();
   }
-  FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
 
   await initializeDependencies();
   await GetStorage.init();
