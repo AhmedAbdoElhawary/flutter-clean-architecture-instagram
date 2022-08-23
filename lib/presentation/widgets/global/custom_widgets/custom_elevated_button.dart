@@ -7,11 +7,13 @@ class CustomElevatedButton extends StatefulWidget {
   final String nameOfButton;
   final bool isItDone;
   final bool blueColor;
+  final bool isThatSignIn;
   final AsyncCallback onPressed;
   const CustomElevatedButton(
       {Key? key,
       required this.isItDone,
       this.blueColor = true,
+      this.isThatSignIn = false,
       required this.nameOfButton,
       required this.onPressed})
       : super(key: key);
@@ -26,7 +28,8 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
     return GestureDetector(
       onTap: () async => widget.onPressed(),
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.symmetric(
+            horizontal: 20, vertical: widget.isThatSignIn ? 0 : 20),
         child: Container(
             margin: const EdgeInsetsDirectional.all(3.0),
             padding: const EdgeInsetsDirectional.all(15.0),
