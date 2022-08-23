@@ -136,7 +136,6 @@ class StringsManager {
 
   static const String noPosts = "noPosts";
 
-
   static const String tryAddPost = "tryAddPost";
   static const String noVideos = "noVideos";
 
