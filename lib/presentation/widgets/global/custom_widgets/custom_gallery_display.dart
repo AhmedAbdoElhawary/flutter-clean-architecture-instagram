@@ -33,8 +33,8 @@ class _CustomGalleryDisplayState extends State<CustomGalleryDisplay> {
     return AppTheme(
         focusColor: Theme.of(context).focusColor,
         primaryColor: Theme.of(context).primaryColor,
-        shimmerBaseColor: Theme.of(context).textTheme.headline5!.color!,
-        shimmerHighlightColor: Theme.of(context).textTheme.headline6!.color!);
+        shimmerBaseColor: Theme.of(context).textTheme.headlineSmall!.color!,
+        shimmerHighlightColor: Theme.of(context).textTheme.titleLarge!.color!);
   }
 
   TabsTexts tapsNames() {
