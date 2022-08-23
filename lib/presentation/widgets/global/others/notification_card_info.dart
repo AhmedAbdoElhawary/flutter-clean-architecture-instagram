@@ -47,12 +47,12 @@ class NotificationCardInfo extends StatelessWidget {
                 children: <TextSpan>[
                   TextSpan(
                     text: "${notificationInfo.personalUserName} ",
-                    style: Theme.of(context).textTheme.headline2,
+                    style: Theme.of(context).textTheme.displayMedium,
                   ),
                   if (hashOfUserName.isNotEmpty) ...[
                     TextSpan(
                       text: "${hashOfUserName[0]} ",
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     TextSpan(
                       text: "${hashOfUserName[1]} ",
@@ -67,17 +67,17 @@ class NotificationCardInfo extends StatelessWidget {
                     ),
                     TextSpan(
                       text: "${hashOfUserName[2]} ",
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ] else ...[
                     TextSpan(
                       text: "${notificationInfo.text} ",
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],
                   TextSpan(
                     text: reformatDate,
-                    style: Theme.of(context).textTheme.headline1,
+                    style: Theme.of(context).textTheme.displayLarge,
                   ),
                 ],
               ),
