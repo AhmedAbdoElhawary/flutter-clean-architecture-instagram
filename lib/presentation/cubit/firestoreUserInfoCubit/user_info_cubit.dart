@@ -57,7 +57,6 @@ class UserInfoCubit extends Cubit<UserInfoState> {
     });
   }
 
-
   Future<void> getAllUnFollowersUsers(UserPersonalInfo myPersonalInfo) async {
     emit(CubitAllUnFollowersUserLoading());
     await _getAllUnFollowersUsersUseCase
