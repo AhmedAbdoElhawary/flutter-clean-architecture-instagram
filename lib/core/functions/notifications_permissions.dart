@@ -178,13 +178,14 @@ _onSelectNotification(BuildContext context, String? payload) async {
     String route = s[0];
     String routeParameterId = s[1];
     String userCallingId = s[2];
-
-    await _pushToPage(
-      context,
-      route: route,
-      routeParameterId: routeParameterId,
-      userCallingId: userCallingId,
-    );
+    if (userCallingId.isEmpty) {
+      await _pushToPage(
+        context,
+        route: route,
+        routeParameterId: routeParameterId,
+        userCallingId: userCallingId,
+      );
+    }
   }
 }
 
