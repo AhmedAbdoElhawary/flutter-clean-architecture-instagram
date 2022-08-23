@@ -25,7 +25,7 @@ class AppTheme {
           isThatMobile ? ColorManager.white : ColorManager.customGreyForWeb,
       iconTheme: const IconThemeData(color: ColorManager.black38),
       chipTheme:
-      const ChipThemeData(backgroundColor: ColorManager.veryLowOpacityGrey),
+          const ChipThemeData(backgroundColor: ColorManager.veryLowOpacityGrey),
       errorColor: ColorManager.black,
       canvasColor: ColorManager.transparent,
       splashColor: ColorManager.white,
@@ -38,16 +38,16 @@ class AppTheme {
             getNormalStyle(fontSize: FontSize.s16, color: ColorManager.black),
       ),
       textTheme: TextTheme(
-        bodyText1: getNormalStyle(color: ColorManager.black, fontSize: 15),
-        bodyText2: getNormalStyle(color: ColorManager.white),
-        headline1: getNormalStyle(color: ColorManager.grey, fontSize: 15),
-        headline2: getBoldStyle(color: ColorManager.black, fontSize: 15),
-        headline3: getMediumStyle(color: ColorManager.black, fontSize: 15),
-        headline4: getNormalStyle(color: ColorManager.black54, fontSize: 15),
-        headline5: getNormalStyle(color: ColorManager.shimmerLightGrey),
-        headline6: getNormalStyle(color: Colors.white),
-        subtitle1: getNormalStyle(color: ColorManager.lightGrey),
-        subtitle2: getNormalStyle(color: ColorManager.darkWhite),
+        bodyLarge: getNormalStyle(color: ColorManager.black, fontSize: 15),
+
+        displayLarge: getNormalStyle(color: ColorManager.grey, fontSize: 15),
+        displayMedium: getBoldStyle(color: ColorManager.black, fontSize: 15),
+
+        ///
+        displaySmall: getMediumStyle(color: ColorManager.black, fontSize: 15),
+        headlineSmall: getNormalStyle(color: ColorManager.shimmerLightGrey),
+        titleLarge: getNormalStyle(color: Colors.white),
+        titleSmall: getNormalStyle(color: ColorManager.darkWhite),
       ),
     );
   }
@@ -83,16 +83,13 @@ class AppTheme {
             getNormalStyle(fontSize: FontSize.s16, color: ColorManager.white),
       ),
       textTheme: TextTheme(
-        bodyText1: getNormalStyle(color: ColorManager.white),
-        bodyText2: getNormalStyle(color: ColorManager.black),
-        headline1: getNormalStyle(color: ColorManager.grey, fontSize: 15),
-        headline2: getBoldStyle(color: ColorManager.white, fontSize: 15),
-        headline3: getMediumStyle(color: ColorManager.white, fontSize: 15),
-        headline4: getNormalStyle(color: ColorManager.grey, fontSize: 15),
-        headline5: getNormalStyle(color: Colors.grey[500]!),
-        headline6: getNormalStyle(color: ColorManager.shimmerDarkGrey),
-        subtitle1: getNormalStyle(color: ColorManager.darkGray),
-        subtitle2: getNormalStyle(color: ColorManager.black54),
+        bodyLarge: getNormalStyle(color: ColorManager.white),
+        displayLarge: getNormalStyle(color: ColorManager.grey, fontSize: 15),
+        displayMedium: getBoldStyle(color: ColorManager.white, fontSize: 15),
+        displaySmall: getMediumStyle(color: ColorManager.white, fontSize: 15),
+        headlineSmall: getNormalStyle(color: Colors.grey[500]!),
+        titleLarge: getNormalStyle(color: ColorManager.shimmerDarkGrey),
+        titleSmall: getNormalStyle(color: ColorManager.black54),
       ),
     );
   }
