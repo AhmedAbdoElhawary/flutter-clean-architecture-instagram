@@ -78,6 +78,7 @@ class StringsManager {
 
   static const String fromCamera = "fromCamera";
   static const String fromGallery = "fromGallery";
+  static const String rememberPassword = "rememberPassword";
 
   static const String message = "message";
   static const String messageP = "messageP";
