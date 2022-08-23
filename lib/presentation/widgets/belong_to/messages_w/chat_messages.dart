@@ -330,10 +330,10 @@ class _ChatMessagesState extends State<ChatMessages>
           builder: (_, __) => Container(
                 decoration: BoxDecoration(
                   color: messageInfo.isThatPost
-                      ? (Theme.of(context).textTheme.subtitle1!.color)
+                      ? (Theme.of(context).textTheme.titleMedium!.color)
                       : (isThatMine
                           ? _colorTween.value
-                          : Theme.of(context).textTheme.subtitle1!.color),
+                          : Theme.of(context).textTheme.titleMedium!.color),
                   borderRadius: BorderRadiusDirectional.only(
                     bottomStart: Radius.circular(isThatMine ? 20 : 0),
                     bottomEnd: Radius.circular(isThatMine ? 0 : 20),
@@ -372,7 +372,7 @@ class _ChatMessagesState extends State<ChatMessages>
       child: Container(
         decoration: BoxDecoration(
           color: isThatMine
-              ? Theme.of(context).textTheme.subtitle1!.color
+              ? Theme.of(context).textTheme.titleMedium!.color
               : ColorManager.white,
           borderRadius: const BorderRadiusDirectional.all(Radius.circular(25)),
           border: isThatMine
@@ -728,7 +728,7 @@ class _ChatMessagesState extends State<ChatMessages>
             valueListenable: _textController,
             builder: (context, TextEditingController textValue, child) =>
                 TextFormField(
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
               keyboardType: TextInputType.multiline,
               cursorColor: ColorManager.teal,
               maxLines: null,
@@ -876,7 +876,7 @@ class _ChatMessagesState extends State<ChatMessages>
         Text(
           "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr}",
           style: TextStyle(
-              color: Theme.of(context).textTheme.subtitle2!.color,
+              color: Theme.of(context).textTheme.titleSmall!.color,
               fontSize: 13),
         ),
         const SizedBox(
@@ -886,7 +886,7 @@ class _ChatMessagesState extends State<ChatMessages>
           "${widget.userInfo.posts.length} ${StringsManager.posts.tr}",
           style: TextStyle(
               fontSize: 13,
-              color: Theme.of(context).textTheme.subtitle2!.color),
+              color: Theme.of(context).textTheme.titleSmall!.color),
         ),
       ],
     );
