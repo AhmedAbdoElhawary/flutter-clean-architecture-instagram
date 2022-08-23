@@ -46,7 +46,7 @@ class CustomNotification extends NotificationCheck {
     );
   }
 
-   Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap() => {
         "text": text,
         "time": time,
         "receiverId": receiverId,
