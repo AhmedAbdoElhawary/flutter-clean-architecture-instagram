@@ -1,6 +1,8 @@
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/datasourses/remote/calling_rooms/calling_rooms.dart';
+import 'package:instagram/data/datasourses/remote/notification/device_notification.dart';
 import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
+import 'package:instagram/data/models/push_notification.dart';
 import 'package:instagram/data/models/user_personal_info.dart';
 import 'package:instagram/domain/entities/calling_status.dart';
 import 'package:instagram/domain/repositories/calling_rooms_repository.dart';
@@ -18,11 +20,26 @@ class CallingRoomsRepoImpl implements CallingRoomsRepository {
           userId: callToThisUserId,
           channelId: channelId,
           myPersonalId: myPersonalInfo.userId);
-      if (!isUserAvailable) {
-        throw Exception("Busy");
-      }
-      else {
+      if (isUserAvailable) {
+        UserPersonalInfo receiverInfo =
+            await FirestoreUser.getUserInfo(callToThisUserId);
+        String token = receiverInfo.deviceToken;
+        if (token.isNotEmpty) {
+          String body = "Calling you";
+          PushNotification detail = PushNotification(
+            title: myPersonalInfo.name,
+            body: body,
+            deviceToken: token,
+            notificationRoute: "call",
+            userCallingId: myPersonalInfo.userId,
+            routeParameterId: channelId,
+          );
+          await DeviceNotification.sendPopupNotification(
+              pushNotification: detail);
+        }
         return channelId;
+      } else {
+        throw Exception("Busy");
       }
     } catch (e) {
       return Future.error(e.toString());
