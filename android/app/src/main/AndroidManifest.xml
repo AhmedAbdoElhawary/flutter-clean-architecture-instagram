@@ -5,7 +5,7 @@
 
     <application
         android:requestLegacyExternalStorage="true"
-        android:label="again_instagram"
+        android:label="Instagram"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
