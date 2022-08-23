@@ -114,7 +114,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             } else if (state is CubitGetUserInfoFailed) {
               ToastShow.toastStateError(state);
               return Text(StringsManager.noPosts.tr,
-                  style: Theme.of(context).textTheme.bodyText1);
+                  style: Theme.of(context).textTheme.bodyLarge);
             } else {
               return const ThineCircularProgress();
             }
