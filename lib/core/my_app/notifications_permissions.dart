@@ -45,28 +45,27 @@ Future<void> _listenFCM(BuildContext context) async {
     }
   });
 
-  /// When app is onBackground
 
-  FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    _pushToPage(
-        route: message.data["route"],
-        routeParameterId: message.data["routeParameterId"],
-        context);
-  });
 
   /// When app is close
-  FirebaseMessaging.instance.getInitialMessage().then((message) {
-    if (message != null) {
-      _pushToPage(
-          route: message.data["route"],
-          routeParameterId: message.data["routeParameterId"],
-          context);
-    }
+  FirebaseMessaging.instance.getInitialMessage().then((value) async {
+    if (value != null)await _handleMessage(context, value);
   });
+
+  /// When app is onBackground
+  FirebaseMessaging.onMessageOpenedApp
+      .listen((m) async =>await _handleMessage(context, m));
 }
 
-_pushToPage(BuildContext context,
-    {required String route, required String routeParameterId}) {
+Future<void> _handleMessage(BuildContext context, RemoteMessage message) async{
+ await _pushToPage(
+      route: message.data["route"],
+      routeParameterId: message.data["routeParameterId"],
+      context);
+}
+
+Future<void> _pushToPage(BuildContext context,
+    {required dynamic route, required dynamic routeParameterId}) async {
   Widget page;
   if (route == "post") {
     page = GetsPostInfoAndDisplay(
@@ -81,7 +80,7 @@ _pushToPage(BuildContext context,
       child: ChattingPage(userId: routeParameterId),
     );
   }
-  pushToPage(context, page: page);
+  await pushToPage(context, page: page);
 }
 
 AndroidNotificationDetails _androidNotificationDetails() {
@@ -131,7 +130,8 @@ Future<void> _loadFCM(BuildContext context) async {
       List<String> s = payload.split(",");
       String route = s[0];
       String routeParameterId = s[1];
-      _pushToPage(route: route, routeParameterId: routeParameterId, context);
+      await _pushToPage(
+          route: route, routeParameterId: routeParameterId, context);
     }
   });
 }
