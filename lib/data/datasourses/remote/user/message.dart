@@ -36,7 +36,8 @@ class FireStoreMessage {
           notificationRoute: "message",
           routeParameterId: message.senderId,
         );
-        await DeviceNotification.sendPopupNotification(pushNotification: detail);
+        await DeviceNotification.sendPopupNotification(
+            pushNotification: detail);
       }
     }
     return await _sendMessage(userId: userId, chatId: chatId, message: message);

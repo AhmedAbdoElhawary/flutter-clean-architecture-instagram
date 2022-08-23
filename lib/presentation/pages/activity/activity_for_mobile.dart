@@ -41,8 +41,7 @@ class _ActivityPageState extends State<ActivityPage> {
         : buildBody(context);
   }
 
-  BlocBuilder<UserInfoCubit, UserInfoState> buildBody(
-      BuildContext context) {
+  BlocBuilder<UserInfoCubit, UserInfoState> buildBody(BuildContext context) {
     return BlocBuilder<UserInfoCubit, UserInfoState>(
       bloc: UserInfoCubit.get(context)..getAllUnFollowersUsers(myPersonalInfo),
       buildWhen: (previous, current) =>
@@ -171,7 +170,7 @@ class _ShowNotificationsState extends State<_ShowNotifications> {
       return Center(
         child: Text(
           StringsManager.noActivity.tr,
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       );
     }

@@ -14,17 +14,20 @@ enum UserCallingType { sender, receiver }
 
 class CallPage extends StatefulWidget {
   final String channelName;
-  final UserInfoInCallingRoom userInfo;
+  final String userCallingId;
+
+  final UserInfoInCallingRoom? userInfo;
   final UserCallingType userCallingType;
   final ClientRole role;
 
-  const CallPage(
-      {Key? key,
-      required this.channelName,
-      required this.userCallingType,
-      required this.role,
-      required this.userInfo})
-      : super(key: key);
+  const CallPage({
+    Key? key,
+    required this.channelName,
+    this.userCallingId = "",
+    required this.userCallingType,
+    required this.role,
+    this.userInfo,
+  }) : super(key: key);
 
   @override
   CallPageState createState() => CallPageState();
@@ -251,7 +254,10 @@ class CallPageState extends State<CallPage> {
   void _onCallEnd(BuildContext context) {
     setState(() => amICalling = false);
     CallingRoomsCubit.get(context).deleteTheRoom(
-        channelId: widget.channelName, userId: widget.userInfo.userId);
+        channelId: widget.channelName,
+        userId: widget.userInfo == null
+            ? widget.userCallingId
+            : widget.userInfo!.userId);
 
     Navigator.of(context).maybePop();
   }
@@ -318,15 +324,17 @@ class CallPageState extends State<CallPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage:
-                          NetworkImage(widget.userInfo.profileImageUrl),
-                    ),
-                    const SizedBox(height: 30),
-                    Text(widget.userInfo.name,
-                        style: getNormalStyle(
-                            color: ColorManager.white, fontSize: 25)),
+                    if (widget.userInfo != null) ...[
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage:
+                            NetworkImage(widget.userInfo!.profileImageUrl),
+                      ),
+                      const SizedBox(height: 30),
+                      Text(widget.userInfo!.name,
+                          style: getNormalStyle(
+                              color: ColorManager.white, fontSize: 25)),
+                    ],
                     const SizedBox(height: 10),
                     Text('Connecting...',
                         style: getNormalStyle(

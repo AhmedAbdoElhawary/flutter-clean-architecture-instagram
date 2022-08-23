@@ -6,6 +6,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/domain/entities/registered_user.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/screens/responsive_layout.dart';
@@ -13,6 +14,7 @@ import 'package:instagram/presentation/screens/web_screen_layout.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/popup_calling.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/register_widgets.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/models/user_personal_info.dart';
 import '../../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../../cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
@@ -276,14 +278,16 @@ class _UserNamePageState extends State<UserNamePage> {
   moveToMain(CubitAuthConfirmed authState) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       myPersonalId = authState.user.uid;
+      final SharedPreferences sharePrefs = injector<SharedPreferences>();
+      await sharePrefs.setString("myPersonalId", myPersonalId);
       if (!isItMoved) {
+        isItMoved = true;
         Get.offAll(
           ResponsiveLayout(
             mobileScreenLayout: PopupCalling(myPersonalId),
             webScreenLayout: const WebScreenLayout(),
           ),
         );
-        isItMoved = true;
       }
     });
   }

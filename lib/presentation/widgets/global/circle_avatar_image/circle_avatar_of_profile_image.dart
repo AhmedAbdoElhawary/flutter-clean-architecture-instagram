@@ -184,10 +184,10 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     return CircleAvatar(
       backgroundColor: ColorManager.customGrey,
       backgroundImage: profileImage.isNotEmpty
-          ? CachedNetworkImageProvider(profileImage,maxWidth: 165,maxHeight: 165)
+          ? CachedNetworkImageProvider(profileImage,
+              maxWidth: 165, maxHeight: 165)
           : null,
       radius: widget.bodyHeight * .046,
-
       child: profileImage.isEmpty
           ? Icon(
               Icons.person,

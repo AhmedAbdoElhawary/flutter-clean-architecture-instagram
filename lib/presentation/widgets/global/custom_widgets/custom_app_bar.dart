@@ -35,7 +35,7 @@ class CustomAppBar {
   }
 
   static Widget _messengerButton(BuildContext context) {
-    return BlocBuilder<UsersInfoReelTimeBloc,UsersInfoReelTimeState>(
+    return BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState>(
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsetsDirectional.only(end: 5.0),
@@ -80,7 +80,7 @@ class CustomAppBar {
   }
 
   static Widget _favoriteButton(BuildContext context) {
-    return BlocBuilder<UsersInfoReelTimeBloc,UsersInfoReelTimeState>(
+    return BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState>(
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsetsDirectional.only(end: 13.0),
@@ -172,9 +172,7 @@ class CustomAppBar {
                 withoutRoot: false,
                 withoutPageTransition: true);
             amICalling = false;
-
           },
-
           child: SvgPicture.asset(
             IconsAssets.videoPoint,
             height: 25,

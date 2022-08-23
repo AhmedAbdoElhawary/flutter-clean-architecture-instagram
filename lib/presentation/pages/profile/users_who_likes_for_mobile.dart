@@ -36,7 +36,7 @@ class UsersWhoLikesForMobile extends StatelessWidget {
       elevation: 0,
       backgroundColor: Theme.of(context).primaryColor,
       title: Text(StringsManager.likes.tr,
-          style: Theme.of(context).textTheme.bodyText1),
+          style: Theme.of(context).textTheme.bodyLarge),
     );
   }
 }

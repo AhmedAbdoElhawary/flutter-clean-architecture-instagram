@@ -126,7 +126,7 @@ class _CommentInfoState extends State<CommentInfo> {
           } else if (state is CubitReplyInfoFailed) {
             ToastShow.toastStateError(state);
             return Text(state.toString(),
-                style: Theme.of(context).textTheme.bodyText1);
+                style: Theme.of(context).textTheme.bodyLarge);
           } else {
             return textOfLoading(context, StringsManager.loading.tr);
           }
@@ -142,8 +142,8 @@ class _CommentInfoState extends State<CommentInfo> {
               color: Theme.of(context).dividerColor, height: 1, width: 40),
           const SizedBox(width: 10),
           Expanded(
-            child:
-                Text(loadingText, style: Theme.of(context).textTheme.headline1),
+            child: Text(loadingText,
+                style: Theme.of(context).textTheme.displayLarge),
           )
         ],
       ),
@@ -226,7 +226,7 @@ class _CommentInfoState extends State<CommentInfo> {
     return Row(
       children: [
         Text(DateOfNow.commentsDateOfNow(widget.commentInfo.datePublished),
-            style: Theme.of(context).textTheme.headline1),
+            style: Theme.of(context).textTheme.displayLarge),
         if (widget.commentInfo.likes.isNotEmpty)
           Padding(
             padding: const EdgeInsetsDirectional.only(start: 20.0),
@@ -243,7 +243,7 @@ class _CommentInfoState extends State<CommentInfo> {
               },
               child: Text(
                 "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like.tr : StringsManager.likes.tr}",
-                style: Theme.of(context).textTheme.headline1,
+                style: Theme.of(context).textTheme.displayLarge,
               ),
             ),
           ),
@@ -268,7 +268,7 @@ class _CommentInfoState extends State<CommentInfo> {
           },
           child: Text(
             StringsManager.reply.tr,
-            style: Theme.of(context).textTheme.headline1,
+            style: Theme.of(context).textTheme.displayLarge,
           ),
         ),
       ],
@@ -288,7 +288,7 @@ class _CommentInfoState extends State<CommentInfo> {
           children: <TextSpan>[
             TextSpan(
               text: widget.commentInfo.whoCommentInfo!.userName,
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             const TextSpan(
               text: '  ',

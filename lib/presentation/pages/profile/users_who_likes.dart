@@ -42,7 +42,7 @@ class UsersWhoLikes extends StatelessWidget {
           ToastShow.toastStateError(state);
           return Center(
             child: Text(StringsManager.somethingWrong.tr,
-                style: Theme.of(context).textTheme.bodyText1),
+                style: Theme.of(context).textTheme.bodyLarge),
           );
         } else {
           return const Center(child: ThineCircularProgress());

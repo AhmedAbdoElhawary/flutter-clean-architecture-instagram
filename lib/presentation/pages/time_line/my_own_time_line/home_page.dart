@@ -463,7 +463,7 @@ class _WelcomeCardsState extends State<_WelcomeCards>
   late AnimationController _aniController, _scaleController, _footerController;
   PageController pageController = PageController(viewportFraction: 0.7);
   final _refreshController = ValueNotifier(RefreshController());
-  int _selectedIndex = 0;
+  final ValueNotifier<int> _selectedIndex = ValueNotifier(0);
   @override
   void initState() {
     init();
@@ -471,10 +471,6 @@ class _WelcomeCardsState extends State<_WelcomeCards>
   }
 
   init() {
-    pageController.addListener(() {
-      int pos = pageController.page!.round();
-      if (_selectedIndex != pos) setState(() => _selectedIndex = pos);
-    });
     _aniController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 2000));
     _scaleController =
@@ -543,23 +539,29 @@ class _WelcomeCardsState extends State<_WelcomeCards>
           child: BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState>(
             bloc: UsersInfoReelTimeBloc.get(context)
               ..add(LoadAllUsersInfoInfo()),
+            buildWhen: (previous, current) =>
+                previous != current && (current is AllUsersInfoLoaded),
             builder: (context, state) {
               if (state is AllUsersInfoLoaded) {
                 List<UserPersonalInfo> users = state.allUsersInfoInReelTime;
                 if (users.isEmpty) {
                   return emptyText();
                 } else {
-                  return PageView.builder(
-                    itemCount: users.length,
-                    controller: pageController,
-                    physics: const BouncingScrollPhysics(),
-                    onPageChanged: (index) {
-                      setState(() => _selectedIndex = index);
-                    },
-                    itemBuilder: (context, index) {
-                      bool active = _selectedIndex == index;
-                      return userCardInfo(active, users[index]);
-                    },
+                  return ValueListenableBuilder(
+                    valueListenable: _selectedIndex,
+                    builder: (context, int selectedIndexValue, child) =>
+                        PageView.builder(
+                      itemCount: users.length,
+                      controller: pageController,
+                      physics: const BouncingScrollPhysics(),
+                      onPageChanged: (index) {
+                        _selectedIndex.value = index;
+                      },
+                      itemBuilder: (context, index) {
+                        bool active = selectedIndexValue == index;
+                        return userCardInfo(active, users[index]);
+                      },
+                    ),
                   );
                 }
               } else {
@@ -586,7 +588,7 @@ class _WelcomeCardsState extends State<_WelcomeCards>
           child: Text(
             StringsManager.followPeopleToSee.tr,
             style: getNormalStyle(
-                color: Theme.of(context).textTheme.headline4!.color!,
+                color: Theme.of(context).textTheme.headlineMedium!.color!,
                 fontSize: 14),
           ),
         ),
@@ -594,7 +596,7 @@ class _WelcomeCardsState extends State<_WelcomeCards>
           child: Text(
             StringsManager.videosTheyShare.tr,
             style: getNormalStyle(
-                color: Theme.of(context).textTheme.headline4!.color!,
+                color: Theme.of(context).textTheme.headlineMedium!.color!,
                 fontSize: 14),
           ),
         ),
@@ -662,7 +664,7 @@ class _WelcomeCardsState extends State<_WelcomeCards>
             Text(
               userInfo.name,
               style: getNormalStyle(
-                  color: Theme.of(context).textTheme.headline4!.color!),
+                  color: Theme.of(context).textTheme.headlineMedium!.color!),
             ),
             const SizedBox(height: 20),
             Row(
@@ -773,10 +775,7 @@ class _WelcomeCardsState extends State<_WelcomeCards>
       alignment: Alignment.center,
       child: FadeTransition(
         opacity: _scaleController,
-        child: ScaleTransition(
-          scale: _scaleController,
-          child: const ThineCircularProgress(),
-        ),
+        child: const ThineCircularProgress(),
       ),
     );
   }

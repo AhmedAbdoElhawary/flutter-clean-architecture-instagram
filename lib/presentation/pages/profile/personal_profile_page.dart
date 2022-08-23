@@ -105,7 +105,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
                   isThatMyPersonalId: true,
                   getData: getData,
                   userId: state.userPersonalInfo.userId,
-                  userInfo: state.userPersonalInfo,
+                  userInfo: ValueNotifier(state.userPersonalInfo),
                   widgetsAboveTapBars: isThatMobile
                       ? widgetsAboveTapBarsForMobile(state.userPersonalInfo)
                       : widgetsAboveTapBarsForWeb(state.userPersonalInfo),
@@ -114,7 +114,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             } else if (state is CubitGetUserInfoFailed) {
               ToastShow.toastStateError(state);
               return Text(StringsManager.noPosts.tr,
-                  style: Theme.of(context).textTheme.bodyText1);
+                  style: Theme.of(context).textTheme.bodyLarge);
             } else {
               return const ThineCircularProgress();
             }
@@ -226,7 +226,6 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             controller.changeLanguage();
             Phoenix.rebirth(context);
             Get.updateLocale(Locale(controller.appLocale));
-
           },
           child: createSizedBox(StringsManager.changeLanguage.tr,
               icon: Icons.language_rounded),

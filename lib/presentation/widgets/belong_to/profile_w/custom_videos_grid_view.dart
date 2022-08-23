@@ -41,7 +41,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
         : Center(
             child: Text(
             StringsManager.noPosts.tr,
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyLarge,
           ));
   }
 

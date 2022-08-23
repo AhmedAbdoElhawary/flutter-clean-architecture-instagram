@@ -132,7 +132,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
         switch (mode) {
           case LoadStatus.failed:
             child = Text(StringsManager.clickRetry.tr,
-                style: Theme.of(context).textTheme.bodyText1);
+                style: Theme.of(context).textTheme.bodyLarge);
             break;
           case LoadStatus.noMore:
             child = Container();

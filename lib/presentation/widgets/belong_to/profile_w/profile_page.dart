@@ -25,7 +25,7 @@ import '../time_line_w/read_more_text.dart';
 class ProfilePage extends StatefulWidget {
   String userId;
   bool isThatMyPersonalId;
-  UserPersonalInfo userInfo;
+  final ValueNotifier<UserPersonalInfo> userInfo;
   List<Widget> widgetsAboveTapBars;
   final AsyncCallback getData;
 
@@ -61,21 +61,25 @@ class _ProfilePageState extends State<ProfilePage> {
         width: isThatMobile ? null : 920,
         child: DefaultTabController(
           length: 3,
-          child: NestedScrollView(
-            headerSliverBuilder: (_, __) {
-              return [
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    isThatMobile
-                        ? widgetsAboveTapBarsForMobile(
-                            widget.userInfo, bodyHeight)
-                        : widgetsAboveTapBarsForWeb(
-                            widget.userInfo, bodyHeight),
+          child: ValueListenableBuilder(
+            valueListenable: widget.userInfo,
+            builder: (context, UserPersonalInfo userInfoValue, child) =>
+                NestedScrollView(
+              headerSliverBuilder: (_, __) {
+                return [
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      isThatMobile
+                          ? widgetsAboveTapBarsForMobile(
+                              userInfoValue, bodyHeight)
+                          : widgetsAboveTapBarsForWeb(
+                              userInfoValue, bodyHeight),
+                    ),
                   ),
-                ),
-              ];
-            },
-            body: tapBar(),
+                ];
+              },
+              body: tapBar(),
+            ),
           ),
         ),
       ),
@@ -86,7 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return BlocBuilder<PostCubit, PostState>(
       bloc: PostCubit.get(context)
         ..getPostsInfo(
-            postsIds: widget.userInfo.posts,
+            postsIds: widget.userInfo.value.posts,
             isThatMyPosts: widget.isThatMyPersonalId),
       buildWhen: (previous, current) {
         if (reBuild.value) {
@@ -122,8 +126,8 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           tabBarIcons(),
           Shimmer.fromColors(
-            baseColor: Theme.of(context).textTheme.headline5!.color!,
-            highlightColor: Theme.of(context).textTheme.headline6!.color!,
+            baseColor: Theme.of(context).textTheme.headlineSmall!.color!,
+            highlightColor: Theme.of(context).textTheme.titleLarge!.color!,
             child: GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -307,7 +311,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Text(userInfo.name,
-                      style: Theme.of(context).textTheme.headline2),
+                      style: Theme.of(context).textTheme.displayMedium),
                   const SizedBox(height: 5),
                   Text(userInfo.bio,
                       style: getNormalStyle(
@@ -349,7 +353,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(userInfo.name,
-                      style: Theme.of(context).textTheme.headline2),
+                      style: Theme.of(context).textTheme.displayMedium),
                   ReadMore(userInfo.bio, 4),
                   const SizedBox(height: 10),
                   Row(

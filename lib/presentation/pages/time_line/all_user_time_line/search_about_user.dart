@@ -121,13 +121,13 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
             color: Theme.of(context).shadowColor,
             borderRadius: BorderRadius.circular(10)),
         child: TextFormField(
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
           controller: _textController.value,
           textAlign: TextAlign.start,
           decoration: InputDecoration(
               contentPadding: const EdgeInsetsDirectional.all(12.5),
               hintText: StringsManager.search.tr,
-              hintStyle: Theme.of(context).textTheme.headline1,
+              hintStyle: Theme.of(context).textTheme.displayLarge,
               border: InputBorder.none),
           onChanged: (_) => setState(() {}),
         ),

@@ -42,10 +42,10 @@ class AllCatchUpIcon extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         Text(StringsManager.allCaughtUp.tr,
-            style: Theme.of(context).textTheme.headline3),
+            style: Theme.of(context).textTheme.displaySmall),
         const SizedBox(height: 15),
         Text(StringsManager.noMorePostToday.tr,
-            style: Theme.of(context).textTheme.headline1),
+            style: Theme.of(context).textTheme.displayLarge),
       ],
     );
   }

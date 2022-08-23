@@ -35,7 +35,6 @@ class CustomPostDisplay extends StatefulWidget {
 
 class _CustomPostDisplayState extends State<CustomPostDisplay>
     with TickerProviderStateMixin {
-
   @override
   void initState() {
     super.initState();
@@ -49,6 +48,7 @@ class _CustomPostDisplayState extends State<CustomPostDisplay>
         mediaQuery.padding.top;
     return thePostsOfHomePage(bodyHeight: bodyHeight);
   }
+
   Widget thePostsOfHomePage({required double bodyHeight}) {
     return SizedBox(
       width: double.infinity,
@@ -80,29 +80,28 @@ class _CustomPostDisplayState extends State<CustomPostDisplay>
       Post postInfoValue, double bodyHeight, BuildContext context) {
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 11.5),
-      child:  GetBuilder<AppLanguage>(
+      child: GetBuilder<AppLanguage>(
           init: AppLanguage(),
-        builder: (AppLanguage controller) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (postInfoValue.likes.isNotEmpty)
-                CountOfLikes(postInfo: postInfoValue),
-              const SizedBox(height: 5),
-              if (controller.appLocale == 'en') ...[
-                ReadMore(
-                    "${postInfoValue.publisherInfo!.name} ${postInfoValue.caption}",
-                    2),
-              ] else ...[
-                ReadMore(
-                    "${postInfoValue.caption} ${postInfoValue.publisherInfo!.name}",
-                    2),
+          builder: (AppLanguage controller) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (postInfoValue.likes.isNotEmpty)
+                  CountOfLikes(postInfo: postInfoValue),
+                const SizedBox(height: 5),
+                if (controller.appLocale == 'en') ...[
+                  ReadMore(
+                      "${postInfoValue.publisherInfo!.name} ${postInfoValue.caption}",
+                      2),
+                ] else ...[
+                  ReadMore(
+                      "${postInfoValue.caption} ${postInfoValue.publisherInfo!.name}",
+                      2),
+                ],
               ],
-            ],
-          );
-        }
-      ),
+            );
+          }),
     );
   }
 }

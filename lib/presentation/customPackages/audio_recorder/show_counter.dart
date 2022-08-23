@@ -29,13 +29,13 @@ class ShowCounter extends StatelessWidget {
                 children: [
                   Text(
                     soundRecorderState.second.toString().padLeft(2, '0'),
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   const SizedBox(width: 3),
-                  Text(" : ", style: Theme.of(context).textTheme.bodyText1),
+                  Text(" : ", style: Theme.of(context).textTheme.bodyLarge),
                   Text(
                     soundRecorderState.minute.toString().padLeft(2, '0'),
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],
               ),

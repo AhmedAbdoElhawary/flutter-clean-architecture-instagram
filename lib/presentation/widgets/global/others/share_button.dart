@@ -123,18 +123,18 @@ class _ShareButtonState extends State<ShareButton> {
             borderRadius: BorderRadius.circular(10)),
         child: TextFormField(
           cursorColor: ColorManager.teal,
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
           controller: _bottomSheetSearchTextController,
           textAlign: TextAlign.start,
           decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.search,
                 size: 20,
-                color: Theme.of(context).textTheme.headline1!.color!,
+                color: Theme.of(context).textTheme.displayLarge!.color!,
               ),
               contentPadding: const EdgeInsetsDirectional.all(12),
               hintText: StringsManager.search.tr,
-              hintStyle: Theme.of(context).textTheme.headline1,
+              hintStyle: Theme.of(context).textTheme.displayLarge,
               border: InputBorder.none),
           onChanged: (_) => setState(() {}),
         ),
@@ -190,7 +190,7 @@ class _ShareButtonState extends State<ShareButton> {
         width: 45,
         height: 4.5,
         decoration: BoxDecoration(
-          color: Theme.of(context).textTheme.headline4!.color,
+          color: Theme.of(context).textTheme.headlineMedium!.color,
           borderRadius: BorderRadius.circular(5),
         ),
       ),

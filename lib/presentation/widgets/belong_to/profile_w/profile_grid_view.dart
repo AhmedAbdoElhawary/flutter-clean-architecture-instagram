@@ -47,7 +47,7 @@ class _CustomGridViewState extends State<ProfileGridView> {
         : Center(
             child: Text(
             StringsManager.noPosts.tr,
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyLarge,
           ));
   }
 

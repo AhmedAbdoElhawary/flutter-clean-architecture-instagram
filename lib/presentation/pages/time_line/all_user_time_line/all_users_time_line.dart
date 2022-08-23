@@ -54,7 +54,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
                 prefixIcon: Icon(Icons.search_rounded,
                     color: Theme.of(context).focusColor),
                 hintText: StringsManager.search.tr,
-                hintStyle: Theme.of(context).textTheme.headline1,
+                hintStyle: Theme.of(context).textTheme.displayLarge,
                 border: InputBorder.none),
           ),
         ),
@@ -129,8 +129,8 @@ class AllUsersTimeLinePage extends StatelessWidget {
       child: SizedBox(
         width: isThatMobile ? null : 910,
         child: Shimmer.fromColors(
-          baseColor: Theme.of(context).textTheme.headline5!.color!,
-          highlightColor: Theme.of(context).textTheme.headline6!.color!,
+          baseColor: Theme.of(context).textTheme.headlineSmall!.color!,
+          highlightColor: Theme.of(context).textTheme.titleLarge!.color!,
           child: StaggeredGridView.countBuilder(
             crossAxisSpacing: isThatMobile ? 1.5 : 30,
             mainAxisSpacing: isThatMobile ? 1.5 : 30,

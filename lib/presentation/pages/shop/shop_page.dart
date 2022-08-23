@@ -10,7 +10,7 @@ class ShopPage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Text(StringsManager.underWork.tr,
-            style: Theme.of(context).textTheme.bodyText1),
+            style: Theme.of(context).textTheme.bodyLarge),
       ),
     );
   }
