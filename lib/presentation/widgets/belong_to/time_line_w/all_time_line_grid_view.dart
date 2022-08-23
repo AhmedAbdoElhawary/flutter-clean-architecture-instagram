@@ -152,7 +152,7 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
     return Center(
       child: Text(
         StringsManager.noPosts.tr,
-        style: Theme.of(context).textTheme.bodyText1,
+        style: Theme.of(context).textTheme.bodyLarge,
       ),
     );
   }
