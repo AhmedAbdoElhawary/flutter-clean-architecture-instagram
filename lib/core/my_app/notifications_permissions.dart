@@ -1,5 +1,4 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -18,7 +17,7 @@ late AndroidNotificationChannel _channel;
 Future<void> notificationPermissions(BuildContext context) async {
   await _requestPermission();
   await _listenFCM(context);
-  await _loadFCM();
+  await _loadFCM(context);
 }
 
 Future<void> _requestPermission() async {
@@ -40,7 +39,7 @@ Future<void> _listenFCM(BuildContext context) async {
         notification.hashCode,
         notification.title,
         notification.body,
-        payload: notification.body,
+        payload: "${message.data["route"]},${message.data["routeParameterId"]}",
         NotificationDetails(android: _androidNotificationDetails()),
       );
     }
@@ -48,35 +47,41 @@ Future<void> _listenFCM(BuildContext context) async {
 
   /// When app is onBackground
 
-  FirebaseMessaging.onMessageOpenedApp
-      .listen((message) => _pushToPage(message, context));
+  FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    _pushToPage(
+        route: message.data["route"],
+        routeParameterId: message.data["routeParameterId"],
+        context);
+  });
 
   /// When app is close
-  FirebaseMessaging.instance
-      .getInitialMessage()
-      .then((message) => _pushToPage(message, context));
+  FirebaseMessaging.instance.getInitialMessage().then((message) {
+    if (message != null) {
+      _pushToPage(
+          route: message.data["route"],
+          routeParameterId: message.data["routeParameterId"],
+          context);
+    }
+  });
 }
 
-_pushToPage(RemoteMessage? message, BuildContext context) {
-  if (message != null) {
-    String route = message.data["route"];
-    String routeParameterId = message.data["routeParameterId"];
-    Widget page;
-    if (route == "post") {
-      page = GetsPostInfoAndDisplay(
-        postId: routeParameterId,
-        appBarText: StringsManager.post.tr,
-      );
-    } else if (route == "profile") {
-      page = WhichProfilePage(userId: routeParameterId);
-    } else {
-      page = BlocProvider<MessageBloc>(
-        create: (context) => injector<MessageBloc>(),
-        child: ChattingPage(userId: routeParameterId),
-      );
-    }
-    pushToPage(context, page: page);
+_pushToPage(BuildContext context,
+    {required String route, required String routeParameterId}) {
+  Widget page;
+  if (route == "post") {
+    page = GetsPostInfoAndDisplay(
+      postId: routeParameterId,
+      appBarText: StringsManager.post.tr,
+    );
+  } else if (route == "profile") {
+    page = WhichProfilePage(userId: routeParameterId);
+  } else {
+    page = BlocProvider<MessageBloc>(
+      create: (context) => injector<MessageBloc>(),
+      child: ChattingPage(userId: routeParameterId),
+    );
   }
+  pushToPage(context, page: page);
 }
 
 AndroidNotificationDetails _androidNotificationDetails() {
@@ -90,12 +95,11 @@ AndroidNotificationDetails _androidNotificationDetails() {
     priority: Priority.high,
     showWhen: true,
     setAsGroupSummary: true,
-    color: const Color.fromARGB(121, 44, 255, 118),
     sound: const RawResourceAndroidNotificationSound('notification'),
   );
 }
 
-Future<void> _loadFCM() async {
+Future<void> _loadFCM(BuildContext context) async {
   final int id = DateTime.now().microsecondsSinceEpoch ~/ 1000;
   _channel = AndroidNotificationChannel(
     id.toString(),
@@ -104,7 +108,6 @@ Future<void> _loadFCM() async {
     enableVibration: true,
     playSound: true,
     showBadge: true,
-    ledColor: const Color.fromARGB(121, 44, 255, 118),
     sound: const RawResourceAndroidNotificationSound('notification'),
   );
 
@@ -124,12 +127,11 @@ Future<void> _loadFCM() async {
   /// when app opened and select the message
   _localNotifications.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
-    if (kDebugMode) {
-      print("payload --------------------------------------> $payload");
+    if (payload != null) {
+      List<String> s = payload.split(",");
+      String route = s[0];
+      String routeParameterId = s[1];
+      _pushToPage(route: route, routeParameterId: routeParameterId, context);
     }
-
-    ///
-    ///
-    ///
   });
 }
