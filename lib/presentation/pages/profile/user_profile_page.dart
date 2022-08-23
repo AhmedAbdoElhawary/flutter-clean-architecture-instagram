@@ -112,7 +112,7 @@ class _ProfilePageState extends State<UserProfilePage> {
             ToastShow.toastStateError(state);
             return Text(
               StringsManager.somethingWrong.tr,
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
             );
           } else {
             return const ThineCircularProgress();
