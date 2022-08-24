@@ -38,12 +38,11 @@ class AppTheme {
             getNormalStyle(fontSize: FontSize.s16, color: ColorManager.black),
       ),
       textTheme: TextTheme(
-        bodyLarge: getNormalStyle(color: ColorManager.black, fontSize: 15),
-
+        bodyLarge: getNormalStyle(color: ColorManager.black),
+        bodyMedium: getNormalStyle(color: ColorManager.imageGrey),
+        bodySmall: getNormalStyle(color: ColorManager.grey),
         displayLarge: getNormalStyle(color: ColorManager.grey, fontSize: 15),
         displayMedium: getBoldStyle(color: ColorManager.black, fontSize: 15),
-
-        ///
         displaySmall: getMediumStyle(color: ColorManager.black, fontSize: 15),
         headlineSmall: getNormalStyle(color: ColorManager.shimmerLightGrey),
         titleLarge: getNormalStyle(color: Colors.white),
@@ -84,12 +83,14 @@ class AppTheme {
       ),
       textTheme: TextTheme(
         bodyLarge: getNormalStyle(color: ColorManager.white),
+        bodyMedium: getNormalStyle(color: ColorManager.darkGray),
+        bodySmall: getNormalStyle(color: ColorManager.lightGrey),
         displayLarge: getNormalStyle(color: ColorManager.grey, fontSize: 15),
-        displayMedium: getBoldStyle(color: ColorManager.white, fontSize: 15),
+        displayMedium: getBoldStyle(color: ColorManager.white,fontSize: 15),
         displaySmall: getMediumStyle(color: ColorManager.white, fontSize: 15),
         headlineSmall: getNormalStyle(color: Colors.grey[500]!),
         titleLarge: getNormalStyle(color: ColorManager.shimmerDarkGrey),
-        titleSmall: getNormalStyle(color: ColorManager.black54),
+        titleSmall: getNormalStyle(color: ColorManager.darkGray),
       ),
     );
   }

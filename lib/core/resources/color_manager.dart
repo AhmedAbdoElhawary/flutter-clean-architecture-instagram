@@ -12,6 +12,7 @@ class ColorManager {
 
   static const Color lowOpacityGrey = Color(0x2A3E3E2F);
   static const Color veryLowOpacityGrey = Color(0x16444439);
+  static const Color imageGrey = Color(0xFFE1E1E1);
 
   static const Color black = Color(0xff000000);
   static const Color black87 = Color(0xdd000000);

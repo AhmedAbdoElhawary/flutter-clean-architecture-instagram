@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram/core/resources/color_manager.dart';
 // ignore: depend_on_referenced_packages
 import 'package:octo_image/octo_image.dart';
 
@@ -9,7 +8,6 @@ class NetworkImageDisplay extends StatefulWidget {
   final String imageUrl, blurHash;
   final double aspectRatio;
   final double? height;
-
   const NetworkImageDisplay({
     Key? key,
     required this.imageUrl,
@@ -91,7 +89,17 @@ class _NetworkImageDisplayState extends State<NetworkImageDisplay> {
   Widget buildSizedBox() {
     return Container(
       width: double.infinity,
-      color: ColorManager.lowOpacityGrey,
+      color: Theme.of(context).textTheme.bodyMedium!.color,
+      child: Center(
+          child: CircleAvatar(
+        radius: 57,
+        backgroundColor: Theme.of(context).textTheme.bodySmall!.color,
+        child: Center(
+            child: CircleAvatar(
+          radius: 56,
+          backgroundColor: Theme.of(context).textTheme.bodyMedium!.color,
+        )),
+      )),
     );
   }
 }
