@@ -50,21 +50,16 @@ class _ImagesSliderState extends State<ImagesSlider> {
                   Stack(
             alignment: Alignment.bottomCenter,
             children: [
-              CarouselSlider(
+              CarouselSlider.builder(
+                itemCount: widget.imagesUrls.length,
                 carouselController: _controller,
-                items: widget.imagesUrls.map((url) {
-                  if (url.toString().isNotEmpty) {
-                    precacheImage(NetworkImage(url), context);
-                  }
-                  return Hero(
-                    tag: url,
-                    child: NetworkImageDisplay(
-                      aspectRatio: widget.aspectRatio,
-                      blurHash: widget.blurHash,
-                      imageUrl: url,
-                    ),
+                itemBuilder: (context, index, realIndex) {
+                  return NetworkImageDisplay(
+                    aspectRatio: widget.aspectRatio,
+                    blurHash: index == 0 ? widget.blurHash : "",
+                    imageUrl: widget.imagesUrls[index],
                   );
-                }).toList(),
+                },
                 options: CarouselOptions(
                   viewportFraction: 1.0,
                   enableInfiniteScroll: false,
