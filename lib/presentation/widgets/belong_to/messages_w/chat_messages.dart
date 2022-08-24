@@ -292,15 +292,16 @@ class _ChatMessagesState extends State<ChatMessages>
             ),
             if (!isThatMine) const SizedBox(width: 100),
             Visibility(
-                visible: messageInfo.messageUid.isEmpty,
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 5.0),
-                  child: SvgPicture.asset(
-                    IconsAssets.send2Icon,
-                    height: 15,
-                    color: Theme.of(context).focusColor,
-                  ),
-                )),
+              visible: messageInfo.messageUid.isEmpty,
+              child: Padding(
+                padding: const EdgeInsetsDirectional.only(start: 5.0),
+                child: SvgPicture.asset(
+                  IconsAssets.send2Icon,
+                  height: 15,
+                  color: Theme.of(context).focusColor,
+                ),
+              ),
+            ),
           ],
         ),
       ],
