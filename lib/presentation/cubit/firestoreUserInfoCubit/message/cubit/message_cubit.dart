@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/message.dart';
 import 'package:instagram/domain/entities/sender_info.dart';
 import 'package:instagram/domain/use_cases/message/common/get_specific_chat_info.dart';
 import 'package:instagram/domain/use_cases/message/single_message/add_message.dart';
