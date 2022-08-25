@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:instagram/data/models/story.dart';
+import 'package:instagram/data/models/child_classes/post/story.dart';
 
 // ignore: must_be_immutable
 class UserPersonalInfo extends Equatable {
@@ -12,6 +12,7 @@ class UserPersonalInfo extends Equatable {
   List<dynamic> followedPeople;
   List<dynamic> followerPeople;
   List<dynamic> posts;
+  List<dynamic> chatsOfGroups;
   String deviceToken;
   List<dynamic> stories;
   List<Story>? storiesInfo;
@@ -24,6 +25,7 @@ class UserPersonalInfo extends Equatable {
     required this.followedPeople,
     required this.followerPeople,
     required this.posts,
+    required this.chatsOfGroups,
     required this.stories,
     required this.charactersOfName,
     required this.lastThreePostUrls,
@@ -51,6 +53,7 @@ class UserPersonalInfo extends Equatable {
       followedPeople: snap?["following"] ?? [],
       followerPeople: snap?["followers"] ?? [],
       posts: snap?["posts"] ?? [],
+      chatsOfGroups: snap?["chatsOfGroups"] ?? [],
       stories: snap?["stories"] ?? [],
       charactersOfName: snap?["charactersOfName"] ?? [],
       numberOfNewNotifications: snap?["numberOfNewNotifications"] ?? 0,
@@ -65,6 +68,7 @@ class UserPersonalInfo extends Equatable {
         'following': followedPeople,
         'followers': followerPeople,
         'posts': posts,
+        'chatsOfGroups': chatsOfGroups,
         'stories': stories,
         'name': name,
         'userName': userName,
@@ -91,6 +95,7 @@ class UserPersonalInfo extends Equatable {
         followedPeople,
         followerPeople,
         posts,
+        chatsOfGroups,
         stories,
         storiesInfo,
         charactersOfName,
