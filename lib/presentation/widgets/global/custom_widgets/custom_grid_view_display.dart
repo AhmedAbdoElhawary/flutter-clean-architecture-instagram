@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/models/post.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/others/image_of_post.dart';
