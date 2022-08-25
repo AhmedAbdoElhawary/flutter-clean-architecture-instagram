@@ -1,4 +1,4 @@
-import 'package:instagram/data/models/specific_users_info.dart';
+import 'package:instagram/domain/entities/specific_users_info.dart';
 import 'package:instagram/core/use_case/use_case.dart';
 import '../../../repositories/user_repository.dart';
 
