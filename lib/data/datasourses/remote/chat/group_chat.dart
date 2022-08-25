@@ -50,13 +50,13 @@ class FireStoreGroupChat {
       {required List<dynamic> chatsIds}) async {
     List<SenderInfo> allUsers = [];
     for (final chatId in chatsIds) {
-      SenderInfo userInfo = await _getChatInfo(chatId: chatId);
+      SenderInfo userInfo = await getChatInfo(chatId: chatId);
       allUsers.add(userInfo);
     }
     return allUsers;
   }
 
-  static Future<SenderInfo> _getChatInfo({required dynamic chatId}) async {
+  static Future<SenderInfo> getChatInfo({required dynamic chatId}) async {
     DocumentReference<Map<String, dynamic>> userCollection =
         _fireStoreChatCollection.doc(chatId);
     DocumentSnapshot<Map<String, dynamic>> snap = await userCollection.get();
