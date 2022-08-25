@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 class Message extends Equatable {
   String datePublished;
   String message;
-  String receiverId;
+  List<dynamic> receiversIds;
   String messageUid;
   String blurHash;
   String senderId;
@@ -18,20 +18,28 @@ class Message extends Equatable {
   bool isThatPost;
   bool multiImages;
   bool isThatVideo;
+  bool isThatGroup;
+  String chatOfGroupId;
   String postId;
-  String profileImageUrl;
+  String senderName;
+  String senderProfileImageUrl;
+  String profileImageOfSharedPostUrl;
   String userNameOfSharedPost;
   Message({
     this.localImage,
     required this.message,
     required this.blurHash,
     this.multiImages = false,
-    required this.receiverId,
+    required this.receiversIds,
     this.isThatPost = false,
     this.isThatVideo = false,
+    this.isThatGroup = false,
+    this.chatOfGroupId = "",
     required this.senderId,
     this.postId = "",
-    this.profileImageUrl = "",
+    this.senderName = "",
+    this.senderProfileImageUrl = "",
+    this.profileImageOfSharedPostUrl = "",
     this.userNameOfSharedPost = "",
     this.messageUid = "",
     this.imageUrl = "",
@@ -40,30 +48,37 @@ class Message extends Equatable {
     required this.datePublished,
   });
 
-  static Message fromJson(QueryDocumentSnapshot<Map<String, dynamic>> snap) {
+  static Message fromJson(
+      {DocumentSnapshot<Map<String, dynamic>>? doc,
+      QueryDocumentSnapshot<Map<String, dynamic>>? query}) {
+    dynamic snap = doc ?? query;
     return Message(
       datePublished: snap.data()["datePublished"] ?? "",
       message: snap.data()["message"] ?? "",
-      receiverId: snap.data()["receiverId"] ?? "",
+      receiversIds: snap.data()["receiversIds"] ?? [],
       senderId: snap.data()["senderId"] ?? "",
       messageUid: snap.data()["messageUid"] ?? "",
       blurHash: snap.data()["blurHash"] ?? "",
       imageUrl: snap.data()["imageUrl"] ?? "",
+      senderName: snap.data()["senderName"] ?? "",
+      senderProfileImageUrl: snap.data()["senderProfileImageUrl"] ?? "",
       recordedUrl: snap.data()["recordedUrl"] ?? "",
       isThatImage: snap.data()["isThatImage"] ?? false,
       isThatPost: snap.data()["isThatPost"] ?? false,
       postId: snap.data()["postId"] ?? "",
-      profileImageUrl: snap.data()["profileImageUrl"] ?? "",
+      profileImageOfSharedPostUrl: snap.data()["profileImageUrl"] ?? "",
       userNameOfSharedPost: snap.data()["userNameOfSharedPost"] ?? "",
       multiImages: snap.data()["multiImages"] ?? false,
       isThatVideo: snap.data()["isThatVideo"] ?? false,
+      isThatGroup: snap.data()["isThatGroup"] ?? false,
+      chatOfGroupId: snap.data()["chatOfGroupId"] ?? "",
     );
   }
 
   Map<String, dynamic> toMap() => {
         "datePublished": datePublished,
         "message": message,
-        "receiverId": receiverId,
+        "receiversIds": receiversIds,
         "senderId": senderId,
         "blurHash": blurHash,
         "imageUrl": imageUrl,
@@ -71,17 +86,21 @@ class Message extends Equatable {
         "isThatImage": isThatImage,
         "isThatPost": isThatPost,
         "postId": postId,
-        "profileImageUrl": profileImageUrl,
+        "profileImageUrl": profileImageOfSharedPostUrl,
         "userNameOfSharedPost": userNameOfSharedPost,
         "multiImages": multiImages,
         "isThatVideo": isThatVideo,
+        "senderProfileImageUrl": senderProfileImageUrl,
+        "senderName": senderName,
+        "chatOfGroupId": chatOfGroupId,
+        "isThatGroup": isThatGroup,
       };
 
   @override
   List<Object?> get props => [
         datePublished,
         message,
-        receiverId,
+        receiversIds,
         messageUid,
         senderId,
         blurHash,
@@ -90,9 +109,13 @@ class Message extends Equatable {
         isThatImage,
         isThatPost,
         postId,
-        profileImageUrl,
+        profileImageOfSharedPostUrl,
         userNameOfSharedPost,
         multiImages,
         isThatVideo,
+        senderName,
+        senderProfileImageUrl,
+        chatOfGroupId,
+        isThatGroup,
       ];
 }
