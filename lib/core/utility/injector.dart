@@ -28,6 +28,7 @@ import 'package:instagram/domain/use_cases/calling_rooms/get_users_info_in_room.
 import 'package:instagram/domain/use_cases/calling_rooms/join_to_calling_room.dart';
 import 'package:instagram/domain/use_cases/follow/follow_this_user.dart';
 import 'package:instagram/domain/use_cases/follow/remove_this_follower.dart';
+import 'package:instagram/domain/use_cases/message/common/get_specific_chat_info.dart';
 import 'package:instagram/domain/use_cases/message/group_message/add_message.dart';
 import 'package:instagram/domain/use_cases/message/group_message/create_message.dart';
 import 'package:instagram/domain/use_cases/message/group_message/delete_message.dart';
@@ -299,6 +300,9 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<AddMessageForGroupChatUseCase>(
       AddMessageForGroupChatUseCase(injector()));
 
+  injector
+      .registerSingleton<GetSpecificChatInfo>(GetSpecificChatInfo(injector()));
+
   /// ==============================================================================================>
 
   // auth Blocs
@@ -332,7 +336,7 @@ Future<void> initializeDependencies() async {
 
   // message searchAboutUser
   injector.registerFactory<MessageCubit>(
-    () => MessageCubit(injector(), injector()),
+    () => MessageCubit(injector(), injector(), injector()),
   );
   injector.registerFactory<MessageBloc>(
     () => MessageBloc(injector(), injector()),
