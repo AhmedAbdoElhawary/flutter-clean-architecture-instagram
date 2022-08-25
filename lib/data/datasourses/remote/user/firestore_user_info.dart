@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
-import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/message.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/domain/entities/sender_info.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
