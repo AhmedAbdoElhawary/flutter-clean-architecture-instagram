@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
-import 'package:instagram/data/models/post.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 
 class FirestorePost {
   static final _fireStorePostCollection =
@@ -33,7 +33,7 @@ class FirestorePost {
         .update({'caption': postInfo.caption});
     DocumentSnapshot<Map<String, dynamic>> snap =
         await _fireStorePostCollection.doc(postInfo.postUid).get();
-    return Post.fromQuery(query: snap);
+    return Post.fromQuery(doc: snap);
   }
 
   static Future<List<Post>> getPostsInfo(
@@ -54,7 +54,7 @@ class FirestorePost {
         DocumentSnapshot<Map<String, dynamic>> snap =
             await _fireStorePostCollection.doc(postsIds[i]).get();
         if (snap.exists) {
-          Post postReformat = Post.fromQuery(query: snap);
+          Post postReformat = Post.fromQuery(doc: snap);
           if (postReformat.postUrl.isNotEmpty) {
             UserPersonalInfo publisherInfo =
                 await FirestoreUser.getUserInfo(postReformat.publisherId);
@@ -78,7 +78,7 @@ class FirestorePost {
     DocumentSnapshot<Map<String, dynamic>> snap =
         await _fireStorePostCollection.doc(postId).get();
     if (snap.exists) {
-      Post postReformat = Post.fromQuery(query: snap);
+      Post postReformat = Post.fromQuery(doc: snap);
       return postReformat.comments;
     } else {
       return Future.error(StringsManager.userNotExist.tr);
@@ -99,7 +99,7 @@ class FirestorePost {
     }
     for (final doc in snap.docs) {
       if (skippedVideoUid == doc.id) continue;
-      Post postReformat = Post.fromQuery(doc: doc);
+      Post postReformat = Post.fromQuery(query: doc);
       UserPersonalInfo publisherInfo =
           await FirestoreUser.getUserInfo(postReformat.publisherId);
       postReformat.publisherInfo = publisherInfo;
