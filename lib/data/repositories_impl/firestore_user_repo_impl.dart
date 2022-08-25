@@ -5,7 +5,7 @@ import 'package:instagram/data/datasourses/remote/chat/group_chat.dart';
 import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
 import 'package:instagram/data/datasourses/remote/notification/firebase_notification.dart';
 import 'package:instagram/data/datasourses/remote/chat/single_chat.dart';
-import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/message.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/domain/entities/sender_info.dart';
 import 'package:instagram/domain/entities/specific_users_info.dart';
