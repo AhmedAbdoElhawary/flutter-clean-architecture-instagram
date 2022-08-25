@@ -5,6 +5,7 @@ class PushNotification {
   String routeParameterId;
   String notificationRoute;
   String userCallingId;
+  bool isThatGroupChat;
   PushNotification({
     required this.body,
     required this.title,
@@ -12,6 +13,7 @@ class PushNotification {
     this.userCallingId = '',
     required this.routeParameterId,
     required this.notificationRoute,
+    this.isThatGroupChat = false,
   });
 
   Map<String, dynamic> toMap() => {
@@ -22,6 +24,7 @@ class PushNotification {
           'route': notificationRoute,
           'routeParameterId': routeParameterId,
           'userCallingId': userCallingId,
+          'isThatGroupChat': isThatGroupChat,
         },
         "to": deviceToken,
       };
