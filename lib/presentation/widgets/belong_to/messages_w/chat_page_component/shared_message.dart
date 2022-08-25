@@ -6,7 +6,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/translations/app_lang.dart';
-import 'package:instagram/data/models/message.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/get_post_info.dart';
 
@@ -97,7 +97,7 @@ class SharedMessage extends StatelessWidget {
           CircleAvatar(
             backgroundColor: ColorManager.customGrey,
             backgroundImage: messageInfo.imageUrl.isNotEmpty
-                ? CachedNetworkImageProvider(messageInfo.profileImageUrl)
+                ? CachedNetworkImageProvider(messageInfo.profileImageOfSharedPostUrl)
                 : null,
             radius: 15,
             child: messageInfo.imageUrl.isEmpty
