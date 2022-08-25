@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:instagram/data/models/notification.dart';
-import 'package:instagram/data/models/push_notification.dart';
+import 'package:instagram/data/models/child_classes/child_classes_with_entities/notification.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/push_notification.dart';
 import 'package:instagram/core/utility/private_keys.dart';
 
 class DeviceNotification {
