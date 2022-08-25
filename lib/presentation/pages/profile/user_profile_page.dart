@@ -11,8 +11,9 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
-import 'package:instagram/data/models/notification.dart';
+import 'package:instagram/data/models/child_classes/child_classes_with_entities/notification.dart';
 import 'package:instagram/domain/entities/notification_check.dart';
+import 'package:instagram/domain/entities/sender_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
@@ -25,7 +26,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
 import '../../../core/utility/constant.dart';
-import '../../../data/models/user_personal_info.dart';
+import '../../../data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 
 class UserProfilePage extends StatefulWidget {
@@ -346,7 +347,8 @@ class _ProfilePageState extends State<UserProfilePage> {
           pushToPage(context,
               page: BlocProvider<MessageBloc>(
                 create: (context) => injector<MessageBloc>(),
-                child: ChattingPage(userInfo: userInfo.value),
+                child: ChattingPage(
+                    messageDetails: SenderInfo(receiversInfo: [userInfo.value])),
               ));
         },
         child: containerOfFollowText(
