@@ -229,12 +229,22 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Future<List<SenderInfo>> getSpecificChatInfo(
+  Future<SenderInfo> getSpecificChatInfo(
       {required String chatUid, required bool isThatGroup}) async {
     try {
       if (isThatGroup) {
-        await FireStoreGroupChat.getChatInfo(chatId: chatUid);
-      } else {}
+        SenderInfo coverChatInfo =
+            await FireStoreGroupChat.getChatInfo(chatId: chatUid);
+        SenderInfo messageDetails =
+            await FirestoreUser.extractUsersForGroupChatInfo(coverChatInfo);
+        return messageDetails;
+      } else {
+        SenderInfo coverChatInfo =
+            await FirestoreUser.getChatOfUser(chatUid: chatUid);
+        SenderInfo messageDetails =
+            await FirestoreUser.extractUsersForSingleChatInfo(coverChatInfo);
+        return messageDetails;
+      }
     } catch (e) {
       return Future.error(e.toString());
     }
@@ -248,7 +258,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
           await FireStoreGroupChat.getSpecificChatsInfo(
               chatsIds: myPersonalInfo.chatsOfGroups);
       List<SenderInfo> allChatsInfo =
-          await FirestoreUser.getChatUserInfo(userId: myPersonalInfo.userId);
+          await FirestoreUser.getMessagesOfChat(userId: myPersonalInfo.userId);
       List<SenderInfo> allChats = allChatsInfo + allChatsOfGroupsInfo;
       List<SenderInfo> allUsersInfo =
           await FirestoreUser.extractUsersChatInfo(messagesDetails: allChats);
