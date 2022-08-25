@@ -6,8 +6,8 @@ import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/models/post.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
@@ -56,11 +56,8 @@ class _SendToUsersState extends State<SendToUsers> {
           List<UserPersonalInfo> usersInfo =
               state.followersAndFollowingsInfo.followersInfo;
           for (final i in state.followersAndFollowingsInfo.followingsInfo) {
-            if (!usersInfo.contains(i)) {
-              usersInfo.add(i);
-            }
+            if (!usersInfo.contains(i)) usersInfo.add(i);
           }
-
           return ValueListenableBuilder(
             valueListenable: widget.selectedUsersInfo,
             builder:
@@ -135,7 +132,7 @@ class _SendToUsersState extends State<SendToUsers> {
               ? Icon(
                   Icons.person,
                   color: Theme.of(context).primaryColor,
-                  size: 10,
+                  size: 25,
                 )
               : null,
         ),
