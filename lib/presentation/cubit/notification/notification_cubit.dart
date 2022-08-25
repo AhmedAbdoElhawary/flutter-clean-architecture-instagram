@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram/data/models/notification.dart';
+import 'package:instagram/data/models/child_classes/child_classes_with_entities/notification.dart';
 import 'package:instagram/domain/entities/notification_check.dart';
 import 'package:instagram/domain/use_cases/notification/create_notification_use_case.dart';
 import 'package:instagram/domain/use_cases/notification/delete_notification.dart';
