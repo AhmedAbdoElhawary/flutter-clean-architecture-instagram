@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 
 // ignore: must_be_immutable
 class Message extends Equatable {
@@ -11,6 +12,7 @@ class Message extends Equatable {
   String messageUid;
   String blurHash;
   String senderId;
+  UserPersonalInfo? senderInfo;
   String imageUrl;
   Uint8List? localImage;
   String recordedUrl;
@@ -20,11 +22,10 @@ class Message extends Equatable {
   bool isThatVideo;
   bool isThatGroup;
   String chatOfGroupId;
-  String postId;
-  String senderName;
-  String senderProfileImageUrl;
-  String profileImageOfSharedPostUrl;
-  String userNameOfSharedPost;
+  String sharedPostId;
+  String ownerOfSharedPostId;
+  UserPersonalInfo? ownerOfSharedPostInfo;
+
   Message({
     this.localImage,
     required this.message,
@@ -36,16 +37,15 @@ class Message extends Equatable {
     this.isThatGroup = false,
     this.chatOfGroupId = "",
     required this.senderId,
-    this.postId = "",
-    this.senderName = "",
-    this.senderProfileImageUrl = "",
-    this.profileImageOfSharedPostUrl = "",
-    this.userNameOfSharedPost = "",
+    this.sharedPostId = "",
+    this.ownerOfSharedPostId = "",
     this.messageUid = "",
     this.imageUrl = "",
     this.recordedUrl = "",
+    this.senderInfo,
     required this.isThatImage,
     required this.datePublished,
+    this.ownerOfSharedPostInfo,
   });
 
   static Message fromJson(
@@ -60,14 +60,11 @@ class Message extends Equatable {
       messageUid: snap.data()["messageUid"] ?? "",
       blurHash: snap.data()["blurHash"] ?? "",
       imageUrl: snap.data()["imageUrl"] ?? "",
-      senderName: snap.data()["senderName"] ?? "",
-      senderProfileImageUrl: snap.data()["senderProfileImageUrl"] ?? "",
+      ownerOfSharedPostId: snap.data()["ownerOfSharedPostId"] ?? "",
       recordedUrl: snap.data()["recordedUrl"] ?? "",
       isThatImage: snap.data()["isThatImage"] ?? false,
       isThatPost: snap.data()["isThatPost"] ?? false,
-      postId: snap.data()["postId"] ?? "",
-      profileImageOfSharedPostUrl: snap.data()["profileImageUrl"] ?? "",
-      userNameOfSharedPost: snap.data()["userNameOfSharedPost"] ?? "",
+      sharedPostId: snap.data()["postId"] ?? "",
       multiImages: snap.data()["multiImages"] ?? false,
       isThatVideo: snap.data()["isThatVideo"] ?? false,
       isThatGroup: snap.data()["isThatGroup"] ?? false,
@@ -85,13 +82,10 @@ class Message extends Equatable {
         "recordedUrl": recordedUrl,
         "isThatImage": isThatImage,
         "isThatPost": isThatPost,
-        "postId": postId,
-        "profileImageUrl": profileImageOfSharedPostUrl,
-        "userNameOfSharedPost": userNameOfSharedPost,
+        "postId": sharedPostId,
+        "ownerOfSharedPostId": ownerOfSharedPostId,
         "multiImages": multiImages,
         "isThatVideo": isThatVideo,
-        "senderProfileImageUrl": senderProfileImageUrl,
-        "senderName": senderName,
         "chatOfGroupId": chatOfGroupId,
         "isThatGroup": isThatGroup,
       };
@@ -108,13 +102,10 @@ class Message extends Equatable {
         recordedUrl,
         isThatImage,
         isThatPost,
-        postId,
-        profileImageOfSharedPostUrl,
-        userNameOfSharedPost,
+        sharedPostId,
+        ownerOfSharedPostId,
         multiImages,
         isThatVideo,
-        senderName,
-        senderProfileImageUrl,
         chatOfGroupId,
         isThatGroup,
       ];

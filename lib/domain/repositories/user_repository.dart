@@ -53,6 +53,7 @@ abstract class FirestoreUserRepository {
 
   Future<void> deleteMessage(
       {required Message messageInfo, Message? replacedMessage});
-
+  Future<SenderInfo> getSpecificChatInfo(
+      {required String chatUid, required bool isThatGroup});
   Future<List<SenderInfo>> getChatUserInfo({required UserPersonalInfo myPersonalInfo});
 }
