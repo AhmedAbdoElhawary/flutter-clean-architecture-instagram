@@ -8,8 +8,7 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/domain/entities/sender_info.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
 import 'package:instagram/presentation/pages/profile/user_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/chat_messages.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
@@ -18,8 +17,6 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_netw
 
 class ChattingPage extends StatefulWidget {
   final SenderInfo? messageDetails;
-
-  /// todo handle the notifications
   final String chatUid;
   final bool isThatGroup;
 
@@ -42,28 +39,22 @@ class _ChattingPageState extends State<ChattingPage>
 
   @override
   Widget build(BuildContext context) {
-    /// todo handle the notifications
-
-    return
-        widget.messageDetails != null
-          ?
-        scaffold(widget.messageDetails!)
-        : getUserInfo(context)
-        ;
+    return widget.messageDetails != null
+        ? scaffold(widget.messageDetails!)
+        : getUserInfo(context);
   }
 
-  /// todo handle the notifications
-
   Widget getUserInfo(BuildContext context) {
-    return BlocBuilder<UsersInfoCubit, UsersInfoState>(
-      bloc: UsersInfoCubit.get(context)
-        ..getChatUsersInfo(myPersonalInfo: myPersonalInfo),
+    return BlocBuilder<MessageCubit, MessageState>(
+      bloc: MessageCubit.get(context)
+        ..getSpecificChatInfo(
+            isThatGroup: widget.isThatGroup, chatUid: widget.chatUid),
       buildWhen: (previous, current) =>
-      previous != current && current is CubitGettingChatUsersInfoLoaded,
+          previous != current && current is GetSpecificChatLoaded,
       builder: (context, state) {
-        if (state is CubitGettingChatUsersInfoLoaded) {
-          return scaffold(state.userPersonalInfo);
-        } else if (state is CubitGetUserInfoFailed) {
+        if (state is GetSpecificChatLoaded) {
+          return scaffold(state.coverMessageDetails);
+        } else if (state is GetMessageFailed) {
           ToastShow.toast(state.error);
 
           return Scaffold(
