@@ -24,7 +24,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gall
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/functions/toast_show.dart';
-import '../../../data/models/user_personal_info.dart';
+import '../../../data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import '../../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../register/login_page.dart';
