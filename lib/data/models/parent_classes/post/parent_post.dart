@@ -1,6 +1,6 @@
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 
-class ParentPost {
+abstract class ParentPost {
   String datePublished;
   String caption;
   String publisherId;
