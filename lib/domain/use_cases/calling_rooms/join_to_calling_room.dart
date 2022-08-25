@@ -1,4 +1,4 @@
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/domain/repositories/calling_rooms_repository.dart';
 import 'package:instagram/core/use_case/use_case.dart';
 
