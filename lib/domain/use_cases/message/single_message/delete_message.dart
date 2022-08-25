@@ -1,5 +1,5 @@
 import 'package:instagram/core/use_case/use_case.dart';
-import 'package:instagram/data/models/message.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
 import 'package:instagram/domain/repositories/user_repository.dart';
 
 class DeleteMessageUseCase
