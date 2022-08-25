@@ -1,49 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/datasourses/remote/notification/device_notification.dart';
-import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
-import 'package:instagram/data/models/message.dart';
-import 'package:instagram/data/models/push_notification.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
 
-class FireStoreMessage {
+class FireStoreSingleChat {
   static final _fireStoreUserCollection =
       FirebaseFirestore.instance.collection('users');
 
   static Future<Message> sendMessage({
-    required String userId,
-    required String chatId,
-    required Message message,
-  }) async {
-    DocumentReference<Map<String, dynamic>> userCollection =
-        _fireStoreUserCollection.doc(userId);
-    if (userId != myPersonalId) {
-      userCollection.update({"numberOfNewMessages": FieldValue.increment(1)});
-      UserPersonalInfo receiverInfo = await FirestoreUser.getUserInfo(userId);
-      String token = receiverInfo.deviceToken;
-      if (token.isNotEmpty) {
-        String body = message.message.isNotEmpty
-            ? message.message
-            : (message.isThatImage
-                ? "Send image"
-                : (message.isThatPost
-                    ? "Share with you a post"
-                    : "Send message"));
-        PushNotification detail = PushNotification(
-          title: message.senderId,
-          body: body,
-          deviceToken: token,
-          notificationRoute: "message",
-          routeParameterId: message.senderId,
-        );
-        await DeviceNotification.sendPopupNotification(
-            pushNotification: detail);
-      }
-    }
-    return await _sendMessage(userId: userId, chatId: chatId, message: message);
-  }
-
-  static Future<Message> _sendMessage({
     required String userId,
     required String chatId,
     required Message message,
@@ -92,8 +55,8 @@ class FireStoreMessage {
             .orderBy("datePublished", descending: false)
             .snapshots();
     return snapshotsMessages.map((snapshot) =>
-        snapshot.docs.map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
-          return Message.fromJson(doc);
+        snapshot.docs.map((QueryDocumentSnapshot<Map<String, dynamic>> query) {
+          return Message.fromJson(query: query);
         }).toList());
   }
 
