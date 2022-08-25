@@ -4,12 +4,14 @@ import 'package:instagram/data/repositories_impl/firebase_auth_repository_impl.d
 import 'package:instagram/data/repositories_impl/firestore_notification.dart';
 import 'package:instagram/data/repositories_impl/firestore_story_repo_impl.dart';
 import 'package:instagram/data/repositories_impl/firestore_user_repo_impl.dart';
+import 'package:instagram/data/repositories_impl/group_message_repo_impl.dart';
 import 'package:instagram/data/repositories_impl/post/comment/firestore_comment_repo_impl.dart';
 import 'package:instagram/data/repositories_impl/post/comment/firestore_reply_repo_impl.dart';
 import 'package:instagram/data/repositories_impl/post/firestore_post_repo_impl.dart';
 import 'package:instagram/domain/repositories/auth_repository.dart';
 import 'package:instagram/domain/repositories/calling_rooms_repository.dart';
 import 'package:instagram/domain/repositories/firestore_notification.dart';
+import 'package:instagram/domain/repositories/group_message.dart';
 import 'package:instagram/domain/repositories/post/comment/comment_repository.dart';
 import 'package:instagram/domain/repositories/post/comment/reply_repository.dart';
 import 'package:instagram/domain/repositories/post/post_repository.dart';
@@ -26,6 +28,14 @@ import 'package:instagram/domain/use_cases/calling_rooms/get_users_info_in_room.
 import 'package:instagram/domain/use_cases/calling_rooms/join_to_calling_room.dart';
 import 'package:instagram/domain/use_cases/follow/follow_this_user.dart';
 import 'package:instagram/domain/use_cases/follow/remove_this_follower.dart';
+import 'package:instagram/domain/use_cases/message/group_message/add_message.dart';
+import 'package:instagram/domain/use_cases/message/group_message/create_message.dart';
+import 'package:instagram/domain/use_cases/message/group_message/delete_message.dart';
+import 'package:instagram/domain/use_cases/message/group_message/get_messages.dart';
+import 'package:instagram/domain/use_cases/message/single_message/add_message.dart';
+import 'package:instagram/domain/use_cases/message/single_message/delete_message.dart';
+import 'package:instagram/domain/use_cases/message/single_message/get_chat_users_info.dart';
+import 'package:instagram/domain/use_cases/message/single_message/get_messages.dart';
 import 'package:instagram/domain/use_cases/notification/create_notification_use_case.dart';
 import 'package:instagram/domain/use_cases/notification/delete_notification.dart';
 import 'package:instagram/domain/use_cases/notification/get_notifications_use_case.dart';
@@ -57,10 +67,6 @@ import 'package:instagram/domain/use_cases/user/getUserInfo/get_followers_and_fo
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_specific_users_usecase.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_user_from_user_name.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_user_info_usecase.dart';
-import 'package:instagram/domain/use_cases/user/message/add_message.dart';
-import 'package:instagram/domain/use_cases/user/message/delete_message.dart';
-import 'package:instagram/domain/use_cases/user/message/get_chat_users_info.dart';
-import 'package:instagram/domain/use_cases/user/message/get_messages.dart';
 import 'package:instagram/domain/use_cases/user/my_personal_info.dart';
 import 'package:instagram/domain/use_cases/user/search_about_user.dart';
 import 'package:instagram/domain/use_cases/user/update_user_info.dart';
@@ -71,6 +77,7 @@ import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.da
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/group_chat/message_for_group_chat_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -129,6 +136,10 @@ Future<void> initializeDependencies() async {
   );
   // calling rooms repository
   injector.registerSingleton<CallingRoomsRepository>(CallingRoomsRepoImpl());
+
+  injector.registerSingleton<FirestoreGroupMessageRepository>(
+      FirebaseGroupMessageRepoImpl());
+
   // *
   /// ==============================================================================================>
 
@@ -276,6 +287,18 @@ Future<void> initializeDependencies() async {
   injector
       .registerSingleton<GetAllUsersUseCase>(GetAllUsersUseCase(injector()));
 
+  injector.registerSingleton<CreateGroupChatUseCase>(
+      CreateGroupChatUseCase(injector()));
+
+  injector.registerSingleton<DeleteMessageForGroupChatUseCase>(
+      DeleteMessageForGroupChatUseCase(injector()));
+
+  injector.registerSingleton<GetMessagesGroGroupChatUseCase>(
+      GetMessagesGroGroupChatUseCase(injector()));
+
+  injector.registerSingleton<AddMessageForGroupChatUseCase>(
+      AddMessageForGroupChatUseCase(injector()));
+
   /// ==============================================================================================>
 
   // auth Blocs
@@ -312,7 +335,7 @@ Future<void> initializeDependencies() async {
     () => MessageCubit(injector(), injector()),
   );
   injector.registerFactory<MessageBloc>(
-    () => MessageBloc(injector()),
+    () => MessageBloc(injector(), injector()),
   );
   // *
   // *
@@ -376,5 +399,8 @@ Future<void> initializeDependencies() async {
   );
   injector
       .registerFactory<CallingStatusBloc>(() => CallingStatusBloc(injector()));
+
+  injector.registerFactory<MessageForGroupChatCubit>(
+      () => MessageForGroupChatCubit(injector(), injector()));
   // *
 }
