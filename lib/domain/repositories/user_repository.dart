@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:instagram/data/models/message.dart';
-import 'package:instagram/data/models/post.dart';
-import 'package:instagram/data/models/sender_info.dart';
-import 'package:instagram/data/models/specific_users_info.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
+import 'package:instagram/domain/entities/sender_info.dart';
+import 'package:instagram/domain/entities/specific_users_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 
 abstract class FirestoreUserRepository {
   Future<void> addNewUser(UserPersonalInfo newUserInfo);
@@ -39,6 +39,10 @@ abstract class FirestoreUserRepository {
   Future<void> followThisUser(String followingUserId, String myPersonalId);
 
   Future<void> unFollowThisUser(String followingUserId, String myPersonalId);
+  Stream<UserPersonalInfo> getMyPersonalInfo();
+
+  Stream<List<UserPersonalInfo>> searchAboutUser(
+      {required String name, required bool searchForSingleLetter});
 
   Future<Message> sendMessage(
       {required Message messageInfo,
@@ -47,11 +51,8 @@ abstract class FirestoreUserRepository {
 
   Stream<List<Message>> getMessages({required String receiverId});
 
-  Stream<UserPersonalInfo> getMyPersonalInfo();
-
-  Stream<List<UserPersonalInfo>> searchAboutUser(
-      {required String name, required bool searchForSingleLetter});
   Future<void> deleteMessage(
       {required Message messageInfo, Message? replacedMessage});
-  Future<List<SenderInfo>> getChatUserInfo({required String userId});
+
+  Future<List<SenderInfo>> getChatUserInfo({required UserPersonalInfo myPersonalInfo});
 }
