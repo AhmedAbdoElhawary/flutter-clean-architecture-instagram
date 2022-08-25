@@ -15,7 +15,7 @@ import 'package:instagram/presentation/widgets/belong_to/register_w/popup_callin
 import 'package:instagram/presentation/widgets/belong_to/register_w/register_widgets.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../data/models/user_personal_info.dart';
+import '../../../data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import '../../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../../cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 import '../../../core/functions/toast_show.dart';
@@ -323,6 +323,7 @@ class _UserNamePageState extends State<UserNamePage> {
       followerPeople: const [],
       followedPeople: const [],
       posts: const [],
+      chatsOfGroups: const [],
       stories: const [],
       lastThreePostUrls: const [],
     );
