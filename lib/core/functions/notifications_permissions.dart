@@ -44,6 +44,7 @@ Future<void> _listenFCM(BuildContext context) async {
       dynamic route = message.data["route"];
       dynamic routeParameterId = message.data["routeParameterId"];
       dynamic userCallingId = message.data["userCallingId"];
+      dynamic isThatGroupChat = message.data["isThatGroupChat"];
 
       bool isThatVideoCall = route == "call";
       if (isThatVideoCall) {
@@ -51,7 +52,7 @@ Future<void> _listenFCM(BuildContext context) async {
           notification.hashCode,
           notification.title,
           notification.body,
-          payload: "$route,$routeParameterId,$userCallingId",
+          payload: "$route,$routeParameterId,$userCallingId,$isThatGroupChat",
           NotificationDetails(
               android: _videoCallAndroidNotificationDetails(
                   channel: _videoCallChannel, isThatCalling: true)),
@@ -81,17 +82,20 @@ Future<void> _listenFCM(BuildContext context) async {
 }
 
 Future<void> _handleMessage(BuildContext context, RemoteMessage message) async {
-  await _pushToPage(
+  await _pushToPage(context,
       route: message.data["route"],
       routeParameterId: message.data["routeParameterId"],
       userCallingId: message.data["userCallingId"],
-      context);
+      isThatGroupChat: message.data["isThatGroupChat"]);
 }
 
-Future<void> _pushToPage(BuildContext context,
-    {required dynamic route,
-    required dynamic routeParameterId,
-    required dynamic userCallingId}) async {
+Future<void> _pushToPage(
+  BuildContext context, {
+  required dynamic route,
+  required dynamic routeParameterId,
+  required dynamic userCallingId,
+  required dynamic isThatGroupChat,
+}) async {
   Widget page;
   if (route == "post") {
     page = GetsPostInfoAndDisplay(
@@ -113,9 +117,11 @@ Future<void> _pushToPage(BuildContext context,
   } else {
     page = BlocProvider<MessageBloc>(
       create: (context) => injector<MessageBloc>(),
-      child: ChattingPage(chatUid: routeParameterId),
+      child:
+          ChattingPage(chatUid: routeParameterId, isThatGroup: isThatGroupChat),
     );
   }
+
   await pushToPage(context, page: page);
 }
 
@@ -178,12 +184,14 @@ _onSelectNotification(BuildContext context, String? payload) async {
     String route = s[0];
     String routeParameterId = s[1];
     String userCallingId = s[2];
+    dynamic isThatGroupChat = s[3];
     if (userCallingId.isEmpty) {
       await _pushToPage(
         context,
         route: route,
         routeParameterId: routeParameterId,
         userCallingId: userCallingId,
+        isThatGroupChat: isThatGroupChat,
       );
     }
   }
