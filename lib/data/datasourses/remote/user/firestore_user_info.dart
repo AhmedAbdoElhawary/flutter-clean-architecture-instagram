@@ -2,11 +2,13 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
-import 'package:instagram/data/models/message.dart';
-import 'package:instagram/data/models/post.dart';
-import 'package:instagram/data/models/sender_info.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
+import 'package:instagram/domain/entities/sender_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import '../../../../core/utility/constant.dart';
+import 'package:instagram/data/datasourses/remote/notification/device_notification.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/push_notification.dart';
 
 class FirestoreUser {
   static final _fireStoreUserCollection =
@@ -37,6 +39,52 @@ class FirestoreUser {
       return true;
     } else {
       return false;
+    }
+  }
+
+  static Future<void> updateChatsOfGroups({
+    required Message messageInfo,
+  }) async {
+    for (final userId in messageInfo.receiversIds) {
+      await _fireStoreUserCollection.doc(userId).update({
+        "chatsOfGroups": FieldValue.arrayUnion([messageInfo.chatOfGroupId])
+      });
+
+      await FirestoreUser.sendNotification(
+          userId: userId, message: messageInfo);
+    }
+    await _fireStoreUserCollection.doc(messageInfo.senderId).update({
+      "chatsOfGroups": FieldValue.arrayUnion([messageInfo.chatOfGroupId])
+    });
+  }
+
+  static Future<void> sendNotification(
+      {required String userId, required Message message}) async {
+    DocumentReference<Map<String, dynamic>> userCollection =
+        _fireStoreUserCollection.doc(userId);
+    if (userId != myPersonalId) {
+      userCollection.update({"numberOfNewMessages": FieldValue.increment(1)});
+      UserPersonalInfo receiverInfo = await getUserInfo(userId);
+      String token = receiverInfo.deviceToken;
+      if (token.isNotEmpty) {
+        String body = message.message.isNotEmpty
+            ? message.message
+            : (message.isThatImage
+                ? "Send image"
+                : (message.isThatPost
+                    ? "Share with you a post"
+                    : "Send message"));
+        PushNotification detail = PushNotification(
+          title: message.senderInfo?.name ?? "A user",
+          body: body,
+          deviceToken: token,
+          isThatGroupChat: message.isThatGroup,
+          notificationRoute: "message",
+          routeParameterId: message.senderId,
+        );
+        await DeviceNotification.sendPopupNotification(
+            pushNotification: detail);
+      }
     }
   }
 
@@ -143,21 +191,56 @@ class FirestoreUser {
     return usersInfo;
   }
 
-  static Future<List<SenderInfo>> extractUsersIds(
-      {required List<SenderInfo> usersInfo}) async {
-    for (int i = 0; i < usersInfo.length; i++) {
-      if (usersInfo[i].lastMessage != null) {
-        String userId = usersInfo[i].lastMessage?.senderId != myPersonalId
-            ? usersInfo[i].lastMessage!.senderId
-            : usersInfo[i].lastMessage!.receiverId;
-        UserPersonalInfo userInfo = await getUserInfo(userId);
-        usersInfo[i].userInfo = userInfo;
+  static Future<List<SenderInfo>> extractUsersChatInfo(
+      {required List<SenderInfo> messagesDetails}) async {
+    for (int i = 0; i < messagesDetails.length; i++) {
+      if (messagesDetails[i].lastMessage!.isThatGroup) {
+        messagesDetails[i] =
+            await extractUsersForGroupChatInfo(messagesDetails[i]);
+      } else {
+        messagesDetails[i] =
+            await extractUsersForSingleChatInfo(messagesDetails[i]);
       }
     }
+    return messagesDetails;
+  }
+
+  static Future<SenderInfo> extractUsersForSingleChatInfo(
+      SenderInfo usersInfo) async {
+    if (usersInfo.lastMessage != null) {
+      String userId;
+      if (usersInfo.lastMessage?.senderId != myPersonalId) {
+        userId = usersInfo.lastMessage!.senderId;
+      } else {
+        userId = usersInfo.lastMessage!.receiversIds[0];
+      }
+      UserPersonalInfo userInfo = await getUserInfo(userId);
+      usersInfo.receiversInfo = [userInfo];
+    }
+
     return usersInfo;
   }
 
-  static Future<List<SenderInfo>> getChatUserInfo(
+  static Future<SenderInfo> extractUsersForGroupChatInfo(
+      SenderInfo usersInfo) async {
+    if (usersInfo.lastMessage != null) {
+      for (final receiverId in usersInfo.lastMessage!.receiversIds) {
+        UserPersonalInfo userInfo = await getUserInfo(receiverId);
+        if (usersInfo.receiversInfo == null) {
+          usersInfo.receiversInfo = [userInfo];
+        } else {
+          usersInfo.receiversInfo!.add(userInfo);
+        }
+      }
+      String userId = usersInfo.lastMessage!.senderId;
+      UserPersonalInfo userInfo = await getUserInfo(userId);
+      usersInfo.receiversInfo!.add(userInfo);
+    }
+
+    return usersInfo;
+  }
+
+  static Future<List<SenderInfo>> getMessagesOfChat(
       {required String userId}) async {
     List<SenderInfo> allUsers = [];
 
@@ -167,12 +250,22 @@ class FirestoreUser {
     QuerySnapshot<Map<String, dynamic>> snap =
         await userCollection.collection("chats").get();
 
-    for (int i = 0; i < snap.docs.length; i++) {
-      QueryDocumentSnapshot<Map<String, dynamic>> doc = snap.docs[i];
-      Message messageInfo = Message.fromJson(doc);
+    for (final chatInfo in snap.docs) {
+      QueryDocumentSnapshot<Map<String, dynamic>> query = chatInfo;
+      Message messageInfo = Message.fromJson(query: query);
       allUsers.add(SenderInfo(lastMessage: messageInfo));
     }
     return allUsers;
+  }
+
+  static Future<SenderInfo> getChatOfUser({required String chatUid}) async {
+    DocumentReference<Map<String, dynamic>> userCollection =
+        _fireStoreUserCollection.doc(myPersonalId);
+    userCollection.update({'numberOfNewMessages': 0});
+    DocumentSnapshot<Map<String, dynamic>> doc =
+        await userCollection.collection("chats").doc(chatUid).get();
+    Message messageInfo = Message.fromJson(doc: doc);
+    return SenderInfo(lastMessage: messageInfo);
   }
 
   static updateProfileImage(

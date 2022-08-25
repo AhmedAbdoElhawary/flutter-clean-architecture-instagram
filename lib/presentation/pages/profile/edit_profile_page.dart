@@ -11,7 +11,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
@@ -157,6 +157,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     userId: widget.userInfo.userId,
                     deviceToken: widget.userInfo.deviceToken,
                     lastThreePostUrls: widget.userInfo.lastThreePostUrls,
+                    chatsOfGroups: widget.userInfo.chatsOfGroups,
                   );
                   await updateUserCubit
                       .updateUserInfo(updatedUserInfo)

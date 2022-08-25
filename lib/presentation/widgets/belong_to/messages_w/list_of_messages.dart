@@ -9,10 +9,11 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
-import 'package:instagram/data/models/message.dart';
-import 'package:instagram/data/models/sender_info.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
+import 'package:instagram/domain/entities/sender_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instagram/presentation/pages/messages/chatting_page.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
@@ -35,6 +36,13 @@ class ListOfMessages extends StatefulWidget {
 }
 
 class _ListOfMessagesState extends State<ListOfMessages> {
+  late UserPersonalInfo myPersonalInfo;
+  @override
+  void initState() {
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return buildBlocBuilder();
@@ -48,7 +56,8 @@ class _ListOfMessagesState extends State<ListOfMessages> {
             mediaQuery.padding.top
         : 500;
     return BlocBuilder<UsersInfoCubit, UsersInfoState>(
-      bloc: UsersInfoCubit.get(context)..getChatUsersInfo(userId: myPersonalId),
+      bloc: UsersInfoCubit.get(context)
+        ..getChatUsersInfo(myPersonalInfo: myPersonalInfo),
       buildWhen: (previous, current) =>
           previous != current && current is CubitGettingChatUsersInfoLoaded,
       builder: (context, state) {
@@ -56,74 +65,27 @@ class _ListOfMessagesState extends State<ListOfMessages> {
           bool isThatUserExist = false;
           if (widget.additionalUser != null) {
             state.usersInfo.where((element) {
-              bool check =
-                  element.userInfo?.userId != widget.additionalUser?.userId;
+              bool check = (element.receiversInfo?[0].userId !=
+                      widget.additionalUser?.userId) &&
+                  !(element.lastMessage?.isThatGroup ?? true);
               if (!check) isThatUserExist = true;
               return true;
             }).toList();
           }
-          SenderInfo senderInfo = SenderInfo(userInfo: widget.additionalUser);
           List<SenderInfo> usersInfo = state.usersInfo;
-
           if (!isThatUserExist && widget.additionalUser != null) {
+            SenderInfo senderInfo =
+                SenderInfo(receiversInfo: [widget.additionalUser!]);
             usersInfo.add(senderInfo);
           }
-          return ListView.separated(
-              physics: widget.freezeListView
-                  ? const NeverScrollableScrollPhysics()
-                  : null,
-              primary: !widget.freezeListView,
-              shrinkWrap: widget.freezeListView,
-              itemBuilder: (context, index) {
-                Message? theLastMessage = usersInfo[index].lastMessage;
-
-                return ListTile(
-                  title: buildText(usersInfo, index, context),
-                  subtitle: theLastMessage != null
-                      ? Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  theLastMessage.message.isEmpty
-                                      ? (theLastMessage.imageUrl.isEmpty
-                                          ? StringsManager.recordedSent.tr
-                                          : StringsManager.photoSent.tr)
-                                      : theLastMessage.message,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style:
-                                      getNormalStyle(color: ColorManager.grey)),
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                                DateOfNow.commentsDateOfNow(
-                                    theLastMessage.datePublished),
-                                style:
-                                    getNormalStyle(color: ColorManager.grey)),
-                          ],
-                        )
-                      : null,
-                  leading: CircleAvatarOfProfileImage(
-                    bodyHeight: bodyHeight * 0.85,
-                    userInfo: usersInfo[index].userInfo!,
-                  ),
-                  onTap: () {
-                    if (widget.selectChatting != null) {
-                      widget.selectChatting!(usersInfo[index].userInfo!);
-                    } else {
-                      pushToPage(context,
-                          page: BlocProvider<MessageBloc>(
-                            create: (context) => injector<MessageBloc>(),
-                            child: ChattingPage(
-                                userInfo: usersInfo[index].userInfo!),
-                          ));
-                    }
-                  },
-                );
-              },
-              itemCount: usersInfo.length,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider());
+          if (usersInfo.isEmpty) {
+            return Center(
+              child: Text(StringsManager.noUsers.tr,
+                  style: getNormalStyle(color: Theme.of(context).focusColor)),
+            );
+          } else {
+            return buildListView(usersInfo, bodyHeight);
+          }
         } else if (state is CubitGettingSpecificUsersFailed) {
           ToastShow.toastStateError(state);
           return Text(
@@ -139,9 +101,115 @@ class _ListOfMessagesState extends State<ListOfMessages> {
     );
   }
 
+  ListView buildListView(List<SenderInfo> usersInfo, num bodyHeight) {
+    return ListView.separated(
+        physics: widget.freezeListView
+            ? const NeverScrollableScrollPhysics()
+            : const BouncingScrollPhysics(),
+        primary: !widget.freezeListView,
+        shrinkWrap: widget.freezeListView,
+        itemCount: usersInfo.length,
+        itemBuilder: (context, index) {
+          Message? theLastMessage = usersInfo[index].lastMessage;
+          bool isThatGroup = usersInfo[index].lastMessage?.isThatGroup ?? false;
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: GestureDetector(
+              onTap: () {
+                if (widget.selectChatting != null) {
+                  widget.selectChatting!(usersInfo[index].receiversInfo![0]);
+                } else {
+                  pushToPage(context,
+                      page: BlocProvider<MessageBloc>(
+                        create: (context) => injector<MessageBloc>(),
+                        child: ChattingPage(messageDetails: usersInfo[index]),
+                      ));
+                }
+              },
+              child: Row(
+                children: [
+                  if (isThatGroup) ...[
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.only(top: 15, end: 12),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Positioned(
+                            top: -15,
+                            left: 15,
+                            child: CircleAvatarOfProfileImage(
+                              bodyHeight: bodyHeight * 0.7,
+                              userInfo: usersInfo[index].receiversInfo![0],
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: CircleAvatarOfProfileImage(
+                              bodyHeight: bodyHeight * 0.7,
+                              userInfo: usersInfo[index].receiversInfo![1],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ] else ...[
+                    CircleAvatarOfProfileImage(
+                      bodyHeight: bodyHeight * 0.85,
+                      userInfo: usersInfo[index].receiversInfo![0],
+                    ),
+                  ],
+                  const SizedBox(width: 15),
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildText(usersInfo, index, context),
+                        if (theLastMessage != null) ...[
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    theLastMessage.message.isEmpty
+                                        ? (theLastMessage.imageUrl.isEmpty
+                                            ? StringsManager.recordedSent.tr
+                                            : StringsManager.photoSent.tr)
+                                        : theLastMessage.message,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: getNormalStyle(
+                                        color: ColorManager.grey)),
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                  DateOfNow.commentsDateOfNow(
+                                      theLastMessage.datePublished),
+                                  style:
+                                      getNormalStyle(color: ColorManager.grey)),
+                            ],
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) =>
+            const SizedBox(height: 20));
+  }
+
   Text buildText(List<SenderInfo> usersInfo, int index, BuildContext context) {
+    bool isThatGroup = usersInfo[index].lastMessage?.isThatGroup ?? false;
+    List<UserPersonalInfo> receiverInfo = usersInfo[index].receiversInfo!;
+    String text = isThatGroup
+        ? "${receiverInfo[0].name}, ${receiverInfo[1].name}${receiverInfo.length > 2 ? ", ..." : ""}"
+        : receiverInfo[0].name;
     return Text(
-      usersInfo[index].userInfo!.name,
+      text,
+      overflow: TextOverflow.ellipsis,
       style: getNormalStyle(color: Theme.of(context).focusColor),
     );
   }

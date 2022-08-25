@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../data/models/user_personal_info.dart';
+import '../../../data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import '../../../domain/use_cases/user/add_new_user_usecase.dart';
 part 'add_new_user_state.dart';
 

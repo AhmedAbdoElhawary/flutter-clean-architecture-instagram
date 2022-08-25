@@ -1,5 +1,5 @@
 import 'package:instagram/core/use_case/use_case.dart';
-import 'package:instagram/data/models/comment.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/comment.dart';
 import 'package:instagram/domain/repositories/post/comment/reply_repository.dart';
 
 class GetRepliesOfThisCommentUseCase implements UseCase<List<Comment>, String> {

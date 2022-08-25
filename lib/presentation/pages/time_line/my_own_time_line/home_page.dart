@@ -10,7 +10,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/models/post.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
@@ -27,7 +27,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../../../../data/models/user_personal_info.dart';
+import '../../../../data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import '../../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../../../widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 

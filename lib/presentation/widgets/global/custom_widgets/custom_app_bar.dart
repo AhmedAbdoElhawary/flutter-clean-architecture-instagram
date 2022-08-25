@@ -8,13 +8,14 @@ import 'package:instagram/core/widgets/svg_pictures.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/pages/activity/activity_for_mobile.dart';
 import 'package:instagram/presentation/pages/messages/messages_page_for_mobile.dart';
 import 'package:instagram/presentation/pages/messages/wait_call_page.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
@@ -126,31 +127,42 @@ class CustomAppBar {
       await pushToPage(context, page: const CustomGalleryDisplay());
 
   static AppBar chattingAppBar(
-      UserPersonalInfo userInfo, BuildContext context) {
+      List<UserPersonalInfo> userInfo, BuildContext context) {
+    int length = userInfo.length;
+    length = length >= 3 ? 3 : length;
     return AppBar(
       iconTheme: IconThemeData(color: Theme.of(context).focusColor),
       backgroundColor: Theme.of(context).primaryColor,
-      title: Row(
-        children: [
-          CircleAvatar(
-            radius: 17,
-            child: ClipOval(
-              child: NetworkImageDisplay(
-                imageUrl: userInfo.profileImageUrl,
-                cachingWidth: 68,
-                cachingHeight: 68,
-              ),
+      title: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        child: Row(
+          children: [
+            if (length > 1) ...[
+              _imagesOfGroupUsers(userInfo)
+            ] else ...[
+              CircleAvatarOfProfileImage(
+                  userInfo: userInfo[0],
+                  bodyHeight: 340,
+                  showColorfulCircle: false),
+            ],
+            const SizedBox(width: 15),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ...List.generate(1, (index) {
+                  return Text(
+                    "${userInfo[index].name}${length > 1 ? ", ..." : ""}",
+                    style: TextStyle(
+                        color: Theme.of(context).focusColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.normal),
+                  );
+                }),
+              ],
             ),
-          ),
-          const SizedBox(width: 15),
-          Text(
-            userInfo.name,
-            style: TextStyle(
-                color: Theme.of(context).focusColor,
-                fontSize: 16,
-                fontWeight: FontWeight.normal),
-          ),
-        ],
+          ],
+        ),
       ),
       actions: [
         GestureDetector(
@@ -168,7 +180,7 @@ class CustomAppBar {
             amICalling = true;
             await pushToPage(context,
                 page: VideoCallPage(
-                    userInfo: userInfo, myPersonalInfo: myPersonalInfo),
+                    userInfo: userInfo[0], myPersonalInfo: myPersonalInfo),
                 withoutRoot: false,
                 withoutPageTransition: true);
             amICalling = false;
@@ -180,6 +192,41 @@ class CustomAppBar {
           ),
         ),
         const SizedBox(width: 15),
+      ],
+    );
+  }
+
+  static Stack _imagesOfGroupUsers(List<UserPersonalInfo> userInfo) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          left: 10,
+          top: -6,
+          child: CircleAvatar(
+            radius: 12,
+            child: ClipOval(
+              child: NetworkImageDisplay(
+                imageUrl: userInfo[0].profileImageUrl,
+                cachingWidth: 68,
+                cachingHeight: 68,
+              ),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: CircleAvatar(
+            radius: 12,
+            child: ClipOval(
+              child: NetworkImageDisplay(
+                imageUrl: userInfo[1].profileImageUrl,
+                cachingWidth: 68,
+                cachingHeight: 68,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

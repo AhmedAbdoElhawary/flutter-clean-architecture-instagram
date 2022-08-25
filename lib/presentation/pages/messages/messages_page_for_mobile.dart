@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/presentation/pages/messages/select_for_group_chat.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/list_of_messages.dart';
 
 class MessagesPageForMobile extends StatelessWidget {
@@ -18,7 +20,9 @@ class MessagesPageForMobile extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColor,
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            pushToPage(context, page: const SelectForGroupChat());
+          },
           icon: Icon(
             Icons.add,
             color: Theme.of(context).focusColor,

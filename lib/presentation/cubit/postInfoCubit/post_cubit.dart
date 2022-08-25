@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram/data/models/post.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/domain/use_cases/post/delete/delete_post.dart';
 import 'package:instagram/domain/use_cases/post/get/get_all_posts.dart';
 import 'package:instagram/domain/use_cases/post/get/get_post_info.dart';

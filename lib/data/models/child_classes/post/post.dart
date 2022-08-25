@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instagram/data/models/parent_post.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_classes/post/parent_post.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 
 class Post extends ParentPost {
   String postUrl;
@@ -34,9 +34,9 @@ class Post extends ParentPost {
         );
 
   static Post fromQuery(
-      {DocumentSnapshot<Map<String, dynamic>>? query,
-      QueryDocumentSnapshot<Map<String, dynamic>>? doc}) {
-    dynamic snap = query ?? doc;
+      {DocumentSnapshot<Map<String, dynamic>>? doc,
+      QueryDocumentSnapshot<Map<String, dynamic>>? query}) {
+    dynamic snap = doc ?? query;
     return Post(
       caption: snap.data()?["caption"] ?? "",
       datePublished: snap.data()?["datePublished"] ?? "",

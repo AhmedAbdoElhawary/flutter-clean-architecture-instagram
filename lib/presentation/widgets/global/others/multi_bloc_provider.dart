@@ -7,6 +7,7 @@ import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.da
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/group_chat/message_for_group_chat_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -88,6 +89,9 @@ class MultiBlocs extends StatelessWidget {
       ),
       BlocProvider<CallingStatusBloc>(
         create: (context) => injector<CallingStatusBloc>(),
+      ),
+      BlocProvider<MessageForGroupChatCubit>(
+        create: (context) => injector<MessageForGroupChatCubit>(),
       ),
       BlocProvider<UsersInfoReelTimeBloc>(
         create: (context1) {

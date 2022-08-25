@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/models/message.dart';
-import 'package:instagram/data/models/post.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 
 class CustomShareButton extends StatefulWidget {
   final Post postInfo;
@@ -29,19 +30,23 @@ class CustomShareButton extends StatefulWidget {
 }
 
 class _CustomShareButtonState extends State<CustomShareButton> {
+  late UserPersonalInfo myPersonalInfo;
+
+  @override
+  void initState() {
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Builder(builder: (context) {
         MessageCubit messageCubit = MessageCubit.get(context);
-
         return InkWell(
           onTap: () async {
             for (final selectedUser in widget.selectedUsersInfo) {
-              if (!widget.postInfo.isThatImage) {
-                // q
-              }
               await messageCubit.sendMessage(
                 messageInfo:
                     createSharedMessage(widget.postInfo.blurHash, selectedUser),
@@ -68,7 +73,7 @@ class _CustomShareButtonState extends State<CustomShareButton> {
       message: widget.messageTextController.text,
       senderId: myPersonalId,
       blurHash: "",
-      receiverId: userInfoWhoIShared.userId,
+      receiversIds: userInfoWhoIShared.userId,
       isThatImage: false,
     );
   }
@@ -80,20 +85,20 @@ class _CustomShareButtonState extends State<CustomShareButton> {
             ? widget.postInfo.imagesUrls[0]
             : widget.postInfo.postUrl
         : widget.postInfo.coverOfVideoUrl;
+    dynamic userId = userInfoWhoIShared.userId;
     return Message(
       datePublished: DateOfNow.dateOfNow(),
       message: widget.postInfo.caption,
       senderId: myPersonalId,
       blurHash: blurHash,
-      receiverId: userInfoWhoIShared.userId,
+      receiversIds: [userId],
       isThatImage: true,
       isThatVideo: !widget.postInfo.isThatImage,
-      postId: widget.postInfo.postUid,
+      sharedPostId: widget.postInfo.postUid,
       imageUrl: imageUrl,
       isThatPost: true,
-      profileImageUrl: widget.publisherInfo.profileImageUrl,
+      ownerOfSharedPostId:widget.publisherInfo.userId ,
       multiImages: widget.postInfo.imagesUrls.length > 1,
-      userNameOfSharedPost: widget.publisherInfo.name,
     );
   }
 

@@ -2,20 +2,19 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:instagram/core/use_case/use_case.dart';
-import 'package:instagram/data/models/message.dart';
-import 'package:instagram/domain/repositories/user_repository.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
+import 'package:instagram/domain/repositories/group_message.dart';
 
-class AddMessageUseCase
+class AddMessageForGroupChatUseCase
     implements UseCaseThreeParams<Message, Message, Uint8List, File?> {
-  final FirestoreUserRepository _addPostToUserRepository;
-
-  AddMessageUseCase(this._addPostToUserRepository);
+  final FirestoreGroupMessageRepository _addPostToUserRepository;
+  AddMessageForGroupChatUseCase(this._addPostToUserRepository);
 
   @override
   Future<Message> call(
       {required Message paramsOne,
-      Uint8List? paramsTwo,
-      required File? paramsThree}) {
+        Uint8List? paramsTwo,
+        required File? paramsThree}) {
     return _addPostToUserRepository.sendMessage(
         messageInfo: paramsOne,
         pathOfPhoto: paramsTwo,

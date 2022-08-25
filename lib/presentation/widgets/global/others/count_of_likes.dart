@@ -4,7 +4,7 @@ import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/models/post.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/presentation/pages/profile/users_who_likes_for_mobile.dart';
 import 'package:instagram/presentation/pages/profile/users_who_likes_for_web.dart';
 

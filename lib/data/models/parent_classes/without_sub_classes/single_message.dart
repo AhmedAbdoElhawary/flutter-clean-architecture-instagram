@@ -2,15 +2,17 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 
 // ignore: must_be_immutable
 class Message extends Equatable {
   String datePublished;
   String message;
-  String receiverId;
+  List<dynamic> receiversIds;
   String messageUid;
   String blurHash;
   String senderId;
+  UserPersonalInfo? senderInfo;
   String imageUrl;
   Uint8List? localImage;
   String recordedUrl;
@@ -18,70 +20,81 @@ class Message extends Equatable {
   bool isThatPost;
   bool multiImages;
   bool isThatVideo;
-  String postId;
-  String profileImageUrl;
-  String userNameOfSharedPost;
+  bool isThatGroup;
+  String chatOfGroupId;
+  String sharedPostId;
+  String ownerOfSharedPostId;
+  UserPersonalInfo? ownerOfSharedPostInfo;
+
   Message({
     this.localImage,
     required this.message,
     required this.blurHash,
     this.multiImages = false,
-    required this.receiverId,
+    required this.receiversIds,
     this.isThatPost = false,
     this.isThatVideo = false,
+    this.isThatGroup = false,
+    this.chatOfGroupId = "",
     required this.senderId,
-    this.postId = "",
-    this.profileImageUrl = "",
-    this.userNameOfSharedPost = "",
+    this.sharedPostId = "",
+    this.ownerOfSharedPostId = "",
     this.messageUid = "",
     this.imageUrl = "",
     this.recordedUrl = "",
+    this.senderInfo,
     required this.isThatImage,
     required this.datePublished,
+    this.ownerOfSharedPostInfo,
   });
 
-  static Message fromJson(QueryDocumentSnapshot<Map<String, dynamic>> snap) {
+  static Message fromJson(
+      {DocumentSnapshot<Map<String, dynamic>>? doc,
+      QueryDocumentSnapshot<Map<String, dynamic>>? query}) {
+    dynamic snap = doc ?? query;
     return Message(
       datePublished: snap.data()["datePublished"] ?? "",
       message: snap.data()["message"] ?? "",
-      receiverId: snap.data()["receiverId"] ?? "",
+      receiversIds: snap.data()["receiversIds"] ?? [],
       senderId: snap.data()["senderId"] ?? "",
       messageUid: snap.data()["messageUid"] ?? "",
       blurHash: snap.data()["blurHash"] ?? "",
       imageUrl: snap.data()["imageUrl"] ?? "",
+      ownerOfSharedPostId: snap.data()["ownerOfSharedPostId"] ?? "",
       recordedUrl: snap.data()["recordedUrl"] ?? "",
       isThatImage: snap.data()["isThatImage"] ?? false,
       isThatPost: snap.data()["isThatPost"] ?? false,
-      postId: snap.data()["postId"] ?? "",
-      profileImageUrl: snap.data()["profileImageUrl"] ?? "",
-      userNameOfSharedPost: snap.data()["userNameOfSharedPost"] ?? "",
+      sharedPostId: snap.data()["postId"] ?? "",
       multiImages: snap.data()["multiImages"] ?? false,
       isThatVideo: snap.data()["isThatVideo"] ?? false,
+      isThatGroup: snap.data()["isThatGroup"] ?? false,
+      chatOfGroupId: snap.data()["chatOfGroupId"] ?? "",
     );
   }
 
   Map<String, dynamic> toMap() => {
         "datePublished": datePublished,
         "message": message,
-        "receiverId": receiverId,
+        "receiversIds": receiversIds,
         "senderId": senderId,
         "blurHash": blurHash,
         "imageUrl": imageUrl,
         "recordedUrl": recordedUrl,
         "isThatImage": isThatImage,
         "isThatPost": isThatPost,
-        "postId": postId,
-        "profileImageUrl": profileImageUrl,
-        "userNameOfSharedPost": userNameOfSharedPost,
+        "postId": sharedPostId,
+        "ownerOfSharedPostId": ownerOfSharedPostId,
         "multiImages": multiImages,
         "isThatVideo": isThatVideo,
+        "chatOfGroupId": chatOfGroupId,
+        "isThatGroup": isThatGroup,
       };
 
   @override
   List<Object?> get props => [
         datePublished,
         message,
-        receiverId,
+        receiversIds,
         messageUid,
         senderId,
         blurHash,
@@ -89,10 +102,11 @@ class Message extends Equatable {
         recordedUrl,
         isThatImage,
         isThatPost,
-        postId,
-        profileImageUrl,
-        userNameOfSharedPost,
+        sharedPostId,
+        ownerOfSharedPostId,
         multiImages,
         isThatVideo,
+        chatOfGroupId,
+        isThatGroup,
       ];
 }

@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
-import 'package:instagram/data/models/post.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart';
 
 // ignore: must_be_immutable

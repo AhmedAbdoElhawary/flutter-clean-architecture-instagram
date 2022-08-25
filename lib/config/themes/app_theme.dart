@@ -47,6 +47,8 @@ class AppTheme {
         headlineSmall: getNormalStyle(color: ColorManager.shimmerLightGrey),
         titleLarge: getNormalStyle(color: Colors.white),
         titleSmall: getNormalStyle(color: ColorManager.darkWhite),
+        titleMedium: getNormalStyle(color: ColorManager.lightGrey),
+
       ),
     );
   }
@@ -91,7 +93,9 @@ class AppTheme {
         headlineSmall: getNormalStyle(color: Colors.grey[500]!),
         titleLarge: getNormalStyle(color: ColorManager.shimmerDarkGrey),
         titleSmall: getNormalStyle(color: ColorManager.darkGray),
-      ),
+        titleMedium: getNormalStyle(color: ColorManager.darkGray),
+
+    ),
     );
   }
 }

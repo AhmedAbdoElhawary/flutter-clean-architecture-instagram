@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:instagram/data/models/post.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
 
 abstract class FirestorePostRepository {
   Future<Post> createPost(

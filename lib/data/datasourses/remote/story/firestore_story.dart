@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instagram/data/models/story.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/child_classes/post/story.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 
 class FireStoreStory {
   static final _fireStoreStoryCollection =

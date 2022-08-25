@@ -2,8 +2,8 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/datasourses/remote/calling_rooms/calling_rooms.dart';
 import 'package:instagram/data/datasourses/remote/notification/device_notification.dart';
 import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
-import 'package:instagram/data/models/push_notification.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/push_notification.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/domain/entities/calling_status.dart';
 import 'package:instagram/domain/repositories/calling_rooms_repository.dart';
 

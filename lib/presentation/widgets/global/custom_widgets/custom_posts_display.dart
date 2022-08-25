@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/data/models/post.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_of_post_for_time_line.dart';

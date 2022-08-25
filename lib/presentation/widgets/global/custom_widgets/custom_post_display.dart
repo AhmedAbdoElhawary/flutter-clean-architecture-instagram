@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:instagram/core/translations/app_lang.dart';
-import 'package:instagram/data/models/comment.dart';
-import 'package:instagram/data/models/post.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/comment.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/read_more_text.dart';
 import 'package:instagram/presentation/widgets/global/others/count_of_likes.dart';
 import 'package:instagram/presentation/widgets/global/others/image_of_post.dart';

@@ -6,7 +6,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/translations/app_lang.dart';
-import 'package:instagram/data/models/message.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/get_post_info.dart';
 
@@ -29,7 +29,7 @@ class SharedMessage extends StatelessWidget {
       onTap: () {
         pushToPage(context,
             page: GetsPostInfoAndDisplay(
-              postId: messageInfo.postId,
+              postId: messageInfo.sharedPostId,
               appBarText: StringsManager.post.tr,
             ),
             withoutRoot: false);
@@ -96,11 +96,14 @@ class SharedMessage extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: ColorManager.customGrey,
-            backgroundImage: messageInfo.imageUrl.isNotEmpty
-                ? CachedNetworkImageProvider(messageInfo.profileImageUrl)
+            backgroundImage: messageInfo.imageUrl.isNotEmpty &&
+                    messageInfo.ownerOfSharedPostInfo != null
+                ? CachedNetworkImageProvider(
+                    messageInfo.ownerOfSharedPostInfo!.profileImageUrl)
                 : null,
             radius: 15,
-            child: messageInfo.imageUrl.isEmpty
+            child: messageInfo.imageUrl.isEmpty &&
+                    messageInfo.ownerOfSharedPostInfo == null
                 ? Icon(
                     Icons.person,
                     color: Theme.of(context).primaryColor,
@@ -110,7 +113,7 @@ class SharedMessage extends StatelessWidget {
           ),
           const SizedBox(width: 7),
           Text(
-            messageInfo.userNameOfSharedPost,
+            messageInfo.ownerOfSharedPostInfo?.name ?? "",
             style: getBoldStyle(
               color: Theme.of(context).focusColor,
               fontSize: 12,
@@ -136,8 +139,8 @@ class SharedMessage extends StatelessWidget {
               builder: (controller) {
                 return Text(
                   controller.appLocale == 'en'
-                      ? "${messageInfo.userNameOfSharedPost} ${messageInfo.message}"
-                      : "${messageInfo.message} ${messageInfo.userNameOfSharedPost}",
+                      ? "${messageInfo.ownerOfSharedPostInfo?.name} ${messageInfo.message}"
+                      : "${messageInfo.message} ${messageInfo.ownerOfSharedPostInfo?.name}",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: getNormalStyle(color: Theme.of(context).focusColor),

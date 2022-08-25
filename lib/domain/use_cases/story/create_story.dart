@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:instagram/core/use_case/use_case.dart';
-import 'package:instagram/data/models/story.dart';
+import 'package:instagram/data/models/child_classes/post/story.dart';
 import 'package:instagram/domain/repositories/story_repository.dart';
 
 class CreateStoryUseCase implements UseCaseTwoParams<String, Story, Uint8List> {

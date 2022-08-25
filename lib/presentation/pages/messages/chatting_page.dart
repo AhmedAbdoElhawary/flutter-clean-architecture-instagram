@@ -5,9 +5,10 @@ import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/models/message.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
+import 'package:instagram/domain/entities/sender_info.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
 import 'package:instagram/presentation/pages/profile/user_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/chat_messages.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
@@ -15,9 +16,15 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circ
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
 class ChattingPage extends StatefulWidget {
-  final UserPersonalInfo? userInfo;
-  final String userId;
-  const ChattingPage({Key? key, this.userInfo, this.userId = ""})
+  final SenderInfo? messageDetails;
+  final String chatUid;
+  final bool isThatGroup;
+
+  const ChattingPage(
+      {Key? key,
+      this.messageDetails,
+      this.chatUid = "",
+      this.isThatGroup = false})
       : super(key: key);
 
   @override
@@ -32,21 +39,22 @@ class _ChattingPageState extends State<ChattingPage>
 
   @override
   Widget build(BuildContext context) {
-    return widget.userInfo != null
-        ? scaffold(widget.userInfo!)
+    return widget.messageDetails != null
+        ? scaffold(widget.messageDetails!)
         : getUserInfo(context);
   }
 
-  BlocBuilder<UserInfoCubit, UserInfoState> getUserInfo(BuildContext context) {
-    return BlocBuilder<UserInfoCubit, UserInfoState>(
-      bloc: UserInfoCubit.get(context)
-        ..getUserInfo(widget.userId, isThatMyPersonalId: false),
+  Widget getUserInfo(BuildContext context) {
+    return BlocBuilder<MessageCubit, MessageState>(
+      bloc: MessageCubit.get(context)
+        ..getSpecificChatInfo(
+            isThatGroup: widget.isThatGroup, chatUid: widget.chatUid),
       buildWhen: (previous, current) =>
-          previous != current && current is CubitUserLoaded,
+          previous != current && current is GetSpecificChatLoaded,
       builder: (context, state) {
-        if (state is CubitUserLoaded) {
-          return scaffold(state.userPersonalInfo);
-        } else if (state is CubitGetUserInfoFailed) {
+        if (state is GetSpecificChatLoaded) {
+          return scaffold(state.coverMessageDetails);
+        } else if (state is GetMessageFailed) {
           ToastShow.toast(state.error);
 
           return Scaffold(
@@ -58,30 +66,32 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  Scaffold scaffold(UserPersonalInfo userInfo) {
+  Scaffold scaffold(SenderInfo messageDetails) {
     return Scaffold(
-      appBar:
-          isThatMobile ? CustomAppBar.chattingAppBar(userInfo, context) : null,
+      appBar: isThatMobile
+          ? CustomAppBar.chattingAppBar(messageDetails.receiversInfo!, context)
+          : null,
       body: GestureDetector(
           onTap: () {
             unSend.value = false;
             deleteThisMessage.value = null;
           },
           child: isThatMobile
-              ? ChatMessages(userInfo: userInfo)
-              : buildBodyForWeb(userInfo)),
+              ? ChatMessages(messageDetails: messageDetails)
+              : buildBodyForWeb(messageDetails)),
     );
   }
 
-  Widget buildBodyForWeb(UserPersonalInfo userInfo) {
+  Widget buildBodyForWeb(SenderInfo messageDetails) {
     return Column(
       children: [
-        buildUserInfo(userInfo),
-        ChatMessages(userInfo: userInfo),
+        buildUserInfo(messageDetails.receiversInfo![0]),
+        ChatMessages(messageDetails: messageDetails)
       ],
     );
   }
 
+  /// handle the group chat in web
   Column buildUserInfo(UserPersonalInfo userInfo) {
     return Column(
       children: [

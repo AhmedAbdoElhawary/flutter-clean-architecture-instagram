@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram/data/models/comment.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/comment.dart';
 import 'package:instagram/domain/use_cases/post/comments/replies/get_replies_of_this_comment.dart';
 import 'package:instagram/domain/use_cases/post/comments/replies/reply_on_this_comment.dart';
 

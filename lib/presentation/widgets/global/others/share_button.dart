@@ -6,8 +6,8 @@ import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/models/post.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/send_to_users.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/web/share_post.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
@@ -65,9 +65,7 @@ class _ShareButtonState extends State<ShareButton> {
     );
   }
 
-  SvgPicture iconsOfImagePost(
-    String path,
-  ) {
+  SvgPicture iconsOfImagePost(String path) {
     return SvgPicture.asset(
       path,
       color: widget.isThatForVideoPage
