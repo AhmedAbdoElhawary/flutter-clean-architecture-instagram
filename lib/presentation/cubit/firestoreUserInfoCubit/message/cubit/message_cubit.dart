@@ -4,6 +4,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
+import 'package:instagram/domain/entities/sender_info.dart';
+import 'package:instagram/domain/use_cases/message/common/get_specific_chat_info.dart';
 import 'package:instagram/domain/use_cases/message/single_message/add_message.dart';
 import 'package:instagram/domain/use_cases/message/single_message/delete_message.dart';
 
@@ -12,9 +14,10 @@ part 'message_state.dart';
 class MessageCubit extends Cubit<MessageState> {
   final AddMessageUseCase _addMessageUseCase;
   final DeleteMessageUseCase _deleteMessageUseCase;
-
+  final GetSpecificChatInfo _getSpecificChatInfo;
   List<Message> messagesInfo = [];
-  MessageCubit(this._addMessageUseCase, this._deleteMessageUseCase)
+  MessageCubit(this._addMessageUseCase, this._deleteMessageUseCase,
+      this._getSpecificChatInfo)
       : super(MessageInitial());
 
   static MessageCubit get(BuildContext context) => BlocProvider.of(context);
@@ -37,6 +40,17 @@ class MessageCubit extends Cubit<MessageState> {
     });
   }
 
+  Future<void> getSpecificChatInfo(
+      {required String chatUid, required bool isThatGroup}) async {
+    emit(GetSpecificChatLoading());
+    await _getSpecificChatInfo
+        .call(paramsOne: chatUid, paramsTwo: isThatGroup)
+        .then((coverMessageDetails) {
+      emit(GetSpecificChatLoaded(coverMessageDetails));
+    }).catchError((e) {
+      emit(GetMessageFailed(e.toString()));
+    });
+  }
 
   Future<void> deleteMessage(
       {required Message messageInfo, Message? replacedMessage}) async {
