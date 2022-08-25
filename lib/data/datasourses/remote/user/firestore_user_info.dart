@@ -56,7 +56,6 @@ class FirestoreUser {
     await _fireStoreUserCollection.doc(messageInfo.senderId).update({
       "chatsOfGroups": FieldValue.arrayUnion([messageInfo.chatOfGroupId])
     });
-
   }
 
   static Future<void> sendNotification(
@@ -76,9 +75,10 @@ class FirestoreUser {
                     ? "Share with you a post"
                     : "Send message"));
         PushNotification detail = PushNotification(
-          title: message.senderId,
+          title: message.senderInfo?.name ?? "A user",
           body: body,
           deviceToken: token,
+          isThatGroupChat: message.isThatGroup,
           notificationRoute: "message",
           routeParameterId: message.senderId,
         );
@@ -196,16 +196,16 @@ class FirestoreUser {
     for (int i = 0; i < messagesDetails.length; i++) {
       if (messagesDetails[i].lastMessage!.isThatGroup) {
         messagesDetails[i] =
-            await _extractUsersForGroupChatInfo(messagesDetails[i]);
+            await extractUsersForGroupChatInfo(messagesDetails[i]);
       } else {
         messagesDetails[i] =
-            await _extractUsersForSingleChatInfo(messagesDetails[i]);
+            await extractUsersForSingleChatInfo(messagesDetails[i]);
       }
     }
     return messagesDetails;
   }
 
-  static Future<SenderInfo> _extractUsersForSingleChatInfo(
+  static Future<SenderInfo> extractUsersForSingleChatInfo(
       SenderInfo usersInfo) async {
     if (usersInfo.lastMessage != null) {
       String userId;
@@ -221,7 +221,7 @@ class FirestoreUser {
     return usersInfo;
   }
 
-  static Future<SenderInfo> _extractUsersForGroupChatInfo(
+  static Future<SenderInfo> extractUsersForGroupChatInfo(
       SenderInfo usersInfo) async {
     if (usersInfo.lastMessage != null) {
       for (final receiverId in usersInfo.lastMessage!.receiversIds) {
@@ -240,7 +240,7 @@ class FirestoreUser {
     return usersInfo;
   }
 
-  static Future<List<SenderInfo>> getChatUserInfo(
+  static Future<List<SenderInfo>> getMessagesOfChat(
       {required String userId}) async {
     List<SenderInfo> allUsers = [];
 
@@ -250,12 +250,22 @@ class FirestoreUser {
     QuerySnapshot<Map<String, dynamic>> snap =
         await userCollection.collection("chats").get();
 
-    for (int i = 0; i < snap.docs.length; i++) {
-      QueryDocumentSnapshot<Map<String, dynamic>> query = snap.docs[i];
+    for (final chatInfo in snap.docs) {
+      QueryDocumentSnapshot<Map<String, dynamic>> query = chatInfo;
       Message messageInfo = Message.fromJson(query: query);
       allUsers.add(SenderInfo(lastMessage: messageInfo));
     }
     return allUsers;
+  }
+
+  static Future<SenderInfo> getChatOfUser({required String chatUid}) async {
+    DocumentReference<Map<String, dynamic>> userCollection =
+        _fireStoreUserCollection.doc(myPersonalId);
+    userCollection.update({'numberOfNewMessages': 0});
+    DocumentSnapshot<Map<String, dynamic>> doc =
+        await userCollection.collection("chats").doc(chatUid).get();
+    Message messageInfo = Message.fromJson(doc: doc);
+    return SenderInfo(lastMessage: messageInfo);
   }
 
   static updateProfileImage(
