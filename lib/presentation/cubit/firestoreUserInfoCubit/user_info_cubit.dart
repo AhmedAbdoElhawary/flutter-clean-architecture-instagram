@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram/data/models/post.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/domain/use_cases/user/add_post_to_user.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_all_un_followers_info.dart';
 import 'package:instagram/domain/use_cases/user/getUserInfo/get_user_from_user_name.dart';
@@ -19,8 +19,6 @@ class UserInfoCubit extends Cubit<UserInfoState> {
   final AddPostToUserUseCase _addPostToUserUseCase;
   final GetUserFromUserNameUseCase _getUserFromUserNameUseCase;
   late UserPersonalInfo myPersonalInfo;
-
-  UserPersonalInfo? userInfo;
 
   UserInfoCubit(
       this._getUserInfoUseCase,
@@ -49,7 +47,6 @@ class UserInfoCubit extends Cubit<UserInfoState> {
         myPersonalInfo = userInfo;
         emit(CubitMyPersonalInfoLoaded(userInfo));
       } else {
-        this.userInfo = userInfo;
         emit(CubitUserLoaded(userInfo));
       }
     }).catchError((e) {
@@ -86,7 +83,6 @@ class UserInfoCubit extends Cubit<UserInfoState> {
           myPersonalInfo = userInfo;
           emit(CubitMyPersonalInfoLoaded(userInfo));
         } else {
-          this.userInfo = userInfo;
           emit(CubitUserLoaded(userInfo));
         }
       } else {
