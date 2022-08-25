@@ -1,14 +1,15 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/data/datasourses/remote/chat/group_chat.dart';
 import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
 import 'package:instagram/data/datasourses/remote/notification/firebase_notification.dart';
-import 'package:instagram/data/datasourses/remote/user/message.dart';
-import 'package:instagram/data/models/message.dart';
-import 'package:instagram/data/models/post.dart';
-import 'package:instagram/data/models/sender_info.dart';
-import 'package:instagram/data/models/specific_users_info.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/datasourses/remote/chat/single_chat.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
+import 'package:instagram/data/models/child_classes/post/post.dart';
+import 'package:instagram/domain/entities/sender_info.dart';
+import 'package:instagram/domain/entities/specific_users_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import '../../domain/repositories/user_repository.dart';
 import '../datasourses/remote/user/firestore_user_info.dart';
 
@@ -137,6 +138,23 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
+  Future<List<UserPersonalInfo>> getAllUnFollowersUsers(
+      UserPersonalInfo myPersonalInfo) {
+    try {
+      return FirestoreUser.getAllUnFollowersUsers(myPersonalInfo);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  @override
+  Stream<UserPersonalInfo> getMyPersonalInfo() =>
+      FirestoreUser.getMyPersonalInfoInReelTime();
+
+  @override
+  Stream<List<UserPersonalInfo>> getAllUsers() => FirestoreUser.getAllUsers();
+
+  @override
   Future<UserPersonalInfo?> getUserFromUserName(
       {required String userName}) async {
     try {
@@ -145,6 +163,12 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       return Future.error(e.toString());
     }
   }
+
+  @override
+  Stream<List<UserPersonalInfo>> searchAboutUser(
+          {required String name, required bool searchForSingleLetter}) =>
+      FirestoreUser.searchAboutUser(
+          name: name, searchForSingleLetter: searchForSingleLetter);
 
   @override
   Future<Message> sendMessage(
@@ -162,16 +186,18 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
             folderName: "messagesFiles", postFile: recordFile);
         messageInfo.recordedUrl = recordedUrl;
       }
-      Message myMessageInfo = await FireStoreMessage.sendMessage(
+      Message myMessageInfo = await FireStoreSingleChat.sendMessage(
           userId: messageInfo.senderId,
-          chatId: messageInfo.receiverId,
+          chatId: messageInfo.receiversIds[0],
           message: messageInfo);
 
-      await FireStoreMessage.sendMessage(
-        userId: messageInfo.receiverId,
-        chatId: messageInfo.senderId,
-        message: messageInfo,
-      );
+      await FireStoreSingleChat.sendMessage(
+          userId: messageInfo.receiversIds[0],
+          chatId: messageInfo.senderId,
+          message: messageInfo);
+
+      await FirestoreUser.sendNotification(
+          userId: messageInfo.receiversIds[0], message: messageInfo);
 
       return myMessageInfo;
     } catch (e) {
@@ -181,25 +207,19 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
 
   @override
   Stream<List<Message>> getMessages({required String receiverId}) =>
-      FireStoreMessage.getMessages(receiverId: receiverId);
-
-  @override
-  Stream<List<UserPersonalInfo>> searchAboutUser(
-          {required String name, required bool searchForSingleLetter}) =>
-      FirestoreUser.searchAboutUser(
-          name: name, searchForSingleLetter: searchForSingleLetter);
+      FireStoreSingleChat.getMessages(receiverId: receiverId);
 
   @override
   Future<void> deleteMessage(
       {required Message messageInfo, Message? replacedMessage}) async {
     try {
-      await FireStoreMessage.deleteMessage(
+      await FireStoreSingleChat.deleteMessage(
           userId: messageInfo.senderId,
-          chatId: messageInfo.receiverId,
+          chatId: messageInfo.receiversIds[0],
           messageId: messageInfo.messageUid);
       if (replacedMessage != null) {
-        await FireStoreMessage.updateLastMessage(
-            userId: messageInfo.receiverId,
+        await FireStoreSingleChat.updateLastMessage(
+            userId: messageInfo.receiversIds[0],
             chatId: messageInfo.senderId,
             message: replacedMessage);
       }
@@ -209,32 +229,32 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   }
 
   @override
-  Future<List<SenderInfo>> getChatUserInfo({required String userId}) async {
+  Future<List<SenderInfo>> getSpecificChatInfo(
+      {required String chatUid, required bool isThatGroup}) async {
     try {
-      List<SenderInfo> allUsersIds =
-          await FirestoreUser.getChatUserInfo(userId: userId);
+      if (isThatGroup) {
+        await FireStoreGroupChat.getChatInfo(chatId: chatUid);
+      } else {}
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  @override
+  Future<List<SenderInfo>> getChatUserInfo(
+      {required UserPersonalInfo myPersonalInfo}) async {
+    try {
+      List<SenderInfo> allChatsOfGroupsInfo =
+          await FireStoreGroupChat.getSpecificChatsInfo(
+              chatsIds: myPersonalInfo.chatsOfGroups);
+      List<SenderInfo> allChatsInfo =
+          await FirestoreUser.getChatUserInfo(userId: myPersonalInfo.userId);
+      List<SenderInfo> allChats = allChatsInfo + allChatsOfGroupsInfo;
       List<SenderInfo> allUsersInfo =
-          await FirestoreUser.extractUsersIds(usersInfo: allUsersIds);
+          await FirestoreUser.extractUsersChatInfo(messagesDetails: allChats);
       return allUsersInfo;
     } catch (e) {
       return Future.error(e.toString());
     }
   }
-
-  @override
-  Future<List<UserPersonalInfo>> getAllUnFollowersUsers(
-      UserPersonalInfo myPersonalInfo) {
-    try {
-      return FirestoreUser.getAllUnFollowersUsers(myPersonalInfo);
-    } catch (e) {
-      return Future.error(e.toString());
-    }
-  }
-
-  @override
-  Stream<UserPersonalInfo> getMyPersonalInfo() =>
-      FirestoreUser.getMyPersonalInfoInReelTime();
-
-  @override
-  Stream<List<UserPersonalInfo>> getAllUsers() => FirestoreUser.getAllUsers();
 }
