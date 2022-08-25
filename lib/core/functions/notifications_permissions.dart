@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -113,7 +113,7 @@ Future<void> _pushToPage(BuildContext context,
   } else {
     page = BlocProvider<MessageBloc>(
       create: (context) => injector<MessageBloc>(),
-      child: ChattingPage(userId: routeParameterId),
+      child: ChattingPage(chatUid: routeParameterId),
     );
   }
   await pushToPage(context, page: page);
