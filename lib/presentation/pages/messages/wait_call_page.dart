@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/domain/entities/calling_status.dart';
 import 'package:instagram/presentation/cubit/callingRooms/bloc/calling_status_bloc.dart';
 import 'package:instagram/presentation/pages/messages/video_call_page.dart';
