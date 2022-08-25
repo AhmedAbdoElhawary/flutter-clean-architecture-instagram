@@ -1,6 +1,6 @@
 import 'dart:typed_data';
-import 'package:instagram/data/models/story.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/child_classes/post/story.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 
 abstract class FirestoreStoryRepository {
   Future<String> createStory(
