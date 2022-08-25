@@ -861,6 +861,8 @@ class _ChatMessagesState extends State<ChatMessages>
               } else {
                 messageCubit.sendMessage(messageInfo: newMessage());
               }
+              if (!mounted) return;
+
               if (isThatMobile) scrollToLastIndex(context);
               _textController.value.text = "";
             }
@@ -951,8 +953,6 @@ class _ChatMessagesState extends State<ChatMessages>
       datePublished: DateOfNow.dateOfNow(),
       message: _textController.value.text,
       senderId: myPersonalId,
-      senderProfileImageUrl: myPersonalInfo.profileImageUrl,
-      senderName: myPersonalInfo.name,
       blurHash: blurHash,
       receiversIds: usersIds,
       isThatImage: isThatImage,
@@ -967,8 +967,6 @@ class _ChatMessagesState extends State<ChatMessages>
       datePublished: DateOfNow.dateOfNow(),
       message: _textController.value.text,
       senderId: myPersonalId,
-      senderProfileImageUrl: myPersonalInfo.profileImageUrl,
-      senderName: myPersonalInfo.name,
       blurHash: blurHash,
       receiversIds: [userId],
       isThatImage: isThatImage,
