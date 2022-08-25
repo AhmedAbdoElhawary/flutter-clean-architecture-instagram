@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram/data/models/user_personal_info.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/domain/entities/calling_status.dart';
 import 'package:instagram/domain/use_cases/calling_rooms/cancel_joining_to_room.dart';
 import 'package:instagram/domain/use_cases/calling_rooms/create_calling_room.dart';
