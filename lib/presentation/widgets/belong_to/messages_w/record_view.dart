@@ -8,9 +8,9 @@ import 'package:instagram/core/utility/constant.dart';
 
 class RecordView extends StatefulWidget {
   final String urlRecord;
-  final bool isThatMine;
+  final bool isThatMe;
   const RecordView(
-      {Key? key, required this.urlRecord, required this.isThatMine})
+      {Key? key, required this.urlRecord, required this.isThatMe})
       : super(key: key);
 
   @override
@@ -28,7 +28,7 @@ class RecordViewState extends State<RecordView> {
   AudioPlayer audioPlayer = AudioPlayer();
   @override
   Widget build(BuildContext context) {
-    Color theColor = widget.isThatMine
+    Color theColor = widget.isThatMe
         ? (isThatMobile ? ColorManager.white : Theme.of(context).focusColor)
         : Theme.of(context).focusColor;
     return widget.urlRecord.isEmpty
@@ -53,7 +53,7 @@ class RecordViewState extends State<RecordView> {
                   total: Duration(microseconds: _totalDuration ?? 0),
                   barHeight: 3,
                   thumbRadius: 6.0,
-                  baseBarColor: widget.isThatMine
+                  baseBarColor: widget.isThatMe
                       ? (isThatMobile
                           ? ColorManager.darkWhite
                           : ColorManager.veryLowOpacityGrey)

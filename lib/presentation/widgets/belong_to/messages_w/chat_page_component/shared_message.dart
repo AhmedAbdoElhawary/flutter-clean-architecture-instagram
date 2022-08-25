@@ -12,11 +12,11 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/get_post_in
 
 class SharedMessage extends StatelessWidget {
   final Message messageInfo;
-  final bool isThatMine;
+  final bool isThatMe;
   const SharedMessage({
     Key? key,
     required this.messageInfo,
-    required this.isThatMine,
+    required this.isThatMe,
   }) : super(key: key);
 
   @override
