@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
-import 'package:instagram/data/models/parent_classes/without_sub_classes/single_message.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/message.dart';
 import 'package:instagram/domain/entities/sender_info.dart';
 
 class FireStoreGroupChat {
