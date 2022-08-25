@@ -1,6 +1,6 @@
 import 'package:instagram/data/datasourses/remote/post/comment/firestore_comment.dart';
 import 'package:instagram/data/datasourses/remote/post/comment/firestore_reply.dart';
-import 'package:instagram/data/models/comment.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/comment.dart';
 import 'package:instagram/domain/repositories/post/comment/reply_repository.dart';
 
 class FirestoreRepliesRepositoryImpl implements FirestoreReplyRepository {
