@@ -57,7 +57,7 @@ class _ChatMessagesState extends State<ChatMessages>
   late AnimationController _colorAnimationController;
   late Animation _colorTween;
   late UserPersonalInfo myPersonalInfo;
-
+  String senderIdForGroup = "";
   int itemIndex = 0;
 
   Future<void> scrollToLastIndex(BuildContext context) async {
@@ -288,11 +288,18 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
+
   Widget buildTheMessage(
       Message messageInfo, String previousDateOfMessage, int index) {
-    bool isThatMine = false;
-
-    if (messageInfo.senderId == myPersonalId) isThatMine = true;
+    bool isThatMe = false;
+    if (messageInfo.senderId == myPersonalId) isThatMe = true;
+    bool checkForSenderNameInGroup;
+    if (!isThatMe && senderIdForGroup != messageInfo.senderId) {
+      senderIdForGroup = messageInfo.senderId;
+      checkForSenderNameInGroup = true;
+    } else {
+      checkForSenderNameInGroup = false;
+    }
     String theDate = DateOfNow.chattingDateOfNow(
         messageInfo.datePublished, previousDateOfMessage);
     return Column(
@@ -311,7 +318,7 @@ class _ChatMessagesState extends State<ChatMessages>
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            if (!isThatMine && !isThatMobile) ...[
+            if (!isThatMe && !isThatMobile) ...[
               CircleAvatarOfProfileImage(
                 bodyHeight: 350,
                 userInfo: widget.messageDetails.receiversInfo![0],
@@ -319,7 +326,7 @@ class _ChatMessagesState extends State<ChatMessages>
               ),
               const SizedBox(width: 10),
             ],
-            if (isThatMine) const SizedBox(width: 100),
+            if (isThatMe) const SizedBox(width: 100),
             Expanded(
               child: GestureDetector(
                 onLongPress: () {
@@ -327,12 +334,23 @@ class _ChatMessagesState extends State<ChatMessages>
                   indexOfGarbageMessage.value = index;
                   unSend.value = true;
                 },
-                child: isThatMobile
-                    ? buildMessageForMobile(isThatMine, messageInfo)
-                    : buildMessageForWeb(isThatMine, messageInfo),
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      if (checkForSenderNameInGroup) ...[
+                        Text("${messageInfo.senderInfo?.name}",
+                            style: getNormalStyle(color: ColorManager.grey)),
+                        const SizedBox(height: 5),
+                      ],
+                      isThatMobile
+                          ? buildMessageForMobile(isThatMe, messageInfo)
+                          : buildMessageForWeb(isThatMe, messageInfo),
+                    ]),
               ),
             ),
-            if (!isThatMine) const SizedBox(width: 100),
+            if (!isThatMe) const SizedBox(width: 100),
             Visibility(
               visible: messageInfo.messageUid.isEmpty,
               child: Padding(
@@ -350,22 +368,23 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  Align buildMessageForMobile(bool isThatMine, Message messageInfo) {
+  Align buildMessageForMobile(bool isThatMe, Message messageInfo) {
     String message = messageInfo.message;
     String imageUrl = messageInfo.imageUrl;
     String recordedUrl = messageInfo.recordedUrl;
     Widget messageWidget = messageInfo.recordedUrl.isNotEmpty
-        ? recordMessage(recordedUrl, isThatMine)
+        ? recordMessage(recordedUrl, isThatMe)
         : (messageInfo.isThatPost
             ? SharedMessage(
                 messageInfo: messageInfo,
-                isThatMine: isThatMine,
+                isThatMe: isThatMe,
               )
             : (messageInfo.isThatImage
                 ? imageMessage(messageInfo, imageUrl)
-                : textMessage(message, isThatMine)));
+                : textMessage(message, isThatMe)));
+
     return Align(
-      alignment: isThatMine
+      alignment: isThatMe
           ? AlignmentDirectional.centerEnd
           : AlignmentDirectional.centerStart,
       child: AnimatedBuilder(
@@ -374,12 +393,12 @@ class _ChatMessagesState extends State<ChatMessages>
                 decoration: BoxDecoration(
                   color: messageInfo.isThatPost
                       ? (Theme.of(context).textTheme.titleMedium!.color)
-                      : (isThatMine
+                      : (isThatMe
                           ? _colorTween.value
                           : Theme.of(context).textTheme.titleMedium!.color),
                   borderRadius: BorderRadiusDirectional.only(
-                    bottomStart: Radius.circular(isThatMine ? 20 : 0),
-                    bottomEnd: Radius.circular(isThatMine ? 0 : 20),
+                    bottomStart: Radius.circular(isThatMe ? 20 : 0),
+                    bottomEnd: Radius.circular(isThatMe ? 0 : 20),
                     topStart: const Radius.circular(20),
                     topEnd: const Radius.circular(20),
                   ),
@@ -394,52 +413,57 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  Align buildMessageForWeb(bool isThatMine, Message messageInfo) {
+  Align buildMessageForWeb(bool isThatMe, Message messageInfo) {
     String message = messageInfo.message;
     String imageUrl = messageInfo.imageUrl;
     String recordedUrl = messageInfo.recordedUrl;
     Widget messageWidget = messageInfo.recordedUrl.isNotEmpty
-        ? recordMessage(recordedUrl, isThatMine)
+        ? recordMessage(recordedUrl, isThatMe)
         : (messageInfo.isThatPost
             ? SharedMessage(
                 messageInfo: messageInfo,
-                isThatMine: isThatMine,
+                isThatMe: isThatMe,
               )
             : (messageInfo.isThatImage
                 ? imageMessage(messageInfo, imageUrl)
-                : textMessage(message, isThatMine)));
+                : textMessage(message, isThatMe)));
+    Widget child = buildMessage(isThatMe, imageUrl, messageWidget);
+
     return Align(
-      alignment: isThatMine
+      alignment: isThatMe
           ? AlignmentDirectional.centerEnd
           : AlignmentDirectional.centerStart,
-      child: Container(
-        decoration: BoxDecoration(
-          color: isThatMine
-              ? Theme.of(context).textTheme.titleMedium!.color
-              : ColorManager.white,
-          borderRadius: const BorderRadiusDirectional.all(Radius.circular(25)),
-          border: isThatMine
-              ? null
-              : Border.all(color: ColorManager.lowOpacityGrey),
-        ),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        padding: imageUrl.isEmpty
-            ? const EdgeInsets.symmetric(vertical: 15, horizontal: 25)
-            : const EdgeInsetsDirectional.all(0),
-        child: messageWidget,
+      child: child,
+    );
+  }
+
+  Container buildMessage(bool isThatMe, String imageUrl, Widget messageWidget) {
+    return Container(
+      decoration: BoxDecoration(
+        color: isThatMe
+            ? Theme.of(context).textTheme.titleMedium!.color
+            : ColorManager.white,
+        borderRadius: const BorderRadiusDirectional.all(Radius.circular(25)),
+        border:
+            isThatMe ? null : Border.all(color: ColorManager.lowOpacityGrey),
       ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      padding: imageUrl.isEmpty
+          ? const EdgeInsets.symmetric(vertical: 15, horizontal: 25)
+          : const EdgeInsetsDirectional.all(0),
+      child: messageWidget,
     );
   }
 
   ValueListenableBuilder<String> recordMessage(
-      String recordedUrl, bool isThatMine) {
+      String recordedUrl, bool isThatMe) {
     return ValueListenableBuilder(
       valueListenable: records,
       builder: (context, String recordsValue, child) => SizedBox(
         width: isThatMobile ? null : 240,
         child: RecordView(
           urlRecord: recordedUrl.isEmpty ? recordsValue : recordedUrl,
-          isThatMine: isThatMine,
+          isThatMe: isThatMe,
         ),
       ),
     );
@@ -465,8 +489,8 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  Text textMessage(String message, bool isThatMine) {
-    TextStyle style = isThatMine
+  Text textMessage(String message, bool isThatMe) {
+    TextStyle style = isThatMe
         ? getNormalStyle(color: ColorManager.white)
         : getNormalStyle(color: Theme.of(context).focusColor);
     style = isThatMobile
@@ -570,7 +594,7 @@ class _ChatMessagesState extends State<ChatMessages>
     return ValueListenableBuilder(
       valueListenable: deleteThisMessage,
       builder: (context, Message? messageValue, child) {
-        bool isThatMine = messageValue!.senderId == myPersonalId;
+        bool isThatMe = messageValue!.senderId == myPersonalId;
         return ValueListenableBuilder(
           valueListenable: isDeleteMessageDone,
           builder: (context, bool messageDoneValue, child) =>
@@ -605,7 +629,7 @@ class _ChatMessagesState extends State<ChatMessages>
                     padding:
                         const EdgeInsetsDirectional.only(start: 80, end: 80),
                     child: Row(
-                        mainAxisAlignment: isThatMine
+                        mainAxisAlignment: isThatMe
                             ? MainAxisAlignment.spaceBetween
                             : MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -614,7 +638,7 @@ class _ChatMessagesState extends State<ChatMessages>
                               style: getBoldStyle(
                                   color: Theme.of(context).focusColor,
                                   fontSize: 15)),
-                          if (isThatMine)
+                          if (isThatMe)
                             GestureDetector(
                                 onTap: () async {
                                   if (deleteThisMessage.value != null) {
