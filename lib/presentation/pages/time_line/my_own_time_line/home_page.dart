@@ -83,7 +83,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     getData(0);
-
     /// It's prefer to the here not in data_sources to avoid bugs when push notification.
     if (isThatMobile) {
       WidgetsBinding.instance.addPostFrameCallback(
