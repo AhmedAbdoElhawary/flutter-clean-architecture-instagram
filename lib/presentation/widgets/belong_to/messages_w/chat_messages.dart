@@ -30,7 +30,6 @@ import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ChatMessages extends StatefulWidget {
   final SenderInfo messageDetails;
@@ -47,7 +46,7 @@ class _ChatMessagesState extends State<ChatMessages>
   final ValueNotifier<int?> indexOfGarbageMessage = ValueNotifier(null);
   final ValueNotifier<Message?> deleteThisMessage = ValueNotifier(null);
   final ValueNotifier<Message?> newMessageInfo = ValueNotifier(null);
-  final itemScrollController = ValueNotifier(ItemScrollController());
+  final scrollControl = ScrollController();
   final _textController = ValueNotifier(TextEditingController());
   final isDeleteMessageDone = ValueNotifier(false);
   final isMessageLoaded = ValueNotifier(false);
@@ -61,13 +60,8 @@ class _ChatMessagesState extends State<ChatMessages>
   int itemIndex = 0;
 
   Future<void> scrollToLastIndex(BuildContext context) async {
-    if (globalMessagesInfo.value.length > 1) {
-      itemScrollController.value.scrollTo(
-          index: globalMessagesInfo.value.length - 1,
-          alignment: 0.2,
-          duration: const Duration(milliseconds: 10),
-          curve: Curves.easeInOutQuint);
-    }
+    await scrollControl.animateTo(0.0,
+        duration: const Duration(seconds: 1), curve: Curves.easeInOutQuart);
   }
 
   @override
@@ -231,41 +225,25 @@ class _ChatMessagesState extends State<ChatMessages>
             const SizedBox(height: 5));
   }
 
-  NotificationListener<ScrollNotification> notificationListenerForMobile(
-      List<Message> globalMessagesValue) {
-    return NotificationListener<ScrollNotification>(
-        onNotification: _scrollListener,
-        child: ValueListenableBuilder(
-          valueListenable: itemScrollController,
-          builder: (context, ItemScrollController itemScrollValue, child) =>
-              ScrollablePositionedList.separated(
-                  itemScrollController: itemScrollValue,
-                  itemBuilder: (context, index) {
-                    int indexForMobile = index != 0 ? index - 1 : 0;
-                    return Column(
-                      children: [
-                        if (index == 0) buildUserInfo(context),
-                        buildTheMessage(
-                            globalMessagesValue[index],
-                            globalMessagesValue[indexForMobile].datePublished,
-                            index),
-                        if (index == globalMessagesValue.length - 1)
-                          const SizedBox(height: 50),
-                      ],
-                    );
-                  },
-                  itemCount: globalMessagesValue.length,
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const SizedBox(height: 5)),
-        ));
-  }
-
-  bool _scrollListener(ScrollNotification scrollInfo) {
-    if (scrollInfo.metrics.axis == Axis.vertical) {
-      _colorAnimationController.animateTo(scrollInfo.metrics.pixels / 350);
-      return true;
-    }
-    return false;
+  Widget notificationListenerForMobile(List<Message> globalMessagesValue) {
+    return ListView.separated(
+        controller: scrollControl,
+        reverse: true,
+        itemBuilder: (context, index) {
+          int indexForMobile = index != 0 ? index - 1 : 0;
+          return Column(
+            children: [
+              if (index == 0) buildUserInfo(context),
+              buildTheMessage(globalMessagesValue[index],
+                  globalMessagesValue[indexForMobile].datePublished, index),
+              if (index == globalMessagesValue.length - 1)
+                const SizedBox(height: 50),
+            ],
+          );
+        },
+        itemCount: globalMessagesValue.length,
+        separatorBuilder: (BuildContext context, int index) =>
+            const SizedBox(height: 5));
   }
 
   Widget buildCircularProgress() => const ThineCircularProgress();
@@ -287,7 +265,6 @@ class _ChatMessagesState extends State<ChatMessages>
       ],
     );
   }
-
 
   Widget buildTheMessage(
       Message messageInfo, String previousDateOfMessage, int index) {
