@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/utility/define_function.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -18,8 +19,11 @@ class ShowMeTheUsers extends StatefulWidget {
   final bool showColorfulCircle;
   final String emptyText;
   final bool isThatMyPersonalId;
+  final UpdateFollowersCallback? updateFollowersCallback;
+
   const ShowMeTheUsers({
     Key? key,
+    this.updateFollowersCallback,
     required this.isThatMyPersonalId,
     this.showColorfulCircle = true,
     this.isThatFollower = true,
@@ -136,6 +140,9 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                       BlocProvider.of<UserInfoCubit>(context)
                           .updateMyFollowings(
                               userId: userInfo.userId, addThisUser: false);
+                      if (widget.updateFollowersCallback != null) {
+                        widget.updateFollowersCallback!(false, userInfo.userId);
+                      }
                     } else {
                       BlocProvider.of<FollowCubit>(followContext)
                           .followThisUser(
@@ -143,6 +150,9 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                               myPersonalId: myPersonalId);
                       BlocProvider.of<UserInfoCubit>(context)
                           .updateMyFollowings(userId: userInfo.userId);
+                      if (widget.updateFollowersCallback != null) {
+                        widget.updateFollowersCallback!(true, userInfo.userId);
+                      }
                     }
                   },
                   child: whichContainerOfText(stateOfFollow, userInfo));
