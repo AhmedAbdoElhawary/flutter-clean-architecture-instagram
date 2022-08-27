@@ -422,6 +422,16 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  void updateUserInfo(bool isThatAdding, dynamic userId) {
+    setState(() {
+      if (isThatAdding) {
+        widget.userInfo.value.followedPeople.add(userId);
+      } else {
+        widget.userInfo.value.followedPeople.remove(userId);
+      }
+    });
+  }
+
   Widget personalNumbersInfo(List<dynamic> usersIds, UserPersonalInfo userInfo,
       {bool? isThatFollowers}) {
     String text = isThatFollowers == null
@@ -448,9 +458,10 @@ class _ProfilePageState extends State<ProfilePage> {
             if (isThatMobile) {
               await pushToPage(context,
                   page: FollowersInfoPage(
-                      userInfo: userInfo,
-                      initialIndex:
-                          usersIds == userInfo.followerPeople ? 0 : 1));
+                    userInfo: widget.userInfo,
+                    initialIndex: usersIds == userInfo.followerPeople ? 0 : 1,
+                    updateFollowersCallback: updateUserInfo,
+                  ));
             } else {
               await Navigator.of(context).push(
                 HeroDialogRoute(
