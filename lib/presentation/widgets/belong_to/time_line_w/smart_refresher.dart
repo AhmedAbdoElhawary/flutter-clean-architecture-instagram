@@ -1,9 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instagram/core/resources/assets_manager.dart';
-import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -172,10 +169,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
       alignment: Alignment.center,
       child: FadeTransition(
         opacity: _scaleController,
-        child: ScaleTransition(
-          scale: _scaleController,
-          child: circularProgressIndicator(context),
-        ),
+        child: circularProgressIndicator(context),
       ),
     );
   }
@@ -185,31 +179,6 @@ class _SmarterRefreshState extends State<SmarterRefresh>
       strokeWidth: 1.5,
       color: Theme.of(context).iconTheme.color,
       backgroundColor: Theme.of(context).dividerColor,
-    );
-  }
-
-  Widget noMoreData(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  ColorManager.blackRed,
-                  ColorManager.redAccent,
-                  ColorManager.yellow,
-                ],
-              ),
-            ),
-            child: SvgPicture.asset(IconsAssets.noMoreData,
-                color: ColorManager.transparent),
-          ),
-        ],
-      ),
     );
   }
 }
