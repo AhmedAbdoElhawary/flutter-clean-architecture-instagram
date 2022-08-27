@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +10,7 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/child_classes/child_classes_with_entities/notification.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/get_post_info.dart';
 
 class NotificationCardInfo extends StatelessWidget {
@@ -33,12 +33,11 @@ class NotificationCardInfo extends StatelessWidget {
         padding: EdgeInsetsDirectional.only(
             start: 15, top: 15, end: 15, bottom: !isThatMobile ? 5 : 0),
         child: Row(children: [
-          CircleAvatar(
-            backgroundColor: ColorManager.customGrey,
-            backgroundImage: CachedNetworkImageProvider(
-                notificationInfo.personalProfileImageUrl),
-            child: null,
-            radius: 25,
+          NetworkImageDisplay(
+            imageUrl: notificationInfo.personalProfileImageUrl,
+            height: 300,
+            cachingHeight: 300,
+            cachingWidth: 300,
           ),
           const SizedBox(width: 10),
           Expanded(
