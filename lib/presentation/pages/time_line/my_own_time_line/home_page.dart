@@ -26,7 +26,7 @@ import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_of_po
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_smart_refresh.dart';
 import '../../../../data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import '../../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../../../widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
@@ -83,6 +83,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     getData(0);
+
     /// It's prefer to the here not in data_sources to avoid bugs when push notification.
     if (isThatMobile) {
       WidgetsBinding.instance.addPostFrameCallback(
@@ -457,42 +458,13 @@ class _WelcomeCards extends StatefulWidget {
   State<_WelcomeCards> createState() => _WelcomeCardsState();
 }
 
-class _WelcomeCardsState extends State<_WelcomeCards>
-    with TickerProviderStateMixin {
-  late AnimationController _aniController, _scaleController, _footerController;
-  PageController pageController = PageController(viewportFraction: 0.7);
-  final _refreshController = ValueNotifier(RefreshController());
+class _WelcomeCardsState extends State<_WelcomeCards> {
   final ValueNotifier<int> _selectedIndex = ValueNotifier(0);
-  @override
-  void initState() {
-    init();
-    super.initState();
-  }
-
-  init() {
-    _aniController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2000));
-    _scaleController =
-        AnimationController(value: 1, vsync: this, upperBound: 1);
-    _footerController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2000));
-    _refreshController.value.headerMode!.addListener(() {
-      if (_refreshController.value.headerStatus == RefreshStatus.idle) {
-        _scaleController.value = 0.0;
-        _aniController.reset();
-      } else if (_refreshController.value.headerStatus ==
-          RefreshStatus.refreshing) {
-        _aniController.repeat();
-      }
-    });
-  }
+  PageController pageController = PageController(viewportFraction: 0.7);
 
   @override
   void dispose() {
-    _refreshController.dispose();
-    _scaleController.dispose();
-    _footerController.dispose();
-    _aniController.dispose();
+    _selectedIndex.dispose();
     pageController.dispose();
     super.dispose();
   }
@@ -505,29 +477,9 @@ class _WelcomeCardsState extends State<_WelcomeCards>
   Widget welcomeCards() {
     return SizedBox(
       height: double.maxFinite,
-      child: ValueListenableBuilder(
-        valueListenable: _refreshController,
-        builder: (_, RefreshController value, __) {
-          return SmartRefresher(
-            enablePullUp: false,
-            enablePullDown: true,
-            enableTwoLevel: false,
-            controller: value,
-            scrollDirection: Axis.vertical,
-            onRefresh: onSmarterRefresh,
-            header: customHeader(),
-            child: suggestionsFriends(),
-          );
-        },
-      ),
+      child: CustomSmartRefresh(
+          onRefreshData: widget.onRefreshData, child: suggestionsFriends()),
     );
-  }
-
-  onSmarterRefresh() {
-    widget.onRefreshData(0).whenComplete(() {
-      _refreshController.value.refreshCompleted();
-      _refreshController.value.loadComplete();
-    });
   }
 
   Widget suggestionsFriends() {
@@ -750,32 +702,6 @@ class _WelcomeCardsState extends State<_WelcomeCards>
               style: getNormalStyle(color: Theme.of(context).focusColor))
           : Text(StringsManager.follow.tr,
               style: getNormalStyle(color: ColorManager.white)),
-    );
-  }
-
-  CustomHeader customHeader() {
-    return CustomHeader(
-      refreshStyle: RefreshStyle.Behind,
-      onOffsetChange: (offset) {
-        if (_refreshController.value.headerMode!.value !=
-            RefreshStatus.refreshing) {
-          _scaleController.value = offset / 150.0;
-        }
-      },
-      builder: (context, mode) {
-        return customCircleProgress(context);
-      },
-    );
-  }
-
-  Container customCircleProgress(BuildContext context) {
-    return Container(
-      color: Theme.of(context).primaryColor,
-      alignment: Alignment.center,
-      child: FadeTransition(
-        opacity: _scaleController,
-        child: const ThineCircularProgress(),
-      ),
     );
   }
 }
