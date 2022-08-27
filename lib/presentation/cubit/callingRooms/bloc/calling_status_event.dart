@@ -8,11 +8,11 @@ abstract class CallingStatusEvent extends Equatable {
 }
 
 class LoadCallingStatus extends CallingStatusEvent {
-  final String userIAmCalling;
+  final String channelUid;
 
-  const LoadCallingStatus(this.userIAmCalling);
+  const LoadCallingStatus(this.channelUid);
   @override
-  List<Object> get props => [userIAmCalling];
+  List<Object> get props => [channelUid];
 }
 
 class UpdateCallingStatus extends CallingStatusEvent {
