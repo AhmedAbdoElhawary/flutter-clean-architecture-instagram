@@ -41,10 +41,12 @@ Future<void> _listenFCM(BuildContext context) async {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null) {
-      dynamic route = message.data["route"];
-      dynamic routeParameterId = message.data["routeParameterId"];
-      dynamic userCallingId = message.data["userCallingId"];
-      dynamic isThatGroupChat = message.data["isThatGroupChat"];
+      dynamic route = message.data["route"] ?? "";
+      dynamic routeParameterId = message.data["routeParameterId"] ?? "";
+
+      /// in case calling
+      dynamic userCallingId = message.data["userCallingId"] ?? "";
+      dynamic isThatGroupChat = message.data["isThatGroupChat"] ?? false;
 
       bool isThatVideoCall = route == "call";
       if (isThatVideoCall) {
@@ -62,7 +64,7 @@ Future<void> _listenFCM(BuildContext context) async {
           notification.hashCode,
           notification.title,
           notification.body,
-          payload: "$route,${message.data["routeParameterId"]}",
+          payload: "$route,$routeParameterId",
           NotificationDetails(
               android: _videoCallAndroidNotificationDetails(
                   channel: _normalChannel)),
@@ -83,10 +85,10 @@ Future<void> _listenFCM(BuildContext context) async {
 
 Future<void> _handleMessage(BuildContext context, RemoteMessage message) async {
   await _pushToPage(context,
-      route: message.data["route"],
-      routeParameterId: message.data["routeParameterId"],
-      userCallingId: message.data["userCallingId"],
-      isThatGroupChat: message.data["isThatGroupChat"]);
+      route: message.data["route"] ?? "",
+      routeParameterId: message.data["routeParameterId"] ?? "",
+      userCallingId: message.data["userCallingId"] ?? "",
+      isThatGroupChat: message.data["isThatGroupChat"] ?? false);
 }
 
 Future<void> _pushToPage(
@@ -106,8 +108,8 @@ Future<void> _pushToPage(
     page = WhichProfilePage(userId: routeParameterId);
   } else if (route == "call") {
     UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-    await CallingRoomsCubit.get(context)
-        .joinToRoom(channelId: routeParameterId, userInfo: myPersonalInfo);
+    await CallingRoomsCubit.get(context).joinToRoom(
+        channelId: routeParameterId, myPersonalInfo: myPersonalInfo);
     page = CallPage(
       channelName: routeParameterId,
       role: ClientRole.Broadcaster,
@@ -135,7 +137,7 @@ AndroidNotificationDetails _videoCallAndroidNotificationDetails(
     enableLights: true,
     playSound: true,
     priority: Priority.high,
-    showWhen: true,
+    // showWhen: true,
     setAsGroupSummary: true,
     timeoutAfter: isThatCalling ? 75000 : null,
     fullScreenIntent: isThatCalling,
@@ -180,11 +182,16 @@ Future<void> _loadFCM(BuildContext context) async {
 
 _onSelectNotification(BuildContext context, String? payload) async {
   if (payload != null) {
-    List<String> s = payload.split(",");
-    String route = s[0];
-    String routeParameterId = s[1];
-    String userCallingId = s[2];
-    dynamic isThatGroupChat = s[3];
+    List<String> data = payload.split(",");
+    int length = data.length;
+    if (length < 2) return;
+    String route = "", routeParameterId = "", userCallingId = "";
+    dynamic isThatGroupChat = false;
+    route = data[0];
+    routeParameterId = data[1];
+    userCallingId = length > 2 ? data[2] : "";
+    isThatGroupChat = length > 3 ? data[3] : false;
+
     if (userCallingId.isEmpty) {
       await _pushToPage(
         context,

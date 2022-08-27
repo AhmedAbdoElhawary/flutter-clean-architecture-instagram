@@ -23,10 +23,6 @@ class NetworkImageDisplay extends StatefulWidget {
 }
 
 class _NetworkImageDisplayState extends State<NetworkImageDisplay> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void didChangeDependencies() {
@@ -49,7 +45,6 @@ class _NetworkImageDisplayState extends State<NetworkImageDisplay> {
       child: buildOctoImage(),
     );
   }
-
   Widget buildOctoImage({double? height = double.infinity}) {
     int cachingHeight = widget.cachingHeight;
     int cachingWidth = widget.cachingWidth;

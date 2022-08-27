@@ -19,14 +19,14 @@ class CallingStatusBloc extends Bloc<CallingStatusEvent, CallingStatusState> {
     CallingStatusEvent event,
   ) async* {
     if (event is LoadCallingStatus) {
-      yield* _mapLoadInfoToState(event.userIAmCalling);
+      yield* _mapLoadInfoToState(event.channelUid);
     } else if (event is UpdateCallingStatus) {
       yield* _mapUpdateInfoToState(event);
     }
   }
 
-  Stream<CallingStatusState> _mapLoadInfoToState(String userIAmCalling) async* {
-    _getCallingStatusUseCase.call(params: userIAmCalling).listen(
+  Stream<CallingStatusState> _mapLoadInfoToState(String channelUid) async* {
+    _getCallingStatusUseCase.call(params: channelUid).listen(
       (isHeOnLine) {
         add(UpdateCallingStatus(isHeOnLine));
       },

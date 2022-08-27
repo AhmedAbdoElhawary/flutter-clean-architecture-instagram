@@ -28,7 +28,7 @@ class MessageForGroupChatCubit extends Cubit<MessageForGroupChatState> {
   Future<void> sendMessage({
     required Message messageInfo,
     Uint8List? pathOfPhoto,
-    File? recordFile,
+    File? recordFile
   }) async {
     emit(MessageForGroupChatLoading());
     await _addMessageForGroupChatUseCase

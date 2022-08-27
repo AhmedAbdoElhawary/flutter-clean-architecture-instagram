@@ -5,13 +5,14 @@ import 'lock_record.dart';
 import 'show_counter.dart';
 import 'show_mic_and_counter.dart';
 import 'sound_recorder_notifier.dart';
+// ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
 
 import 'sound_recorder_when_locked_design.dart';
 
 class SocialMediaRecorder extends StatefulWidget {
   /// function reture the recording sound file
-  final Function(File soundFile) sendRequestFunction;
+  final Function(File soundFile, int lengthOfRecord) sendRequestFunction;
 
   /// text to know user should drag in the left to cancel record
   final String? slideToCancelText;
@@ -105,7 +106,9 @@ class SocialMediaRecorderS extends State<SocialMediaRecorder> {
           if (state.buttonPressed) {
             if (state.second > 1 || state.minute > 0) {
               String path = state.mPath;
-              widget.sendRequestFunction(File.fromUri(Uri(path: path)));
+
+              widget.sendRequestFunction(
+                  File.fromUri(Uri(path: path)), state.second);
             }
             widget.showIcons(true);
           }

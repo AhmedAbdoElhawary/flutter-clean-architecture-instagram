@@ -12,7 +12,7 @@ class CallingRoomsInitial extends CallingRoomsState {}
 class CallingRoomsLoading extends CallingRoomsState {}
 
 class UsersInfoInRoomLoaded extends CallingRoomsState {
-  final List<UserInfoInCallingRoom> usersInfo;
+  final List<UsersInfoInCallingRoom> usersInfo;
 
   const UsersInfoInRoomLoaded({required this.usersInfo});
   @override

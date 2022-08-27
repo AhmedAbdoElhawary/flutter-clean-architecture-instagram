@@ -10,6 +10,6 @@ class JoinToCallingRoomUseCase
   Future<String> call(
       {required String paramsOne, required UserPersonalInfo paramsTwo}) async {
     return await _callingRoomsRepo.joinToRoom(
-        channelId: paramsOne, userInfo: paramsTwo);
+        channelId: paramsOne, myPersonalInfo: paramsTwo);
   }
 }

@@ -6,6 +6,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/core/utility/define_function.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/show_me_the_users.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
@@ -13,12 +14,15 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circ
 import '../../cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 
 class FollowersInfoPage extends StatefulWidget {
-  final UserPersonalInfo userInfo;
+  final ValueNotifier<UserPersonalInfo> userInfo;
   final int initialIndex;
-
-  const FollowersInfoPage(
-      {Key? key, required this.userInfo, this.initialIndex = 0})
-      : super(key: key);
+  final UpdateFollowersCallback updateFollowersCallback;
+  const FollowersInfoPage({
+    Key? key,
+    required this.userInfo,
+    this.initialIndex = 0,
+    required this.updateFollowersCallback,
+  }) : super(key: key);
 
   @override
   State<FollowersInfoPage> createState() => _FollowersInfoPageState();
@@ -32,49 +36,53 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
     return DefaultTabController(
       length: 2,
       initialIndex: widget.initialIndex,
-      child: Scaffold(
-        appBar: isThatMobile ? buildAppBar(context) : null,
-        body: ValueListenableBuilder(
-          valueListenable: rebuildUsersInfo,
-          builder: (context, bool rebuildValue, child) =>
-              BlocBuilder<UsersInfoCubit, UsersInfoState>(
-            bloc: BlocProvider.of<UsersInfoCubit>(context)
-              ..getFollowersAndFollowingsInfo(
-                  followersIds: widget.userInfo.followerPeople,
-                  followingsIds: widget.userInfo.followedPeople),
-            buildWhen: (previous, current) {
-              if (previous != current &&
-                  (current is CubitFollowersAndFollowingsLoaded)) {
-                return true;
-              }
-              if (rebuildValue &&
-                  (current is CubitFollowersAndFollowingsLoaded)) {
-                rebuildUsersInfo.value = false;
-                return true;
-              }
-              return false;
-            },
-            builder: (context, state) {
-              if (state is CubitFollowersAndFollowingsLoaded) {
-                return _TapBarView(
-                  state: state,
-                  userInfo: ValueNotifier(widget.userInfo),
-                );
-              }
-              if (state is CubitGettingSpecificUsersFailed) {
-                ToastShow.toastStateError(state);
-                return Text(StringsManager.somethingWrong.tr);
-              } else {
-                return const ThineCircularProgress();
-              }
-            },
+      child: ValueListenableBuilder(
+        valueListenable: widget.userInfo,
+        builder: (context, UserPersonalInfo userInfoValue, child) => Scaffold(
+          appBar: isThatMobile ? buildAppBar(context, userInfoValue) : null,
+          body: ValueListenableBuilder(
+            valueListenable: rebuildUsersInfo,
+            builder: (context, bool rebuildValue, child) =>
+                BlocBuilder<UsersInfoCubit, UsersInfoState>(
+              bloc: BlocProvider.of<UsersInfoCubit>(context)
+                ..getFollowersAndFollowingsInfo(
+                    followersIds: userInfoValue.followerPeople,
+                    followingsIds: userInfoValue.followedPeople),
+              buildWhen: (previous, current) {
+                if (previous != current &&
+                    (current is CubitFollowersAndFollowingsLoaded)) {
+                  return true;
+                }
+                if (rebuildValue &&
+                    (current is CubitFollowersAndFollowingsLoaded)) {
+                  rebuildUsersInfo.value = false;
+                  return true;
+                }
+                return false;
+              },
+              builder: (context, state) {
+                if (state is CubitFollowersAndFollowingsLoaded) {
+                  return _TapBarView(
+                    state: state,
+                    userInfo: widget.userInfo,
+                    updateFollowersCallback: widget.updateFollowersCallback,
+                  );
+                }
+                if (state is CubitGettingSpecificUsersFailed) {
+                  ToastShow.toastStateError(state);
+                  return Text(StringsManager.somethingWrong.tr);
+                } else {
+                  return const ThineCircularProgress();
+                }
+              },
+            ),
           ),
         ),
       ),
     );
   }
 
-  AppBar buildAppBar(BuildContext context) {
+  AppBar buildAppBar(BuildContext context, UserPersonalInfo userInfoValue) {
     return AppBar(
       elevation: 0,
       backgroundColor: Theme.of(context).primaryColor,
@@ -85,13 +93,13 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
         tabs: [
           Tab(
               icon: buildText(context,
-                  "${widget.userInfo.followerPeople.length} ${StringsManager.followers.tr}")),
+                  "${userInfoValue.followerPeople.length} ${StringsManager.followers.tr}")),
           Tab(
               icon: buildText(context,
-                  "${widget.userInfo.followedPeople.length} ${StringsManager.following.tr}")),
+                  "${userInfoValue.followedPeople.length} ${StringsManager.following.tr}")),
         ],
       ),
-      title: buildText(context, widget.userInfo.userName),
+      title: buildText(context, userInfoValue.userName),
     );
   }
 
@@ -104,9 +112,14 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
 class _TapBarView extends StatelessWidget {
   final CubitFollowersAndFollowingsLoaded state;
   final ValueNotifier<UserPersonalInfo> userInfo;
+  final UpdateFollowersCallback updateFollowersCallback;
 
-  const _TapBarView({Key? key, required this.userInfo, required this.state})
-      : super(key: key);
+  const _TapBarView({
+    Key? key,
+    required this.userInfo,
+    required this.state,
+    required this.updateFollowersCallback,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +132,7 @@ class _TapBarView extends StatelessWidget {
             usersInfo: state.followersAndFollowingsInfo.followersInfo,
             emptyText: StringsManager.noFollowers.tr,
             isThatMyPersonalId: isThatMyPersonalId,
+            updateFollowersCallback: updateFollowersCallback,
           ),
         ),
         SingleChildScrollView(

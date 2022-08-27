@@ -42,10 +42,7 @@ class ShowCounter extends StatelessWidget {
               AnimatedOpacity(
                 duration: const Duration(seconds: 1),
                 opacity: soundRecorderState.second % 2 == 0 ? 1 : 0,
-                child: const Icon(
-                  Icons.mic,
-                  color: Colors.red,
-                ),
+                child: const Icon(Icons.mic, color: Colors.red),
               ),
             ],
           ),

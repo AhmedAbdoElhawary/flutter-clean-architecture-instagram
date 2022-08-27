@@ -21,30 +21,33 @@ class FirestoreUser {
   }
 
   // update channelId for user
-  static Future<bool> updateChannelId(
-      {required String userId,
+  static Future<List<bool>> updateChannelId(
+      {required List<dynamic> callThoseUsersIds,
       required String myPersonalId,
       required String channelId}) async {
     await _fireStoreUserCollection
         .doc(myPersonalId)
         .update({"channelId": channelId});
-
-    DocumentSnapshot<Map<String, dynamic>> collection =
-        await _fireStoreUserCollection.doc(userId).get();
-    UserPersonalInfo userInfo = UserPersonalInfo.fromDocSnap(collection.data());
-    if (userInfo.channelId.isEmpty) {
-      await _fireStoreUserCollection
-          .doc(userId)
-          .update({"channelId": channelId});
-      return true;
-    } else {
-      return false;
+    List<bool> isUsersAvailable = [];
+    for (final userId in callThoseUsersIds) {
+      DocumentSnapshot<Map<String, dynamic>> collection =
+          await _fireStoreUserCollection.doc(userId).get();
+      UserPersonalInfo userInfo =
+          UserPersonalInfo.fromDocSnap(collection.data());
+      if (userInfo.channelId.isEmpty) {
+        isUsersAvailable.add(true);
+        await _fireStoreUserCollection
+            .doc(userId)
+            .update({"channelId": channelId});
+      } else {
+        isUsersAvailable.add(false);
+      }
     }
+    return isUsersAvailable;
   }
 
-  static Future<void> updateChatsOfGroups({
-    required Message messageInfo,
-  }) async {
+  static Future<void> updateChatsOfGroups(
+      {required Message messageInfo}) async {
     for (final userId in messageInfo.receiversIds) {
       await _fireStoreUserCollection.doc(userId).update({
         "chatsOfGroups": FieldValue.arrayUnion([messageInfo.chatOfGroupId])
@@ -80,7 +83,8 @@ class FirestoreUser {
           deviceToken: token,
           isThatGroupChat: message.isThatGroup,
           notificationRoute: "message",
-          routeParameterId: message.senderId,
+          routeParameterId:
+              message.isThatGroup ? message.chatOfGroupId : message.senderId,
         );
         await DeviceNotification.sendPopupNotification(
             pushNotification: detail);
@@ -89,26 +93,18 @@ class FirestoreUser {
   }
 
   static Future<void> clearChannelsIds(
-      {required String userId, required String myPersonalId}) async {
+      {required List<dynamic> usersIds, required String myPersonalId}) async {
     await _fireStoreUserCollection.doc(myPersonalId).update({"channelId": ""});
-    await _fireStoreUserCollection.doc(userId).update({"channelId": ""});
-  }
-
-  static Stream<bool> getCallingStatus({required String userId}) {
-    Stream<DocumentSnapshot<Map<String, dynamic>>> snapSearch =
-        _fireStoreUserCollection.doc(userId).snapshots();
-
-    return snapSearch.map((snapshot) {
-      UserPersonalInfo userInfo = UserPersonalInfo.fromDocSnap(snapshot.data());
-      return userInfo.channelId.isNotEmpty;
-    });
+    for (final userId in usersIds) {
+      await _fireStoreUserCollection.doc(userId).update({"channelId": ""});
+    }
   }
 
   static Future<void> cancelJoiningToRoom(String userId) async {
     await _fireStoreUserCollection.doc(userId).update({"channelId": ""});
   }
 
-  static Future<UserPersonalInfo> getUserInfo(String userId) async {
+  static Future<UserPersonalInfo> getUserInfo(dynamic userId) async {
     DocumentSnapshot<Map<String, dynamic>> snap =
         await _fireStoreUserCollection.doc(userId).get();
     if (snap.exists) {

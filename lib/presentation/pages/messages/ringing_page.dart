@@ -45,13 +45,9 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
               });
             }
             if (state is UsersInfoInRoomLoaded) {
-              return callingLoadingPage(state.usersInfo[0], context);
+              return callingLoadingPage(state.usersInfo);
             } else {
-              return Center(
-                  child: Text(
-                "Waiting...",
-                style: getNormalStyle(color: ColorManager.white),
-              ));
+              return waitingText();
             }
           },
         ),
@@ -59,8 +55,56 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
     );
   }
 
-  Widget callingLoadingPage(
-      UserInfoInCallingRoom userInfo, BuildContext context) {
+  Future<void> onTapAcceptButton() async {
+    UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    await CallingRoomsCubit.get(context).joinToRoom(
+        channelId: widget.channelId, myPersonalInfo: myPersonalInfo);
+    if (!mounted) return;
+
+    await pushToPage(
+      context,
+      page: CallPage(
+        channelName: widget.channelId,
+        role: ClientRole.Broadcaster,
+        userCallingType: UserCallingType.receiver,
+      ),
+      withoutRoot: false,
+    );
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => setState(() => pop = true));
+  }
+
+  Future<void> onTapCancelButton() async {
+    UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    await CallingRoomsCubit.get(context).leaveTheRoom(
+      userId: myPersonalInfo.userId,
+      channelId: widget.channelId,
+      isThatAfterJoining: false,
+    );
+    if (!mounted) return;
+    Navigator.of(context).maybePop();
+  }
+
+  Widget waitingText() {
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Someone calling you",
+            style: getNormalStyle(color: ColorManager.white),
+          ),
+          Text(
+            "Please wait for loaded...",
+            style: getNormalStyle(color: ColorManager.white),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget callingLoadingPage(List<UsersInfoInCallingRoom> userInfo) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -74,10 +118,10 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
           children: [
             CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage(userInfo.profileImageUrl),
+              backgroundImage: NetworkImage(userInfo[0].profileImageUrl!),
             ),
             const SizedBox(height: 30),
-            Text(userInfo.name,
+            Text(userInfo[0].name!,
                 style: getNormalStyle(color: ColorManager.white, fontSize: 25)),
             const SizedBox(height: 10),
             Text('Calling...',
@@ -93,14 +137,7 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
           mainAxisSize: MainAxisSize.max,
           children: [
             GestureDetector(
-              onTap: () async {
-                UserPersonalInfo myPersonalInfo =
-                    UserInfoCubit.getMyPersonalInfo(context);
-                await CallingRoomsCubit.get(context)
-                    .cancelJoiningToRoom(userId: myPersonalInfo.userId);
-                if (!mounted) return;
-                Navigator.of(context).maybePop();
-              },
+              onTap: onTapCancelButton,
               child: const CircleAvatar(
                 radius: 32,
                 backgroundColor: ColorManager.red,
@@ -112,26 +149,7 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
               ),
             ),
             GestureDetector(
-              onTap: () async {
-                UserPersonalInfo myPersonalInfo =
-                    UserInfoCubit.getMyPersonalInfo(context);
-                await CallingRoomsCubit.get(context).joinToRoom(
-                    channelId: widget.channelId, userInfo: myPersonalInfo);
-                if (!mounted) return;
-
-                await pushToPage(
-                  context,
-                  page: CallPage(
-                    channelName: widget.channelId,
-                    role: ClientRole.Broadcaster,
-                    userInfo: userInfo,
-                    userCallingType: UserCallingType.receiver,
-                  ),
-                  withoutRoot: false,
-                );
-                WidgetsBinding.instance
-                    .addPostFrameCallback((_) => setState(() => pop = true));
-              },
+              onTap: onTapAcceptButton,
               child: const CircleAvatar(
                 radius: 32,
                 backgroundColor: ColorManager.green,

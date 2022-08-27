@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:instagram/core/resources/color_manager.dart';
+// ignore: depend_on_referenced_packages
+import 'package:octo_image/octo_image.dart';
 
 class MemoryImageDisplay extends StatefulWidget {
   final Uint8List imagePath;
@@ -27,23 +28,36 @@ class _NetworkImageDisplayState extends State<MemoryImageDisplay> {
   }
 
   Widget buildOctoImage() {
-    return Container(
+    return OctoImage(
+      image: MemoryImage(widget.imagePath),
+      errorBuilder: (context, url, error) => buildError(),
+      fit: BoxFit.cover,
       width: double.infinity,
-      color: ColorManager.black26,
-      child: Image.memory(
-        widget.imagePath,
-        errorBuilder: (context, url, error) => buildError(),
-        fit: BoxFit.cover,
-        width: double.infinity,
-      ),
+      placeholderBuilder: (context) => Center(child: buildSizedBox()),
     );
   }
 
   SizedBox buildError() {
     return SizedBox(
-      width: double.infinity,
       child: Icon(Icons.warning_amber_rounded,
-          size: 50, color: Theme.of(context).focusColor),
+          size: 30, color: Theme.of(context).focusColor),
+    );
+  }
+
+  Widget buildSizedBox() {
+    return Container(
+      width: double.infinity,
+      color: Theme.of(context).textTheme.bodyMedium!.color,
+      child: Center(
+          child: CircleAvatar(
+        radius: 57,
+        backgroundColor: Theme.of(context).textTheme.bodySmall!.color,
+        child: Center(
+            child: CircleAvatar(
+          radius: 56,
+          backgroundColor: Theme.of(context).textTheme.bodyMedium!.color,
+        )),
+      )),
     );
   }
 }

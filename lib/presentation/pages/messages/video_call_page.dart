@@ -7,8 +7,9 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/private_keys.dart';
-import 'package:instagram/domain/entities/calling_status.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 
 enum UserCallingType { sender, receiver }
 
@@ -16,7 +17,7 @@ class CallPage extends StatefulWidget {
   final String channelName;
   final String userCallingId;
 
-  final UserInfoInCallingRoom? userInfo;
+  final List<UserPersonalInfo>? usersInfo;
   final UserCallingType userCallingType;
   final ClientRole role;
 
@@ -26,7 +27,7 @@ class CallPage extends StatefulWidget {
     this.userCallingId = "",
     required this.userCallingType,
     required this.role,
-    this.userInfo,
+    this.usersInfo,
   }) : super(key: key);
 
   @override
@@ -37,8 +38,10 @@ class CallPageState extends State<CallPage> {
   final _users = <int>[];
   final _infoStrings = <String>[];
   bool muted = false;
-  late RtcEngine _engine;
+  bool moreThanOne = false;
 
+  late RtcEngine _engine;
+  late UserPersonalInfo myPersonalInfo;
   @override
   void dispose() {
     _users.clear();
@@ -54,6 +57,7 @@ class CallPageState extends State<CallPage> {
   @override
   void initState() {
     super.initState();
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     initialize();
   }
 
@@ -154,17 +158,17 @@ class CallPageState extends State<CallPage> {
   }
 
   /// Video layout wrapper
-  bool enter = false;
   Widget _viewRows() {
     final views = _getRenderViews();
     if (views.length > 1) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-            enter = true;
-          }));
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => setState(() => moreThanOne = true));
     }
     if (widget.userCallingType == UserCallingType.receiver &&
         views.length == 1 &&
-        enter) {
+        moreThanOne) {
+      CallingRoomsCubit.get(context)
+          .deleteTheRoom(channelId: widget.channelName);
       WidgetsBinding.instance
           .addPostFrameCallback((_) => setState(() => amICalling = false));
       Navigator.of(context).maybePop();
@@ -253,12 +257,11 @@ class CallPageState extends State<CallPage> {
 
   void _onCallEnd(BuildContext context) {
     setState(() => amICalling = false);
-    CallingRoomsCubit.get(context).deleteTheRoom(
-        channelId: widget.channelName,
-        userId: widget.userInfo == null
-            ? widget.userCallingId
-            : widget.userInfo!.userId);
-
+    CallingRoomsCubit.get(context).leaveTheRoom(
+      userId: myPersonalInfo.userId,
+      channelId: widget.channelName,
+      isThatAfterJoining: true,
+    );
     Navigator.of(context).maybePop();
   }
 
@@ -324,16 +327,25 @@ class CallPageState extends State<CallPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (widget.userInfo != null) ...[
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundImage:
-                            NetworkImage(widget.userInfo!.profileImageUrl),
-                      ),
+                    if (widget.usersInfo != null) ...[
+                      if (widget.usersInfo!.length > 1) ...[
+                        buildCircleAvatar(0, 50),
+                      ] else ...[
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: buildCircleAvatar(0, 40),
+                        ),
+                        Positioned(
+                            height: -15,
+                            left: -10,
+                            child: buildCircleAvatar(1, 40)),
+                      ],
                       const SizedBox(height: 30),
-                      Text(widget.userInfo!.name,
-                          style: getNormalStyle(
-                              color: ColorManager.white, fontSize: 25)),
+                      ...List.generate(widget.usersInfo!.length, (index) {
+                        return Text(widget.usersInfo![index].name,
+                            style: getNormalStyle(
+                                color: ColorManager.white, fontSize: 25));
+                      }),
                     ],
                     const SizedBox(height: 10),
                     Text('Connecting...',
@@ -348,6 +360,13 @@ class CallPageState extends State<CallPage> {
           ],
         ),
       ),
+    );
+  }
+
+  CircleAvatar buildCircleAvatar(int index, double radius) {
+    return CircleAvatar(
+      radius: radius,
+      backgroundImage: NetworkImage(widget.usersInfo![index].profileImageUrl),
     );
   }
 }

@@ -127,8 +127,8 @@ class CustomAppBar {
       await pushToPage(context, page: const CustomGalleryDisplay());
 
   static AppBar chattingAppBar(
-      List<UserPersonalInfo> userInfo, BuildContext context) {
-    int length = userInfo.length;
+      List<UserPersonalInfo> usersInfo, BuildContext context) {
+    int length = usersInfo.length;
     length = length >= 3 ? 3 : length;
     return AppBar(
       iconTheme: IconThemeData(color: Theme.of(context).focusColor),
@@ -139,10 +139,10 @@ class CustomAppBar {
         child: Row(
           children: [
             if (length > 1) ...[
-              _imagesOfGroupUsers(userInfo)
+              _imagesOfGroupUsers(usersInfo)
             ] else ...[
               CircleAvatarOfProfileImage(
-                  userInfo: userInfo[0],
+                  userInfo: usersInfo[0],
                   bodyHeight: 340,
                   showColorfulCircle: false),
             ],
@@ -152,7 +152,7 @@ class CustomAppBar {
               children: [
                 ...List.generate(1, (index) {
                   return Text(
-                    "${userInfo[index].name}${length > 1 ? ", ..." : ""}",
+                    "${usersInfo[index].name}${length > 1 ? ", ..." : ""}",
                     style: TextStyle(
                         color: Theme.of(context).focusColor,
                         fontSize: 16,
@@ -180,7 +180,7 @@ class CustomAppBar {
             amICalling = true;
             await pushToPage(context,
                 page: VideoCallPage(
-                    userInfo: userInfo[0], myPersonalInfo: myPersonalInfo),
+                    usersInfo: usersInfo, myPersonalInfo: myPersonalInfo),
                 withoutRoot: false,
                 withoutPageTransition: true);
             amICalling = false;
