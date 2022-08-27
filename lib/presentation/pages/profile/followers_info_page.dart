@@ -65,7 +65,7 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
                   return _TapBarView(
                     state: state,
                     userInfo: widget.userInfo,
-                    updateFollowersCallback: widget.updateFollowersCallback,
+                    updateCallback: widget.updateFollowersCallback,
                   );
                 }
                 if (state is CubitGettingSpecificUsersFailed) {
@@ -112,13 +112,12 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
 class _TapBarView extends StatelessWidget {
   final CubitFollowersAndFollowingsLoaded state;
   final ValueNotifier<UserPersonalInfo> userInfo;
-  final UpdateFollowersCallback updateFollowersCallback;
-
+  final UpdateFollowersCallback updateCallback;
   const _TapBarView({
     Key? key,
     required this.userInfo,
     required this.state,
-    required this.updateFollowersCallback,
+    required this.updateCallback,
   }) : super(key: key);
 
   @override
@@ -132,7 +131,8 @@ class _TapBarView extends StatelessWidget {
             usersInfo: state.followersAndFollowingsInfo.followersInfo,
             emptyText: StringsManager.noFollowers.tr,
             isThatMyPersonalId: isThatMyPersonalId,
-            updateFollowersCallback: updateFollowersCallback,
+            updateFollowedCallback: updateCallback,
+            // updateFollowedCallback: updateFollowedCallback,
           ),
         ),
         SingleChildScrollView(
@@ -141,6 +141,7 @@ class _TapBarView extends StatelessWidget {
             isThatFollower: false,
             emptyText: StringsManager.noFollowings.tr,
             isThatMyPersonalId: isThatMyPersonalId,
+            updateFollowedCallback: updateCallback,
           ),
         ),
       ],
