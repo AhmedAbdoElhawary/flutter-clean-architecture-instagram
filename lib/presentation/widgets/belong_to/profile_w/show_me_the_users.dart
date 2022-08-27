@@ -19,11 +19,11 @@ class ShowMeTheUsers extends StatefulWidget {
   final bool showColorfulCircle;
   final String emptyText;
   final bool isThatMyPersonalId;
-  final UpdateFollowersCallback? updateFollowersCallback;
+  final UpdateFollowersCallback? updateFollowedCallback;
 
   const ShowMeTheUsers({
     Key? key,
-    this.updateFollowersCallback,
+    this.updateFollowedCallback,
     required this.isThatMyPersonalId,
     this.showColorfulCircle = true,
     this.isThatFollower = true,
@@ -140,8 +140,8 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                       BlocProvider.of<UserInfoCubit>(context)
                           .updateMyFollowings(
                               userId: userInfo.userId, addThisUser: false);
-                      if (widget.updateFollowersCallback != null) {
-                        widget.updateFollowersCallback!(false, userInfo.userId);
+                      if (widget.updateFollowedCallback != null) {
+                        widget.updateFollowedCallback!(false, userInfo.userId);
                       }
                     } else {
                       BlocProvider.of<FollowCubit>(followContext)
@@ -150,8 +150,8 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                               myPersonalId: myPersonalId);
                       BlocProvider.of<UserInfoCubit>(context)
                           .updateMyFollowings(userId: userInfo.userId);
-                      if (widget.updateFollowersCallback != null) {
-                        widget.updateFollowersCallback!(true, userInfo.userId);
+                      if (widget.updateFollowedCallback != null) {
+                        widget.updateFollowedCallback!(true, userInfo.userId);
                       }
                     }
                   },

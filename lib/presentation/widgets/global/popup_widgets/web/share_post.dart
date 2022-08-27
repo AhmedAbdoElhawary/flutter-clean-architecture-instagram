@@ -27,8 +27,7 @@ class _PopupSharePostState extends State<PopupSharePost> {
   final TextEditingController messageTextController = TextEditingController();
   final TextEditingController searchTextController = TextEditingController();
 
-  final ValueNotifier<List<UserPersonalInfo>> selectedUsersInfo =
-      ValueNotifier([]);
+  final selectedUsersInfo = ValueNotifier<List<UserPersonalInfo>>([]);
   @override
   Widget build(BuildContext context) {
     bool minimumOfWidth = MediaQuery.of(context).size.width > 700;
