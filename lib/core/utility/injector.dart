@@ -30,7 +30,6 @@ import 'package:instagram/domain/use_cases/follow/follow_this_user.dart';
 import 'package:instagram/domain/use_cases/follow/remove_this_follower.dart';
 import 'package:instagram/domain/use_cases/message/common/get_specific_chat_info.dart';
 import 'package:instagram/domain/use_cases/message/group_message/add_message.dart';
-import 'package:instagram/domain/use_cases/message/group_message/create_message.dart';
 import 'package:instagram/domain/use_cases/message/group_message/delete_message.dart';
 import 'package:instagram/domain/use_cases/message/group_message/get_messages.dart';
 import 'package:instagram/domain/use_cases/message/single_message/add_message.dart';
@@ -287,9 +286,6 @@ Future<void> initializeDependencies() async {
 
   injector
       .registerSingleton<GetAllUsersUseCase>(GetAllUsersUseCase(injector()));
-
-  injector.registerSingleton<CreateGroupChatUseCase>(
-      CreateGroupChatUseCase(injector()));
 
   injector.registerSingleton<DeleteMessageForGroupChatUseCase>(
       DeleteMessageForGroupChatUseCase(injector()));
