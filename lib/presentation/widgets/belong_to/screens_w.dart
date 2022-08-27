@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
 class PersonalImageIcon extends StatelessWidget {
   const PersonalImageIcon({Key? key}) : super(key: key);
@@ -12,10 +13,12 @@ class PersonalImageIcon extends StatelessWidget {
       UserPersonalInfo userCubit = UserInfoCubit.getMyPersonalInfo(context);
       String userImage = userCubit.profileImageUrl;
       if (userImage.isNotEmpty) {
-        return CircleAvatar(
-            radius: 14,
-            backgroundImage: NetworkImage(userImage),
-            backgroundColor: Theme.of(context).hintColor);
+        return NetworkImageDisplay(
+          imageUrl: userImage,
+          height: 100,
+          cachingWidth: 100,
+          cachingHeight: 100,
+        );
       } else {
         return CircleAvatar(
             radius: 14,
