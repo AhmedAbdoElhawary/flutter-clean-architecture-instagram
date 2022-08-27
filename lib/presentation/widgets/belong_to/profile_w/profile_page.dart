@@ -422,14 +422,13 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void updateUserInfo(bool isThatAdding, dynamic userId) {
-    setState(() {
-      if (isThatAdding) {
-        widget.userInfo.value.followedPeople.add(userId);
-      } else {
-        widget.userInfo.value.followedPeople.remove(userId);
-      }
-    });
+   updateUserInfo(bool isThatAdding, dynamic userId) {
+        if (isThatAdding) {
+          widget.userInfo.value.followedPeople.add(userId);
+        } else {
+          widget.userInfo.value.followedPeople.remove(userId);
+        }
+
   }
 
   Widget personalNumbersInfo(List<dynamic> usersIds, UserPersonalInfo userInfo,
@@ -452,32 +451,35 @@ class _ProfilePageState extends State<ProfilePage> {
             style: getNormalStyle(
                 color: Theme.of(context).focusColor, fontSize: 15)),
       ];
-      return GestureDetector(
-        onTap: () async {
-          if (isThatFollowers != null) {
-            if (isThatMobile) {
-              await pushToPage(context,
-                  page: FollowersInfoPage(
-                    userInfo: widget.userInfo,
-                    initialIndex: usersIds == userInfo.followerPeople ? 0 : 1,
-                    updateFollowersCallback: updateUserInfo,
-                  ));
-            } else {
-              await Navigator.of(context).push(
-                HeroDialogRoute(
-                  builder: (context) => PopupFollowCard(
-                    usersIds: usersIds,
-                    isThatFollower: isThatFollowers,
-                    isThatMyPersonalId: userInfo.userId == myPersonalId,
+      return ValueListenableBuilder(
+        valueListenable: widget.userInfo,
+        builder: (context,UserPersonalInfo userInfoValue, child) => GestureDetector(
+          onTap: () async {
+            if (isThatFollowers != null) {
+              if (isThatMobile) {
+                await pushToPage(context,
+                    page: FollowersInfoPage(
+                      userInfo: widget.userInfo,
+                      initialIndex: usersIds == userInfo.followerPeople ? 0 : 1,
+                      updateFollowersCallback: updateUserInfo,
+                    ));
+              } else {
+                await Navigator.of(context).push(
+                  HeroDialogRoute(
+                    builder: (context) => PopupFollowCard(
+                      usersIds: usersIds,
+                      isThatFollower: isThatFollowers,
+                      isThatMyPersonalId: userInfo.userId == myPersonalId,
+                    ),
                   ),
-                ),
-              );
+                );
+              }
             }
-          }
-        },
-        child: isThatMobile
-            ? Column(children: userInfoWidgets)
-            : Row(children: userInfoWidgets),
+          },
+          child: isThatMobile
+              ? Column(children: userInfoWidgets)
+              : Row(children: userInfoWidgets),
+        ) ,
       );
     });
   }
