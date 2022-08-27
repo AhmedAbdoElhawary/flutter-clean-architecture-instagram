@@ -91,7 +91,7 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  /// handle the group chat in web
+  /// todo handle the group chat in web
   Column buildUserInfo(UserPersonalInfo userInfo) {
     return Column(
       children: [
