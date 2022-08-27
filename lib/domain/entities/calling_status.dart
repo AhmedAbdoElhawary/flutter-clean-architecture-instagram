@@ -1,10 +1,9 @@
-class UserInfoInCallingRoom {
-  String name;
-  String profileImageUrl;
-  String userId;
-  UserInfoInCallingRoom({
-    required this.name,
-    required this.userId,
-    required this.profileImageUrl,
+
+class UsersInfoInCallingRoom {
+  String? name, userId, profileImageUrl;
+  UsersInfoInCallingRoom({
+    this.name,
+    this.userId,
+    this.profileImageUrl,
   });
 }
