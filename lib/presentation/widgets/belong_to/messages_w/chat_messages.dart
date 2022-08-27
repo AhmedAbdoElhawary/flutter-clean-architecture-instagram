@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +30,7 @@ import 'package:instagram/presentation/widgets/belong_to/messages_w/record_view.
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memory_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
 class ChatMessages extends StatefulWidget {
@@ -59,8 +61,10 @@ class _ChatMessagesState extends State<ChatMessages>
   String senderIdForGroup = "";
   int itemIndex = 0;
 
+  AudioPlayer audioPlayer = AudioPlayer();
+  int tempLengthOfRecord = 0;
   Future<void> scrollToLastIndex(BuildContext context) async {
-    await scrollControl.animateTo(0.0,
+    await scrollControl.animateTo(scrollControl.position.maxScrollExtent,
         duration: const Duration(seconds: 1), curve: Curves.easeInOutQuart);
   }
 
@@ -228,7 +232,6 @@ class _ChatMessagesState extends State<ChatMessages>
   Widget notificationListenerForMobile(List<Message> globalMessagesValue) {
     return ListView.separated(
         controller: scrollControl,
-        reverse: true,
         itemBuilder: (context, index) {
           int indexForMobile = index != 0 ? index - 1 : 0;
           return Column(
@@ -260,8 +263,7 @@ class _ChatMessagesState extends State<ChatMessages>
           const SizedBox(height: 5),
           someInfoOfUser(),
           viewProfileButton(context),
-        ] else
-          ...[],
+        ],
       ],
     );
   }
@@ -311,7 +313,10 @@ class _ChatMessagesState extends State<ChatMessages>
                   indexOfGarbageMessage.value = index;
                   unSend.value = true;
                 },
-                child: Column(
+                child: ValueListenableBuilder(
+                  valueListenable: newMessageInfo,
+                  builder: (context, Message? newMessageInfoValue, child) =>
+                      Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -324,7 +329,9 @@ class _ChatMessagesState extends State<ChatMessages>
                       isThatMobile
                           ? buildMessageForMobile(isThatMe, messageInfo)
                           : buildMessageForWeb(isThatMe, messageInfo),
-                    ]),
+                    ],
+                  ),
+                ),
               ),
             ),
             if (!isThatMe) const SizedBox(width: 100),
@@ -349,16 +356,17 @@ class _ChatMessagesState extends State<ChatMessages>
     String message = messageInfo.message;
     String imageUrl = messageInfo.imageUrl;
     String recordedUrl = messageInfo.recordedUrl;
-    Widget messageWidget = messageInfo.recordedUrl.isNotEmpty
-        ? recordMessage(recordedUrl, isThatMe)
-        : (messageInfo.isThatPost
-            ? SharedMessage(
-                messageInfo: messageInfo,
-                isThatMe: isThatMe,
-              )
-            : (messageInfo.isThatImage
-                ? imageMessage(messageInfo, imageUrl)
-                : textMessage(message, isThatMe)));
+    Widget messageWidget =
+        messageInfo.isThatRecord || messageInfo.recordedUrl.isNotEmpty
+            ? recordMessage(messageInfo.lengthOfRecord, recordedUrl, isThatMe)
+            : (messageInfo.isThatPost
+                ? SharedMessage(
+                    messageInfo: messageInfo,
+                    isThatMe: isThatMe,
+                  )
+                : (messageInfo.isThatImage
+                    ? imageMessage(messageInfo, imageUrl)
+                    : textMessage(message, isThatMe)));
 
     return Align(
       alignment: isThatMe
@@ -381,7 +389,7 @@ class _ChatMessagesState extends State<ChatMessages>
                   ),
                 ),
                 clipBehavior: Clip.antiAliasWithSaveLayer,
-                padding: imageUrl.isEmpty
+                padding: !messageInfo.isThatImage
                     ? const EdgeInsetsDirectional.only(
                         start: 10, end: 10, bottom: 8, top: 8)
                     : const EdgeInsetsDirectional.all(0),
@@ -394,17 +402,18 @@ class _ChatMessagesState extends State<ChatMessages>
     String message = messageInfo.message;
     String imageUrl = messageInfo.imageUrl;
     String recordedUrl = messageInfo.recordedUrl;
-    Widget messageWidget = messageInfo.recordedUrl.isNotEmpty
-        ? recordMessage(recordedUrl, isThatMe)
-        : (messageInfo.isThatPost
-            ? SharedMessage(
-                messageInfo: messageInfo,
-                isThatMe: isThatMe,
-              )
-            : (messageInfo.isThatImage
-                ? imageMessage(messageInfo, imageUrl)
-                : textMessage(message, isThatMe)));
-    Widget child = buildMessage(isThatMe, imageUrl, messageWidget);
+    Widget messageWidget =
+        messageInfo.isThatRecord || messageInfo.recordedUrl.isNotEmpty
+            ? recordMessage(messageInfo.lengthOfRecord, recordedUrl, isThatMe)
+            : (messageInfo.isThatPost
+                ? SharedMessage(
+                    messageInfo: messageInfo,
+                    isThatMe: isThatMe,
+                  )
+                : (messageInfo.isThatImage
+                    ? imageMessage(messageInfo, imageUrl)
+                    : textMessage(message, isThatMe)));
+    Widget child = buildMessage(isThatMe, messageInfo, messageWidget);
 
     return Align(
       alignment: isThatMe
@@ -414,7 +423,8 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  Container buildMessage(bool isThatMe, String imageUrl, Widget messageWidget) {
+  Container buildMessage(
+      bool isThatMe, Message messageInfo, Widget messageWidget) {
     return Container(
       decoration: BoxDecoration(
         color: isThatMe
@@ -425,7 +435,7 @@ class _ChatMessagesState extends State<ChatMessages>
             isThatMe ? null : Border.all(color: ColorManager.lowOpacityGrey),
       ),
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      padding: imageUrl.isEmpty
+      padding: !messageInfo.isThatImage
           ? const EdgeInsets.symmetric(vertical: 15, horizontal: 25)
           : const EdgeInsetsDirectional.all(0),
       child: messageWidget,
@@ -433,13 +443,16 @@ class _ChatMessagesState extends State<ChatMessages>
   }
 
   ValueListenableBuilder<String> recordMessage(
-      String recordedUrl, bool isThatMe) {
+      int lengthOfRecord, String recordedUrl, bool isThatMe) {
     return ValueListenableBuilder(
       valueListenable: records,
       builder: (context, String recordsValue, child) => SizedBox(
         width: isThatMobile ? null : 240,
         child: RecordView(
           urlRecord: recordedUrl.isEmpty ? recordsValue : recordedUrl,
+          isThatLocalRecorded: recordedUrl.isEmpty,
+          lengthOfRecord:
+              recordedUrl.isEmpty ? tempLengthOfRecord : lengthOfRecord,
           isThatMe: isThatMe,
         ),
       ),
@@ -461,7 +474,7 @@ class _ChatMessagesState extends State<ChatMessages>
           : ValueListenableBuilder(
               valueListenable: newMessageInfo,
               builder: (context, Message? newMessageValue, child) =>
-                  Image.memory(newMessageValue!.localImage!, fit: BoxFit.cover),
+                  MemoryImageDisplay(imagePath: newMessageValue!.localImage!),
             ),
     );
   }
@@ -677,21 +690,24 @@ class _ChatMessagesState extends State<ChatMessages>
                         showIcons: showIcons,
                         slideToCancelText: StringsManager.slideToCancel.tr,
                         cancelText: StringsManager.cancel.tr,
-                        sendRequestFunction: (File soundFile) async {
+                        sendRequestFunction:
+                            (File soundFile, int lengthOfRecordInSecond) async {
+                          tempLengthOfRecord = lengthOfRecordInSecond * 1000000;
                           records.value = soundFile.path;
-                          MessageCubit messageCubit = MessageCubit.get(context);
-
                           isMessageLoaded.value = true;
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             setState(() {});
                           });
                           if (widget.messageDetails.isThatGroupChat ||
                               widget.messageDetails.lastMessage!.isThatGroup) {
-                            newMessageInfo.value = newMessageForGroup();
+                            newMessageInfo.value =
+                                newMessageForGroup(isThatRecord: true);
+                            if (!mounted) return;
 
                             await MessageForGroupChatCubit.get(context)
                                 .sendMessage(
-                                    messageInfo: newMessageForGroup(),
+                                    messageInfo:
+                                        newMessageForGroup(isThatRecord: true),
                                     recordFile: soundFile);
                             if (!mounted) return;
                             bool check = widget.messageDetails.lastMessage
@@ -704,10 +720,11 @@ class _ChatMessagesState extends State<ChatMessages>
                               widget.messageDetails.lastMessage = lastMessage;
                             }
                           } else {
-                            newMessageInfo.value = newMessage();
+                            newMessageInfo.value =
+                                newMessage(isThatRecord: true);
 
                             await messageCubit.sendMessage(
-                                messageInfo: newMessage(),
+                                messageInfo: newMessage(isThatRecord: true),
                                 recordFile: soundFile);
                           }
                           newMessageInfo.value = null;
@@ -717,6 +734,8 @@ class _ChatMessagesState extends State<ChatMessages>
 
                           if (!mounted) return;
                           scrollToLastIndex(context);
+                          records.value = "";
+                          tempLengthOfRecord = 0;
                         },
                       ),
                       if (controller.appLocale == 'en')
@@ -942,10 +961,10 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  Message newMessageForGroup({
-    String blurHash = "",
-    bool isThatImage = false,
-  }) {
+  Message newMessageForGroup(
+      {String blurHash = "",
+      bool isThatImage = false,
+      bool isThatRecord = false}) {
     List<dynamic> usersIds = [];
     for (final userInfo in widget.messageDetails.receiversInfo!) {
       usersIds.add(userInfo.userId);
@@ -954,21 +973,30 @@ class _ChatMessagesState extends State<ChatMessages>
       datePublished: DateOfNow.dateOfNow(),
       message: _textController.value.text,
       senderId: myPersonalId,
+      senderInfo: myPersonalInfo,
       blurHash: blurHash,
       receiversIds: usersIds,
       isThatImage: isThatImage,
+      isThatRecord: isThatRecord,
+      lengthOfRecord: tempLengthOfRecord,
       isThatGroup: true,
       chatOfGroupId: widget.messageDetails.lastMessage?.chatOfGroupId ?? "",
     );
   }
 
-  Message newMessage({String blurHash = "", bool isThatImage = false}) {
+  Message newMessage(
+      {String blurHash = "",
+      bool isThatImage = false,
+      bool isThatRecord = false}) {
     dynamic userId = widget.messageDetails.receiversInfo?[0].userId;
     return Message(
       datePublished: DateOfNow.dateOfNow(),
       message: _textController.value.text,
       senderId: myPersonalId,
+      senderInfo: myPersonalInfo,
       blurHash: blurHash,
+      lengthOfRecord: tempLengthOfRecord,
+      isThatRecord: isThatRecord,
       receiversIds: [userId],
       isThatImage: isThatImage,
     );
@@ -1082,18 +1110,12 @@ class _ChatMessagesState extends State<ChatMessages>
       children: [
         Text(
           "${userInfo.followerPeople.length} ${StringsManager.followers.tr}",
-          style: TextStyle(
-              color: Theme.of(context).textTheme.titleSmall!.color,
-              fontSize: 13),
+          style: const TextStyle(color: ColorManager.grey, fontSize: 13),
         ),
-        const SizedBox(
-          width: 15,
-        ),
+        const SizedBox(width: 15),
         Text(
           "${userInfo.posts.length} ${StringsManager.posts.tr}",
-          style: TextStyle(
-              fontSize: 13,
-              color: Theme.of(context).textTheme.titleSmall!.color),
+          style: const TextStyle(fontSize: 13, color: ColorManager.grey),
         ),
       ],
     );
