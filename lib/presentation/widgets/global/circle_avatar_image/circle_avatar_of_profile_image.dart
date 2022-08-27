@@ -192,7 +192,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
           ? Icon(
               Icons.person,
               color: Theme.of(context).primaryColor,
-              size: widget.bodyHeight * 0.07,
+              size: widget.bodyHeight * 0.04,
             )
           : null,
     );
