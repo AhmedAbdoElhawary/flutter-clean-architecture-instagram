@@ -19,6 +19,7 @@ import 'package:instagram/presentation/pages/messages/chatting_page.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_smart_refresh.dart';
 
 class ListOfMessages extends StatefulWidget {
   final ValueChanged<UserPersonalInfo>? selectChatting;
@@ -37,15 +38,25 @@ class ListOfMessages extends StatefulWidget {
 
 class _ListOfMessagesState extends State<ListOfMessages> {
   late UserPersonalInfo myPersonalInfo;
+
   @override
   void initState() {
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
 
+  Future<void> onRefreshData(int index) async {
+    await UsersInfoCubit.get(context)
+        .getChatUsersInfo(myPersonalInfo: myPersonalInfo);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return buildBlocBuilder();
+    return SizedBox(
+      height: double.maxFinite,
+      child: CustomSmartRefresh(
+          onRefreshData: onRefreshData, child: buildBlocBuilder()),
+    );
   }
 
   BlocBuilder<UsersInfoCubit, UsersInfoState> buildBlocBuilder() {
