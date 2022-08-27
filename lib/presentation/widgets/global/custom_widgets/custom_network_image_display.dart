@@ -67,7 +67,7 @@ class _NetworkImageDisplayState extends State<NetworkImageDisplay> {
       width: double.infinity,
       height: widget.aspectRatio,
       child: Icon(Icons.warning_amber_rounded,
-          size: 50, color: Theme.of(context).focusColor),
+          size: 30, color: Theme.of(context).focusColor),
     );
   }
 
