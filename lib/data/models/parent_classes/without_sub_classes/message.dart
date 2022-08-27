@@ -18,6 +18,7 @@ class Message extends Equatable {
   String recordedUrl;
   bool isThatImage;
   bool isThatPost;
+  bool isThatRecord;
   bool multiImages;
   bool isThatVideo;
   bool isThatGroup;
@@ -25,7 +26,7 @@ class Message extends Equatable {
   String sharedPostId;
   String ownerOfSharedPostId;
   UserPersonalInfo? ownerOfSharedPostInfo;
-
+  int lengthOfRecord;
   Message({
     this.localImage,
     required this.message,
@@ -35,6 +36,7 @@ class Message extends Equatable {
     this.isThatPost = false,
     this.isThatVideo = false,
     this.isThatGroup = false,
+    this.isThatRecord = false,
     this.chatOfGroupId = "",
     required this.senderId,
     this.sharedPostId = "",
@@ -46,6 +48,7 @@ class Message extends Equatable {
     required this.isThatImage,
     required this.datePublished,
     this.ownerOfSharedPostInfo,
+    this.lengthOfRecord=0,
   });
 
   static Message fromJson(
@@ -68,7 +71,9 @@ class Message extends Equatable {
       multiImages: snap.data()["multiImages"] ?? false,
       isThatVideo: snap.data()["isThatVideo"] ?? false,
       isThatGroup: snap.data()["isThatGroup"] ?? false,
+      isThatRecord: snap.data()["isThatRecord"] ?? false,
       chatOfGroupId: snap.data()["chatOfGroupId"] ?? "",
+      lengthOfRecord: snap.data()["lengthOfRecord"] ?? 0,
     );
   }
 
@@ -88,6 +93,8 @@ class Message extends Equatable {
         "isThatVideo": isThatVideo,
         "chatOfGroupId": chatOfGroupId,
         "isThatGroup": isThatGroup,
+        "isThatRecord": isThatRecord,
+        "lengthOfRecord": lengthOfRecord,
       };
 
   @override
@@ -108,5 +115,7 @@ class Message extends Equatable {
         isThatVideo,
         chatOfGroupId,
         isThatGroup,
+        isThatRecord,
+        lengthOfRecord,
       ];
 }
