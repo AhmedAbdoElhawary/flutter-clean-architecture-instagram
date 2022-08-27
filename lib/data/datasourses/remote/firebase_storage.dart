@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'dart:typed_data';
 
