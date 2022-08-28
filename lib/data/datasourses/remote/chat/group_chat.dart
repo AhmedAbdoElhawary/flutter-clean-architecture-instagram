@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/message.dart';
 import 'package:instagram/domain/entities/sender_info.dart';
 
@@ -65,7 +64,7 @@ class FireStoreGroupChat {
     return SenderInfo(lastMessage: messageInfo);
   }
 
-  static Stream<List<Message>> getMessages({required String groupChatUid}) {
+  static   Stream<List<Message>>getMessages({required String groupChatUid}) {
     Stream<QuerySnapshot<Map<String, dynamic>>> snapshotsMessages =
         _fireStoreChatCollection
             .doc(groupChatUid)
@@ -75,15 +74,6 @@ class FireStoreGroupChat {
     return snapshotsMessages.map((snapshot) =>
         snapshot.docs.map((QueryDocumentSnapshot<Map<String, dynamic>> query) {
           Message messageInfo = Message.fromJson(query: query);
-          if (messageInfo.isThatPost) {
-            FirestoreUser.getUserInfo(messageInfo.ownerOfSharedPostId)
-                .then((userInfo) {
-              messageInfo.ownerOfSharedPostInfo = userInfo;
-            });
-          }
-          FirestoreUser.getUserInfo(messageInfo.senderId).then((userInfo) {
-            messageInfo.senderInfo = userInfo;
-          });
           return messageInfo;
         }).toList());
   }

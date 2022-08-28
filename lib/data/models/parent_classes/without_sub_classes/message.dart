@@ -25,7 +25,6 @@ class Message extends Equatable {
   String chatOfGroupId;
   String sharedPostId;
   String ownerOfSharedPostId;
-  UserPersonalInfo? ownerOfSharedPostInfo;
   int lengthOfRecord;
   Message({
     this.localImage,
@@ -47,7 +46,6 @@ class Message extends Equatable {
     this.senderInfo,
     required this.isThatImage,
     required this.datePublished,
-    this.ownerOfSharedPostInfo,
     this.lengthOfRecord=0,
   });
 

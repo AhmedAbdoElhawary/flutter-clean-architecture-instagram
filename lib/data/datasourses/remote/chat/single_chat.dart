@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/message.dart';
 
 class FireStoreSingleChat {
@@ -58,15 +57,6 @@ class FireStoreSingleChat {
     return snapshotsMessages.map((snapshot) =>
         snapshot.docs.map((QueryDocumentSnapshot<Map<String, dynamic>> query) {
           Message messageInfo = Message.fromJson(query: query);
-          if (messageInfo.isThatPost) {
-            FirestoreUser.getUserInfo(messageInfo.ownerOfSharedPostId)
-                .then((userInfo) {
-              messageInfo.ownerOfSharedPostInfo = userInfo;
-            });
-          }
-          FirestoreUser.getUserInfo(messageInfo.senderId).then((userInfo) {
-            messageInfo.senderInfo = userInfo;
-          });
           return messageInfo;
         }).toList());
   }
