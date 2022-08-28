@@ -35,7 +35,9 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_netw
 
 class ChatMessages extends StatefulWidget {
   final SenderInfo messageDetails;
-  const ChatMessages({Key? key, required this.messageDetails})
+  final List<dynamic> receiversIds;
+  const ChatMessages(
+      {Key? key, required this.messageDetails, required this.receiversIds})
       : super(key: key);
 
   @override
@@ -59,6 +61,7 @@ class _ChatMessagesState extends State<ChatMessages>
   late Animation _colorTween;
   late UserPersonalInfo myPersonalInfo;
   String senderIdForGroup = "";
+  String profileImageOfSender = "";
   int itemIndex = 0;
 
   AudioPlayer audioPlayer = AudioPlayer();
@@ -187,7 +190,7 @@ class _ChatMessagesState extends State<ChatMessages>
       children: [
         Padding(
             padding: const EdgeInsetsDirectional.only(
-                end: 0, start: 0, top: 10, bottom: 10),
+                end: 10, start: 10, top: 10, bottom: 10),
             child: globalMessagesValue.isNotEmpty
                 ? notificationListenerForMobile(globalMessagesValue)
                 : buildUserInfo(context)),
@@ -273,31 +276,34 @@ class _ChatMessagesState extends State<ChatMessages>
     bool isThatMe = false;
     if (messageInfo.senderId == myPersonalId) isThatMe = true;
     bool checkForSenderNameInGroup;
+
     if (!isThatMe && senderIdForGroup != messageInfo.senderId) {
       senderIdForGroup = messageInfo.senderId;
       checkForSenderNameInGroup = true;
     } else {
       checkForSenderNameInGroup = false;
     }
+
     String theDate = DateOfNow.chattingDateOfNow(
         messageInfo.datePublished, previousDateOfMessage);
     return Column(
       children: [
         if (theDate.isNotEmpty)
           Align(
-              alignment: AlignmentDirectional.center,
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(bottom: 15, top: 15),
-                child: Text(
-                  theDate,
-                  style: getNormalStyle(color: Theme.of(context).hoverColor),
-                ),
-              )),
+            alignment: AlignmentDirectional.center,
+            child: Padding(
+              padding: const EdgeInsetsDirectional.only(bottom: 15, top: 15),
+              child: Text(
+                theDate,
+                style: getNormalStyle(color: Theme.of(context).hoverColor),
+              ),
+            ),
+          ),
         const SizedBox(height: 5),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            if (!isThatMe) ...[
+            if (!isThatMe && !isThatMobile) ...[
               CircleAvatarOfProfileImage(
                 bodyHeight: 350,
                 userInfo: widget.messageDetails.receiversInfo![0],
