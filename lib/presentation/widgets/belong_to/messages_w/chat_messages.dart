@@ -35,9 +35,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_netw
 
 class ChatMessages extends StatefulWidget {
   final SenderInfo messageDetails;
-  final List<dynamic> receiversIds;
-  const ChatMessages(
-      {Key? key, required this.messageDetails, required this.receiversIds})
+  const ChatMessages({Key? key, required this.messageDetails})
       : super(key: key);
 
   @override
@@ -63,6 +61,7 @@ class _ChatMessagesState extends State<ChatMessages>
   String senderIdForGroup = "";
   String profileImageOfSender = "";
   int itemIndex = 0;
+  String senderIdForProfileImage = "";
 
   AudioPlayer audioPlayer = AudioPlayer();
   int tempLengthOfRecord = 0;
@@ -220,7 +219,7 @@ class _ChatMessagesState extends State<ChatMessages>
         itemBuilder: (context, index) {
           return Column(
             children: [
-              buildTheMessage(globalMessagesValue[index],
+              buildTheMessage(globalMessagesValue,
                   globalMessagesValue[index].datePublished, index),
               if (index == globalMessagesValue.length - 1)
                 const SizedBox(height: 50),
@@ -240,7 +239,7 @@ class _ChatMessagesState extends State<ChatMessages>
           return Column(
             children: [
               if (index == 0) buildUserInfo(context),
-              buildTheMessage(globalMessagesValue[index],
+              buildTheMessage(globalMessagesValue,
                   globalMessagesValue[indexForMobile].datePublished, index),
               if (index == globalMessagesValue.length - 1)
                 const SizedBox(height: 50),
@@ -272,8 +271,11 @@ class _ChatMessagesState extends State<ChatMessages>
   }
 
   Widget buildTheMessage(
-      Message messageInfo, String previousDateOfMessage, int index) {
+      List<Message> messagesInfo, String previousDateOfMessage, int index) {
+    Message messageInfo = messagesInfo[index];
     bool isThatMe = false;
+    bool createProfileImage = false;
+
     if (messageInfo.senderId == myPersonalId) isThatMe = true;
     bool checkForSenderNameInGroup;
 
@@ -283,7 +285,18 @@ class _ChatMessagesState extends State<ChatMessages>
     } else {
       checkForSenderNameInGroup = false;
     }
-
+    if (senderIdForProfileImage.isEmpty) {
+      senderIdForProfileImage = messageInfo.senderId;
+    }
+    int i = index + 1 < messagesInfo.length ? index + 1 : index;
+    if (!isThatMe && messagesInfo[i].senderId != senderIdForProfileImage) {
+      senderIdForProfileImage = messagesInfo[i].senderId;
+      createProfileImage = true;
+    }
+    if (index == messagesInfo.length - 1) {
+      senderIdForProfileImage = messagesInfo[i].senderId;
+      createProfileImage = true;
+    }
     String theDate = DateOfNow.chattingDateOfNow(
         messageInfo.datePublished, previousDateOfMessage);
     return Column(
@@ -303,14 +316,10 @@ class _ChatMessagesState extends State<ChatMessages>
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            if (!isThatMe && !isThatMobile) ...[
-              CircleAvatarOfProfileImage(
-                bodyHeight: 350,
-                userInfo: widget.messageDetails.receiversInfo![0],
-                showColorfulCircle: false,
-              ),
-              const SizedBox(width: 10),
+            if (!isThatMe) ...[
+              buildProfileImage(createProfileImage),
             ],
+            const SizedBox(width: 10),
             if (isThatMe) const SizedBox(width: 100),
             Expanded(
               child: GestureDetector(
@@ -354,6 +363,26 @@ class _ChatMessagesState extends State<ChatMessages>
           ],
         ),
       ],
+    );
+  }
+
+  Visibility buildProfileImage(bool createProfileImage) {
+    int indexOfUserInfo = 0;
+    if (createProfileImage) {
+      indexOfUserInfo = widget.messageDetails.receiversIds
+              ?.indexOf(senderIdForProfileImage) ??
+          0;
+    }
+    return Visibility(
+      visible: createProfileImage,
+      maintainSize: true,
+      maintainAnimation: true,
+      maintainState: true,
+      child: CircleAvatarOfProfileImage(
+        bodyHeight: 350,
+        userInfo: widget.messageDetails.receiversInfo![indexOfUserInfo],
+        showColorfulCircle: false,
+      ),
     );
   }
 
