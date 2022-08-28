@@ -134,7 +134,21 @@ class _SignUpPageState extends State<RegisterWidgets> {
                       builder: (context, bool rememberPasswordValue, child) =>
                           Checkbox(
                               value: rememberPasswordValue,
-                              activeColor: ColorManager.blue,
+                              activeColor: ColorManager.white,
+                              fillColor: MaterialStateProperty.resolveWith(
+                                  (Set states) {
+                                if (states.contains(MaterialState.disabled)) {
+                                  return Colors.blue.withOpacity(.32);
+                                }
+                                return Colors.blue;
+                              }),
+                              overlayColor: MaterialStateProperty.resolveWith(
+                                  (Set states) {
+                                if (states.contains(MaterialState.disabled)) {
+                                  return Colors.blue.withOpacity(.32);
+                                }
+                                return Theme.of(context).focusColor;
+                              }),
                               onChanged: (value) => widget.rememberPassword!
                                   .value = !rememberPasswordValue),
                     ),
