@@ -293,8 +293,7 @@ class GroupMessages extends StatelessWidget {
       body: BlocProvider<MessageBloc>(
         create: (context) => injector<MessageBloc>(),
         child: ChatMessages(
-            messageDetails: messageDetails,
-            receiversIds: messageDetails.receiversIds ?? []),
+            messageDetails: messageDetails),
       ),
     );
   }
