@@ -78,8 +78,7 @@ class _ChattingPageState extends State<ChattingPage>
           },
           child: isThatMobile
               ? ChatMessages(
-                  messageDetails: messageDetails,
-                  receiversIds: messageDetails.receiversIds ?? [],
+                  messageDetails: messageDetails
                 )
               : buildBodyForWeb(messageDetails)),
     );
@@ -90,8 +89,7 @@ class _ChattingPageState extends State<ChattingPage>
       children: [
         buildUserInfo(messageDetails.receiversInfo![0]),
         ChatMessages(
-          messageDetails: messageDetails,
-          receiversIds: messageDetails.receiversIds ?? [],
+          messageDetails: messageDetails
         )
       ],
     );
