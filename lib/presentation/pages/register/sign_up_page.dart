@@ -9,6 +9,7 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/domain/entities/registered_user.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/screens/responsive_layout.dart';
 import 'package:instagram/presentation/screens/web_screen_layout.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/popup_calling.dart';
@@ -280,6 +281,8 @@ class _UserNamePageState extends State<UserNamePage> {
       myPersonalId = authState.user.uid;
       final SharedPreferences sharePrefs = injector<SharedPreferences>();
       await sharePrefs.setString("myPersonalId", myPersonalId);
+      if (!mounted) return;
+      await UserInfoCubit.get(context).getUserInfo(myPersonalId);
       if (!isItMoved) {
         isItMoved = true;
         Get.offAll(
