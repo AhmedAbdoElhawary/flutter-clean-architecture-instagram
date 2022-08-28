@@ -4,5 +4,5 @@ import 'package:instagram/domain/entities/registered_user.dart';
 abstract class FirebaseAuthRepository {
   Future<User> signUp(RegisteredUser newUserInfo);
   Future<User> logIn(RegisteredUser userInfo);
-  Future<void> signOut({required String userId, required String? deviceToken});
+  Future<void> signOut({required String userId});
 }
