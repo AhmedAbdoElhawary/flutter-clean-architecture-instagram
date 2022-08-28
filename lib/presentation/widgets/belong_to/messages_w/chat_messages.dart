@@ -187,7 +187,7 @@ class _ChatMessagesState extends State<ChatMessages>
       children: [
         Padding(
             padding: const EdgeInsetsDirectional.only(
-                end: 10, start: 10, top: 10, bottom: 10),
+                end: 0, start: 0, top: 10, bottom: 10),
             child: globalMessagesValue.isNotEmpty
                 ? notificationListenerForMobile(globalMessagesValue)
                 : buildUserInfo(context)),
@@ -297,7 +297,7 @@ class _ChatMessagesState extends State<ChatMessages>
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            if (!isThatMe && !isThatMobile) ...[
+            if (!isThatMe) ...[
               CircleAvatarOfProfileImage(
                 bodyHeight: 350,
                 userInfo: widget.messageDetails.receiversInfo![0],
@@ -333,7 +333,7 @@ class _ChatMessagesState extends State<ChatMessages>
                 ),
               ),
             ),
-            if (!isThatMe) const SizedBox(width: 100),
+            if (!isThatMe) const SizedBox(width: 85),
             Visibility(
               visible: messageInfo.messageUid.isEmpty,
               child: Padding(
@@ -462,7 +462,7 @@ class _ChatMessagesState extends State<ChatMessages>
     return ValueListenableBuilder(
       valueListenable: records,
       builder: (context, String recordsValue, child) => SizedBox(
-        width: isThatMobile ? null : 240,
+        width: isThatMobile ? 500 : 240,
         child: RecordView(
           urlRecord: recordedUrl.isEmpty ? recordsValue : recordedUrl,
           isThatLocalRecorded: recordedUrl.isEmpty,
