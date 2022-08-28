@@ -26,11 +26,8 @@ class FirestoreNotification {
     return myPersonalInfo;
   }
 
-  static Future<void> deleteDeviceToken(
-      {required String userId, required String? deviceToken}) async {
-    await _fireStoreUserCollection
-        .doc(userId)
-        .update({'deviceToken': deviceToken});
+  static Future<void> deleteDeviceToken({required String userId}) async {
+    await _fireStoreUserCollection.doc(userId).update({'deviceToken': ""});
   }
 
   static Future<String> createNotification(
