@@ -212,6 +212,7 @@ class FirestoreUser {
       }
       UserPersonalInfo userInfo = await getUserInfo(userId);
       usersInfo.receiversInfo = [userInfo];
+      usersInfo.receiversIds = [userInfo.userId];
     }
 
     return usersInfo;
@@ -224,13 +225,17 @@ class FirestoreUser {
         UserPersonalInfo userInfo = await getUserInfo(receiverId);
         if (usersInfo.receiversInfo == null) {
           usersInfo.receiversInfo = [userInfo];
+          usersInfo.receiversIds = [userInfo.userId];
         } else {
           usersInfo.receiversInfo!.add(userInfo);
+          usersInfo.receiversIds!.add(userInfo.userId);
         }
       }
       String userId = usersInfo.lastMessage!.senderId;
       UserPersonalInfo userInfo = await getUserInfo(userId);
       usersInfo.receiversInfo!.add(userInfo);
+      usersInfo.receiversIds!.add(userInfo.userId);
+
     }
 
     return usersInfo;

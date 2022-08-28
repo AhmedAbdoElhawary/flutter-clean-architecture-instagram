@@ -88,10 +88,14 @@ class _MessagesForWebState extends State<MessagesForWeb> {
   }
 
   Widget chatMessages() {
+    SenderInfo senderInfo = SenderInfo(
+        receiversInfo: [widget.selectedTextingUser!],
+        receiversIds: widget.selectedTextingUser!.userId);
+
     return BlocProvider<MessageBloc>(
       create: (context) => injector<MessageBloc>(),
       child: ChatMessages(
-          messageDetails: SenderInfo(receiversInfo: [widget.selectedTextingUser!])),
+          messageDetails: senderInfo),
     );
   }
 

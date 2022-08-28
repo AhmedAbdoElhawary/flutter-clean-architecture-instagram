@@ -77,7 +77,9 @@ class _ChattingPageState extends State<ChattingPage>
             deleteThisMessage.value = null;
           },
           child: isThatMobile
-              ? ChatMessages(messageDetails: messageDetails)
+              ? ChatMessages(
+                  messageDetails: messageDetails
+                )
               : buildBodyForWeb(messageDetails)),
     );
   }
@@ -86,7 +88,9 @@ class _ChattingPageState extends State<ChattingPage>
     return Column(
       children: [
         buildUserInfo(messageDetails.receiversInfo![0]),
-        ChatMessages(messageDetails: messageDetails)
+        ChatMessages(
+          messageDetails: messageDetails
+        )
       ],
     );
   }
