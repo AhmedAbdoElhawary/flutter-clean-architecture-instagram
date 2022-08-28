@@ -286,13 +286,15 @@ class GroupMessages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SenderInfo messageDetails =
-        SenderInfo(receiversInfo: selectedUsersInfoValue, isThatGroupChat: true);
+    SenderInfo messageDetails = SenderInfo(
+        receiversInfo: selectedUsersInfoValue, isThatGroupChat: true);
     return Scaffold(
       appBar: CustomAppBar.chattingAppBar(selectedUsersInfoValue, context),
       body: BlocProvider<MessageBloc>(
         create: (context) => injector<MessageBloc>(),
-        child: ChatMessages(messageDetails: messageDetails),
+        child: ChatMessages(
+            messageDetails: messageDetails,
+            receiversIds: messageDetails.receiversIds ?? []),
       ),
     );
   }
