@@ -322,8 +322,7 @@ class _ChatMessagesState extends State<ChatMessages>
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       if (checkForSenderNameInGroup) ...[
-                        Text("${messageInfo.senderInfo?.name}",
-                            style: getNormalStyle(color: ColorManager.grey)),
+                        senderNameText(context, messageInfo),
                         const SizedBox(height: 5),
                       ],
                       isThatMobile
@@ -349,6 +348,22 @@ class _ChatMessagesState extends State<ChatMessages>
           ],
         ),
       ],
+    );
+  }
+
+  BlocBuilder<UserInfoCubit, UserInfoState> senderNameText(
+      BuildContext context, Message messageInfo) {
+    return BlocBuilder<UserInfoCubit, UserInfoState>(
+      buildWhen: (previous, current) =>
+          previous != current && current is CubitUserLoaded,
+      bloc: UserInfoCubit.get(context)
+        ..getUserInfo(messageInfo.senderId, isThatMyPersonalId: false),
+      builder: (context, state) {
+        UserPersonalInfo? userInfo;
+        if (state is CubitUserLoaded) userInfo = state.userPersonalInfo;
+        return Text(userInfo?.name ?? "",
+            style: getNormalStyle(color: ColorManager.grey));
+      },
     );
   }
 
