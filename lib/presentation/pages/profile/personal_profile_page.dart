@@ -270,10 +270,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         child: createSizedBox(StringsManager.logOut.tr,
             icon: Icons.logout_rounded),
         onTap: () async {
-          String? token = sharePrefs.getString("deviceToken");
-
-          await authCubit.signOut(
-              userId: widget.personalId, deviceToken: token);
+          await authCubit.signOut(userId: widget.personalId);
         },
       );
     });
