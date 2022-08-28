@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/config/routes/app_routes.dart';
@@ -7,6 +8,8 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/translations/app_lang.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/message.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/get_post_info.dart';
 
@@ -36,56 +39,66 @@ class SharedMessage extends StatelessWidget {
       },
       child: SizedBox(
         width: 240,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _createPhotoTitle(context),
-            Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                Container(
-                  color: Theme.of(context).textTheme.titleSmall!.color,
-                  width: double.infinity,
-                  child: NetworkImageDisplay(
-                    blurHash: messageInfo.blurHash,
-                    imageUrl: messageInfo.imageUrl,
-                    height: 270,
-                  ),
-                ),
-                if (messageInfo.multiImages)
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Icon(
-                        Icons.collections_rounded,
-                        size: 20,
-                        color: Colors.white,
+        child: BlocBuilder<UserInfoCubit, UserInfoState>(
+            buildWhen: (previous, current) =>
+                previous != current && current is CubitUserLoaded,
+            bloc: UserInfoCubit.get(context)
+              ..getUserInfo(messageInfo.senderId, isThatMyPersonalId: false),
+            builder: (context, state) {
+              UserPersonalInfo? userInfo;
+              if (state is CubitUserLoaded) userInfo = state.userPersonalInfo;
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _createPhotoTitle(context, userInfo),
+                  Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      Container(
+                        color: Theme.of(context).textTheme.titleSmall!.color,
+                        width: double.infinity,
+                        child: NetworkImageDisplay(
+                          blurHash: messageInfo.blurHash,
+                          imageUrl: messageInfo.imageUrl,
+                          height: 270,
+                        ),
                       ),
-                    ),
+                      if (messageInfo.multiImages)
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: Icon(
+                              Icons.collections_rounded,
+                              size: 20,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      if (messageInfo.isThatVideo)
+                        const Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Icon(
+                              Icons.slow_motion_video_sharp,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
-                if (messageInfo.isThatVideo)
-                  const Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Icon(
-                        Icons.slow_motion_video_sharp,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            _createActionBar(context),
-          ],
-        ),
+                  _createActionBar(context, userInfo),
+                ],
+              );
+            }),
       ),
     );
   }
 
-  Widget _createPhotoTitle(BuildContext context) {
+  Widget _createPhotoTitle(BuildContext context, UserPersonalInfo? userInfo) {
     return Container(
       padding: const EdgeInsetsDirectional.only(
           bottom: 5, top: 5, end: 10, start: 15),
@@ -96,14 +109,11 @@ class SharedMessage extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: ColorManager.customGrey,
-            backgroundImage: messageInfo.imageUrl.isNotEmpty &&
-                    messageInfo.ownerOfSharedPostInfo != null
-                ? CachedNetworkImageProvider(
-                    messageInfo.ownerOfSharedPostInfo!.profileImageUrl)
+            backgroundImage: messageInfo.imageUrl.isNotEmpty && userInfo != null
+                ? CachedNetworkImageProvider(userInfo.profileImageUrl)
                 : null,
             radius: 15,
-            child: messageInfo.imageUrl.isEmpty &&
-                    messageInfo.ownerOfSharedPostInfo == null
+            child: messageInfo.imageUrl.isEmpty && userInfo == null
                 ? Icon(
                     Icons.person,
                     color: Theme.of(context).primaryColor,
@@ -113,7 +123,7 @@ class SharedMessage extends StatelessWidget {
           ),
           const SizedBox(width: 7),
           Text(
-            messageInfo.ownerOfSharedPostInfo?.name ?? "",
+            userInfo?.name ?? "",
             style: getBoldStyle(
               color: Theme.of(context).focusColor,
               fontSize: 12,
@@ -124,7 +134,7 @@ class SharedMessage extends StatelessWidget {
     );
   }
 
-  Widget _createActionBar(BuildContext context) {
+  Widget _createActionBar(BuildContext context, UserPersonalInfo? userInfo) {
     return Container(
       height: 50,
       width: double.infinity,
@@ -139,8 +149,8 @@ class SharedMessage extends StatelessWidget {
               builder: (controller) {
                 return Text(
                   controller.appLocale == 'en'
-                      ? "${messageInfo.ownerOfSharedPostInfo?.name} ${messageInfo.message}"
-                      : "${messageInfo.message} ${messageInfo.ownerOfSharedPostInfo?.name}",
+                      ? "${userInfo?.name} ${messageInfo.message}"
+                      : "${messageInfo.message} ${userInfo?.name}",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: getNormalStyle(color: Theme.of(context).focusColor),
