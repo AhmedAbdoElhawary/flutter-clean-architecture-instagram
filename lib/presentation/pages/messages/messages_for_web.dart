@@ -94,8 +94,7 @@ class _MessagesForWebState extends State<MessagesForWeb> {
 
     return BlocProvider<MessageBloc>(
       create: (context) => injector<MessageBloc>(),
-      child: ChatMessages(
-          messageDetails: senderInfo),
+      child: ChatMessages(messageDetails: senderInfo),
     );
   }
 
