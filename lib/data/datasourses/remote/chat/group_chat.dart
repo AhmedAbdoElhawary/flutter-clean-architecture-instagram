@@ -64,7 +64,7 @@ class FireStoreGroupChat {
     return SenderInfo(lastMessage: messageInfo);
   }
 
-  static   Stream<List<Message>>getMessages({required String groupChatUid}) {
+  static Stream<List<Message>> getMessages({required String groupChatUid}) {
     Stream<QuerySnapshot<Map<String, dynamic>>> snapshotsMessages =
         _fireStoreChatCollection
             .doc(groupChatUid)

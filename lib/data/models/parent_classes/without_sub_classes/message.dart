@@ -46,7 +46,7 @@ class Message extends Equatable {
     this.senderInfo,
     required this.isThatImage,
     required this.datePublished,
-    this.lengthOfRecord=0,
+    this.lengthOfRecord = 0,
   });
 
   static Message fromJson(

@@ -42,7 +42,8 @@ class UsersInfoCubit extends Cubit<UsersInfoState> {
     });
   }
 
-  Future<void> getChatUsersInfo({required UserPersonalInfo myPersonalInfo}) async {
+  Future<void> getChatUsersInfo(
+      {required UserPersonalInfo myPersonalInfo}) async {
     emit(CubitGettingChatUsersInfoLoading());
     await _getChatUsersInfoAddMessageUseCase
         .call(params: myPersonalInfo)

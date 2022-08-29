@@ -25,11 +25,10 @@ class MessageForGroupChatCubit extends Cubit<MessageForGroupChatState> {
   static Message getLastMessage(BuildContext context) =>
       BlocProvider.of<MessageForGroupChatCubit>(context).lastMessage;
 
-  Future<void> sendMessage({
-    required Message messageInfo,
-    Uint8List? pathOfPhoto,
-    File? recordFile
-  }) async {
+  Future<void> sendMessage(
+      {required Message messageInfo,
+      Uint8List? pathOfPhoto,
+      File? recordFile}) async {
     emit(MessageForGroupChatLoading());
     await _addMessageForGroupChatUseCase
         .call(

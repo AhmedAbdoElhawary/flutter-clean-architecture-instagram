@@ -13,8 +13,8 @@ class AddMessageForGroupChatUseCase
   @override
   Future<Message> call(
       {required Message paramsOne,
-        Uint8List? paramsTwo,
-        required File? paramsThree}) {
+      Uint8List? paramsTwo,
+      required File? paramsThree}) {
     return _addPostToUserRepository.sendMessage(
         messageInfo: paramsOne,
         pathOfPhoto: paramsTwo,

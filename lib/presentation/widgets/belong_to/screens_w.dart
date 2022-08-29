@@ -10,7 +10,8 @@ class PersonalImageIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
-      UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+      UserPersonalInfo myPersonalInfo =
+          UserInfoCubit.getMyPersonalInfo(context);
       String userImage = myPersonalInfo.profileImageUrl;
       if (userImage.isNotEmpty) {
         return CircleAvatarOfProfileImage(

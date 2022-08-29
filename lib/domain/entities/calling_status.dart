@@ -1,4 +1,3 @@
-
 class UsersInfoInCallingRoom {
   String? name, userId, profileImageUrl;
   UsersInfoInCallingRoom({
