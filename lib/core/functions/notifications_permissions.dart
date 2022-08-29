@@ -73,11 +73,6 @@ Future<void> _listenFCM(BuildContext context) async {
     }
   });
 
-  /// When app is close
-  FirebaseMessaging.instance.getInitialMessage().then((value) async {
-    if (value != null) await _handleMessage(context, value);
-  });
-
   /// When app is onBackground
   FirebaseMessaging.onMessageOpenedApp
       .listen((m) async => await _handleMessage(context, m));
@@ -178,6 +173,31 @@ Future<void> _loadFCM(BuildContext context) async {
 
   _videoCallLocalNotifications.initialize(initializationSettings,
       onSelectNotification: (p) => _onSelectNotification(context, p));
+  /// When app is close
+  await _detailsWhenAppClose(context);
+
+}
+
+Future<void> _detailsWhenAppClose(BuildContext context) async {
+  final normalDetails =
+      await _normalLocalNotifications.getNotificationAppLaunchDetails();
+  if (normalDetails != null && normalDetails.didNotificationLaunchApp) {
+    String? payload = normalDetails.payload;
+    if (payload != null) {
+      List<String> data = payload.split(",");
+      int length = data.length;
+      dynamic isThatGroupChat = length > 3 ? data[3] : false;
+      if (isThatGroupChat) {
+        final videoDetails = await _videoCallLocalNotifications
+            .getNotificationAppLaunchDetails();
+        if (videoDetails != null && videoDetails.didNotificationLaunchApp) {
+          _onSelectNotification(context, videoDetails.payload);
+        }
+      } else {
+        _onSelectNotification(context, payload);
+      }
+    }
+  }
 }
 
 _onSelectNotification(BuildContext context, String? payload) async {
