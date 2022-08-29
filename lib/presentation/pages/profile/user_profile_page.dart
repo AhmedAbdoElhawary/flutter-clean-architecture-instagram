@@ -348,7 +348,8 @@ class _ProfilePageState extends State<UserProfilePage> {
               page: BlocProvider<MessageBloc>(
                 create: (context) => injector<MessageBloc>(),
                 child: ChattingPage(
-                    messageDetails: SenderInfo(receiversInfo: [userInfo.value])),
+                    messageDetails:
+                        SenderInfo(receiversInfo: [userInfo.value])),
               ));
         },
         child: containerOfFollowText(
