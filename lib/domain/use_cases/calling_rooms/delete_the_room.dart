@@ -1,7 +1,8 @@
 import 'package:instagram/domain/repositories/calling_rooms_repository.dart';
 import 'package:instagram/core/use_case/use_case.dart';
 
-class DeleteTheRoomUseCase extends UseCaseTwoParams<void, String, List<dynamic>> {
+class DeleteTheRoomUseCase
+    extends UseCaseTwoParams<void, String, List<dynamic>> {
   final CallingRoomsRepository _callingRoomsRepo;
   DeleteTheRoomUseCase(this._callingRoomsRepo);
   @override
