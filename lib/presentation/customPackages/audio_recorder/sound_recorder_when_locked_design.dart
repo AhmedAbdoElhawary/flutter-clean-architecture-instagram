@@ -11,7 +11,7 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
   final SoundRecordNotifier soundRecordNotifier;
   final String? cancelText;
   final ValueChanged<bool> showIcons;
-  final Function(File soundFile,int lengthOfRecord) sendRequestFunction;
+  final Function(File soundFile, int lengthOfRecord) sendRequestFunction;
   final Color recordIconWhenLockBackGroundColor;
   const SoundRecorderWhenLockedDesign({
     Key? key,
@@ -41,7 +41,8 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
                     soundRecordNotifier.minute > 0) {
                   String path = soundRecordNotifier.mPath;
                   await Future.delayed(const Duration(milliseconds: 500));
-                  sendRequestFunction(File.fromUri(Uri(path: path)),soundRecordNotifier.second);
+                  sendRequestFunction(File.fromUri(Uri(path: path)),
+                      soundRecordNotifier.second);
                 }
                 soundRecordNotifier.resetEdgePadding();
                 showIcons(true);
