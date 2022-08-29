@@ -292,8 +292,7 @@ class GroupMessages extends StatelessWidget {
       appBar: CustomAppBar.chattingAppBar(selectedUsersInfoValue, context),
       body: BlocProvider<MessageBloc>(
         create: (context) => injector<MessageBloc>(),
-        child: ChatMessages(
-            messageDetails: messageDetails),
+        child: ChatMessages(messageDetails: messageDetails),
       ),
     );
   }
