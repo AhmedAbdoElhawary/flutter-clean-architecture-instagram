@@ -22,6 +22,7 @@ class LoadMessagesForGroupChat extends MessageEvent {
   @override
   List<Object> get props => [groupChatUid];
 }
+
 class UpdateMessagesForGroup extends MessageEvent {
   final List<Message> messages;
 
