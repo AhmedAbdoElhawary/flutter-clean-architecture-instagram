@@ -97,7 +97,7 @@ class _CustomShareButtonState extends State<CustomShareButton> {
       sharedPostId: widget.postInfo.postUid,
       imageUrl: imageUrl,
       isThatPost: true,
-      ownerOfSharedPostId:widget.publisherInfo.userId ,
+      ownerOfSharedPostId: widget.publisherInfo.userId,
       multiImages: widget.postInfo.imagesUrls.length > 1,
     );
   }
