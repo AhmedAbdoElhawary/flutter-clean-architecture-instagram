@@ -235,7 +235,6 @@ class FirestoreUser {
       UserPersonalInfo userInfo = await getUserInfo(userId);
       usersInfo.receiversInfo!.add(userInfo);
       usersInfo.receiversIds!.add(userInfo.userId);
-
     }
 
     return usersInfo;
