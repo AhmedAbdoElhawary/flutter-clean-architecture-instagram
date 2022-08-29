@@ -48,7 +48,6 @@ class AppTheme {
         titleLarge: getNormalStyle(color: Colors.white),
         titleSmall: getNormalStyle(color: ColorManager.darkWhite),
         titleMedium: getNormalStyle(color: ColorManager.lightGrey),
-
       ),
     );
   }
@@ -88,14 +87,13 @@ class AppTheme {
         bodyMedium: getNormalStyle(color: ColorManager.darkGray),
         bodySmall: getNormalStyle(color: ColorManager.lightGrey),
         displayLarge: getNormalStyle(color: ColorManager.grey, fontSize: 15),
-        displayMedium: getBoldStyle(color: ColorManager.white,fontSize: 15),
+        displayMedium: getBoldStyle(color: ColorManager.white, fontSize: 15),
         displaySmall: getMediumStyle(color: ColorManager.white, fontSize: 15),
         headlineSmall: getNormalStyle(color: Colors.grey[500]!),
         titleLarge: getNormalStyle(color: ColorManager.shimmerDarkGrey),
         titleSmall: getNormalStyle(color: ColorManager.darkGray),
         titleMedium: getNormalStyle(color: ColorManager.darkGray),
-
-    ),
+      ),
     );
   }
 }
