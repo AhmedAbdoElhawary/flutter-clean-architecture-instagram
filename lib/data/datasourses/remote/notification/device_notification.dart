@@ -27,6 +27,7 @@ class DeviceNotification {
       deviceToken: token,
       notificationRoute: notificationRoute,
       routeParameterId: routeParameterId,
+
       /// to avoid errors
       isThatGroupChat: false,
       userCallingId: "",
