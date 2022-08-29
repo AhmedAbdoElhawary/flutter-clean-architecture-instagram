@@ -422,13 +422,12 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-   updateUserInfo(bool isThatAdding, dynamic userId) {
-        if (isThatAdding) {
-          widget.userInfo.value.followedPeople.add(userId);
-        } else {
-          widget.userInfo.value.followedPeople.remove(userId);
-        }
-
+  updateUserInfo(bool isThatAdding, dynamic userId) {
+    if (isThatAdding) {
+      widget.userInfo.value.followedPeople.add(userId);
+    } else {
+      widget.userInfo.value.followedPeople.remove(userId);
+    }
   }
 
   Widget personalNumbersInfo(List<dynamic> usersIds, UserPersonalInfo userInfo,
@@ -453,7 +452,8 @@ class _ProfilePageState extends State<ProfilePage> {
       ];
       return ValueListenableBuilder(
         valueListenable: widget.userInfo,
-        builder: (context,UserPersonalInfo userInfoValue, child) => GestureDetector(
+        builder: (context, UserPersonalInfo userInfoValue, child) =>
+            GestureDetector(
           onTap: () async {
             if (isThatFollowers != null) {
               if (isThatMobile) {
@@ -479,7 +479,7 @@ class _ProfilePageState extends State<ProfilePage> {
           child: isThatMobile
               ? Column(children: userInfoWidgets)
               : Row(children: userInfoWidgets),
-        ) ,
+        ),
       );
     });
   }
