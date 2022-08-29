@@ -173,9 +173,9 @@ Future<void> _loadFCM(BuildContext context) async {
 
   _videoCallLocalNotifications.initialize(initializationSettings,
       onSelectNotification: (p) => _onSelectNotification(context, p));
+
   /// When app is close
   await _detailsWhenAppClose(context);
-
 }
 
 Future<void> _detailsWhenAppClose(BuildContext context) async {
