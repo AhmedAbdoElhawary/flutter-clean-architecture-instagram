@@ -7,7 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:instagram/core/app.dart';
-import 'package:instagram/core/utility/private_keys.dart';
+/// follow README.md to know how to add this file
+import 'package:instagram/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/utility/injector.dart';
 
@@ -28,25 +29,8 @@ Future<void> main() async {
 
 Future<SharedPreferences> init() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (kIsWeb) {
-    // I deleted private_keys in github project,
-    // so create your own firebase project and add your web private keys here and in web/index.html.
-    await Firebase.initializeApp(
-      options: FirebaseOptions(
-        measurementId: measurementId,
-        databaseURL: databaseURL,
-        authDomain: authDomain,
-        apiKey: apiKey,
-        appId: appId,
-        messagingSenderId: messagingSenderId,
-        projectId: projectId,
-        storageBucket: storageBucket,
-      ),
-    );
-  } else {
-    await Firebase.initializeApp();
-    await CustomGalleryPermissions.requestPermissionExtend();
-  }
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await CustomGalleryPermissions.requestPermissionExtend();
 
   await initializeDependencies();
   await GetStorage.init();
