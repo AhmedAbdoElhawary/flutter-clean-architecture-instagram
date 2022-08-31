@@ -131,6 +131,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
                   isThatCommentScreen: false,
                   postInfo: widget.postInfo,
                   textController: textValue,
+                  selectedCommentInfo: ValueNotifier(null),
                   userPersonalInfo: widget.postInfo.value.publisherInfo!,
                   currentFocus: ValueNotifier(FocusScopeNode()),
                   makeSelectedCommentNullable: makeSelectedCommentNullable,
