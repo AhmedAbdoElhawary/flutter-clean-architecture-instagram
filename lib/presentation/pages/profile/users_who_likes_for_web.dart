@@ -50,5 +50,5 @@ class UsersWhoLikesForWeb extends StatelessWidget {
   }
 
   Widget customDivider() =>
-      Container(color: ColorManager.grey, height: 1, width: double.infinity);
+      Container(color: ColorManager.grey, height: 0.5, width: double.infinity);
 }
