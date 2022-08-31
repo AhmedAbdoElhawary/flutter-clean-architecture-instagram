@@ -1,4 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instagram/config/themes/app_theme.dart';
@@ -31,8 +32,10 @@ class _MyAppState extends State<MyApp> {
     myId = widget.sharePrefs.getString("myPersonalId");
     if (myId != null) myPersonalId = myId!;
 
+  if(!kIsWeb) {
     WidgetsBinding.instance
         .addPostFrameCallback((_) async => await callVideoPermissions());
+  }
 
     super.initState();
   }
