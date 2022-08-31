@@ -20,11 +20,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 3.3.3
 
 environment:
-  sdk: '>=2.19.0-97.0.dev <3.0.0'
+  sdk: '>=2.19.0-147.0.dev <3.0.0'
 
-analyzer:
-  language:
-    enableSuperMixins: true
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
@@ -83,13 +80,11 @@ dependencies:
 
   ## My package
   #  custom_gallery_display: ^0.3.8
-  custom_gallery_display:
-    git:
-      url: https://github.com/AhmedAbdoElhawary/custom_gallery_display.git
-  # custom_gallery_display:
-  #   path: D:day_8_6\custom_gallery_display
-
-
+    custom_gallery_display:
+      git:
+        url: https://github.com/AhmedAbdoElhawary/custom_gallery_display.git
+#  custom_gallery_display:
+#    path: D:\day_8_6\custom_gallery_display
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

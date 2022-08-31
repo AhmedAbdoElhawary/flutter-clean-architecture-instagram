@@ -15,6 +15,7 @@ class PersonalImageIcon extends StatelessWidget {
       String userImage = myPersonalInfo.profileImageUrl;
       if (userImage.isNotEmpty) {
         return CircleAvatarOfProfileImage(
+          disablePressed: true,
           userInfo: myPersonalInfo,
           bodyHeight: 300,
           showColorfulCircle: false,

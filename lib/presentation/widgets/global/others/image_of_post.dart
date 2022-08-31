@@ -182,7 +182,7 @@ class _ImageOfPostState extends State<ImageOfPost>
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: CommentBox(
             postInfo: widget.postInfo,
-            selectedCommentInfo: widget.selectedCommentInfo.value,
+            selectedCommentInfo: widget.selectedCommentInfo,
             textController: widget.textController.value,
             userPersonalInfo: myPersonalInfo,
             expandCommentBox: true,
@@ -241,6 +241,8 @@ class _ImageOfPostState extends State<ImageOfPost>
       child: Scaffold(
         backgroundColor: ColorManager.black38,
         body: GestureDetector(
+          /// Don't remove this,it's for avoid pop when tap in popup post
+          onTap: (){},
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -308,7 +310,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(
+                    Flexible(
                       child: GestureDetector(
                         onTap: () {
                           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -358,17 +360,10 @@ class _ImageOfPostState extends State<ImageOfPost>
                               ),
                             ),
                           ),
-                          Flexible(
-                            fit: FlexFit.loose,
-                            flex: 1,
-                            child: SizedBox(
-                              height: double.infinity,
-                              child: CommentsOfPost(
-                                postInfo: widget.postInfo,
-                                selectedCommentInfo: widget.selectedCommentInfo,
-                                textController: widget.textController,
-                              ),
-                            ),
+                          CommentsOfPost(
+                            postInfo: widget.postInfo,
+                            selectedCommentInfo: widget.selectedCommentInfo,
+                            textController: widget.textController,
                           ),
                           Container(
                             decoration: const BoxDecoration(

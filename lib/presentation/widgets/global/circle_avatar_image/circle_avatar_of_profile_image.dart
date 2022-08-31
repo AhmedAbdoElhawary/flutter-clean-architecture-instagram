@@ -23,13 +23,14 @@ class CircleAvatarOfProfileImage extends StatefulWidget {
   final String hashTag;
   final bool moveTextMore;
   final bool showColorfulCircle;
-
+  final bool disablePressed;
   const CircleAvatarOfProfileImage({
     this.hashTag = "",
     this.nameOfCircle = "",
     required this.userInfo,
     required this.bodyHeight,
     this.moveTextMore = false,
+    this.disablePressed = false,
     this.thisForStoriesLine = false,
     this.showColorfulCircle = true,
     Key? key,
@@ -142,7 +143,8 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     return widget.thisForStoriesLine
         ? stackOfImage(profileImage)
         : GestureDetector(
-            onTap: () => onPressedImage(context),
+            onTap:
+                !widget.disablePressed ? () => onPressedImage(context) : null,
             child: stackOfImage(profileImage),
           );
   }

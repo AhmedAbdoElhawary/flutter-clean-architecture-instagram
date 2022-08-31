@@ -108,9 +108,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
   }
 
   selectedComment(Comment commentInfo) {
-    setState(() {
-      widget.selectedCommentInfo.value = commentInfo;
-    });
+    setState(() => widget.selectedCommentInfo.value = commentInfo);
   }
 
   Widget commentsListView(List<Comment> commentsOfThePost) {
@@ -254,7 +252,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
 
   Widget commentTextField() => CommentBox(
         postInfo: widget.postInfo,
-        selectedCommentInfo: widget.selectedCommentInfo.value,
+        selectedCommentInfo: widget.selectedCommentInfo,
         textController: widget.textController.value,
         userPersonalInfo: myPersonalInfo,
         currentFocus: currentFocus,

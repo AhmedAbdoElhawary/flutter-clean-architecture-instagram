@@ -61,7 +61,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             focusedBorder: outlineInputBorder(),
             enabledBorder: outlineInputBorder(),
             errorStyle: getNormalStyle(color: ColorManager.red),
-            errorText: errorMassage,
+            errorText:isThatMobile? errorMassage:null,
             contentPadding: EdgeInsets.symmetric(
                 horizontal: 10, vertical: isThatMobile ? 15 : 5),
           ),

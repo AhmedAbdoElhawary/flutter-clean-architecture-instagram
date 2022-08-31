@@ -4,7 +4,8 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
 
 class CreateNewStory extends StatefulWidget {
-  const CreateNewStory({Key? key}) : super(key: key);
+  final bool isThatStory;
+  const CreateNewStory({Key? key, this.isThatStory = true}) : super(key: key);
 
   @override
   State<CreateNewStory> createState() => _CreateNewStoryState();
@@ -15,7 +16,8 @@ class _CreateNewStoryState extends State<CreateNewStory> {
   Widget build(BuildContext context) => CustomGallery.normalDisplay(
         appTheme: appStoryTheme(),
         sendRequestFunction: (SelectedImagesDetails details) =>
-            moveToCreationPage(context, details, isThatStory: true),
+            moveToCreationPage(context, details,
+                isThatStory: widget.isThatStory),
       );
 
   AppTheme appStoryTheme() => AppTheme(

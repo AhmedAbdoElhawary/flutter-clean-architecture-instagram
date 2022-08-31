@@ -126,35 +126,30 @@ class _SignUpPageState extends State<RegisterWidgets> {
             Flexible(
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 4, vertical: 15),
+                     EdgeInsets.symmetric(horizontal:isThatMobile? 4:0, vertical:isThatMobile? 15:10),
                 child: Row(
                   children: [
+                    const SizedBox(width: 13),
                     ValueListenableBuilder(
                       valueListenable: widget.rememberPassword!,
                       builder: (context, bool rememberPasswordValue, child) =>
                           Checkbox(
                               value: rememberPasswordValue,
-                              activeColor: ColorManager.white,
-                              fillColor: MaterialStateProperty.resolveWith(
+                              activeColor:isThatMobile? ColorManager.white:ColorManager.blue,
+                              fillColor:isThatMobile? MaterialStateProperty.resolveWith(
                                   (Set states) {
                                 if (states.contains(MaterialState.disabled)) {
                                   return Colors.blue.withOpacity(.32);
                                 }
                                 return Colors.blue;
-                              }),
-                              overlayColor: MaterialStateProperty.resolveWith(
-                                  (Set states) {
-                                if (states.contains(MaterialState.disabled)) {
-                                  return Colors.blue.withOpacity(.32);
-                                }
-                                return Theme.of(context).focusColor;
-                              }),
+                              }):null,
+
                               onChanged: (value) => widget.rememberPassword!
                                   .value = !rememberPasswordValue),
                     ),
                     Text(
                       StringsManager.rememberPassword.tr,
-                      style: getNormalStyle(color: ColorManager.grey),
+                      style: getNormalStyle(color:Theme.of(context).focusColor),
                     )
                   ],
                 ),
@@ -180,10 +175,6 @@ class _SignUpPageState extends State<RegisterWidgets> {
               haveAccountRow(context),
               const OrText(),
             ],
-          ] else ...[
-            const SizedBox(height: 10),
-            const OrText(),
-            const SizedBox(height: 10),
           ],
           if (widget.isThatLogIn) ...[
             TextButton(

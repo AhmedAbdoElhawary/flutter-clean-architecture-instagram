@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "again_instagram" "\0"
+            VALUE "FileDescription", "instagram" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "again_instagram" "\0"
+            VALUE "InternalName", "instagram" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "again_instagram.exe" "\0"
-            VALUE "ProductName", "again_instagram" "\0"
+            VALUE "OriginalFilename", "instagram.exe" "\0"
+            VALUE "ProductName", "instagram" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/config/routes/app_routes.dart';
+import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -18,6 +19,7 @@ import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/co
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/replyLikes/reply_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
 import 'package:instagram/presentation/pages/profile/users_who_likes_for_mobile.dart';
+import 'package:instagram/presentation/pages/profile/users_who_likes_for_web.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/core/functions/toast_show.dart';
@@ -227,51 +229,66 @@ class _CommentInfoState extends State<CommentInfo> {
       children: [
         Text(DateOfNow.commentsDateOfNow(widget.commentInfo.datePublished),
             style: Theme.of(context).textTheme.displayLarge),
-        if (widget.commentInfo.likes.isNotEmpty)
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 20.0),
-            child: InkWell(
-              onTap: () {
-                pushToPage(context,
-                    page: UsersWhoLikesForMobile(
-                      showSearchBar: false,
-                      usersIds: widget.commentInfo.likes,
-                      isThatMyPersonalId:
-                          widget.commentInfo.whoCommentId == myPersonalId,
-                    ),
-                    withoutRoot: false);
-              },
-              child: Text(
-                "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like.tr : StringsManager.likes.tr}",
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
-            ),
-          ),
+        if (widget.commentInfo.likes.isNotEmpty) usersWhoLikes(context),
         const SizedBox(width: 20),
-        InkWell(
-          onTap: () async {
-            String hashTag = "@${widget.commentInfo.whoCommentInfo!.userName} ";
-
-            widget.textController.value.text = hashTag;
-
-            widget.textController.value.selection = TextSelection.fromPosition(
-                TextPosition(offset: widget.textController.value.text.length));
-            Comment commentInfo = widget.commentInfo;
-            if (widget.commentInfo.parentCommentId.isEmpty) {
-              commentInfo.parentCommentId = commentInfo.commentUid;
-            }
-            // widget.currentFocus.value.requestFocus();
-
-            setState(() {
-              widget.selectedCommentInfo!.value(commentInfo);
-            });
-          },
-          child: Text(
-            StringsManager.reply.tr,
-            style: Theme.of(context).textTheme.displayLarge,
-          ),
-        ),
+        replayButton(context),
       ],
+    );
+  }
+
+  InkWell replayButton(BuildContext context) {
+    return InkWell(
+      onTap: () async {
+        String hashTag = "@${widget.commentInfo.whoCommentInfo!.userName} ";
+        widget.textController.value.text = hashTag;
+        widget.textController.value.selection = TextSelection.fromPosition(
+            TextPosition(offset: widget.textController.value.text.length));
+        Comment commentInfo = widget.commentInfo;
+        if (widget.commentInfo.parentCommentId.isEmpty) {
+          commentInfo.parentCommentId = commentInfo.commentUid;
+        }
+        setState(() => widget.selectedCommentInfo?.value(commentInfo));
+      },
+      child: Text(
+        StringsManager.reply.tr,
+        style: Theme.of(context).textTheme.displayLarge,
+      ),
+    );
+  }
+
+  Padding usersWhoLikes(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 20.0),
+      child: InkWell(
+        onTap: () {
+          if (isThatMobile) {
+            pushToPage(
+              context,
+              page: UsersWhoLikesForMobile(
+                showSearchBar: false,
+                usersIds: widget.commentInfo.likes,
+                isThatMyPersonalId:
+                    widget.commentInfo.whoCommentId == myPersonalId,
+              ),
+            );
+          } else {
+            Navigator.of(context).push(
+              HeroDialogRoute(
+                backgroundColor: ColorManager.black26,
+                builder: (context) => UsersWhoLikesForWeb(
+                  usersIds: widget.commentInfo.likes,
+                  isThatMyPersonalId:
+                      widget.commentInfo.whoCommentId == myPersonalId,
+                ),
+              ),
+            );
+          }
+        },
+        child: Text(
+          "${widget.commentInfo.likes.length} ${widget.commentInfo.likes.length == 1 ? StringsManager.like.tr : StringsManager.likes.tr}",
+          style: Theme.of(context).textTheme.displayLarge,
+        ),
+      ),
     );
   }
 

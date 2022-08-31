@@ -20,7 +20,7 @@ class CommentBox extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
   final ValueNotifier<FocusNode> currentFocus;
   final bool isThatCommentScreen;
-  final Comment? selectedCommentInfo;
+  final ValueNotifier<Comment?> selectedCommentInfo;
   final UserPersonalInfo userPersonalInfo;
   final TextEditingController textController;
   final ValueChanged<bool> makeSelectedCommentNullable;
@@ -30,7 +30,7 @@ class CommentBox extends StatefulWidget {
     required this.currentFocus,
     this.expandCommentBox = false,
     required this.postInfo,
-    this.selectedCommentInfo,
+    required this.selectedCommentInfo,
     required this.textController,
     required this.userPersonalInfo,
     this.isThatCommentScreen = true,
@@ -114,19 +114,22 @@ class _CommentBoxState extends State<CommentBox> {
                   child: const Text('🙌'),
                 ),
               ] else ...[
-                InkWell(
-                  onTap: () {
-                    if (widget.textController.text.isNotEmpty) {
-                      postTheComment(widget.userPersonalInfo);
-                    }
-                  },
-                  child: Text(
-                    StringsManager.post.tr,
-                    style: getNormalStyle(
-                        color: widget.textController.text.isNotEmpty
-                            ? ColorManager.blue
-                            : ColorManager.lightBlue),
-                  ),
+                ValueListenableBuilder(
+                  valueListenable:widget.selectedCommentInfo ,
+                  builder: (context,Comment? selectedComment, child) =>InkWell(
+                    onTap: () {
+                      if (widget.textController.text.isNotEmpty) {
+                        postTheComment(widget.userPersonalInfo, selectedComment);
+                      }
+                    },
+                    child: Text(
+                      StringsManager.post.tr,
+                      style: getNormalStyle(
+                          color: widget.textController.text.isNotEmpty
+                              ? ColorManager.blue
+                              : ColorManager.lightBlue),
+                    ),
+                  ) ,
                 ),
               ],
             ],
@@ -136,12 +139,12 @@ class _CommentBoxState extends State<CommentBox> {
     );
   }
 
-  Future<void> postTheComment(UserPersonalInfo myPersonalInfo) async {
+  Future<void> postTheComment(UserPersonalInfo myPersonalInfo,Comment? selectedComment) async {
     final whitespaceRE = RegExp(r"\s+");
     String textWithOneSpaces =
         widget.textController.text.replaceAll(whitespaceRE, " ");
 
-    if (widget.selectedCommentInfo == null) {
+    if (selectedComment==null) {
       CommentsInfoCubit commentsInfoCubit =
           BlocProvider.of<CommentsInfoCubit>(context);
       await commentsInfoCubit.addComment(
@@ -156,7 +159,7 @@ class _CommentBoxState extends State<CommentBox> {
         });
       }
     } else {
-      Comment replyInfo = newReplyInfo(widget.selectedCommentInfo!,
+      Comment replyInfo = newReplyInfo(selectedComment,
           myPersonalInfo.userId, textWithOneSpaces);
       await ReplyInfoCubit.get(context)
           .replyOnThisComment(replyInfo: replyInfo);

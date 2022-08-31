@@ -64,36 +64,7 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
           crossAxisCount: 3,
           itemCount: lengthOfGrid,
           itemBuilder: (context, index) {
-            if (indexOfPostsVideo >= widget.postsVideosInfo.length &&
-                indexOfPostsImage < widget.postsImagesInfo.length) {
-              postInfo = widget.postsImagesInfo[indexOfPostsImage];
-              indexOfPostsImage++;
-            } else if (indexOfPostsVideo < widget.postsVideosInfo.length &&
-                indexOfPostsImage >= widget.postsImagesInfo.length) {
-              postInfo = widget.postsVideosInfo[indexOfPostsVideo];
-              indexOfPostsVideo++;
-            } else {
-              if (indexOfPostsVideo >= widget.postsVideosInfo.length &&
-                  indexOfPostsImage >= widget.postsImagesInfo.length) {
-                indexOfPostsVideo = 0;
-                indexOfPostsImage = 0;
-              }
-              bool firstCondition = isThatMobile ? index == 2 : index == 1;
-              bool secondCondition =
-                  isThatMobile ? index % 11 == 0 : index % 14 == 0;
-
-              if ((firstCondition || (secondCondition && index != 0)) &&
-                  indexOfPostsVideo < widget.postsVideosInfo.length) {
-                postInfo = widget.postsVideosInfo[indexOfPostsVideo];
-                indexOfPostsVideo++;
-              } else {
-                postInfo = widget.postsImagesInfo[indexOfPostsImage];
-                indexOfPostsImage++;
-              }
-            }
-            if (index == widget.allPostsInfo.length - 1) {
-              widget.isThatEndOfList.value = true;
-            }
+            _structurePostDisplay(index);
             return inViewWidget(index, postInfo);
           },
           staggeredTileBuilder: (index) {
@@ -124,6 +95,38 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
     );
   }
 
+  _structurePostDisplay(int index) {
+    if (indexOfPostsVideo >= widget.postsVideosInfo.length &&
+        indexOfPostsImage < widget.postsImagesInfo.length) {
+      postInfo = widget.postsImagesInfo[indexOfPostsImage];
+      indexOfPostsImage++;
+    } else if (indexOfPostsVideo < widget.postsVideosInfo.length &&
+        indexOfPostsImage >= widget.postsImagesInfo.length) {
+      postInfo = widget.postsVideosInfo[indexOfPostsVideo];
+      indexOfPostsVideo++;
+    } else {
+      if (indexOfPostsVideo >= widget.postsVideosInfo.length &&
+          indexOfPostsImage >= widget.postsImagesInfo.length) {
+        indexOfPostsVideo = 0;
+        indexOfPostsImage = 0;
+      }
+      bool firstCondition = isThatMobile ? index == 2 : index == 1;
+      bool secondCondition = isThatMobile ? index % 11 == 0 : index % 14 == 0;
+
+      if ((firstCondition || (secondCondition && index != 0)) &&
+          indexOfPostsVideo < widget.postsVideosInfo.length) {
+        postInfo = widget.postsVideosInfo[indexOfPostsVideo];
+        indexOfPostsVideo++;
+      } else {
+        postInfo = widget.postsImagesInfo[indexOfPostsImage];
+        indexOfPostsImage++;
+      }
+    }
+    if (index == widget.allPostsInfo.length - 1) {
+      widget.isThatEndOfList.value = true;
+    }
+  }
+
   Container inViewWidget(int index, Post postInfo) {
     return Container(
       width: double.infinity,
@@ -140,7 +143,6 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
                 playThisVideo: isInView,
                 isThatProfile: false,
               );
-              // return columnOfWidgets(bodyHeight, index, isInView);
             },
           );
         },

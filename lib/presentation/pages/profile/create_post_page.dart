@@ -68,7 +68,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       width: 70,
                       child: Stack(
                         children: [
-                          Image.memory(image),
+                          Image.memory(widget.isThatImage
+                              ? image
+                              : widget.coverOfVideoBytes!),
                           if (widget.multiSelectedFiles.length > 1)
                             const Padding(
                               padding: EdgeInsets.all(2.0),

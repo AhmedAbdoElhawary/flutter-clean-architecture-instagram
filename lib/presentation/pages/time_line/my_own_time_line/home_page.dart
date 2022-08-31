@@ -18,6 +18,7 @@ import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart';
+import 'package:instagram/presentation/customPackages/snapping.dart';
 import 'package:instagram/presentation/pages/story/story_for_web.dart';
 import 'package:instagram/presentation/pages/story/story_page_for_mobile.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/create_new_story.dart';
@@ -27,6 +28,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_smart_refresh.dart';
+import 'package:instagram/presentation/widgets/global/popup_widgets/common/jump_arrow.dart';
 import '../../../../data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import '../../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import '../../../widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
@@ -51,6 +53,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   List postsIds = [];
   ValueNotifier<List<Post>> postsInfo = ValueNotifier([]);
   List<UserPersonalInfo>? storiesOwnersInfo;
+  ScrollController scrollController = ScrollController();
 
   Future<void> getData(int index) async {
     storiesOwnersInfo = null;
@@ -296,7 +299,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               style: getNormalStyle(color: Theme.of(context).focusColor),
             ));
           } else {
-            return Container();
+            return const SizedBox();
           }
         },
       ),
@@ -325,20 +328,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  ScrollController scrollController = ScrollController();
   Padding buildStories(double bodyHeight, BuildContext context,
       List<UserPersonalInfo> storiesOwnersInfo) {
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 10),
       child: SizedBox(
         width: double.infinity,
-        height: bodyHeight * 0.155,
+        height: 600 * 0.155,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (personalInfo!.stories.isEmpty && isThatMobile) ...[
+              if (personalInfo!.stories.isEmpty) ...[
                 myOwnStory(context, storiesOwnersInfo, bodyHeight),
                 const SizedBox(width: 12),
               ],
@@ -408,36 +410,34 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         reLoadData.value = true;
       },
       child: Stack(
+        alignment: Alignment.bottomRight,
         children: [
           CircleAvatarOfProfileImage(
             userInfo: personalInfo!,
-            bodyHeight: bodyHeight,
+            bodyHeight: 700,
             moveTextMore: true,
             thisForStoriesLine: true,
             nameOfCircle: StringsManager.yourStory.tr,
           ),
           Positioned(
-            top: bodyHeight * .0525,
-            left: bodyHeight * .0555,
-            right: bodyHeight * .01,
-            child: CircleAvatar(
-              radius: 13,
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
-          ),
-          Positioned(
-            top: bodyHeight * .058,
-            left: bodyHeight * .058,
-            right: bodyHeight * .012,
-            child: CircleAvatar(
-              radius: 9.5,
-              backgroundColor: Theme.of(context).primaryColor,
-              child: const CircleAvatar(
-                radius: 10,
-                backgroundColor: ColorManager.blue,
-                child: Icon(
-                  Icons.add,
-                  size: 14,
+            top: 650 * .058,
+            left: 650 * .058,
+            right: 650 * .012,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  shape: BoxShape.circle),
+              padding: const EdgeInsets.all(2),
+              child: CircleAvatar(
+                radius: 15,
+                backgroundColor: Theme.of(context).primaryColor,
+                child: const CircleAvatar(
+                  radius: 10,
+                  backgroundColor: ColorManager.blue,
+                  child: Icon(
+                    Icons.add,
+                    size: 14,
+                  ),
                 ),
               ),
             ),
@@ -461,6 +461,15 @@ class _WelcomeCards extends StatefulWidget {
 class _WelcomeCardsState extends State<_WelcomeCards> {
   final ValueNotifier<int> _selectedIndex = ValueNotifier(0);
   PageController pageController = PageController(viewportFraction: 0.7);
+  int currentPage = 0;
+  late ScrollController _scrollPageController;
+  double initialPage = 0;
+  @override
+  void initState() {
+    super.initState();
+    initialPage = currentPage.toDouble();
+    _scrollPageController = ScrollController();
+  }
 
   @override
   void dispose() {
@@ -477,8 +486,60 @@ class _WelcomeCardsState extends State<_WelcomeCards> {
   Widget welcomeCards() {
     return SizedBox(
       height: double.maxFinite,
-      child: CustomSmartRefresh(
-          onRefreshData: widget.onRefreshData, child: suggestionsFriends()),
+      child:isThatMobile?CustomSmartRefresh(
+          onRefreshData: widget.onRefreshData, child: suggestionsFriends()): suggestionsFriends(),
+    );
+  }
+
+  Widget buildColumn(List<UserPersonalInfo> users) {
+    double widthOfScreen = MediaQuery.of(context).size.width;
+    double halfOfWidth = widthOfScreen / 2;
+    double heightOfStory =
+        (halfOfWidth < 515 ? widthOfScreen : halfOfWidth) + 100;
+    double widthOfStory =
+        (halfOfWidth < 515 ? halfOfWidth : halfOfWidth / 2) + 80;
+
+    return ScrollSnapList(
+      itemBuilder: (_, index) {
+        bool active = currentPage == index;
+
+        return SizedBox(
+          width: widthOfStory,
+          child: Center(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  height: heightOfStory,
+                  width: widthOfStory,
+                  child: userCardInfo(active, users[index], index),
+                ),
+                if (currentPage == index) ...[
+                  buildJumpArrow(),
+                  buildJumpArrow(isThatBack: false),
+                ],
+              ],
+            ),
+          ),
+        );
+      },
+      onItemFocus: (pos) {
+        setState(() => currentPage = pos);
+        if (kDebugMode) {
+          print('Done! $pos');
+        }
+      },
+      itemSize: widthOfStory,
+      listController: _scrollPageController,
+      initialIndex: initialPage,
+      dynamicItemSize: true,
+      scrollDirection: Axis.horizontal,
+      onReachEnd: () {
+        if (kDebugMode) {
+          print('Done!');
+        }
+      },
+      itemCount: users.length,
     );
   }
 
@@ -498,25 +559,29 @@ class _WelcomeCardsState extends State<_WelcomeCards> {
                 if (users.isEmpty) {
                   return emptyText();
                 } else {
-                  return ValueListenableBuilder(
-                    valueListenable: _selectedIndex,
-                    builder: (context, int selectedIndexValue, child) =>
-                        PageView.builder(
-                      itemCount: users.length,
-                      controller: pageController,
-                      physics: const BouncingScrollPhysics(),
-                      onPageChanged: (index) {
-                        _selectedIndex.value = index;
-                      },
-                      itemBuilder: (context, index) {
-                        bool active = selectedIndexValue == index;
-                        return userCardInfo(active, users[index]);
-                      },
-                    ),
-                  );
+                  if(isThatMobile){
+                    return ValueListenableBuilder(
+                      valueListenable: _selectedIndex,
+                      builder: (context, int selectedIndexValue, child) =>
+                          PageView.builder(
+                            itemCount: users.length,
+                            controller: pageController,
+                            physics: const BouncingScrollPhysics(),
+                            onPageChanged: (index) {
+                              _selectedIndex.value = index;
+                            },
+                            itemBuilder: (context, index) {
+                              bool active = selectedIndexValue == index;
+                              return userCardInfo(active, users[index],index);
+                            },
+                          ),
+                    );
+                  }else{
+                    return buildColumn(users);
+                  }
                 }
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: ThineCircularProgress());
               }
             },
           ),
@@ -553,14 +618,15 @@ class _WelcomeCardsState extends State<_WelcomeCards> {
         ),
       ];
 
-  Widget userCardInfo(bool active, UserPersonalInfo userInfo) {
+  Widget userCardInfo(bool active, UserPersonalInfo userInfo, int index) {
     final double margin = active ? 0 : 25;
-    double width = MediaQuery.of(context).size.width - 120;
+    double width =
+        MediaQuery.of(context).size.width - (isThatMobile ? 120 : 200);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: SizedBox(
-          height: 330,
+          height: isThatMobile ? 330 : 400,
           width: width,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 500),
@@ -581,6 +647,30 @@ class _WelcomeCardsState extends State<_WelcomeCards> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildJumpArrow({bool isThatBack = true}) {
+    return GestureDetector(
+      onTap: () async {
+        if (isThatBack) {
+          _scrollPageController.animateTo(
+            _scrollPageController.offset -
+                MediaQuery.of(context).size.width / 4,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        } else {
+          _scrollPageController.animateTo(
+            _scrollPageController.offset +
+                MediaQuery.of(context).size.width / 4,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      },
+      child: SizedBox(
+          child: ArrowJump(isThatBack: isThatBack)),
     );
   }
 
@@ -638,12 +728,12 @@ class _WelcomeCardsState extends State<_WelcomeCards> {
                       return Padding(
                         padding: const EdgeInsetsDirectional.only(end: 1),
                         child: SizedBox(
-                            height: 70,
-                            width: 70,
+                            height:isThatMobile? 70:100,
+                            width: isThatMobile? 70:100,
                             child: NetworkImageDisplay(
                               imageUrl: imageUrl,
-                              cachingWidth: 140,
-                              cachingHeight: 140,
+                              cachingWidth:isThatMobile? 140:200,
+                              cachingHeight: isThatMobile? 140:200,
                             )),
                       );
                     },

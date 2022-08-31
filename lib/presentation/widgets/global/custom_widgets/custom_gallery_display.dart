@@ -68,18 +68,20 @@ Future<void> moveToCreationPage(
       ? details.selectedFiles![0]
       : details.selectedFile;
   Uint8List bytesFile = await file.readAsBytes();
-
+  Uint8List convertedBytes = (await compressImage(bytesFile)) ?? bytesFile;
   if (isThatStory) {
     // ignore: use_build_context_synchronously
     await pushToPage(context,
         page: CreateStoryPage(
-            storyImage: bytesFile, isThatImage: details.isThatImage));
+            storyImage: convertedBytes, isThatImage: details.isThatImage));
   } else {
     if (!details.isThatImage) {
       final convertImage = await VideoThumbnail.thumbnailData(
         video: details.selectedFile.path,
         imageFormat: ImageFormat.PNG,
       );
+      Uint8List? convertedBytes = (await compressImage(convertImage)) ?? convertImage;
+
       Uint8List convertVideo = await details.selectedFile.readAsBytes();
 
       // ignore: use_build_context_synchronously
@@ -88,7 +90,7 @@ Future<void> moveToCreationPage(
             aspectRatio: 1,
             multiSelectedFiles: [convertVideo],
             isThatImage: false,
-            coverOfVideoBytes: convertImage,
+            coverOfVideoBytes: convertedBytes,
           ));
     } else {
       // ignore: use_build_context_synchronously
@@ -96,7 +98,7 @@ Future<void> moveToCreationPage(
         context,
         page: CreatePostPage(
           multiSelectedFiles:
-              selectedUint8Lists.isNotEmpty ? selectedUint8Lists : [bytesFile],
+              selectedUint8Lists.isNotEmpty ? selectedUint8Lists : [convertedBytes],
           isThatImage: details.isThatImage,
           aspectRatio: details.aspectRatio,
         ),
