@@ -1,6 +1,9 @@
 # flutter-clean-architecture-instagram
 
-Instagram clean architecture using flutter and firebase as ( frontend & backend ) with almost fully functionalities
+Instagram clean architecture using flutter and firebase as ( frontend & backend ) with almost all functionalities
+
+### Notes 
+* I didn't publish the keys such as messaging, agora, firebase web, or even google-services.json. So follow the steps (3. Setup the app) to add them.
 
 ## Features
 
@@ -17,7 +20,7 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
     * View all comments on a post
     * Replay on a comment & replay 
     * Like on a comment & replay
-      * View all likes on a comment & replay and their profiles
+      * View all likes on a comment & replay & their profiles
   * Edit post
   * Delete post
   * Unfollow the user of the post
@@ -25,22 +28,22 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
 * My Timelines Screen
   * Custom posts & stories feed based on followers & followings
   * Refresh the posts info
-  * Loading more posts (it displays 5 by 5 posts)
+  * Loading more posts (it displays five by five posts)
 
 * All Timelines Screen
-  * View all users posts (images & videos)
-  * Change screen from grid layout to timeline layout
+  * View all user's posts (images & videos)
+  * Change screen from a grid layout to a timeline layout
 
-* Search for user based on username
+* Search for a user based on username
 
 * Video Screen 
-  * It displays all users videos with almost post features
+  * It displays all user's videos with almost post features
   * Control of sound & play
   
 * Profile Screen
   * Follow / Unfollow Users
-  * Display images & videos in a separated view
-  * Change screen from grid layout to timeline layout
+  * Display images & videos in a separate view
+  * Change screen from a grid layout to a timeline layout
   * Edit profile info
   
 * Chat Screen
@@ -112,70 +115,82 @@ $ git clone https://github.com/AhmedAbdoElhawary/flutter-clean-architecture-inst
 $ cd flutter-clean-architecture-instagram/
 ```
 
-#### 3. Setup the firebase app
+## 3. Setup the app
+
+### . Setup the firebase services
+
 
 1. You'll need to create a Firebase instance. Follow the instructions at https://console.firebase.google.com.
-2. Once your Firebase instance is created, you'll need to enable anonymous authentication.
+2. Once your Firebase instance is created, you'll need to enable Email/Password authentication.
 
 * Go to the Firebase Console for your new instance.
 * Click "Authentication" in the left-hand menu
 * Click the "sign-in method" tab
-* Click "Google" and enable it
+* Click "Email/Password" and enable it
 
-
-4. Enable the Firebase Database
+4. Enable the Cloud Firestore
 * Go to the Firebase Console
-* Click "Database" in the left-hand menu
-* Click the Cloudstore "Create Database" button
-* Select "Start in test mode" and "Enable"
+* Click "Firebase Database" in the left-hand menu
+* Click on the "Create Database" button
+* Select "Start in production mode" and "Enable"
 
-5. (skip if not running on Android)
-
-* Create an app within your Firebase instance for Android, with package name com.ahmed.instagram
-* Run the following command to get your SHA-1 key:
-
-```
-keytool -exportcert -list -v \
--alias androiddebugkey -keystore ~/.android/debug.keystore
-```
-
-* In the Firebase console, in the settings of your Android app, add your SHA-1 key by clicking "Add Fingerprint".
-* Follow instructions to download google-services.json
-* place `google-services.json` into `/android/app/`.
+5. Enable the Firebase Storage
+* Go to the Firebase Console
+* Click "Storage" in the left-hand menu
+* Click on the "Create Storage" button
+* Select "Start in production mode" and "Enable"
 
 
-6. (skip if not running on iOS)
+6. Add a Flutter app with firebase
 
-* Create an app within your Firebase instance for iOS, with your app package name
-* Follow instructions to download GoogleService-Info.plist
-* Open XCode, right click the Runner folder, select the "Add Files to 'Runner'" menu, and select the GoogleService-Info.plist file to add it to /ios/Runner in XCode
-* Open /ios/Runner/Info.plist in a text editor. Locate the CFBundleURLSchemes key. The second item in the array value of this key is specific to the Firebase instance. Replace it with the value for REVERSED_CLIENT_ID from GoogleService-Info.plist
+* Recently google add to the firebase method to connect with your flutter app directly without making android and ios separately.
+* Click "Project Overview" in the left-hand menu
+* Click on the flutter icon button
+* Just follow the steps carefully
+* When you run flutterfire configure --project=^project name^ support android, ios, and web
 
-Double check install instructions for both
-   - Google Auth Plugin
-     - https://pub.dartlang.org/packages/firebase_auth
-   - Firestore Plugin
-     -  https://pub.dartlang.org/packages/cloud_firestore
+5. Enable the Firebase Messaging
+* Go to the Firebase Console
+* Click "Messaging" in the left-hand menu
+* Click on the android icon button
+* Click on create your first campaign
+* Now go to project settings and cloud Messaging and copy the server key in Cloud Messaging API
+* Search for notificationKey in this project by a tap on control+shift+f in the IDE and set the server key as a string like this "key=^server key^" 
 
+### . Setup agora
+* Go to https://www.agora.io/en/ and sign in
+* Go to console by clicking on the account icon
+* Click on Project Management in the left-hand menu
+* Click on Create New Project
+
+* Now the most important step in the agora
+  * Select "Testing mode: APP ID" not "secured mode" (if you select secured mode, It will be one channel available and you can't make another one in your app. in other words you can't make a private channel between two users or more, all users that use your app will go to the same calling room)
+
+*  Set project name and Social/Chatroom in Use Case and click on submit
+
+* Click on config on the project and copy App ID
+
+* Search about agoraAppId in this project by a tap on control+shift+f in the IDE and set the App ID as a string
+ 
 
 ## What's Next?
- - [x] Notificaitons for likes, comments, follows, etc
+ - [x] Notifications for likes, comments, follows, etc
  - [ ] Caching of Profiles, Images, Etc.
  - [x] Calling video and voice in chat
  - [ ] Add stickers on chat
- - [x] Send post to chats
- - [x] control in dimension of selected image & video from gallery
+ - [x] Send posts to chats
+ - [x] control in the dimension of selected image & video from the gallery
  - [x] Custom gallery display
  - [ ] Filters support for images
- - [x] Improve display loading of posts when open the app
+ - [x] Improve display loading of posts when opening the app
  - [ ] Like & comment on story
  - [ ] Delete the story
- - [ ] Turn off commenting of a post
+ - [ ] Turn off commenting on a post
  - [ ] Hide Like count of a post
  - [ ] Archive a post
  - [x] share post
  - [ ] Live support
- - [x] Make like, comment and share of animation container post touchy when longPressed on post
+ - [x] Make like, comment, and share of animation container post touchy when long pressed on post
  - [ ] Create store screens
  - [ ] Make it stable for web & desktop
  - [ ] Clean-up more code
@@ -183,11 +198,11 @@ Double check install instructions for both
 
 
 ## How to Contribute
-1. Fork the the project
+1. Fork the project
 2. Create your feature branch (git checkout -b my-new-feature)
 3. Make required changes and commit (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
-5. Create new Pull Request
+5. Create a new Pull Request
 
 
 ## Contact
@@ -197,7 +212,7 @@ You will find me on
 <a href="https://www.linkedin.com/in/ahmedabdoelhawary/"><img src="https://user-images.githubusercontent.com/35039342/55471530-94b34280-5627-11e9-8c0e-6fe86a8406d6.png" width="60"></a>
 
 
-## License & copyright
+## License & Copyright
 
 Copyright (c) 2022 Ahmed Abdo
 
