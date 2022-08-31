@@ -16,17 +16,15 @@ migrate_working_dir/
 *.iws
 .idea/
 
-**/app/google-services.json
-**/web/index.html
-lib/presentation/widgets/global/try
-lib/core/utility/private_keys.dart
-
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
 #.vscode/
 
 # Flutter/Dart/Pub related
+/web/index.html
+*lib/core/utility/private_keys.
+
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
@@ -36,9 +34,6 @@ lib/core/utility/private_keys.dart
 .pub-cache/
 .pub/
 /build/
-
-# Web related
-lib/generated_plugin_registrant.dart
 
 # Symbolication related
 app.*.symbols
@@ -50,4 +45,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-/node_modules/
