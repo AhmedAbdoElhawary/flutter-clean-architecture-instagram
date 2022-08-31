@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:instagram/core/app.dart';
+
 /// follow README.md to know how to add this file
 import 'package:instagram/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +31,7 @@ Future<void> main() async {
 Future<SharedPreferences> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await CustomGalleryPermissions.requestPermissionExtend();
+  if (!kIsWeb) await CustomGalleryPermissions.requestPermissionExtend();
 
   await initializeDependencies();
   await GetStorage.init();
