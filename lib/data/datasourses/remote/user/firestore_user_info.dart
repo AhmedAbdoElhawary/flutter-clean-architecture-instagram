@@ -22,22 +22,22 @@ class FirestoreUser {
 
   // update channelId for user
   static Future<List<bool>> updateChannelId(
-      {required List<dynamic> callThoseUsersIds,
+      {required List<UserPersonalInfo> callThoseUsers,
       required String myPersonalId,
       required String channelId}) async {
     await _fireStoreUserCollection
         .doc(myPersonalId)
         .update({"channelId": channelId});
     List<bool> isUsersAvailable = [];
-    for (final userId in callThoseUsersIds) {
+    for (final user in callThoseUsers) {
       DocumentSnapshot<Map<String, dynamic>> collection =
-          await _fireStoreUserCollection.doc(userId).get();
+          await _fireStoreUserCollection.doc(user.userId).get();
       UserPersonalInfo userInfo =
           UserPersonalInfo.fromDocSnap(collection.data());
       if (userInfo.channelId.isEmpty) {
         isUsersAvailable.add(true);
         await _fireStoreUserCollection
-            .doc(userId)
+            .doc(user.userId)
             .update({"channelId": channelId});
       } else {
         isUsersAvailable.add(false);
@@ -312,14 +312,14 @@ class FirestoreUser {
         _fireStoreUserCollection.doc(userId);
     Map<String, dynamic>? snap = (await collection.get()).data();
     List<dynamic> lastPosts = snap?["lastThreePostUrls"] ??= [];
-    if (lastPosts.length == 3) lastPosts.removeLast();
+    if (lastPosts.length >= 3) lastPosts = lastPosts.sublist(0, 3);
+
     if (postInfo.isThatImage) {
       lastPosts.add(postInfo.postUrl);
     } else {
       if (postInfo.coverOfVideoUrl.isEmpty) return;
       lastPosts.add(postInfo.coverOfVideoUrl);
     }
-    lastPosts.add(postInfo.postUrl);
     return await collection
         .update({'lastThreePostUrls': FieldValue.arrayUnion(lastPosts)});
   }
