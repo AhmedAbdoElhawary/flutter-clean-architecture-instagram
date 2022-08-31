@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 
 class HeroDialogRoute<T> extends PageRoute<T> {
+  final Color? backgroundColor;
   HeroDialogRoute({
+    this.backgroundColor,
     required WidgetBuilder builder,
     RouteSettings? settings,
     bool fullscreenDialog = false,
@@ -23,7 +26,7 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   bool get maintainState => true;
 
   @override
-  Color get barrierColor => Colors.black54;
+  Color get barrierColor => backgroundColor ?? ColorManager.black54;
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
