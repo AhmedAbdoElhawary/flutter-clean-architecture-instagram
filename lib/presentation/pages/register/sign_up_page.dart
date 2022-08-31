@@ -88,7 +88,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     passwordController: passwordController,
                     fullNameController: fullNameController,
                   );
-                  pushToPage(context, page: UserNamePage(textsControllers));
+                  pushToPage(context,
+                      page: UserNamePage(textsControllers),
+                      withoutRoot: false,
+                      withoutPageTransition: true);
                 }
               },
             );
@@ -124,39 +127,63 @@ class _UserNamePageState extends State<UserNamePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 100),
-              Text(
-                StringsManager.createUserName.tr,
-                style: getMediumStyle(
-                    color: Theme.of(context).focusColor, fontSize: 15),
-              ),
-              const SizedBox(height: 10),
-              Center(
-                child: Text(
-                  StringsManager.addUserName.tr,
-                  style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
-                ),
-              ),
-              Text(
-                StringsManager.youCanChangeUserNameLater.tr,
-                style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
-              ),
-              const SizedBox(height: 30),
-              userNameTextField(context),
-              customTextButton(),
-            ],
-          ),
+        child: Center(
+          child:isThatMobile? SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: buildColumn(context),
+          ):buildForWeb(context),
         ),
       ),
     );
   }
 
+  Widget buildColumn(BuildContext context) {
+    return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment:MainAxisAlignment.start,
+          children: [
+            const SizedBox(height: 100),
+            Text(
+              StringsManager.createUserName.tr,
+              style: getMediumStyle(
+                  color: Theme.of(context).focusColor, fontSize: 15),
+            ),
+            const SizedBox(height: 10),
+            Center(
+              child: Text(
+                StringsManager.addUserName.tr,
+                style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
+              ),
+            ),
+            Text(
+              StringsManager.youCanChangeUserNameLater.tr,
+              style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
+            ),
+            const SizedBox(height: 30),
+            userNameTextField(context),
+            customTextButton(),
+          ],
+        );
+  }
+  SizedBox buildForWeb(BuildContext context) {
+    return SizedBox(
+      width: 352,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: double.infinity,
+            height: 400,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey, width: 0.2),
+            ),
+            child: buildColumn(context),
+          ),
+        ],
+      ),
+    );
+  }
   BlocBuilder<SearchAboutUserBloc, SearchAboutUserState> userNameTextField(
       BuildContext context) {
     return BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
