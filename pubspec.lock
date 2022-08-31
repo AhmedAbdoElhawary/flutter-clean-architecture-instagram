@@ -270,9 +270,11 @@ packages:
   custom_gallery_display:
     dependency: "direct main"
     description:
-      path: "D:\\hereeeeeeeeeeeeeeeeeeeeee\\day_8_6\\custom_gallery_display"
-      relative: false
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "239cdc6b31e188cd9792fa6cf5e60a227a0f28f4"
+      url: "https://github.com/AhmedAbdoElhawary/custom_gallery_display.git"
+    source: git
     version: "0.3.9"
   dbus:
     dependency: transitive
@@ -440,6 +442,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
+  flutter_launcher_icons:
+    dependency: "direct dev"
+    description:
+      name: flutter_launcher_icons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.9.3"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -1134,6 +1143,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.0"
+  yaml:
+    dependency: transitive
+    description:
+      name: yaml
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.1"
 sdks:
   dart: ">=2.19.0-147.0.dev <3.0.0"
   flutter: ">=3.0.0"
