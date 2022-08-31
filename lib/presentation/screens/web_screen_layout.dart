@@ -49,9 +49,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
   }
 
   void onPageChanged(int page) {
-    setState(() {
-      page = page;
-    });
+    setState(() => page = page);
   }
 
   void navigationTapped(int page) {
@@ -151,9 +149,10 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
               ),
               const SizedBox(width: 5),
               PopupMenuButton<int>(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 500, vertical: 360),
                 tooltip: "Show notifications",
+                constraints:
+                    const BoxConstraints.tightFor(height: 360, width: 500),
+                position: PopupMenuPosition.under,
                 elevation: 20,
                 color: Theme.of(context).splashColor,
                 offset: const Offset(90, 12),
@@ -195,9 +194,10 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
 
   PopupMenuButton<int> buildPopupMenuButton(BuildContext context) {
     return PopupMenuButton<int>(
-      padding: const EdgeInsets.symmetric(horizontal: 180),
       tooltip: "Show profile menu",
       elevation: 20,
+      constraints: const BoxConstraints.tightFor(width: 180),
+      position: PopupMenuPosition.under,
       color: Theme.of(context).splashColor,
       offset: const Offset(90, 12),
       icon: const PersonalImageIcon(),
@@ -220,7 +220,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
           value: 0,
           child: Row(
             children: [
-              const Icon(Icons.grid_on_sharp, size: 15),
+              const Icon(Icons.person, size: 15),
               const SizedBox(width: 15),
               Expanded(
                 child: Text(
@@ -269,7 +269,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
   SvgPicture icons(String icon, bool value, {bool biggerIcon = false}) {
     return SvgPicture.asset(
       icon,
-      height: biggerIcon ? 28 : 25,
+      height: biggerIcon ? 30 : 25,
       color: Theme.of(context).focusColor,
     );
   }
