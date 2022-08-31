@@ -80,8 +80,10 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
               return Container(
                 margin: const EdgeInsetsDirectional.all(3.0),
                 child: CustomElevatedButton(
-                  onPressed: () =>
-                      createStory(personalInfo, userCubit, builderContext),
+                  onPressed: () async {
+                    return await createStory(
+                        personalInfo, userCubit, builderContext);
+                  },
                   isItDone: isItDone,
                   nameOfButton: StringsManager.share.tr,
                 ),
@@ -96,25 +98,20 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
   Future<void> createStory(UserPersonalInfo personalInfo,
       UserInfoCubit userCubit, BuildContext builder2context) async {
     if (isItDone) {
-      String blurHash = await blurHashEncode(widget.storyImage);
-
-      Story storyInfo = addStoryInfo(personalInfo, blurHash);
       setState(() => isItDone = false);
+      String blurHash = await blurHashEncode(widget.storyImage);
+      Story storyInfo = addStoryInfo(personalInfo, blurHash);
       if (!mounted) return;
-
       StoryCubit storyCubit = StoryCubit.get(context);
-
       await storyCubit.createStory(storyInfo, widget.storyImage);
       if (storyCubit.storyId != '') {
         userCubit.updateMyStories(storyId: storyCubit.storyId);
         WidgetsBinding.instance
             .addPostFrameCallback((_) => setState(() => isItDone = true));
-
         final SharedPreferences sharePrefs =
             await SharedPreferences.getInstance();
         sharePrefs.remove(myPersonalId);
         if (!mounted) return;
-
         Navigator.of(context).pushAndRemoveUntil(
           CupertinoPageRoute(builder: (_) => PopupCalling(myPersonalId)),
           (route) => false,
