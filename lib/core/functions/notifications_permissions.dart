@@ -186,15 +186,15 @@ Future<void> _detailsWhenAppClose(BuildContext context) async {
     if (payload != null) {
       List<String> data = payload.split(",");
       int length = data.length;
-      dynamic isThatGroupChat = length > 3 ? data[3] : false;
-      if (isThatGroupChat) {
+      dynamic userCallingId = length > 2 ? data[2] : "";
+      if (userCallingId != "") {
         final videoDetails = await _videoCallLocalNotifications
             .getNotificationAppLaunchDetails();
         if (videoDetails != null && videoDetails.didNotificationLaunchApp) {
-          _onSelectNotification(context, videoDetails.payload);
+          await _onSelectNotification(context, videoDetails.payload);
         }
       } else {
-        _onSelectNotification(context, payload);
+        await _onSelectNotification(context, payload);
       }
     }
   }
