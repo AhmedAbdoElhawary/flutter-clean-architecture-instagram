@@ -52,6 +52,12 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
     * Text
     * Image (gallery & camera)
     * Voice
+    
+#### New features
+* Push Notificaitons
+* Calling video in chat
+* Send post to chats
+
 ## SnapShots
 
 ### |--------- Login page ----------|----------- Stories ------------|---------- List of posts ------- |
@@ -168,9 +174,9 @@ $ cd flutter-clean-architecture-instagram/
  
 
 ## What's Next?
- - [ ] Notifications for likes, comments, follows, etc
+ - [x] Notifications for likes, comments, follows, etc
  - [ ] Caching of Profiles, Images, Etc.
- - [ ] Calling video and voice in chat
+ - [x] Calling video and voice in chat
  - [ ] Add stickers on chat
  - [x] Send posts to chats
  - [x] control in the dimension of selected image & video from the gallery
@@ -182,9 +188,9 @@ $ cd flutter-clean-architecture-instagram/
  - [ ] Turn off commenting on a post
  - [ ] Hide Like count of a post
  - [ ] Archive a post
- - [ ] share post
+ - [x] share post
  - [ ] Live support
- - [ ] Make like, comment, and share of animation container post touchy when long pressed on post
+ - [x] Make like, comment, and share of animation container post touchy when long pressed on post
  - [ ] Create store screens
  - [ ] Make it stable for web & desktop
  - [ ] Clean-up more code
