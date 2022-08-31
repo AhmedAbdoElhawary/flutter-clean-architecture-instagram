@@ -9,7 +9,6 @@ class PlayThisVideo extends StatefulWidget {
   final bool play;
   final bool withoutSound;
   final bool showImageCover;
-
   const PlayThisVideo({
     Key? key,
     required this.videoInfo,
@@ -47,18 +46,14 @@ class PlayThisVideoState extends State<PlayThisVideo> {
 
   @override
   void didUpdateWidget(PlayThisVideo oldWidget) {
-    if (oldWidget.play != widget.play) {
-      if (widget.play) {
-        _controller.play();
-        _controller.setLooping(true);
-        setState(() {
-          if (widget.withoutSound) {
-            _controller.setVolume(0);
-          }
-        });
-      } else {
-        _controller.pause();
-      }
+    if (widget.play) {
+      _controller.play();
+      _controller.setLooping(true);
+      setState(() {
+        if (widget.withoutSound) _controller.setVolume(0);
+      });
+    } else {
+      _controller.pause();
     }
     if (widget.withoutSound) {
       _controller.setVolume(0);
@@ -77,14 +72,11 @@ class PlayThisVideoState extends State<PlayThisVideo> {
   @override
   Widget build(BuildContext context) {
     if (widget.videoInfo.coverOfVideoUrl.isNotEmpty && widget.showImageCover) {
-      return AspectRatio(
-        aspectRatio: 0.65,
-        child: NetworkImageDisplay(
-          cachingWidth: 238,
-          cachingHeight: 430,
-          blurHash: widget.videoInfo.blurHash,
-          imageUrl: widget.videoInfo.coverOfVideoUrl,
-        ),
+      return NetworkImageDisplay(
+        cachingWidth: 238,
+        cachingHeight: 430,
+        blurHash: widget.videoInfo.blurHash,
+        imageUrl: widget.videoInfo.coverOfVideoUrl,
       );
     } else {
       return FutureBuilder(
