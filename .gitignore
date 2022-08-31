@@ -24,7 +24,7 @@ migrate_working_dir/
 # Flutter/Dart/Pub related
 /web/index.html
 *lib/core/utility/private_keys.
-
+/lib/firebase_options.dart
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
