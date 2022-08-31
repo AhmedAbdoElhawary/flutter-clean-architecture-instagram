@@ -30,7 +30,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       {required String userId, bool getDeviceToken = false}) async {
     try {
       UserPersonalInfo myPersonalInfo = await FirestoreUser.getUserInfo(userId);
-      if (getDeviceToken) {
+      if (isThatMobile && getDeviceToken) {
         UserPersonalInfo updateInfo =
             await FirestoreNotification.createNewDeviceToken(
                 userId: userId, myPersonalInfo: myPersonalInfo);
