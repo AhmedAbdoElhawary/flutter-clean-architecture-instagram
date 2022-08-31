@@ -80,9 +80,9 @@ dependencies:
 
   ## My package
   #  custom_gallery_display: ^0.3.8
-    custom_gallery_display:
-      git:
-        url: https://github.com/AhmedAbdoElhawary/custom_gallery_display.git
+  custom_gallery_display:
+    git:
+      url: https://github.com/AhmedAbdoElhawary/custom_gallery_display.git
 #  custom_gallery_display:
 #    path: D:\day_8_6\custom_gallery_display
 

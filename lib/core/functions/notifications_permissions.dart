@@ -22,7 +22,9 @@ late FlutterLocalNotificationsPlugin _videoCallLocalNotifications;
 late AndroidNotificationChannel _videoCallChannel;
 Future<void> notificationPermissions(BuildContext context) async {
   await _requestPermission();
+  // ignore: use_build_context_synchronously
   await _listenFCM(context);
+  // ignore: use_build_context_synchronously
   await _loadFCM(context);
 }
 
@@ -119,6 +121,7 @@ Future<void> _pushToPage(
     );
   }
 
+  // ignore: use_build_context_synchronously
   await pushToPage(context, page: page);
 }
 
@@ -175,6 +178,7 @@ Future<void> _loadFCM(BuildContext context) async {
       onSelectNotification: (p) => _onSelectNotification(context, p));
 
   /// When app is close
+  // ignore: use_build_context_synchronously
   await _detailsWhenAppClose(context);
 }
 
@@ -191,9 +195,11 @@ Future<void> _detailsWhenAppClose(BuildContext context) async {
         final videoDetails = await _videoCallLocalNotifications
             .getNotificationAppLaunchDetails();
         if (videoDetails != null && videoDetails.didNotificationLaunchApp) {
+          // ignore: use_build_context_synchronously
           await _onSelectNotification(context, videoDetails.payload);
         }
       } else {
+        // ignore: use_build_context_synchronously
         await _onSelectNotification(context, payload);
       }
     }

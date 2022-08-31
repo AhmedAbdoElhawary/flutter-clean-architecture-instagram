@@ -22,9 +22,12 @@ migrate_working_dir/
 #.vscode/
 
 # Flutter/Dart/Pub related
-/web/index.html
-*lib/core/utility/private_keys.
-
+lib/presentation/widgets/global/try
+ios/firebase_app_id_file.json
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+*lib/core/utility/private_keys.dart
+/lib/firebase_options.dart
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
