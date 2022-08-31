@@ -18,7 +18,7 @@ class CallingRoomsRepoImpl implements CallingRoomsRepository {
           initialNumberOfUsers: callThoseUsersInfo.length + 1);
 
       List<bool> isUsersAvailable = await FirestoreUser.updateChannelId(
-          callThoseUsersIds: callThoseUsersInfo,
+          callThoseUsers: callThoseUsersInfo,
           channelId: channelId,
           myPersonalId: myPersonalInfo.userId);
       bool isAnyOneAvailable = false;
