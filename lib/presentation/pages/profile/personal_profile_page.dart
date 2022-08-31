@@ -363,22 +363,23 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   }
 
   Widget createStory() {
+
     return InkWell(
-        onTap: () async => createNewStory(),
+        onTap: () async => createNewStory(true),
         child: createSizedBox(StringsManager.story.tr,
             nameOfPath: IconsAssets.addInstagramStoryIcon));
   }
 
   Widget createVideo() {
     return InkWell(
-        onTap: () async => createNewPost(),
+        onTap: () async => createNewStory(false),
         child: createSizedBox(StringsManager.reel.tr,
             nameOfPath: IconsAssets.videoIcon));
   }
 
-  createNewStory() async {
+  createNewStory(bool isThatStory) async {
     Navigator.maybePop(context);
-    pushToPage(context, page: const CreateNewStory());
+    pushToPage(context, page: CreateNewStory(isThatStory: isThatStory));
 
     rebuildUserInfo.value = true;
   }
