@@ -24,6 +24,8 @@ class VideoCallPage extends StatelessWidget {
       backgroundColor: ColorManager.lowOpacityGrey,
       body: SafeArea(
         child: BlocBuilder<CallingRoomsCubit, CallingRoomsState>(
+          buildWhen: (previous, current) =>
+              previous != current && current is CallingRoomsLoaded,
           bloc: CallingRoomsCubit.get(context)
             ..createCallingRoom(
                 myPersonalInfo: myPersonalInfo, callThoseUsersInfo: usersInfo),
