@@ -75,10 +75,15 @@ class StoryPageForWebState extends State<StoryPageForWeb> {
           const SizedBox(width: 10),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-              child: ScrollSnapList(
+      body: buildColumn(widthOfStory, heightOfStory),
+    );
+  }
+
+  Column buildColumn(double widthOfStory, double heightOfStory) {
+    return Column(
+      children: [
+        Expanded(
+          child: ScrollSnapList(
             itemBuilder: (_, index) {
               if (index == widget.storiesOwnersInfo.length) {
                 return const Center(
@@ -127,9 +132,9 @@ class StoryPageForWebState extends State<StoryPageForWeb> {
               }
             },
             itemCount: widget.storiesOwnersInfo.length,
-          )),
-        ],
-      ),
+          ),
+        ),
+      ],
     );
   }
 }
