@@ -32,7 +32,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circ
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memory_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
-
+/// It's not clean enough
 class ChatMessages extends StatefulWidget {
   final SenderInfo messageDetails;
   const ChatMessages({Key? key, required this.messageDetails})
@@ -54,6 +54,8 @@ class _ChatMessagesState extends State<ChatMessages>
   final isMessageLoaded = ValueNotifier(false);
   final appearIcons = ValueNotifier(true);
   final unSend = ValueNotifier(false);
+  final reLoad = ValueNotifier(false);
+
   final records = ValueNotifier('');
   late AnimationController _colorAnimationController;
   late Animation _colorTween;
@@ -109,12 +111,50 @@ class _ChatMessagesState extends State<ChatMessages>
         widget.messageDetails.lastMessage!.chatOfGroupId.isEmpty) {
       return buildMessages(context, []);
     } else {
-      return BlocBuilder<MessageBloc, MessageBlocState>(
+      return ValueListenableBuilder(
+        valueListenable: reLoad,
+        builder: (context, bool reLoadValue, child) =>
+            BlocBuilder<MessageBloc, MessageBlocState>(
+          bloc: BlocProvider.of<MessageBloc>(context)
+            ..add(LoadMessagesForGroupChat(
+                groupChatUid:
+                    widget.messageDetails.lastMessage!.chatOfGroupId)),
+          buildWhen: (previous, current) {
+            if (reLoadValue) {
+              reLoad.value = false;
+              return true;
+            }
+            return previous != current && (current is MessageBlocLoaded);
+          },
+          builder: (context, state) {
+            if (state is MessageBlocLoaded) {
+              return buildMessages(context, state.messages);
+            } else {
+              return isThatMobile
+                  ? buildCircularProgress()
+                  : const ThineLinearProgress();
+            }
+          },
+        ),
+      );
+    }
+  }
+
+  Widget buildSingleChat(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: reLoad,
+      builder: (context, bool reLoadValue, child) =>
+          BlocBuilder<MessageBloc, MessageBlocState>(
         bloc: BlocProvider.of<MessageBloc>(context)
-          ..add(LoadMessagesForGroupChat(
-              groupChatUid: widget.messageDetails.lastMessage!.chatOfGroupId)),
-        buildWhen: (previous, current) =>
-            previous != current && (current is MessageBlocLoaded),
+          ..add(LoadMessagesForSingleChat(
+              widget.messageDetails.receiversInfo![0].userId)),
+        buildWhen: (previous, current) {
+          if (reLoadValue) {
+            reLoad.value = false;
+            return true;
+          }
+          return previous != current && (current is MessageBlocLoaded);
+        },
         builder: (context, state) {
           if (state is MessageBlocLoaded) {
             return buildMessages(context, state.messages);
@@ -124,26 +164,8 @@ class _ChatMessagesState extends State<ChatMessages>
                 : const ThineLinearProgress();
           }
         },
-      );
-    }
-  }
-
-  Widget buildSingleChat(BuildContext context) {
-    return BlocBuilder<MessageBloc, MessageBlocState>(
-        bloc: BlocProvider.of<MessageBloc>(context)
-          ..add(LoadMessagesForSingleChat(
-              widget.messageDetails.receiversInfo![0].userId)),
-        buildWhen: (previous, current) =>
-            previous != current && (current is MessageBlocLoaded),
-        builder: (context, state) {
-          if (state is MessageBlocLoaded) {
-            return buildMessages(context, state.messages);
-          } else {
-            return isThatMobile
-                ? buildCircularProgress()
-                : const ThineLinearProgress();
-          }
-        });
+      ),
+    );
   }
 
   Widget buildMessages(BuildContext context, List<Message> messages) {
@@ -373,7 +395,7 @@ class _ChatMessagesState extends State<ChatMessages>
       indexOfUserInfo = widget.messageDetails.receiversIds
               ?.indexOf(senderIdForProfileImage) ??
           0;
-      indexOfUserInfo=indexOfUserInfo==-1?0:indexOfUserInfo;
+      indexOfUserInfo = indexOfUserInfo == -1 ? 0 : indexOfUserInfo;
     }
     return Visibility(
       visible: createProfileImage,
@@ -671,38 +693,43 @@ class _ChatMessagesState extends State<ChatMessages>
                     padding:
                         const EdgeInsetsDirectional.only(start: 80, end: 80),
                     child: Row(
-                        mainAxisAlignment: isThatMe
-                            ? MainAxisAlignment.spaceBetween
-                            : MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(StringsManager.reply.tr,
+                      mainAxisAlignment: isThatMe
+                          ? MainAxisAlignment.spaceBetween
+                          : MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(StringsManager.reply.tr,
+                            style: getBoldStyle(
+                                color: Theme.of(context).focusColor,
+                                fontSize: 15)),
+                        if (isThatMe)
+                          GestureDetector(
+                            onTap: () async {
+                              Message? deleteMessage = deleteThisMessage.value;
+                              if (deleteMessage != null) {
+                                isDeleteMessageDone.value = true;
+                                Message? replacedMessage;
+                                if (globalMessagesInfo.value.last.messageUid ==
+                                    deleteMessage.messageUid) {
+                                  replacedMessage = globalMessagesInfo.value[
+                                      globalMessagesInfo.value.length - 2];
+                                }
+                                await MessageCubit.get(context).deleteMessage(
+                                    messageInfo: deleteMessage,
+                                    replacedMessage: replacedMessage);
+                                globalMessagesInfo.value.remove(deleteMessage);
+                                reLoad.value = true;
+                              }
+                            },
+                            child: Text(
+                              StringsManager.unSend.tr,
                               style: getBoldStyle(
                                   color: Theme.of(context).focusColor,
-                                  fontSize: 15)),
-                          if (isThatMe)
-                            GestureDetector(
-                                onTap: () async {
-                                  if (deleteThisMessage.value != null) {
-                                    isDeleteMessageDone.value = true;
-                                    Message? replacedMessage;
-                                    if (globalMessagesInfo
-                                            .value.last.messageUid ==
-                                        deleteThisMessage.value!.messageUid) {
-                                      replacedMessage = globalMessagesInfo
-                                              .value[
-                                          globalMessagesInfo.value.length - 2];
-                                    }
-                                    MessageCubit.get(context).deleteMessage(
-                                        messageInfo: deleteThisMessage.value!,
-                                        replacedMessage: replacedMessage);
-                                  }
-                                },
-                                child: Text(StringsManager.unSend.tr,
-                                    style: getBoldStyle(
-                                        color: Theme.of(context).focusColor,
-                                        fontSize: 15))),
-                        ]),
+                                  fontSize: 15),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 );
               },
