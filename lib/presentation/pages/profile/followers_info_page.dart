@@ -6,7 +6,6 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/core/utility/define_function.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/show_me_the_users.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
@@ -16,7 +15,7 @@ import '../../cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 class FollowersInfoPage extends StatefulWidget {
   final ValueNotifier<UserPersonalInfo> userInfo;
   final int initialIndex;
-  final UpdateFollowersCallback updateFollowersCallback;
+  final VoidCallback updateFollowersCallback;
   const FollowersInfoPage({
     Key? key,
     required this.userInfo,
@@ -112,7 +111,7 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
 class _TapBarView extends StatelessWidget {
   final CubitFollowersAndFollowingsLoaded state;
   final ValueNotifier<UserPersonalInfo> userInfo;
-  final UpdateFollowersCallback updateCallback;
+  final VoidCallback updateCallback;
   const _TapBarView({
     Key? key,
     required this.userInfo,
@@ -132,7 +131,6 @@ class _TapBarView extends StatelessWidget {
             emptyText: StringsManager.noFollowers.tr,
             isThatMyPersonalId: isThatMyPersonalId,
             updateFollowedCallback: updateCallback,
-            // updateFollowedCallback: updateFollowedCallback,
           ),
         ),
         SingleChildScrollView(

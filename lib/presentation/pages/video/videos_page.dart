@@ -12,6 +12,8 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
@@ -39,6 +41,13 @@ class VideosPage extends StatefulWidget {
 class VideosPageState extends State<VideosPage> {
   ValueNotifier<Uint8List?> videoFile = ValueNotifier(null);
   ValueNotifier<bool> rebuildUserInfo = ValueNotifier(false);
+  @override
+  void dispose() {
+    videoFile.dispose();
+    rebuildUserInfo.dispose();
+    widget.stopVideo.value = false;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,13 +111,16 @@ class VideosPageState extends State<VideosPage> {
                 );
                 Uint8List convertVideo = await video.readAsBytes();
                 if (!mounted) return;
-                pushToPage(context,
-                    page: CreatePostPage(
-                      aspectRatio: 1,
-                      multiSelectedFiles: [convertVideo],
-                      isThatImage: false,
-                      coverOfVideoBytes: convertImage,
-                    ));
+                pushToPage(
+                  context,
+                  page: CreatePostPage(
+                    aspectRatio: 1,
+                    multiSelectedFiles: [convertVideo],
+                    isThatImage: false,
+                    coverOfVideoBytes: convertImage,
+                  ),
+                );
+                widget.stopVideo.value = false;
               }
             },
             icon: const Icon(Icons.camera_alt,
@@ -191,8 +203,6 @@ class _HorizontalButtons extends StatefulWidget {
 }
 
 class _HorizontalButtonsState extends State<_HorizontalButtons> {
-  ValueNotifier<bool?> isFollowed = ValueNotifier(null);
-
   @override
   Widget build(BuildContext context) {
     return horizontalWidgets();
@@ -258,48 +268,63 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
     widget.stopVideo.value = false;
   }
 
-  Widget followButton(UserPersonalInfo personalInfo) {
-    return ValueListenableBuilder(
-      valueListenable: isFollowed,
-      builder: (context, bool? isFollowedValue, child) => GestureDetector(
-          onTap: () async {
-            if (personalInfo.followerPeople.contains(myPersonalId) ||
-                isFollowedValue == null ||
-                isFollowedValue == true) {
-              await BlocProvider.of<FollowCubit>(context).unFollowThisUser(
-                  followingUserId: personalInfo.userId,
-                  myPersonalId: myPersonalId);
-              isFollowed.value = false;
+  Widget followButton(UserPersonalInfo userInfo) {
+    return BlocBuilder<FollowCubit, FollowState>(
+      builder: (followContext, stateOfFollow) {
+        return Builder(
+          builder: (userContext) {
+            UserPersonalInfo myPersonalInfo =
+                UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
+
+            if (myPersonalId == userInfo.userId) {
+              return Container();
             } else {
-              await BlocProvider.of<FollowCubit>(context).followThisUser(
-                  followingUserId: personalInfo.userId,
-                  myPersonalId: myPersonalId);
-              isFollowed.value = true;
+              return GestureDetector(
+                  onTap: () async {
+                    if (myPersonalInfo.followedPeople
+                        .contains(userInfo.userId)) {
+                      await BlocProvider.of<FollowCubit>(followContext)
+                          .unFollowThisUser(
+                              followingUserId: userInfo.userId,
+                              myPersonalId: myPersonalId);
+                      if (!mounted) return;
+                      BlocProvider.of<UserInfoCubit>(context)
+                          .updateMyFollowings(
+                              userId: userInfo.userId, addThisUser: false);
+                    } else {
+                      await BlocProvider.of<FollowCubit>(followContext)
+                          .followThisUser(
+                              followingUserId: userInfo.userId,
+                              myPersonalId: myPersonalId);
+                      if (!mounted) return;
+
+                      BlocProvider.of<UserInfoCubit>(context)
+                          .updateMyFollowings(userId: userInfo.userId);
+                    }
+                  },
+                  child: followText(userInfo, myPersonalInfo));
             }
-            setState(() {});
           },
-          child: followText(personalInfo)),
+        );
+      },
     );
   }
 
-  Container followText(UserPersonalInfo personalInfo) {
+  Container followText(
+      UserPersonalInfo userInfo, UserPersonalInfo myPersonalInfo) {
     return Container(
-        padding: const EdgeInsetsDirectional.only(
-            start: 5, end: 5, bottom: 2, top: 2),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(color: ColorManager.white, width: 1)),
-        child: ValueListenableBuilder(
-          valueListenable: isFollowed,
-          builder: (context, bool? isFollowedValue, child) => Text(
-            (isFollowedValue == null &&
-                        personalInfo.followerPeople.contains(myPersonalId)) ||
-                    (isFollowedValue != null && isFollowedValue)
-                ? StringsManager.following.tr
-                : StringsManager.follow.tr,
-            style: const TextStyle(color: ColorManager.white),
-          ),
-        ));
+      padding:
+          const EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 2, top: 2),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(color: ColorManager.white, width: 1)),
+      child: Text(
+        myPersonalInfo.followedPeople.contains(userInfo.userId)
+            ? StringsManager.following.tr
+            : StringsManager.follow.tr,
+        style: const TextStyle(color: ColorManager.white),
+      ),
+    );
   }
 }
 

@@ -278,7 +278,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             reLoadData.value = false;
             return true;
           }
-
+          if (value) {
+            reLoadData.value = false;
+            return true;
+          }
           if (previous != current && current is CubitStoriesInfoLoaded) {
             return true;
           }

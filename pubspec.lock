@@ -270,11 +270,9 @@ packages:
   custom_gallery_display:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "239cdc6b31e188cd9792fa6cf5e60a227a0f28f4"
-      url: "https://github.com/AhmedAbdoElhawary/custom_gallery_display.git"
-    source: git
+      path: "D:\\hereeeeeeeeeeeeeeeeeeeeee\\day_8_6\\custom_gallery_display"
+      relative: false
+    source: path
     version: "0.3.9"
   dbus:
     dependency: transitive
@@ -441,7 +439,7 @@ packages:
       name: flutter_image_compress
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.2"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -610,7 +608,7 @@ packages:
       name: image_picker_ios
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.5+6"
+    version: "0.8.6"
   image_picker_platform_interface:
     dependency: transitive
     description:
