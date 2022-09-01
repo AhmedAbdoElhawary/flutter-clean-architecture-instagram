@@ -125,7 +125,7 @@ class _PopupSharePostState extends State<PopupSharePost> {
     );
   }
 
-  // I didn't use the normal way of divider because the height of divider was changing when moving your mouse on it.
+  /// I didn't use the normal way of divider because the height of divider was changing when moving your mouse on it.
 
   Container customDivider({required Widget child, bool bottomDivider = true}) {
     return Container(
