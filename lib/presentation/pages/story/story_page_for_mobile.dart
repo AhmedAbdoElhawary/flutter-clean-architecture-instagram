@@ -12,6 +12,7 @@ import 'package:instagram/presentation/customPackages/story_view/story_controlle
 import 'package:instagram/presentation/customPackages/story_view/story_view.dart';
 import 'package:instagram/presentation/customPackages/story_view/utils.dart';
 import 'package:instagram/presentation/widgets/belong_to/story_w/story_swipe.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StoryPageForMobile extends StatefulWidget {
@@ -358,10 +359,13 @@ class ProfileWidget extends StatelessWidget {
         ),
       );
 
-  CircleAvatar buildCircleAvatar() {
-    return CircleAvatar(
-      radius: 24,
-      backgroundImage: NetworkImage(user.profileImageUrl),
+  Widget buildCircleAvatar() {
+    return CircleAvatarOfProfileImage(
+      bodyHeight: 500,
+      userInfo: user,
+      showColorfulCircle: false,
+      disablePressed: true,
     );
+
   }
 }
