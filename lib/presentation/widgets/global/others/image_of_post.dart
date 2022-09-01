@@ -47,6 +47,7 @@ class ImageOfPost extends StatefulWidget {
   final int indexOfPost;
   final ValueNotifier<List<Post>> postsInfo;
   final VoidCallback? rebuildPreviousWidget;
+
   final bool popupWebContainer;
   final bool showSliderArrow;
   final ValueNotifier<TextEditingController> textController;
