@@ -285,7 +285,7 @@ class _ChatMessagesState extends State<ChatMessages>
     } else {
       checkForSenderNameInGroup = false;
     }
-    if (senderIdForProfileImage.isEmpty) {
+    if (senderIdForProfileImage.isEmpty && !isThatMe) {
       senderIdForProfileImage = messageInfo.senderId;
     }
     int i = index + 1 < messagesInfo.length ? index + 1 : index;
@@ -317,7 +317,8 @@ class _ChatMessagesState extends State<ChatMessages>
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             if (!isThatMe) ...[
-              buildProfileImage(createProfileImage),
+              buildProfileImage(
+                  createProfileImage && senderIdForProfileImage.isNotEmpty),
             ],
             const SizedBox(width: 10),
             if (isThatMe) const SizedBox(width: 100),
@@ -372,6 +373,7 @@ class _ChatMessagesState extends State<ChatMessages>
       indexOfUserInfo = widget.messageDetails.receiversIds
               ?.indexOf(senderIdForProfileImage) ??
           0;
+      indexOfUserInfo=indexOfUserInfo==-1?0:indexOfUserInfo;
     }
     return Visibility(
       visible: createProfileImage,
