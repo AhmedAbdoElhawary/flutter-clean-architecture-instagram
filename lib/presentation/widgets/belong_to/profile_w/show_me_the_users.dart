@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
-import 'package:instagram/core/utility/define_function.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import '../../../cubit/follow/follow_cubit.dart';
 import '../../global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/core/utility/constant.dart';
@@ -19,7 +19,7 @@ class ShowMeTheUsers extends StatefulWidget {
   final bool showColorfulCircle;
   final String emptyText;
   final bool isThatMyPersonalId;
-  final UpdateFollowersCallback? updateFollowedCallback;
+  final VoidCallback? updateFollowedCallback;
 
   const ShowMeTheUsers({
     Key? key,
@@ -36,12 +36,7 @@ class ShowMeTheUsers extends StatefulWidget {
 }
 
 class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
-  late UserPersonalInfo myPersonalInfo;
-  @override
-  initState() {
-    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -115,17 +110,19 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
             ),
           ),
           // const Spacer(),
-          followButton(userInfo, isThatFollower),
+          followButton(userInfo),
         ]),
       ),
     );
   }
 
-  Widget followButton(UserPersonalInfo userInfo, bool isThatFollower) {
+  Widget followButton(UserPersonalInfo userInfo) {
     return BlocBuilder<FollowCubit, FollowState>(
       builder: (followContext, stateOfFollow) {
         return Builder(
           builder: (userContext) {
+            UserPersonalInfo myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
+
             if (myPersonalId == userInfo.userId) {
               return Container();
             } else {
@@ -133,29 +130,27 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
                   onTap: () async {
                     if (myPersonalInfo.followedPeople
                         .contains(userInfo.userId)) {
-                      BlocProvider.of<FollowCubit>(followContext)
+                      await BlocProvider.of<FollowCubit>(followContext)
                           .unFollowThisUser(
                               followingUserId: userInfo.userId,
                               myPersonalId: myPersonalId);
+                      if (!mounted) return;
                       BlocProvider.of<UserInfoCubit>(context)
                           .updateMyFollowings(
                               userId: userInfo.userId, addThisUser: false);
-                      if (widget.updateFollowedCallback != null) {
-                        widget.updateFollowedCallback!(false, userInfo.userId);
-                      }
                     } else {
-                      BlocProvider.of<FollowCubit>(followContext)
+                      await BlocProvider.of<FollowCubit>(followContext)
                           .followThisUser(
                               followingUserId: userInfo.userId,
                               myPersonalId: myPersonalId);
+                      if (!mounted) return;
+
                       BlocProvider.of<UserInfoCubit>(context)
                           .updateMyFollowings(userId: userInfo.userId);
-                      if (widget.updateFollowedCallback != null) {
-                        widget.updateFollowedCallback!(true, userInfo.userId);
-                      }
+
                     }
                   },
-                  child: whichContainerOfText(stateOfFollow, userInfo));
+                  child: whichContainerOfText(stateOfFollow, userInfo,myPersonalInfo));
             }
           },
         );
@@ -164,7 +159,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
   }
 
   Widget whichContainerOfText(
-      FollowState stateOfFollow, UserPersonalInfo userInfo) {
+      FollowState stateOfFollow, UserPersonalInfo userInfo, UserPersonalInfo myPersonalInfo) {
     if (stateOfFollow is CubitFollowThisUserFailed) {
       ToastShow.toastStateError(stateOfFollow);
     }
