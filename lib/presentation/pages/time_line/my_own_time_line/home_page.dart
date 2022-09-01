@@ -102,10 +102,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
 
-    return Scaffold(
-      appBar: isThatMobile ? CustomAppBar.basicAppBar(context) : null,
-      body: Center(
-        child: blocBuilder(bodyHeight),
+    return SafeArea(
+      child: Scaffold(
+        appBar: isThatMobile ? CustomAppBar.basicAppBar(context) : null,
+        body: Center(
+          child: blocBuilder(bodyHeight),
+        ),
       ),
     );
   }
