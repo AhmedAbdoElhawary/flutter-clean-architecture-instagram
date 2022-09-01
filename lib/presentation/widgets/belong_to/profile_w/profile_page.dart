@@ -422,12 +422,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  updateUserInfo(bool isThatAdding, dynamic userId) {
-    if (isThatAdding) {
-      widget.userInfo.value.followedPeople.add(userId);
-    } else {
-      widget.userInfo.value.followedPeople.remove(userId);
-    }
+  updateUserInfo() {
+    reBuild.value = true;
   }
 
   Widget personalNumbersInfo(List<dynamic> usersIds, UserPersonalInfo userInfo,
