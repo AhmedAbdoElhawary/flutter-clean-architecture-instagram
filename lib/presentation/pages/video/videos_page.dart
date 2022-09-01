@@ -13,7 +13,6 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
@@ -43,9 +42,9 @@ class VideosPageState extends State<VideosPage> {
   ValueNotifier<bool> rebuildUserInfo = ValueNotifier(false);
   @override
   void dispose() {
+    widget.stopVideo.value = false;
     videoFile.dispose();
     rebuildUserInfo.dispose();
-    widget.stopVideo.value = false;
     super.dispose();
   }
 
@@ -101,6 +100,8 @@ class VideosPageState extends State<VideosPage> {
         actions: [
           IconButton(
             onPressed: () async {
+              widget.stopVideo.value = false;
+
               final XFile? pickedFile =
                   await ImagePicker().pickVideo(source: ImageSource.camera);
               if (pickedFile != null) {
@@ -111,7 +112,8 @@ class VideosPageState extends State<VideosPage> {
                 );
                 Uint8List convertVideo = await video.readAsBytes();
                 if (!mounted) return;
-                pushToPage(
+
+                await pushToPage(
                   context,
                   page: CreatePostPage(
                     aspectRatio: 1,
@@ -120,7 +122,7 @@ class VideosPageState extends State<VideosPage> {
                     coverOfVideoBytes: convertImage,
                   ),
                 );
-                widget.stopVideo.value = false;
+                widget.stopVideo.value = true;
               }
             },
             icon: const Icon(Icons.camera_alt,
@@ -261,11 +263,13 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
   }
 
   goToUserProfile(UserPersonalInfo personalInfo) async {
+    widget.stopVideo.value = false;
+
     await pushToPage(context,
         page: WhichProfilePage(
             userId: personalInfo.userId, userName: personalInfo.userName),
         withoutRoot: false);
-    widget.stopVideo.value = false;
+    widget.stopVideo.value = true;
   }
 
   Widget followButton(UserPersonalInfo userInfo) {
@@ -274,36 +278,29 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
         return Builder(
           builder: (userContext) {
             UserPersonalInfo myPersonalInfo =
-                UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
+                UserInfoCubit.getMyPersonalInfo(context);
+            return GestureDetector(
+                onTap: () async {
+                  if (myPersonalInfo.followedPeople.contains(userInfo.userId)) {
+                    await BlocProvider.of<FollowCubit>(followContext)
+                        .unFollowThisUser(
+                            followingUserId: userInfo.userId,
+                            myPersonalId: myPersonalId);
+                    if (!mounted) return;
+                    BlocProvider.of<UserInfoCubit>(context).updateMyFollowings(
+                        userId: userInfo.userId, addThisUser: false);
+                  } else {
+                    await BlocProvider.of<FollowCubit>(followContext)
+                        .followThisUser(
+                            followingUserId: userInfo.userId,
+                            myPersonalId: myPersonalId);
+                    if (!mounted) return;
 
-            if (myPersonalId == userInfo.userId) {
-              return Container();
-            } else {
-              return GestureDetector(
-                  onTap: () async {
-                    if (myPersonalInfo.followedPeople
-                        .contains(userInfo.userId)) {
-                      await BlocProvider.of<FollowCubit>(followContext)
-                          .unFollowThisUser(
-                              followingUserId: userInfo.userId,
-                              myPersonalId: myPersonalId);
-                      if (!mounted) return;
-                      BlocProvider.of<UserInfoCubit>(context)
-                          .updateMyFollowings(
-                              userId: userInfo.userId, addThisUser: false);
-                    } else {
-                      await BlocProvider.of<FollowCubit>(followContext)
-                          .followThisUser(
-                              followingUserId: userInfo.userId,
-                              myPersonalId: myPersonalId);
-                      if (!mounted) return;
-
-                      BlocProvider.of<UserInfoCubit>(context)
-                          .updateMyFollowings(userId: userInfo.userId);
-                    }
-                  },
-                  child: followText(userInfo, myPersonalInfo));
-            }
+                    BlocProvider.of<UserInfoCubit>(context)
+                        .updateMyFollowings(userId: userInfo.userId);
+                  }
+                },
+                child: followText(userInfo, myPersonalInfo));
           },
         );
       },
@@ -397,9 +394,10 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
   }
 
   goToCommentPage(Post videoInfo) async {
+    widget.stopVideo.value = false;
     await pushToPage(context,
         page: CommentsPageForMobile(postInfo: ValueNotifier(videoInfo)));
-    widget.stopVideo.value = false;
+    widget.stopVideo.value = true;
   }
 
   GestureDetector commentButton(Post videoInfo) {
@@ -416,6 +414,7 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
   Widget numberOfLikes(Post videoInfo) {
     return InkWell(
       onTap: () async {
+        widget.stopVideo.value = false;
         await pushToPage(context,
             page: UsersWhoLikesForMobile(
               showSearchBar: true,
@@ -423,8 +422,7 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
               isThatMyPersonalId: videoInfo.publisherId == myPersonalId,
             ),
             withoutRoot: false);
-
-        widget.stopVideo.value = false;
+        widget.stopVideo.value = true;
       },
       child: SizedBox(
         width: 30,
