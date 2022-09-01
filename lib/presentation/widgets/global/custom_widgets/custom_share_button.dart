@@ -57,11 +57,11 @@ class _CustomShareButtonState extends State<CustomShareButton> {
                     messageInfo: createCaptionMessage(selectedUser));
               }
             }
-            if (!mounted) return;
+            // if (!mounted) return;
 
-            Navigator.of(context).maybePop();
+            // ignore: use_build_context_synchronously
+            await Navigator.of(context).maybePop();
             widget.clearTexts(true);
-            isThatLoading.value = false;
           },
           child: buildDoneButton(),
         );
@@ -114,13 +114,13 @@ class _CustomShareButtonState extends State<CustomShareButton> {
         width: double.infinity,
         padding: const EdgeInsetsDirectional.only(start: 17, end: 17),
         decoration: BoxDecoration(
-          color: widget.selectedUsersInfo.isNotEmpty || isThatLoadingValue
+          color: isThatLoadingValue
               ? ColorManager.lightBlue
               : ColorManager.blue,
           borderRadius: BorderRadius.circular(5.0),
         ),
         child: Center(
-          child: isThatLoadingValue
+          child: !isThatLoadingValue
               ? Text(
                   widget.textOfButton,
                   style: const TextStyle(
