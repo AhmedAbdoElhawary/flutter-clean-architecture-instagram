@@ -211,16 +211,19 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
 
   @override
   Future<void> deleteMessage(
-      {required Message messageInfo, Message? replacedMessage}) async {
+      {required Message messageInfo,
+      Message? replacedMessage,
+      required bool isThatOnlyMessageInChat}) async {
     try {
       await FireStoreSingleChat.deleteMessage(
           userId: messageInfo.senderId,
           chatId: messageInfo.receiversIds[0],
           messageId: messageInfo.messageUid);
-      if (replacedMessage != null) {
+      if (replacedMessage != null||isThatOnlyMessageInChat) {
         await FireStoreSingleChat.updateLastMessage(
             userId: messageInfo.receiversIds[0],
             chatId: messageInfo.senderId,
+            isThatOnlyMessageInChat: isThatOnlyMessageInChat,
             message: replacedMessage);
       }
     } catch (e) {
