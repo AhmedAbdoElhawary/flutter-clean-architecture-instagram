@@ -18,7 +18,7 @@ import 'circle_avatar_name.dart';
 class CircleAvatarOfProfileImage extends StatefulWidget {
   final double bodyHeight;
   final bool thisForStoriesLine;
-  final UserPersonalInfo userInfo;
+  final UserPersonalInfo? userInfo;
   final String nameOfCircle;
   final String hashTag;
   final bool moveTextMore;
@@ -45,8 +45,8 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     with SingleTickerProviderStateMixin {
   @override
   void didChangeDependencies() {
-    if (widget.userInfo.profileImageUrl.isNotEmpty) {
-      precacheImage(NetworkImage(widget.userInfo.profileImageUrl), context);
+    if (widget.userInfo?.profileImageUrl.isNotEmpty ?? false) {
+      precacheImage(NetworkImage(widget.userInfo!.profileImageUrl), context);
     }
 
     super.didChangeDependencies();
@@ -63,7 +63,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
 
   @override
   Widget build(BuildContext context) {
-    String profileImage = widget.userInfo.profileImageUrl;
+    String? profileImage = widget.userInfo?.profileImageUrl;
     return SizedBox(
       child: widget.thisForStoriesLine
           ? buildColumn(profileImage, context)
@@ -71,7 +71,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     );
   }
 
-  Widget buildColumn(String profileImage, BuildContext context) {
+  Widget buildColumn(String? profileImage, BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -85,7 +85,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
               SizedBox(height: widget.bodyHeight * 0.015),
             NameOfCircleAvatar(
                 widget.nameOfCircle.isEmpty
-                    ? widget.userInfo.name
+                    ? widget.userInfo?.name??""
                     : widget.nameOfCircle,
                 widget.thisForStoriesLine),
           ]
@@ -97,49 +97,47 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
   onPressedImage(BuildContext context) async {
     if (!widget.showColorfulCircle) {
       await pushToPage(context,
-          page: WhichProfilePage(userId: widget.userInfo.userId));
-    } else {
-      if (widget.userInfo.stories.isNotEmpty) {
-        Widget page = BlocBuilder<StoryCubit, StoryState>(
-          bloc: StoryCubit.get(context)
-            ..getSpecificStoriesInfo(userInfo: widget.userInfo),
-          buildWhen: (previous, current) {
-            if (previous != current && current is SpecificStoriesInfoLoaded) {
-              return true;
-            }
-            if (previous != current && current is CubitStoryFailed) {
-              return true;
-            }
-            return false;
-          },
-          builder: (context, state) {
-            if (state is SpecificStoriesInfoLoaded) {
-              if (isThatMobile) {
-                return StoryPageForMobile(
-                    user: state.userInfo,
-                    hashTag: "${widget.hashTag} for mobile",
-                    storiesOwnersInfo: [state.userInfo]);
-              } else {
-                return StoryPageForWeb(
-                    user: state.userInfo,
-                    hashTag: "${widget.hashTag} for web",
-                    storiesOwnersInfo: [state.userInfo]);
-              }
+          page: WhichProfilePage(userId: widget.userInfo?.userId));
+    } else if (widget.userInfo?.stories.isNotEmpty ?? false) {
+      Widget page = BlocBuilder<StoryCubit, StoryState>(
+        bloc: StoryCubit.get(context)
+          ..getSpecificStoriesInfo(userInfo: widget.userInfo!),
+        buildWhen: (previous, current) {
+          if (previous != current && current is SpecificStoriesInfoLoaded) {
+            return true;
+          }
+          if (previous != current && current is CubitStoryFailed) {
+            return true;
+          }
+          return false;
+        },
+        builder: (context, state) {
+          if (state is SpecificStoriesInfoLoaded) {
+            if (isThatMobile) {
+              return StoryPageForMobile(
+                  user: state.userInfo,
+                  hashTag: "${widget.hashTag} for mobile",
+                  storiesOwnersInfo: [state.userInfo]);
             } else {
-              return Scaffold(
-                  body: Center(
-                child: CustomCircularProgress(Theme.of(context).focusColor),
-              ));
+              return StoryPageForWeb(
+                  user: state.userInfo,
+                  hashTag: "${widget.hashTag} for web",
+                  storiesOwnersInfo: [state.userInfo]);
             }
-          },
-        );
-        pushToPage(context, page: page);
-        setState(() {});
-      }
+          } else {
+            return Scaffold(
+                body: Center(
+              child: CustomCircularProgress(Theme.of(context).focusColor),
+            ));
+          }
+        },
+      );
+      pushToPage(context, page: page);
+      setState(() {});
     }
   }
 
-  Widget buildStack(String profileImage, BuildContext context) {
+  Widget buildStack(String? profileImage, BuildContext context) {
     return widget.thisForStoriesLine
         ? stackOfImage(profileImage)
         : GestureDetector(
@@ -149,9 +147,13 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
           );
   }
 
-  Stack stackOfImage(String profileImage) {
-    bool isStorySeen = _sharePrefs.getBool(widget.userInfo.userId) == true;
-    bool hasStory = widget.userInfo.stories.isNotEmpty;
+  Stack stackOfImage(String? profileImage) {
+    bool isStorySeen=false;
+    if(widget.userInfo!=null){
+      isStorySeen = _sharePrefs.getBool(widget.userInfo!.userId) == true;
+
+    }
+    bool hasStory = widget.userInfo?.stories.isNotEmpty??false;
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -182,15 +184,15 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     );
   }
 
-  Widget imageOfUser(String profileImage) {
+  Widget imageOfUser(String? profileImage) {
     return CircleAvatar(
       backgroundColor: ColorManager.customGrey,
-      backgroundImage: profileImage.isNotEmpty
-          ? CachedNetworkImageProvider(profileImage,
+      backgroundImage: profileImage?.isNotEmpty??false
+          ? CachedNetworkImageProvider(profileImage!,
               maxWidth: 165, maxHeight: 165)
           : null,
       radius: widget.bodyHeight * .046,
-      child: profileImage.isEmpty
+      child: profileImage?.isEmpty??true
           ? Icon(
               Icons.person,
               color: Theme.of(context).primaryColor,
