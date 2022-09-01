@@ -35,14 +35,19 @@ class FireStoreSingleChat {
   static Future<void> updateLastMessage({
     required String userId,
     required String chatId,
-    required Message message,
+    required Message? message,
+    required bool isThatOnlyMessageInChat,
   }) async {
     DocumentReference<Map<String, dynamic>> fireChatsCollection =
         _fireStoreUserCollection
             .doc(myPersonalId)
             .collection("chats")
             .doc(chatId != myPersonalId ? chatId : userId);
-    await fireChatsCollection.set(message.toMap());
+    if (message != null) {
+      Map<String, dynamic> toMap =
+          isThatOnlyMessageInChat ? {"": ""} : message.toMap();
+      await fireChatsCollection.set(toMap);
+    }
   }
 
   static Stream<List<Message>> getMessages({required String receiverId}) {
