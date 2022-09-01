@@ -42,9 +42,9 @@ class VideosPageState extends State<VideosPage> {
   ValueNotifier<bool> rebuildUserInfo = ValueNotifier(false);
   @override
   void dispose() {
-    widget.stopVideo.value = false;
-    videoFile.dispose();
-    rebuildUserInfo.dispose();
+    // widget.stopVideo.value = false;
+    // videoFile.dispose();
+    // rebuildUserInfo.dispose();
     super.dispose();
   }
 
