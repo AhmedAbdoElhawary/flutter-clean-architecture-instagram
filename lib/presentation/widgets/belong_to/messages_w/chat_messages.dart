@@ -32,6 +32,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circ
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memory_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
+
 /// It's not clean enough
 class ChatMessages extends StatefulWidget {
   final SenderInfo messageDetails;
@@ -706,18 +707,25 @@ class _ChatMessagesState extends State<ChatMessages>
                           GestureDetector(
                             onTap: () async {
                               Message? deleteMessage = deleteThisMessage.value;
+                              List<Message> globalMessages =
+                                  globalMessagesInfo.value;
+
                               if (deleteMessage != null) {
                                 isDeleteMessageDone.value = true;
                                 Message? replacedMessage;
-                                if (globalMessagesInfo.value.last.messageUid ==
+                                if (globalMessages.last.messageUid ==
                                     deleteMessage.messageUid) {
-                                  replacedMessage = globalMessagesInfo.value[
-                                      globalMessagesInfo.value.length - 2];
+                                  int length = globalMessages.length;
+                                  replacedMessage = length > 1
+                                      ? globalMessages[length - 2]
+                                      : null;
                                 }
                                 await MessageCubit.get(context).deleteMessage(
                                     messageInfo: deleteMessage,
-                                    replacedMessage: replacedMessage);
-                                globalMessagesInfo.value.remove(deleteMessage);
+                                    replacedMessage: replacedMessage,
+                                    isThatOnlyMessageInChat:
+                                        globalMessages.length <= 1);
+                                globalMessages.remove(deleteMessage);
                                 reLoad.value = true;
                               }
                             },
