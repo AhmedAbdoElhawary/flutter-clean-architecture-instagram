@@ -52,11 +52,17 @@ class MessageCubit extends Cubit<MessageState> {
     });
   }
 
-  Future<void> deleteMessage(
-      {required Message messageInfo, Message? replacedMessage}) async {
+  Future<void> deleteMessage({
+    required Message messageInfo,
+    Message? replacedMessage,
+    bool isThatOnlyMessageInChat = false,
+  }) async {
     emit(DeleteMessageLoading());
     await _deleteMessageUseCase
-        .call(paramsOne: messageInfo, paramsTwo: replacedMessage)
+        .call(
+            paramsOne: messageInfo,
+            paramsTwo: replacedMessage,
+            paramsThree: isThatOnlyMessageInChat)
         .then((_) {
       emit(DeleteMessageLoaded());
     }).catchError((e) {
