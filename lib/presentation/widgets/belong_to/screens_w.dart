@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 
-class PersonalImageIcon extends StatelessWidget {
-  const PersonalImageIcon({Key? key}) : super(key: key);
+class PersonalImageIcon extends StatefulWidget {
+ final UserPersonalInfo myPersonalInfo;
+
+  const PersonalImageIcon({Key? key,required this.myPersonalInfo}) : super(key: key);
 
   @override
+  State<PersonalImageIcon> createState() => _PersonalImageIconState();
+}
+
+class _PersonalImageIconState extends State<PersonalImageIcon> {
+  @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      UserPersonalInfo myPersonalInfo =
-          UserInfoCubit.getMyPersonalInfo(context);
-      String userImage = myPersonalInfo.profileImageUrl;
-      if (userImage.isNotEmpty) {
-        return CircleAvatarOfProfileImage(
-          disablePressed: true,
-          userInfo: myPersonalInfo,
-          bodyHeight: 300,
-          showColorfulCircle: false,
-        );
-      } else {
-        return CircleAvatar(
-            radius: 14,
-            backgroundColor: Theme.of(context).hintColor,
-            child: const Icon(Icons.person, color: ColorManager.white));
-      }
-    });
+    String userImage = widget.myPersonalInfo.profileImageUrl;
+    if (userImage.isNotEmpty) {
+      return CircleAvatarOfProfileImage(
+        disablePressed: true,
+        userInfo: widget.myPersonalInfo,
+        bodyHeight: 300,
+        showColorfulCircle: false,
+      );
+    } else {
+      return CircleAvatar(
+          radius: 14,
+          backgroundColor: Theme.of(context).hintColor,
+          child: const Icon(Icons.person, color: ColorManager.white));
+    }
   }
 }
