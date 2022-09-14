@@ -1,11 +1,10 @@
 import 'dart:math';
-import 'dart:typed_data';
-
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:instagram/core/functions/image_picker.dart';
+import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -14,6 +13,7 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
 
 import '../../../core/functions/toast_show.dart';
 import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -21,7 +21,6 @@ import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 // ignore: must_be_immutable
 class EditProfilePage extends StatefulWidget {
   UserPersonalInfo userInfo;
-  Uint8List? _photo;
   TextEditingController nameController = TextEditingController(text: "");
   TextEditingController userNameController = TextEditingController(text: "");
   final TextEditingController pronounsController =
@@ -37,7 +36,7 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  bool isImageUpload = true;
+  ValueNotifier<bool> isImageUpload = ValueNotifier(true);
   bool reBuild = false;
   bool userNameChanging = false;
   bool validateEdits = true;
@@ -53,7 +52,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context1) {
     return BlocBuilder<UserInfoCubit, UserInfoState>(
       buildWhen: (previous, current) {
         if (previous != current && (current is CubitMyPersonalInfoLoaded)) {
@@ -134,41 +133,48 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 scaleY: 1,
                 scaleX: 1.2,
                 child: const CustomCircularProgress(ColorManager.blue))
-            : IconButton(
-                onPressed: () async {
-                  reBuild = true;
-                  List<dynamic> charactersOfName = [];
-                  String name = widget.nameController.text.toLowerCase();
-                  for (int i = 0; i < name.length; i++) {
-                    charactersOfName =
-                        charactersOfName + [name.substring(0, i + 1)];
-                  }
-                  UserPersonalInfo updatedUserInfo = UserPersonalInfo(
-                    followerPeople: widget.userInfo.followerPeople,
-                    followedPeople: widget.userInfo.followedPeople,
-                    posts: widget.userInfo.posts,
-                    userName: widget.userNameController.text,
-                    name: widget.nameController.text,
-                    bio: widget.bioController.text,
-                    profileImageUrl: widget.userInfo.profileImageUrl,
-                    email: widget.userInfo.email,
-                    charactersOfName: charactersOfName,
-                    stories: widget.userInfo.stories,
-                    userId: widget.userInfo.userId,
-                    deviceToken: widget.userInfo.deviceToken,
-                    lastThreePostUrls: widget.userInfo.lastThreePostUrls,
-                    chatsOfGroups: widget.userInfo.chatsOfGroups,
-                  );
-                  await updateUserCubit
-                      .updateUserInfo(updatedUserInfo)
-                      .whenComplete(() {
-                    Future.delayed(Duration.zero, () {
-                      Navigator.of(context).maybePop(widget.userInfo);
-                      reBuild = false;
-                    });
-                  });
-                },
-                icon: checkIcon(false),
+            : ValueListenableBuilder(
+                valueListenable: isImageUpload,
+                builder: (context, bool isImageUploadValue, child) =>
+                    IconButton(
+                  onPressed: () async {
+                    if (isImageUploadValue) {
+                      reBuild = true;
+                      List<dynamic> charactersOfName = [];
+                      String name = widget.nameController.text.toLowerCase();
+                      for (int i = 0; i < name.length; i++) {
+                        charactersOfName =
+                            charactersOfName + [name.substring(0, i + 1)];
+                      }
+                      UserPersonalInfo updatedUserInfo = UserPersonalInfo(
+                        followerPeople: widget.userInfo.followerPeople,
+                        followedPeople: widget.userInfo.followedPeople,
+                        posts: widget.userInfo.posts,
+                        userName: widget.userNameController.text,
+                        name: widget.nameController.text,
+                        bio: widget.bioController.text,
+                        profileImageUrl: widget.userInfo.profileImageUrl,
+                        email: widget.userInfo.email,
+                        charactersOfName: charactersOfName,
+                        stories: widget.userInfo.stories,
+                        userId: widget.userInfo.userId,
+                        deviceToken: widget.userInfo.deviceToken,
+                        lastThreePostUrls: widget.userInfo.lastThreePostUrls,
+                        chatsOfGroups: widget.userInfo.chatsOfGroups,
+                      );
+                      await updateUserCubit
+                          .updateUserInfo(updatedUserInfo)
+                          .whenComplete(() {
+                        Future.delayed(Duration.zero, () {
+                          reBuild = false;
+
+                          Navigator.of(context).maybePop();
+                        });
+                      });
+                    }
+                  },
+                  icon: checkIcon(false),
+                ),
               )
       ] else ...[
         Padding(
@@ -191,13 +197,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
         padding: const EdgeInsetsDirectional.all(10),
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: textFieldsColumn(context, updateUserCubit),
+          child: textFieldsColumn(updateUserCubit),
         ),
       ),
     );
   }
 
-  Widget textFieldsColumn(BuildContext context, UserInfoCubit updateUserCubit) {
+  Widget textFieldsColumn(UserInfoCubit updateUserCubit) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -205,35 +211,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
         imageCircleAvatar(context),
         const SizedBox(height: 15),
         Center(
-            child: InkWell(
-          onTap: () async {
-            Uint8List? pickImage = await imageGalleryPicker();
-            if (pickImage != null) {
-              setState(() {
-                widget._photo = pickImage;
-                isImageUpload = false;
-              });
-
-              await updateUserCubit
-                  .uploadProfileImage(
-                      photo: widget._photo!,
-                      userId: widget.userInfo.userId,
-                      previousImageUrl: widget.userInfo.profileImageUrl)
-                  .whenComplete(() {
-                Future.delayed(Duration.zero, () {
-                  Navigator.of(context).maybePop(widget.userInfo);
-                  isImageUpload = true;
-                });
-              });
-            } else {
-              ToastShow.toast(StringsManager.noImageSelected.tr);
-            }
-          },
-          child: Text(
-            StringsManager.changeProfilePhoto.tr,
-            style: getNormalStyle(fontSize: 18, color: ColorManager.blue),
+          child: InkWell(
+            onTap: () async => onTapChangeImage(updateUserCubit),
+            child: Text(
+              StringsManager.changeProfilePhoto.tr,
+              style: getNormalStyle(fontSize: 18, color: ColorManager.blue),
+            ),
           ),
-        )),
+        ),
         textFormField(widget.nameController, StringsManager.name.tr),
         const SizedBox(height: 10),
         userNameTextField(context),
@@ -258,31 +243,65 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  BlocBuilder<SearchAboutUserBloc, SearchAboutUserState> userNameTextField(
-      BuildContext context) {
-    return BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
-      bloc: BlocProvider.of<SearchAboutUserBloc>(context)
-        ..add(FindSpecificUser(widget.userNameController.text,
-            searchForSingleLetter: true)),
-      buildWhen: (previous, current) =>
-          previous != current && (current is SearchAboutUserBlocLoaded),
-      builder: (context, state) {
-        List<UserPersonalInfo> usersWithSameUserName = [];
-        if (state is SearchAboutUserBlocLoaded) {
-          usersWithSameUserName = state.users;
-        }
-        bool isIExist = usersWithSameUserName.contains(widget.userInfo);
-        WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-              validateEdits = isIExist || usersWithSameUserName.isEmpty;
-              userNameChanging =
-                  widget.userNameController.text != widget.userInfo.userName;
-            }));
-        return userNameTextFormField(
-          widget.userNameController,
-          StringsManager.username.tr,
-          uniqueUserName: validateEdits,
-        );
-      },
+  onTapChangeImage(UserInfoCubit updateUserCubit) async {
+    SelectedImagesDetails? details = await pushToCustomGallery(context);
+    if (details == null) return;
+    isImageUpload.value = false;
+    Uint8List pickImage =
+        await (details.selectedFiles[0].selectedFile).readAsBytes();
+
+    await updateUserCubit.uploadProfileImage(
+        photo: pickImage,
+        userId: widget.userInfo.userId,
+        previousImageUrl: widget.userInfo.profileImageUrl);
+    isImageUpload.value = true;
+  }
+
+  static Future<SelectedImagesDetails?> pushToCustomGallery(
+      BuildContext context) async {
+    ImagePickerPlus picker = ImagePickerPlus(context);
+    SelectedImagesDetails? details = await picker.pickImage(
+      source: ImageSource.both,
+      galleryDisplaySettings: GalleryDisplaySettings(
+        showImagePreview: true,
+        cropImage: true,
+        tabsTexts: CustomImagePickerPlus.tapsNames(),
+        appTheme: CustomImagePickerPlus.appTheme(context),
+      ),
+    );
+    return details;
+  }
+
+  Widget userNameTextField(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: isImageUpload,
+      builder: (context, bool isImageUploadValue, child) =>
+          BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
+        bloc: BlocProvider.of<SearchAboutUserBloc>(context)
+          ..add(FindSpecificUser(widget.userNameController.text,
+              searchForSingleLetter: true)),
+        buildWhen: (previous, current) =>
+            previous != current &&
+            (current is SearchAboutUserBlocLoaded) &&
+            isImageUploadValue,
+        builder: (context, state) {
+          List<UserPersonalInfo> usersWithSameUserName = [];
+          if (state is SearchAboutUserBlocLoaded) {
+            usersWithSameUserName = state.users;
+          }
+          bool isIExist = usersWithSameUserName.contains(widget.userInfo);
+          WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+                validateEdits = isIExist || usersWithSameUserName.isEmpty;
+                userNameChanging =
+                    widget.userNameController.text != widget.userInfo.userName;
+              }));
+          return userNameTextFormField(
+            widget.userNameController,
+            StringsManager.username.tr,
+            uniqueUserName: validateEdits,
+          );
+        },
+      ),
     );
   }
 
@@ -331,26 +350,31 @@ class _EditProfilePageState extends State<EditProfilePage> {
         child: Stack(
       alignment: Alignment.bottomRight,
       children: [
-        studentCircleAvatarImage(),
+        userCircleAvatarImage(),
       ],
     ));
   }
 
-  Widget studentCircleAvatarImage() {
+  Widget userCircleAvatarImage() {
     bool hasUserPhoto = widget.userInfo.profileImageUrl.isNotEmpty;
+
     return GestureDetector(
-      child: CircleAvatar(
-        backgroundImage: isImageUpload && hasUserPhoto
-            ? NetworkImage(widget.userInfo.profileImageUrl)
-            : null,
-        radius: 50,
-        backgroundColor: Theme.of(context).focusColor,
-        child: ClipOval(
-            child: !isImageUpload
-                ? const ThineCircularProgress()
+      child: ValueListenableBuilder(
+        valueListenable: isImageUpload,
+        builder: (context, bool isImageUploadValue, child) => CircleAvatar(
+          backgroundImage: isImageUploadValue && hasUserPhoto
+              ? NetworkImage(widget.userInfo.profileImageUrl)
+              : null,
+          radius: 50,
+          backgroundColor: Theme.of(context).focusColor,
+          child: ClipOval(
+            child: !isImageUploadValue
+                ? const ThineCircularProgress(color: ColorManager.white)
                 : (!hasUserPhoto
                     ? Icon(Icons.person, color: Theme.of(context).primaryColor)
-                    : null)),
+                    : null),
+          ),
+        ),
       ),
     );
   }
