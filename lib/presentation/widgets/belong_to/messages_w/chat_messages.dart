@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
-import 'package:instagram/core/functions/image_picker.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -29,10 +29,13 @@ import 'package:instagram/presentation/widgets/belong_to/messages_w/chat_page_co
 import 'package:instagram/presentation/widgets/belong_to/messages_w/record_view.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memory_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
+import 'dart:math' as math; // import this
 
+/// It's not clean enough
 class ChatMessages extends StatefulWidget {
   final SenderInfo messageDetails;
   const ChatMessages({Key? key, required this.messageDetails})
@@ -54,6 +57,8 @@ class _ChatMessagesState extends State<ChatMessages>
   final isMessageLoaded = ValueNotifier(false);
   final appearIcons = ValueNotifier(true);
   final unSend = ValueNotifier(false);
+  final reLoad = ValueNotifier(false);
+
   final records = ValueNotifier('');
   late AnimationController _colorAnimationController;
   late Animation _colorTween;
@@ -109,12 +114,36 @@ class _ChatMessagesState extends State<ChatMessages>
         widget.messageDetails.lastMessage!.chatOfGroupId.isEmpty) {
       return buildMessages(context, []);
     } else {
-      return BlocBuilder<MessageBloc, MessageBlocState>(
+      return ValueListenableBuilder(
+        valueListenable: reLoad,
+        builder: (context, bool reLoadValue, child) =>
+            BlocBuilder<MessageBloc, MessageBlocState>(
+          bloc: BlocProvider.of<MessageBloc>(context)
+            ..add(LoadMessagesForGroupChat(
+                groupChatUid:
+                    widget.messageDetails.lastMessage!.chatOfGroupId)),
+          builder: (context, state) {
+            if (state is MessageBlocLoaded) {
+              return buildMessages(context, state.messages);
+            } else {
+              return isThatMobile
+                  ? buildCircularProgress()
+                  : const ThineLinearProgress();
+            }
+          },
+        ),
+      );
+    }
+  }
+
+  Widget buildSingleChat(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: reLoad,
+      builder: (context, bool reLoadValue, child) =>
+          BlocBuilder<MessageBloc, MessageBlocState>(
         bloc: BlocProvider.of<MessageBloc>(context)
-          ..add(LoadMessagesForGroupChat(
-              groupChatUid: widget.messageDetails.lastMessage!.chatOfGroupId)),
-        buildWhen: (previous, current) =>
-            previous != current && (current is MessageBlocLoaded),
+          ..add(LoadMessagesForSingleChat(
+              widget.messageDetails.receiversInfo![0].userId)),
         builder: (context, state) {
           if (state is MessageBlocLoaded) {
             return buildMessages(context, state.messages);
@@ -124,26 +153,8 @@ class _ChatMessagesState extends State<ChatMessages>
                 : const ThineLinearProgress();
           }
         },
-      );
-    }
-  }
-
-  Widget buildSingleChat(BuildContext context) {
-    return BlocBuilder<MessageBloc, MessageBlocState>(
-        bloc: BlocProvider.of<MessageBloc>(context)
-          ..add(LoadMessagesForSingleChat(
-              widget.messageDetails.receiversInfo![0].userId)),
-        buildWhen: (previous, current) =>
-            previous != current && (current is MessageBlocLoaded),
-        builder: (context, state) {
-          if (state is MessageBlocLoaded) {
-            return buildMessages(context, state.messages);
-          } else {
-            return isThatMobile
-                ? buildCircularProgress()
-                : const ThineLinearProgress();
-          }
-        });
+      ),
+    );
   }
 
   Widget buildMessages(BuildContext context, List<Message> messages) {
@@ -299,6 +310,7 @@ class _ChatMessagesState extends State<ChatMessages>
     }
     String theDate = DateOfNow.chattingDateOfNow(
         messageInfo.datePublished, previousDateOfMessage);
+    bool isLangArabic = AppLanguage().appLocale == "ar";
     return Column(
       children: [
         if (theDate.isNotEmpty)
@@ -316,6 +328,7 @@ class _ChatMessagesState extends State<ChatMessages>
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            if (isLangArabic) ...[buildVisibility(messageInfo, true)],
             if (!isThatMe) ...[
               buildProfileImage(
                   createProfileImage && senderIdForProfileImage.isNotEmpty),
@@ -350,20 +363,35 @@ class _ChatMessagesState extends State<ChatMessages>
               ),
             ),
             if (!isThatMe) const SizedBox(width: 85),
-            Visibility(
-              visible: messageInfo.messageUid.isEmpty,
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(start: 5.0),
-                child: SvgPicture.asset(
-                  IconsAssets.send2Icon,
-                  height: 15,
-                  color: Theme.of(context).focusColor,
-                ),
-              ),
-            ),
+            if (!isLangArabic) ...[buildVisibility(messageInfo, false)],
           ],
         ),
       ],
+    );
+  }
+
+  Visibility buildVisibility(Message messageInfo, bool rotateIcon) {
+    return Visibility(
+      visible: messageInfo.senderId == myPersonalId &&
+          messageInfo.messageUid.isEmpty,
+      child: Padding(
+        padding: const EdgeInsetsDirectional.only(start: 5.0),
+        child: rotateIcon
+            ? Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.rotationY(math.pi),
+                child: sendIcon(),
+              )
+            : sendIcon(),
+      ),
+    );
+  }
+
+  SvgPicture sendIcon() {
+    return SvgPicture.asset(
+      IconsAssets.send2Icon,
+      height: 15,
+      color: Theme.of(context).focusColor,
     );
   }
 
@@ -373,7 +401,7 @@ class _ChatMessagesState extends State<ChatMessages>
       indexOfUserInfo = widget.messageDetails.receiversIds
               ?.indexOf(senderIdForProfileImage) ??
           0;
-      indexOfUserInfo=indexOfUserInfo==-1?0:indexOfUserInfo;
+      indexOfUserInfo = indexOfUserInfo == -1 ? 0 : indexOfUserInfo;
     }
     return Visibility(
       visible: createProfileImage,
@@ -644,12 +672,8 @@ class _ChatMessagesState extends State<ChatMessages>
             valueListenable: indexOfGarbageMessage,
             builder: (context, int? indexOfGarbageMessageValue, child) =>
                 BlocBuilder<MessageCubit, MessageState>(
-              buildWhen: (previous, current) {
-                if (previous != current && (current is DeleteMessageLoaded)) {
-                  return true;
-                }
-                return false;
-              },
+              buildWhen: (previous, current) =>
+                  previous != current && (current is DeleteMessageLoaded),
               builder: (context, state) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (unSendValue &&
@@ -671,38 +695,50 @@ class _ChatMessagesState extends State<ChatMessages>
                     padding:
                         const EdgeInsetsDirectional.only(start: 80, end: 80),
                     child: Row(
-                        mainAxisAlignment: isThatMe
-                            ? MainAxisAlignment.spaceBetween
-                            : MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(StringsManager.reply.tr,
+                      mainAxisAlignment: isThatMe
+                          ? MainAxisAlignment.spaceBetween
+                          : MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(StringsManager.reply.tr,
+                            style: getBoldStyle(
+                                color: Theme.of(context).focusColor,
+                                fontSize: 15)),
+                        if (isThatMe)
+                          GestureDetector(
+                            onTap: () async {
+                              Message? deleteMessage = deleteThisMessage.value;
+                              List<Message> globalMessages =
+                                  globalMessagesInfo.value;
+
+                              if (deleteMessage != null) {
+                                isDeleteMessageDone.value = true;
+                                Message? replacedMessage;
+                                if (globalMessages.last.messageUid ==
+                                    deleteMessage.messageUid) {
+                                  int length = globalMessages.length;
+                                  replacedMessage = length > 1
+                                      ? globalMessages[length - 2]
+                                      : null;
+                                }
+                                await MessageCubit.get(context).deleteMessage(
+                                    messageInfo: deleteMessage,
+                                    replacedMessage: replacedMessage,
+                                    isThatOnlyMessageInChat:
+                                        globalMessages.length <= 1);
+                                globalMessages.remove(deleteMessage);
+                                reLoad.value = true;
+                              }
+                            },
+                            child: Text(
+                              StringsManager.unSend.tr,
                               style: getBoldStyle(
                                   color: Theme.of(context).focusColor,
-                                  fontSize: 15)),
-                          if (isThatMe)
-                            GestureDetector(
-                                onTap: () async {
-                                  if (deleteThisMessage.value != null) {
-                                    isDeleteMessageDone.value = true;
-                                    Message? replacedMessage;
-                                    if (globalMessagesInfo
-                                            .value.last.messageUid ==
-                                        deleteThisMessage.value!.messageUid) {
-                                      replacedMessage = globalMessagesInfo
-                                              .value[
-                                          globalMessagesInfo.value.length - 2];
-                                    }
-                                    MessageCubit.get(context).deleteMessage(
-                                        messageInfo: deleteThisMessage.value!,
-                                        replacedMessage: replacedMessage);
-                                  }
-                                },
-                                child: Text(StringsManager.unSend.tr,
-                                    style: getBoldStyle(
-                                        color: Theme.of(context).focusColor,
-                                        fontSize: 15))),
-                        ]),
+                                  fontSize: 15),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -826,21 +862,25 @@ class _ChatMessagesState extends State<ChatMessages>
                 padding: const EdgeInsetsDirectional.only(end: 10.0),
                 child: GestureDetector(
                   onTap: () async {
-                    Uint8List? pickImage = await imageCameraPicker();
+                    SelectedImagesDetails? pickImage =
+                        await CustomImagePickerPlus.pickImage(context,
+                            source: ImageSource.camera);
                     if (pickImage != null) {
+                      Uint8List byte = pickImage.selectedFiles[0].selectedByte;
                       isMessageLoaded.value = true;
-                      String blurHash = await blurHashEncode(pickImage);
+                      String blurHash =
+                          await CustomBlurHash.blurHashEncode(byte);
 
                       if (!mounted) return;
                       if (widget.messageDetails.isThatGroupChat ||
                           widget.messageDetails.lastMessage!.isThatGroup) {
                         newMessageInfo.value = newMessageForGroup(
                             blurHash: blurHash, isThatImage: true);
-                        newMessageInfo.value!.localImage = pickImage;
+                        newMessageInfo.value!.localImage = byte;
                         await MessageForGroupChatCubit.get(context).sendMessage(
                             messageInfo: newMessageForGroup(
                                 blurHash: blurHash, isThatImage: true),
-                            pathOfPhoto: pickImage);
+                            pathOfPhoto: byte);
                         if (!mounted) return;
                         bool check = widget.messageDetails.lastMessage
                                 ?.chatOfGroupId.isEmpty ??
@@ -853,11 +893,11 @@ class _ChatMessagesState extends State<ChatMessages>
                       } else {
                         newMessageInfo.value =
                             newMessage(blurHash: blurHash, isThatImage: true);
-                        newMessageInfo.value!.localImage = pickImage;
+                        newMessageInfo.value!.localImage = byte;
                         messageCubit.sendMessage(
                             messageInfo: newMessage(
                                 blurHash: blurHash, isThatImage: true),
-                            pathOfPhoto: pickImage);
+                            pathOfPhoto: byte);
                       }
 
                       if (!mounted) return;
@@ -965,21 +1005,25 @@ class _ChatMessagesState extends State<ChatMessages>
   Widget pickPhoto(MessageCubit messageCubit) {
     return GestureDetector(
       onTap: () async {
-        Uint8List? pickImage = await imageGalleryPicker();
+        SelectedImagesDetails? pickImage =
+            await CustomImagePickerPlus.pickImage(context,
+                source: ImageSource.gallery);
         if (pickImage != null) {
+          Uint8List byte = pickImage.selectedFiles[0].selectedByte;
+
           isMessageLoaded.value = true;
-          String blurHash = await blurHashEncode(pickImage);
+          String blurHash = await CustomBlurHash.blurHashEncode(byte);
 
           if (!mounted) return;
           if (widget.messageDetails.isThatGroupChat ||
               widget.messageDetails.lastMessage!.isThatGroup) {
             newMessageInfo.value =
                 newMessageForGroup(blurHash: blurHash, isThatImage: true);
-            newMessageInfo.value!.localImage = pickImage;
+            newMessageInfo.value!.localImage = byte;
             await MessageForGroupChatCubit.get(context).sendMessage(
                 messageInfo:
                     newMessageForGroup(blurHash: blurHash, isThatImage: true),
-                pathOfPhoto: pickImage);
+                pathOfPhoto: byte);
             if (!mounted) return;
             bool check =
                 widget.messageDetails.lastMessage?.chatOfGroupId.isEmpty ??
@@ -992,10 +1036,10 @@ class _ChatMessagesState extends State<ChatMessages>
           } else {
             newMessageInfo.value =
                 newMessage(blurHash: blurHash, isThatImage: true);
-            newMessageInfo.value!.localImage = pickImage;
+            newMessageInfo.value!.localImage = byte;
             messageCubit.sendMessage(
                 messageInfo: newMessage(blurHash: blurHash, isThatImage: true),
-                pathOfPhoto: pickImage);
+                pathOfPhoto: byte);
           }
 
           if (!mounted) return;
