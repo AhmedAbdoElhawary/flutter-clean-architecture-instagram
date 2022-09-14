@@ -22,10 +22,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_netw
 class UpdatePostInfo extends StatefulWidget {
   final Post oldPostInfo;
 
-  const UpdatePostInfo({
-    required this.oldPostInfo,
-    Key? key,
-  }) : super(key: key);
+  const UpdatePostInfo({required this.oldPostInfo, Key? key}) : super(key: key);
 
   @override
   State<UpdatePostInfo> createState() => _UpdatePostInfoState();
