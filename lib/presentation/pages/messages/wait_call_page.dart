@@ -21,7 +21,7 @@ class VideoCallPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.lowOpacityGrey,
+      // backgroundColor: ColorManager.lowOpacityGrey,
       body: SafeArea(
         child: BlocBuilder<CallingRoomsCubit, CallingRoomsState>(
           buildWhen: (previous, current) =>
