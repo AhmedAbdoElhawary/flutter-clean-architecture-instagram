@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
@@ -16,14 +17,13 @@ import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/popup_calling.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_multi_posts_display.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateStoryPage extends StatefulWidget {
-  final Uint8List storyImage;
-  final bool isThatImage;
+  final SelectedImagesDetails storiesDetails;
 
-  const CreateStoryPage(
-      {Key? key, required this.storyImage, this.isThatImage = true})
+  const CreateStoryPage({Key? key, required this.storiesDetails})
       : super(key: key);
 
   @override
@@ -32,6 +32,12 @@ class CreateStoryPage extends StatefulWidget {
 
 class _CreateStoryPageState extends State<CreateStoryPage> {
   bool isItDone = true;
+  late List<SelectedByte> selectedFiles;
+  @override
+  void initState() {
+    selectedFiles = widget.storiesDetails.selectedFiles;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +46,11 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
       body: SafeArea(
         child: Column(
           children: [
-            Expanded(child: Image.memory(widget.storyImage)),
+            Expanded(
+              child: widget.storiesDetails.multiSelectionMode
+                  ? CustomMultiImagesDisplay(selectedImages: selectedFiles)
+                  : Image.file(selectedFiles[0].selectedFile),
+            ),
             Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
@@ -81,8 +91,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
                 margin: const EdgeInsetsDirectional.all(3.0),
                 child: CustomElevatedButton(
                   onPressed: () async {
-                    return await createStory(
-                        personalInfo, userCubit, builderContext);
+                    return await createStory(personalInfo, userCubit);
                   },
                   isItDone: isItDone,
                   nameOfButton: StringsManager.share.tr,
@@ -95,21 +104,24 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
     );
   }
 
-  Future<void> createStory(UserPersonalInfo personalInfo,
-      UserInfoCubit userCubit, BuildContext builder2context) async {
+  Future<void> createStory(
+      UserPersonalInfo personalInfo, UserInfoCubit userCubit) async {
     if (isItDone) {
       setState(() => isItDone = false);
-      String blurHash = await blurHashEncode(widget.storyImage);
-      Story storyInfo = addStoryInfo(personalInfo, blurHash);
-      if (!mounted) return;
-      StoryCubit storyCubit = StoryCubit.get(context);
-      await storyCubit.createStory(storyInfo, widget.storyImage);
-      if (storyCubit.storyId != '') {
-        userCubit.updateMyStories(storyId: storyCubit.storyId);
-        WidgetsBinding.instance
-            .addPostFrameCallback((_) => setState(() => isItDone = true));
+      for (final storyDetails in widget.storiesDetails.selectedFiles) {
+        Uint8List story = await storyDetails.selectedFile.readAsBytes();
+        String blurHash = await CustomBlurHash.blurHashEncode(story);
+        Story storyInfo = addStoryInfo(personalInfo, blurHash);
+        if (!mounted) return;
+        StoryCubit storyCubit = StoryCubit.get(context);
+        await storyCubit.createStory(storyInfo, story);
+        if (storyCubit.storyId != '') {
+          userCubit.updateMyStories(storyId: storyCubit.storyId);
+        }
         final SharedPreferences sharePrefs =
             await SharedPreferences.getInstance();
+        WidgetsBinding.instance
+            .addPostFrameCallback((_) => setState(() => isItDone = true));
         sharePrefs.remove(myPersonalId);
         if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
@@ -128,7 +140,6 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
       comments: [],
       likes: [],
       blurHash: blurHash,
-      isThatImage: widget.isThatImage,
     );
   }
 }
