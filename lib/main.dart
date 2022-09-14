@@ -1,4 +1,3 @@
-import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -31,7 +30,6 @@ Future<void> main() async {
 Future<SharedPreferences> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  if (!kIsWeb) await CustomGalleryPermissions.requestPermissionExtend();
 
   await initializeDependencies();
   await GetStorage.init();
