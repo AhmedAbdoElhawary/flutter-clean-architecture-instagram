@@ -10,6 +10,8 @@ import 'package:instagram/core/utility/private_keys.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 enum UserCallingType { sender, receiver }
 
@@ -58,8 +60,17 @@ class CallPageState extends State<CallPage> {
   void initState() {
     super.initState();
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
     initialize();
   }
+
+  Future<void> onJoin() async {
+    await _handleCameraAndMic(Permission.camera);
+    await _handleCameraAndMic(Permission.microphone);
+  }
+
+  Future<void> _handleCameraAndMic(Permission permission) async =>
+      await permission.request();
 
   /// Create your own app id with agora with "testing mode"
   /// it's very simple, just go to https://www.agora.io/en/ and create your own project and get your own app id in [agoraAppId]
@@ -279,7 +290,7 @@ class CallPageState extends State<CallPage> {
   @override
   Widget build(BuildContext context) {
     final views = _getRenderViews();
-
+    final numOfUsers = widget.usersInfo!.length;
     return Material(
       child: Center(
         child: Stack(
@@ -328,20 +339,20 @@ class CallPageState extends State<CallPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (widget.usersInfo != null) ...[
-                      if (widget.usersInfo!.length > 1) ...[
-                        buildCircleAvatar(0, 50),
-                      ] else ...[
+                      if (numOfUsers == 1) ...[
+                        buildCircleAvatar(0, 1000),
+                      ] else if (numOfUsers != 0) ...[
                         Align(
                           alignment: Alignment.bottomRight,
-                          child: buildCircleAvatar(0, 40),
+                          child: buildCircleAvatar(0, 700),
                         ),
                         Positioned(
                             height: -15,
                             left: -10,
-                            child: buildCircleAvatar(1, 40)),
+                            child: buildCircleAvatar(1, 700)),
                       ],
                       const SizedBox(height: 30),
-                      ...List.generate(widget.usersInfo!.length, (index) {
+                      ...List.generate(numOfUsers, (index) {
                         return Text(widget.usersInfo![index].name,
                             style: getNormalStyle(
                                 color: ColorManager.white, fontSize: 25));
@@ -363,10 +374,12 @@ class CallPageState extends State<CallPage> {
     );
   }
 
-  CircleAvatar buildCircleAvatar(int index, double radius) {
-    return CircleAvatar(
-      radius: radius,
-      backgroundImage: NetworkImage(widget.usersInfo![index].profileImageUrl),
+  Widget buildCircleAvatar(int index, double bodyHeight) {
+    return CircleAvatarOfProfileImage(
+      bodyHeight: bodyHeight,
+      userInfo: widget.usersInfo![index],
+      disablePressed: true,
+      showColorfulCircle: false,
     );
   }
 }
