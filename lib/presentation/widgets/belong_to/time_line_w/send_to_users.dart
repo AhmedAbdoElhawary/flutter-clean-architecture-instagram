@@ -53,46 +53,54 @@ class _SendToUsersState extends State<SendToUsers> {
           previous != current && (current is CubitFollowersAndFollowingsLoaded),
       builder: (context, state) {
         if (state is CubitFollowersAndFollowingsLoaded) {
-          List<UserPersonalInfo> usersInfo =
-              state.followersAndFollowingsInfo.followersInfo;
-          for (final i in state.followersAndFollowingsInfo.followingsInfo) {
-            if (!usersInfo.contains(i)) usersInfo.add(i);
-          }
-          return ValueListenableBuilder(
-            valueListenable: widget.selectedUsersInfo,
-            builder:
-                (context, List<UserPersonalInfo> selectedUsersValue, child) {
-              if (isThatMobile) {
-                return Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    buildUsers(usersInfo, selectedUsersValue),
-                    if (selectedUsersValue.isNotEmpty)
-                      CustomShareButton(
-                        postInfo: widget.postInfo,
-                        clearTexts: widget.clearTexts,
-                        publisherInfo: widget.publisherInfo,
-                        messageTextController: widget.messageTextController,
-                        selectedUsersInfo: selectedUsersValue,
-                        textOfButton: StringsManager.done.tr,
-                      ),
-                  ],
-                );
-              } else {
-                return buildUsers(usersInfo, selectedUsersValue);
-              }
-            },
-          );
+          return buildBodyOfSheet(state);
         }
         if (state is CubitGettingSpecificUsersFailed) {
           ToastShow.toastStateError(state);
           return Text(StringsManager.somethingWrong.tr);
         } else {
           return isThatMobile
-              ? const ThineLinearProgress()
-              : const Scaffold(
-                  body: SizedBox(height: 1, child: ThineLinearProgress()),
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children:const [
+                     SizedBox(height: 1, child: ThineLinearProgress()),
+                  ],
+                )
+              :const Scaffold(
+                  body:  SizedBox(height: 1, child: ThineLinearProgress()),
                 );
+        }
+      },
+    );
+  }
+
+  Widget buildBodyOfSheet(CubitFollowersAndFollowingsLoaded state) {
+    List<UserPersonalInfo> usersInfo =
+        state.followersAndFollowingsInfo.followersInfo;
+    for (final i in state.followersAndFollowingsInfo.followingsInfo) {
+      if (!usersInfo.contains(i)) usersInfo.add(i);
+    }
+    return ValueListenableBuilder(
+      valueListenable: widget.selectedUsersInfo,
+      builder: (context, List<UserPersonalInfo> selectedUsersValue, child) {
+        if (isThatMobile) {
+          return Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              buildUsers(usersInfo, selectedUsersValue),
+              if (selectedUsersValue.isNotEmpty)
+                CustomShareButton(
+                  postInfo: widget.postInfo,
+                  clearTexts: widget.clearTexts,
+                  publisherInfo: widget.publisherInfo,
+                  messageTextController: widget.messageTextController,
+                  selectedUsersInfo: selectedUsersValue,
+                  textOfButton: StringsManager.done.tr,
+                ),
+            ],
+          );
+        } else {
+          return buildUsers(usersInfo, selectedUsersValue);
         }
       },
     );
@@ -102,7 +110,7 @@ class _SendToUsersState extends State<SendToUsers> {
       List<UserPersonalInfo> selectedUsersValue) {
     return Padding(
       padding: const EdgeInsetsDirectional.only(
-          end: 20, start: 20, bottom: 60, top: 10),
+          end: 20, start: 20, bottom: 60, top: 0),
       child: ListView.separated(
         shrinkWrap: true,
         primary: false,
