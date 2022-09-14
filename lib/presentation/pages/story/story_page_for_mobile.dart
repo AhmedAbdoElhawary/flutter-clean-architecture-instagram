@@ -12,6 +12,7 @@ import 'package:instagram/presentation/customPackages/story_view/story_controlle
 import 'package:instagram/presentation/customPackages/story_view/story_view.dart';
 import 'package:instagram/presentation/customPackages/story_view/utils.dart';
 import 'package:instagram/presentation/widgets/belong_to/story_w/story_swipe.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StoryPageForMobile extends StatefulWidget {
@@ -231,64 +232,69 @@ class StoryWidgetState extends State<StoryWidget> {
                                   color: Colors.white,
                                   size: 25,
                                 )
-                              : Row(children: [
-                                  Expanded(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(35),
-                                        border: Border.all(
-                                          color: Colors
-                                              .white, //                   <--- border color
-                                          width: 0.5,
+                              : Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(35),
+                                          border: Border.all(
+                                            color: Colors
+                                                .white, //                   <--- border color
+                                            width: 0.5,
+                                          ),
                                         ),
-                                      ),
-                                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                                      height: 40,
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.only(
-                                                start: 8.0, end: 20),
-                                        child: Center(
-                                          child: TextFormField(
-                                            keyboardType:
-                                                TextInputType.multiline,
-                                            cursorColor: Colors.teal,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                            onTap: () {
-                                              controller.value.pause();
-                                            },
-                                            showCursor: true,
-                                            maxLines: null,
-                                            decoration:
-                                                const InputDecoration.collapsed(
-                                                    hintText: StringsManager
-                                                        .sendMessage,
-                                                    border: InputBorder.none,
-                                                    hintStyle: TextStyle(
-                                                        color: Colors.grey)),
-                                            autofocus: false,
-                                            cursorWidth: 1.5,
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
+                                        height: 40,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  start: 8.0, end: 20),
+                                          child: Center(
+                                            child: TextFormField(
+                                              keyboardType:
+                                                  TextInputType.multiline,
+                                              cursorColor: Colors.teal,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge,
+                                              onTap: () {
+                                                controller.value.pause();
+                                              },
+                                              showCursor: true,
+                                              maxLines: null,
+                                              decoration: const InputDecoration
+                                                  .collapsed(
+                                                hintText:
+                                                    StringsManager.sendMessage,
+                                                border: InputBorder.none,
+                                                hintStyle: TextStyle(
+                                                    color: Colors.grey),
+                                              ),
+                                              autofocus: false,
+                                              cursorWidth: 1.5,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 25),
-                                  SvgPicture.asset(
-                                    IconsAssets.loveIcon,
-                                    width: .5,
-                                    color: Colors.white,
-                                    height: 25,
-                                  ),
-                                  const SizedBox(width: 25),
-                                  SvgPicture.asset(
-                                    IconsAssets.send2Icon,
-                                    color: Colors.white,
-                                    height: 23,
-                                  ),
-                                ]),
+                                    const SizedBox(width: 25),
+                                    SvgPicture.asset(
+                                      IconsAssets.loveIcon,
+                                      width: .5,
+                                      color: Colors.white,
+                                      height: 25,
+                                    ),
+                                    const SizedBox(width: 25),
+                                    SvgPicture.asset(
+                                      IconsAssets.send2Icon,
+                                      color: Colors.white,
+                                      height: 23,
+                                    ),
+                                  ],
+                                ),
                         ),
                       ),
                     ),
@@ -358,10 +364,12 @@ class ProfileWidget extends StatelessWidget {
         ),
       );
 
-  CircleAvatar buildCircleAvatar() {
-    return CircleAvatar(
-      radius: 24,
-      backgroundImage: NetworkImage(user.profileImageUrl),
+  Widget buildCircleAvatar() {
+    return CircleAvatarOfProfileImage(
+      bodyHeight: 500,
+      userInfo: user,
+      showColorfulCircle: false,
+      disablePressed: true,
     );
   }
 }
