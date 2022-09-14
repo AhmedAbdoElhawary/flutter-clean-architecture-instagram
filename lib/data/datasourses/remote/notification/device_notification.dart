@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 
-import 'package:instagram/data/models/child_classes/child_classes_with_entities/notification.dart';
+import 'package:instagram/data/models/child_classes/notification.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/push_notification.dart';
 import 'package:instagram/core/utility/private_keys.dart';
 
