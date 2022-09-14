@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
+import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/themes/theme_service.dart';
 import 'package:instagram/core/translations/app_lang.dart';
@@ -15,14 +15,14 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
+import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/create_new_story.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/recommendation_people.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../core/functions/toast_show.dart';
 import '../../../data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import '../../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
@@ -288,16 +288,15 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Expanded editProfileButtonForMobile(UserPersonalInfo userInfo) {
     return Expanded(
       child: Builder(builder: (buildContext) {
+        UserPersonalInfo myPersonalInfo =
+            UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
         return InkWell(
           onTap: () async {
             Navigator.maybePop(context);
             Future.delayed(Duration.zero, () async {
-              UserPersonalInfo? result =
-                  await pushToPage(context, page: EditProfilePage(userInfo));
-              if (result != null) {
-                rebuildUserInfo.value = true;
-                userInfo = result;
-              }
+              await pushToPage(context, page: EditProfilePage(userInfo));
+              rebuildUserInfo.value = true;
+              userInfo = myPersonalInfo;
             });
           },
           child: Container(
@@ -363,7 +362,6 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   }
 
   Widget createStory() {
-
     return InkWell(
         onTap: () async => createNewStory(true),
         child: createSizedBox(StringsManager.story.tr,
@@ -379,21 +377,27 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   createNewStory(bool isThatStory) async {
     Navigator.maybePop(context);
-    pushToPage(context, page: CreateNewStory(isThatStory: isThatStory));
-
+    SelectedImagesDetails? details = await CustomImagePickerPlus.pickImage(
+        context,
+        source: ImageSource.gallery,
+        isThatStory: true);
+    if (!mounted || details == null) return;
+    await pushToPage(
+      context,
+      page: CreatePostPage(selectedFilesDetails: details),
+    );
     rebuildUserInfo.value = true;
   }
 
   createNewPost() async {
     Navigator.maybePop(context);
-    await pushToPage(context, page: const CustomGalleryDisplay());
+    await CustomImagePickerPlus.pickBoth(context);
     rebuildUserInfo.value = true;
   }
 
   Widget createPost() {
     return InkWell(
-        onTap: () => createNewPost(),
-        child: createSizedBox(StringsManager.post.tr));
+        onTap: createNewPost, child: createSizedBox(StringsManager.post.tr));
   }
 
   Widget createSizedBox(String text,

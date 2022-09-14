@@ -17,10 +17,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 3.3.3
+version: 3.4.3
 
 environment:
-  sdk: '>=2.19.0-147.0.dev <3.0.0'
+  sdk: '>=2.18.0-147.0.dev <3.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -78,13 +78,12 @@ dependencies:
   flutter_local_notifications: ^9.7.0
   sliding_sheet: ^0.5.2
 
-  ## My package
-  #  custom_gallery_display: ^0.3.8
-  custom_gallery_display:
-    git:
-      url: https://github.com/AhmedAbdoElhawary/custom_gallery_display.git
+  # My package
+#  custom_gallery_display: ^0.3.9
+  image_picker_plus:
+    path: C:\Users\ahmed\StudioProjects\custom_gallery_display
 #  custom_gallery_display:
-#    path: D:\day_8_6\custom_gallery_display
+#    path: D:\day_9_2_custom_gallery_display\custom_gallery_display
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

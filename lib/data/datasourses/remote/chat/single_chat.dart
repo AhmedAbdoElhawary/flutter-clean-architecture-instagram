@@ -21,28 +21,32 @@ class FireStoreSingleChat {
     CollectionReference<Map<String, dynamic>> fireMessagesCollection =
         fireChatsCollection.collection("messages");
 
-    DocumentReference<Map<String, dynamic>> messageRef =
-        await fireMessagesCollection.add(message.toMap());
-
-    message.messageUid = messageRef.id;
-
-    await fireMessagesCollection
-        .doc(messageRef.id)
-        .update({"messageUid": messageRef.id});
+    if (message.messageUid.isEmpty) {
+      DocumentReference<Map<String, dynamic>> messageRef =
+          await fireMessagesCollection.add(message.toMap());
+      message.messageUid = messageRef.id;
+      await fireMessagesCollection
+          .doc(messageRef.id)
+          .update({"messageUid": messageRef.id});
+    } else {
+      await fireMessagesCollection.doc(message.messageUid).set(message.toMap());
+    }
     return message;
   }
 
   static Future<void> updateLastMessage({
     required String userId,
     required String chatId,
-    required Message message,
+    required Message? message,
+    required bool isThatOnlyMessageInChat,
   }) async {
     DocumentReference<Map<String, dynamic>> fireChatsCollection =
-        _fireStoreUserCollection
-            .doc(myPersonalId)
-            .collection("chats")
-            .doc(chatId != myPersonalId ? chatId : userId);
-    await fireChatsCollection.set(message.toMap());
+        _fireStoreUserCollection.doc(userId).collection("chats").doc(chatId);
+    if (message != null) {
+      Map<String, dynamic> toMap =
+          isThatOnlyMessageInChat ? {"": ""} : message.toMap();
+      await fireChatsCollection.set(toMap);
+    }
   }
 
   static Stream<List<Message>> getMessages({required String receiverId}) {

@@ -142,13 +142,13 @@ class _ListOfMessagesState extends State<ListOfMessages> {
                   if (isThatGroup) ...[
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.only(top: 15, end: 12),
+                          const EdgeInsetsDirectional.only(top: 15, end: 5,start: 15),
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [
                           Positioned(
-                            top: -15,
-                            left: 15,
+                            top: -12,
+                            left: 12,
                             child: CircleAvatarOfProfileImage(
                               bodyHeight: bodyHeight * 0.7,
                               userInfo: usersInfo[index].receiversInfo![0],

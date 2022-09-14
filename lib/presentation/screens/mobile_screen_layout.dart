@@ -4,7 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/profile/personal_profile_page.dart';
 import 'package:instagram/presentation/pages/shop/shop_page.dart';
@@ -112,7 +116,13 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       );
 
   BottomNavigationBarItem personalImageItem() {
-    return const BottomNavigationBarItem(icon: PersonalImageIcon());
+    UserPersonalInfo myPersonalInfo;
+    if (isMyInfoInReelTimeReady) {
+      myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
+    } else {
+      myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    }
+    return BottomNavigationBarItem(icon: PersonalImageIcon(myPersonalInfo:myPersonalInfo ,));
   }
 
   BottomNavigationBarItem navigationBarItem(String icon, bool value,

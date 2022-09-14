@@ -6,7 +6,7 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/customPackages/story_view/story_image_for_web.dart';
-import 'story_image.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'story_video.dart';
 import 'story_controller.dart';
 import 'utils.dart';
@@ -125,12 +125,10 @@ class StoryItem {
         child: Stack(
           children: <Widget>[
             if (isThatMobile) ...[
-              StoryImage.url(
-                url,
-                controller: controller,
-                fit: imageFit,
-                requestHeaders: requestHeaders,
-              )
+              Align(
+                  alignment: Alignment.center,
+                  child:
+                      NetworkImageDisplay(imageUrl: url, blurHash: blurHash)),
             ] else ...[
               StoryImageForWeb(url,
                   controller: controller, fit: imageFit, key: key)
@@ -203,12 +201,15 @@ class StoryItem {
                 child: blurHash.isNotEmpty ? BlurHash(hash: blurHash) : null,
               ),
               if (isThatMobile) ...[
-                StoryImage.url(
-                  url,
-                  controller: controller,
-                  fit: imageFit,
-                  requestHeaders: requestHeaders,
-                )
+                Align(
+                  alignment: Alignment.center,
+                  child: NetworkImageDisplay(imageUrl: url, blurHash: blurHash),
+                ), // StoryImage.url(
+                //   url,
+                //   controller: controller,
+                //   fit: imageFit,
+                //   requestHeaders: requestHeaders,
+                // )
               ] else ...[
                 StoryImageForWeb(url,
                     controller: controller, fit: imageFit, key: key)

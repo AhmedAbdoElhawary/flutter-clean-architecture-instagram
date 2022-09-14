@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/domain/use_cases/post/delete/delete_post.dart';
 import 'package:instagram/domain/use_cases/post/get/get_all_posts.dart';
@@ -32,7 +33,7 @@ class PostCubit extends Cubit<PostState> {
 
   static PostCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future<void> createPost(Post postInfo, List<Uint8List> files,
+  Future<void> createPostForMobile(Post postInfo, List<SelectedByte> files,
       {Uint8List? coverOfVideo}) async {
     newPostInfo = null;
     emit(CubitPostLoading());

@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
@@ -205,13 +204,14 @@ class _PopupNewPostState extends State<PopupNewPost> {
       UserInfoCubit userCubit, BuildContext builder2context) async {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => setState(() => isItDone.value = false));
-    String blurHash = await blurHashEncode(selectedImage.value!);
-    Post postInfo = addPostInfo(personalInfo, blurHash);
+    // String blurHash = await CustomBlurHash. blurHashEncode(selectedImage.value!);
+    // Post postInfo = addPostInfo(personalInfo, blurHash);
     if (!mounted) return;
 
     PostCubit postCubit =
         BlocProvider.of<PostCubit>(builder2context, listen: false);
-    await postCubit.createPost(postInfo, selectedImages.value);
+    /// TODO: Solve this bug
+    // await postCubit.createPostForMobile(postInfo, selectedImages.value);
     if (postCubit.newPostInfo != null) {
       await userCubit.updateUserPostsInfo(
           userId: personalInfo.userId, postInfo: postCubit.newPostInfo!);

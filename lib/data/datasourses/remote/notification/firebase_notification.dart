@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/datasourses/remote/notification/device_notification.dart';
 import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
-import 'package:instagram/data/models/child_classes/child_classes_with_entities/notification.dart';
+import 'package:instagram/data/models/child_classes/notification.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/domain/entities/notification_check.dart';
 import 'package:shared_preferences/shared_preferences.dart';

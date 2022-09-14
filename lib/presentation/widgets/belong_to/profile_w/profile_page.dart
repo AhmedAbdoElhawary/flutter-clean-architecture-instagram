@@ -395,9 +395,10 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Padding(
             padding: const EdgeInsetsDirectional.only(start: 15.0, top: 10),
             child: CircleAvatarOfProfileImage(
-                bodyHeight: bodyHeight * 1.45,
-                userInfo: userInfo,
-                hashTag: hash),
+              bodyHeight: bodyHeight * 1.45,
+              userInfo: userInfo,
+              hashTag: hash,
+            ),
           ),
         ),
         Expanded(

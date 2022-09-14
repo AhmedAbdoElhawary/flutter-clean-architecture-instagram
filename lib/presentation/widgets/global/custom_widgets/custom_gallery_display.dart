@@ -1,35 +1,53 @@
 import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/compress_image.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
-import 'package:instagram/presentation/pages/story/create_story.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
-class CustomGalleryDisplay extends StatefulWidget {
-  const CustomGalleryDisplay({Key? key}) : super(key: key);
-
-  @override
-  State<CustomGalleryDisplay> createState() => _CustomGalleryDisplayState();
-}
-
-class _CustomGalleryDisplayState extends State<CustomGalleryDisplay> {
-  @override
-  Widget build(BuildContext context) {
-    return CustomGallery.instagramDisplay(
-      tabsTexts: tapsNames(),
-      appTheme: appTheme(context),
-      sendRequestFunction: (SelectedImagesDetails d) =>
-          moveToCreationPage(context, d),
+class CustomImagePickerPlus {
+  static Future<void> pickBoth(BuildContext context) async {
+    ImagePickerPlus picker = ImagePickerPlus(context);
+    SelectedImagesDetails? details = await picker.pickBoth(
+      source: ImageSource.both,
+      multiSelection: true,
+      galleryDisplaySettings: GalleryDisplaySettings(
+        showImagePreview: true,
+        cropImage: true,
+        tabsTexts: tapsNames(),
+        appTheme: appTheme(context),
+      ),
     );
+    if (details == null) return;
+    //ignore: use_build_context_synchronously
+    await moveToCreationPage(context, details);
   }
 
-  AppTheme appTheme(BuildContext context) {
+  static Future<SelectedImagesDetails?> pickImage(BuildContext context,
+      {required ImageSource source, bool isThatStory = false}) async {
+    ImagePickerPlus picker = ImagePickerPlus(context);
+    SelectedImagesDetails? details = await picker.pickImage(
+      source: source,
+      multiImages: isThatStory,
+      galleryDisplaySettings: GalleryDisplaySettings(
+        tabsTexts: tapsNames(),
+        appTheme: appTheme(context),
+        gridDelegate: _sliverGridDelegate(isThatStory),
+      ),
+    );
+    return details;
+  }
+  static SliverGridDelegateWithFixedCrossAxisCount _sliverGridDelegate(bool isThatStory) {
+    return SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount:isThatStory? 3:4,
+      crossAxisSpacing: 1.7,
+      mainAxisSpacing: 1.5,
+      childAspectRatio:isThatStory? .5:1,
+    );
+  }
+  static AppTheme appTheme(BuildContext context) {
     return AppTheme(
         focusColor: Theme.of(context).focusColor,
         primaryColor: Theme.of(context).primaryColor,
@@ -37,7 +55,7 @@ class _CustomGalleryDisplayState extends State<CustomGalleryDisplay> {
         shimmerHighlightColor: Theme.of(context).textTheme.titleLarge!.color!);
   }
 
-  TabsTexts tapsNames() {
+  static TabsTexts tapsNames() {
     return TabsTexts(
       deletingText: StringsManager.delete.tr,
       galleryText: StringsManager.gallery.tr,
@@ -49,60 +67,19 @@ class _CustomGalleryDisplayState extends State<CustomGalleryDisplay> {
       videoText: StringsManager.video.tr,
     );
   }
-}
 
-Future<void> moveToCreationPage(
-    BuildContext context, SelectedImagesDetails details,
-    {bool isThatStory = false}) async {
-  List<Uint8List> selectedUint8Lists = [];
-  if (details.selectedFiles != null && details.multiSelectionMode) {
-    for (final image in details.selectedFiles!) {
-      Uint8List bytesSelectedFiles = await image.readAsBytes();
-      Uint8List convertedFile =
-          (await compressImage(bytesSelectedFiles)) ?? bytesSelectedFiles;
-      selectedUint8Lists.add(convertedFile);
+  static Future<void> moveToCreationPage(
+      BuildContext context, SelectedImagesDetails details) async {
+    for (final selectedFiles in details.selectedFiles) {
+      File file = selectedFiles.selectedFile;
+      File? compressByte = await CompressImage.compressFile(file);
+      File convertedFile = compressByte ?? file;
+      selectedFiles.selectedFile = convertedFile;
     }
-  }
-
-  File file = details.multiSelectionMode && details.selectedFiles != null
-      ? details.selectedFiles![0]
-      : details.selectedFile;
-  Uint8List bytesFile = await file.readAsBytes();
-  Uint8List convertedBytes = (await compressImage(bytesFile)) ?? bytesFile;
-  if (isThatStory) {
-    // ignore: use_build_context_synchronously
-    await pushToPage(context,
-        page: CreateStoryPage(
-            storyImage: convertedBytes, isThatImage: details.isThatImage));
-  } else {
-    if (!details.isThatImage) {
-      final convertImage = await VideoThumbnail.thumbnailData(
-        video: details.selectedFile.path,
-        imageFormat: ImageFormat.PNG,
-      );
-      Uint8List? convertedBytes = (await compressImage(convertImage)) ?? convertImage;
-
-      Uint8List convertVideo = await details.selectedFile.readAsBytes();
-
-      // ignore: use_build_context_synchronously
-      await pushToPage(context,
-          page: CreatePostPage(
-            aspectRatio: 1,
-            multiSelectedFiles: [convertVideo],
-            isThatImage: false,
-            coverOfVideoBytes: convertedBytes,
-          ));
-    } else {
-      // ignore: use_build_context_synchronously
-      await pushToPage(
-        context,
-        page: CreatePostPage(
-          multiSelectedFiles:
-              selectedUint8Lists.isNotEmpty ? selectedUint8Lists : [convertedBytes],
-          isThatImage: details.isThatImage,
-          aspectRatio: details.aspectRatio,
-        ),
-      );
-    }
+    //ignore: use_build_context_synchronously
+    await pushToPage(
+      context,
+      page: CreatePostPage(selectedFilesDetails: details),
+    );
   }
 }

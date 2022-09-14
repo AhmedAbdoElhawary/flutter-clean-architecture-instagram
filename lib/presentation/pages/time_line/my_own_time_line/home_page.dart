@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/functions/notifications_permissions.dart';
@@ -19,13 +20,14 @@ import 'package:instagram/presentation/cubit/postInfoCubit/specific_users_posts_
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart';
 import 'package:instagram/presentation/customPackages/snapping.dart';
+import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/pages/story/story_for_web.dart';
 import 'package:instagram/presentation/pages/story/story_page_for_mobile.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_gallery/create_new_story.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_up_icon.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_of_post_for_time_line.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_smart_refresh.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/common/jump_arrow.dart';
@@ -46,7 +48,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   ValueNotifier<bool> isThatEndOfList = ValueNotifier(false);
-  UserPersonalInfo? personalInfo;
+  late UserPersonalInfo personalInfo;
   ValueNotifier<bool> reLoadData = ValueNotifier(false);
   Post? selectedPostInfo;
   bool rebuild = true;
@@ -61,10 +63,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     UserInfoCubit userCubit =
         BlocProvider.of<UserInfoCubit>(context, listen: false);
     await userCubit.getUserInfo(widget.userId);
-    personalInfo = userCubit.myPersonalInfo;
     if (!mounted) return;
-    List usersIds = personalInfo!.followedPeople;
-
+    personalInfo = userCubit.myPersonalInfo;
+    List usersIds = personalInfo.followedPeople;
     SpecificUsersPostsCubit usersPostsCubit =
         BlocProvider.of<SpecificUsersPostsCubit>(context, listen: false);
 
@@ -72,7 +73,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     List usersPostsIds = usersPostsCubit.usersPostsInfo;
 
-    postsIds = personalInfo!.posts + usersPostsIds;
+    postsIds = personalInfo.posts + usersPostsIds;
     if (!mounted) return;
     PostCubit postCubit = PostCubit.get(context);
     await postCubit
@@ -102,10 +103,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
 
-    return Scaffold(
-      appBar: isThatMobile ? CustomAppBar.basicAppBar(context) : null,
-      body: Center(
-        child: blocBuilder(bodyHeight),
+    return SafeArea(
+      child: Scaffold(
+        appBar: isThatMobile ? CustomAppBar.basicAppBar(context) : null,
+        body: Center(
+          child: blocBuilder(bodyHeight),
+        ),
       ),
     );
   }
@@ -223,7 +226,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Container customDivider() => Container(
-      margin: const EdgeInsetsDirectional.only(bottom: 8),
+      margin: const EdgeInsetsDirectional.only(bottom: 8, top: 5),
       color: ColorManager.grey,
       width: double.infinity,
       height: 0.3);
@@ -265,14 +268,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Widget storiesLines(double bodyHeight) {
     List<dynamic> usersStoriesIds =
-        personalInfo!.followedPeople + personalInfo!.followerPeople;
+        personalInfo.followedPeople + personalInfo.followerPeople;
     return ValueListenableBuilder(
       valueListenable: reLoadData,
       builder: (context, bool value, child) =>
           BlocBuilder<StoryCubit, StoryState>(
         bloc: StoryCubit.get(context)
           ..getStoriesInfo(
-              usersIds: usersStoriesIds, myPersonalInfo: personalInfo!),
+              usersIds: usersStoriesIds, myPersonalInfo: personalInfo),
         buildWhen: (previous, current) {
           if (value && current is CubitStoriesInfoLoaded) {
             reLoadData.value = false;
@@ -343,7 +346,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (personalInfo!.stories.isEmpty) ...[
+              if (personalInfo.stories.isEmpty) ...[
                 myOwnStory(context, storiesOwnersInfo, bodyHeight),
                 const SizedBox(width: 12),
               ],
@@ -384,7 +387,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         bodyHeight: bodyHeight * 1.1,
                         thisForStoriesLine: true,
                         nameOfCircle: index == 0 &&
-                                publisherInfo.userId == personalInfo!.userId
+                                publisherInfo.userId == personalInfo.userId
                             ? StringsManager.yourStory.tr
                             : "",
                       ),
@@ -409,14 +412,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       List<UserPersonalInfo> storiesOwnersInfo, double bodyHeight) {
     return GestureDetector(
       onTap: () async {
-        pushToPage(context, page: const CreateNewStory());
+        SelectedImagesDetails? details = await CustomImagePickerPlus.pickImage(
+            context,
+            source: ImageSource.gallery,
+            isThatStory: true);
+        if (!mounted || details == null) return;
+        await pushToPage(
+          context,
+          page: CreatePostPage(selectedFilesDetails: details),
+        );
         reLoadData.value = true;
       },
       child: Stack(
         alignment: Alignment.bottomRight,
         children: [
           CircleAvatarOfProfileImage(
-            userInfo: personalInfo!,
+            userInfo: personalInfo,
             bodyHeight: 700,
             moveTextMore: true,
             thisForStoriesLine: true,
@@ -489,8 +500,10 @@ class _WelcomeCardsState extends State<_WelcomeCards> {
   Widget welcomeCards() {
     return SizedBox(
       height: double.maxFinite,
-      child:isThatMobile?CustomSmartRefresh(
-          onRefreshData: widget.onRefreshData, child: suggestionsFriends()): suggestionsFriends(),
+      child: isThatMobile
+          ? CustomSmartRefresh(
+              onRefreshData: widget.onRefreshData, child: suggestionsFriends())
+          : suggestionsFriends(),
     );
   }
 
@@ -562,24 +575,24 @@ class _WelcomeCardsState extends State<_WelcomeCards> {
                 if (users.isEmpty) {
                   return emptyText();
                 } else {
-                  if(isThatMobile){
+                  if (isThatMobile) {
                     return ValueListenableBuilder(
                       valueListenable: _selectedIndex,
                       builder: (context, int selectedIndexValue, child) =>
                           PageView.builder(
-                            itemCount: users.length,
-                            controller: pageController,
-                            physics: const BouncingScrollPhysics(),
-                            onPageChanged: (index) {
-                              _selectedIndex.value = index;
-                            },
-                            itemBuilder: (context, index) {
-                              bool active = selectedIndexValue == index;
-                              return userCardInfo(active, users[index],index);
-                            },
-                          ),
+                        itemCount: users.length,
+                        controller: pageController,
+                        physics: const BouncingScrollPhysics(),
+                        onPageChanged: (index) {
+                          _selectedIndex.value = index;
+                        },
+                        itemBuilder: (context, index) {
+                          bool active = selectedIndexValue == index;
+                          return userCardInfo(active, users[index], index);
+                        },
+                      ),
                     );
-                  }else{
+                  } else {
                     return buildColumn(users);
                   }
                 }
@@ -672,8 +685,7 @@ class _WelcomeCardsState extends State<_WelcomeCards> {
           );
         }
       },
-      child: SizedBox(
-          child: ArrowJump(isThatBack: isThatBack)),
+      child: SizedBox(child: ArrowJump(isThatBack: isThatBack)),
     );
   }
 
@@ -731,12 +743,12 @@ class _WelcomeCardsState extends State<_WelcomeCards> {
                       return Padding(
                         padding: const EdgeInsetsDirectional.only(end: 1),
                         child: SizedBox(
-                            height:isThatMobile? 70:100,
-                            width: isThatMobile? 70:100,
+                            height: isThatMobile ? 70 : 100,
+                            width: isThatMobile ? 70 : 100,
                             child: NetworkImageDisplay(
                               imageUrl: imageUrl,
-                              cachingWidth:isThatMobile? 140:200,
-                              cachingHeight: isThatMobile? 140:200,
+                              cachingWidth: isThatMobile ? 140 : 200,
+                              cachingHeight: isThatMobile ? 140 : 200,
                             )),
                       );
                     },

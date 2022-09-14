@@ -123,8 +123,9 @@ class CustomAppBar {
     );
   }
 
-  static Future<void> _pushToCustomGallery(BuildContext context) async =>
-      await pushToPage(context, page: const CustomGalleryDisplay());
+  static Future<void> _pushToCustomGallery(BuildContext context) async {
+    await CustomImagePickerPlus.pickBoth(context);
+  }
 
   static AppBar chattingAppBar(
       List<UserPersonalInfo> usersInfo, BuildContext context) {

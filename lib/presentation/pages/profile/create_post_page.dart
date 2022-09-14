@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -15,19 +17,12 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cu
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/popup_calling.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class CreatePostPage extends StatefulWidget {
-  final List<Uint8List> multiSelectedFiles;
-  final bool isThatImage;
-  final double aspectRatio;
-  final Uint8List? coverOfVideoBytes;
-  const CreatePostPage({
-    required this.aspectRatio,
-    this.isThatImage = true,
-    required this.multiSelectedFiles,
-    this.coverOfVideoBytes,
-    Key? key,
-  }) : super(key: key);
+  final SelectedImagesDetails selectedFilesDetails;
+  const CreatePostPage({required this.selectedFilesDetails, Key? key})
+      : super(key: key);
 
   @override
   State<CreatePostPage> createState() => _CreatePostPageState();
@@ -39,17 +34,25 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   TextEditingController captionController = TextEditingController(text: "");
   late UserPersonalInfo myPersonalInfo;
+  bool isThatImage = true;
+  late bool multiSelectionMode;
+  late SelectedByte firstSelectedByte;
+  late List<SelectedByte> selectedByte;
+
+  late File firstImage;
   @override
   void initState() {
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    selectedByte = widget.selectedFilesDetails.selectedFiles;
+    firstSelectedByte = widget.selectedFilesDetails.selectedFiles[0];
+    multiSelectionMode = widget.selectedFilesDetails.multiSelectionMode;
+    isThatImage = firstSelectedByte.isThatImage;
+    firstImage = firstSelectedByte.selectedFile;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Uint8List image = widget.coverOfVideoBytes != null
-        ? widget.coverOfVideoBytes!
-        : widget.multiSelectedFiles[0];
     return BlocProvider<PostCubit>(
       create: (context) => injector<PostCubit>(),
       child: Scaffold(
@@ -64,39 +67,38 @@ class _CreatePostPageState extends State<CreatePostPage> {
               child: Row(
                 children: [
                   SizedBox(
-                      height: 70,
-                      width: 70,
-                      child: Stack(
-                        children: [
-                          Image.memory(widget.isThatImage
-                              ? image
-                              : widget.coverOfVideoBytes!),
-                          if (widget.multiSelectedFiles.length > 1)
-                            const Padding(
-                              padding: EdgeInsets.all(2.0),
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Icon(
-                                  Icons.copy_rounded,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
+                    height: 70,
+                    width: 70,
+                    child: Stack(
+                      children: [
+                        if (isThatImage) Image.file(firstImage),
+                        if (multiSelectionMode)
+                          const Padding(
+                            padding: EdgeInsets.all(2),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Icon(
+                                Icons.copy_rounded,
+                                color: Colors.white,
+                                size: 20,
                               ),
                             ),
-                          if (!widget.isThatImage)
-                            const Padding(
-                              padding: EdgeInsets.all(2.0),
-                              child: Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Icon(
-                                  Icons.slow_motion_video_sharp,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
+                          ),
+                        if (!isThatImage)
+                          const Padding(
+                            padding: EdgeInsets.all(2.0),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Icon(
+                                Icons.slow_motion_video_sharp,
+                                color: Colors.white,
+                                size: 20,
                               ),
                             ),
-                        ],
-                      )),
+                          ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: TextFormField(
@@ -142,13 +144,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   Padding buildText(String text) {
     return Padding(
-        padding: const EdgeInsetsDirectional.only(
-            start: 7, end: 7, bottom: 10, top: 10),
-        child: Text(
-          text,
-          style: getNormalStyle(
-              fontSize: 16.5, color: Theme.of(context).focusColor),
-        ));
+      padding: const EdgeInsetsDirectional.only(
+          start: 7, end: 7, bottom: 10, top: 10),
+      child: Text(
+        text,
+        style:
+            getNormalStyle(fontSize: 16.5, color: Theme.of(context).focusColor),
+      ),
+    );
   }
 
   AppBar appBar(BuildContext context) {
@@ -184,20 +187,25 @@ class _CreatePostPageState extends State<CreatePostPage> {
   Future<void> createPost(BuildContext context) async {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => setState(() => isItDone.value = false));
-    String blurHash;
     Post postInfo;
-    if (!widget.isThatImage && widget.coverOfVideoBytes != null) {
-      blurHash = await blurHashEncode(widget.coverOfVideoBytes!);
+    File selectedFile = firstSelectedByte.selectedFile;
+    Uint8List? convertedBytes;
+    if (!isThatImage) {
+      convertedBytes = await createThumbnail(selectedFile);
+      String blurHash = convertedBytes != null
+          ? await CustomBlurHash.blurHashEncode(convertedBytes)
+          : "";
       postInfo = addPostInfo(blurHash);
     } else {
-      blurHash = await blurHashEncode(widget.multiSelectedFiles[0]);
+      Uint8List byte = await selectedFile.readAsBytes();
+      String blurHash = await CustomBlurHash.blurHashEncode(byte);
       postInfo = addPostInfo(blurHash);
     }
     if (!mounted) return;
 
     PostCubit postCubit = BlocProvider.of<PostCubit>(context, listen: false);
-    await postCubit.createPost(postInfo, widget.multiSelectedFiles,
-        coverOfVideo: widget.coverOfVideoBytes);
+    await postCubit.createPostForMobile(postInfo, selectedByte,
+        coverOfVideo: convertedBytes);
 
     if (postCubit.newPostInfo != null) {
       if (!mounted) return;
@@ -218,9 +226,18 @@ class _CreatePostPageState extends State<CreatePostPage> {
         (route) => false);
   }
 
+  Future<Uint8List?> createThumbnail(File selectedFile) async {
+    final Uint8List? convertImage = await VideoThumbnail.thumbnailData(
+      video: selectedFile.path,
+      imageFormat: ImageFormat.PNG,
+    );
+
+    return convertImage;
+  }
+
   Post addPostInfo(String blurHash) {
     return Post(
-      aspectRatio: widget.aspectRatio,
+      aspectRatio: widget.selectedFilesDetails.aspectRatio,
       publisherId: myPersonalId,
       datePublished: DateOfNow.dateOfNow(),
       caption: captionController.text,
@@ -228,7 +245,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
       imagesUrls: [],
       comments: [],
       likes: [],
-      isThatImage: widget.isThatImage,
     );
   }
 }

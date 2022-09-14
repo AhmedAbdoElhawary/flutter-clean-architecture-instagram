@@ -14,7 +14,6 @@ class AppLanguage extends GetxController {
     update();
     Get.updateLocale(Locale(appLocale));
   }
-
   void changeLanguage() async {
     LocalStorage localStorage = LocalStorage();
 

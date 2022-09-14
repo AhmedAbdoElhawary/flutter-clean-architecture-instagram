@@ -11,7 +11,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
-import 'package:instagram/data/models/child_classes/child_classes_with_entities/notification.dart';
+import 'package:instagram/data/models/child_classes/notification.dart';
 import 'package:instagram/domain/entities/notification_check.dart';
 import 'package:instagram/domain/entities/sender_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
