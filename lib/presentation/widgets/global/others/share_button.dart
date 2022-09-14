@@ -5,6 +5,7 @@ import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
@@ -79,7 +80,7 @@ class _ShareButtonState extends State<ShareButton> {
     return showSlidingBottomSheet<void>(
       context,
       builder: (BuildContext context) => SlidingSheetDialog(
-        cornerRadius: 16,
+        cornerRadius: 16,minHeight: 200,
         color: Theme.of(context).splashColor,
         snapSpec: const SnapSpec(
           initialSnap: 1,
@@ -145,11 +146,10 @@ class _ShareButtonState extends State<ShareButton> {
       child: TextField(
         controller: _bottomSheetMessageTextController,
         cursorColor: ColorManager.teal,
+        style:getNormalStyle(color: Theme.of(context).focusColor),
         decoration: InputDecoration(
           hintText: StringsManager.writeMessage.tr,
-          hintStyle: const TextStyle(
-            color: ColorManager.grey,
-          ),
+          hintStyle: const TextStyle(color: ColorManager.grey),
           focusedBorder: InputBorder.none,
           enabledBorder: InputBorder.none,
           errorBorder: InputBorder.none,
@@ -161,9 +161,10 @@ class _ShareButtonState extends State<ShareButton> {
   }
 
   Padding postImage() {
-    String postImageUrl = widget.postInfo.value.imagesUrls.length > 1
-        ? widget.postInfo.value.imagesUrls[0]
-        : widget.postInfo.value.postUrl;
+    Post postInfo = widget.postInfo.value;
+    String postImageUrl = postInfo.imagesUrls.length > 1
+        ? postInfo.imagesUrls[0]
+        : postInfo.postUrl;
     return Padding(
       padding: const EdgeInsets.only(left: 20),
       child: Container(
@@ -173,7 +174,8 @@ class _ShareButtonState extends State<ShareButton> {
           color: ColorManager.grey,
           borderRadius: BorderRadius.circular(5),
           image: DecorationImage(
-            image: NetworkImage(postImageUrl),
+            image: NetworkImage(
+                postInfo.isThatImage ? postImageUrl : postInfo.coverOfVideoUrl),
             fit: BoxFit.cover,
           ),
         ),
