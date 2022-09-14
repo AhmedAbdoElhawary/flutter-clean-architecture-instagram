@@ -31,7 +31,7 @@ class CustomShareButton extends StatefulWidget {
 
 class _CustomShareButtonState extends State<CustomShareButton> {
   late UserPersonalInfo myPersonalInfo;
-
+  final isThatLoading = ValueNotifier(false);
   @override
   void initState() {
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
@@ -46,19 +46,19 @@ class _CustomShareButtonState extends State<CustomShareButton> {
         MessageCubit messageCubit = MessageCubit.get(context);
         return InkWell(
           onTap: () async {
+            isThatLoading.value = true;
             for (final selectedUser in widget.selectedUsersInfo) {
               await messageCubit.sendMessage(
                 messageInfo:
                     createSharedMessage(widget.postInfo.blurHash, selectedUser),
               );
               if (widget.messageTextController.text.isNotEmpty) {
-                messageCubit.sendMessage(
+                await messageCubit.sendMessage(
                     messageInfo: createCaptionMessage(selectedUser));
               }
             }
-            if (!mounted) return;
-
-            Navigator.of(context).maybePop();
+            // ignore: use_build_context_synchronously
+            await Navigator.of(context).maybePop();
             widget.clearTexts(true);
           },
           child: buildDoneButton(),
@@ -74,7 +74,7 @@ class _CustomShareButtonState extends State<CustomShareButton> {
       senderId: myPersonalId,
       senderInfo: myPersonalInfo,
       blurHash: "",
-      receiversIds: userInfoWhoIShared.userId,
+      receiversIds: [userInfoWhoIShared.userId],
       isThatImage: false,
     );
   }
@@ -104,26 +104,41 @@ class _CustomShareButtonState extends State<CustomShareButton> {
     );
   }
 
-  Container buildDoneButton() {
-    return Container(
-      height: 50.0,
-      width: double.infinity,
-      padding: const EdgeInsetsDirectional.only(start: 17, end: 17),
-      decoration: BoxDecoration(
-        color: widget.selectedUsersInfo.isNotEmpty
-            ? ColorManager.blue
-            : ColorManager.lightBlue,
-        borderRadius: BorderRadius.circular(5.0),
-      ),
-      child: Center(
-        child: Text(
-          widget.textOfButton,
-          style: const TextStyle(
-              fontSize: 15.0,
-              color: ColorManager.white,
-              fontWeight: FontWeight.w500),
+  Widget buildDoneButton() {
+    return ValueListenableBuilder(
+      valueListenable: isThatLoading,
+      builder: (context, bool isThatLoadingValue, child) => Container(
+        height: 50.0,
+        width: double.infinity,
+        padding: const EdgeInsetsDirectional.only(start: 17, end: 17),
+        decoration: BoxDecoration(
+          color: isThatLoadingValue
+              ? ColorManager.lightBlue
+              : ColorManager.blue,
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        child: Center(
+          child: !isThatLoadingValue
+              ? Text(
+                  widget.textOfButton,
+                  style: const TextStyle(
+                      fontSize: 15.0,
+                      color: ColorManager.white,
+                      fontWeight: FontWeight.w500),
+                )
+              : circularProgress(),
         ),
       ),
+    );
+  }
+
+  Widget circularProgress() {
+    return const Center(
+      child: SizedBox(
+          height: 20,
+          width: 20,
+          child: CircularProgressIndicator(
+              color: ColorManager.white, strokeWidth: 2)),
     );
   }
 }
