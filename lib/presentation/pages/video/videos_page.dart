@@ -1,10 +1,9 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -13,7 +12,6 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
@@ -25,7 +23,6 @@ import 'package:instagram/presentation/widgets/belong_to/videos_w/reel_video_pla
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/presentation/widgets/global/others/share_button.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 import '../../../core/utility/constant.dart';
 
 class VideosPage extends StatefulWidget {
@@ -43,9 +40,9 @@ class VideosPageState extends State<VideosPage> {
   ValueNotifier<bool> rebuildUserInfo = ValueNotifier(false);
   @override
   void dispose() {
+    widget.stopVideo.value = false;
     videoFile.dispose();
     rebuildUserInfo.dispose();
-    widget.stopVideo.value = false;
     super.dispose();
   }
 
@@ -101,26 +98,18 @@ class VideosPageState extends State<VideosPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              final XFile? pickedFile =
-                  await ImagePicker().pickVideo(source: ImageSource.camera);
-              if (pickedFile != null) {
-                final File video = File(pickedFile.path);
-                final convertImage = await VideoThumbnail.thumbnailData(
-                  video: video.path,
-                  imageFormat: ImageFormat.PNG,
-                );
-                Uint8List convertVideo = await video.readAsBytes();
+              widget.stopVideo.value = false;
+
+              final SelectedImagesDetails? details =
+                  await ImagePickerPlus(context)
+                      .pickVideo(source: ImageSource.camera);
+              if (details != null) {
                 if (!mounted) return;
-                pushToPage(
+                await pushToPage(
                   context,
-                  page: CreatePostPage(
-                    aspectRatio: 1,
-                    multiSelectedFiles: [convertVideo],
-                    isThatImage: false,
-                    coverOfVideoBytes: convertImage,
-                  ),
+                  page: CreatePostPage(selectedFilesDetails: details),
                 );
-                widget.stopVideo.value = false;
+                widget.stopVideo.value = true;
               }
             },
             icon: const Icon(Icons.camera_alt,
@@ -261,11 +250,13 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
   }
 
   goToUserProfile(UserPersonalInfo personalInfo) async {
+    widget.stopVideo.value = false;
+
     await pushToPage(context,
         page: WhichProfilePage(
             userId: personalInfo.userId, userName: personalInfo.userName),
         withoutRoot: false);
-    widget.stopVideo.value = false;
+    widget.stopVideo.value = true;
   }
 
   Widget followButton(UserPersonalInfo userInfo) {
@@ -274,36 +265,29 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
         return Builder(
           builder: (userContext) {
             UserPersonalInfo myPersonalInfo =
-                UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
+                UserInfoCubit.getMyPersonalInfo(context);
+            return GestureDetector(
+                onTap: () async {
+                  if (myPersonalInfo.followedPeople.contains(userInfo.userId)) {
+                    await BlocProvider.of<FollowCubit>(followContext)
+                        .unFollowThisUser(
+                            followingUserId: userInfo.userId,
+                            myPersonalId: myPersonalId);
+                    if (!mounted) return;
+                    BlocProvider.of<UserInfoCubit>(context).updateMyFollowings(
+                        userId: userInfo.userId, addThisUser: false);
+                  } else {
+                    await BlocProvider.of<FollowCubit>(followContext)
+                        .followThisUser(
+                            followingUserId: userInfo.userId,
+                            myPersonalId: myPersonalId);
+                    if (!mounted) return;
 
-            if (myPersonalId == userInfo.userId) {
-              return Container();
-            } else {
-              return GestureDetector(
-                  onTap: () async {
-                    if (myPersonalInfo.followedPeople
-                        .contains(userInfo.userId)) {
-                      await BlocProvider.of<FollowCubit>(followContext)
-                          .unFollowThisUser(
-                              followingUserId: userInfo.userId,
-                              myPersonalId: myPersonalId);
-                      if (!mounted) return;
-                      BlocProvider.of<UserInfoCubit>(context)
-                          .updateMyFollowings(
-                              userId: userInfo.userId, addThisUser: false);
-                    } else {
-                      await BlocProvider.of<FollowCubit>(followContext)
-                          .followThisUser(
-                              followingUserId: userInfo.userId,
-                              myPersonalId: myPersonalId);
-                      if (!mounted) return;
-
-                      BlocProvider.of<UserInfoCubit>(context)
-                          .updateMyFollowings(userId: userInfo.userId);
-                    }
-                  },
-                  child: followText(userInfo, myPersonalInfo));
-            }
+                    BlocProvider.of<UserInfoCubit>(context)
+                        .updateMyFollowings(userId: userInfo.userId);
+                  }
+                },
+                child: followText(userInfo, myPersonalInfo));
           },
         );
       },
@@ -397,9 +381,10 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
   }
 
   goToCommentPage(Post videoInfo) async {
+    widget.stopVideo.value = false;
     await pushToPage(context,
         page: CommentsPageForMobile(postInfo: ValueNotifier(videoInfo)));
-    widget.stopVideo.value = false;
+    widget.stopVideo.value = true;
   }
 
   GestureDetector commentButton(Post videoInfo) {
@@ -416,6 +401,7 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
   Widget numberOfLikes(Post videoInfo) {
     return InkWell(
       onTap: () async {
+        widget.stopVideo.value = false;
         await pushToPage(context,
             page: UsersWhoLikesForMobile(
               showSearchBar: true,
@@ -423,8 +409,7 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
               isThatMyPersonalId: videoInfo.publisherId == myPersonalId,
             ),
             withoutRoot: false);
-
-        widget.stopVideo.value = false;
+        widget.stopVideo.value = true;
       },
       child: SizedBox(
         width: 30,
