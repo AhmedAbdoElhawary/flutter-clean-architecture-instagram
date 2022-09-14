@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
 import 'package:instagram/data/datasourses/remote/post/firestore_post.dart';
 import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
@@ -9,13 +10,14 @@ class FirestorePostRepositoryImpl implements FirestorePostRepository {
   @override
   Future<Post> createPost({
     required Post postInfo,
-    required List<Uint8List> files,
+    required List<SelectedByte> files,
     required Uint8List? coverOfVideo,
   }) async {
     try {
       for (int i = 0; i < files.length; i++) {
-        String postUrl = await FirebaseStoragePost.uploadData(
-            data: files[i], folderName: 'postsImage');
+        String fileName = files[i].isThatImage ? "jpg" : "mp4";
+        String postUrl = await FirebaseStoragePost.uploadFile(
+            postFile: files[i].selectedFile, folderName: fileName);
         if (i == 0) postInfo.postUrl = postUrl;
         postInfo.imagesUrls.add(postUrl);
       }
