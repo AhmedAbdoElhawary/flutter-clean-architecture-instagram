@@ -11,7 +11,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/comment.dart';
-import 'package:instagram/data/models/child_classes/child_classes_with_entities/notification.dart';
+import 'package:instagram/data/models/child_classes/notification.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/domain/entities/notification_check.dart';
@@ -47,6 +47,7 @@ class ImageOfPost extends StatefulWidget {
   final int indexOfPost;
   final ValueNotifier<List<Post>> postsInfo;
   final VoidCallback? rebuildPreviousWidget;
+
   final bool popupWebContainer;
   final bool showSliderArrow;
   final ValueNotifier<TextEditingController> textController;
