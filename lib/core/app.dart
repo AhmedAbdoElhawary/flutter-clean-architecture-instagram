@@ -1,5 +1,4 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instagram/config/themes/app_theme.dart';
@@ -12,7 +11,6 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/pages/register/login_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/get_my_user_info.dart';
 import 'package:instagram/presentation/widgets/global/others/multi_bloc_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyApp extends StatefulWidget {
@@ -32,17 +30,7 @@ class _MyAppState extends State<MyApp> {
     myId = widget.sharePrefs.getString("myPersonalId");
     if (myId != null) myPersonalId = myId!;
 
-  if(!kIsWeb) {
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) async => await callVideoPermissions());
-  }
-
     super.initState();
-  }
-
-  Future<void> callVideoPermissions() async {
-    await Permission.camera.request();
-    await Permission.microphone.request();
   }
 
   @override
