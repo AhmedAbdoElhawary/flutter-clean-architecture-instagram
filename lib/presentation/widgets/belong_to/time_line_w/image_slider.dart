@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/points_scroll_bar.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memory_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/common/jump_arrow.dart';
 
@@ -11,12 +13,14 @@ class ImagesSlider extends StatefulWidget {
   final String blurHash;
   final bool showPointsScrollBar;
   final Function(int, CarouselPageChangedReason) updateImageIndex;
+  final bool isImageFromNetwork;
   const ImagesSlider({
     Key? key,
     required this.imagesUrls,
     this.blurHash = "",
     required this.updateImageIndex,
     required this.aspectRatio,
+    this.isImageFromNetwork = true,
     this.showPointsScrollBar = false,
   }) : super(key: key);
 
@@ -28,10 +32,13 @@ class _ImagesSliderState extends State<ImagesSlider> {
   ValueNotifier<int> initPosition = ValueNotifier(0);
   ValueNotifier<double> countOpacity = ValueNotifier(0);
   final CarouselController _controller = CarouselController();
+  late List<SelectedByte> selectedImages;
   @override
   void didChangeDependencies() {
-    if (widget.imagesUrls.isNotEmpty) {
+    if (widget.imagesUrls.isNotEmpty && widget.isImageFromNetwork) {
       widget.imagesUrls.map((url) => precacheImage(NetworkImage(url), context));
+    } else {
+      selectedImages = widget.imagesUrls as List<SelectedByte>;
     }
     super.didChangeDependencies();
   }
@@ -54,11 +61,16 @@ class _ImagesSliderState extends State<ImagesSlider> {
                 itemCount: widget.imagesUrls.length,
                 carouselController: _controller,
                 itemBuilder: (context, index, realIndex) {
-                  return NetworkImageDisplay(
-                    aspectRatio: widget.aspectRatio,
-                    blurHash: index == 0 ? widget.blurHash : "",
-                    imageUrl: widget.imagesUrls[index],
-                  );
+                  if (widget.isImageFromNetwork) {
+                    return NetworkImageDisplay(
+                      aspectRatio: widget.aspectRatio,
+                      blurHash: index == 0 ? widget.blurHash : "",
+                      imageUrl: widget.imagesUrls[index],
+                    );
+                  } else {
+                    return MemoryImageDisplay(
+                        imagePath: selectedImages[index].selectedByte);
+                  }
                 },
                 options: CarouselOptions(
                   viewportFraction: 1.0,
