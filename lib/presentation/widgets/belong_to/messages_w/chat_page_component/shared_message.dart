@@ -57,9 +57,9 @@ class SharedMessage extends StatelessWidget {
                       Container(
                         color: Theme.of(context).textTheme.titleSmall!.color,
                         width: double.infinity,
-                        child: NetworkImageDisplay(
+                        child: NetworkDisplay(
                           blurHash: messageInfo.blurHash,
-                          imageUrl: messageInfo.imageUrl,
+                          url: messageInfo.imageUrl,
                           height: 270,
                         ),
                       ),
