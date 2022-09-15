@@ -21,13 +21,11 @@ class Post extends ParentPost {
     required List<dynamic> comments,
     required String blurHash,
     required List<dynamic> likes,
-    bool isThatImage = true,
   }) : super(
           datePublished: datePublished,
           likes: likes,
           comments: comments,
           publisherId: publisherId,
-          isThatImage: isThatImage,
           caption: caption,
           blurHash: blurHash,
           publisherInfo: publisherInfo,
@@ -49,7 +47,6 @@ class Post extends ParentPost {
       postUid: snap.data()?["postUid"] ?? "",
       aspectRatio: snap.data()?["aspectRatio"] ?? 0.0,
       postUrl: snap.data()?["postUrl"] ?? "",
-      isThatImage: snap.data()?["isThatImage"] ?? true,
     );
   }
 
@@ -64,7 +61,6 @@ class Post extends ParentPost {
         'likes': likes,
         'postUid': postUid,
         "postUrl": postUrl,
-        "isThatImage": isThatImage,
         "coverOfVideoUrl": coverOfVideoUrl,
       };
 }
