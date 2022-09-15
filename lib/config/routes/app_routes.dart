@@ -12,7 +12,6 @@ Future pushToPage(
   BuildContext context, {
   required Widget page,
   bool withoutRoot = true,
-
   bool withoutPageTransition = false,
 }) async {
   if (isThatMobile) {
@@ -23,7 +22,6 @@ Future pushToPage(
             builder: (context) => page, maintainState: !withoutRoot);
     return Navigator.of(context, rootNavigator: withoutRoot).push(route);
   } else {
-
     return Get.to(WebScreenLayout(body: page),
         transition: Transition.noTransition);
   }
