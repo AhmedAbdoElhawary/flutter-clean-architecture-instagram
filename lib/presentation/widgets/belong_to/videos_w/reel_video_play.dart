@@ -36,12 +36,11 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
     if (!oldWidget.stopVideo) {
       _initializeVideoPlayerFuture = _controller.pause();
       _controller.pause();
-    }else{
+    } else {
       _initializeVideoPlayerFuture = _controller.play();
       _controller.play();
     }
     super.didUpdateWidget(oldWidget);
-
   }
 
   @override

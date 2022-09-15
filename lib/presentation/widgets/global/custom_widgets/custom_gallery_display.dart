@@ -10,7 +10,7 @@ import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 class CustomImagePickerPlus {
   static Future<void> pickBoth(BuildContext context) async {
     ImagePickerPlus picker = ImagePickerPlus(context);
-    SelectedImagesDetails? details = await picker.pickBoth(
+    await picker.pickBoth(
       source: ImageSource.both,
       multiSelection: true,
       galleryDisplaySettings: GalleryDisplaySettings(
@@ -18,11 +18,11 @@ class CustomImagePickerPlus {
         cropImage: true,
         tabsTexts: tapsNames(),
         appTheme: appTheme(context),
+        sendRequestFunction: (details) async {
+          await moveToCreationPage(context, details);
+        },
       ),
     );
-    if (details == null) return;
-    //ignore: use_build_context_synchronously
-    await moveToCreationPage(context, details);
   }
 
   static Future<SelectedImagesDetails?> pickImage(BuildContext context,
@@ -39,14 +39,17 @@ class CustomImagePickerPlus {
     );
     return details;
   }
-  static SliverGridDelegateWithFixedCrossAxisCount _sliverGridDelegate(bool isThatStory) {
+
+  static SliverGridDelegateWithFixedCrossAxisCount _sliverGridDelegate(
+      bool isThatStory) {
     return SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount:isThatStory? 3:4,
+      crossAxisCount: isThatStory ? 3 : 4,
       crossAxisSpacing: 1.7,
       mainAxisSpacing: 1.5,
-      childAspectRatio:isThatStory? .5:1,
+      childAspectRatio: isThatStory ? .5 : 1,
     );
   }
+
   static AppTheme appTheme(BuildContext context) {
     return AppTheme(
         focusColor: Theme.of(context).focusColor,
@@ -71,11 +74,13 @@ class CustomImagePickerPlus {
   static Future<void> moveToCreationPage(
       BuildContext context, SelectedImagesDetails details) async {
     for (final selectedFiles in details.selectedFiles) {
+      if (!selectedFiles.isThatImage) continue;
       File file = selectedFiles.selectedFile;
       File? compressByte = await CompressImage.compressFile(file);
       File convertedFile = compressByte ?? file;
       selectedFiles.selectedFile = convertedFile;
     }
+
     //ignore: use_build_context_synchronously
     await pushToPage(
       context,

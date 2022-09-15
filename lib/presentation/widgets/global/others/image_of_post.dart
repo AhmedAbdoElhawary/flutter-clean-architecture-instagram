@@ -243,7 +243,7 @@ class _ImageOfPostState extends State<ImageOfPost>
         backgroundColor: ColorManager.black38,
         body: GestureDetector(
           /// Don't remove this,it's for avoid pop when tap in popup post
-          onTap: (){},
+          onTap: () {},
           child: Stack(
             alignment: Alignment.center,
             children: [

@@ -141,8 +141,8 @@ class _ListOfMessagesState extends State<ListOfMessages> {
                 children: [
                   if (isThatGroup) ...[
                     Padding(
-                      padding:
-                          const EdgeInsetsDirectional.only(top: 15, end: 5,start: 15),
+                      padding: const EdgeInsetsDirectional.only(
+                          top: 15, end: 5, start: 15),
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [

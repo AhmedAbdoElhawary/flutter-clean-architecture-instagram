@@ -125,8 +125,9 @@ class _SignUpPageState extends State<RegisterWidgets> {
           if (!widget.isThatLogIn) ...[
             Flexible(
               child: Padding(
-                padding:
-                     EdgeInsets.symmetric(horizontal:isThatMobile? 4:0, vertical:isThatMobile? 15:10),
+                padding: EdgeInsets.symmetric(
+                    horizontal: isThatMobile ? 4 : 0,
+                    vertical: isThatMobile ? 15 : 10),
                 child: Row(
                   children: [
                     const SizedBox(width: 13),
@@ -135,21 +136,26 @@ class _SignUpPageState extends State<RegisterWidgets> {
                       builder: (context, bool rememberPasswordValue, child) =>
                           Checkbox(
                               value: rememberPasswordValue,
-                              activeColor:isThatMobile? ColorManager.white:ColorManager.blue,
-                              fillColor:isThatMobile? MaterialStateProperty.resolveWith(
-                                  (Set states) {
-                                if (states.contains(MaterialState.disabled)) {
-                                  return Colors.blue.withOpacity(.32);
-                                }
-                                return Colors.blue;
-                              }):null,
-
+                              activeColor: isThatMobile
+                                  ? ColorManager.white
+                                  : ColorManager.blue,
+                              fillColor: isThatMobile
+                                  ? MaterialStateProperty.resolveWith(
+                                      (Set states) {
+                                      if (states
+                                          .contains(MaterialState.disabled)) {
+                                        return Colors.blue.withOpacity(.32);
+                                      }
+                                      return Colors.blue;
+                                    })
+                                  : null,
                               onChanged: (value) => widget.rememberPassword!
                                   .value = !rememberPasswordValue),
                     ),
                     Text(
                       StringsManager.rememberPassword.tr,
-                      style: getNormalStyle(color:Theme.of(context).focusColor),
+                      style:
+                          getNormalStyle(color: Theme.of(context).focusColor),
                     )
                   ],
                 ),

@@ -122,7 +122,10 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     } else {
       myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     }
-    return BottomNavigationBarItem(icon: PersonalImageIcon(myPersonalInfo:myPersonalInfo ,));
+    return BottomNavigationBarItem(
+        icon: PersonalImageIcon(
+      myPersonalInfo: myPersonalInfo,
+    ));
   }
 
   BottomNavigationBarItem navigationBarItem(String icon, bool value,

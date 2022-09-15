@@ -55,7 +55,7 @@ class UsersInfoReelTimeBloc
 
   Stream<UsersInfoReelTimeState> _mapUpdateMyInfoToState(
       UpdateMyPersonalInfo event) async* {
-     isMyInfoInReelTimeReady=true;
+    isMyInfoInReelTimeReady = true;
     myPersonalInfoInReelTime = event.myPersonalInfoInReelTime;
     yield MyPersonalInfoLoaded(
         myPersonalInfoInReelTime: event.myPersonalInfoInReelTime);

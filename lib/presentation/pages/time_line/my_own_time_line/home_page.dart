@@ -413,9 +413,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return GestureDetector(
       onTap: () async {
         SelectedImagesDetails? details = await CustomImagePickerPlus.pickImage(
-            context,
-            source: ImageSource.gallery,
-            isThatStory: true);
+          context,
+          source: ImageSource.gallery,
+          isThatStory: true,
+        );
         if (!mounted || details == null) return;
         await pushToPage(
           context,
