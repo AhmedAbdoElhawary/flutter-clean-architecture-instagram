@@ -27,7 +27,7 @@ class CustomCircularProgress extends StatelessWidget {
 }
 
 class ThineCircularProgress extends StatelessWidget {
- final Color? color;
+  final Color? color;
   const ThineCircularProgress({Key? key, this.color}) : super(key: key);
 
   @override
@@ -35,8 +35,9 @@ class ThineCircularProgress extends StatelessWidget {
     return Center(
       child: isThatAndroid
           ? CircularProgressIndicator(
-              strokeWidth: 1, color:color?? Theme.of(context).focusColor)
-          : CupertinoActivityIndicator(color:color?? Theme.of(context).focusColor),
+              strokeWidth: 1, color: color ?? Theme.of(context).focusColor)
+          : CupertinoActivityIndicator(
+              color: color ?? Theme.of(context).focusColor),
     );
   }
 }
