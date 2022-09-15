@@ -161,10 +161,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Expanded tapBarView(List<Post> postsInfo) {
     List<Post> videosPostsInfo =
-        postsInfo.where((element) => element.isThatImage == false).toList();
+        postsInfo.where((element) => element.postUrl.contains("mp4")).toList();
 
     List<Post> imagesPostsInfo =
-        postsInfo.where((element) => element.isThatImage == true).toList();
+        postsInfo.where((element) => !element.postUrl.contains("mp4")).toList();
     return Expanded(
       child: TabBarView(
         children: [
