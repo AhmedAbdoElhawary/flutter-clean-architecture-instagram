@@ -112,9 +112,8 @@ class _CustomShareButtonState extends State<CustomShareButton> {
         width: double.infinity,
         padding: const EdgeInsetsDirectional.only(start: 17, end: 17),
         decoration: BoxDecoration(
-          color: isThatLoadingValue
-              ? ColorManager.lightBlue
-              : ColorManager.blue,
+          color:
+              isThatLoadingValue ? ColorManager.lightBlue : ColorManager.blue,
           borderRadius: BorderRadius.circular(5.0),
         ),
         child: Center(
