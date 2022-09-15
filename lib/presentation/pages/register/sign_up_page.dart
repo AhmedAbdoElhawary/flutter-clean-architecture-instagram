@@ -128,10 +128,12 @@ class _UserNamePageState extends State<UserNamePage> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child:isThatMobile? SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: buildColumn(context),
-          ):buildForWeb(context),
+          child: isThatMobile
+              ? SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: buildColumn(context),
+                )
+              : buildForWeb(context),
         ),
       ),
     );
@@ -139,32 +141,33 @@ class _UserNamePageState extends State<UserNamePage> {
 
   Widget buildColumn(BuildContext context) {
     return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment:MainAxisAlignment.start,
-          children: [
-            const SizedBox(height: 100),
-            Text(
-              StringsManager.createUserName.tr,
-              style: getMediumStyle(
-                  color: Theme.of(context).focusColor, fontSize: 15),
-            ),
-            const SizedBox(height: 10),
-            Center(
-              child: Text(
-                StringsManager.addUserName.tr,
-                style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
-              ),
-            ),
-            Text(
-              StringsManager.youCanChangeUserNameLater.tr,
-              style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
-            ),
-            const SizedBox(height: 30),
-            userNameTextField(context),
-            customTextButton(),
-          ],
-        );
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 100),
+        Text(
+          StringsManager.createUserName.tr,
+          style:
+              getMediumStyle(color: Theme.of(context).focusColor, fontSize: 15),
+        ),
+        const SizedBox(height: 10),
+        Center(
+          child: Text(
+            StringsManager.addUserName.tr,
+            style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
+          ),
+        ),
+        Text(
+          StringsManager.youCanChangeUserNameLater.tr,
+          style: getNormalStyle(color: ColorManager.grey, fontSize: 13),
+        ),
+        const SizedBox(height: 30),
+        userNameTextField(context),
+        customTextButton(),
+      ],
+    );
   }
+
   SizedBox buildForWeb(BuildContext context) {
     return SizedBox(
       width: 352,
@@ -184,6 +187,7 @@ class _UserNamePageState extends State<UserNamePage> {
       ),
     );
   }
+
   BlocBuilder<SearchAboutUserBloc, SearchAboutUserState> userNameTextField(
       BuildContext context) {
     return BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
