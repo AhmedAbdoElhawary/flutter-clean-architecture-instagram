@@ -71,7 +71,6 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
       onRefreshData: getData,
       postsIds: postsValue,
       isThatEndOfList: isThatEndOfList,
-      onListEndReached: () {},
       initialInViewIds: const ['0'],
       isInViewPortCondition:
           (double deltaTop, double deltaBottom, double vpHeight) {
