@@ -1,22 +1,28 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:instagram/presentation/pages/video/play_this_video.dart';
 // ignore: depend_on_referenced_packages
 import 'package:octo_image/octo_image.dart';
 
-class MemoryImageDisplay extends StatefulWidget {
+class MemoryDisplay extends StatefulWidget {
+  final bool isThatImage;
   final Uint8List imagePath;
 
-  const MemoryImageDisplay({Key? key, required this.imagePath})
-      : super(key: key);
+  const MemoryDisplay({
+    Key? key,
+    required this.imagePath,
+    this.isThatImage = true,
+  }) : super(key: key);
 
   @override
-  State<MemoryImageDisplay> createState() => _NetworkImageDisplayState();
+  State<MemoryDisplay> createState() => _NetworkImageDisplayState();
 }
 
-class _NetworkImageDisplayState extends State<MemoryImageDisplay> {
+class _NetworkImageDisplayState extends State<MemoryDisplay> {
   @override
   void didChangeDependencies() {
-    if (widget.imagePath.isNotEmpty) {
+    if (widget.isThatImage && widget.imagePath.isNotEmpty) {
       precacheImage(MemoryImage(widget.imagePath), context);
     }
     super.didChangeDependencies();
@@ -28,13 +34,19 @@ class _NetworkImageDisplayState extends State<MemoryImageDisplay> {
   }
 
   Widget buildOctoImage() {
-    return OctoImage(
-      image: MemoryImage(widget.imagePath),
-      errorBuilder: (context, url, error) => buildError(),
-      fit: BoxFit.cover,
-      width: double.infinity,
-      placeholderBuilder: (context) => Center(child: buildSizedBox()),
-    );
+    return widget.isThatImage
+        ? PlayThisVideo(
+            play: true,
+            isThatFromMemory: true,
+            videoUrl: File.fromRawPath(widget.imagePath).path,
+          )
+        : OctoImage(
+            image: MemoryImage(widget.imagePath),
+            errorBuilder: (context, url, error) => buildError(),
+            fit: BoxFit.cover,
+            width: double.infinity,
+            placeholderBuilder: (context) => Center(child: buildSizedBox()),
+          );
   }
 
   SizedBox buildError() {
