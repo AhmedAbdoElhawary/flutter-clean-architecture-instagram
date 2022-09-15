@@ -35,7 +35,7 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
             horizontal: 20, vertical: widget.isThatSignIn ? 0 : 20),
         child: Container(
             margin: const EdgeInsetsDirectional.all(3.0),
-            padding: EdgeInsetsDirectional.all(isThatMobile?15.0:10),
+            padding: EdgeInsetsDirectional.all(isThatMobile ? 15.0 : 10),
             width: double.infinity,
             decoration: containerStyle(),
             child: widget.isItDone ? textOfButton() : circularProgress()),
@@ -70,7 +70,7 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
       color: !widget.blueColor
           ? ColorManager.lightBlue
           : (widget.isItDone ? ColorManager.blue : ColorManager.lightBlue),
-      borderRadius: BorderRadius.circular(isThatMobile?10.0:5),
+      borderRadius: BorderRadius.circular(isThatMobile ? 10.0 : 5),
       boxShadow: !isThatMobile
           ? null
           : [
