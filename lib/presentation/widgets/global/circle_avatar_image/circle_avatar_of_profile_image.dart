@@ -85,7 +85,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
               SizedBox(height: widget.bodyHeight * 0.015),
             NameOfCircleAvatar(
                 widget.nameOfCircle.isEmpty
-                    ? widget.userInfo?.name??""
+                    ? widget.userInfo?.name ?? ""
                     : widget.nameOfCircle,
                 widget.thisForStoriesLine),
           ]
@@ -148,12 +148,11 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
   }
 
   Stack stackOfImage(String? profileImage) {
-    bool isStorySeen=false;
-    if(widget.userInfo!=null){
+    bool isStorySeen = false;
+    if (widget.userInfo != null) {
       isStorySeen = _sharePrefs.getBool(widget.userInfo!.userId) == true;
-
     }
-    bool hasStory = widget.userInfo?.stories.isNotEmpty??false;
+    bool hasStory = widget.userInfo?.stories.isNotEmpty ?? false;
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -187,12 +186,13 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
   Widget imageOfUser(String? profileImage) {
     return CircleAvatar(
       backgroundColor: ColorManager.customGrey,
-      backgroundImage: profileImage?.isNotEmpty??false
+      backgroundImage: profileImage?.isNotEmpty ?? false
           ? CachedNetworkImageProvider(profileImage!,
-              maxWidth: (widget.bodyHeight).toInt(), maxHeight: (widget.bodyHeight).toInt())
+              maxWidth: (widget.bodyHeight).toInt(),
+              maxHeight: (widget.bodyHeight).toInt())
           : null,
       radius: widget.bodyHeight * .046,
-      child: profileImage?.isEmpty??true
+      child: profileImage?.isEmpty ?? true
           ? Icon(
               Icons.person,
               color: Theme.of(context).primaryColor,
