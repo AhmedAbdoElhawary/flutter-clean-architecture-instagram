@@ -25,7 +25,8 @@ class CustomMultiImagesDisplay extends StatelessWidget {
                   )
                 : Hero(
                     tag: selectedImages[0],
-                    child: MemoryImageDisplay(imagePath: selectedImages[0].selectedByte),
+                    child: MemoryImageDisplay(
+                        imagePath: selectedImages[0].selectedByte),
                   ),
           ),
         ),
