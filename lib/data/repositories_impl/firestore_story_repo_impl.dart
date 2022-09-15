@@ -12,8 +12,10 @@ class FirestoreStoryRepositoryImpl implements FirestoreStoryRepository {
   Future<String> createStory(
       {required Story storyInfo, required Uint8List file}) async {
     try {
+      String fileName = storyInfo.isThatImage ? "jpg" : "mp4";
+
       String postUrl = await FirebaseStoragePost.uploadData(
-          data: file, folderName: 'postsImage');
+          data: file, folderName: fileName);
       storyInfo.storyUrl = postUrl;
       String storyUid = await FireStoreStory.createStory(storyInfo);
       await FirestoreUser.updateUserStories(
