@@ -378,9 +378,10 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   createNewStory(bool isThatStory) async {
     Navigator.maybePop(context);
     SelectedImagesDetails? details = await CustomImagePickerPlus.pickImage(
-        context,
-        source: ImageSource.gallery,
-        isThatStory: true,);
+      context,
+      source: ImageSource.gallery,
+      isThatStory: true,
+    );
     if (!mounted || details == null) return;
     await pushToPage(context, page: CreateStoryPage(storiesDetails: details));
     rebuildUserInfo.value = true;
