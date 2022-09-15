@@ -546,15 +546,15 @@ class _ChatMessagesState extends State<ChatMessages>
       child: messageInfo.messageUid.isNotEmpty
           ? Hero(
               tag: imageUrl,
-              child: NetworkImageDisplay(
+              child: NetworkDisplay(
                 blurHash: messageInfo.blurHash,
-                imageUrl: imageUrl,
+                url: imageUrl,
               ),
             )
           : ValueListenableBuilder(
               valueListenable: newMessageInfo,
               builder: (context, Message? newMessageValue, child) =>
-                  MemoryImageDisplay(imagePath: newMessageValue!.localImage!),
+                  MemoryDisplay(imagePath: newMessageValue!.localImage!),
             ),
     );
   }
@@ -1112,8 +1112,8 @@ class _ChatMessagesState extends State<ChatMessages>
               child: CircleAvatar(
                 radius: 30,
                 child: ClipOval(
-                  child: NetworkImageDisplay(
-                    imageUrl:
+                  child: NetworkDisplay(
+                    url:
                         widget.messageDetails.receiversInfo![1].profileImageUrl,
                   ),
                 ),
@@ -1124,8 +1124,8 @@ class _ChatMessagesState extends State<ChatMessages>
               child: CircleAvatar(
                 radius: 30,
                 child: ClipOval(
-                  child: NetworkImageDisplay(
-                    imageUrl:
+                  child: NetworkDisplay(
+                    url:
                         widget.messageDetails.receiversInfo![0].profileImageUrl,
                   ),
                 ),
