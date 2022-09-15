@@ -18,7 +18,6 @@
            android:hardwareAccelerated="true"
            android:windowSoftInputMode="adjustResize"
            tools:targetApi="o_mr1"
-           android:showWhenLocked="true"
            android:turnScreenOn="true"
            >
            <!-- Specifies an Android theme to apply to this Activity as soon as
