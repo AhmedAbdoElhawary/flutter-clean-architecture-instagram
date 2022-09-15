@@ -81,7 +81,7 @@ class _CustomShareButtonState extends State<CustomShareButton> {
 
   Message createSharedMessage(
       String blurHash, UserPersonalInfo userInfoWhoIShared) {
-    bool isThatVideo=widget.postInfo.postUrl.contains("mp4");
+    bool isThatVideo = widget.postInfo.postUrl.contains("mp4");
     String imageUrl = !isThatVideo
         ? widget.postInfo.imagesUrls.length > 1
             ? widget.postInfo.imagesUrls[0]
