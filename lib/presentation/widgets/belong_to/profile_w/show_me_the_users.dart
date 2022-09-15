@@ -36,8 +36,6 @@ class ShowMeTheUsers extends StatefulWidget {
 }
 
 class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
-
-
   @override
   Widget build(BuildContext context) {
     if (widget.usersInfo.isNotEmpty) {
@@ -121,7 +119,8 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
       builder: (followContext, stateOfFollow) {
         return Builder(
           builder: (userContext) {
-            UserPersonalInfo myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
+            UserPersonalInfo myPersonalInfo =
+                UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
 
             if (myPersonalId == userInfo.userId) {
               return Container();
@@ -147,10 +146,10 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
 
                       BlocProvider.of<UserInfoCubit>(context)
                           .updateMyFollowings(userId: userInfo.userId);
-
                     }
                   },
-                  child: whichContainerOfText(stateOfFollow, userInfo,myPersonalInfo));
+                  child: whichContainerOfText(
+                      stateOfFollow, userInfo, myPersonalInfo));
             }
           },
         );
@@ -158,8 +157,8 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
     );
   }
 
-  Widget whichContainerOfText(
-      FollowState stateOfFollow, UserPersonalInfo userInfo, UserPersonalInfo myPersonalInfo) {
+  Widget whichContainerOfText(FollowState stateOfFollow,
+      UserPersonalInfo userInfo, UserPersonalInfo myPersonalInfo) {
     if (stateOfFollow is CubitFollowThisUserFailed) {
       ToastShow.toastStateError(stateOfFollow);
     }
