@@ -6,6 +6,7 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/customPackages/story_view/story_image_for_web.dart';
+import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'story_video.dart';
 import 'story_controller.dart';
@@ -183,6 +184,8 @@ class StoryItem {
     bool roundedBottom = false,
     Duration? duration,
   }) {
+    bool isThatVideo = url.contains("mp4");
+
     return StoryItem(
       ClipRRect(
         key: key,
@@ -203,13 +206,14 @@ class StoryItem {
               if (isThatMobile) ...[
                 Align(
                   alignment: Alignment.center,
-                  child: NetworkImageDisplay(imageUrl: url, blurHash: blurHash),
+                  child: isThatVideo
+                      ? PlayThisVideo(
+                          play: true,
+                          videoUrl: url,
+                          blurHash: blurHash,
+                        )
+                      : NetworkImageDisplay(imageUrl: url, blurHash: blurHash),
                 ), // StoryImage.url(
-                //   url,
-                //   controller: controller,
-                //   fit: imageFit,
-                //   requestHeaders: requestHeaders,
-                // )
               ] else ...[
                 StoryImageForWeb(url,
                     controller: controller, fit: imageFit, key: key)

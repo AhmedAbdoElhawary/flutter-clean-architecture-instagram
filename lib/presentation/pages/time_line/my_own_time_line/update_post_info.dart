@@ -179,7 +179,11 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                       ),
                     ))
               : PlayThisVideo(
-                  videoInfo: postInfo, play: false, showImageCover: true),
+                  videoUrl: postInfo.postUrl,
+                  coverOfVideoUrl: postInfo.coverOfVideoUrl,
+                  blurHash: postInfo.blurHash,
+                  play: false,
+                ),
         ),
       ),
       if (postInfo.imagesUrls.length > 1)

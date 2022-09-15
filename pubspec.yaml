@@ -79,11 +79,7 @@ dependencies:
   sliding_sheet: ^0.5.2
 
   # My package
-#  custom_gallery_display: ^0.3.9
-  image_picker_plus:
-    path: C:\Users\ahmed\StudioProjects\custom_gallery_display
-#  custom_gallery_display:
-#    path: D:\day_9_2_custom_gallery_display\custom_gallery_display
+  image_picker_plus: ^0.5.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

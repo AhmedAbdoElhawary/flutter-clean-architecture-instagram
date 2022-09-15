@@ -436,7 +436,12 @@ class _PopupPostCardState extends State<PopupPostCard> {
                           color: Theme.of(context).primaryColor,
                           width: double.infinity,
                           height: screenSize.height - 200,
-                          child: PlayThisVideo(videoInfo: postInfo, play: true),
+                          child: PlayThisVideo(
+                            videoUrl: postInfo.postUrl,
+                            coverOfVideoUrl: postInfo.coverOfVideoUrl,
+                            blurHash: postInfo.blurHash,
+                            play: true,
+                          ),
                         ),
                   popupMessage(),
                   loveAnimation()

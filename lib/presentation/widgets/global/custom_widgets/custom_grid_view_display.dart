@@ -80,10 +80,12 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
 
   Widget buildCardVideo({bool? playVideo}) {
     return PlayThisVideo(
-      videoInfo: widget.postClickedInfo,
+      videoUrl: widget.postClickedInfo.postUrl,
+      coverOfVideoUrl: widget.postClickedInfo.coverOfVideoUrl,
+      blurHash: widget.postClickedInfo.blurHash,
       play: playVideo ?? widget.playThisVideo,
-      showImageCover: !isThatMobile,
       withoutSound: true,
+
     );
   }
 

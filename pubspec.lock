@@ -612,10 +612,10 @@ packages:
   image_picker_plus:
     dependency: "direct main"
     description:
-      path: "C:\\Users\\ahmed\\StudioProjects\\custom_gallery_display"
-      relative: false
-    source: path
-    version: "0.5.0"
+      name: image_picker_plus
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.1"
   intl:
     dependency: transitive
     description:
