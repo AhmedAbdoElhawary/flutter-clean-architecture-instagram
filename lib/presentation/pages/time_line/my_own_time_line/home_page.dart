@@ -414,7 +414,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       onTap: () async {
         SelectedImagesDetails? details = await CustomImagePickerPlus.pickImage(
           context,
-          source: ImageSource.both,
           isThatStory: true,
         );
         if (!mounted || details == null) return;

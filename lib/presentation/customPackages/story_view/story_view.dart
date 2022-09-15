@@ -128,8 +128,7 @@ class StoryItem {
             if (isThatMobile) ...[
               Align(
                   alignment: Alignment.center,
-                  child:
-                      NetworkDisplay(url: url, blurHash: blurHash)),
+                  child: NetworkDisplay(url: url, blurHash: blurHash)),
             ] else ...[
               StoryImageForWeb(url,
                   controller: controller, fit: imageFit, key: key)

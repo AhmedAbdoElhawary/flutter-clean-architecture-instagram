@@ -1006,8 +1006,7 @@ class _ChatMessagesState extends State<ChatMessages>
     return GestureDetector(
       onTap: () async {
         SelectedImagesDetails? pickImage =
-            await CustomImagePickerPlus.pickImage(context,
-                source: ImageSource.gallery);
+            await CustomImagePickerPlus.pickImage(context);
         if (pickImage != null) {
           Uint8List byte = pickImage.selectedFiles[0].selectedByte;
 

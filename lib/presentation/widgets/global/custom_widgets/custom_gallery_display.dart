@@ -26,7 +26,8 @@ class CustomImagePickerPlus {
   }
 
   static Future<SelectedImagesDetails?> pickImage(BuildContext context,
-      {required ImageSource source, bool isThatStory = false}) async {
+      {ImageSource source = ImageSource.gallery,
+      bool isThatStory = false}) async {
     ImagePickerPlus picker = ImagePickerPlus(context);
     SelectedImagesDetails? details = await picker.pickImage(
       source: source,
