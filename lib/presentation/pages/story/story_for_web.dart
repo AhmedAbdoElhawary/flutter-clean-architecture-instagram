@@ -174,33 +174,18 @@ class StoryWidgetState extends State<StoryWidget> {
 
   void addStoryItems() {
     for (final story in widget.user.storiesInfo!) {
-      switch (story.isThatImage) {
-        case true:
-          storyItems.add(StoryItem.inlineImage(
-            roundedBottom: false,
-            roundedTop: false,
-            blurHash: story.blurHash,
-            imageFit: BoxFit.fitWidth,
-            url: story.storyUrl,
-            controller: storyController.value,
-            caption: Text(story.caption),
-            duration: const Duration(
-              milliseconds: 5000,
-            ),
-          ));
-          break;
-        case false:
-          storyItems.add(
-            StoryItem.text(
-              title: story.caption,
-              backgroundColor: Colors.black,
-              duration: const Duration(
-                milliseconds: 5000,
-              ),
-            ),
-          );
-          break;
-      }
+      storyItems.add(StoryItem.inlineImage(
+        roundedBottom: false,
+        roundedTop: false,
+        blurHash: story.blurHash,
+        imageFit: BoxFit.fitWidth,
+        url: story.storyUrl,
+        controller: storyController.value,
+        caption: Text(story.caption),
+        duration: const Duration(
+          milliseconds: 5000,
+        ),
+      ));
     }
   }
 

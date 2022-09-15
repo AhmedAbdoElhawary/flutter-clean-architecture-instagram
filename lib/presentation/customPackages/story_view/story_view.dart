@@ -129,7 +129,7 @@ class StoryItem {
               Align(
                   alignment: Alignment.center,
                   child:
-                      NetworkImageDisplay(imageUrl: url, blurHash: blurHash)),
+                      NetworkDisplay(url: url, blurHash: blurHash)),
             ] else ...[
               StoryImageForWeb(url,
                   controller: controller, fit: imageFit, key: key)
@@ -212,7 +212,7 @@ class StoryItem {
                           videoUrl: url,
                           blurHash: blurHash,
                         )
-                      : NetworkImageDisplay(imageUrl: url, blurHash: blurHash),
+                      : NetworkDisplay(url: url, blurHash: blurHash),
                 ), // StoryImage.url(
               ] else ...[
                 StoryImageForWeb(url,

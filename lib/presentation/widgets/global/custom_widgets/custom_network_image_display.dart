@@ -1,16 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/presentation/pages/video/play_this_video.dart';
 // ignore: depend_on_referenced_packages
 import 'package:octo_image/octo_image.dart';
 
-class NetworkImageDisplay extends StatefulWidget {
+class NetworkDisplay extends StatefulWidget {
   final int cachingHeight, cachingWidth;
-  final String imageUrl, blurHash;
+  final String url, blurHash;
   final double aspectRatio;
+
   final double? height;
-  const NetworkImageDisplay({
+  const NetworkDisplay({
     Key? key,
-    required this.imageUrl,
+    required this.url,
     this.cachingHeight = 720,
     this.cachingWidth = 720,
     this.height,
@@ -19,38 +21,53 @@ class NetworkImageDisplay extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<NetworkImageDisplay> createState() => _NetworkImageDisplayState();
+  State<NetworkDisplay> createState() => _NetworkDisplayState();
 }
 
-class _NetworkImageDisplayState extends State<NetworkImageDisplay> {
+class _NetworkDisplayState extends State<NetworkDisplay> {
+  late bool isThatVideo;
+  @override
+  void initState() {
+    isThatVideo = widget.url.contains("mp4");
+    super.initState();
+  }
+
   @override
   void didChangeDependencies() {
-    if (widget.imageUrl.isNotEmpty) {
-      precacheImage(NetworkImage(widget.imageUrl), context);
+    if (!isThatVideo && widget.url.isNotEmpty) {
+      precacheImage(NetworkImage(widget.url), context);
     }
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return widget.aspectRatio == 0
-        ? buildOctoImage(height: null)
-        : buildImage();
+    return widget.aspectRatio == 0 ? whichBuild(height: null) : aspectRatio();
   }
 
-  Widget buildImage() {
+  Widget aspectRatio() {
     return AspectRatio(
       aspectRatio: widget.aspectRatio,
-      child: buildOctoImage(),
+      child: whichBuild(),
     );
   }
 
-  Widget buildOctoImage({double? height = double.infinity}) {
+  Widget whichBuild({double? height = double.infinity}) {
+    return isThatVideo
+        ? PlayThisVideo(
+            play: true,
+            videoUrl: widget.url,
+            blurHash: widget.blurHash,
+          )
+        : buildOcto(height);
+  }
+
+  Widget buildOcto(height) {
     int cachingHeight = widget.cachingHeight;
     int cachingWidth = widget.cachingWidth;
     if (widget.aspectRatio != 1 && cachingHeight == 720) cachingHeight = 960;
     return OctoImage(
-      image: CachedNetworkImageProvider(widget.imageUrl,
+      image: CachedNetworkImageProvider(widget.url,
           maxWidth: cachingWidth, maxHeight: cachingHeight),
       errorBuilder: (context, url, error) => buildError(),
       fit: BoxFit.cover,

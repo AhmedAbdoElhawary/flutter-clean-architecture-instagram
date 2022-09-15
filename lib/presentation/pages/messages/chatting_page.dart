@@ -111,8 +111,8 @@ class _ChattingPageState extends State<ChattingPage>
     return CircleAvatar(
       radius: 45,
       child: ClipOval(
-        child: NetworkImageDisplay(
-          imageUrl: userInfo.profileImageUrl,
+        child: NetworkDisplay(
+          url: userInfo.profileImageUrl,
           cachingWidth: 238,
           cachingHeight: 238,
         ),

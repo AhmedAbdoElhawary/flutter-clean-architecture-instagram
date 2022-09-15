@@ -313,8 +313,8 @@ class FirestoreUser {
     Map<String, dynamic>? snap = (await collection.get()).data();
     List<dynamic> lastPosts = snap?["lastThreePostUrls"] ??= [];
     if (lastPosts.length >= 3) lastPosts = lastPosts.sublist(0, 3);
-
-    if (postInfo.isThatImage) {
+    bool isThatVideo =postInfo.postUrl.contains("mp4");
+    if (!isThatVideo) {
       lastPosts.add(postInfo.postUrl);
     } else {
       if (postInfo.coverOfVideoUrl.isEmpty) return;

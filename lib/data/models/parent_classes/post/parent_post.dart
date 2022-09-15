@@ -7,7 +7,6 @@ abstract class ParentPost {
   List<dynamic> likes;
   List<dynamic> comments;
   UserPersonalInfo? publisherInfo;
-  bool isThatImage;
   String blurHash;
 
   ParentPost({
@@ -18,6 +17,5 @@ abstract class ParentPost {
     required this.comments,
     required this.blurHash,
     required this.likes,
-    this.isThatImage = true,
   });
 }

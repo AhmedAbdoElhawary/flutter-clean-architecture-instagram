@@ -159,11 +159,12 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
   List<Widget> imageOfPost(Post postInfo, double bodyHeight) {
     String postUrl =
         postInfo.postUrl.isNotEmpty ? postInfo.postUrl : postInfo.imagesUrls[0];
+    bool isThatVideo=postUrl.contains("mp4");
     return [
       GestureDetector(
         child: Padding(
           padding: const EdgeInsetsDirectional.only(top: 8.0),
-          child: postInfo.isThatImage
+          child: !isThatVideo
               ? (postInfo.imagesUrls.length > 1
                   ? ImagesSlider(
                       aspectRatio: postInfo.aspectRatio,
@@ -173,9 +174,9 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                     )
                   : Hero(
                       tag: postUrl,
-                      child: NetworkImageDisplay(
+                      child: NetworkDisplay(
                         blurHash: postInfo.blurHash,
-                        imageUrl: postUrl,
+                        url: postUrl,
                       ),
                     ))
               : PlayThisVideo(

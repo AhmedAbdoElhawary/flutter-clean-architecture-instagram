@@ -62,13 +62,13 @@ class _ImagesSliderState extends State<ImagesSlider> {
                 carouselController: _controller,
                 itemBuilder: (context, index, realIndex) {
                   if (widget.isImageFromNetwork) {
-                    return NetworkImageDisplay(
+                    return NetworkDisplay(
                       aspectRatio: widget.aspectRatio,
                       blurHash: index == 0 ? widget.blurHash : "",
-                      imageUrl: widget.imagesUrls[index],
+                      url: widget.imagesUrls[index],
                     );
                   } else {
-                    return MemoryImageDisplay(
+                    return MemoryDisplay(
                         imagePath: selectedImages[index].selectedByte);
                   }
                 },

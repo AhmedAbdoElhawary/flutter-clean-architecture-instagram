@@ -76,7 +76,7 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
                 (firstCondition || (secondCondition && index != 0)) ? 2 : 1;
             int num1 = (isThatMobile ? 1 : num2).toInt();
             if (index == lengthOfGrid - 1) {
-              num2 = !postInfo.isThatImage ? 2 : num2;
+              num2 = postInfo.postUrl.contains("mp4") ? 2 : num2;
             }
 
             return StaggeredTile.count(num1, num2);

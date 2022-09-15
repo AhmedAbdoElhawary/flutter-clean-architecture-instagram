@@ -414,7 +414,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       onTap: () async {
         SelectedImagesDetails? details = await CustomImagePickerPlus.pickImage(
           context,
-          source: ImageSource.gallery,
+          source: ImageSource.both,
           isThatStory: true,
         );
         if (!mounted || details == null) return;
@@ -746,8 +746,8 @@ class _WelcomeCardsState extends State<_WelcomeCards> {
                         child: SizedBox(
                             height: isThatMobile ? 70 : 100,
                             width: isThatMobile ? 70 : 100,
-                            child: NetworkImageDisplay(
-                              imageUrl: imageUrl,
+                            child: NetworkDisplay(
+                              url: imageUrl,
                               cachingWidth: isThatMobile ? 140 : 200,
                               cachingHeight: isThatMobile ? 140 : 200,
                             )),

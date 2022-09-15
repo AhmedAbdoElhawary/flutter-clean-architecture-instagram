@@ -207,8 +207,8 @@ class CustomAppBar {
           child: CircleAvatar(
             radius: 12,
             child: ClipOval(
-              child: NetworkImageDisplay(
-                imageUrl: userInfo[0].profileImageUrl,
+              child: NetworkDisplay(
+                url: userInfo[0].profileImageUrl,
                 cachingWidth: 68,
                 cachingHeight: 68,
               ),
@@ -220,8 +220,8 @@ class CustomAppBar {
           child: CircleAvatar(
             radius: 12,
             child: ClipOval(
-              child: NetworkImageDisplay(
-                imageUrl: userInfo[1].profileImageUrl,
+              child: NetworkDisplay(
+                url: userInfo[1].profileImageUrl,
                 cachingWidth: 68,
                 cachingHeight: 68,
               ),

@@ -379,7 +379,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     Navigator.maybePop(context);
     SelectedImagesDetails? details = await CustomImagePickerPlus.pickImage(
       context,
-      source: ImageSource.gallery,
+      source: ImageSource.both,
       isThatStory: true,
     );
     if (!mounted || details == null) return;
