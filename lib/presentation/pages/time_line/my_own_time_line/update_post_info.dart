@@ -159,7 +159,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
   List<Widget> imageOfPost(Post postInfo, double bodyHeight) {
     String postUrl =
         postInfo.postUrl.isNotEmpty ? postInfo.postUrl : postInfo.imagesUrls[0];
-    bool isThatVideo=postUrl.contains("mp4");
+    bool isThatVideo = postUrl.contains("mp4");
     return [
       GestureDetector(
         child: Padding(
