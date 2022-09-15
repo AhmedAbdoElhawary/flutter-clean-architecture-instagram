@@ -40,7 +40,8 @@ class _CustomGridViewState extends State<ProfileGridView> {
               );
             },
             staggeredTileBuilder: (index) {
-              double num = widget.postsInfo[index].isThatImage ? 1 : 2;
+              String info = widget.postsInfo[index].postUrl;
+              double num = !info.contains("mp4") ? 1 : 2;
               return StaggeredTile.count(1, num);
             },
           )
