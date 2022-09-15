@@ -80,7 +80,8 @@ class _ShareButtonState extends State<ShareButton> {
     return showSlidingBottomSheet<void>(
       context,
       builder: (BuildContext context) => SlidingSheetDialog(
-        cornerRadius: 16,minHeight: 200,
+        cornerRadius: 16,
+        minHeight: 200,
         color: Theme.of(context).splashColor,
         snapSpec: const SnapSpec(
           initialSnap: 1,
@@ -146,7 +147,7 @@ class _ShareButtonState extends State<ShareButton> {
       child: TextField(
         controller: _bottomSheetMessageTextController,
         cursorColor: ColorManager.teal,
-        style:getNormalStyle(color: Theme.of(context).focusColor),
+        style: getNormalStyle(color: Theme.of(context).focusColor),
         decoration: InputDecoration(
           hintText: StringsManager.writeMessage.tr,
           hintStyle: const TextStyle(color: ColorManager.grey),
