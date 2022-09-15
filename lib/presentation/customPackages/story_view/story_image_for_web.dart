@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'story_controller.dart';
 
 /// Widget to display animated gifs or still images. Shows a loader while image
@@ -72,22 +73,30 @@ class StoryImageForWebState extends State<StoryImageForWeb> {
   }
 
   Widget getContentView() {
-    return Image.network(
-      widget.imageUrl,
-      fit: widget.fit,
-      loadingBuilder: (BuildContext context, Widget child,
-          ImageChunkEvent? loadingProgress) {
-        if (loadingProgress == null) return child;
-        return Center(
-          child: CircularProgressIndicator(
-            value: loadingProgress.expectedTotalBytes != null
-                ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes!
-                : null,
-          ),
-        );
-      },
-    );
+    bool isThatVideo = widget.imageUrl.contains("mp4");
+    if (isThatVideo) {
+      return PlayThisVideo(
+        play: true,
+        videoUrl: widget.imageUrl,
+      );
+    } else {
+      return Image.network(
+        widget.imageUrl,
+        fit: widget.fit,
+        loadingBuilder: (BuildContext context, Widget child,
+            ImageChunkEvent? loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Center(
+            child: CircularProgressIndicator(
+              value: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes!
+                  : null,
+            ),
+          );
+        },
+      );
+    }
   }
 
   @override
