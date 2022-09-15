@@ -615,7 +615,7 @@ packages:
       path: "C:\\Users\\ahmed\\StudioProjects\\custom_gallery_display"
       relative: false
     source: path
-    version: "0.5.0"
+    version: "0.5.1"
   intl:
     dependency: transitive
     description:
