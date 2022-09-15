@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:video_player/video_player.dart';
 
 class PlayThisVideo extends StatefulWidget {
-  final Post videoInfo;
+  final String videoUrl;
+  final String coverOfVideoUrl;
+  final String blurHash;
+
   final bool play;
   final bool withoutSound;
-  final bool showImageCover;
   const PlayThisVideo({
     Key? key,
-    required this.videoInfo,
+    required this.videoUrl,
+    this.coverOfVideoUrl = "",
+    this.blurHash = "",
     this.withoutSound = false,
-    this.showImageCover = false,
     required this.play,
   }) : super(key: key);
   @override
@@ -26,7 +28,7 @@ class PlayThisVideoState extends State<PlayThisVideo> {
 
   @override
   void initState() {
-    _controller = VideoPlayerController.network(widget.videoInfo.postUrl);
+    _controller = VideoPlayerController.network(widget.videoUrl);
     _initializeVideoPlayerFuture = _controller.initialize().then((_) {
       setState(() {});
     });
@@ -71,12 +73,12 @@ class PlayThisVideoState extends State<PlayThisVideo> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.videoInfo.coverOfVideoUrl.isNotEmpty && widget.showImageCover) {
+    if (widget.coverOfVideoUrl.isNotEmpty ) {
       return NetworkImageDisplay(
         cachingWidth: 238,
         cachingHeight: 430,
-        blurHash: widget.videoInfo.blurHash,
-        imageUrl: widget.videoInfo.coverOfVideoUrl,
+        blurHash: widget.blurHash,
+        imageUrl: widget.coverOfVideoUrl,
       );
     } else {
       return FutureBuilder(
