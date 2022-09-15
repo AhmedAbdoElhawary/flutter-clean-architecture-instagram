@@ -165,7 +165,6 @@ class _MessagesForWebState extends State<MessagesForWeb> {
         ),
       ),
       child: Column(
-
         children: [
           appBarOfMessages(),
           Flexible(
