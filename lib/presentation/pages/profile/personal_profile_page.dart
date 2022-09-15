@@ -16,7 +16,7 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
-import 'package:instagram/presentation/pages/profile/create_post_page.dart';
+import 'package:instagram/presentation/pages/story/create_story.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/profile_w/recommendation_people.dart';
@@ -380,12 +380,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     SelectedImagesDetails? details = await CustomImagePickerPlus.pickImage(
         context,
         source: ImageSource.gallery,
-        isThatStory: true);
+        isThatStory: true,);
     if (!mounted || details == null) return;
-    await pushToPage(
-      context,
-      page: CreatePostPage(selectedFilesDetails: details),
-    );
+    await pushToPage(context, page: CreateStoryPage(storiesDetails: details));
     rebuildUserInfo.value = true;
   }
 
