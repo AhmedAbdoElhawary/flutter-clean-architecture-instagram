@@ -523,7 +523,7 @@ class _ImageOfPostState extends State<ImageOfPost>
           },
           child: Padding(
             padding: const EdgeInsetsDirectional.only(top: 8.0),
-            child: postInfo.isThatImage
+            child: !postInfo.postUrl.contains("mp4")
                 ? (postInfo.imagesUrls.length > 1
                     ? ImagesSlider(
                         blurHash: postInfo.blurHash,
@@ -594,10 +594,10 @@ class _ImageOfPostState extends State<ImageOfPost>
           makeImageUnbounded(context, postInfo);
         },
         onInteractionEnd: (details) => resetAnimation(),
-        child: NetworkImageDisplay(
+        child: NetworkDisplay(
           blurHash: postInfo.blurHash,
           aspectRatio: postInfo.aspectRatio,
-          imageUrl: postInfo.postUrl,
+          url: postInfo.postUrl,
         ),
       );
     });
