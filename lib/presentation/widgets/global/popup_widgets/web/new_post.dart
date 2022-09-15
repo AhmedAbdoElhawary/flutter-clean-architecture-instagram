@@ -235,9 +235,6 @@ class _PopupNewPostState extends State<PopupNewPost> {
       imagesUrls: [],
       comments: [],
       likes: [],
-
-      /// todo: make it dynamic with video
-      isThatImage: true,
     );
   }
 
