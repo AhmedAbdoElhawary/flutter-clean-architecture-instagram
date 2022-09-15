@@ -107,35 +107,35 @@ class StoryVideoState extends State<StoryVideo> {
   }
 
   Widget getContentView() {
-    if (widget.videoLoader.state == LoadState.success &&
-        playerController!.value.isInitialized) {
+    if (widget.videoLoader.state == LoadState.success) {
       return Center(
         child: AspectRatio(
           aspectRatio: playerController!.value.aspectRatio,
           child: VideoPlayer(playerController!),
         ),
       );
+    } else if (widget.videoLoader.state == LoadState.loading) {
+      return Center(
+        child: SizedBox(
+          width: 70,
+          height: 70,
+          child: CircularProgressIndicator(
+            valueColor:
+                AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+            strokeWidth: 3,
+          ),
+        ),
+      );
+    } else {
+      return const Center(
+        child: Text(
+          "Media failed to load.",
+          style: TextStyle(
+            color: ColorManager.white,
+          ),
+        ),
+      );
     }
-
-    return widget.videoLoader.state == LoadState.loading
-        ? Center(
-            child: SizedBox(
-              width: 70,
-              height: 70,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).primaryColor),
-                strokeWidth: 3,
-              ),
-            ),
-          )
-        : const Center(
-            child: Text(
-            "Media failed to load.",
-            style: TextStyle(
-              color: ColorManager.white,
-            ),
-          ));
   }
 
   @override
