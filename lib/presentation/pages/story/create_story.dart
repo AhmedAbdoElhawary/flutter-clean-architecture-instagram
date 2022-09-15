@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,7 @@ import 'package:instagram/presentation/widgets/belong_to/register_w/popup_callin
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_multi_posts_display.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class CreateStoryPage extends StatefulWidget {
   final SelectedImagesDetails storiesDetails;
@@ -108,10 +110,14 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
       UserPersonalInfo personalInfo, UserInfoCubit userCubit) async {
     if (isItDone) {
       setState(() => isItDone = false);
-      for (final storyDetails in widget.storiesDetails.selectedFiles) {
-        Uint8List story = await storyDetails.selectedFile.readAsBytes();
+      for (final storyDetails in selectedFiles) {
+        Uint8List story = storyDetails.selectedByte;
+        if (!storyDetails.isThatImage) {
+          story = await createThumbnail(storyDetails.selectedFile) ?? story;
+        }
         String blurHash = await CustomBlurHash.blurHashEncode(story);
-        Story storyInfo = addStoryInfo(personalInfo, blurHash);
+        Story storyInfo =
+            addStoryInfo(personalInfo, blurHash, storyDetails.isThatImage);
         if (!mounted) return;
         StoryCubit storyCubit = StoryCubit.get(context);
         await storyCubit.createStory(storyInfo, story);
@@ -132,7 +138,17 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
     }
   }
 
-  Story addStoryInfo(UserPersonalInfo personalInfo, String blurHash) {
+  Future<Uint8List?> createThumbnail(File selectedFile) async {
+    final Uint8List? convertImage = await VideoThumbnail.thumbnailData(
+      video: selectedFile.path,
+      imageFormat: ImageFormat.PNG,
+    );
+
+    return convertImage;
+  }
+
+  Story addStoryInfo(
+      UserPersonalInfo personalInfo, String blurHash, bool isThatImage) {
     return Story(
       publisherId: personalInfo.userId,
       datePublished: DateOfNow.dateOfNow(),
@@ -140,6 +156,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
       comments: [],
       likes: [],
       blurHash: blurHash,
+      isThatImage: isThatImage,
     );
   }
 }
