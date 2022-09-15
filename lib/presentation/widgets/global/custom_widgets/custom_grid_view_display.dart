@@ -36,6 +36,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   }
 
   Widget createGridTileWidget() {
+    bool isThatVideo = widget.postClickedInfo.postUrl.contains("mp4");
     return SafeArea(
       child: Builder(
         builder: (context) {
@@ -44,15 +45,14 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
               postClickedInfo: widget.postClickedInfo,
               postsInfo: widget.postsInfo,
               isThatProfile: widget.isThatProfile,
-              postClickedWidget: widget.postClickedInfo.isThatImage
-                  ? buildCardImage()
-                  : buildCardVideo(),
+              postClickedWidget:
+                  !isThatVideo ? buildCardImage() : buildCardVideo(),
             );
           } else {
             return GestureDetector(
               onTap: onTapPostForWeb,
               onLongPressEnd: (_) => onTapPostForWeb,
-              child: widget.postClickedInfo.isThatImage
+              child: !isThatVideo
                   ? buildCardImage()
                   : buildCardVideo(playVideo: false),
             );
@@ -85,7 +85,6 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
       blurHash: widget.postClickedInfo.blurHash,
       play: playVideo ?? widget.playThisVideo,
       withoutSound: true,
-
     );
   }
 
@@ -95,11 +94,11 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
     return Stack(
       alignment: Alignment.topCenter,
       children: [
-        NetworkImageDisplay(
+        NetworkDisplay(
           cachingHeight: 238,
           cachingWidth: 238,
           blurHash: widget.postClickedInfo.blurHash,
-          imageUrl: isThatMultiImages
+          url: isThatMultiImages
               ? widget.postClickedInfo.imagesUrls[0]
               : widget.postClickedInfo.postUrl,
         ),
