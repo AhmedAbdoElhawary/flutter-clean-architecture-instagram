@@ -62,12 +62,12 @@ class _SendToUsersState extends State<SendToUsers> {
           return isThatMobile
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children:const [
-                     SizedBox(height: 1, child: ThineLinearProgress()),
+                  children: const [
+                    SizedBox(height: 1, child: ThineLinearProgress()),
                   ],
                 )
-              :const Scaffold(
-                  body:  SizedBox(height: 1, child: ThineLinearProgress()),
+              : const Scaffold(
+                  body: SizedBox(height: 1, child: ThineLinearProgress()),
                 );
         }
       },
