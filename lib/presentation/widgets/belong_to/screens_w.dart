@@ -4,9 +4,10 @@ import 'package:instagram/data/models/parent_classes/without_sub_classes/user_pe
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 
 class PersonalImageIcon extends StatefulWidget {
- final UserPersonalInfo myPersonalInfo;
+  final UserPersonalInfo myPersonalInfo;
 
-  const PersonalImageIcon({Key? key,required this.myPersonalInfo}) : super(key: key);
+  const PersonalImageIcon({Key? key, required this.myPersonalInfo})
+      : super(key: key);
 
   @override
   State<PersonalImageIcon> createState() => _PersonalImageIconState();
