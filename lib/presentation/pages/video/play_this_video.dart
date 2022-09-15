@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:video_player/video_player.dart';
 
@@ -7,7 +6,8 @@ class PlayThisVideo extends StatefulWidget {
   final String videoUrl;
   final String coverOfVideoUrl;
   final String blurHash;
-
+  final double aspectRatio;
+  final bool isThatFromMemory;
   final bool play;
   final bool withoutSound;
   const PlayThisVideo({
@@ -16,6 +16,8 @@ class PlayThisVideo extends StatefulWidget {
     this.coverOfVideoUrl = "",
     this.blurHash = "",
     this.withoutSound = false,
+    this.isThatFromMemory = false,
+    this.aspectRatio = 0.65,
     required this.play,
   }) : super(key: key);
   @override
@@ -28,7 +30,9 @@ class PlayThisVideoState extends State<PlayThisVideo> {
 
   @override
   void initState() {
-    _controller = VideoPlayerController.network(widget.videoUrl);
+    _controller = widget.isThatFromMemory
+        ? VideoPlayerController.asset(widget.videoUrl)
+        : VideoPlayerController.network(widget.videoUrl);
     _initializeVideoPlayerFuture = _controller.initialize().then((_) {
       setState(() {});
     });
@@ -73,12 +77,12 @@ class PlayThisVideoState extends State<PlayThisVideo> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.coverOfVideoUrl.isNotEmpty ) {
-      return NetworkImageDisplay(
+    if (widget.coverOfVideoUrl.isNotEmpty) {
+      return NetworkDisplay(
         cachingWidth: 238,
         cachingHeight: 430,
         blurHash: widget.blurHash,
-        imageUrl: widget.coverOfVideoUrl,
+        url: widget.coverOfVideoUrl,
       );
     } else {
       return FutureBuilder(
@@ -86,16 +90,32 @@ class PlayThisVideoState extends State<PlayThisVideo> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return AspectRatio(
-              aspectRatio: 0.65,
+              aspectRatio: widget.aspectRatio,
               child: VideoPlayer(_controller),
             );
           } else {
             return AspectRatio(
-                aspectRatio: 0.65,
-                child: Container(color: ColorManager.lowOpacityGrey));
+                aspectRatio: widget.aspectRatio, child: buildSizedBox());
           }
         },
       );
     }
+  }
+
+  Widget buildSizedBox() {
+    return Container(
+      width: double.infinity,
+      color: Theme.of(context).textTheme.bodyMedium!.color,
+      child: Center(
+          child: CircleAvatar(
+        radius: 40,
+        backgroundColor: Theme.of(context).textTheme.bodySmall!.color,
+        child: Center(
+            child: CircleAvatar(
+          radius: 39,
+          backgroundColor: Theme.of(context).textTheme.bodyMedium!.color,
+        )),
+      )),
+    );
   }
 }
