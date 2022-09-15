@@ -210,6 +210,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
 
     PostCubit postCubit =
         BlocProvider.of<PostCubit>(builder2context, listen: false);
+
     /// TODO: Solve this bug
     // await postCubit.createPostForMobile(postInfo, selectedImages.value);
     if (postCubit.newPostInfo != null) {
