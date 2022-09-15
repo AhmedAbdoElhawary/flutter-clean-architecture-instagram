@@ -90,9 +90,11 @@ class AllUsersTimeLinePage extends StatelessWidget {
             List<Post> videoPosts = [];
 
             for (Post element in state.allPostInfo) {
-              element.isThatImage == true
-                  ? imagePosts.add(element)
-                  : videoPosts.add(element);
+              String postUrl = element.postUrl.isNotEmpty
+                  ? element.postUrl
+                  : element.imagesUrls[0];
+              bool isThatVideo = postUrl.contains("mp4");
+              isThatVideo ? imagePosts.add(element) : videoPosts.add(element);
             }
 
             return Center(
