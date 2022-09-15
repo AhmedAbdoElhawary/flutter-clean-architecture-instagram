@@ -537,9 +537,12 @@ class _ImageOfPostState extends State<ImageOfPost>
                     alignment: Alignment.center,
                     children: [
                       PlayThisVideo(
-                          videoInfo: postInfo,
-                          play: widget.playTheVideo,
-                          withoutSound: !isSoundOn),
+                        videoUrl: postInfo.postUrl,
+                        coverOfVideoUrl: postInfo.coverOfVideoUrl,
+                        blurHash: postInfo.blurHash,
+                        play: widget.playTheVideo,
+                        withoutSound: !isSoundOn,
+                      ),
                       if (!widget.playTheVideo)
                         Align(
                           alignment: Alignment.center,
