@@ -34,7 +34,7 @@ class RecordViewState extends State<RecordView> {
   AudioPlayer audioPlayer = AudioPlayer();
   @override
   void initState() {
-    _totalDuration = widget.lengthOfRecord - 1000000;
+    _totalDuration = widget.lengthOfRecord - 500000;
     super.initState();
   }
 
