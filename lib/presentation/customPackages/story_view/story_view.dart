@@ -112,6 +112,7 @@ class StoryItem {
     required String url,
     required StoryController controller,
     required String blurHash,
+    required bool isThatImage,
     Key? key,
     BoxFit imageFit = BoxFit.fitWidth,
     String? caption,
@@ -128,10 +129,14 @@ class StoryItem {
             if (isThatMobile) ...[
               Align(
                   alignment: Alignment.center,
-                  child: NetworkDisplay(url: url, blurHash: blurHash)),
+                  child: NetworkDisplay(
+                      url: url, isThatImage: isThatImage, blurHash: blurHash)),
             ] else ...[
               StoryImageForWeb(url,
-                  controller: controller, fit: imageFit, key: key)
+                  controller: controller,
+                  isThatImage: isThatImage,
+                  fit: imageFit,
+                  key: key)
             ],
             SafeArea(
               child: Align(
@@ -172,6 +177,7 @@ class StoryItem {
   /// one passed to the `StoryView`
   factory StoryItem.inlineImage({
     required String url,
+    required bool isThatImage,
     Text? caption,
     required StoryController controller,
     required String blurHash,
@@ -183,8 +189,6 @@ class StoryItem {
     bool roundedBottom = false,
     Duration? duration,
   }) {
-    bool isThatVideo = url.contains("mp4");
-
     return StoryItem(
       ClipRRect(
         key: key,
@@ -205,17 +209,23 @@ class StoryItem {
               if (isThatMobile) ...[
                 Align(
                   alignment: Alignment.center,
-                  child: isThatVideo
+                  child: !isThatImage
                       ? PlayThisVideo(
                           play: true,
                           videoUrl: url,
                           blurHash: blurHash,
                         )
-                      : NetworkDisplay(url: url, blurHash: blurHash),
+                      : NetworkDisplay(
+                          url: url,
+                          isThatImage: isThatImage,
+                          blurHash: blurHash),
                 ), // StoryImage.url(
               ] else ...[
                 StoryImageForWeb(url,
-                    controller: controller, fit: imageFit, key: key)
+                    controller: controller,
+                    isThatImage: isThatImage,
+                    fit: imageFit,
+                    key: key)
               ],
               Container(
                 margin: const EdgeInsetsDirectional.only(bottom: 16),
