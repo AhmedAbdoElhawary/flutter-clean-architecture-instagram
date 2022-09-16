@@ -3,7 +3,7 @@ import 'package:instagram/core/use_case/use_case.dart';
 import 'package:instagram/domain/repositories/post/post_repository.dart';
 
 class DeletePostUseCase implements UseCase<void, Post> {
-  final FirestorePostRepository _deletePostRepository;
+  final FireStorePostRepository _deletePostRepository;
 
   DeletePostUseCase(this._deletePostRepository);
 
