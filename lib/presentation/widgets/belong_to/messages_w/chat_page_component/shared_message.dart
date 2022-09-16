@@ -60,6 +60,7 @@ class SharedMessage extends StatelessWidget {
                         child: NetworkDisplay(
                           blurHash: messageInfo.blurHash,
                           url: messageInfo.imageUrl,
+                          isThatImage: messageInfo.isThatImage,
                           height: 270,
                         ),
                       ),
