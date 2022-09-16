@@ -58,7 +58,7 @@ class _ChatMessagesState extends State<ChatMessages>
   final appearIcons = ValueNotifier(true);
   final unSend = ValueNotifier(false);
   final reLoad = ValueNotifier(false);
-
+  late List<UserPersonalInfo> receiversInfo;
   final records = ValueNotifier('');
   late AnimationController _colorAnimationController;
   late Animation _colorTween;
@@ -82,6 +82,7 @@ class _ChatMessagesState extends State<ChatMessages>
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _colorTween = ColorTween(begin: Colors.purple, end: Colors.blue)
         .animate(_colorAnimationController);
+    receiversInfo = widget.messageDetails.receiversInfo ?? [myPersonalInfo];
     super.initState();
   }
 
@@ -142,8 +143,7 @@ class _ChatMessagesState extends State<ChatMessages>
       builder: (context, bool reLoadValue, child) =>
           BlocBuilder<MessageBloc, MessageBlocState>(
         bloc: BlocProvider.of<MessageBloc>(context)
-          ..add(LoadMessagesForSingleChat(
-              widget.messageDetails.receiversInfo![0].userId)),
+          ..add(LoadMessagesForSingleChat(receiversInfo[0].userId)),
         builder: (context, state) {
           if (state is MessageBlocLoaded) {
             return buildMessages(context, state.messages);
@@ -270,7 +270,7 @@ class _ChatMessagesState extends State<ChatMessages>
         circleAvatarOfImage(),
         const SizedBox(height: 10),
         nameOfUser(),
-        if (widget.messageDetails.receiversInfo?.length == 1) ...[
+        if (receiversInfo.length == 1) ...[
           const SizedBox(height: 5),
           userName(),
           const SizedBox(height: 5),
@@ -410,7 +410,7 @@ class _ChatMessagesState extends State<ChatMessages>
       maintainState: true,
       child: CircleAvatarOfProfileImage(
         bodyHeight: 350,
-        userInfo: widget.messageDetails.receiversInfo![indexOfUserInfo],
+        userInfo: receiversInfo[indexOfUserInfo],
         showColorfulCircle: false,
       ),
     );
@@ -548,6 +548,7 @@ class _ChatMessagesState extends State<ChatMessages>
               tag: imageUrl,
               child: NetworkDisplay(
                 blurHash: messageInfo.blurHash,
+                isThatImage: messageInfo.isThatImage,
                 url: imageUrl,
               ),
             )
@@ -1061,7 +1062,7 @@ class _ChatMessagesState extends State<ChatMessages>
       bool isThatImage = false,
       bool isThatRecord = false}) {
     List<dynamic> usersIds = [];
-    for (final userInfo in widget.messageDetails.receiversInfo!) {
+    for (final userInfo in receiversInfo) {
       usersIds.add(userInfo.userId);
     }
     return Message(
@@ -1083,7 +1084,7 @@ class _ChatMessagesState extends State<ChatMessages>
       {String blurHash = "",
       bool isThatImage = false,
       bool isThatRecord = false}) {
-    dynamic userId = widget.messageDetails.receiversInfo?[0].userId;
+    dynamic userId = receiversInfo[0].userId;
     return Message(
       datePublished: DateOfNow.dateOfNow(),
       message: _textController.value.text,
@@ -1111,10 +1112,7 @@ class _ChatMessagesState extends State<ChatMessages>
               child: CircleAvatar(
                 radius: 30,
                 child: ClipOval(
-                  child: NetworkDisplay(
-                    url:
-                        widget.messageDetails.receiversInfo![1].profileImageUrl,
-                  ),
+                  child: NetworkDisplay(url: receiversInfo[1].profileImageUrl),
                 ),
               ),
             ),
@@ -1123,10 +1121,7 @@ class _ChatMessagesState extends State<ChatMessages>
               child: CircleAvatar(
                 radius: 30,
                 child: ClipOval(
-                  child: NetworkDisplay(
-                    url:
-                        widget.messageDetails.receiversInfo![0].profileImageUrl,
-                  ),
+                  child: NetworkDisplay(url: receiversInfo[0].profileImageUrl),
                 ),
               ),
             ),
@@ -1135,7 +1130,7 @@ class _ChatMessagesState extends State<ChatMessages>
       );
     } else {
       return CircleAvatarOfProfileImage(
-          userInfo: widget.messageDetails.receiversInfo![0],
+          userInfo: receiversInfo[0],
           bodyHeight: 950,
           showColorfulCircle: false);
     }
@@ -1146,7 +1141,7 @@ class _ChatMessagesState extends State<ChatMessages>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          widget.messageDetails.receiversInfo![0].userName,
+          receiversInfo[0].userName,
           style: TextStyle(
               color: Theme.of(context).focusColor,
               fontSize: 14,
@@ -1167,7 +1162,7 @@ class _ChatMessagesState extends State<ChatMessages>
   }
 
   Widget nameOfUser() {
-    int length = widget.messageDetails.receiversInfo!.length;
+    int length = receiversInfo.length;
     length = length >= 3 ? 3 : length;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -1184,7 +1179,7 @@ class _ChatMessagesState extends State<ChatMessages>
                 child: Text(
                   index == 2
                       ? "....."
-                      : "${widget.messageDetails.receiversInfo![index].name}${length > 1 ? ',' : ""}",
+                      : "${receiversInfo[index].name}${length > 1 ? ',' : ""}",
                   style: TextStyle(
                       color: Theme.of(context).focusColor,
                       fontSize: 16,
@@ -1199,7 +1194,7 @@ class _ChatMessagesState extends State<ChatMessages>
   }
 
   Row someInfoOfUser() {
-    UserPersonalInfo userInfo = widget.messageDetails.receiversInfo![0];
+    UserPersonalInfo userInfo = receiversInfo[0];
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -1217,16 +1212,17 @@ class _ChatMessagesState extends State<ChatMessages>
   }
 
   TextButton viewProfileButton(BuildContext context) {
-    dynamic userId = widget.messageDetails.receiversInfo![0].userId;
+    dynamic userId = receiversInfo[0].userId;
 
     return TextButton(
       onPressed: () {
         pushToPage(context, page: UserProfilePage(userId: userId));
       },
-      child: Text(StringsManager.viewProfile.tr,
-          style: TextStyle(
-              color: Theme.of(context).focusColor,
-              fontWeight: FontWeight.normal)),
+      child: Text(
+        StringsManager.viewProfile.tr,
+        style: TextStyle(
+            color: Theme.of(context).focusColor, fontWeight: FontWeight.normal),
+      ),
     );
   }
 }
