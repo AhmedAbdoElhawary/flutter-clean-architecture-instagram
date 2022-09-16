@@ -54,15 +54,16 @@ class SocialMediaRecorderS extends State<SocialMediaRecorder> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => soundRecordNotifier),
-        ],
-        child: Consumer<SoundRecordNotifier>(
-          builder: (context, value, _) {
-            return Directionality(
-                textDirection: TextDirection.rtl, child: makeBody(value));
-          },
-        ));
+      providers: [
+        ChangeNotifierProvider(create: (context) => soundRecordNotifier),
+      ],
+      child: Consumer<SoundRecordNotifier>(
+        builder: (context, value, _) {
+          return Directionality(
+              textDirection: TextDirection.rtl, child: makeBody(value));
+        },
+      ),
+    );
   }
 
   Widget makeBody(SoundRecordNotifier state) {
