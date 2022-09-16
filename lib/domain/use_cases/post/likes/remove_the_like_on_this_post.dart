@@ -3,7 +3,7 @@ import 'package:instagram/core/use_case/use_case.dart';
 
 class RemoveTheLikeOnThisPostUseCase
     implements UseCaseTwoParams<void, String, String> {
-  final FirestorePostRepository _removeTheLikeOnThisPostRepository;
+  final FireStorePostRepository _removeTheLikeOnThisPostRepository;
 
   RemoveTheLikeOnThisPostUseCase(this._removeTheLikeOnThisPostRepository);
 
