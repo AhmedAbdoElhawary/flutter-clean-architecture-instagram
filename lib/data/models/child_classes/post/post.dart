@@ -8,12 +8,18 @@ class Post extends ParentPost {
   String postUid;
   double aspectRatio;
   String coverOfVideoUrl;
+
+  /// is this post contains images and videos.
+  /// It's not the best way, we can combine [isThatImage] and [isThatMix] in enum for example,
+  /// But, i made this way because i have a lot of data in the backend without [isThatMix]
+  bool isThatMix = false;
   Post({
     required String datePublished,
     required String publisherId,
     UserPersonalInfo? publisherInfo,
     this.postUid = "",
     this.coverOfVideoUrl = "",
+    this.isThatMix = false,
     this.postUrl = "",
     required this.imagesUrls,
     required this.aspectRatio,
@@ -21,6 +27,7 @@ class Post extends ParentPost {
     required List<dynamic> comments,
     required String blurHash,
     required List<dynamic> likes,
+    bool isThatImage = true,
   }) : super(
           datePublished: datePublished,
           likes: likes,
@@ -29,6 +36,7 @@ class Post extends ParentPost {
           caption: caption,
           blurHash: blurHash,
           publisherInfo: publisherInfo,
+          isThatImage: isThatImage,
         );
 
   static Post fromQuery(
@@ -47,6 +55,8 @@ class Post extends ParentPost {
       postUid: snap.data()?["postUid"] ?? "",
       aspectRatio: snap.data()?["aspectRatio"] ?? 0.0,
       postUrl: snap.data()?["postUrl"] ?? "",
+      isThatImage: snap.data()?["isThatImage"] ?? true,
+      isThatMix: snap.data()?["isThatMix"] ?? false,
     );
   }
 
@@ -62,5 +72,7 @@ class Post extends ParentPost {
         'postUid': postUid,
         "postUrl": postUrl,
         "coverOfVideoUrl": coverOfVideoUrl,
+        "isThatImage": isThatImage,
+        "isThatMix": isThatMix,
       };
 }
