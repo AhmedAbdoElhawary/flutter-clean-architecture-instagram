@@ -288,8 +288,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Expanded editProfileButtonForMobile(UserPersonalInfo userInfo) {
     return Expanded(
       child: Builder(builder: (buildContext) {
-        UserPersonalInfo myPersonalInfo =
-            UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
+        UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+        UserPersonalInfo? info = UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
+        if (isMyInfoInReelTimeReady && info != null) myPersonalInfo = info;
         return InkWell(
           onTap: () async {
             Navigator.maybePop(context);
