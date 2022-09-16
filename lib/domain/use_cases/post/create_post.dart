@@ -6,7 +6,7 @@ import '../../repositories/post/post_repository.dart';
 
 class CreatePostUseCase
     implements UseCaseThreeParams<Post, Post, List<SelectedByte>, Uint8List?> {
-  final FirestorePostRepository _createPostRepository;
+  final FireStorePostRepository _createPostRepository;
 
   CreatePostUseCase(this._createPostRepository);
 
