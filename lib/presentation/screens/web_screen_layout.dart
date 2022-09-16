@@ -195,12 +195,9 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
   }
 
   PopupMenuButton<int> buildPopupMenuButton(BuildContext context) {
-    UserPersonalInfo myPersonalInfo;
-    if (isMyInfoInReelTimeReady) {
-      myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
-    } else {
-      myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-    }
+    UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    UserPersonalInfo? info = UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
+    if (isMyInfoInReelTimeReady && info != null) myPersonalInfo = info;
     return PopupMenuButton<int>(
       tooltip: "Show profile menu",
       elevation: 20,
