@@ -6,7 +6,7 @@ import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart'
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import '../../../domain/repositories/post/post_repository.dart';
 
-class FirestorePostRepositoryImpl implements FirestorePostRepository {
+class FireStorePostRepositoryImpl implements FireStorePostRepository {
   @override
   Future<Post> createPost({
     required Post postInfo,
@@ -14,8 +14,14 @@ class FirestorePostRepositoryImpl implements FirestorePostRepository {
     required Uint8List? coverOfVideo,
   }) async {
     try {
+      bool isFirstPostImage = files[0].isThatImage;
+      bool isThatMix = false;
+      postInfo.isThatImage = isFirstPostImage;
       for (int i = 0; i < files.length; i++) {
-        String fileName = files[i].isThatImage ? "jpg" : "mp4";
+        bool isThatImage = files[i].isThatImage;
+        if (!isThatMix) isThatMix = !isThatImage == isFirstPostImage;
+
+        String fileName = isThatImage ? "jpg" : "mp4";
         String postUrl = await FirebaseStoragePost.uploadFile(
             postFile: files[i].selectedFile, folderName: fileName);
         if (i == 0) postInfo.postUrl = postUrl;
@@ -26,6 +32,8 @@ class FirestorePostRepositoryImpl implements FirestorePostRepository {
             data: coverOfVideo, folderName: 'postsVideo');
         postInfo.coverOfVideoUrl = coverOfVideoUrl;
       }
+
+      postInfo.isThatMix = isThatMix;
       Post newPostInfo = await FirestorePost.createPost(postInfo);
       return newPostInfo;
     } catch (e) {
