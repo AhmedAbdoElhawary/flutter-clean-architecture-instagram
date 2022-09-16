@@ -417,7 +417,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  !postInfo.postUrl.contains("mp4")
+                  postInfo.isThatImage
                       ? Container(
                           color: Theme.of(context).primaryColor,
                           width: double.infinity,
@@ -429,6 +429,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
                             url: postInfo.postUrl.isNotEmpty
                                 ? postInfo.postUrl
                                 : postInfo.imagesUrls[0],
+                            isThatImage: postInfo.isThatImage,
                             aspectRatio: postInfo.aspectRatio,
                           ),
                         )

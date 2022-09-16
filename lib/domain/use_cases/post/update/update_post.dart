@@ -3,7 +3,7 @@ import 'package:instagram/core/use_case/use_case.dart';
 import 'package:instagram/domain/repositories/post/post_repository.dart';
 
 class UpdatePostUseCase implements UseCase<Post, Post> {
-  final FirestorePostRepository _updatePostRepository;
+  final FireStorePostRepository _updatePostRepository;
 
   UpdatePostUseCase(this._updatePostRepository);
 

@@ -11,11 +11,12 @@ class StoryImageForWeb extends StatefulWidget {
   final String imageUrl;
   final BoxFit? fit;
   final StoryController? controller;
-
+  final bool isThatImage;
   StoryImageForWeb(
     this.imageUrl, {
     Key? key,
     this.controller,
+    required this.isThatImage,
     this.fit,
   }) : super(key: key ?? UniqueKey());
 
@@ -23,11 +24,13 @@ class StoryImageForWeb extends StatefulWidget {
   factory StoryImageForWeb.url(
     String url, {
     StoryController? controller,
+    required bool isThatImage,
     Map<String, dynamic>? requestHeaders,
     BoxFit fit = BoxFit.fitWidth,
     Key? key,
   }) {
-    return StoryImageForWeb(url, controller: controller, fit: fit, key: key);
+    return StoryImageForWeb(url,
+        isThatImage: isThatImage, controller: controller, fit: fit, key: key);
   }
 
   @override
@@ -73,8 +76,7 @@ class StoryImageForWebState extends State<StoryImageForWeb> {
   }
 
   Widget getContentView() {
-    bool isThatVideo = widget.imageUrl.contains("mp4");
-    if (isThatVideo) {
+    if (!widget.isThatImage) {
       return PlayThisVideo(
         play: true,
         videoUrl: widget.imageUrl,

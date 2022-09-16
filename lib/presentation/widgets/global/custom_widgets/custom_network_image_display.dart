@@ -8,11 +8,12 @@ class NetworkDisplay extends StatefulWidget {
   final int cachingHeight, cachingWidth;
   final String url, blurHash;
   final double aspectRatio;
-
+  final bool isThatImage;
   final double? height;
   const NetworkDisplay({
     Key? key,
     required this.url,
+    this.isThatImage = true,
     this.cachingHeight = 720,
     this.cachingWidth = 720,
     this.height,
@@ -25,16 +26,14 @@ class NetworkDisplay extends StatefulWidget {
 }
 
 class _NetworkDisplayState extends State<NetworkDisplay> {
-  late bool isThatVideo;
   @override
   void initState() {
-    isThatVideo = widget.url.contains("mp4");
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    if (!isThatVideo && widget.url.isNotEmpty) {
+    if (widget.isThatImage && widget.url.isNotEmpty) {
       precacheImage(NetworkImage(widget.url), context);
     }
     super.didChangeDependencies();
@@ -53,7 +52,7 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
   }
 
   Widget whichBuild({double? height = double.infinity}) {
-    return isThatVideo
+    return !widget.isThatImage
         ? PlayThisVideo(
             play: true,
             videoUrl: widget.url,

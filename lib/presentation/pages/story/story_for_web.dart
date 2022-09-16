@@ -177,6 +177,7 @@ class StoryWidgetState extends State<StoryWidget> {
       storyItems.add(StoryItem.inlineImage(
         roundedBottom: false,
         roundedTop: false,
+        isThatImage: story.isThatImage,
         blurHash: story.blurHash,
         imageFit: BoxFit.fitWidth,
         url: story.storyUrl,

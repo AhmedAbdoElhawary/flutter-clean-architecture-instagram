@@ -32,34 +32,27 @@ class CustomGridViewDisplay extends StatefulWidget {
 class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   @override
   Widget build(BuildContext context) {
-    return createGridTileWidget();
+    return SafeArea(child: createGridTileWidget());
   }
 
   Widget createGridTileWidget() {
-    bool isThatVideo = widget.postClickedInfo.postUrl.contains("mp4");
-    return SafeArea(
-      child: Builder(
-        builder: (context) {
-          if (isThatMobile) {
-            return PopupPostCard(
-              postClickedInfo: widget.postClickedInfo,
-              postsInfo: widget.postsInfo,
-              isThatProfile: widget.isThatProfile,
-              postClickedWidget:
-                  !isThatVideo ? buildCardImage() : buildCardVideo(),
-            );
-          } else {
-            return GestureDetector(
-              onTap: onTapPostForWeb,
-              onLongPressEnd: (_) => onTapPostForWeb,
-              child: !isThatVideo
-                  ? buildCardImage()
-                  : buildCardVideo(playVideo: false),
-            );
-          }
-        },
-      ),
-    );
+    Post postInfo = widget.postClickedInfo;
+    bool isThatImage = postInfo.isThatMix || postInfo.isThatImage;
+    if (isThatMobile) {
+      return PopupPostCard(
+        postClickedInfo: postInfo,
+        postsInfo: widget.postsInfo,
+        isThatProfile: widget.isThatProfile,
+        postClickedWidget: isThatImage ? buildCardImage() : buildCardVideo(),
+      );
+    } else {
+      return GestureDetector(
+        onTap: onTapPostForWeb,
+        onLongPressEnd: (_) => onTapPostForWeb,
+        child:
+            isThatImage ? buildCardImage() : buildCardVideo(playVideo: false),
+      );
+    }
   }
 
   onTapPostForWeb() => Navigator.of(context).push(
@@ -81,7 +74,9 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
   Widget buildCardVideo({bool? playVideo}) {
     return PlayThisVideo(
       videoUrl: widget.postClickedInfo.postUrl,
-      coverOfVideoUrl: widget.postClickedInfo.coverOfVideoUrl,
+      coverOfVideoUrl: !widget.isThatProfile && playVideo == null
+          ? ""
+          : widget.postClickedInfo.coverOfVideoUrl,
       blurHash: widget.postClickedInfo.blurHash,
       play: playVideo ?? widget.playThisVideo,
       withoutSound: true,
@@ -97,6 +92,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
         NetworkDisplay(
           cachingHeight: 238,
           cachingWidth: 238,
+          isThatImage: widget.postClickedInfo.isThatImage,
           blurHash: widget.postClickedInfo.blurHash,
           url: isThatMultiImages
               ? widget.postClickedInfo.imagesUrls[0]

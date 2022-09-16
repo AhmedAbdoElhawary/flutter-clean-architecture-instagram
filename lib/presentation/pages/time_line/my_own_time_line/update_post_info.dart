@@ -159,32 +159,33 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
   List<Widget> imageOfPost(Post postInfo, double bodyHeight) {
     String postUrl =
         postInfo.postUrl.isNotEmpty ? postInfo.postUrl : postInfo.imagesUrls[0];
-    bool isThatVideo = postUrl.contains("mp4");
+    bool isThatImage = postInfo.isThatImage;
     return [
       GestureDetector(
         child: Padding(
           padding: const EdgeInsetsDirectional.only(top: 8.0),
-          child: !isThatVideo
-              ? (postInfo.imagesUrls.length > 1
-                  ? ImagesSlider(
-                      aspectRatio: postInfo.aspectRatio,
-                      blurHash: postInfo.blurHash,
-                      imagesUrls: postInfo.imagesUrls,
-                      updateImageIndex: _updateImageIndex,
-                    )
-                  : Hero(
+          child: postInfo.imagesUrls.length > 1
+              ? ImagesSlider(
+                  aspectRatio: postInfo.aspectRatio,
+                  blurHash: postInfo.blurHash,
+                  imagesUrls: postInfo.imagesUrls,
+                  updateImageIndex: _updateImageIndex,
+                )
+              : (isThatImage
+                  ? Hero(
                       tag: postUrl,
                       child: NetworkDisplay(
                         blurHash: postInfo.blurHash,
+                        isThatImage: isThatImage,
                         url: postUrl,
                       ),
-                    ))
-              : PlayThisVideo(
-                  videoUrl: postInfo.postUrl,
-                  coverOfVideoUrl: postInfo.coverOfVideoUrl,
-                  blurHash: postInfo.blurHash,
-                  play: false,
-                ),
+                    )
+                  : PlayThisVideo(
+                      videoUrl: postInfo.postUrl,
+                      coverOfVideoUrl: postInfo.coverOfVideoUrl,
+                      blurHash: postInfo.blurHash,
+                      play: false,
+                    )),
         ),
       ),
       if (postInfo.imagesUrls.length > 1)

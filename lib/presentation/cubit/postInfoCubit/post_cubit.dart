@@ -33,7 +33,7 @@ class PostCubit extends Cubit<PostState> {
 
   static PostCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future<void> createPostForMobile(Post postInfo, List<SelectedByte> files,
+  Future<void> createPost(Post postInfo, List<SelectedByte> files,
       {Uint8List? coverOfVideo}) async {
     newPostInfo = null;
     emit(CubitPostLoading());

@@ -3,7 +3,7 @@ import 'package:instagram/core/use_case/use_case.dart';
 
 class PutLikeOnThisPostUseCase
     implements UseCaseTwoParams<void, String, String> {
-  final FirestorePostRepository _putLikeOnThisPostRepository;
+  final FireStorePostRepository _putLikeOnThisPostRepository;
 
   PutLikeOnThisPostUseCase(this._putLikeOnThisPostRepository);
 

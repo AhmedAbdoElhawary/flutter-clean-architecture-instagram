@@ -523,48 +523,17 @@ class _ImageOfPostState extends State<ImageOfPost>
           },
           child: Padding(
             padding: const EdgeInsetsDirectional.only(top: 8.0),
-            child: !postInfo.postUrl.contains("mp4")
-                ? (postInfo.imagesUrls.length > 1
-                    ? ImagesSlider(
-                        blurHash: postInfo.blurHash,
-                        aspectRatio: postInfo.aspectRatio,
-                        imagesUrls: postInfo.imagesUrls,
-                        updateImageIndex: _updateImageIndex,
-                        showPointsScrollBar: widget.popupWebContainer,
-                      )
-                    : buildSingleImage(postInfo))
-                : Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      PlayThisVideo(
-                        videoUrl: postInfo.postUrl,
-                        coverOfVideoUrl: postInfo.coverOfVideoUrl,
-                        blurHash: postInfo.blurHash,
-                        play: widget.playTheVideo,
-                        withoutSound: !isSoundOn,
-                      ),
-                      if (!widget.playTheVideo)
-                        Align(
-                          alignment: Alignment.center,
-                          child: Icon(
-                            Icons.play_arrow_rounded,
-                            color: ColorManager.white,
-                            size: isThatMobile ? 100 : 200,
-                          ),
-                        ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: GestureDetector(
-                            onTap: () => setState(() => isSoundOn = !isSoundOn),
-                            child: VolumeIcon(isVolumeOn: isSoundOn),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+            child: postInfo.imagesUrls.length > 1
+                ? ImagesSlider(
+                    blurHash: postInfo.blurHash,
+                    aspectRatio: postInfo.aspectRatio,
+                    imagesUrls: postInfo.imagesUrls,
+                    updateImageIndex: _updateImageIndex,
+                    showPointsScrollBar: widget.popupWebContainer,
+                  )
+                : (postInfo.isThatImage
+                    ? buildSingleImage(postInfo)
+                    : videoPlayer(postInfo)),
           ),
         ),
         Opacity(
@@ -577,6 +546,41 @@ class _ImageOfPostState extends State<ImageOfPost>
             onEnd: () => setState(() => isHeartAnimation = false),
           ),
         ),
+      ],
+    );
+  }
+
+  Stack videoPlayer(Post postInfo) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        PlayThisVideo(
+          videoUrl: postInfo.postUrl,
+          coverOfVideoUrl: postInfo.coverOfVideoUrl,
+          blurHash: postInfo.blurHash,
+          play: widget.playTheVideo,
+          withoutSound: !isSoundOn,
+        ),
+        if (!widget.playTheVideo)
+          Align(
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.play_arrow_rounded,
+              color: ColorManager.white,
+              size: isThatMobile ? 100 : 200,
+            ),
+          ),
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: GestureDetector(
+              onTap: () => setState(() => isSoundOn = !isSoundOn),
+              child: VolumeIcon(isVolumeOn: isSoundOn),
+            ),
+          ),
+        )
       ],
     );
   }
@@ -598,6 +602,7 @@ class _ImageOfPostState extends State<ImageOfPost>
           blurHash: postInfo.blurHash,
           aspectRatio: postInfo.aspectRatio,
           url: postInfo.postUrl,
+          isThatImage: postInfo.isThatImage,
         ),
       );
     });

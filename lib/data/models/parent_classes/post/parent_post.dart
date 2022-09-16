@@ -8,6 +8,7 @@ abstract class ParentPost {
   List<dynamic> comments;
   UserPersonalInfo? publisherInfo;
   String blurHash;
+  bool isThatImage;
 
   ParentPost({
     required this.datePublished,
@@ -17,5 +18,6 @@ abstract class ParentPost {
     required this.comments,
     required this.blurHash,
     required this.likes,
+    required this.isThatImage,
   });
 }

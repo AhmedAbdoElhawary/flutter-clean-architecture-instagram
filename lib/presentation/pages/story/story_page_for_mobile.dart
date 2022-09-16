@@ -102,6 +102,7 @@ class StoryWidgetState extends State<StoryWidget> {
         StoryItem.inlineImage(
           roundedBottom: false,
           roundedTop: false,
+          isThatImage: story.isThatImage,
           blurHash: story.blurHash,
           url: story.storyUrl,
           controller: controller.value,
