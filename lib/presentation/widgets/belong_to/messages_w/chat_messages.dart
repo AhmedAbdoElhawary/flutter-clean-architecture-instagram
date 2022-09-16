@@ -856,69 +856,72 @@ class _ChatMessagesState extends State<ChatMessages>
 
   Widget pickImageFromCamera(MessageCubit messageCubit) {
     return ValueListenableBuilder(
-        valueListenable: appearIcons,
-        builder: (context, bool appearIconsValue, child) => Visibility(
-              visible: appearIconsValue,
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(end: 10.0),
-                child: GestureDetector(
-                  onTap: () async {
-                    SelectedImagesDetails? pickImage =
-                        await CustomImagePickerPlus.pickImage(context,
-                            source: ImageSource.camera);
-                    if (pickImage != null) {
-                      Uint8List byte = pickImage.selectedFiles[0].selectedByte;
-                      isMessageLoaded.value = true;
-                      String blurHash =
-                          await CustomBlurHash.blurHashEncode(byte);
+      valueListenable: appearIcons,
+      builder: (context, bool appearIconsValue, child) => Visibility(
+        visible: appearIconsValue,
+        child: Padding(
+          padding: const EdgeInsetsDirectional.only(end: 10.0),
+          child: GestureDetector(
+            onTap: () async {
+              SelectedImagesDetails? pickImage =
+                  await CustomImagePickerPlus.pickImage(context,
+                      source: ImageSource.camera);
+              if (pickImage != null) {
+                Uint8List byte = pickImage.selectedFiles[0].selectedByte;
+                isMessageLoaded.value = true;
+                String blurHash = await CustomBlurHash.blurHashEncode(byte);
 
-                      if (!mounted) return;
-                      if (widget.messageDetails.isThatGroupChat ||
-                          widget.messageDetails.lastMessage!.isThatGroup) {
-                        newMessageInfo.value = newMessageForGroup(
-                            blurHash: blurHash, isThatImage: true);
-                        newMessageInfo.value!.localImage = byte;
-                        await MessageForGroupChatCubit.get(context).sendMessage(
-                            messageInfo: newMessageForGroup(
-                                blurHash: blurHash, isThatImage: true),
-                            pathOfPhoto: byte);
-                        if (!mounted) return;
-                        bool check = widget.messageDetails.lastMessage
-                                ?.chatOfGroupId.isEmpty ??
-                            true;
-                        if (check) {
-                          Message lastMessage =
-                              MessageForGroupChatCubit.getLastMessage(context);
-                          widget.messageDetails.lastMessage = lastMessage;
-                        }
-                      } else {
-                        newMessageInfo.value =
-                            newMessage(blurHash: blurHash, isThatImage: true);
-                        newMessageInfo.value!.localImage = byte;
-                        messageCubit.sendMessage(
-                            messageInfo: newMessage(
-                                blurHash: blurHash, isThatImage: true),
-                            pathOfPhoto: byte);
-                      }
+                if (!mounted) return;
+                if (widget.messageDetails.isThatGroupChat ||
+                    widget.messageDetails.lastMessage!.isThatGroup) {
+                  newMessageInfo.value =
+                      newMessageForGroup(blurHash: blurHash, isThatImage: true);
+                  newMessageInfo.value!.localImage = byte;
+                  await MessageForGroupChatCubit.get(context).sendMessage(
+                      messageInfo: newMessageForGroup(
+                          blurHash: blurHash, isThatImage: true),
+                      pathOfPhoto: byte);
+                  if (!mounted) return;
+                  bool check = widget
+                          .messageDetails.lastMessage?.chatOfGroupId.isEmpty ??
+                      true;
+                  if (check) {
+                    Message lastMessage =
+                        MessageForGroupChatCubit.getLastMessage(context);
+                    widget.messageDetails.lastMessage = lastMessage;
+                  }
+                } else {
+                  newMessageInfo.value =
+                      newMessage(blurHash: blurHash, isThatImage: true);
+                  newMessageInfo.value!.localImage = byte;
+                  messageCubit.sendMessage(
+                      messageInfo:
+                          newMessage(blurHash: blurHash, isThatImage: true),
+                      pathOfPhoto: byte);
+                }
 
-                      if (!mounted) return;
+                if (!mounted) return;
 
-                      scrollToLastIndex(context);
-                    } else {
-                      ToastShow.toast(StringsManager.noImageSelected.tr);
-                    }
-                  },
-                  child: const CircleAvatar(
-                      backgroundColor: ColorManager.darkBlue,
-                      radius: 18,
-                      child: ClipOval(
-                          child: Icon(
-                        Icons.camera_alt,
-                        color: ColorManager.white,
-                      ))),
+                scrollToLastIndex(context);
+              } else {
+                ToastShow.toast(StringsManager.noImageSelected.tr);
+              }
+            },
+            child: const CircleAvatar(
+              backgroundColor: ColorManager.darkBlue,
+              radius: 18,
+              child: ClipOval(
+                clipBehavior: Clip.none,
+                child: Icon(
+                  Icons.camera_alt,
+                  color: ColorManager.white,
                 ),
               ),
-            ));
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget messageTextField() {
@@ -1109,20 +1112,18 @@ class _ChatMessagesState extends State<ChatMessages>
             Positioned(
               left: 115,
               top: -18,
-              child: CircleAvatar(
-                radius: 30,
-                child: ClipOval(
-                  child: NetworkDisplay(url: receiversInfo[1].profileImageUrl),
-                ),
+              child: CircleAvatarOfProfileImage(
+                bodyHeight: 700,
+                userInfo: receiversInfo[1],
+                showColorfulCircle: false,
               ),
             ),
             Align(
               alignment: Alignment.center,
-              child: CircleAvatar(
-                radius: 30,
-                child: ClipOval(
-                  child: NetworkDisplay(url: receiversInfo[0].profileImageUrl),
-                ),
+              child: CircleAvatarOfProfileImage(
+                bodyHeight: 700,
+                userInfo: receiversInfo[0],
+                showColorfulCircle: false,
               ),
             ),
           ],

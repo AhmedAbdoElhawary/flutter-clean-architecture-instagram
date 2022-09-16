@@ -7,6 +7,7 @@ import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/translations/app_lang.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/message.dart';
@@ -113,6 +114,7 @@ class _ListOfMessagesState extends State<ListOfMessages> {
   }
 
   ListView buildListView(List<SenderInfo> usersInfo, num bodyHeight) {
+    bool isThatEnglish = AppLanguage().appLocale == "en";
     return ListView.separated(
         physics: widget.freezeListView
             ? const NeverScrollableScrollPhysics()
@@ -141,14 +143,16 @@ class _ListOfMessagesState extends State<ListOfMessages> {
                 children: [
                   if (isThatGroup) ...[
                     Padding(
-                      padding: const EdgeInsetsDirectional.only(
-                          top: 15, end: 5, start: 15),
+                      padding: EdgeInsetsDirectional.only(
+                          top: 15,
+                          end: isThatEnglish ? 12 : 3,
+                          start: isThatEnglish ? 5 : 15),
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [
                           Positioned(
                             top: -12,
-                            left: 12,
+                            left: 8,
                             child: CircleAvatarOfProfileImage(
                               bodyHeight: bodyHeight * 0.7,
                               userInfo: usersInfo[index].receiversInfo![0],

@@ -11,9 +11,9 @@ import 'package:instagram/domain/entities/sender_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
 import 'package:instagram/presentation/pages/profile/user_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/chat_messages.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
 class ChattingPage extends StatefulWidget {
   final SenderInfo? messageDetails;
@@ -107,16 +107,12 @@ class _ChattingPageState extends State<ChattingPage>
     );
   }
 
-  CircleAvatar circleAvatarOfImage(UserPersonalInfo userInfo) {
-    return CircleAvatar(
-      radius: 45,
-      child: ClipOval(
-        child: NetworkDisplay(
-          url: userInfo.profileImageUrl,
-          cachingWidth: 238,
-          cachingHeight: 238,
-        ),
-      ),
+  Widget circleAvatarOfImage(UserPersonalInfo userInfo) {
+    return CircleAvatarOfProfileImage(
+      bodyHeight: 1000,
+      userInfo: userInfo,
+      showColorfulCircle: false,
+      disablePressed: false,
     );
   }
 

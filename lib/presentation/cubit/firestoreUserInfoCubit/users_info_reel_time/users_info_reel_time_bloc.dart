@@ -18,15 +18,12 @@ class UsersInfoReelTimeBloc
 
   static UsersInfoReelTimeBloc get(BuildContext context) =>
       BlocProvider.of(context);
-  late UserPersonalInfo myPersonalInfoInReelTime;
+   UserPersonalInfo? myPersonalInfoInReelTime;
   List<UserPersonalInfo> allUsersInfoInReelTime = [];
 
-  static UserPersonalInfo getMyInfoInReelTime(BuildContext context) =>
+  static UserPersonalInfo? getMyInfoInReelTime(BuildContext context) =>
       BlocProvider.of<UsersInfoReelTimeBloc>(context).myPersonalInfoInReelTime;
 
-  static List<UserPersonalInfo> getAllUsersInfoInReelTime(
-          BuildContext context) =>
-      BlocProvider.of<UsersInfoReelTimeBloc>(context).allUsersInfoInReelTime;
   @override
   Stream<UsersInfoReelTimeState> mapEventToState(
     UsersInfoReelTimeEvent event,
@@ -55,8 +52,9 @@ class UsersInfoReelTimeBloc
 
   Stream<UsersInfoReelTimeState> _mapUpdateMyInfoToState(
       UpdateMyPersonalInfo event) async* {
-    isMyInfoInReelTimeReady = true;
     myPersonalInfoInReelTime = event.myPersonalInfoInReelTime;
+    isMyInfoInReelTimeReady = true;
+
     yield MyPersonalInfoLoaded(
         myPersonalInfoInReelTime: event.myPersonalInfoInReelTime);
   }

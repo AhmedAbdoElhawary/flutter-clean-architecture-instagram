@@ -17,7 +17,6 @@ import 'package:instagram/presentation/pages/messages/messages_page_for_mobile.d
 import 'package:instagram/presentation/pages/messages/wait_call_page.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 
 class CustomAppBar {
   static AppBar basicAppBar(BuildContext context) {
@@ -204,28 +203,18 @@ class CustomAppBar {
         Positioned(
           left: 10,
           top: -6,
-          child: CircleAvatar(
-            radius: 12,
-            child: ClipOval(
-              child: NetworkDisplay(
-                url: userInfo[0].profileImageUrl,
-                cachingWidth: 68,
-                cachingHeight: 68,
-              ),
-            ),
+          child: CircleAvatarOfProfileImage(
+            bodyHeight: 280,
+            userInfo: userInfo[0],
+            showColorfulCircle: false,disablePressed: false,
           ),
         ),
         Align(
           alignment: Alignment.center,
-          child: CircleAvatar(
-            radius: 12,
-            child: ClipOval(
-              child: NetworkDisplay(
-                url: userInfo[1].profileImageUrl,
-                cachingWidth: 68,
-                cachingHeight: 68,
-              ),
-            ),
+          child:CircleAvatarOfProfileImage(
+            bodyHeight: 280,
+            userInfo: userInfo[1],
+            showColorfulCircle: false,disablePressed: false,
           ),
         ),
       ],

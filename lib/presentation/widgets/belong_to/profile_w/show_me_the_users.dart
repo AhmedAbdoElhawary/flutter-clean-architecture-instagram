@@ -120,7 +120,10 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
         return Builder(
           builder: (userContext) {
             UserPersonalInfo myPersonalInfo =
+                UserInfoCubit.getMyPersonalInfo(context);
+            UserPersonalInfo? info =
                 UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
+            if (isMyInfoInReelTimeReady && info != null) myPersonalInfo = info;
 
             if (myPersonalId == userInfo.userId) {
               return Container();

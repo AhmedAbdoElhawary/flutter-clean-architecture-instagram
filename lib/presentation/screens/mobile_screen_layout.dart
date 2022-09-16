@@ -116,12 +116,10 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       );
 
   BottomNavigationBarItem personalImageItem() {
-    UserPersonalInfo myPersonalInfo;
-    if (isMyInfoInReelTimeReady) {
-      myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
-    } else {
-      myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-    }
+    UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    UserPersonalInfo? info = UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
+    if (isMyInfoInReelTimeReady && info != null) myPersonalInfo = info;
+
     return BottomNavigationBarItem(
         icon: PersonalImageIcon(
       myPersonalInfo: myPersonalInfo,
