@@ -204,7 +204,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     if (!mounted) return;
 
     PostCubit postCubit = BlocProvider.of<PostCubit>(context, listen: false);
-    await postCubit.createPostForMobile(postInfo, selectedByte,
+    await postCubit.createPost(postInfo, selectedByte,
         coverOfVideo: convertedBytes);
 
     if (postCubit.newPostInfo != null) {
