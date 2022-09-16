@@ -62,14 +62,19 @@ class _ImagesSliderState extends State<ImagesSlider> {
                 carouselController: _controller,
                 itemBuilder: (context, index, realIndex) {
                   if (widget.isImageFromNetwork) {
+                    dynamic imageUrl = widget.imagesUrls[index];
+                    bool isThatVideo = imageUrl.toString().contains("mp4");
                     return NetworkDisplay(
                       aspectRatio: widget.aspectRatio,
                       blurHash: index == 0 ? widget.blurHash : "",
-                      url: widget.imagesUrls[index],
+                      url: imageUrl,
+                      isThatImage: !isThatVideo,
                     );
                   } else {
                     return MemoryDisplay(
-                        imagePath: selectedImages[index].selectedByte);
+                      imagePath: selectedImages[index].selectedByte,
+                      isThatImage: selectedImages[index].isThatImage,
+                    );
                   }
                 },
                 options: CarouselOptions(
