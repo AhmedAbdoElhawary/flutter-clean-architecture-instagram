@@ -313,7 +313,7 @@ class FirestoreUser {
     Map<String, dynamic>? snap = (await collection.get()).data();
     List<dynamic> lastPosts = snap?["lastThreePostUrls"] ??= [];
     if (lastPosts.length >= 3) lastPosts = lastPosts.sublist(0, 3);
-    bool isThatImage =postInfo.isThatImage;
+    bool isThatImage = postInfo.isThatImage;
 
     if (isThatImage) {
       lastPosts.add(postInfo.postUrl);
