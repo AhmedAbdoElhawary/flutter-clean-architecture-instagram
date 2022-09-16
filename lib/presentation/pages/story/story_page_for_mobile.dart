@@ -105,7 +105,6 @@ class StoryWidgetState extends State<StoryWidget> {
           isThatImage: story.isThatImage,
           blurHash: story.blurHash,
           url: story.storyUrl,
-
           controller: controller.value,
           imageFit: BoxFit.fitWidth,
           caption: Text(story.caption),
