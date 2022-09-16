@@ -105,8 +105,8 @@ Future<void> initializeDependencies() async {
   // Repository
 
   // Post
-  injector.registerSingleton<FirestorePostRepository>(
-    FirestorePostRepositoryImpl(),
+  injector.registerSingleton<FireStorePostRepository>(
+    FireStorePostRepositoryImpl(),
   );
   // comment
   injector.registerSingleton<FirestoreCommentRepository>(
