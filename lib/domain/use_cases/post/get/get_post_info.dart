@@ -4,7 +4,7 @@ import 'package:instagram/core/use_case/use_case.dart';
 
 class GetPostsInfoUseCase
     implements UseCaseTwoParams<List<Post>, List<dynamic>, int> {
-  final FirestorePostRepository _getPostRepository;
+  final FireStorePostRepository _getPostRepository;
 
   GetPostsInfoUseCase(this._getPostRepository);
 
