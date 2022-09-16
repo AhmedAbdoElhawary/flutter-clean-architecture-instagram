@@ -175,9 +175,8 @@ class _ShareButtonState extends State<ShareButton> {
           color: ColorManager.grey,
           borderRadius: BorderRadius.circular(5),
           image: DecorationImage(
-            image: NetworkImage(!postInfo.postUrl.contains("mp4")
-                ? postImageUrl
-                : postInfo.coverOfVideoUrl),
+            image: NetworkImage(
+                postInfo.isThatImage ? postImageUrl : postInfo.coverOfVideoUrl),
             fit: BoxFit.cover,
           ),
         ),
