@@ -2,11 +2,12 @@ import 'dart:typed_data';
 import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 
-abstract class FirestorePostRepository {
-  Future<Post> createPost(
-      {required Post postInfo,
-      required List<SelectedByte> files,
-      required Uint8List? coverOfVideo});
+abstract class FireStorePostRepository {
+  Future<Post> createPost({
+    required Post postInfo,
+    required List<SelectedByte> files,
+    required Uint8List? coverOfVideo,
+  });
   Future<List<Post>> getPostsInfo(
       {required List<dynamic> postsIds, required int lengthOfCurrentList});
   Future<List<Post>> getAllPostsInfo(
