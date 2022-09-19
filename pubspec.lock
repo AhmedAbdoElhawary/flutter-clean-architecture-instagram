@@ -612,9 +612,11 @@ packages:
   image_picker_plus:
     dependency: "direct main"
     description:
-      name: image_picker_plus
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: d5e5be299e498fb3100e80a55a6f9cc7fd74cce4
+      url: "https://github.com/AhmedAbdoElhawary/image_picker_plus"
+    source: git
     version: "0.5.1"
   intl:
     dependency: transitive
@@ -859,8 +861,8 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "6d7fbdd5b3cde242a474d66da312aac4aa892b9b"
-      url: "https://github.com/miquelbeltran/flutter_pulltorefresh"
+      resolved-ref: "0be096c1a822fb03b38115cd76d1bee7e5afdaa2"
+      url: "https://github.com/peng8350/flutter_pulltorefresh"
     source: git
     version: "2.0.0"
   quiver:

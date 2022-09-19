@@ -41,7 +41,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
         AnimationController(value: 0.0, vsync: this, upperBound: 1.0);
     _footerController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 2000));
-    _refreshController.value.headerMode!.addListener(() {
+    _refreshController.value.headerMode?.addListener(() {
       if (_refreshController.value.headerStatus == RefreshStatus.idle) {
         _scaleController.value = 0.0;
         _aniController.reset();
@@ -79,6 +79,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
       enablePullDown: true,
       enablePullUp: true,
       controller: value,
+      cacheExtent: 0,
       scrollDirection: Axis.vertical,
       onRefresh: onSmarterRefresh,
       onLoading: onSmarterLoading,
@@ -148,11 +149,11 @@ class _SmarterRefreshState extends State<SmarterRefresh>
     );
   }
 
-  CustomHeader customHeader() {
+  Widget customHeader() {
     return CustomHeader(
       refreshStyle: RefreshStyle.Behind,
       onOffsetChange: (offset) {
-        if (_refreshController.value.headerMode!.value !=
+        if (_refreshController.value.headerMode?.value !=
             RefreshStatus.refreshing) {
           _scaleController.value = offset / 150.0;
         }

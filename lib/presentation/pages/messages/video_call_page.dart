@@ -60,8 +60,15 @@ class CallPageState extends State<CallPage> {
   void initState() {
     super.initState();
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
+      WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
+
     initialize();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+      WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
   }
 
   Future<void> onJoin() async {
@@ -290,7 +297,7 @@ class CallPageState extends State<CallPage> {
   @override
   Widget build(BuildContext context) {
     final views = _getRenderViews();
-    final numOfUsers = widget.usersInfo!.length;
+    final int? numOfUsers = widget.usersInfo?.length;
     return Material(
       child: Center(
         child: Stack(
@@ -352,7 +359,7 @@ class CallPageState extends State<CallPage> {
                             child: buildCircleAvatar(1, 700)),
                       ],
                       const SizedBox(height: 30),
-                      ...List.generate(numOfUsers, (index) {
+                      ...List.generate(numOfUsers!, (index) {
                         return Text(widget.usersInfo![index].name,
                             style: getNormalStyle(
                                 color: ColorManager.white, fontSize: 25));
