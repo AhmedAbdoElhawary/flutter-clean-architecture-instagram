@@ -13,7 +13,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageBlocState> {
   final GetMessagesUseCase _getMessagesUseCase;
   final GetMessagesGroGroupChatUseCase _getMessagesGroGroupChatUseCase;
   MessageBloc(this._getMessagesUseCase, this._getMessagesGroGroupChatUseCase)
-      : super(const MessageBlocLoaded());
+      : super( MessageBlocInitial());
 
   @override
   Stream<MessageBlocState> mapEventToState(
