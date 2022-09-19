@@ -92,6 +92,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
         NetworkDisplay(
           cachingHeight: 238,
           cachingWidth: 238,
+          height: isThatMobile ? 150 : 300,
           isThatImage: widget.postClickedInfo.isThatImage,
           blurHash: widget.postClickedInfo.blurHash,
           url: isThatMultiImages
