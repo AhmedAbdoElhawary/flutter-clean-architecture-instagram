@@ -37,84 +37,87 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      body: Stack(children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "To",
-                style: getMediumStyle(
-                    color: Theme.of(context).focusColor, fontSize: 17),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                controller: scrollController,
-                reverse: true,
-                physics: const BouncingScrollPhysics(),
-                child: ValueListenableBuilder(
-                  valueListenable: selectedUsersInfo,
-                  builder: (context,
-                      List<UserPersonalInfo> selectedUsersInfoValue, child) {
-                    return Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (selectedUsersInfoValue.isEmpty) ...[
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 3.0, vertical: 17),
-                            child: Text(
-                              "Select users",
-                              style: getNormalStyle(
-                                  color: ColorManager.grey, fontSize: 15),
-                            ),
-                          ),
-                        ] else ...[
-                          ...List.generate(
-                            selectedUsersInfoValue.length,
-                            (index) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 3.0, vertical: 5),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 13.5),
-                                  decoration: BoxDecoration(
-                                      color: ColorManager.blue,
-                                      gradient: const LinearGradient(
-                                          begin: Alignment.centerLeft,
-                                          end: Alignment.centerRight,
-                                          colors: [
-                                            Colors.blue,
-                                            Color.fromARGB(255, 121, 219, 236)
-                                          ]),
-                                      borderRadius: BorderRadius.circular(30)),
-                                  child: Center(
-                                    child: Text(
-                                      selectedUsersInfoValue[index].name,
-                                      style: getNormalStyle(
-                                          color: ColorManager.white,
-                                          fontSize: 15),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ],
-                    );
-                  },
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "To",
+                  style: getMediumStyle(
+                      color: Theme.of(context).focusColor, fontSize: 17),
                 ),
-              ),
-            ],
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  controller: scrollController,
+                  reverse: true,
+                  physics: const BouncingScrollPhysics(),
+                  child: ValueListenableBuilder(
+                    valueListenable: selectedUsersInfo,
+                    builder: (context,
+                        List<UserPersonalInfo> selectedUsersInfoValue, child) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (selectedUsersInfoValue.isEmpty) ...[
+                            emptyMessage(),
+                          ] else ...[
+                            ...List.generate(
+                              selectedUsersInfoValue.length,
+                              (index) {
+                                return buildSelectedUser(
+                                    selectedUsersInfoValue, index);
+                              },
+                            ),
+                          ],
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          buildBlocBuilder(),
+        ],
+      ),
+    );
+  }
+
+  Padding emptyMessage() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 17),
+      child: Text(
+        "Select users",
+        style: getNormalStyle(color: ColorManager.grey, fontSize: 15),
+      ),
+    );
+  }
+
+  Padding buildSelectedUser(
+      List<UserPersonalInfo> selectedUsersInfoValue, int index) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 5),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 13.5),
+        decoration: BoxDecoration(
+            color: ColorManager.blue,
+            gradient: const LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Colors.blue, Color.fromARGB(255, 121, 219, 236)]),
+            borderRadius: BorderRadius.circular(30)),
+        child: Center(
+          child: Text(
+            selectedUsersInfoValue[index].name,
+            style: getNormalStyle(color: ColorManager.white, fontSize: 15),
           ),
         ),
-        buildBlocBuilder(),
-      ]),
+      ),
     );
   }
 
@@ -272,9 +275,11 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
             width: 2),
         borderRadius: BorderRadius.circular(50.0),
       ),
-      child: const Center(
-        child: Icon(Icons.check_rounded, color: ColorManager.white, size: 17),
-      ),
+      child: isUserSelected
+          ? const Center(
+              child: Icon(Icons.check_rounded,
+                  color: ColorManager.white, size: 17))
+          : null,
     );
   }
 }
