@@ -158,6 +158,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget inViewNotifier(double bodyHeight) {
+
     return ValueListenableBuilder(
       valueListenable: postsInfo,
       builder: (context, List<Post> postsInfoValue, child) =>
