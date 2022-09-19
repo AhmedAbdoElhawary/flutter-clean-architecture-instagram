@@ -81,7 +81,8 @@ dependencies:
   # My package
 #  image_picker_plus: ^0.5.1
   image_picker_plus:
-    path: C:\Users\ahmed\StudioProjects\custom_gallery_display
+    git:
+      url: https://github.com/AhmedAbdoElhawary/image_picker_plus
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
