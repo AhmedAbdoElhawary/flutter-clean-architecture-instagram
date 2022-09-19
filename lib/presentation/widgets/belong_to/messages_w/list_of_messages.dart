@@ -146,7 +146,7 @@ class _ListOfMessagesState extends State<ListOfMessages> {
                       padding: EdgeInsetsDirectional.only(
                           top: 15,
                           end: isThatEnglish ? 12 : 3,
-                          start: isThatEnglish ? 5 : 15),
+                          start: isThatEnglish ? (isThatMobile ? 5 : 0) : 15),
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [
