@@ -61,7 +61,6 @@ class _CustomSmartRefreshState extends State<CustomSmartRefresh>
           enablePullDown: true,
           enableTwoLevel: false,
           controller: value,
-          cacheExtent: 0,
           scrollDirection: Axis.vertical,
           onRefresh: onSmarterRefresh,
           header: customHeader(),
