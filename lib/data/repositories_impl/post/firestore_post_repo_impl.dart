@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:image_picker_plus/image_picker_plus.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
 import 'package:instagram/data/datasourses/remote/post/firestore_post.dart';
 import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
@@ -22,8 +23,15 @@ class FireStorePostRepositoryImpl implements FireStorePostRepository {
         if (!isThatMix) isThatMix = !isThatImage == isFirstPostImage;
 
         String fileName = isThatImage ? "jpg" : "mp4";
-        String postUrl = await FirebaseStoragePost.uploadFile(
-            postFile: files[i].selectedFile, folderName: fileName);
+        String postUrl;
+        if (isThatMobile) {
+          postUrl = await FirebaseStoragePost.uploadFile(
+              postFile: files[i].selectedFile, folderName: fileName);
+        } else {
+          postUrl = await FirebaseStoragePost.uploadData(
+              data: files[i].selectedByte, folderName: fileName);
+        }
+
         if (i == 0) postInfo.postUrl = postUrl;
         postInfo.imagesUrls.add(postUrl);
       }
