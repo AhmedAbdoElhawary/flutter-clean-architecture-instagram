@@ -79,7 +79,6 @@ class _SmarterRefreshState extends State<SmarterRefresh>
       enablePullDown: true,
       enablePullUp: true,
       controller: value,
-      cacheExtent: 0,
       scrollDirection: Axis.vertical,
       onRefresh: onSmarterRefresh,
       onLoading: onSmarterLoading,

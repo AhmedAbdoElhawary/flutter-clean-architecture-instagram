@@ -612,12 +612,10 @@ packages:
   image_picker_plus:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: d5e5be299e498fb3100e80a55a6f9cc7fd74cce4
-      url: "https://github.com/AhmedAbdoElhawary/image_picker_plus"
-    source: git
-    version: "0.5.1"
+      name: image_picker_plus
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.2"
   intl:
     dependency: transitive
     description:

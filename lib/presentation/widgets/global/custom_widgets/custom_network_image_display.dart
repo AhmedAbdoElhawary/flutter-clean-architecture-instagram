@@ -41,7 +41,7 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.aspectRatio == 0 ? whichBuild() : aspectRatio();
+    return widget.aspectRatio == 0 ? whichBuild(height: null) : aspectRatio();
   }
 
   Widget aspectRatio() {
@@ -51,17 +51,17 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
     );
   }
 
-  Widget whichBuild() {
+  Widget whichBuild({double? height = double.infinity}) {
     return !widget.isThatImage
         ? PlayThisVideo(
             play: true,
             videoUrl: widget.url,
             blurHash: widget.blurHash,
           )
-        : buildOcto();
+        : buildOcto(height);
   }
 
-  Widget buildOcto() {
+  Widget buildOcto(height) {
     int cachingHeight = widget.cachingHeight;
     int cachingWidth = widget.cachingWidth;
     if (widget.aspectRatio != 1 && cachingHeight == 720) cachingHeight = 960;
@@ -71,7 +71,7 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
       errorBuilder: (context, url, error) => buildError(),
       fit: BoxFit.cover,
       width: double.infinity,
-      height: widget.height??double.infinity,
+      height: widget.height ?? height,
       placeholderBuilder: widget.blurHash.isNotEmpty
           ? OctoPlaceholder.blurHash(widget.blurHash)
           : (context) => Center(child: loadingWidget()),
