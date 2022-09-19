@@ -34,7 +34,7 @@ class _NetworkImageDisplayState extends State<MemoryDisplay> {
   }
 
   Widget buildOctoImage() {
-    return widget.isThatImage
+    return !widget.isThatImage
         ? PlayThisVideo(
             play: true,
             isThatFromMemory: true,
