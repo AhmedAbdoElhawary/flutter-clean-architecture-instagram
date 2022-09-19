@@ -8,6 +8,7 @@ import 'package:instagram/data/models/parent_classes/without_sub_classes/user_pe
 import 'package:instagram/presentation/widgets/belong_to/time_line_w/send_to_users.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_share_button.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/common/head_of_popup_widget.dart';
+import 'package:instagram/presentation/widgets/global/popup_widgets/common/jump_arrow.dart';
 
 class PopupSharePost extends StatefulWidget {
   final Post postInfo;
@@ -26,7 +27,7 @@ class PopupSharePost extends StatefulWidget {
 class _PopupSharePostState extends State<PopupSharePost> {
   final TextEditingController messageTextController = TextEditingController();
   final TextEditingController searchTextController = TextEditingController();
-
+  final ScrollController scrollController = ScrollController();
   final selectedUsersInfo = ValueNotifier<List<UserPersonalInfo>>([]);
   @override
   Widget build(BuildContext context) {
@@ -49,33 +50,63 @@ class _PopupSharePostState extends State<PopupSharePost> {
               children: [
                 customDivider(
                   child: TheHeadWidgets(
-                    text: StringsManager.share.tr,
-                    makeIconsBigger: true,
-                  ),
+                      text: StringsManager.share.tr, makeIconsBigger: true),
                 ),
-                SingleChildScrollView(
-                  child: customDivider(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 10),
-                      child: Row(
-                        children: [
-                          Text("To:",
-                              style: getBoldStyle(
-                                  color: ColorManager.black, fontSize: 16)),
-                          const SizedBox(width: 20),
-                          for (int i = 0;
-                              i < selectedUsersInfo.value.length;
-                              i++)
-                            buildContainer(selectedUsersInfo.value[i].name, i),
-                          Flexible(
-                            child: messageField(
-                                searchTextController, StringsManager.search.tr),
-                          ),
-                        ],
-                      ),
+                Container(
+                  color: ColorManager.white,
+                  padding: const EdgeInsets.only(left: 15, top: 15),
+                  child: Text("To:",
+                      style: getBoldStyle(
+                          color: ColorManager.black, fontSize: 16)),
+                ),
+                Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                          top: 10, bottom: 10, end: 12, start: 18),
+                      child: selectedUsersInfo.value.isEmpty
+                          ? emptyMessage()
+                          : SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              controller: scrollController,
+                              reverse: true,
+                              child: Row(
+                                children: [
+                                  ...List.generate(
+                                    selectedUsersInfo.value.length,
+                                    (i) => buildContainer(
+                                        selectedUsersInfo.value[i].name, i),
+                                  ),
+                                ],
+                              ),
+                            ),
                     ),
-                  ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: GestureDetector(
+                            onTap: () {
+                              double pos = scrollController.offset + 600;
+                              scrollController.animateTo(pos,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.easeInOutQuart);
+                            },
+                            child: const ArrowJump(topPadding: true)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: GestureDetector(
+                          onTap: () {
+                            double pos = scrollController.offset - 600;
+                            pos = pos < 0 ? 0 : pos;
+                            scrollController.animateTo(pos,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeInOutQuart);
+                          },
+                          child: const ArrowJump(
+                              isThatBack: false, topPadding: true),
+                        ),
+                      ),
+                  ],
                 ),
                 Flexible(fit: FlexFit.loose, flex: 1, child: buildUsers()),
                 ...textFiledAndShareButton(),
@@ -83,6 +114,22 @@ class _PopupSharePostState extends State<PopupSharePost> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void maxExtentUsersList() {
+    scrollController.animateTo(0.0,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOutQuart);
+  }
+
+  Padding emptyMessage() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 17),
+      child: Text(
+        "Select users",
+        style: getNormalStyle(color: ColorManager.grey, fontSize: 15),
       ),
     );
   }
@@ -142,14 +189,14 @@ class _PopupSharePostState extends State<PopupSharePost> {
   }
 
   BorderSide divider() =>
-      const BorderSide(color: ColorManager.lightGrey, width: 0.1);
+      const BorderSide(color: ColorManager.grey, width: 0.1);
 
   List<Widget> textFiledAndShareButton() => [
         customDivider(
           bottomDivider: false,
           child: Padding(
             padding: const EdgeInsetsDirectional.only(
-                start: 20, bottom: 10, end: 20, top: 20),
+                start: 20, bottom: 10, end: 20, top: 10),
             child: selectedUsersInfo.value.isNotEmpty
                 ? messageField(
                     messageTextController, StringsManager.writeMessage.tr)
@@ -201,6 +248,8 @@ class _PopupSharePostState extends State<PopupSharePost> {
   Widget buildUsers() => SizedBox(
         height: double.infinity,
         child: SendToUsers(
+          maxExtentUsersList: maxExtentUsersList,
+          freezeListScroll: false,
           publisherInfo: widget.postInfo.publisherInfo!,
           messageTextController: messageTextController,
           postInfo: widget.postInfo,
