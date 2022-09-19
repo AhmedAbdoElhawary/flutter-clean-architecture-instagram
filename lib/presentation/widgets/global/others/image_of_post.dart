@@ -87,30 +87,18 @@ class _ImageOfPostState extends State<ImageOfPost>
   bool isLiked = false;
   bool isHeartAnimation = false;
   late UserPersonalInfo myPersonalInfo;
-  TransformationController controller = TransformationController();
-  late AnimationController animationController;
-  Animation<Matrix4>? animation;
-  OverlayEntry? entry;
 
   @override
   void initState() {
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200),
-    )
-      ..addListener(() => controller.value = animation!.value)
-      ..addStatusListener((status) {
-        entry?.remove();
-        entry = null;
-      });
     super.initState();
   }
 
   @override
   void dispose() {
-    animationController.dispose();
-    controller.dispose();
+    commentTextController.dispose();
+    initPosition.dispose();
+    isSaved.dispose();
     super.dispose();
   }
 
@@ -536,14 +524,17 @@ class _ImageOfPostState extends State<ImageOfPost>
                     : videoPlayer(postInfo)),
           ),
         ),
-        Opacity(
-          opacity: isHeartAnimation ? 1 : 0,
-          child: LikePopupAnimation(
-            isAnimating: isHeartAnimation,
-            duration: const Duration(milliseconds: 700),
-            child: const Icon(Icons.favorite,
-                color: ColorManager.white, size: 100),
-            onEnd: () => setState(() => isHeartAnimation = false),
+        Align(
+          alignment: Alignment.center,
+          child: Opacity(
+            opacity: isHeartAnimation ? 1 : 0,
+            child: LikePopupAnimation(
+              isAnimating: isHeartAnimation,
+              duration: const Duration(milliseconds: 700),
+              child: const Icon(Icons.favorite,
+                  color: ColorManager.white, size: 100),
+              onEnd: () => setState(() => isHeartAnimation = false),
+            ),
           ),
         ),
       ],
@@ -585,51 +576,13 @@ class _ImageOfPostState extends State<ImageOfPost>
     );
   }
 
-  Builder buildSingleImage(Post postInfo) {
-    return Builder(builder: (context) {
-      return InteractiveViewer(
-        transformationController: controller,
-        panEnabled: false,
-        clipBehavior: Clip.none,
-        minScale: 1,
-        maxScale: 4,
-        onInteractionStart: (details) {
-          if (details.pointerCount < 2) return;
-          makeImageUnbounded(context, postInfo);
-        },
-        onInteractionEnd: (details) => resetAnimation(),
-        child: NetworkDisplay(
-          blurHash: postInfo.blurHash,
-          aspectRatio: postInfo.aspectRatio,
-          url: postInfo.postUrl,
-          isThatImage: postInfo.isThatImage,
-        ),
-      );
-    });
-  }
-
-  void makeImageUnbounded(BuildContext context, Post postInfo) {
-    final renderBox = context.findRenderObject() as RenderBox;
-    final offset = renderBox.localToGlobal(Offset.zero);
-    final size = MediaQuery.of(context).size;
-    entry = OverlayEntry(
-      builder: (context) => Positioned(
-          left: offset.dx,
-          top: offset.dy,
-          width: size.width,
-          child: buildSingleImage(postInfo)),
+  Widget buildSingleImage(Post postInfo) {
+    return  NetworkDisplay(
+      blurHash: postInfo.blurHash,
+      aspectRatio: postInfo.aspectRatio,
+      url: postInfo.postUrl,
+      isThatImage: postInfo.isThatImage,
     );
-    final overlay = Overlay.of(context)!;
-    overlay.insert(entry!);
-  }
-
-  void resetAnimation() {
-    animation = Matrix4Tween(
-      begin: controller.value,
-      end: Matrix4.identity(),
-    ).animate(CurvedAnimation(
-        parent: animationController, curve: Curves.easeInOutQuart));
-    animationController.forward(from: 0);
   }
 
   void _updateImageIndex(int index, _) {
