@@ -71,6 +71,7 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
       errorBuilder: (context, url, error) => buildError(),
       fit: BoxFit.cover,
       width: double.infinity,
+
       height: widget.height ?? height,
       placeholderBuilder: widget.blurHash.isNotEmpty
           ? OctoPlaceholder.blurHash(widget.blurHash)
