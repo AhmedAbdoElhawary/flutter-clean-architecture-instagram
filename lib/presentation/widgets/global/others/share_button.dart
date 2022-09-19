@@ -40,9 +40,8 @@ class _ShareButtonState extends State<ShareButton> {
     return GestureDetector(
       onTap: () async {
         if (isThatMobile) {
-          bool canPop=Navigator.of(context).canPop();
-          if (widget.shareWidget != null&&canPop) {
-            await Navigator.of(context).maybePop();
+          if (widget.shareWidget != null) {
+             Navigator.of(context).maybePop();
           }
             await draggableBottomSheet();
         } else {
