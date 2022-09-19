@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_picker_plus/image_picker_plus.dart';
+import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
@@ -39,7 +42,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
   CreatePostButton createPostButton = CreatePostButton.none;
   TextEditingController textController = TextEditingController();
   final isItDone = ValueNotifier(true);
-
+  List<SelectedByte> selectedImagesInByte = [];
   @override
   Widget build(BuildContext context) {
     Size sizeOfScreen = MediaQuery.of(context).size;
@@ -204,15 +207,14 @@ class _PopupNewPostState extends State<PopupNewPost> {
       UserInfoCubit userCubit, BuildContext builder2context) async {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => setState(() => isItDone.value = false));
-    // String blurHash = await CustomBlurHash. blurHashEncode(selectedImage.value!);
-    // Post postInfo = addPostInfo(personalInfo, blurHash);
+    String blurHash = await CustomBlurHash.blurHashEncode(selectedImage.value!);
+    Post postInfo = addPostInfo(personalInfo, blurHash);
     if (!mounted) return;
 
     PostCubit postCubit =
         BlocProvider.of<PostCubit>(builder2context, listen: false);
 
-    /// TODO: Solve this bug
-    // await postCubit.createPost(postInfo, selectedImages.value);
+    await postCubit.createPost(postInfo, selectedImagesInByte);
     if (postCubit.newPostInfo != null) {
       await userCubit.updateUserPostsInfo(
           userId: personalInfo.userId, postInfo: postCubit.newPostInfo!);
@@ -713,13 +715,20 @@ class _PopupNewPostState extends State<PopupNewPost> {
   }
 
   Future<void> pickAnotherImage() async {
-    XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    List<XFile>? image = await ImagePicker().pickMultiImage();
     if (image != null) {
-      Uint8List unitImage = await image.readAsBytes();
-      selectedImage.value = unitImage;
-      selectedImages.value.add(unitImage);
+      for (final img in image) {
+        Uint8List unitImage = await img.readAsBytes();
+        SelectedByte byte = SelectedByte(
+            isThatImage: true,
+            selectedByte: unitImage,
+            selectedFile: File(img.path));
+        selectedImagesInByte.add(byte);
+        selectedImage.value = unitImage;
+        selectedImages.value.add(unitImage);
+      }
       setState(() {
-        indexOfSelectedImage = selectedImages.value.length - 1;
+        indexOfSelectedImage = image.length - 1;
       });
     }
   }

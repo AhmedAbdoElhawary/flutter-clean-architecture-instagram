@@ -20,11 +20,15 @@ class SendToUsers extends StatefulWidget {
   final ValueChanged<bool> clearTexts;
   final ValueNotifier<List<UserPersonalInfo>> selectedUsersInfo;
   final bool checkBox;
+  final bool freezeListScroll;
+  final VoidCallback? maxExtentUsersList;
   const SendToUsers({
     Key? key,
     this.checkBox = false,
+    this.freezeListScroll = true,
     required this.publisherInfo,
     required this.clearTexts,
+    this.maxExtentUsersList,
     required this.selectedUsersInfo,
     required this.messageTextController,
     required this.postInfo,
@@ -109,12 +113,14 @@ class _SendToUsersState extends State<SendToUsers> {
   Padding buildUsers(List<UserPersonalInfo> usersInfo,
       List<UserPersonalInfo> selectedUsersValue) {
     return Padding(
-      padding: const EdgeInsetsDirectional.only(
-          end: 20, start: 20, bottom: 60, top: 0),
+      padding:
+          EdgeInsetsDirectional.only(start: 20, bottom: isThatMobile ? 60 : 5),
       child: ListView.separated(
-        shrinkWrap: true,
-        primary: false,
-        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: widget.freezeListScroll,
+        primary: !widget.freezeListScroll,
+        physics: widget.freezeListScroll
+            ? const NeverScrollableScrollPhysics()
+            : null,
         addAutomaticKeepAlives: false,
         addRepaintBoundaries: false,
         itemBuilder: (context, index) =>
@@ -161,18 +167,27 @@ class _SendToUsersState extends State<SendToUsers> {
             ],
           ),
         ),
-        GestureDetector(
-          onTap: () async {
-            setState(() {
-              if (!selectedUsersValue.contains(userInfo)) {
-                widget.selectedUsersInfo.value.add(userInfo);
-              } else {
-                widget.selectedUsersInfo.value.remove(userInfo);
-              }
-              widget.clearTexts(false);
-            });
-          },
-          child: whichChild(context, selectedUsersValue.contains(userInfo)),
+        Padding(
+          padding: const EdgeInsetsDirectional.only(end: 20),
+          child: GestureDetector(
+            onTap: () async {
+              List<UserPersonalInfo> selectedUsers=widget.selectedUsersInfo.value;
+              setState(() {
+                if (!selectedUsersValue.contains(userInfo)) {
+                  selectedUsers.add(userInfo);
+                } else {
+                  selectedUsers.remove(userInfo);
+                }
+
+                if (widget.maxExtentUsersList != null&&selectedUsers.length>5) {
+                  widget.maxExtentUsersList!();
+                }
+
+                widget.clearTexts(false);
+              });
+            },
+            child: whichChild(context, selectedUsersValue.contains(userInfo)),
+          ),
         ),
       ],
     );

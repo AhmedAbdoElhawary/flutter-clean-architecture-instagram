@@ -158,7 +158,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget inViewNotifier(double bodyHeight) {
-
     return ValueListenableBuilder(
       valueListenable: postsInfo,
       builder: (context, List<Post> postsInfoValue, child) =>
@@ -342,19 +341,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       child: SizedBox(
         width: double.infinity,
         height: 600 * 0.155,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (personalInfo.stories.isEmpty) ...[
-                myOwnStory(context, storiesOwnersInfo, bodyHeight),
-                const SizedBox(width: 12),
-              ],
-              ListView.separated(
+        child: Stack(
+          children: [
+            if (personalInfo.stories.isEmpty) ...[
+              myOwnStory(context, storiesOwnersInfo),
+              const SizedBox(width: 12),
+            ],
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              controller: scrollController,
+              child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                controller: scrollController,
+                primary: false,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: storiesOwnersInfo.length,
                 separatorBuilder: (BuildContext context, int index) =>
@@ -385,7 +384,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       },
                       child: CircleAvatarOfProfileImage(
                         userInfo: publisherInfo,
-                        bodyHeight: bodyHeight * 1.1,
+                        bodyHeight:
+                            isThatMobile ? bodyHeight * 1.1 : bodyHeight * 0.7,
                         thisForStoriesLine: true,
                         nameOfCircle: index == 0 &&
                                 publisherInfo.userId == personalInfo.userId
@@ -396,8 +396,37 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   );
                 },
               ),
+            ),
+            if (!isThatMobile) ...[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: GestureDetector(
+                    onTap: () {
+                      double pos = scrollController.offset - 500;
+                      pos = pos < 0 ? 0 : pos;
+                      scrollController.animateTo(pos,
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOutQuart);
+                    },
+                    child: const ArrowJump()),
+              ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: GestureDetector(
+                    onTap: () {
+                      double pos = scrollController.offset + 500;
+
+                      scrollController.animateTo(pos,
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOutQuart);
+                    },
+                    child: const ArrowJump(
+                      isThatBack: false,
+                    ),
+                  ),
+                ),
             ],
-          ),
+          ],
         ),
       ),
     );
@@ -409,8 +438,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           page: StoryPageForMobile(
               user: user, storiesOwnersInfo: storiesOwnersInfo));
 
-  Widget myOwnStory(BuildContext context,
-      List<UserPersonalInfo> storiesOwnersInfo, double bodyHeight) {
+  Widget myOwnStory(
+      BuildContext context, List<UserPersonalInfo> storiesOwnersInfo) {
     return GestureDetector(
       onTap: () async {
         SelectedImagesDetails? details = await CustomImagePickerPlus.pickImage(

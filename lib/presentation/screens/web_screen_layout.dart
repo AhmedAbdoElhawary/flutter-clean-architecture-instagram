@@ -71,7 +71,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
         builder: (context) => const PopupNewPost(),
       ),
     );
-    setState(() => page = page);
+    setState(() => pageOfController = page);
   }
 
   @override
