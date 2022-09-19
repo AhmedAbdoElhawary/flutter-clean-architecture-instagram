@@ -612,10 +612,12 @@ packages:
   image_picker_plus:
     dependency: "direct main"
     description:
-      path: "C:\\Users\\ahmed\\StudioProjects\\custom_gallery_display"
-      relative: false
-    source: path
-    version: "0.5.2"
+      path: "."
+      ref: HEAD
+      resolved-ref: d5e5be299e498fb3100e80a55a6f9cc7fd74cce4
+      url: "https://github.com/AhmedAbdoElhawary/image_picker_plus"
+    source: git
+    version: "0.5.1"
   intl:
     dependency: transitive
     description:
