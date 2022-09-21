@@ -33,39 +33,44 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  defineThePlatform(BuildContext context) {
     TargetPlatform platform = Theme.of(context).platform;
     isThatMobile =
         platform == TargetPlatform.iOS || platform == TargetPlatform.android;
     isThatAndroid = platform == TargetPlatform.android;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    defineThePlatform(context);
     return MultiBlocs(materialApp(context));
   }
 
   Widget materialApp(BuildContext context) {
     return GetBuilder<AppLanguage>(
-        init: AppLanguage(),
-        builder: (controller) {
-          return GetMaterialApp(
-            translations: Translation(),
-            locale: Locale(controller.appLocale),
-            fallbackLocale: const Locale('en'),
-            navigatorKey: navigatorKey,
-            debugShowCheckedModeBanner: false,
-            title: 'Instagram',
-            theme: AppTheme.light,
-            darkTheme: AppTheme.dark,
-            themeMode: ThemeOfApp().theme,
-            home: AnimatedSplashScreen(
-              centered: true,
-              splash: IconsAssets.splashIcon,
-              backgroundColor: ColorManager.white,
-              splashTransition: SplashTransition.scaleTransition,
-              nextScreen: myId == null
-                  ? LoginPage(sharePrefs: widget.sharePrefs)
-                  : GetMyPersonalInfo(myPersonalId: myId!),
-            ),
-          );
-        });
+      init: AppLanguage(),
+      builder: (controller) {
+        return GetMaterialApp(
+          translations: Translation(),
+          locale: Locale(controller.appLocale),
+          fallbackLocale: const Locale('en'),
+          navigatorKey: navigatorKey,
+          debugShowCheckedModeBanner: false,
+          title: 'Instagram',
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
+          themeMode: ThemeOfApp().theme,
+          home: AnimatedSplashScreen(
+            centered: true,
+            splash: IconsAssets.splashIcon,
+            backgroundColor: ColorManager.white,
+            splashTransition: SplashTransition.scaleTransition,
+            nextScreen: myId == null
+                ? LoginPage(sharePrefs: widget.sharePrefs)
+                : GetMyPersonalInfo(myPersonalId: myId!),
+          ),
+        );
+      },
+    );
   }
 }
