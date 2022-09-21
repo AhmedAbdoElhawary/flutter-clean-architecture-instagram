@@ -231,7 +231,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
     return Post(
       aspectRatio: imageAspectRatio.value,
       publisherId: personalInfo.userId,
-      datePublished: DateOfNow.dateOfNow(),
+      datePublished: DateReformat.dateOfNow(),
       caption: textController.text,
       blurHash: blurHash,
       imagesUrls: [],
