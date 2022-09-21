@@ -134,7 +134,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
                       padding: const EdgeInsetsDirectional.only(
                           start: 11.5, top: 5.0),
                       child: Text(
-                        DateOfNow.chattingDateOfNow(
+                        DateReformat.fullDigitsFormat(
                             widget.postInfo.value.datePublished,
                             widget.postInfo.value.datePublished),
                         style: getNormalStyle(
