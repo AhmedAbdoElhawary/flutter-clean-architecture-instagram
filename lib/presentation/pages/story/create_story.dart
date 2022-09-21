@@ -151,7 +151,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
       UserPersonalInfo personalInfo, String blurHash, bool isThatImage) {
     return Story(
       publisherId: personalInfo.userId,
-      datePublished: DateOfNow.dateOfNow(),
+      datePublished: DateReformat.dateOfNow(),
       caption: "",
       comments: [],
       likes: [],
