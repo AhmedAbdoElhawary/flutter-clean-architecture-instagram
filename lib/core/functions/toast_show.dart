@@ -20,10 +20,8 @@ class ToastShow {
     } catch (e) {
       error = state.error;
     }
-    if (kDebugMode) {
-      print(
-          "=====================> $error !!!!!!the error in toast show!!!!!!!");
-    }
+    if (kDebugMode) print("=========> $error !!!!!!the error in toast show!!!");
+
     ToastShow.toast(error);
   }
 }
