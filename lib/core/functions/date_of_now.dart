@@ -1,12 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 
-class DateOfNow {
-  static String dateOfNow() {
-    DateTime now = DateTime.now();
-    return now.toString();
-  }
+class DateReformat {
+  static String dateOfNow() => DateTime.now().toString();
 
-  static String commentsDateOfNow(String theDate) {
+  static String oneDigitFormat(String theDate) {
     final DateTime dateOne = DateTime.now();
     final DateTime? dateTwo = DateTime.tryParse(theDate);
     if (dateTwo == null) return "";
@@ -31,8 +28,7 @@ class DateOfNow {
         : "$second s";
   }
 
-  static String chattingDateOfNow(
-      String theDate, String previousDateOfMessage) {
+  static String fullDigitsFormat(String theDate, String previousDateOfMessage) {
     DateTime theActualDate = DateTime.parse(theDate);
     DateTime thePreviousDate = DateTime.parse(previousDateOfMessage);
     DateTime now = DateTime.now();
