@@ -141,7 +141,7 @@ Future<void> initializeDependencies() async {
       FirebaseGroupMessageRepoImpl());
 
   // *
-  /// ==============================================================================================>
+  /// ========================================================================>
 
   // Firebase auth useCases
   injector.registerSingleton<LogInAuthUseCase>(LogInAuthUseCase(injector()));
@@ -299,7 +299,7 @@ Future<void> initializeDependencies() async {
   injector
       .registerSingleton<GetSpecificChatInfo>(GetSpecificChatInfo(injector()));
 
-  /// ==============================================================================================>
+  /// ========================================================================>
 
   // auth Blocs
   injector.registerFactory<FirebaseAuthCubit>(
