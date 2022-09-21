@@ -197,7 +197,7 @@ class _ListOfMessagesState extends State<ListOfMessages> {
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                  DateOfNow.commentsDateOfNow(
+                                  DateReformat.oneDigitFormat(
                                       theLastMessage.datePublished),
                                   style:
                                       getNormalStyle(color: ColorManager.grey)),

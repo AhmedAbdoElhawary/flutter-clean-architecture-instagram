@@ -12,9 +12,9 @@ class InstagramLogo extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) => GestureDetector(
-        onTap: () {
-          if (enableOnTapForWeb) Get.offAll(const WebScreenLayout());
-        },
+        onTap: enableOnTapForWeb
+            ? () => Get.offAll(const WebScreenLayout())
+            : null,
         child: SvgPicture.asset(
           IconsAssets.instagramLogo,
           height: 32,

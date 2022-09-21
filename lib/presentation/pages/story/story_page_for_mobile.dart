@@ -343,7 +343,7 @@ class ProfileWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      DateOfNow.commentsDateOfNow(storyInfo.datePublished),
+                      DateReformat.oneDigitFormat(storyInfo.datePublished),
                       style: const TextStyle(color: Colors.white38),
                     )
                   ],

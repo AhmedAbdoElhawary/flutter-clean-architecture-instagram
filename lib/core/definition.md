@@ -1,1 +1,1 @@
-- any thing are globally
+- anything is globally

@@ -75,7 +75,6 @@ class _ChatMessagesState extends State<ChatMessages>
     await scrollControl.animateTo(scrollControl.position.maxScrollExtent,
         duration: const Duration(seconds: 1), curve: Curves.easeInOutQuart);
   }
-
   @override
   void dispose() {
     _colorAnimationController.dispose();
@@ -94,26 +93,26 @@ class _ChatMessagesState extends State<ChatMessages>
     audioPlayer.dispose();
     super.dispose();
   }
-
   @override
   void initState() {
-    messageDetails = widget.messageDetails;
+    messageDetails=widget.messageDetails;
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     _colorAnimationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _colorTween = ColorTween(begin: Colors.purple, end: Colors.blue)
         .animate(_colorAnimationController);
     receiversInfo = messageDetails.receiversInfo ?? [myPersonalInfo];
-    isGroupIdEmpty = messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
+    isGroupIdEmpty =
+        messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
     super.initState();
   }
 
   @override
   void didUpdateWidget(ChatMessages oldWidget) {
-    newMessageInfo.value = null;
-    globalMessagesInfo.value = [];
-    isMessageLoaded.value = false;
-    messageDetails = widget.messageDetails;
+      newMessageInfo.value = null;
+      globalMessagesInfo.value = [];
+      isMessageLoaded.value = false;
+      messageDetails=widget.messageDetails;
     super.didUpdateWidget(oldWidget);
   }
 
@@ -142,7 +141,8 @@ class _ChatMessagesState extends State<ChatMessages>
             BlocBuilder<MessageBloc, MessageBlocState>(
           bloc: BlocProvider.of<MessageBloc>(context)
             ..add(LoadMessagesForGroupChat(
-                groupChatUid: messageDetails.lastMessage!.chatOfGroupId)),
+                groupChatUid:
+                    messageDetails.lastMessage!.chatOfGroupId)),
           builder: (context, state) {
             if (state is MessageBlocLoaded) {
               return buildMessages(context, state.messages);
@@ -320,6 +320,7 @@ class _ChatMessagesState extends State<ChatMessages>
     if (senderIdForProfileImage.isEmpty && !isThatMe) {
       senderIdForProfileImage = messageInfo.senderId;
     }
+
     int i = index + 1 < messagesInfo.length ? index + 1 : index;
     if (!isThatMe && messagesInfo[i].senderId != senderIdForProfileImage) {
       senderIdForProfileImage = messagesInfo[i].senderId;
@@ -329,7 +330,7 @@ class _ChatMessagesState extends State<ChatMessages>
       senderIdForProfileImage = messagesInfo[i].senderId;
       createProfileImage = true;
     }
-    String theDate = DateOfNow.chattingDateOfNow(
+    String theDate = DateReformat.fullDigitsFormat(
         messageInfo.datePublished, previousDateOfMessage);
     bool isLangArabic = AppLanguage().appLocale == "ar";
     return Column(
@@ -419,8 +420,9 @@ class _ChatMessagesState extends State<ChatMessages>
   Visibility buildProfileImage(bool createProfileImage) {
     int indexOfUserInfo = 0;
     if (createProfileImage) {
-      indexOfUserInfo =
-          messageDetails.receiversIds?.indexOf(senderIdForProfileImage) ?? 0;
+      indexOfUserInfo = messageDetails.receiversIds
+              ?.indexOf(senderIdForProfileImage) ??
+          0;
       indexOfUserInfo = indexOfUserInfo == -1 ? 0 : indexOfUserInfo;
     }
     return Visibility(
@@ -841,7 +843,8 @@ class _ChatMessagesState extends State<ChatMessages>
         WidgetsBinding.instance.addPostFrameCallback((_) {
           setState(() {});
         });
-        bool isThatGroup = messageDetails.lastMessage?.isThatGroup ?? false;
+        bool isThatGroup =
+            messageDetails.lastMessage?.isThatGroup ?? false;
 
         if (messageDetails.isThatGroupChat || isThatGroup) {
           newMessageInfo.value = newMessageForGroup(isThatRecord: true);
@@ -995,7 +998,8 @@ class _ChatMessagesState extends State<ChatMessages>
       Uint8List byte = pickImage.selectedFiles[0].selectedByte;
       String blurHash = await CustomBlurHash.blurHashEncode(byte);
       if (!mounted) return;
-      bool isThatGroup = messageDetails.lastMessage?.isThatGroup ?? false;
+      bool isThatGroup =
+          messageDetails.lastMessage?.isThatGroup ?? false;
 
       if (messageDetails.isThatGroupChat || isThatGroup) {
         newMessageInfo.value =
@@ -1050,7 +1054,7 @@ class _ChatMessagesState extends State<ChatMessages>
       usersIds.add(userInfo.userId);
     }
     return Message(
-      datePublished: DateOfNow.dateOfNow(),
+      datePublished: DateReformat.dateOfNow(),
       message: _textController.value.text,
       senderId: myPersonalId,
       senderInfo: myPersonalInfo,
@@ -1070,7 +1074,7 @@ class _ChatMessagesState extends State<ChatMessages>
       bool isThatRecord = false}) {
     dynamic userId = receiversInfo[0].userId;
     return Message(
-      datePublished: DateOfNow.dateOfNow(),
+      datePublished: DateReformat.dateOfNow(),
       message: _textController.value.text,
       senderId: myPersonalId,
       senderInfo: myPersonalInfo,

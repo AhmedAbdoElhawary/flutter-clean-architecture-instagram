@@ -107,7 +107,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 11.5, top: 5.0),
       child: Text(
-        DateOfNow.chattingDateOfNow(
+        DateReformat.fullDigitsFormat(
             postInfoValue.datePublished, postInfoValue.datePublished),
         style: getNormalStyle(color: Theme.of(context).bottomAppBarColor),
       ),
@@ -261,7 +261,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
       text: "commented: $textWithOneSpaces",
       postId: widget.postInfo.value.postUid,
       postImageUrl: widget.postInfo.value.postUrl,
-      time: DateOfNow.dateOfNow(),
+      time: DateReformat.dateOfNow(),
       senderId: myPersonalId,
       receiverId: widget.postInfo.value.publisherId,
       personalUserName: myPersonalInfo.userName,
@@ -276,7 +276,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
     return Comment(
       theComment: textWithOneSpaces,
       whoCommentId: myPersonalInfo.userId,
-      datePublished: DateOfNow.dateOfNow(),
+      datePublished: DateReformat.dateOfNow(),
       postId: widget.postInfo.value.postUid,
       likes: [],
       replies: [],

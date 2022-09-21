@@ -184,7 +184,7 @@ class _CommentBoxState extends State<CommentBox> {
       text: "commented: $textWithOneSpaces",
       postId: widget.postInfo.value.postUid,
       postImageUrl: widget.postInfo.value.postUrl,
-      time: DateOfNow.dateOfNow(),
+      time: DateReformat.dateOfNow(),
       senderId: myPersonalId,
       receiverId: widget.postInfo.value.publisherId,
       personalUserName: myPersonalInfo.userName,
@@ -222,7 +222,7 @@ class _CommentBoxState extends State<CommentBox> {
     return Comment(
       theComment: textWithOneSpaces,
       whoCommentId: myPersonalInfo.userId,
-      datePublished: DateOfNow.dateOfNow(),
+      datePublished: DateReformat.dateOfNow(),
       postId: widget.postInfo.value.postUid,
       likes: [],
       replies: [],
@@ -232,7 +232,7 @@ class _CommentBoxState extends State<CommentBox> {
   Comment newReplyInfo(
       Comment commentInfo, String myPersonalId, String textWithOneSpaces) {
     return Comment(
-      datePublished: DateOfNow.dateOfNow(),
+      datePublished: DateReformat.dateOfNow(),
       parentCommentId: commentInfo.parentCommentId,
       postId: commentInfo.postId,
       theComment: textWithOneSpaces,
