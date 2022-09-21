@@ -161,7 +161,7 @@ class _ImageOfPostState extends State<ImageOfPost>
       Padding(
         padding: const EdgeInsetsDirectional.all(10),
         child: Text(
-          DateOfNow.chattingDateOfNow(
+          DateReformat.fullDigitsFormat(
               postInfoValue.datePublished, postInfoValue.datePublished),
           style: getNormalStyle(color: Theme.of(context).bottomAppBarColor),
         ),
@@ -465,7 +465,7 @@ class _ImageOfPostState extends State<ImageOfPost>
       postImageUrl: postInfo.imagesUrls.length > 1
           ? postInfo.imagesUrls[0]
           : postInfo.postUrl,
-      time: DateOfNow.dateOfNow(),
+      time: DateReformat.dateOfNow(),
       senderId: myPersonalId,
       receiverId: postInfo.publisherId,
       personalUserName: myPersonalInfo.userName,
