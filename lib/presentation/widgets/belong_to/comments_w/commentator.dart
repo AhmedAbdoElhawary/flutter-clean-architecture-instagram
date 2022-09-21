@@ -227,7 +227,7 @@ class _CommentInfoState extends State<CommentInfo> {
   Widget commentOption(BuildContext context) {
     return Row(
       children: [
-        Text(DateOfNow.commentsDateOfNow(widget.commentInfo.datePublished),
+        Text(DateReformat.oneDigitFormat(widget.commentInfo.datePublished),
             style: Theme.of(context).textTheme.displayLarge),
         if (widget.commentInfo.likes.isNotEmpty) usersWhoLikes(context),
         const SizedBox(width: 20),
@@ -407,7 +407,7 @@ class _CommentInfoState extends State<CommentInfo> {
       postImageUrl: widget.postInfo.value.imagesUrls.length > 1
           ? widget.postInfo.value.imagesUrls[0]
           : widget.postInfo.value.postUrl,
-      time: DateOfNow.dateOfNow(),
+      time: DateReformat.dateOfNow(),
       senderId: myPersonalId,
       receiverId: widget.postInfo.value.publisherId,
       personalUserName: widget.myPersonalInfo.userName,
