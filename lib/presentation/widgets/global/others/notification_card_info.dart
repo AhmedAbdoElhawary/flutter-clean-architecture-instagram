@@ -42,7 +42,7 @@ class _NotificationCardInfoState extends State<NotificationCardInfo> {
   @override
   Widget build(BuildContext context) {
     String reformatDate =
-        DateOfNow.commentsDateOfNow(widget.notificationInfo.time);
+        DateReformat.oneDigitFormat(widget.notificationInfo.time);
     List<String> hashOfUserName = hashUserName(widget.notificationInfo.text);
     return InkWell(
       onTap: () async {
