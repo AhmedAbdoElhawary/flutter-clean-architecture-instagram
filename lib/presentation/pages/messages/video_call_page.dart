@@ -60,7 +60,7 @@ class CallPageState extends State<CallPage> {
   void initState() {
     super.initState();
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-      WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
+    WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
 
     initialize();
   }
@@ -68,7 +68,7 @@ class CallPageState extends State<CallPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-      WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
+    WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
   }
 
   Future<void> onJoin() async {
@@ -169,9 +169,7 @@ class CallPageState extends State<CallPage> {
   Widget _expandedVideoRow(List<Widget> views) {
     final wrappedViews = views.map<Widget>(_videoView).toList();
     return Expanded(
-      child: Row(
-        children: wrappedViews,
-      ),
+      child: Row(children: wrappedViews),
     );
   }
 
@@ -185,10 +183,11 @@ class CallPageState extends State<CallPage> {
     if (widget.userCallingType == UserCallingType.receiver &&
         views.length == 1 &&
         moreThanOne) {
-      CallingRoomsCubit.get(context)
-          .deleteTheRoom(channelId: widget.channelName);
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => setState(() => amICalling = false));
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await CallingRoomsCubit.get(context)
+            .deleteTheRoom(channelId: widget.channelName);
+        setState(() => amICalling = false);
+      });
       Navigator.of(context).maybePop();
     }
 
@@ -220,7 +219,7 @@ class CallPageState extends State<CallPage> {
         );
       default:
     }
-    return Container();
+    return const SizedBox();
   }
 
   /// Toolbar layout
