@@ -397,7 +397,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 },
               ),
             ),
-            if (!isThatMobile) ...[
+            if (!isThatMobile && storiesOwnersInfo.length > 5) ...[
               Padding(
                 padding: const EdgeInsets.only(bottom: 15),
                 child: GestureDetector(
@@ -410,21 +410,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     },
                     child: const ArrowJump()),
               ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: GestureDetector(
-                    onTap: () {
-                      double pos = scrollController.offset + 500;
+              Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: GestureDetector(
+                  onTap: () {
+                    double pos = scrollController.offset + 500;
 
-                      scrollController.animateTo(pos,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOutQuart);
-                    },
-                    child: const ArrowJump(
-                      isThatBack: false,
-                    ),
+                    scrollController.animateTo(pos,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOutQuart);
+                  },
+                  child: const ArrowJump(
+                    isThatBack: false,
                   ),
                 ),
+              ),
             ],
           ],
         ),
