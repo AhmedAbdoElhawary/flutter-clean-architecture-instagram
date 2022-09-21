@@ -239,7 +239,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return Post(
       aspectRatio: widget.selectedFilesDetails.aspectRatio,
       publisherId: myPersonalId,
-      datePublished: DateOfNow.dateOfNow(),
+      datePublished: DateReformat.dateOfNow(),
       caption: captionController.text,
       blurHash: blurHash,
       imagesUrls: [],
