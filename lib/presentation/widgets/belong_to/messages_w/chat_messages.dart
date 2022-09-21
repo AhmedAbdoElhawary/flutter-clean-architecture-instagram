@@ -70,57 +70,72 @@ class _ChatMessagesState extends State<ChatMessages>
   bool isGroupIdEmpty = true;
   AudioPlayer audioPlayer = AudioPlayer();
   int tempLengthOfRecord = 0;
+  late SenderInfo messageDetails;
   Future<void> scrollToLastIndex(BuildContext context) async {
     await scrollControl.animateTo(scrollControl.position.maxScrollExtent,
         duration: const Duration(seconds: 1), curve: Curves.easeInOutQuart);
   }
-
+  @override
+  void dispose() {
+    _colorAnimationController.dispose();
+    globalMessagesInfo.dispose();
+    indexOfGarbageMessage.dispose();
+    deleteThisMessage.dispose();
+    newMessageInfo.dispose();
+    scrollControl.dispose();
+    _textController.dispose();
+    isDeleteMessageDone.dispose();
+    isMessageLoaded.dispose();
+    appearIcons.dispose();
+    unSend.dispose();
+    reLoad.dispose();
+    records.dispose();
+    audioPlayer.dispose();
+    super.dispose();
+  }
   @override
   void initState() {
+    messageDetails=widget.messageDetails;
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     _colorAnimationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _colorTween = ColorTween(begin: Colors.purple, end: Colors.blue)
         .animate(_colorAnimationController);
-    receiversInfo = widget.messageDetails.receiversInfo ?? [myPersonalInfo];
+    receiversInfo = messageDetails.receiversInfo ?? [myPersonalInfo];
     isGroupIdEmpty =
-        widget.messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
+        messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
     super.initState();
   }
 
   @override
   void didUpdateWidget(ChatMessages oldWidget) {
-    if (widget.messageDetails != oldWidget.messageDetails) {
       newMessageInfo.value = null;
       globalMessagesInfo.value = [];
       isMessageLoaded.value = false;
-    }
+      messageDetails=widget.messageDetails;
+
     super.didUpdateWidget(oldWidget);
   }
 
-  @override
-  void dispose() {
-    _colorAnimationController.dispose();
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    bool check = (widget.messageDetails.lastMessage?.isThatGroup) ?? false;
+    bool check = (messageDetails.lastMessage?.isThatGroup) ?? false;
     return GestureDetector(
       onTap: () {
         deleteThisMessage.value = null;
         indexOfGarbageMessage.value = null;
         unSend.value = false;
       },
-      child: widget.messageDetails.isThatGroupChat || check
+      child: messageDetails.isThatGroupChat || check
           ? buildGroupChat(context)
           : buildSingleChat(context),
     );
   }
 
   Widget buildGroupChat(BuildContext context) {
-    if (widget.messageDetails.lastMessage == null || isGroupIdEmpty) {
+    if (messageDetails.lastMessage == null || isGroupIdEmpty) {
       return buildMessages(context, []);
     } else {
       return ValueListenableBuilder(
@@ -130,7 +145,7 @@ class _ChatMessagesState extends State<ChatMessages>
           bloc: BlocProvider.of<MessageBloc>(context)
             ..add(LoadMessagesForGroupChat(
                 groupChatUid:
-                    widget.messageDetails.lastMessage!.chatOfGroupId)),
+                    messageDetails.lastMessage!.chatOfGroupId)),
           builder: (context, state) {
             if (state is MessageBlocLoaded) {
               return buildMessages(context, state.messages);
@@ -407,7 +422,7 @@ class _ChatMessagesState extends State<ChatMessages>
   Visibility buildProfileImage(bool createProfileImage) {
     int indexOfUserInfo = 0;
     if (createProfileImage) {
-      indexOfUserInfo = widget.messageDetails.receiversIds
+      indexOfUserInfo = messageDetails.receiversIds
               ?.indexOf(senderIdForProfileImage) ??
           0;
       indexOfUserInfo = indexOfUserInfo == -1 ? 0 : indexOfUserInfo;
@@ -831,9 +846,9 @@ class _ChatMessagesState extends State<ChatMessages>
           setState(() {});
         });
         bool isThatGroup =
-            widget.messageDetails.lastMessage?.isThatGroup ?? false;
+            messageDetails.lastMessage?.isThatGroup ?? false;
 
-        if (widget.messageDetails.isThatGroupChat || isThatGroup) {
+        if (messageDetails.isThatGroupChat || isThatGroup) {
           newMessageInfo.value = newMessageForGroup(isThatRecord: true);
           if (!mounted) return;
 
@@ -844,7 +859,7 @@ class _ChatMessagesState extends State<ChatMessages>
           if (isGroupIdEmpty) {
             Message lastMessage =
                 MessageForGroupChatCubit.getLastMessage(context);
-            widget.messageDetails.lastMessage = lastMessage;
+            messageDetails.lastMessage = lastMessage;
           }
         } else {
           newMessageInfo.value = newMessage(isThatRecord: true);
@@ -930,9 +945,9 @@ class _ChatMessagesState extends State<ChatMessages>
           onTap: () async {
             if (_textController.value.text.isNotEmpty) {
               bool isThatGroup =
-                  widget.messageDetails.lastMessage?.isThatGroup ?? false;
+                  messageDetails.lastMessage?.isThatGroup ?? false;
 
-              if (widget.messageDetails.isThatGroupChat || isThatGroup) {
+              if (messageDetails.isThatGroupChat || isThatGroup) {
                 await MessageForGroupChatCubit.get(context)
                     .sendMessage(messageInfo: newMessageForGroup());
                 if (!mounted) return;
@@ -940,7 +955,7 @@ class _ChatMessagesState extends State<ChatMessages>
                 if (isGroupIdEmpty) {
                   Message lastMessage =
                       MessageForGroupChatCubit.getLastMessage(context);
-                  widget.messageDetails.lastMessage = lastMessage;
+                  messageDetails.lastMessage = lastMessage;
                 }
               } else {
                 messageCubit.sendMessage(messageInfo: newMessage());
@@ -986,9 +1001,9 @@ class _ChatMessagesState extends State<ChatMessages>
       String blurHash = await CustomBlurHash.blurHashEncode(byte);
       if (!mounted) return;
       bool isThatGroup =
-          widget.messageDetails.lastMessage?.isThatGroup ?? false;
+          messageDetails.lastMessage?.isThatGroup ?? false;
 
-      if (widget.messageDetails.isThatGroupChat || isThatGroup) {
+      if (messageDetails.isThatGroupChat || isThatGroup) {
         newMessageInfo.value =
             newMessageForGroup(blurHash: blurHash, isThatImage: true);
         newMessageInfo.value?.localImage = byte;
@@ -1002,7 +1017,7 @@ class _ChatMessagesState extends State<ChatMessages>
         if (isGroupIdEmpty) {
           Message lastMessage =
               MessageForGroupChatCubit.getLastMessage(context);
-          widget.messageDetails.lastMessage = lastMessage;
+          messageDetails.lastMessage = lastMessage;
         }
       } else {
         newMessageInfo.value =
@@ -1051,7 +1066,7 @@ class _ChatMessagesState extends State<ChatMessages>
       isThatRecord: isThatRecord,
       lengthOfRecord: tempLengthOfRecord,
       isThatGroup: true,
-      chatOfGroupId: widget.messageDetails.lastMessage?.chatOfGroupId ?? "",
+      chatOfGroupId: messageDetails.lastMessage?.chatOfGroupId ?? "",
     );
   }
 
@@ -1074,8 +1089,8 @@ class _ChatMessagesState extends State<ChatMessages>
   }
 
   Widget circleAvatarOfImage() {
-    bool check = widget.messageDetails.lastMessage?.isThatGroup ?? false;
-    if (widget.messageDetails.isThatGroupChat || check) {
+    bool check = messageDetails.lastMessage?.isThatGroup ?? false;
+    if (messageDetails.isThatGroupChat || check) {
       return Padding(
         padding: const EdgeInsets.only(top: 20.0),
         child: Stack(
