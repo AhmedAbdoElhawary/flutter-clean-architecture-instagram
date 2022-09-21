@@ -69,7 +69,7 @@ class _CustomShareButtonState extends State<CustomShareButton> {
 
   Message createCaptionMessage(UserPersonalInfo userInfoWhoIShared) {
     return Message(
-      datePublished: DateOfNow.dateOfNow(),
+      datePublished: DateReformat.dateOfNow(),
       message: widget.messageTextController.text,
       senderId: myPersonalId,
       senderInfo: myPersonalInfo,
@@ -89,7 +89,7 @@ class _CustomShareButtonState extends State<CustomShareButton> {
         : widget.postInfo.coverOfVideoUrl;
     dynamic userId = userInfoWhoIShared.userId;
     return Message(
-      datePublished: DateOfNow.dateOfNow(),
+      datePublished: DateReformat.dateOfNow(),
       message: widget.postInfo.caption,
       senderId: myPersonalId,
       senderInfo: myPersonalInfo,
