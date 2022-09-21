@@ -13,32 +13,39 @@ class MessageBloc extends Bloc<MessageEvent, MessageBlocState> {
   final GetMessagesUseCase _getMessagesUseCase;
   final GetMessagesGroGroupChatUseCase _getMessagesGroGroupChatUseCase;
   MessageBloc(this._getMessagesUseCase, this._getMessagesGroGroupChatUseCase)
-      : super( MessageBlocInitial());
+      : super(MessageBlocInitial());
 
   @override
   Stream<MessageBlocState> mapEventToState(
     MessageEvent event,
   ) async* {
-    if (event is LoadMessagesForSingleChat) {
-      yield* _mapLoadMessagesToState(event.receiverId);
-    } else if (event is UpdateMessages) {
-      yield* _mapUpdateMessagesToState(event);
-    }
-    if (event is LoadMessagesForGroupChat) {
-      yield* _mapLoadMessagesForGroupToState(event.groupChatUid);
-    } else if (event is UpdateMessagesForGroup) {
-      yield* _mapUpdateMessagesForGroupToState(event);
+    if (event is InitialBloc) {
+      yield* _www();
+    } else {
+      if (event is LoadMessagesForSingleChat) {
+        yield* _mapLoadMessagesToState(event.receiverId);
+      } else if (event is UpdateMessages) {
+        yield* _mapUpdateMessagesToState(event);
+      }
+      if (event is LoadMessagesForGroupChat) {
+        yield* _mapLoadMessagesForGroupToState(event.groupChatUid);
+      } else if (event is UpdateMessagesForGroup) {
+        yield* _mapUpdateMessagesForGroupToState(event);
+      }
     }
   }
 
   static MessageBloc get(BuildContext context) => BlocProvider.of(context);
-
   Stream<MessageBlocState> _mapLoadMessagesToState(String receiverId) async* {
     _getMessagesUseCase.call(params: receiverId).listen(
       (messages) {
         add(UpdateMessages(messages));
       },
     );
+  }
+
+  Stream<MessageBlocState> _www() async* {
+    yield MessageBlocInitial();
   }
 
   Stream<MessageBlocState> _mapUpdateMessagesToState(
