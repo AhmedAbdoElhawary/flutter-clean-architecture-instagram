@@ -20,6 +20,7 @@ late FlutterLocalNotificationsPlugin _normalLocalNotifications;
 late AndroidNotificationChannel _normalChannel;
 late FlutterLocalNotificationsPlugin _videoCallLocalNotifications;
 late AndroidNotificationChannel _videoCallChannel;
+
 Future<void> notificationPermissions(BuildContext context) async {
   await _requestPermission();
   // ignore: use_build_context_synchronously
