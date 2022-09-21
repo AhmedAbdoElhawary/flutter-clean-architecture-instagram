@@ -19,9 +19,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageBlocState> {
   Stream<MessageBlocState> mapEventToState(
     MessageEvent event,
   ) async* {
-    if (event is InitialBloc) {
-      yield* _www();
-    } else {
+
       if (event is LoadMessagesForSingleChat) {
         yield* _mapLoadMessagesToState(event.receiverId);
       } else if (event is UpdateMessages) {
@@ -32,7 +30,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageBlocState> {
       } else if (event is UpdateMessagesForGroup) {
         yield* _mapUpdateMessagesForGroupToState(event);
       }
-    }
+
   }
 
   static MessageBloc get(BuildContext context) => BlocProvider.of(context);
@@ -42,10 +40,6 @@ class MessageBloc extends Bloc<MessageEvent, MessageBlocState> {
         add(UpdateMessages(messages));
       },
     );
-  }
-
-  Stream<MessageBlocState> _www() async* {
-    yield MessageBlocInitial();
   }
 
   Stream<MessageBlocState> _mapUpdateMessagesToState(
