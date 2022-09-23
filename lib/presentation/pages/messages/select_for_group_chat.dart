@@ -10,7 +10,6 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
-import 'package:instagram/domain/entities/sender_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
@@ -291,13 +290,11 @@ class GroupMessages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SenderInfo messageDetails = SenderInfo(
-        receiversInfo: selectedUsersInfoValue, isThatGroupChat: true);
     return Scaffold(
       appBar: CustomAppBar.chattingAppBar(selectedUsersInfoValue, context),
       body: BlocProvider<MessageBloc>(
         create: (context) => injector<MessageBloc>(),
-        child: ChatMessages(messageDetails: messageDetails),
+        child: ChatMessages(userInfo: selectedUsersInfoValue[0]),
       ),
     );
   }
