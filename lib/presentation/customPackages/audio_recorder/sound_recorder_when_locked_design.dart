@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'show_counter.dart';
 import 'sound_recorder_notifier.dart';
 
-// ignore: must_be_immutable
 class SoundRecorderWhenLockedDesign extends StatelessWidget {
   final SoundRecordNotifier soundRecordNotifier;
   final String? cancelText;
