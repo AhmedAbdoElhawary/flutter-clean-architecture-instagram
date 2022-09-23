@@ -18,18 +18,10 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gall
 import '../../../core/functions/toast_show.dart';
 import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 
-// ignore: must_be_immutable
 class EditProfilePage extends StatefulWidget {
-  UserPersonalInfo userInfo;
-  TextEditingController nameController = TextEditingController(text: "");
-  TextEditingController userNameController = TextEditingController(text: "");
-  final TextEditingController pronounsController =
-      TextEditingController(text: "");
-  final TextEditingController websiteController =
-      TextEditingController(text: "");
-  TextEditingController bioController = TextEditingController(text: "");
+  final UserPersonalInfo userInfo;
 
-  EditProfilePage(this.userInfo, {Key? key}) : super(key: key);
+  const EditProfilePage(this.userInfo, {Key? key}) : super(key: key);
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -37,16 +29,30 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   ValueNotifier<bool> isImageUpload = ValueNotifier(true);
+  TextEditingController nameController = TextEditingController(text: "");
+  TextEditingController userNameController = TextEditingController(text: "");
+  final TextEditingController pronounsController =
+      TextEditingController(text: "");
+  final TextEditingController websiteController =
+      TextEditingController(text: "");
+  TextEditingController bioController = TextEditingController(text: "");
+  late UserPersonalInfo userInfo;
+
   bool reBuild = false;
   bool userNameChanging = false;
   bool validateEdits = true;
+  @override
+  void dispose() {
+    isImageUpload.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
-    widget.nameController = TextEditingController(text: widget.userInfo.name);
-    widget.userNameController =
-        TextEditingController(text: widget.userInfo.userName);
-    widget.bioController = TextEditingController(text: widget.userInfo.bio);
+    userInfo = widget.userInfo;
+    nameController = TextEditingController(text: userInfo.name);
+    userNameController = TextEditingController(text: userInfo.userName);
+    bioController = TextEditingController(text: userInfo.bio);
 
     super.initState();
   }
@@ -75,7 +81,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           Future.delayed(Duration.zero, () {
             if (mounted) {
               setState(() {
-                widget.userInfo = getUserState.userPersonalInfo;
+                userInfo = getUserState.userPersonalInfo;
               });
             }
           });
@@ -141,26 +147,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     if (isImageUploadValue) {
                       reBuild = true;
                       List<dynamic> charactersOfName = [];
-                      String name = widget.nameController.text.toLowerCase();
+                      String name = nameController.text.toLowerCase();
                       for (int i = 0; i < name.length; i++) {
                         charactersOfName =
                             charactersOfName + [name.substring(0, i + 1)];
                       }
                       UserPersonalInfo updatedUserInfo = UserPersonalInfo(
-                        followerPeople: widget.userInfo.followerPeople,
-                        followedPeople: widget.userInfo.followedPeople,
-                        posts: widget.userInfo.posts,
-                        userName: widget.userNameController.text,
-                        name: widget.nameController.text,
-                        bio: widget.bioController.text,
-                        profileImageUrl: widget.userInfo.profileImageUrl,
-                        email: widget.userInfo.email,
+                        followerPeople: userInfo.followerPeople,
+                        followedPeople: userInfo.followedPeople,
+                        posts: userInfo.posts,
+                        userName: userNameController.text,
+                        name: nameController.text,
+                        bio: bioController.text,
+                        profileImageUrl: userInfo.profileImageUrl,
+                        email: userInfo.email,
                         charactersOfName: charactersOfName,
-                        stories: widget.userInfo.stories,
-                        userId: widget.userInfo.userId,
-                        deviceToken: widget.userInfo.deviceToken,
-                        lastThreePostUrls: widget.userInfo.lastThreePostUrls,
-                        chatsOfGroups: widget.userInfo.chatsOfGroups,
+                        stories: userInfo.stories,
+                        userId: userInfo.userId,
+                        deviceToken: userInfo.deviceToken,
+                        lastThreePostUrls: userInfo.lastThreePostUrls,
+                        chatsOfGroups: userInfo.chatsOfGroups,
                       );
                       await updateUserCubit
                           .updateUserInfo(updatedUserInfo)
@@ -219,15 +225,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
           ),
         ),
-        textFormField(widget.nameController, StringsManager.name.tr),
+        textFormField(nameController, StringsManager.name.tr),
         const SizedBox(height: 10),
         userNameTextField(context),
         const SizedBox(height: 10),
-        textFormField(widget.pronounsController, StringsManager.pronouns.tr),
+        textFormField(pronounsController, StringsManager.pronouns.tr),
         const SizedBox(height: 10),
-        textFormField(widget.websiteController, StringsManager.website.tr),
+        textFormField(websiteController, StringsManager.website.tr),
         const SizedBox(height: 10),
-        textFormField(widget.bioController, StringsManager.bio.tr),
+        textFormField(bioController, StringsManager.bio.tr),
         const SizedBox(height: 15),
         const Divider(),
         const SizedBox(height: 8),
@@ -252,8 +258,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
     await updateUserCubit.uploadProfileImage(
         photo: pickImage,
-        userId: widget.userInfo.userId,
-        previousImageUrl: widget.userInfo.profileImageUrl);
+        userId: userInfo.userId,
+        previousImageUrl: userInfo.profileImageUrl);
     isImageUpload.value = true;
   }
 
@@ -278,7 +284,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       builder: (context, bool isImageUploadValue, child) =>
           BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
         bloc: BlocProvider.of<SearchAboutUserBloc>(context)
-          ..add(FindSpecificUser(widget.userNameController.text,
+          ..add(FindSpecificUser(userNameController.text,
               searchForSingleLetter: true)),
         buildWhen: (previous, current) =>
             previous != current &&
@@ -289,14 +295,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
           if (state is SearchAboutUserBlocLoaded) {
             usersWithSameUserName = state.users;
           }
-          bool isIExist = usersWithSameUserName.contains(widget.userInfo);
+          bool isIExist = usersWithSameUserName.contains(userInfo);
           WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
                 validateEdits = isIExist || usersWithSameUserName.isEmpty;
-                userNameChanging =
-                    widget.userNameController.text != widget.userInfo.userName;
+                userNameChanging = userNameController.text != userInfo.userName;
               }));
           return userNameTextFormField(
-            widget.userNameController,
+            userNameController,
             StringsManager.username.tr,
             uniqueUserName: validateEdits,
           );
@@ -356,14 +361,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Widget userCircleAvatarImage() {
-    bool hasUserPhoto = widget.userInfo.profileImageUrl.isNotEmpty;
+    bool hasUserPhoto = userInfo.profileImageUrl.isNotEmpty;
 
     return GestureDetector(
       child: ValueListenableBuilder(
         valueListenable: isImageUpload,
         builder: (context, bool isImageUploadValue, child) => CircleAvatar(
           backgroundImage: isImageUploadValue && hasUserPhoto
-              ? NetworkImage(widget.userInfo.profileImageUrl)
+              ? NetworkImage(userInfo.profileImageUrl)
               : null,
           radius: 50,
           backgroundColor: Theme.of(context).focusColor,
