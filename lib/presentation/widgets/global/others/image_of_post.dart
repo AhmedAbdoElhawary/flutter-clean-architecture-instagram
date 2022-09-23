@@ -39,10 +39,9 @@ import 'package:instagram/presentation/widgets/global/popup_widgets/common/jump_
 import 'package:instagram/presentation/widgets/global/popup_widgets/common/volume_icon.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/web/menu_card.dart';
 
-// ignore: must_be_immutable
 class ImageOfPost extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
-  bool playTheVideo;
+  final bool playTheVideo;
   final VoidCallback? reLoadData;
   final int indexOfPost;
   final ValueNotifier<List<Post>> postsInfo;
@@ -54,7 +53,7 @@ class ImageOfPost extends StatefulWidget {
   final ValueNotifier<Comment?> selectedCommentInfo;
   final ValueChanged<int>? removeThisPost;
 
-  ImageOfPost({
+  const ImageOfPost({
     Key? key,
     this.reLoadData,
     required this.postInfo,
@@ -83,6 +82,7 @@ class _ImageOfPostState extends State<ImageOfPost>
   ValueNotifier<int> initPosition = ValueNotifier(0);
   bool showCommentBox = false;
   bool isSoundOn = true;
+  late bool playTheVideo;
 
   bool isLiked = false;
   bool isHeartAnimation = false;
@@ -90,6 +90,7 @@ class _ImageOfPostState extends State<ImageOfPost>
 
   @override
   void initState() {
+    playTheVideo=widget.playTheVideo;
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
@@ -260,7 +261,7 @@ class _ImageOfPostState extends State<ImageOfPost>
           HeroDialogRoute(
             builder: (context) => ImageOfPost(
               postInfo: ValueNotifier(widget.postsInfo.value[index]),
-              playTheVideo: widget.playTheVideo,
+              playTheVideo: playTheVideo,
               indexOfPost: index,
               postsInfo: widget.postsInfo,
               rebuildPreviousWidget: widget.rebuildPreviousWidget,
@@ -304,7 +305,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                         onTap: () {
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             setState(() =>
-                                widget.playTheVideo = !widget.playTheVideo);
+                                playTheVideo = !playTheVideo);
                           });
                         },
                         child: Container(
@@ -549,10 +550,10 @@ class _ImageOfPostState extends State<ImageOfPost>
           videoUrl: postInfo.postUrl,
           coverOfVideoUrl: postInfo.coverOfVideoUrl,
           blurHash: postInfo.blurHash,
-          play: widget.playTheVideo,
+          play: playTheVideo,
           withoutSound: !isSoundOn,
         ),
-        if (!widget.playTheVideo)
+        if (!playTheVideo)
           Align(
             alignment: Alignment.center,
             child: Icon(
@@ -785,7 +786,7 @@ class _ImageOfPostState extends State<ImageOfPost>
           } else {
             if (!widget.popupWebContainer) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                setState(() => widget.playTheVideo = false);
+                setState(() => playTheVideo = false);
               });
 
               Navigator.of(context).push(
@@ -805,7 +806,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                 ),
               );
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                setState(() => widget.playTheVideo = true);
+                setState(() => playTheVideo = true);
               });
             } else {
               setState(() => showCommentBox = true);
