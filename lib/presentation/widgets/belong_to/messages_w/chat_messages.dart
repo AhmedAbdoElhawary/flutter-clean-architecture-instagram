@@ -33,7 +33,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gall
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memory_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
-import 'dart:math' as math; // import this
+import 'dart:math' as math;
 
 /// It's not clean enough
 class ChatMessages extends StatefulWidget {

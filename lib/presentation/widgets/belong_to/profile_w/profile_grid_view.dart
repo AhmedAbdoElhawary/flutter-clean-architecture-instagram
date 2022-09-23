@@ -5,12 +5,11 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart';
 
-// ignore: must_be_immutable
 class ProfileGridView extends StatefulWidget {
-  List<Post> postsInfo;
+  final List<Post> postsInfo;
   final String userId;
 
-  ProfileGridView({required this.userId, required this.postsInfo, Key? key})
+  const ProfileGridView({required this.userId, required this.postsInfo, Key? key})
       : super(key: key);
 
   @override

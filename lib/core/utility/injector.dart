@@ -105,199 +105,200 @@ Future<void> initializeDependencies() async {
   // Repository
 
   // Post
-  injector.registerSingleton<FireStorePostRepository>(
-    FireStorePostRepositoryImpl(),
+  injector.registerLazySingleton<FireStorePostRepository>(
+        ()=>FireStorePostRepositoryImpl(),
   );
   // comment
-  injector.registerSingleton<FirestoreCommentRepository>(
-    FirestoreCommentRepositoryImpl(),
+  injector.registerLazySingleton<FirestoreCommentRepository>(
+        ()=>FirestoreCommentRepositoryImpl(),
   );
   //reply
 
-  injector.registerSingleton<FirestoreReplyRepository>(
-    FirestoreRepliesRepositoryImpl(),
+  injector.registerLazySingleton<FirestoreReplyRepository>(
+        ()=>FirestoreRepliesRepositoryImpl(),
   );
   // *
   // *
   // *
-  injector.registerSingleton<FirebaseAuthRepository>(
-    FirebaseAuthRepositoryImpl(),
+  injector.registerLazySingleton<FirebaseAuthRepository>(
+        ()=>FirebaseAuthRepositoryImpl(),
   );
-  injector.registerSingleton<FirestoreUserRepository>(
-    FirebaseUserRepoImpl(),
+  injector.registerLazySingleton<FirestoreUserRepository>(
+        ()=>FirebaseUserRepoImpl(),
   );
   // story
-  injector.registerSingleton<FirestoreStoryRepository>(
-    FirestoreStoryRepositoryImpl(),
+  injector.registerLazySingleton<FirestoreStoryRepository>(
+        ()=>FirestoreStoryRepositoryImpl(),
   );
   // notification
-  injector.registerSingleton<FirestoreNotificationRepository>(
-    FirestoreNotificationRepoImpl(),
+  injector.registerLazySingleton<FirestoreNotificationRepository>(
+        ()=>FirestoreNotificationRepoImpl(),
   );
   // calling rooms repository
-  injector.registerSingleton<CallingRoomsRepository>(CallingRoomsRepoImpl());
+  injector.registerLazySingleton<CallingRoomsRepository>(()=>CallingRoomsRepoImpl());
 
-  injector.registerSingleton<FirestoreGroupMessageRepository>(
-      FirebaseGroupMessageRepoImpl());
+  injector.registerLazySingleton<FirestoreGroupMessageRepository>(
+          ()=> FirebaseGroupMessageRepoImpl());
 
   // *
   /// ========================================================================>
 
   // Firebase auth useCases
-  injector.registerSingleton<LogInAuthUseCase>(LogInAuthUseCase(injector()));
+  injector.registerLazySingleton<LogInAuthUseCase>(()=>LogInAuthUseCase(injector()));
 
-  injector.registerSingleton<SignUpAuthUseCase>(SignUpAuthUseCase(injector()));
+  injector.registerLazySingleton<SignUpAuthUseCase>(()=>SignUpAuthUseCase(injector()));
   injector
-      .registerSingleton<SignOutAuthUseCase>(SignOutAuthUseCase(injector()));
+      .registerLazySingleton<SignOutAuthUseCase>(()=>SignOutAuthUseCase(injector()));
   // *
-  // Firestore user useCases
-  injector.registerSingleton<AddNewUserUseCase>(AddNewUserUseCase(injector()));
+  // FireStore user useCases
+  injector.registerLazySingleton<AddNewUserUseCase>(()=>AddNewUserUseCase(injector()));
   injector
-      .registerSingleton<GetUserInfoUseCase>(GetUserInfoUseCase(injector()));
+      .registerLazySingleton<GetUserInfoUseCase>(()=>GetUserInfoUseCase(injector()));
 
-  injector.registerSingleton<GetFollowersAndFollowingsUseCase>(
-      GetFollowersAndFollowingsUseCase(injector()));
+  injector.registerLazySingleton<GetFollowersAndFollowingsUseCase>(
+          ()=> GetFollowersAndFollowingsUseCase(injector()));
 
-  injector.registerSingleton<UpdateUserInfoUseCase>(
-      UpdateUserInfoUseCase(injector()));
+  injector.registerLazySingleton<UpdateUserInfoUseCase>(
+          ()=> UpdateUserInfoUseCase(injector()));
 
-  injector.registerSingleton<UploadProfileImageUseCase>(
-      UploadProfileImageUseCase(injector()));
+  injector.registerLazySingleton<UploadProfileImageUseCase>(
+          ()=>UploadProfileImageUseCase(injector()));
 
-  injector.registerSingleton<GetSpecificUsersUseCase>(
-      GetSpecificUsersUseCase(injector()));
+  injector.registerLazySingleton<GetSpecificUsersUseCase>(
+          ()=> GetSpecificUsersUseCase(injector()));
 
-  injector.registerSingleton<AddPostToUserUseCase>(
-      AddPostToUserUseCase(injector()));
+  injector.registerLazySingleton<AddPostToUserUseCase>(
+          ()=> AddPostToUserUseCase(injector()));
 
-  injector.registerSingleton<GetUserFromUserNameUseCase>(
-      GetUserFromUserNameUseCase(injector()));
-  injector.registerSingleton<GetAllUnFollowersUseCase>(
-      GetAllUnFollowersUseCase(injector()));
+  injector.registerLazySingleton<GetUserFromUserNameUseCase>(
+          ()=> GetUserFromUserNameUseCase(injector()));
+  injector.registerLazySingleton<GetAllUnFollowersUseCase>(
+          ()=> GetAllUnFollowersUseCase(injector()));
 
-  injector.registerSingleton<SearchAboutUserUseCase>(
-      SearchAboutUserUseCase(injector()));
+  injector.registerLazySingleton<SearchAboutUserUseCase>(
+          ()=> SearchAboutUserUseCase(injector()));
 
-  injector.registerSingleton<GetChatUsersInfoAddMessageUseCase>(
-      GetChatUsersInfoAddMessageUseCase(injector()));
+  injector.registerLazySingleton<GetChatUsersInfoAddMessageUseCase>(
+          ()=>  GetChatUsersInfoAddMessageUseCase(injector()));
 
-  injector.registerSingleton<GetMyInfoUseCase>(GetMyInfoUseCase(injector()));
+  injector.registerLazySingleton<GetMyInfoUseCase>(()=>GetMyInfoUseCase(injector()));
 
   // message use case
-  injector.registerSingleton<AddMessageUseCase>(AddMessageUseCase(injector()));
+  injector.registerLazySingleton<AddMessageUseCase>(()=>AddMessageUseCase(injector()));
   injector
-      .registerSingleton<GetMessagesUseCase>(GetMessagesUseCase(injector()));
-  injector.registerSingleton<DeleteMessageUseCase>(
-      DeleteMessageUseCase(injector()));
+      .registerLazySingleton<GetMessagesUseCase>(()=>GetMessagesUseCase(injector()));
+  injector.registerLazySingleton<DeleteMessageUseCase>(
+          ()=>  DeleteMessageUseCase(injector()));
   // *
   // *
-  // Firestore Post useCases
-  injector.registerSingleton<CreatePostUseCase>(CreatePostUseCase(injector()));
+  // FireStore Post useCases
+  injector.registerLazySingleton<CreatePostUseCase>(()=>CreatePostUseCase(injector()));
   injector
-      .registerSingleton<GetPostsInfoUseCase>(GetPostsInfoUseCase(injector()));
+      .registerLazySingleton<GetPostsInfoUseCase>(()=>GetPostsInfoUseCase(injector()));
 
-  injector.registerSingleton<GetAllPostsInfoUseCase>(
-      GetAllPostsInfoUseCase(injector()));
+  injector.registerLazySingleton<GetAllPostsInfoUseCase>(
+          ()=> GetAllPostsInfoUseCase(injector()));
 
-  injector.registerSingleton<GetSpecificUsersPostsUseCase>(
-      GetSpecificUsersPostsUseCase(injector()));
+  injector.registerLazySingleton<GetSpecificUsersPostsUseCase>(
+          ()=> GetSpecificUsersPostsUseCase(injector()));
 
-  injector.registerSingleton<PutLikeOnThisPostUseCase>(
-      PutLikeOnThisPostUseCase(injector()));
+  injector.registerLazySingleton<PutLikeOnThisPostUseCase>(
+          ()=> PutLikeOnThisPostUseCase(injector()));
 
-  injector.registerSingleton<RemoveTheLikeOnThisPostUseCase>(
-      RemoveTheLikeOnThisPostUseCase(injector()));
+  injector.registerLazySingleton<RemoveTheLikeOnThisPostUseCase>(
+          ()=> RemoveTheLikeOnThisPostUseCase(injector()));
 
-  injector.registerSingleton<GetSpecificStoriesInfoUseCase>(
-      GetSpecificStoriesInfoUseCase(injector()));
+  injector.registerLazySingleton<GetSpecificStoriesInfoUseCase>(
+          ()=>GetSpecificStoriesInfoUseCase(injector()));
 
-  injector.registerSingleton<DeletePostUseCase>(DeletePostUseCase(injector()));
+  injector.registerLazySingleton<DeletePostUseCase>(()=>DeletePostUseCase(injector()));
 
-  injector.registerSingleton<UpdatePostUseCase>(UpdatePostUseCase(injector()));
-  //Firestore Comment UseCase
-  injector.registerSingleton<GetSpecificCommentsUseCase>(
-      GetSpecificCommentsUseCase(injector()));
+  injector.registerLazySingleton<UpdatePostUseCase>(()=>UpdatePostUseCase(injector()));
+  //FireStore Comment UseCase
+  injector.registerLazySingleton<GetSpecificCommentsUseCase>(
+          ()=>  GetSpecificCommentsUseCase(injector()));
 
-  injector.registerSingleton<AddCommentUseCase>(AddCommentUseCase(injector()));
+  injector.registerLazySingleton<AddCommentUseCase>(()=>AddCommentUseCase(injector()));
 
-  injector.registerSingleton<PutLikeOnThisCommentUseCase>(
-      PutLikeOnThisCommentUseCase(injector()));
+  injector.registerLazySingleton<PutLikeOnThisCommentUseCase>(
+          ()=>  PutLikeOnThisCommentUseCase(injector()));
 
-  injector.registerSingleton<RemoveLikeOnThisCommentUseCase>(
-      RemoveLikeOnThisCommentUseCase(injector()));
+  injector.registerLazySingleton<RemoveLikeOnThisCommentUseCase>(
+          ()=> RemoveLikeOnThisCommentUseCase(injector()));
 
-  //Firestore reply UseCase
-  injector.registerSingleton<PutLikeOnThisReplyUseCase>(
-      PutLikeOnThisReplyUseCase(injector()));
+  //FireStore reply UseCase
+  injector.registerLazySingleton<PutLikeOnThisReplyUseCase>(
+          ()=>  PutLikeOnThisReplyUseCase(injector()));
 
-  injector.registerSingleton<RemoveLikeOnThisReplyUseCase>(
-      RemoveLikeOnThisReplyUseCase(injector()));
+  injector.registerLazySingleton<RemoveLikeOnThisReplyUseCase>(
+          ()=> RemoveLikeOnThisReplyUseCase(injector()));
 
-  injector.registerSingleton<GetRepliesOfThisCommentUseCase>(
-      GetRepliesOfThisCommentUseCase(injector()));
+  injector.registerLazySingleton<GetRepliesOfThisCommentUseCase>(
+          ()=>  GetRepliesOfThisCommentUseCase(injector()));
 
-  injector.registerSingleton<ReplyOnThisCommentUseCase>(
-      ReplyOnThisCommentUseCase(injector()));
+  injector.registerLazySingleton<ReplyOnThisCommentUseCase>(
+          ()=>  ReplyOnThisCommentUseCase(injector()));
   // *
   // *
 
   // follow useCases
-  injector.registerSingleton<FollowThisUserUseCase>(
-      FollowThisUserUseCase(injector()));
-  injector.registerSingleton<UnFollowThisUserUseCase>(
-      UnFollowThisUserUseCase(injector()));
+  injector.registerLazySingleton<FollowThisUserUseCase>(
+          ()=>  FollowThisUserUseCase(injector()));
+  injector.registerLazySingleton<UnFollowThisUserUseCase>(
+          ()=>  UnFollowThisUserUseCase(injector()));
 
   // *
 
   // story useCases
-  injector.registerSingleton<GetStoriesInfoUseCase>(
-      GetStoriesInfoUseCase(injector()));
+  injector.registerLazySingleton<GetStoriesInfoUseCase>(
+      () => GetStoriesInfoUseCase(injector()));
+
   injector
-      .registerSingleton<CreateStoryUseCase>(CreateStoryUseCase(injector()));
+      .registerLazySingleton<CreateStoryUseCase>(()=>CreateStoryUseCase(injector()));
   injector
-      .registerSingleton<DeleteStoryUseCase>(DeleteStoryUseCase(injector()));
+      .registerLazySingleton<DeleteStoryUseCase>(()=>DeleteStoryUseCase(injector()));
 
   // *
   // notification useCases
-  injector.registerSingleton<GetNotificationsUseCase>(
-      GetNotificationsUseCase(injector()));
-  injector.registerSingleton<CreateNotificationUseCase>(
-      CreateNotificationUseCase(injector()));
-  injector.registerSingleton<DeleteNotificationUseCase>(
-      DeleteNotificationUseCase(injector()));
+  injector.registerLazySingleton<GetNotificationsUseCase>(
+          ()=>GetNotificationsUseCase(injector()));
+  injector.registerLazySingleton<CreateNotificationUseCase>(
+          ()=>CreateNotificationUseCase(injector()));
+  injector.registerLazySingleton<DeleteNotificationUseCase>(
+          ()=>DeleteNotificationUseCase(injector()));
   // *
   // calling rooms useCases
-  injector.registerSingleton<CreateCallingRoomUseCase>(
-      CreateCallingRoomUseCase(injector()));
+  injector.registerLazySingleton<CreateCallingRoomUseCase>(
+          ()=>CreateCallingRoomUseCase(injector()));
   // join room useCases
-  injector.registerSingleton<JoinToCallingRoomUseCase>(
-      JoinToCallingRoomUseCase(injector()));
+  injector.registerLazySingleton<JoinToCallingRoomUseCase>(
+          ()=>JoinToCallingRoomUseCase(injector()));
   // cancel room useCases
-  injector.registerSingleton<CancelJoiningToRoomUseCase>(
-      CancelJoiningToRoomUseCase(injector()));
-  injector.registerSingleton<GetCallingStatusUseCase>(
-      GetCallingStatusUseCase(injector()));
+  injector.registerLazySingleton<CancelJoiningToRoomUseCase>(
+          ()=>CancelJoiningToRoomUseCase(injector()));
+  injector.registerLazySingleton<GetCallingStatusUseCase>(
+          ()=>GetCallingStatusUseCase(injector()));
 
-  injector.registerSingleton<GetUsersInfoInRoomUseCase>(
-      GetUsersInfoInRoomUseCase(injector()));
+  injector.registerLazySingleton<GetUsersInfoInRoomUseCase>(
+          ()=>GetUsersInfoInRoomUseCase(injector()));
 
-  injector.registerSingleton<DeleteTheRoomUseCase>(
-      DeleteTheRoomUseCase(injector()));
-
-  injector
-      .registerSingleton<GetAllUsersUseCase>(GetAllUsersUseCase(injector()));
-
-  injector.registerSingleton<DeleteMessageForGroupChatUseCase>(
-      DeleteMessageForGroupChatUseCase(injector()));
-
-  injector.registerSingleton<GetMessagesGroGroupChatUseCase>(
-      GetMessagesGroGroupChatUseCase(injector()));
-
-  injector.registerSingleton<AddMessageForGroupChatUseCase>(
-      AddMessageForGroupChatUseCase(injector()));
+  injector.registerLazySingleton<DeleteTheRoomUseCase>(
+          ()=> DeleteTheRoomUseCase(injector()));
 
   injector
-      .registerSingleton<GetSpecificChatInfo>(GetSpecificChatInfo(injector()));
+      .registerLazySingleton<GetAllUsersUseCase>(()=>GetAllUsersUseCase(injector()));
+
+  injector.registerLazySingleton<DeleteMessageForGroupChatUseCase>(
+          ()=> DeleteMessageForGroupChatUseCase(injector()));
+
+  injector.registerLazySingleton<GetMessagesGroGroupChatUseCase>(
+          ()=>  GetMessagesGroGroupChatUseCase(injector()));
+
+  injector.registerLazySingleton<AddMessageForGroupChatUseCase>(
+          ()=> AddMessageForGroupChatUseCase(injector()));
+
+  injector
+      .registerLazySingleton<GetSpecificChatInfo>(()=>GetSpecificChatInfo(injector()));
 
   /// ========================================================================>
 

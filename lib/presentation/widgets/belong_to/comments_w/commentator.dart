@@ -24,22 +24,21 @@ import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 
-// ignore: must_be_immutable
 class CommentInfo extends StatefulWidget {
-  int index;
-  bool addReply;
-  bool isThatReply;
+  final int index;
+  final bool addReply;
+  final bool isThatReply;
   final Comment commentInfo;
   final bool rebuildComment;
-  Map<int, bool> showMeReplies;
-  UserPersonalInfo myPersonalInfo;
-  ValueNotifier<TextEditingController> textController;
+  final Map<int, bool> showMeReplies;
+  final UserPersonalInfo myPersonalInfo;
+  final ValueNotifier<TextEditingController> textController;
   final ValueNotifier<ValueChanged<Comment>>? selectedCommentInfo;
   final ValueChanged<bool> rebuildCallback;
   final ValueNotifier<Post> postInfo;
-  ValueNotifier<FocusNode> currentFocus;
+  final ValueNotifier<FocusNode> currentFocus;
 
-  CommentInfo(
+  const CommentInfo(
       {Key? key,
       required this.commentInfo,
       required this.currentFocus,

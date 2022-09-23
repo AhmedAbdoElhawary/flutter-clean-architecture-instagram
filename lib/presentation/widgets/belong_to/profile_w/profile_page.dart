@@ -21,15 +21,14 @@ import '../../../../data/models/parent_classes/without_sub_classes/user_personal
 import '../../global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import '../time_line_w/read_more_text.dart';
 
-// ignore: must_be_immutable
 class ProfilePage extends StatefulWidget {
-  String userId;
-  bool isThatMyPersonalId;
+  final String userId;
+  final bool isThatMyPersonalId;
   final ValueNotifier<UserPersonalInfo> userInfo;
-  List<Widget> widgetsAboveTapBars;
+  final List<Widget> widgetsAboveTapBars;
   final AsyncCallback getData;
 
-  ProfilePage(
+  const ProfilePage(
       {required this.widgetsAboveTapBars,
       required this.isThatMyPersonalId,
       required this.userInfo,

@@ -4,6 +4,7 @@ import 'package:instagram/domain/entities/notification_check.dart';
 class CustomNotification extends NotificationCheck {
   String notificationUid;
   String text;
+
   String time;
   String personalUserName;
   String postImageUrl;

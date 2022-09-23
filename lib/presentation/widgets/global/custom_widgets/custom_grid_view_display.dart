@@ -7,15 +7,14 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_netw
 import 'package:instagram/presentation/widgets/global/others/image_of_post.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/mobile/popup_post.dart';
 
-// ignore: must_be_immutable
 class CustomGridViewDisplay extends StatefulWidget {
-  Post postClickedInfo;
+  final Post postClickedInfo;
   final List<Post> postsInfo;
   final bool isThatProfile;
   final int index;
   final bool playThisVideo;
   final ValueChanged<int>? removeThisPost;
-  CustomGridViewDisplay(
+  const CustomGridViewDisplay(
       {required this.index,
       required this.postsInfo,
       this.isThatProfile = true,

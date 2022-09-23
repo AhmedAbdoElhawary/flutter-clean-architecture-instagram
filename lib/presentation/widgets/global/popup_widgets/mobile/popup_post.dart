@@ -40,14 +40,13 @@ class _PositionDimension {
   });
 }
 
-// ignore: must_be_immutable
 class PopupPostCard extends StatefulWidget {
-  Post postClickedInfo;
-  Widget postClickedWidget;
+  final Post postClickedInfo;
+  final Widget postClickedWidget;
   final List<Post> postsInfo;
   final bool isThatProfile;
 
-  PopupPostCard({
+  const PopupPostCard({
     Key? key,
     required this.postClickedInfo,
     required this.postClickedWidget,
@@ -91,6 +90,18 @@ class _PopupPostCardState extends State<PopupPostCard> {
   void initState() {
     isLiked = widget.postClickedInfo.likes.contains(myPersonalId);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    messageVisibility.dispose();
+    loveVisibility.dispose();
+    viewProfileVisibility.dispose();
+    shareVisibility.dispose();
+    menuVisibility.dispose();
+    isHeartAnimation.dispose();
+    loveStatusAnimation.dispose();
+    super.dispose();
   }
 
   @override

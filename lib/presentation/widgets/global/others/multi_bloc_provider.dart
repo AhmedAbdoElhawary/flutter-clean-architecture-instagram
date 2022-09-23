@@ -24,11 +24,10 @@ import 'package:instagram/presentation/cubit/postInfoCubit/specific_users_posts_
 import '../../../../core/utility/injector.dart';
 import '../../../cubit/postInfoCubit/post_cubit.dart';
 
-// ignore: must_be_immutable
 class MultiBlocs extends StatelessWidget {
-  Widget materialApp;
+  final Widget materialApp;
 
-  MultiBlocs(this.materialApp, {Key? key}) : super(key: key);
+  const MultiBlocs(this.materialApp, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

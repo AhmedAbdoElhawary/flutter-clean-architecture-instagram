@@ -5,12 +5,11 @@ import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/mobile/popup_post.dart';
 
-// ignore: must_be_immutable
 class CustomVideosGridView extends StatefulWidget {
-  List<Post> postsInfo;
+  final List<Post> postsInfo;
   final String userId;
 
-  CustomVideosGridView(
+  const CustomVideosGridView(
       {required this.userId, required this.postsInfo, Key? key})
       : super(key: key);
 
