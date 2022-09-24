@@ -263,13 +263,15 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
         ),
       ];
 
-  List<Widget> homeScreenItems() => [
+  List<Widget> homeScreenItems() {
+    return [
         const _HomePage(),
         MessagesForWeb(selectedTextingUser: widget.userInfoForMessagePage),
         const ShopPage(),
         AllUsersTimeLinePage(),
         const _PersonalProfilePage(),
       ];
+  }
 
   SvgPicture icons(String icon, bool value, {bool biggerIcon = false}) {
     return SvgPicture.asset(
