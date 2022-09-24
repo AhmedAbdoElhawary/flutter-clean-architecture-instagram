@@ -53,43 +53,114 @@ class _ChatMessagesState extends State<ChatMessages>
   int itemIndex = 0;
 
   Future<void> scrollToLastIndex(BuildContext context) async {
-    if (globalMessagesInfo.value.length > 1) {
-      itemScrollController.value.scrollTo(
-          index: globalMessagesInfo.value.length - 1,
-          alignment: 0.2,
-          duration: const Duration(milliseconds: 10),
-          curve: Curves.easeInOutQuint);
-    }
+  await scrollControl.animateTo(scrollControl.position.maxScrollExtent,
+        duration: const Duration(seconds: 1), curve: Curves.easeInOutQuart);
+  }
+  
+  @override
+  void dispose() {
+    _colorAnimationController.dispose();
+    indexOfGarbageMessage.dispose();
+    deleteThisMessage.dispose();
+    newMessageInfo.dispose();
+    scrollControl.dispose();
+    _textController.dispose();
+    isDeleteMessageDone.dispose();
+    isMessageLoaded.dispose();
+    appearIcons.dispose();
+    unSend.dispose();
+    reLoad.dispose();
+    records.dispose();
+    audioPlayer.dispose();
+    super.dispose();
   }
 
   @override
   void initState() {
+    messageDetails = widget.messageDetails;
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+
     _colorAnimationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _colorTween = ColorTween(begin: Colors.purple, end: Colors.blue)
         .animate(_colorAnimationController);
+    receiversInfo = messageDetails.receiversInfo ?? [myPersonalInfo];
+    isGroupIdEmpty = messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
+    profileImageOfSender = "";
+    senderIdForGroup = "";
+    senderIdForProfileImage = "";
+
     super.initState();
   }
 
   @override
   void didUpdateWidget(ChatMessages oldWidget) {
-    if (widget.userInfo != oldWidget.userInfo) {
-      newMessageInfo.value = null;
-      globalMessagesInfo.value.clear();
-      isMessageLoaded.value = false;
-    }
+    newMessageInfo.value = null;
+    globalMessagesInfo.value = [];
+    isMessageLoaded.value = false;
+    messageDetails = widget.messageDetails;
+    receiversInfo = messageDetails.receiversInfo ?? [myPersonalInfo];
+    isGroupIdEmpty = messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
+    profileImageOfSender = "";
+    senderIdForGroup = "";
+    senderIdForProfileImage = "";
     super.didUpdateWidget(oldWidget);
   }
 
   @override
-  void dispose() {
-    _colorAnimationController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    bool check = (messageDetails.lastMessage?.isThatGroup) ?? false;
+    return GestureDetector(
+      onTap: () {
+        deleteThisMessage.value = null;
+        indexOfGarbageMessage.value = null;
+        unSend.value = false;
+      },
+      child: messageDetails.isThatGroupChat || check
+          ? buildGroupChat(context)
+          : buildSingleChat(context),
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return buildBody(context);
+  Widget buildGroupChat(BuildContext context) {
+    if (messageDetails.lastMessage == null || isGroupIdEmpty) {
+      return buildMessages(context, []);
+    } else {
+      return ValueListenableBuilder(
+        valueListenable: reLoad,
+        builder: (context, bool reLoadValue, child) =>
+            BlocBuilder<MessageBloc, MessageBlocState>(
+          bloc: BlocProvider.of<MessageBloc>(context)
+            ..add(LoadMessagesForGroupChat(
+                groupChatUid: messageDetails.lastMessage!.chatOfGroupId)),
+          builder: (context, state) {
+            if (state is MessageBlocLoaded) {
+              return buildMessages(context, state.messages);
+            } else {
+              return isThatMobile
+                  ? buildCircularProgress()
+                  : const ThineLinearProgress();
+            }
+          },
+        ),
+      );
+    }
+  }
+
+  Widget buildSingleChat(BuildContext context) {
+    return BlocBuilder<MessageBloc, MessageBlocState>(
+      bloc: BlocProvider.of<MessageBloc>(context)
+        ..add(LoadMessagesForSingleChat(receiversInfo[0].userId)),
+      builder: (context, state) {
+        if (state is MessageBlocLoaded) {
+          return buildMessages(context, state.messages);
+        } else {
+          return isThatMobile
+              ? buildCircularProgress()
+              : const ThineLinearProgress();
+        }
+      },
+    );
   }
 
   Widget buildBody(BuildContext context) {
@@ -164,8 +235,8 @@ class _ChatMessagesState extends State<ChatMessages>
     return Stack(
       children: [
         Padding(
-            padding: EdgeInsetsDirectional.only(
-                end: 10, start: 10, top: 10, bottom: isThatMobile ? 10 : 25),
+            padding: const EdgeInsetsDirectional.only(
+                end: 10, start: 10, top: 10, bottom: 25),
             child: listViewForWeb(globalMessagesValue)),
         Align(alignment: Alignment.bottomCenter, child: fieldOfMessageForWeb())
       ],
@@ -174,7 +245,7 @@ class _ChatMessagesState extends State<ChatMessages>
 
   Widget listViewForWeb(List<Message> globalMessagesValue) {
     return ListView.separated(
-        controller: ScrollController(),
+        controller: scrollControl,
         itemBuilder: (context, index) {
           return Column(
             children: [
@@ -245,34 +316,57 @@ class _ChatMessagesState extends State<ChatMessages>
   }
 
   Widget buildTheMessage(
-      Message messageInfo, String previousDateOfMessage, int index) {
-    bool isThatMine = false;
-    if (messageInfo.senderId == myPersonalId) isThatMine = true;
+      List<Message> messagesInfo, String previousDateOfMessage, int index) {
+    Message messageInfo = messagesInfo[index];
+    bool isThatMe = false;
+    if (messageInfo.senderId == myPersonalId) isThatMe = true;
+    bool createProfileImage = false;
+    bool checkForSenderNameInGroup;
+
+    if (!isThatMe && senderIdForGroup != messageInfo.senderId) {
+      senderIdForGroup = messageInfo.senderId;
+      checkForSenderNameInGroup = true;
+    } else {
+      checkForSenderNameInGroup = false;
+    }
+    if (senderIdForProfileImage.isEmpty && !isThatMe) {
+      senderIdForProfileImage = messageInfo.senderId;
+    }
+
+    int i = index + 1 < messagesInfo.length ? index + 1 : index;
+    if (!isThatMe && messagesInfo[i].senderId != senderIdForProfileImage) {
+      senderIdForProfileImage = messagesInfo[i].senderId;
+      createProfileImage = true;
+    }
+    if (index == messagesInfo.length - 1) {
+      senderIdForProfileImage = messagesInfo[i].senderId;
+      createProfileImage = true;
+    }
+
     String theDate = DateReformat.fullDigitsFormat(
         messageInfo.datePublished, previousDateOfMessage);
     return Column(
       children: [
         if (theDate.isNotEmpty)
           Align(
-              alignment: AlignmentDirectional.center,
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(bottom: 15, top: 15),
-                child: Text(
-                  theDate,
-                  style: getNormalStyle(color: Theme.of(context).hoverColor),
-                ),
-              )),
+            alignment: AlignmentDirectional.center,
+            child: Padding(
+              padding: const EdgeInsetsDirectional.only(bottom: 15, top: 15),
+              child: Text(
+                theDate,
+                style: getNormalStyle(color: ColorManager.grey),
+              ),
+            ),
+          ),
+
         const SizedBox(height: 5),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            if (!isThatMine && !isThatMobile) ...[
-              CircleAvatarOfProfileImage(
-                bodyHeight: 350,
-                userInfo: widget.userInfo,
-                showColorfulCircle: false,
-              ),
-              const SizedBox(width: 10),
+            if (isLangArabic) ...[buildVisibility(messageInfo, true)],
+            if (!isThatMe) ...[
+              buildProfileImage(createProfileImage),
+
             ],
             if (isThatMine) const SizedBox(width: 100),
             Expanded(
@@ -305,7 +399,68 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  Align buildMessageForMobile(bool isThatMine, Message messageInfo) {
+  Visibility buildVisibility(Message messageInfo, bool rotateIcon) {
+    return Visibility(
+      visible: messageInfo.senderId == myPersonalId &&
+          messageInfo.messageUid.isEmpty,
+      child: Padding(
+        padding: const EdgeInsetsDirectional.only(start: 5.0),
+        child: rotateIcon
+            ? Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.rotationY(math.pi),
+                child: sendIcon(),
+              )
+            : sendIcon(),
+      ),
+    );
+  }
+
+  SvgPicture sendIcon() {
+    return SvgPicture.asset(
+      IconsAssets.send2Icon,
+      height: 15,
+      color: Theme.of(context).focusColor,
+    );
+  }
+
+  Visibility buildProfileImage(bool createProfileImage) {
+    int indexOfUserInfo = 0;
+    if (createProfileImage) {
+      indexOfUserInfo =
+          messageDetails.receiversIds?.indexOf(senderIdForProfileImage) ?? 0;
+      indexOfUserInfo = indexOfUserInfo == -1 ? 0 : indexOfUserInfo;
+    }
+    return Visibility(
+      visible: createProfileImage,
+      maintainSize: true,
+      maintainAnimation: true,
+      maintainState: true,
+      child: CircleAvatarOfProfileImage(
+        bodyHeight: 350,
+        userInfo: receiversInfo[indexOfUserInfo],
+        showColorfulCircle: false,
+      ),
+    );
+  }
+
+  BlocBuilder<UserInfoCubit, UserInfoState> senderNameText(
+      BuildContext context, Message messageInfo) {
+    return BlocBuilder<UserInfoCubit, UserInfoState>(
+      buildWhen: (previous, current) =>
+          previous != current && current is CubitUserLoaded,
+      bloc: UserInfoCubit.get(context)
+        ..getUserInfo(messageInfo.senderId, isThatMyPersonalId: false),
+      builder: (context, state) {
+        UserPersonalInfo? userInfo;
+        if (state is CubitUserLoaded) userInfo = state.userPersonalInfo;
+        return Text(userInfo?.name ?? "",
+            style: getNormalStyle(color: ColorManager.grey));
+      },
+    );
+  }
+
+  Align buildMessageForMobile(bool isThatMe, Message messageInfo) {
     String message = messageInfo.message;
     String imageUrl = messageInfo.imageUrl;
     String recordedUrl = messageInfo.recordedUrl;
@@ -676,6 +831,54 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
+  SocialMediaRecorder recordButton(
+      BuildContext context, MessageCubit messageCubit) {
+    return SocialMediaRecorder(
+      showIcons: showIcons,
+      slideToCancelText: StringsManager.slideToCancel.tr,
+      cancelText: StringsManager.cancel.tr,
+      sendRequestFunction: (File soundFile, int lengthOfRecordInSecond) async {
+        tempLengthOfRecord = lengthOfRecordInSecond * 1000000;
+        records.value = soundFile.path;
+        isMessageLoaded.value = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          setState(() {});
+        });
+        bool isThatGroup = messageDetails.lastMessage?.isThatGroup ?? false;
+
+        if (messageDetails.isThatGroupChat || isThatGroup) {
+          newMessageInfo.value = newMessageForGroup(isThatRecord: true);
+          if (!mounted) return;
+
+          await MessageForGroupChatCubit.get(context).sendMessage(
+              messageInfo: newMessageForGroup(isThatRecord: true),
+              recordFile: soundFile);
+          if (!mounted) return;
+          if (isGroupIdEmpty) {
+            Message lastMessage =
+                MessageForGroupChatCubit.getLastMessage(context);
+            messageDetails.lastMessage = lastMessage;
+          }
+        } else {
+          newMessageInfo.value = newMessage(isThatRecord: true);
+
+          await messageCubit.sendMessage(
+              messageInfo: newMessage(isThatRecord: true),
+              recordFile: soundFile);
+        }
+        newMessageInfo.value = null;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          setState(() {});
+        });
+
+        if (!mounted) return;
+        scrollToLastIndex(context);
+        records.value = "";
+        tempLengthOfRecord = 0;
+      },
+    );
+  }
+
   Widget pickImageFromCamera(MessageCubit messageCubit) {
     return ValueListenableBuilder(
         valueListenable: appearIcons,
@@ -784,6 +987,51 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
+  Future<void> onSelectImage(
+      MessageCubit messageCubit, ImageSource source) async {
+    SelectedImagesDetails? pickImage =
+        await CustomImagePickerPlus.pickImage(context, source: source);
+    if (pickImage != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() => isMessageLoaded.value = true);
+      });
+      Uint8List byte = pickImage.selectedFiles[0].selectedByte;
+      String blurHash = await CustomBlurHash.blurHashEncode(byte);
+      if (!mounted) return;
+      bool isThatGroup = messageDetails.lastMessage?.isThatGroup ?? false;
+
+      if (messageDetails.isThatGroupChat || isThatGroup) {
+        newMessageInfo.value =
+            newMessageForGroup(blurHash: blurHash, isThatImage: true);
+        newMessageInfo.value?.localImage = byte;
+
+        await MessageForGroupChatCubit.get(context).sendMessage(
+            messageInfo:
+                newMessageForGroup(blurHash: blurHash, isThatImage: true),
+            pathOfPhoto: byte);
+
+        if (!mounted) return;
+        if (isGroupIdEmpty) {
+          Message lastMessage =
+              MessageForGroupChatCubit.getLastMessage(context);
+          messageDetails.lastMessage = lastMessage;
+        }
+      } else {
+        newMessageInfo.value =
+            newMessage(blurHash: blurHash, isThatImage: true);
+        newMessageInfo.value?.localImage = byte;
+        messageCubit.sendMessage(
+            messageInfo: newMessage(blurHash: blurHash, isThatImage: true),
+            pathOfPhoto: byte);
+      }
+
+      if (!mounted) return;
+
+      scrollToLastIndex(context);
+    } else {
+      ToastShow.toast(StringsManager.noImageSelected.tr);
+    }
+  }
   Widget pickPhoto(MessageCubit messageCubit) {
     return GestureDetector(
       onTap: () async {

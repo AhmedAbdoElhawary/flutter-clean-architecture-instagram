@@ -12,21 +12,28 @@ import 'package:instagram/presentation/widgets/belong_to/messages_w/chat_message
 import 'package:instagram/presentation/widgets/belong_to/messages_w/list_of_messages.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 
-// ignore: must_be_immutable
 class MessagesForWeb extends StatefulWidget {
-  UserPersonalInfo? selectedTextingUser;
+  final UserPersonalInfo? selectedTextingUser;
 
-  MessagesForWeb({Key? key, this.selectedTextingUser}) : super(key: key);
+  const MessagesForWeb({Key? key, this.selectedTextingUser}) : super(key: key);
 
   @override
   State<MessagesForWeb> createState() => _MessagesForWebState();
 }
 
 class _MessagesForWebState extends State<MessagesForWeb> {
+  late UserPersonalInfo? selectedTextingUser;
   late UserPersonalInfo myPersonalInfo;
+  late SenderInfo senderInfo;
 
   @override
   initState() {
+    selectedTextingUser = widget.selectedTextingUser;
+    if (selectedTextingUser != null) {
+      senderInfo = SenderInfo(
+          receiversInfo: [selectedTextingUser!],
+          receiversIds: [selectedTextingUser!.userId]);
+    }
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
@@ -61,7 +68,7 @@ class _MessagesForWebState extends State<MessagesForWeb> {
   }
 
   Widget chatting() {
-    if (widget.selectedTextingUser == null) {
+    if (selectedTextingUser == null) {
       return Expanded(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -94,6 +101,8 @@ class _MessagesForWebState extends State<MessagesForWeb> {
   }
 
   Container appBarOfChatting() {
+    bool isThatGroup = senderInfo.lastMessage?.isThatGroup ?? false;
+
     return Container(
       height: 70,
       decoration: const BoxDecoration(
@@ -104,26 +113,46 @@ class _MessagesForWebState extends State<MessagesForWeb> {
           ),
         ),
       ),
-      child: widget.selectedTextingUser != null
+      child: selectedTextingUser != null
           ? Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
                     const SizedBox(width: 25),
-                    CircleAvatarOfProfileImage(
-                      bodyHeight: 350,
-                      userInfo: widget.selectedTextingUser!,
-                      showColorfulCircle: false,
-                    ),
+                    if (isThatGroup) ...[
+                      Padding(
+                        padding:
+                            const EdgeInsetsDirectional.only(top: 15, end: 12),
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Positioned(
+                              top: -4,
+                              left: 5,
+                              child: CircleAvatarOfProfileImage(
+                                bodyHeight: 330,
+                                userInfo: senderInfo.receiversInfo![0],
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: CircleAvatarOfProfileImage(
+                                bodyHeight: 330,
+                                userInfo: senderInfo.receiversInfo![1],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ] else ...[
+                      CircleAvatarOfProfileImage(
+                        bodyHeight: 350,
+                        userInfo: senderInfo.receiversInfo![0],
+                      ),
+                    ],
                     const SizedBox(width: 15),
-                    Text(
-                      widget.selectedTextingUser!.name,
-                      style: TextStyle(
-                          color: Theme.of(context).focusColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal),
-                    ),
+                    buildText(),
                   ],
                 ),
                 Row(
@@ -148,6 +177,19 @@ class _MessagesForWebState extends State<MessagesForWeb> {
     );
   }
 
+  Text buildText() {
+    bool isThatGroup = senderInfo.lastMessage?.isThatGroup ?? false;
+    List<UserPersonalInfo> receiverInfo = senderInfo.receiversInfo!;
+    String text = isThatGroup
+        ? "${receiverInfo[0].name}, ${receiverInfo[1].name}${receiverInfo.length > 2 ? ", ..." : ""}"
+        : receiverInfo[0].name;
+    return Text(
+      text,
+      overflow: TextOverflow.ellipsis,
+      style: getNormalStyle(color: Theme.of(context).focusColor),
+    );
+  }
+
   Container messages() {
     return Container(
       width: 350,
@@ -166,7 +208,7 @@ class _MessagesForWebState extends State<MessagesForWeb> {
             child: SingleChildScrollView(
               child: ListOfMessages(
                 selectChatting: selectChatting,
-                additionalUser: widget.selectedTextingUser,
+                additionalUser: selectedTextingUser,
                 freezeListView: true,
               ),
             ),
@@ -176,10 +218,11 @@ class _MessagesForWebState extends State<MessagesForWeb> {
     );
   }
 
-  void selectChatting(UserPersonalInfo userInfo) {
+  void selectChatting(SenderInfo userInfo) {
     setState(() {
-      widget.selectedTextingUser = null;
-      widget.selectedTextingUser = userInfo;
+      selectedTextingUser = null;
+      selectedTextingUser = userInfo.receiversInfo![0];
+      senderInfo = userInfo;
     });
   }
 

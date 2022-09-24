@@ -309,8 +309,8 @@ Future<void> initializeDependencies() async {
   // *
 
   // user Blocs
-  injector.registerFactory<FirestoreAddNewUserCubit>(
-    () => FirestoreAddNewUserCubit(injector()),
+  injector.registerFactory<FireStoreAddNewUserCubit>(
+    () => FireStoreAddNewUserCubit(injector()),
   );
   injector.registerFactory<UserInfoCubit>(() => UserInfoCubit(
         injector(),
