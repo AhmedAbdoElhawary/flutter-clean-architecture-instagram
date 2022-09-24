@@ -175,21 +175,16 @@ $ cd flutter-clean-architecture-instagram/
 
 ## What's Next?
  - [x] Notifications for likes, comments, follows, etc
- - [ ] Caching of Profiles, Images, Etc.
+ - [x] Caching of Profiles, Images, Etc.
  - [x] Calling video and voice in chat
  - [ ] Add stickers on chat
  - [x] Send posts to chats
  - [x] control in the dimension of selected image & video from the gallery
  - [x] Custom gallery display
- - [ ] Filters support for images
  - [x] Improve display loading of posts when opening the app
- - [ ] Like & comment on story
- - [ ] Delete the story
  - [ ] Turn off commenting on a post
  - [ ] Hide Like count of a post
- - [ ] Archive a post
  - [x] share post
- - [ ] Live support
  - [x] Make like, comment, and share of animation container post touchy when long pressed on post
  - [ ] Create store screens
  - [ ] Make it stable for web & desktop
