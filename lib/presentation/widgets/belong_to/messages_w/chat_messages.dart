@@ -75,10 +75,10 @@ class _ChatMessagesState extends State<ChatMessages>
     await scrollControl.animateTo(scrollControl.position.maxScrollExtent,
         duration: const Duration(seconds: 1), curve: Curves.easeInOutQuart);
   }
+
   @override
   void dispose() {
     _colorAnimationController.dispose();
-    globalMessagesInfo.dispose();
     indexOfGarbageMessage.dispose();
     deleteThisMessage.dispose();
     newMessageInfo.dispose();
@@ -93,26 +93,34 @@ class _ChatMessagesState extends State<ChatMessages>
     audioPlayer.dispose();
     super.dispose();
   }
+
   @override
   void initState() {
-    messageDetails=widget.messageDetails;
+    messageDetails = widget.messageDetails;
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     _colorAnimationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _colorTween = ColorTween(begin: Colors.purple, end: Colors.blue)
         .animate(_colorAnimationController);
     receiversInfo = messageDetails.receiversInfo ?? [myPersonalInfo];
-    isGroupIdEmpty =
-        messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
+    isGroupIdEmpty = messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
+    profileImageOfSender = "";
+    senderIdForGroup = "";
+    senderIdForProfileImage = "";
     super.initState();
   }
 
   @override
   void didUpdateWidget(ChatMessages oldWidget) {
-      newMessageInfo.value = null;
-      globalMessagesInfo.value = [];
-      isMessageLoaded.value = false;
-      messageDetails=widget.messageDetails;
+    newMessageInfo.value = null;
+    globalMessagesInfo.value = [];
+    isMessageLoaded.value = false;
+    messageDetails = widget.messageDetails;
+    receiversInfo = messageDetails.receiversInfo ?? [myPersonalInfo];
+    isGroupIdEmpty = messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
+    profileImageOfSender = "";
+    senderIdForGroup = "";
+    senderIdForProfileImage = "";
     super.didUpdateWidget(oldWidget);
   }
 
@@ -141,8 +149,7 @@ class _ChatMessagesState extends State<ChatMessages>
             BlocBuilder<MessageBloc, MessageBlocState>(
           bloc: BlocProvider.of<MessageBloc>(context)
             ..add(LoadMessagesForGroupChat(
-                groupChatUid:
-                    messageDetails.lastMessage!.chatOfGroupId)),
+                groupChatUid: messageDetails.lastMessage!.chatOfGroupId)),
           builder: (context, state) {
             if (state is MessageBlocLoaded) {
               return buildMessages(context, state.messages);
@@ -158,22 +165,18 @@ class _ChatMessagesState extends State<ChatMessages>
   }
 
   Widget buildSingleChat(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: reLoad,
-      builder: (context, bool reLoadValue, child) =>
-          BlocBuilder<MessageBloc, MessageBlocState>(
-        bloc: BlocProvider.of<MessageBloc>(context)
-          ..add(LoadMessagesForSingleChat(receiversInfo[0].userId)),
-        builder: (context, state) {
-          if (state is MessageBlocLoaded) {
-            return buildMessages(context, state.messages);
-          } else {
-            return isThatMobile
-                ? buildCircularProgress()
-                : const ThineLinearProgress();
-          }
-        },
-      ),
+    return BlocBuilder<MessageBloc, MessageBlocState>(
+      bloc: BlocProvider.of<MessageBloc>(context)
+        ..add(LoadMessagesForSingleChat(receiversInfo[0].userId)),
+      builder: (context, state) {
+        if (state is MessageBlocLoaded) {
+          return buildMessages(context, state.messages);
+        } else {
+          return isThatMobile
+              ? buildCircularProgress()
+              : const ThineLinearProgress();
+        }
+      },
     );
   }
 
@@ -237,8 +240,8 @@ class _ChatMessagesState extends State<ChatMessages>
     return Stack(
       children: [
         Padding(
-            padding: EdgeInsetsDirectional.only(
-                end: 10, start: 10, top: 10, bottom: isThatMobile ? 10 : 25),
+            padding: const EdgeInsetsDirectional.only(
+                end: 10, start: 10, top: 10, bottom: 25),
             child: listViewForWeb(globalMessagesValue)),
         Align(alignment: Alignment.bottomCenter, child: fieldOfMessageForWeb())
       ],
@@ -247,7 +250,7 @@ class _ChatMessagesState extends State<ChatMessages>
 
   Widget listViewForWeb(List<Message> globalMessagesValue) {
     return ListView.separated(
-        controller: ScrollController(),
+        controller: scrollControl,
         itemBuilder: (context, index) {
           return Column(
             children: [
@@ -306,9 +309,8 @@ class _ChatMessagesState extends State<ChatMessages>
       List<Message> messagesInfo, String previousDateOfMessage, int index) {
     Message messageInfo = messagesInfo[index];
     bool isThatMe = false;
-    bool createProfileImage = false;
-
     if (messageInfo.senderId == myPersonalId) isThatMe = true;
+    bool createProfileImage = false;
     bool checkForSenderNameInGroup;
 
     if (!isThatMe && senderIdForGroup != messageInfo.senderId) {
@@ -342,7 +344,7 @@ class _ChatMessagesState extends State<ChatMessages>
               padding: const EdgeInsetsDirectional.only(bottom: 15, top: 15),
               child: Text(
                 theDate,
-                style: getNormalStyle(color: Theme.of(context).hoverColor),
+                style: getNormalStyle(color: ColorManager.grey),
               ),
             ),
           ),
@@ -352,8 +354,7 @@ class _ChatMessagesState extends State<ChatMessages>
           children: [
             if (isLangArabic) ...[buildVisibility(messageInfo, true)],
             if (!isThatMe) ...[
-              buildProfileImage(
-                  createProfileImage && senderIdForProfileImage.isNotEmpty),
+              buildProfileImage(createProfileImage),
             ],
             const SizedBox(width: 10),
             if (isThatMe) const SizedBox(width: 100),
@@ -420,9 +421,8 @@ class _ChatMessagesState extends State<ChatMessages>
   Visibility buildProfileImage(bool createProfileImage) {
     int indexOfUserInfo = 0;
     if (createProfileImage) {
-      indexOfUserInfo = messageDetails.receiversIds
-              ?.indexOf(senderIdForProfileImage) ??
-          0;
+      indexOfUserInfo =
+          messageDetails.receiversIds?.indexOf(senderIdForProfileImage) ?? 0;
       indexOfUserInfo = indexOfUserInfo == -1 ? 0 : indexOfUserInfo;
     }
     return Visibility(
@@ -843,8 +843,7 @@ class _ChatMessagesState extends State<ChatMessages>
         WidgetsBinding.instance.addPostFrameCallback((_) {
           setState(() {});
         });
-        bool isThatGroup =
-            messageDetails.lastMessage?.isThatGroup ?? false;
+        bool isThatGroup = messageDetails.lastMessage?.isThatGroup ?? false;
 
         if (messageDetails.isThatGroupChat || isThatGroup) {
           newMessageInfo.value = newMessageForGroup(isThatRecord: true);
@@ -998,8 +997,7 @@ class _ChatMessagesState extends State<ChatMessages>
       Uint8List byte = pickImage.selectedFiles[0].selectedByte;
       String blurHash = await CustomBlurHash.blurHashEncode(byte);
       if (!mounted) return;
-      bool isThatGroup =
-          messageDetails.lastMessage?.isThatGroup ?? false;
+      bool isThatGroup = messageDetails.lastMessage?.isThatGroup ?? false;
 
       if (messageDetails.isThatGroupChat || isThatGroup) {
         newMessageInfo.value =
