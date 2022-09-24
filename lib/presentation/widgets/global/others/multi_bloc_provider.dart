@@ -38,8 +38,8 @@ class MultiBlocs extends StatelessWidget {
       BlocProvider<UserInfoCubit>(
         create: (context) => injector<UserInfoCubit>(),
       ),
-      BlocProvider<FirestoreAddNewUserCubit>(
-        create: (context) => injector<FirestoreAddNewUserCubit>(),
+      BlocProvider<FireStoreAddNewUserCubit>(
+        create: (context) => injector<FireStoreAddNewUserCubit>(),
       ),
       BlocProvider<PostCubit>(
         create: (context) => injector<PostCubit>()..getAllPostInfo(),
