@@ -4,12 +4,12 @@ import '../../../data/models/parent_classes/without_sub_classes/user_personal_in
 import '../../../domain/use_cases/user/add_new_user_usecase.dart';
 part 'add_new_user_state.dart';
 
-class FirestoreAddNewUserCubit extends Cubit<FirestoreAddNewUserState> {
+class FireStoreAddNewUserCubit extends Cubit<FirestoreAddNewUserState> {
   final AddNewUserUseCase _addNewUserUseCase;
 
-  FirestoreAddNewUserCubit(this._addNewUserUseCase) : super(CubitInitial());
+  FireStoreAddNewUserCubit(this._addNewUserUseCase) : super(CubitInitial());
 
-  static FirestoreAddNewUserCubit get(BuildContext context) =>
+  static FireStoreAddNewUserCubit get(BuildContext context) =>
       BlocProvider.of(context);
 
   void addNewUser(UserPersonalInfo newUserInfo) {
