@@ -6,6 +6,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
+import 'package:instagram/domain/entities/sender_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/chat_messages.dart';
@@ -96,7 +97,7 @@ class _MessagesForWebState extends State<MessagesForWeb> {
   Widget chatMessages() {
     return BlocProvider<MessageBloc>(
       create: (context) => injector<MessageBloc>(),
-      child: ChatMessages(userInfo:widget.selectedTextingUser!),
+      child: ChatMessages(messageDetails:senderInfo),
     );
   }
 
