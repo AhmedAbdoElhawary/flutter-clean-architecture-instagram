@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
-import 'package:instagram/data/datasourses/remote/post/firestore_post.dart';
-import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
+import 'package:instagram/data/data_sources/remote/firebase_storage.dart';
+import 'package:instagram/data/data_sources/remote/post/firestore_post.dart';
+import 'package:instagram/data/data_sources/remote/user/firestore_user_info.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import '../../../domain/repositories/post/post_repository.dart';
 
@@ -42,7 +42,7 @@ class FireStorePostRepositoryImpl implements FireStorePostRepository {
       }
 
       postInfo.isThatMix = isThatMix;
-      Post newPostInfo = await FirestorePost.createPost(postInfo);
+      Post newPostInfo = await FireStorePost.createPost(postInfo);
       return newPostInfo;
     } catch (e) {
       return Future.error(e.toString());
@@ -54,7 +54,7 @@ class FireStorePostRepositoryImpl implements FireStorePostRepository {
       {required List<dynamic> postsIds,
       required int lengthOfCurrentList}) async {
     try {
-      return await FirestorePost.getPostsInfo(
+      return await FireStorePost.getPostsInfo(
           postsIds: postsIds, lengthOfCurrentList: lengthOfCurrentList);
     } catch (e) {
       return Future.error(e.toString());
@@ -66,7 +66,7 @@ class FireStorePostRepositoryImpl implements FireStorePostRepository {
       {required bool isVideosWantedOnly,
       required String skippedVideoUid}) async {
     try {
-      return await FirestorePost.getAllPostsInfo(
+      return await FireStorePost.getAllPostsInfo(
           isVideosWantedOnly: isVideosWantedOnly,
           skippedVideoUid: skippedVideoUid);
     } catch (e) {
@@ -87,7 +87,7 @@ class FireStorePostRepositoryImpl implements FireStorePostRepository {
   Future<void> putLikeOnThisPost(
       {required String postId, required String userId}) async {
     try {
-      return await FirestorePost.putLikeOnThisPost(
+      return await FireStorePost.putLikeOnThisPost(
           postId: postId, userId: userId);
     } catch (e) {
       return Future.error(e.toString());
@@ -98,7 +98,7 @@ class FireStorePostRepositoryImpl implements FireStorePostRepository {
   Future<void> removeTheLikeOnThisPost(
       {required String postId, required String userId}) async {
     try {
-      return await FirestorePost.removeTheLikeOnThisPost(
+      return await FireStorePost.removeTheLikeOnThisPost(
           postId: postId, userId: userId);
     } catch (e) {
       return Future.error(e.toString());
@@ -108,7 +108,7 @@ class FireStorePostRepositoryImpl implements FireStorePostRepository {
   @override
   Future<void> deletePost({required Post postInfo}) async {
     try {
-      await FirestorePost.deletePost(postInfo: postInfo);
+      await FireStorePost.deletePost(postInfo: postInfo);
       await FirebaseStoragePost.deleteImageFromStorage(postInfo.postUrl);
     } catch (e) {
       return Future.error(e.toString());
@@ -118,7 +118,7 @@ class FireStorePostRepositoryImpl implements FireStorePostRepository {
   @override
   Future<Post> updatePost({required Post postInfo}) async {
     try {
-      return await FirestorePost.updatePost(postInfo: postInfo);
+      return await FireStorePost.updatePost(postInfo: postInfo);
     } catch (e) {
       return Future.error(e.toString());
     }
