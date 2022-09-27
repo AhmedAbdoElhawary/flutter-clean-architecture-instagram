@@ -1,24 +1,24 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/datasourses/remote/chat/group_chat.dart';
-import 'package:instagram/data/datasourses/remote/firebase_storage.dart';
-import 'package:instagram/data/datasourses/remote/notification/firebase_notification.dart';
-import 'package:instagram/data/datasourses/remote/chat/single_chat.dart';
+import 'package:instagram/data/data_sources/remote/chat/group_chat.dart';
+import 'package:instagram/data/data_sources/remote/firebase_storage.dart';
+import 'package:instagram/data/data_sources/remote/notification/firebase_notification.dart';
+import 'package:instagram/data/data_sources/remote/chat/single_chat.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/message.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/domain/entities/sender_info.dart';
 import 'package:instagram/domain/entities/specific_users_info.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import '../../domain/repositories/user_repository.dart';
-import '../datasourses/remote/user/firestore_user_info.dart';
+import '../data_sources/remote/user/firestore_user_info.dart';
 
 class FirebaseUserRepoImpl implements FirestoreUserRepository {
   @override
   Future<void> addNewUser(UserPersonalInfo newUserInfo) async {
     try {
       await FirestoreUser.createUser(newUserInfo);
-      await FirestoreNotification.createNewDeviceToken(
+      await FireStoreNotification.createNewDeviceToken(
           userId: newUserInfo.userId, myPersonalInfo: newUserInfo);
     } catch (e) {
       return Future.error(e.toString());
@@ -32,7 +32,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       UserPersonalInfo myPersonalInfo = await FirestoreUser.getUserInfo(userId);
       if (isThatMobile && getDeviceToken) {
         UserPersonalInfo updateInfo =
-            await FirestoreNotification.createNewDeviceToken(
+            await FireStoreNotification.createNewDeviceToken(
                 userId: userId, myPersonalInfo: myPersonalInfo);
         myPersonalInfo = updateInfo;
       }

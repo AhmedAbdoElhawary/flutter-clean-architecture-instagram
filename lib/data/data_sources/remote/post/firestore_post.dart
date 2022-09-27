@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
-import 'package:instagram/data/datasourses/remote/user/firestore_user_info.dart';
+import 'package:instagram/data/data_sources/remote/user/firestore_user_info.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 
-class FirestorePost {
+class FireStorePost {
   static final _fireStorePostCollection =
       FirebaseFirestore.instance.collection('posts');
 

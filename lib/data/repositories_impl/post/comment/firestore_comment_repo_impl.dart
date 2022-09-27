@@ -1,5 +1,5 @@
-import 'package:instagram/data/datasourses/remote/post/comment/firestore_comment.dart';
-import 'package:instagram/data/datasourses/remote/post/firestore_post.dart';
+import 'package:instagram/data/data_sources/remote/post/comment/firestore_comment.dart';
+import 'package:instagram/data/data_sources/remote/post/firestore_post.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/comment.dart';
 import 'package:instagram/domain/repositories/post/comment/comment_repository.dart';
 
@@ -13,7 +13,7 @@ class FirestoreCommentRepositoryImpl implements FirestoreCommentRepository {
       Comment theCommentInfo =
           await FirestoreComment.getCommentInfo(commentId: commentId);
 
-      await FirestorePost.putCommentOnThisPost(
+      await FireStorePost.putCommentOnThisPost(
           postId: theCommentInfo.postId, commentId: theCommentInfo.commentUid);
       return theCommentInfo;
     } catch (e) {
@@ -47,7 +47,7 @@ class FirestoreCommentRepositoryImpl implements FirestoreCommentRepository {
   Future<List<Comment>> getSpecificComments({required String postId}) async {
     try {
       List<dynamic> commentsIds =
-          await FirestorePost.getCommentsOfPost(postId: postId);
+          await FireStorePost.getCommentsOfPost(postId: postId);
       List<Comment> theComments =
           await FirestoreComment.getSpecificComments(commentsIds: commentsIds);
 

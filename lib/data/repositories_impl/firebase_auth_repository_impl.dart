@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:instagram/data/datasourses/remote/notification/firebase_notification.dart';
+import 'package:instagram/data/data_sources/remote/notification/firebase_notification.dart';
 import 'package:instagram/domain/entities/registered_user.dart';
 import 'package:instagram/domain/repositories/auth_repository.dart';
-import '../datasourses/remote/firebase_auth.dart';
+import '../data_sources/remote/firebase_auth.dart';
 
 class FirebaseAuthRepositoryImpl implements FirebaseAuthRepository {
   @override
@@ -18,8 +18,9 @@ class FirebaseAuthRepositoryImpl implements FirebaseAuthRepository {
   @override
   Future<void> signOut({required String userId}) async {
     try {
+
       await FirebaseAuthentication.signOut();
-      await FirestoreNotification.deleteDeviceToken(userId: userId);
+      await FireStoreNotification.deleteDeviceToken(userId: userId);
       return;
     } catch (e) {
       return Future.error(e.toString());
