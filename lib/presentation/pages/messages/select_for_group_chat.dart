@@ -10,6 +10,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
+import 'package:instagram/domain/entities/sender_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
@@ -67,7 +68,7 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
                           ] else ...[
                             ...List.generate(
                               selectedUsersInfoValue.length,
-                              (index) {
+                                  (index) {
                                 return buildSelectedUser(
                                     selectedUsersInfoValue, index);
                               },
@@ -130,33 +131,33 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
           valueListenable: selectedUsersInfo,
           builder:
               (context, List<UserPersonalInfo> selectedUsersInfoValue, child) =>
-                  Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 18),
-            child: GestureDetector(
-              onTap: () {
-                pushToPage(context,
-                    page: GroupMessages(
-                        selectedUsersInfoValue: selectedUsersInfoValue));
-              },
-              child: Text("Chat",
-                  style: getMediumStyle(
-                      color: selectedUsersInfoValue.isNotEmpty
-                          ? ColorManager.blue
-                          : ColorManager.lightBlue,
-                      fontSize: 18)),
-            ),
-          ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 18),
+                child: GestureDetector(
+                  onTap: () {
+                    pushToPage(context,
+                        page: GroupMessages(
+                            selectedUsersInfoValue: selectedUsersInfoValue));
+                  },
+                  child: Text("Chat",
+                      style: getMediumStyle(
+                          color: selectedUsersInfoValue.isNotEmpty
+                              ? ColorManager.blue
+                              : ColorManager.lightBlue,
+                          fontSize: 18)),
+                ),
+              ),
         )
       ],
     );
   }
 
   BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState>
-      buildBlocBuilder() {
+  buildBlocBuilder() {
     return BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState>(
       bloc: UsersInfoReelTimeBloc.get(context)..add(LoadAllUsersInfoInfo()),
       buildWhen: (previous, current) =>
-          previous != current && current is AllUsersInfoLoaded,
+      previous != current && current is AllUsersInfoLoaded,
       builder: (context, state) {
         if (state is AllUsersInfoLoaded) {
           List<UserPersonalInfo> usersInfo = state.allUsersInfoInReelTime;
@@ -169,8 +170,8 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
           return isThatMobile
               ? const ThineLinearProgress()
               : const Scaffold(
-                  body: SizedBox(height: 1, child: ThineLinearProgress()),
-                );
+            body: SizedBox(height: 1, child: ThineLinearProgress()),
+          );
         }
       },
     );
@@ -223,15 +224,15 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
                   backgroundColor: ColorManager.customGrey,
                   backgroundImage: userInfo.profileImageUrl.isNotEmpty
                       ? CachedNetworkImageProvider(userInfo.profileImageUrl,
-                          maxWidth: 120, maxHeight: 120)
+                      maxWidth: 120, maxHeight: 120)
                       : null,
                   radius: 30,
                   child: userInfo.profileImageUrl.isEmpty
                       ? Icon(
-                          Icons.person,
-                          color: Theme.of(context).primaryColor,
-                          size: 30,
-                        )
+                    Icons.person,
+                    color: Theme.of(context).primaryColor,
+                    size: 30,
+                  )
                       : null,
                 ),
                 const SizedBox(width: 15),
@@ -276,8 +277,8 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
       ),
       child: isUserSelected
           ? const Center(
-              child: Icon(Icons.check_rounded,
-                  color: ColorManager.white, size: 17))
+          child: Icon(Icons.check_rounded,
+              color: ColorManager.white, size: 17))
           : null,
     );
   }
@@ -290,11 +291,13 @@ class GroupMessages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SenderInfo messageDetails = SenderInfo(
+        receiversInfo: selectedUsersInfoValue, isThatGroupChat: true);
     return Scaffold(
       appBar: CustomAppBar.chattingAppBar(selectedUsersInfoValue, context),
       body: BlocProvider<MessageBloc>(
         create: (context) => injector<MessageBloc>(),
-        child: ChatMessages(userInfo: selectedUsersInfoValue[0]),
+        child: ChatMessages(messageDetails: messageDetails),
       ),
     );
   }
