@@ -273,8 +273,8 @@ class _UserNamePageState extends State<UserNamePage> {
 
   Widget customTextButton() {
     return Builder(builder: (context) {
-      FirestoreAddNewUserCubit userCubit =
-          FirestoreAddNewUserCubit.get(context);
+      FireStoreAddNewUserCubit userCubit =
+          FireStoreAddNewUserCubit.get(context);
       return ValueListenableBuilder(
         valueListenable: isToastShowed,
         builder: (context, bool isToastShowedValue, child) =>
@@ -337,7 +337,7 @@ class _UserNamePageState extends State<UserNamePage> {
     ToastShow.toast(error);
   }
 
-  addNewUser(CubitAuthConfirmed authState, FirestoreAddNewUserCubit userCubit) {
+  addNewUser(CubitAuthConfirmed authState, FireStoreAddNewUserCubit userCubit) {
     String fullName = widget.textsControllers.fullNameController.text;
     List<dynamic> charactersOfName = [];
     String nameOfLower = fullName.toLowerCase();

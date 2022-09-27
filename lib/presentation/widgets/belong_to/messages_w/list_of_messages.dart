@@ -23,15 +23,15 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_line
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_smart_refresh.dart';
 
 class ListOfMessages extends StatefulWidget {
-  final ValueChanged<UserPersonalInfo>? selectChatting;
+  final ValueChanged<SenderInfo>? selectChatting;
   final UserPersonalInfo? additionalUser;
   final bool freezeListView;
-  const ListOfMessages(
-      {Key? key,
-      this.selectChatting,
-      this.freezeListView = false,
-      this.additionalUser})
-      : super(key: key);
+  const ListOfMessages({
+    Key? key,
+    this.selectChatting,
+    this.freezeListView = false,
+    this.additionalUser,
+  }) : super(key: key);
 
   @override
   State<ListOfMessages> createState() => _ListOfMessagesState();
@@ -77,10 +77,10 @@ class _ListOfMessagesState extends State<ListOfMessages> {
           bool isThatUserExist = false;
           if (widget.additionalUser != null) {
             state.usersInfo.where((element) {
-              bool check = (element.receiversInfo?[0].userId !=
-                      widget.additionalUser?.userId) &&
-                  !(element.lastMessage?.isThatGroup ?? true);
-              if (!check) isThatUserExist = true;
+              bool isUserExist = ((element.receiversIds
+                      ?.contains(widget.additionalUser?.userId)) ??
+                  false) && !(element.lastMessage?.isThatGroup ?? true);
+              if (!isUserExist) isThatUserExist = true;
               return true;
             }).toList();
           }
@@ -130,7 +130,7 @@ class _ListOfMessagesState extends State<ListOfMessages> {
             child: GestureDetector(
               onTap: () {
                 if (widget.selectChatting != null) {
-                  widget.selectChatting!(usersInfo[index].receiversInfo![0]);
+                  widget.selectChatting!(usersInfo[index]);
                 } else {
                   pushToPage(context,
                       page: BlocProvider<MessageBloc>(
