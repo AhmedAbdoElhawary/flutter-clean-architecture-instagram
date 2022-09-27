@@ -75,6 +75,7 @@ class _ChatMessagesState extends State<ChatMessages>
     await scrollControl.animateTo(scrollControl.position.maxScrollExtent,
         duration: const Duration(seconds: 1), curve: Curves.easeInOutQuart);
   }
+
   @override
   void dispose() {
     _colorAnimationController.dispose();
@@ -93,46 +94,26 @@ class _ChatMessagesState extends State<ChatMessages>
     audioPlayer.dispose();
     super.dispose();
   }
+
   @override
   void initState() {
-    messageDetails=widget.messageDetails;
+    messageDetails = widget.messageDetails;
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     _colorAnimationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _colorTween = ColorTween(begin: Colors.purple, end: Colors.blue)
         .animate(_colorAnimationController);
     receiversInfo = messageDetails.receiversInfo ?? [myPersonalInfo];
-    isGroupIdEmpty =
-        messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
-    super.initState();
-  }
-  resetValues() {
-    globalMessagesInfo.value = [];
-    indexOfGarbageMessage.value = null;
-    deleteThisMessage.value = null;
-    newMessageInfo.value = null;
-    _textController.value = TextEditingController();
-    isDeleteMessageDone.value = false;
-    isMessageLoaded.value = false;
-    appearIcons.value = true;
-    unSend.value = false;
-    reLoad.value = false;
-    records.value = '';
-    senderIdForGroup = "";
-    profileImageOfSender = "";
-    itemIndex = 0;
-    senderIdForProfileImage = "";
-    receiversInfo = messageDetails.receiversInfo ?? [myPersonalInfo];
     isGroupIdEmpty = messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
-    audioPlayer = AudioPlayer();
-    tempLengthOfRecord = 0;
+    super.initState();
   }
 
   @override
   void didUpdateWidget(ChatMessages oldWidget) {
-
-      messageDetails=widget.messageDetails;
-      resetValues();
+    newMessageInfo.value = null;
+    globalMessagesInfo.value = [];
+    isMessageLoaded.value = false;
+    messageDetails = widget.messageDetails;
     super.didUpdateWidget(oldWidget);
   }
 
@@ -161,8 +142,7 @@ class _ChatMessagesState extends State<ChatMessages>
             BlocBuilder<MessageBloc, MessageBlocState>(
           bloc: BlocProvider.of<MessageBloc>(context)
             ..add(LoadMessagesForGroupChat(
-                groupChatUid:
-                    messageDetails.lastMessage!.chatOfGroupId)),
+                groupChatUid: messageDetails.lastMessage!.chatOfGroupId)),
           builder: (context, state) {
             if (state is MessageBlocLoaded) {
               return buildMessages(context, state.messages);
@@ -440,9 +420,8 @@ class _ChatMessagesState extends State<ChatMessages>
   Visibility buildProfileImage(bool createProfileImage) {
     int indexOfUserInfo = 0;
     if (createProfileImage) {
-      indexOfUserInfo = messageDetails.receiversIds
-              ?.indexOf(senderIdForProfileImage) ??
-          0;
+      indexOfUserInfo =
+          messageDetails.receiversIds?.indexOf(senderIdForProfileImage) ?? 0;
       indexOfUserInfo = indexOfUserInfo == -1 ? 0 : indexOfUserInfo;
     }
     return Visibility(
@@ -863,8 +842,7 @@ class _ChatMessagesState extends State<ChatMessages>
         WidgetsBinding.instance.addPostFrameCallback((_) {
           setState(() {});
         });
-        bool isThatGroup =
-            messageDetails.lastMessage?.isThatGroup ?? false;
+        bool isThatGroup = messageDetails.lastMessage?.isThatGroup ?? false;
 
         if (messageDetails.isThatGroupChat || isThatGroup) {
           newMessageInfo.value = newMessageForGroup(isThatRecord: true);
@@ -1018,8 +996,7 @@ class _ChatMessagesState extends State<ChatMessages>
       Uint8List byte = pickImage.selectedFiles[0].selectedByte;
       String blurHash = await CustomBlurHash.blurHashEncode(byte);
       if (!mounted) return;
-      bool isThatGroup =
-          messageDetails.lastMessage?.isThatGroup ?? false;
+      bool isThatGroup = messageDetails.lastMessage?.isThatGroup ?? false;
 
       if (messageDetails.isThatGroupChat || isThatGroup) {
         newMessageInfo.value =
