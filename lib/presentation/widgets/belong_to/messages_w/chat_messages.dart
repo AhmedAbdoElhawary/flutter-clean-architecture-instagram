@@ -107,13 +107,31 @@ class _ChatMessagesState extends State<ChatMessages>
     isGroupIdEmpty = messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
     super.initState();
   }
-
+  resetValues() {
+    globalMessagesInfo.value = [];
+    indexOfGarbageMessage.value = null;
+    deleteThisMessage.value = null;
+    newMessageInfo.value = null;
+    _textController.value = TextEditingController();
+    isDeleteMessageDone.value = false;
+    isMessageLoaded.value = false;
+    appearIcons.value = true;
+    unSend.value = false;
+    reLoad.value = false;
+    records.value = '';
+    senderIdForGroup = "";
+    profileImageOfSender = "";
+    itemIndex = 0;
+    senderIdForProfileImage = "";
+    receiversInfo = messageDetails.receiversInfo ?? [myPersonalInfo];
+    isGroupIdEmpty = messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
+    audioPlayer = AudioPlayer();
+    tempLengthOfRecord = 0;
+  }
   @override
   void didUpdateWidget(ChatMessages oldWidget) {
-    newMessageInfo.value = null;
-    globalMessagesInfo.value = [];
-    isMessageLoaded.value = false;
     messageDetails = widget.messageDetails;
+    resetValues();
     super.didUpdateWidget(oldWidget);
   }
 
