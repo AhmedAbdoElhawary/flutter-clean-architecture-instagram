@@ -22,7 +22,7 @@ jobs:
       #      - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          repoToken: '${{ secrets.TOKEN_GITHUB }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_EL_INSTAGRAM }}'
           channelId: live
           projectId: el-instagram
