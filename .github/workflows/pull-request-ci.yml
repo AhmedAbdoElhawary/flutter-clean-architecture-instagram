@@ -1,0 +1,49 @@
+name: Pull Request CI
+
+on:
+  pull_request:
+    branches:
+      - 'master'
+      - 'release*'
+# Um workflow é composto de um ou mais Jobs que podem ser executados sequencialmente ou em paralelo
+jobs:
+  # Este Workflow contém dois Jobs chamados "test" e "build-and-deploy"
+  test:
+    name: Run Unit Tests
+    # O tipo de runner em que o job será executado
+    runs-on: ubuntu-latest  
+    # Steps representam a sequencia de tarefas usando o shell runners que serão executadas como parte do Job
+    steps:
+    - uses: actions/checkout@v1
+    #  Step para instalar o NDK
+    - name: set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    #  Step para rodar testes unitários
+    - name: Unit tests
+      run: ./gradlew test --stacktrace
+  
+  build-and-generate-apk:
+    # O tipo de runner em que o job será executado
+    runs-on: ubuntu-latest
+    # Steps representam a sequencia de tarefas usando o shell runners que serão executadas como parte do Job
+    steps:
+    - uses: actions/checkout@v1
+    # Step para Configurar o JDK
+    - name: set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8       
+    #  Step para instalar o NDK
+    - name: Install NDK
+      run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;20.0.5594570"
+    # Step para Buildar o Projeto e gerar a APK
+    - name: Build Debug 
+      run: ./gradlew assembleDebug
+    # Step para salvar a APK como Artifact
+    - name: Upload APK on Github Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: app
+        path: app/build/outputs/apk/prod/debug/app-prod-debug.apk 
