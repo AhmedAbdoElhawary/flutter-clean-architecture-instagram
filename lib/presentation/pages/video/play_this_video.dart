@@ -82,6 +82,7 @@ class PlayThisVideoState extends State<PlayThisVideo> {
         cachingWidth: 238,
         cachingHeight: 430,
         blurHash: widget.blurHash,
+        aspectRatio: widget.aspectRatio,
         url: widget.coverOfVideoUrl,
       );
     } else {

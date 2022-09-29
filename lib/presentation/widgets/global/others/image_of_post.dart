@@ -94,7 +94,12 @@ class _ImageOfPostState extends State<ImageOfPost>
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
-
+  @override
+  void didUpdateWidget(covariant ImageOfPost oldWidget) {
+    playTheVideo=widget.playTheVideo;
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    super.didUpdateWidget(oldWidget);
+  }
   @override
   void dispose() {
     commentTextController.dispose();
@@ -498,31 +503,34 @@ class _ImageOfPostState extends State<ImageOfPost>
     return Stack(
       alignment: Alignment.center,
       children: [
-        GestureDetector(
-          onDoubleTap: () {
-            setState(() {
-              isHeartAnimation = true;
-              this.isLiked = true;
-              if (!isLiked) {
-                BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
-                    postId: postInfo.postUid, userId: myPersonalId);
-                postInfo.likes.add(myPersonalId);
-              }
-            });
-          },
-          child: Padding(
-            padding: const EdgeInsetsDirectional.only(top: 8.0),
-            child: postInfo.imagesUrls.length > 1
-                ? ImagesSlider(
-                    blurHash: postInfo.blurHash,
-                    aspectRatio: postInfo.aspectRatio,
-                    imagesUrls: postInfo.imagesUrls,
-                    updateImageIndex: _updateImageIndex,
-                    showPointsScrollBar: widget.popupWebContainer,
-                  )
-                : (postInfo.isThatImage
-                    ? buildSingleImage(postInfo)
-                    : videoPlayer(postInfo)),
+        Align(
+          alignment: Alignment.center,
+          child: GestureDetector(
+            onDoubleTap: () {
+              setState(() {
+                isHeartAnimation = true;
+                this.isLiked = true;
+                if (!isLiked) {
+                  BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
+                      postId: postInfo.postUid, userId: myPersonalId);
+                  postInfo.likes.add(myPersonalId);
+                }
+              });
+            },
+            child: Padding(
+              padding: const EdgeInsetsDirectional.only(top: 8.0),
+              child: postInfo.imagesUrls.length > 1
+                  ? ImagesSlider(
+                      blurHash: postInfo.blurHash,
+                      aspectRatio: postInfo.aspectRatio,
+                      imagesUrls: postInfo.imagesUrls,
+                      updateImageIndex: _updateImageIndex,
+                      showPointsScrollBar: widget.popupWebContainer,
+                    )
+                  : (postInfo.isThatImage
+                      ? buildSingleImage(postInfo)
+                      : videoPlayer(postInfo)),
+            ),
           ),
         ),
         Align(
