@@ -61,21 +61,21 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
 
 ## SnapShots
 
-### |--------- Sign page ----------|----------- Welcome page ------------|---------- Stories ------- |
+### |--------- Sign page ----------|------- Welcome page --------|-------------- Stories ----------|
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/193092118-a6e5ecfb-6ee0-42d2-9a40-b9616bee692d.gif"   width="32%" height="50%">
 <img src="https://user-images.githubusercontent.com/88978546/193092126-9c23eb3b-b6e7-4789-ab1b-a0e9cb6ab5b4.gif"   width="32%" height="50%">
 <img src="https://user-images.githubusercontent.com/88978546/193092135-05d3f4d5-9246-40a2-98e4-0432a54be598.gif"   width="32%" height="50%">
 </p>
 
-### |----- Home screen ------|----- Comment screen ------|--------  Create story ---------|
+### |-------- Home screen --------|------ Comment screen ------|--------  Create story ----------|
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/193121221-4b31e55d-0add-4aef-9c3a-5f6b716674aa.gif"   width="32%" height="50%">
 <img src="https://user-images.githubusercontent.com/88978546/193093024-2db7c6cc-f633-4c87-9597-f4ff6ea8ef3f.gif"   width="32%" height="50%">
 <img src="https://user-images.githubusercontent.com/88978546/193093346-1128eff3-bff8-4674-985c-bd3b4c37890d.gif"  width="32%" height="50%">
 </p>
 
-### |--- Share post --- |--------- Videos page ---------|---- personal profile page ---|
+### |--------- Share post --------- |--------- Videos page ---------|---- personal profile page ---|
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/193093277-b499a2ea-9834-4a0d-9558-1f6a8566c424.gif"   width="32%" height="50%">
 <img src="https://user-images.githubusercontent.com/88978546/173257900-43ff2295-06bd-4193-b6cc-a8dd34fb66ff.gif"   width="32%" height="50%">
@@ -83,7 +83,7 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
 
 </p>
 
-### |---- Change app theme -----|--- Logout & Login ----| Change app language |
+### |---- Change app theme -----|------- Logout & Login --------|-- Change app language -- |
 
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/193093794-ff844bb8-c71e-42a0-b946-90e9187a833f.gif"   width="32%" height="50%">
@@ -92,7 +92,7 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
 
 </p>
 
-### |---- Following users -----|--- Unfollow all users ----| Change profile image |
+### |------ Following users -------|----- Unfollow all users ------|---- Change profile image ----|
 
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/193093834-d8d7ed49-d703-4a2e-8f40-7404b3b57e27.gif"   width="32%" height="50%">
@@ -100,14 +100,14 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
 <img src="https://user-images.githubusercontent.com/88978546/193093861-babf4599-fc5e-46fa-87ad-7958a9c34a67.gif"   width="32%" height="50%">
 </p>
 
-### |--------- All users time line ----------|--------- Search about user ---------|---------- Create post ------- |
+### |----- All users time line ------|----- Search about user ------|---------- Create post ------- |
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/193094015-3f8f2186-48b8-49cd-ad16-0efb65223f3c.gif"   width="32%" height="50%">
 <img src="https://user-images.githubusercontent.com/88978546/193094159-1cb6a582-7b70-464e-9c4e-41c6c03eabaf.gif"   width="32%" height="50%">
 <img src="https://user-images.githubusercontent.com/88978546/193127197-cd45b689-68f3-48b3-9279-04ad996e10ca.gif"   width="32%" height="50%">
 </p>
 
-### |----  Create video -----|--- Show created video ----| share created video |
+### |--------  Create video ---------|---- Show created video -----|---- share created video -----|
 
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/193094411-2ea2f0a8-131e-41d7-96eb-9b2fe348e6a5.gif"   width="32%" height="50%">
@@ -117,7 +117,7 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
 </p>
 
 
-### |---- Edit post -----|--- Notifications ----| Activity page |
+### |----------- Edit post ----------|-------- Notifications ---------|-------- Activity page --------|
 
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/193094494-8cc71b18-4f08-4535-be25-6d5e2624c5ab.gif"   width="32%" height="50%">
@@ -125,7 +125,7 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
 <img src="https://user-images.githubusercontent.com/88978546/193094534-d66b3819-b726-47c5-897c-476a27a84a96.gif"   width="32%" height="50%">
 </p>
 
-### |------------------- Chatting -----------------|
+### |--------------------------- Chatting ----------------------------|
 
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/173257255-4fdd1318-3e21-47e4-bc4b-3f3809dc5b9c.gif"   width="32%" height="50%">
