@@ -66,8 +66,8 @@ class _ChatMessagesState extends State<ChatMessages>
   String senderIdForGroup = "";
   String profileImageOfSender = "";
   int itemIndex = 0;
-  String senderIdForProfileImage = "";
   bool isGroupIdEmpty = true;
+  bool checkForSenderNameInGroup = false;
   AudioPlayer audioPlayer = AudioPlayer();
   int tempLengthOfRecord = 0;
   late SenderInfo messageDetails;
@@ -107,6 +107,7 @@ class _ChatMessagesState extends State<ChatMessages>
     isGroupIdEmpty = messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
     super.initState();
   }
+
   resetValues() {
     globalMessagesInfo.value = [];
     indexOfGarbageMessage.value = null;
@@ -122,12 +123,12 @@ class _ChatMessagesState extends State<ChatMessages>
     senderIdForGroup = "";
     profileImageOfSender = "";
     itemIndex = 0;
-    senderIdForProfileImage = "";
     receiversInfo = messageDetails.receiversInfo ?? [myPersonalInfo];
     isGroupIdEmpty = messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
     audioPlayer = AudioPlayer();
     tempLengthOfRecord = 0;
   }
+
   @override
   void didUpdateWidget(ChatMessages oldWidget) {
     messageDetails = widget.messageDetails;
@@ -285,6 +286,16 @@ class _ChatMessagesState extends State<ChatMessages>
     return ListView.separated(
         controller: scrollControl,
         itemBuilder: (context, index) {
+          Message messageInfo = globalMessagesValue[index];
+          bool isThatMe = messageInfo.senderId == myPersonalId;
+
+          if (!isThatMe && senderIdForGroup != messageInfo.senderId) {
+            senderIdForGroup = messageInfo.senderId;
+            checkForSenderNameInGroup = true;
+          } else {
+            senderIdForGroup = "";
+            checkForSenderNameInGroup = false;
+          }
           int indexForMobile = index != 0 ? index - 1 : 0;
           return Column(
             children: [
@@ -323,31 +334,8 @@ class _ChatMessagesState extends State<ChatMessages>
   Widget buildTheMessage(
       List<Message> messagesInfo, String previousDateOfMessage, int index) {
     Message messageInfo = messagesInfo[index];
-    bool isThatMe = false;
-    bool createProfileImage = false;
+    bool isThatMe = messageInfo.senderId == myPersonalId;
 
-    if (messageInfo.senderId == myPersonalId) isThatMe = true;
-    bool checkForSenderNameInGroup;
-
-    if (!isThatMe && senderIdForGroup != messageInfo.senderId) {
-      senderIdForGroup = messageInfo.senderId;
-      checkForSenderNameInGroup = true;
-    } else {
-      checkForSenderNameInGroup = false;
-    }
-    if (senderIdForProfileImage.isEmpty && !isThatMe) {
-      senderIdForProfileImage = messageInfo.senderId;
-    }
-
-    int i = index + 1 < messagesInfo.length ? index + 1 : index;
-    if (!isThatMe && messagesInfo[i].senderId != senderIdForProfileImage) {
-      senderIdForProfileImage = messagesInfo[i].senderId;
-      createProfileImage = true;
-    }
-    if (index == messagesInfo.length - 1) {
-      senderIdForProfileImage = messagesInfo[i].senderId;
-      createProfileImage = true;
-    }
     String theDate = DateReformat.fullDigitsFormat(
         messageInfo.datePublished, previousDateOfMessage);
     bool isLangArabic = AppLanguage().appLocale == "ar";
@@ -368,11 +356,7 @@ class _ChatMessagesState extends State<ChatMessages>
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            if (isLangArabic) ...[buildVisibility(messageInfo, true)],
-            if (!isThatMe) ...[
-              buildProfileImage(
-                  createProfileImage && senderIdForProfileImage.isNotEmpty),
-            ],
+            if (isLangArabic) ...[buildSendLoadingIcon(messageInfo, true)],
             const SizedBox(width: 10),
             if (isThatMe) const SizedBox(width: 100),
             Expanded(
@@ -403,14 +387,14 @@ class _ChatMessagesState extends State<ChatMessages>
               ),
             ),
             if (!isThatMe) const SizedBox(width: 85),
-            if (!isLangArabic) ...[buildVisibility(messageInfo, false)],
+            if (!isLangArabic) ...[buildSendLoadingIcon(messageInfo, false)],
           ],
         ),
       ],
     );
   }
 
-  Visibility buildVisibility(Message messageInfo, bool rotateIcon) {
+  Visibility buildSendLoadingIcon(Message messageInfo, bool rotateIcon) {
     return Visibility(
       visible: messageInfo.senderId == myPersonalId &&
           messageInfo.messageUid.isEmpty,
@@ -432,26 +416,6 @@ class _ChatMessagesState extends State<ChatMessages>
       IconsAssets.send2Icon,
       height: 15,
       color: Theme.of(context).focusColor,
-    );
-  }
-
-  Visibility buildProfileImage(bool createProfileImage) {
-    int indexOfUserInfo = 0;
-    if (createProfileImage) {
-      indexOfUserInfo =
-          messageDetails.receiversIds?.indexOf(senderIdForProfileImage) ?? 0;
-      indexOfUserInfo = indexOfUserInfo == -1 ? 0 : indexOfUserInfo;
-    }
-    return Visibility(
-      visible: createProfileImage,
-      maintainSize: true,
-      maintainAnimation: true,
-      maintainState: true,
-      child: CircleAvatarOfProfileImage(
-        bodyHeight: 350,
-        userInfo: receiversInfo[indexOfUserInfo],
-        showColorfulCircle: false,
-      ),
     );
   }
 
@@ -483,34 +447,31 @@ class _ChatMessagesState extends State<ChatMessages>
                 : (messageInfo.isThatImage
                     ? imageMessage(messageInfo, imageUrl)
                     : textMessage(message, isThatMe)));
-
     return Align(
       alignment: isThatMe
           ? AlignmentDirectional.centerEnd
           : AlignmentDirectional.centerStart,
-      child: AnimatedBuilder(
-          animation: _colorAnimationController,
-          builder: (_, __) => Container(
-                decoration: BoxDecoration(
-                  color: messageInfo.isThatPost
-                      ? (Theme.of(context).textTheme.titleMedium?.color)
-                      : (isThatMe
-                          ? _colorTween.value
-                          : Theme.of(context).textTheme.titleMedium?.color),
-                  borderRadius: BorderRadiusDirectional.only(
-                    bottomStart: Radius.circular(isThatMe ? 20 : 0),
-                    bottomEnd: Radius.circular(isThatMe ? 0 : 20),
-                    topStart: const Radius.circular(20),
-                    topEnd: const Radius.circular(20),
-                  ),
-                ),
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                padding: !messageInfo.isThatImage
-                    ? const EdgeInsetsDirectional.only(
-                        start: 10, end: 10, bottom: 8, top: 8)
-                    : const EdgeInsetsDirectional.all(0),
-                child: messageWidget,
-              )),
+      child: Container(
+        decoration: BoxDecoration(
+          color: messageInfo.isThatPost
+              ? (Theme.of(context).textTheme.titleMedium?.color)
+              : (isThatMe
+                  ? _colorTween.value
+                  : Theme.of(context).textTheme.titleMedium?.color),
+          borderRadius: BorderRadiusDirectional.only(
+            bottomStart: Radius.circular(isThatMe ? 20 : 0),
+            bottomEnd: Radius.circular(isThatMe ? 0 : 20),
+            topStart: const Radius.circular(20),
+            topEnd: const Radius.circular(20),
+          ),
+        ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        padding: !messageInfo.isThatImage
+            ? const EdgeInsetsDirectional.only(
+                start: 10, end: 10, bottom: 8, top: 8)
+            : const EdgeInsetsDirectional.all(0),
+        child: messageWidget,
+      ),
     );
   }
 
@@ -576,7 +537,7 @@ class _ChatMessagesState extends State<ChatMessages>
     return SizedBox(
       height: isThatMobile ? 180 : 300,
       width: isThatMobile ? 140 : 210,
-      child: messageInfo.messageUid.isNotEmpty
+      child: imageUrl.isNotEmpty
           ? Hero(
               tag: imageUrl,
               child: NetworkDisplay(
@@ -591,7 +552,7 @@ class _ChatMessagesState extends State<ChatMessages>
                 Uint8List? image = newMessageValue?.localImage;
                 return image != null
                     ? MemoryDisplay(imagePath: image)
-                    : const SizedBox();
+                    : Container(color: ColorManager.purple);
               },
             ),
     );
