@@ -57,52 +57,82 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
 * Push Notificaitons
 * Calling video in chat
 * Send post to chats
+* Group chat with calling video
 
 ## SnapShots
 
-### |--------- Login page ----------|----------- Stories ------------|---------- List of posts ------- |
-
+### |--------- Sign page ----------|----------- Welcome page ------------|---------- Stories ------- |
 <p>
-<img src="https://user-images.githubusercontent.com/88978546/173256887-3e3df39a-bc7e-4b9e-9568-92eefe64aed4.gif"   width="32%" height="50%">
-<img src="https://user-images.githubusercontent.com/88978546/173257036-a5eca476-a302-4bd7-bfdf-9176f8100d9d.gif"   width="32%" height="50%">
-<img src="https://user-images.githubusercontent.com/88978546/173257869-8a652a56-ef8e-4a7a-b28a-153a6db746a5.gif"   width="32%" height="50%">
-</p>
- 
-### |----- Likes & Comment ------|-------- Edit the post ---------|--- All user timeline posts --- |
-<p>
-<img src="https://user-images.githubusercontent.com/88978546/173257119-4006f644-4fcf-43c1-9a4a-3255afcf0db5.gif"   width="32%" height="50%">
-<img src="https://user-images.githubusercontent.com/88978546/173257164-9fc3b546-e940-4496-86c0-2e31b31f2c61.gif"  width="32%" height="50%">
-<img src="https://user-images.githubusercontent.com/88978546/173257889-a50b2613-b1a6-4aaf-a181-d8f422107c2f.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193092118-a6e5ecfb-6ee0-42d2-9a40-b9616bee692d.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193092126-9c23eb3b-b6e7-4789-ab1b-a0e9cb6ab5b4.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193092135-05d3f4d5-9246-40a2-98e4-0432a54be598.gif"   width="32%" height="50%">
 </p>
 
-### |----- Search about user -----|--------- Videos page ---------|---- personal profile page --- |
+### |----- Home screen ------|----- Comment screen ------|--------  Create story ---------|
 <p>
-<img src="https://user-images.githubusercontent.com/88978546/173257177-46c9a927-b269-4aac-8aad-d449b51b455f.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193121221-4b31e55d-0add-4aef-9c3a-5f6b716674aa.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193093024-2db7c6cc-f633-4c87-9597-f4ff6ea8ef3f.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193093346-1128eff3-bff8-4674-985c-bd3b4c37890d.gif"  width="32%" height="50%">
+</p>
+
+### |--- Share post --- |--------- Videos page ---------|---- personal profile page ---|
+<p>
+<img src="https://user-images.githubusercontent.com/88978546/193093277-b499a2ea-9834-4a0d-9558-1f6a8566c424.gif"   width="32%" height="50%">
 <img src="https://user-images.githubusercontent.com/88978546/173257900-43ff2295-06bd-4193-b6cc-a8dd34fb66ff.gif"   width="32%" height="50%">
 <img src="https://user-images.githubusercontent.com/88978546/173257186-613a59c8-d5cc-40a1-b3aa-82c4545eb3a9.gif"   width="32%" height="50%">
+
 </p>
 
-### |----- Edit personal info ------|-- Selecting image for post --|-- Selecting image for story - |
+### |---- Change app theme -----|--- Logout & Login ----| Change app language |
 
 <p>
-<img src="https://user-images.githubusercontent.com/88978546/173257199-1a0152a0-ff20-4479-b51c-f9f329726a12.gif"   width="32%" height="50%">
-<img src="https://user-images.githubusercontent.com/88978546/173257920-85816932-5da7-47e2-a318-e84696d75879.gif"  width="32%" height="50%">
-<img src="https://user-images.githubusercontent.com/88978546/173257206-d78fa66e-6295-4ede-a46e-7e94f943cd02.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193093794-ff844bb8-c71e-42a0-b946-90e9187a833f.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193093811-1c150b97-627b-4680-aded-6e35793c3ccb.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193093824-229f21e9-e7d0-4498-b430-39441c9007d2.gif"   width="32%" height="50%">
+
 </p>
 
-### |---- Change app theme -----|--- Change app language ----| Chatting with bottom video |
+### |---- Following users -----|--- Unfollow all users ----| Change profile image |
 
 <p>
-<img src="https://user-images.githubusercontent.com/88978546/173257217-e8fabbf2-ce9d-460c-84ae-57057895bdfd.gif"   width="32%" height="50%">
-<img src="https://user-images.githubusercontent.com/88978546/173257225-ccfc0561-eee2-4c26-ad5f-a94e22da108a.gif"   width="32%" height="50%">
-<img src="https://user-images.githubusercontent.com/88978546/173257249-3aef7bd3-8174-45ce-9af9-73696ff20c8d.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193093834-d8d7ed49-d703-4a2e-8f40-7404b3b57e27.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193093845-90ef0e55-1f62-4696-831a-e021e780004d.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193093861-babf4599-fc5e-46fa-87ad-7958a9c34a67.gif"   width="32%" height="50%">
 </p>
 
-### |-- Chatting with top video --|
+### |--------- All users time line ----------|--------- Search about user ---------|---------- Create post ------- |
+<p>
+<img src="https://user-images.githubusercontent.com/88978546/193094015-3f8f2186-48b8-49cd-ad16-0efb65223f3c.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193094159-1cb6a582-7b70-464e-9c4e-41c6c03eabaf.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193127197-cd45b689-68f3-48b3-9279-04ad996e10ca.gif"   width="32%" height="50%">
+</p>
+
+### |----  Create video -----|--- Show created video ----| share created video |
+
+<p>
+<img src="https://user-images.githubusercontent.com/88978546/193094411-2ea2f0a8-131e-41d7-96eb-9b2fe348e6a5.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193094453-79d480b3-1774-41c7-853c-eb537748b74d.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193094469-21358a55-443c-4d48-8ecd-95d0095d2b25.gif"   width="32%" height="50%">
+
+</p>
+
+
+### |---- Edit post -----|--- Notifications ----| Activity page |
+
+<p>
+<img src="https://user-images.githubusercontent.com/88978546/193094494-8cc71b18-4f08-4535-be25-6d5e2624c5ab.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193094512-a09a0b7a-aeff-45bc-b3e6-d93b271c94ef.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193094534-d66b3819-b726-47c5-897c-476a27a84a96.gif"   width="32%" height="50%">
+</p>
+
+### |------------------- Chatting -----------------|
 
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/173257255-4fdd1318-3e21-47e4-bc4b-3f3809dc5b9c.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/173257249-3aef7bd3-8174-45ce-9af9-73696ff20c8d.gif"   width="32%" height="50%">
+
 </p>
+
 
 ## Getting started
 
@@ -177,6 +207,8 @@ $ cd flutter-clean-architecture-instagram/
  - [x] Notifications for likes, comments, follows, etc
  - [x] Caching of Profiles, Images, Etc.
  - [x] Calling video and voice in chat
+ - [x] Create group chat
+ - [x] Calling video and voice in group chat
  - [ ] Add stickers on chat
  - [x] Send posts to chats
  - [x] control in the dimension of selected image & video from the gallery
