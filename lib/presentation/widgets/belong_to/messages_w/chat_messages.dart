@@ -459,10 +459,10 @@ class _ChatMessagesState extends State<ChatMessages>
                   ? _colorTween.value
                   : Theme.of(context).textTheme.titleMedium?.color),
           borderRadius: BorderRadiusDirectional.only(
-            bottomStart: Radius.circular(isThatMe ? 20 : 0),
-            bottomEnd: Radius.circular(isThatMe ? 0 : 20),
+            bottomStart: Radius.circular(isThatMe ? 24 : 0),
+            bottomEnd: Radius.circular(isThatMe ? 0 : 24),
             topStart: const Radius.circular(20),
-            topEnd: const Radius.circular(20),
+            topEnd: const Radius.circular(24),
           ),
         ),
         clipBehavior: Clip.antiAliasWithSaveLayer,
