@@ -19,6 +19,6 @@ jobs:
         run: flutter build web
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          repoToken: '${{ secrets.TOKEN_GITHUB }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_EL_INSTAGRAM }}'
           projectId: el-instagram
