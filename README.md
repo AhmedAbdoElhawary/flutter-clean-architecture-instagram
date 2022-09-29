@@ -130,9 +130,14 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/173257255-4fdd1318-3e21-47e4-bc4b-3f3809dc5b9c.gif"   width="32%" height="50%">
 <img src="https://user-images.githubusercontent.com/88978546/173257249-3aef7bd3-8174-45ce-9af9-73696ff20c8d.gif"   width="32%" height="50%">
-
 </p>
 
+### |-------------------------- Video call ---------------------------|
+
+<p>
+<img src="https://user-images.githubusercontent.com/88978546/193158603-31563c80-91c5-4044-a984-f4067436bb41.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193158607-e559285c-3fa3-461a-b0ab-a0d4737189a7.gif"   width="32%" height="50%">
+</p>
 
 ## Getting started
 
