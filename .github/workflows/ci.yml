@@ -50,7 +50,7 @@ jobs:
       - run: flutter build apk
 
       # Step to Submit the generated APK to Firebase App Distribution
-      - name: Upload artifact to Firebase App Distribution
+      - name: "Upload artifact to Firebase App Distribution"
         uses: wzieba/Firebase-Distribution-Github-Action@v1.2.1
         with:
           appId: ${{ secrets.FIREBASE_ANDROID_APPID }}
