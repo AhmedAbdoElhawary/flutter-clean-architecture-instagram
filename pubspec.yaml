@@ -39,6 +39,7 @@ dependencies:
   firebase_auth: ^3.6.2
   firebase_core: ^1.20.0
   firebase_storage: ^10.3.4
+  firebase_crashlytics: ^2.8.12
   flutter_svg: ^1.1.2
   readmore: ^2.2.0
   equatable: ^2.0.3
