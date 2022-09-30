@@ -14,11 +14,13 @@ jobs:
       with:
         java-version: 1.8
     - name: build release 
-      run: ./gradlew assembleRelease
-    - name: "upload artifact to Firebase App Distribution"
-      uses: wzieba/Firebase-Distribution-Github-Action@v1
+    - run: flutter build apk --release
+
+    # Step to Submit the generated APK to Firebase App Distribution
+    - name: "Upload artifact to Firebase App Distribution"
+      uses: wzieba/Firebase-Distribution-Github-Action@v1.2.1
       with:
-        appId: ${{secrets.FIREBASE_APPID}}
-        token: ${{secrets.FIREBASE_TOKEN}}
+        appId: ${{ secrets.FIREBASE_ANDROID_APPID }}
+        token: ${{ secrets.FIREBASE_TOKEN }}
         groups: tester
-        file: app/build\app\outputs\flutter-apk\app-release.apk
+        file: app/build\app\outputs\flutter-apk\app.apk
