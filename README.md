@@ -244,9 +244,3 @@ You will find me on
 
 <a href="https://www.linkedin.com/in/ahmedabdoelhawary"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" width="40"></a>
 
-
-## License & Copyright
-
-Copyright (c) 2022 Ahmed Abdo
-
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](LICENSE)
