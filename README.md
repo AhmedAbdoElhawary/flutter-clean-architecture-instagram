@@ -11,16 +11,16 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
   * Arabic & English language
   * Dark & Light theme 
 
+* Custome gallery & camera & video display like Instagram (my package) [image picker plus ](https://github.com/AhmedAbdoElhawary/image_picker_plus.git)
+ <a href="https://pub.dev/packages/image_picker_plus"><img src="https://img.shields.io/pub/v/image_picker_plus.svg" width="80"></a>
+
+
 * Post features
   * Support images & videos 
-  * Support multi images in one post
-  * Like on a post 
-    * View all likes on a post and their profiles
-  * Comment on a post 
-    * View all comments on a post
-    * Replay on a comment & replay 
-    * Like on a comment & replay
-      * View all likes on a comment & replay & their profiles
+  * Support multi images in one post or mixin with them
+  * Like on a post and view all likes with their profiles
+  * Comment on a post and replay on a (comment & replay)
+    * Like on a comment & replay and view all likes with their profiles
   * Edit post
   * Delete post
   * Unfollow the user of the post
@@ -48,16 +48,17 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
   
 * Chat Screen
   * Chat with any user
+  * Group chat
   * Support
     * Text
     * Image (gallery & camera)
     * Voice
-    
-#### New features
+    * One-to-one video call
+    * Group video call
+
 * Push Notifications
-* Calling video in chat
 * Send post to chats
-* Group chat with calling video
+
 
 ## SnapShots
 
@@ -241,7 +242,7 @@ $ cd flutter-clean-architecture-instagram/
 
 You will find me on 
 
-<a href="https://www.linkedin.com/in/ahmedabdoelhawary/"><img src="https://user-images.githubusercontent.com/35039342/55471530-94b34280-5627-11e9-8c0e-6fe86a8406d6.png" width="60"></a>
+<a href="https://www.linkedin.com/in/ahmedabdoelhawary"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" width="40"></a>
 
 
 ## License & Copyright
