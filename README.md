@@ -54,7 +54,7 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
     * Voice
     
 #### New features
-* Push Notificaitons
+* Push Notifications
 * Calling video in chat
 * Send post to chats
 * Group chat with calling video
