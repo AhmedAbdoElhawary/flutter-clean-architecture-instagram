@@ -263,6 +263,8 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
 
   Widget checkBox(BuildContext context, bool isUserSelected) {
     return Container(
+      height: 25,
+      width: 25,
       padding: const EdgeInsetsDirectional.all(2),
       decoration: BoxDecoration(
         color: !isUserSelected

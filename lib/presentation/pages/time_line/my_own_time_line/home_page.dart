@@ -340,7 +340,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       padding: const EdgeInsetsDirectional.only(start: 10),
       child: SizedBox(
         width: double.infinity,
-        height: 600 * 0.155,
+        height: 600 * 0.153,
         child: Stack(
           children: [
             if (personalInfo.stories.isEmpty) ...[
