@@ -31,21 +31,22 @@ Future<void> main() async {
 Future<SharedPreferences> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await initializeDependencies();
+  await GetStorage.init();
+  if (!kIsWeb) {
+    await crashlytics();
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+  }
+
+  return await SharedPreferences.getInstance();
+}
+
+crashlytics() async {
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   if (kDebugMode) {
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
   } else {
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   }
-
-  await initializeDependencies();
-  await GetStorage.init();
-  if (!kIsWeb) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
-    ]);
-  }
-
-  return await SharedPreferences.getInstance();
 }
