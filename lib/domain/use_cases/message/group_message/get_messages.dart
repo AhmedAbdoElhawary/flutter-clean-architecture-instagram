@@ -4,7 +4,7 @@ import 'package:instagram/domain/repositories/group_message.dart';
 
 class GetMessagesGroGroupChatUseCase
     implements StreamUseCase<List<Message>, String> {
-  final FirestoreGroupMessageRepository _addPostToUserRepository;
+  final FireStoreGroupMessageRepository _addPostToUserRepository;
 
   GetMessagesGroGroupChatUseCase(this._addPostToUserRepository);
 
