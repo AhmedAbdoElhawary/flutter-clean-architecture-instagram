@@ -226,6 +226,7 @@ $ cd flutter-clean-architecture-instagram/
  - [x] Make like, comment, and share of animation container post touchy when long pressed on post
  - [ ] Create store screens
  - [ ] Make it stable for web & desktop
+ - [ ] Create a live
  - [ ] Clean-up more code
 
 
