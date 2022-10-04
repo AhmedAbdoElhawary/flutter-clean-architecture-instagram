@@ -4,7 +4,7 @@ import 'package:instagram/domain/repositories/group_message.dart';
 
 class DeleteMessageForGroupChatUseCase
     implements UseCaseThreeParams<void, String, Message, Message?> {
-  final FirestoreGroupMessageRepository _addPostToUserRepository;
+  final FireStoreGroupMessageRepository _addPostToUserRepository;
 
   DeleteMessageForGroupChatUseCase(this._addPostToUserRepository);
 

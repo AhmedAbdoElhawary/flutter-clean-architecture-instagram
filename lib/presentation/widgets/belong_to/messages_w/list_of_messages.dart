@@ -16,6 +16,7 @@ import 'package:instagram/data/models/parent_classes/without_sub_classes/user_pe
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/pages/messages/chatting_page.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
@@ -42,11 +43,14 @@ class _ListOfMessagesState extends State<ListOfMessages> {
 
   @override
   void initState() {
-    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context) ??
+        UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
 
   Future<void> onRefreshData(int index) async {
+    myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context) ??
+        UserInfoCubit.getMyPersonalInfo(context);
     await UsersInfoCubit.get(context)
         .getChatUsersInfo(myPersonalInfo: myPersonalInfo);
   }
@@ -78,8 +82,9 @@ class _ListOfMessagesState extends State<ListOfMessages> {
           if (widget.additionalUser != null) {
             state.usersInfo.where((element) {
               bool isUserExist = ((element.receiversIds
-                      ?.contains(widget.additionalUser?.userId)) ??
-                  false) && !(element.lastMessage?.isThatGroup ?? true);
+                          ?.contains(widget.additionalUser?.userId)) ??
+                      false) &&
+                  !(element.lastMessage?.isThatGroup ?? true);
               if (!isUserExist) isThatUserExist = true;
               return true;
             }).toList();

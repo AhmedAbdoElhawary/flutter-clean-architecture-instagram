@@ -23,6 +23,7 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/group_chat/message_for_group_chat_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/customPackages/audio_recorder/social_media_recoder.dart';
 import 'package:instagram/presentation/pages/profile/user_profile_page.dart';
 import 'package:instagram/presentation/widgets/belong_to/messages_w/chat_page_component/shared_message.dart';
@@ -67,13 +68,19 @@ class _ChatMessagesState extends State<ChatMessages>
   String profileImageOfSender = "";
   int itemIndex = 0;
   bool isGroupIdEmpty = true;
+  late bool isThatGroupChat;
+
   bool checkForSenderNameInGroup = false;
   AudioPlayer audioPlayer = AudioPlayer();
   int tempLengthOfRecord = 0;
   late SenderInfo messageDetails;
   Future<void> scrollToLastIndex(BuildContext context) async {
-    await scrollControl.animateTo(scrollControl.position.maxScrollExtent,
-        duration: const Duration(seconds: 1), curve: Curves.easeInOutQuart);
+    try {
+      await scrollControl.animateTo(scrollControl.position.maxScrollExtent,
+          duration: const Duration(seconds: 1), curve: Curves.easeInOutQuart);
+    } catch (e) {
+      return;
+    }
   }
 
   @override
@@ -97,18 +104,18 @@ class _ChatMessagesState extends State<ChatMessages>
 
   @override
   void initState() {
-    messageDetails = widget.messageDetails;
-    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    resetValues();
     _colorAnimationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _colorTween = ColorTween(begin: Colors.purple, end: Colors.blue)
         .animate(_colorAnimationController);
-    receiversInfo = messageDetails.receiversInfo ?? [myPersonalInfo];
-    isGroupIdEmpty = messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
     super.initState();
   }
 
   resetValues() {
+    messageDetails = widget.messageDetails;
+    myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context) ??
+        UserInfoCubit.getMyPersonalInfo(context);
     globalMessagesInfo.value = [];
     indexOfGarbageMessage.value = null;
     deleteThisMessage.value = null;
@@ -125,13 +132,13 @@ class _ChatMessagesState extends State<ChatMessages>
     itemIndex = 0;
     receiversInfo = messageDetails.receiversInfo ?? [myPersonalInfo];
     isGroupIdEmpty = messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
+    isThatGroupChat = messageDetails.isThatGroupChat;
     audioPlayer = AudioPlayer();
     tempLengthOfRecord = 0;
   }
 
   @override
   void didUpdateWidget(ChatMessages oldWidget) {
-    messageDetails = widget.messageDetails;
     resetValues();
     super.didUpdateWidget(oldWidget);
   }
@@ -831,11 +838,7 @@ class _ChatMessagesState extends State<ChatMessages>
               messageInfo: newMessageForGroup(isThatRecord: true),
               recordFile: soundFile);
           if (!mounted) return;
-          if (isGroupIdEmpty) {
-            Message lastMessage =
-                MessageForGroupChatCubit.getLastMessage(context);
-            messageDetails.lastMessage = lastMessage;
-          }
+          updateGroupChat();
         } else {
           newMessageInfo.value = newMessage(isThatRecord: true);
 
@@ -854,6 +857,18 @@ class _ChatMessagesState extends State<ChatMessages>
         tempLengthOfRecord = 0;
       },
     );
+  }
+
+  updateGroupChat() {
+    Message lastMessage = MessageForGroupChatCubit.getLastMessage(context);
+    messageDetails.lastMessage = lastMessage;
+    isGroupIdEmpty = messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
+    myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context) ??
+        UserInfoCubit.getMyPersonalInfo(context);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {});
+    });
   }
 
   Widget pickImageFromCamera(MessageCubit messageCubit) {
@@ -926,12 +941,7 @@ class _ChatMessagesState extends State<ChatMessages>
                 await MessageForGroupChatCubit.get(context)
                     .sendMessage(messageInfo: newMessageForGroup());
                 if (!mounted) return;
-
-                if (isGroupIdEmpty) {
-                  Message lastMessage =
-                      MessageForGroupChatCubit.getLastMessage(context);
-                  messageDetails.lastMessage = lastMessage;
-                }
+                updateGroupChat();
               } else {
                 messageCubit.sendMessage(messageInfo: newMessage());
               }
@@ -988,11 +998,7 @@ class _ChatMessagesState extends State<ChatMessages>
             pathOfPhoto: byte);
 
         if (!mounted) return;
-        if (isGroupIdEmpty) {
-          Message lastMessage =
-              MessageForGroupChatCubit.getLastMessage(context);
-          messageDetails.lastMessage = lastMessage;
-        }
+        updateGroupChat();
       } else {
         newMessageInfo.value =
             newMessage(blurHash: blurHash, isThatImage: true);
@@ -1021,10 +1027,11 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  Message newMessageForGroup(
-      {String blurHash = "",
-      bool isThatImage = false,
-      bool isThatRecord = false}) {
+  Message newMessageForGroup({
+    String blurHash = "",
+    bool isThatImage = false,
+    bool isThatRecord = false,
+  }) {
     List<dynamic> usersIds = [];
     for (final userInfo in receiversInfo) {
       usersIds.add(userInfo.userId);

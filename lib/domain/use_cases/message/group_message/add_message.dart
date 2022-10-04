@@ -7,7 +7,7 @@ import 'package:instagram/domain/repositories/group_message.dart';
 
 class AddMessageForGroupChatUseCase
     implements UseCaseThreeParams<Message, Message, Uint8List, File?> {
-  final FirestoreGroupMessageRepository _addPostToUserRepository;
+  final FireStoreGroupMessageRepository _addPostToUserRepository;
   AddMessageForGroupChatUseCase(this._addPostToUserRepository);
 
   @override
