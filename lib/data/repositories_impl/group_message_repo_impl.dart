@@ -8,13 +8,13 @@ import 'package:instagram/data/data_sources/remote/user/firestore_user_info.dart
 import 'package:instagram/data/models/parent_classes/without_sub_classes/message.dart';
 import 'package:instagram/domain/repositories/group_message.dart';
 
-class FirebaseGroupMessageRepoImpl implements FirestoreGroupMessageRepository {
+class FirebaseGroupMessageRepoImpl implements FireStoreGroupMessageRepository {
   @override
   Future<Message> createChatForGroups(Message messageInfo) async {
     try {
       Message messageDetails =
           await FireStoreGroupChat.createChatForGroups(messageInfo);
-      await FirestoreUser.updateChatsOfGroups(messageInfo: messageInfo);
+      await FirestoreUser.updateChatsOfGroups(messageInfo: messageDetails);
       return messageDetails;
     } catch (e) {
       return Future.error(e.toString());
