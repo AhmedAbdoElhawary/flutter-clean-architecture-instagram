@@ -137,7 +137,7 @@ Future<void> initializeDependencies() async {
   // calling rooms repository
   injector.registerLazySingleton<CallingRoomsRepository>(()=>CallingRoomsRepoImpl());
 
-  injector.registerLazySingleton<FirestoreGroupMessageRepository>(
+  injector.registerLazySingleton<FireStoreGroupMessageRepository>(
           ()=> FirebaseGroupMessageRepoImpl());
 
   // *
