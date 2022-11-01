@@ -2,6 +2,16 @@
 
 Instagram clean architecture using flutter and firebase as ( frontend & backend ) with almost all functionalities
 
+## You can support me.
+ <a href="https://www.paypal.com/paypalme/AhmedAbdoElhawary"><img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-medium.png"></a>
+
+## Contact
+
+You will find me on 
+
+<a href="https://www.linkedin.com/in/ahmedabdoelhawary"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" width="40"></a>
+
+
 ### Notes 
 * I didn't publish the keys such as messaging, agora, firebase web, or even google-services.json. So follow the steps (3. Setup the app) to add them.
 
@@ -238,10 +248,4 @@ $ cd flutter-clean-architecture-instagram/
 4. Push to the branch (git push origin my-new-feature)
 5. Create a new Pull Request
 
-
-## Contact
-
-You will find me on 
-
-<a href="https://www.linkedin.com/in/ahmedabdoelhawary"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" width="40"></a>
 
