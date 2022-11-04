@@ -1,17 +1,14 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/domain/entities/registered_user.dart';
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instagram/presentation/screens/responsive_layout.dart';
-import 'package:instagram/presentation/screens/web_screen_layout.dart';
-import 'package:instagram/presentation/widgets/belong_to/register_w/popup_calling.dart';
+import 'package:instagram/presentation/widgets/belong_to/register_w/get_my_user_info.dart';
 import 'package:instagram/presentation/widgets/belong_to/register_w/register_widgets.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
-import 'package:instagram/core/functions/toast_show.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -50,64 +47,44 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget customTextButton() {
-    return Builder(builder: (context) {
-      UserInfoCubit getUserCubit = UserInfoCubit.get(context);
-
-      return blocBuilder(getUserCubit);
-    });
+    return blocBuilder();
   }
 
-  BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState> blocBuilder(
-      UserInfoCubit getUserCubit) {
-    return BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState>(
-      buildWhen: (previous, current) => true,
-      builder: (context, authState) =>
-          buildBlocBuilder(context, authState, getUserCubit),
-    );
-  }
-
-  Widget buildBlocBuilder(
-      context, FirebaseAuthCubitState authState, UserInfoCubit getUserCubit) {
+  Widget blocBuilder() {
     return ValueListenableBuilder(
       valueListenable: isToastShowed,
-      builder: (context, bool isToastShowedValue, child) {
-        FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
-        if (authState is CubitAuthConfirmed) {
-          onAuthConfirmed(getUserCubit, authCubit);
-        } else if (authState is CubitAuthFailed && !isToastShowedValue) {
-          isToastShowed.value = true;
-          isUserIdReady.value = true;
-          ToastShow.toastStateError(authState);
-        }
-        return loginButton(authCubit);
-      },
+      builder: (context, bool isToastShowedValue, child) =>
+          BlocListener<FirebaseAuthCubit, FirebaseAuthCubitState>(
+        listenWhen: (previous, current) => previous != current,
+        listener: (context, state) {
+          if (state is CubitAuthConfirmed) {
+            onAuthConfirmed(state);
+          } else if (state is CubitAuthFailed && !isToastShowedValue) {
+            isToastShowed.value = true;
+            isUserIdReady.value = true;
+            ToastShow.toastStateError(state);
+          }
+        },
+        child: loginButton(),
+      ),
     );
   }
 
-  onAuthConfirmed(UserInfoCubit getUserCubit, FirebaseAuthCubit authCubit) {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await getUserCubit.getUserInfo(authCubit.user!.uid, getDeviceToken: true);
-      String userId = authCubit.user!.uid;
-      isUserIdReady.value = true;
-      if (!isHeMovedToHome.value) {
-        myPersonalId = userId;
-        if (myPersonalId.isNotEmpty) {
-          await widget.sharePrefs.setString("myPersonalId", myPersonalId);
-          Get.offAll(
-            ResponsiveLayout(
-              mobileScreenLayout: PopupCalling(myPersonalId),
-              webScreenLayout: const WebScreenLayout(),
-            ),
-          );
-        } else {
-          ToastShow.toast(StringsManager.somethingWrong.tr);
-        }
-      }
-      isHeMovedToHome.value = true;
-    });
+  onAuthConfirmed(CubitAuthConfirmed state) async {
+    String userId = state.user.uid;
+    isUserIdReady.value = true;
+    myPersonalId = userId;
+    if (myPersonalId.isNotEmpty) {
+      await widget.sharePrefs.setString("myPersonalId", myPersonalId);
+      Get.offAll(GetMyPersonalInfo(myPersonalId: myPersonalId));
+    } else {
+      ToastShow.toast(StringsManager.somethingWrong.tr);
+    }
   }
 
-  Widget loginButton(FirebaseAuthCubit authCubit) {
+  Widget loginButton() {
+    FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
+
     return ValueListenableBuilder(
       valueListenable: isUserIdReady,
       builder: (context, bool isUserIdReadyValue, child) =>
