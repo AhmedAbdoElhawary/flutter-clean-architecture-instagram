@@ -14,6 +14,7 @@ You will find me on
 
 ### Notes 
 * I didn't publish the keys such as messaging, agora, firebase web, or even google-services.json. So follow the steps (3. Setup the app) to add them.
+* Right now, I am working on cleaning up the code
 
 ## Features
 
