@@ -1,6 +1,6 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -8,14 +8,14 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
-import 'package:instagram/data/models/parent_classes/without_sub_classes/comment.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/comment.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
-import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.dart';
-import 'package:instagram/presentation/widgets/belong_to/comments_w/commentator.dart';
+import 'package:instagram/presentation/pages/comments/widgets/comment_box.dart';
+import 'package:instagram/presentation/pages/comments/widgets/commentator.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_post_display.dart';
 

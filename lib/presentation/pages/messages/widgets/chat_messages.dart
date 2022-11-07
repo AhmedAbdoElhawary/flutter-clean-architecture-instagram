@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'dart:math' as math;
 import 'dart:typed_data';
+
 import 'package:audioplayers/audioplayers.dart';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/blur_hash.dart';
@@ -25,16 +27,15 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubi
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/customPackages/audio_recorder/social_media_recoder.dart';
+import 'package:instagram/presentation/pages/messages/widgets/chat_page_component/shared_message.dart';
+import 'package:instagram/presentation/pages/messages/widgets/record_view.dart';
 import 'package:instagram/presentation/pages/profile/user_profile_page.dart';
-import 'package:instagram/presentation/widgets/belong_to/messages_w/chat_page_component/shared_message.dart';
-import 'package:instagram/presentation/widgets/belong_to/messages_w/record_view.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memory_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
-import 'dart:math' as math;
 
 /// It's not clean enough
 class ChatMessages extends StatefulWidget {
