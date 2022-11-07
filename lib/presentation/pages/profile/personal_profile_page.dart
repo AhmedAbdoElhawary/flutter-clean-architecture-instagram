@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,21 +9,22 @@ import 'package:get/get.dart';
 import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/themes/theme_service.dart';
-import 'package:instagram/core/translations/app_lang.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
+import 'package:instagram/core/translations/app_lang.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
+import 'package:instagram/presentation/pages/profile/widgets/bottom_sheet.dart';
+import 'package:instagram/presentation/pages/profile/widgets/profile_page.dart';
+import 'package:instagram/presentation/pages/profile/widgets/recommendation_people.dart';
 import 'package:instagram/presentation/pages/story/create_story.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_page.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/recommendation_people.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../core/functions/toast_show.dart';
 import '../../../data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import '../../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
@@ -288,8 +290,10 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Expanded editProfileButtonForMobile(UserPersonalInfo userInfo) {
     return Expanded(
       child: Builder(builder: (buildContext) {
-        UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-        UserPersonalInfo? info = UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
+        UserPersonalInfo myPersonalInfo =
+            UserInfoCubit.getMyPersonalInfo(context);
+        UserPersonalInfo? info =
+            UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
         if (isMyInfoInReelTimeReady && info != null) myPersonalInfo = info;
         return InkWell(
           onTap: () async {

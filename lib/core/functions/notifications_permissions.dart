@@ -13,7 +13,7 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/pages/messages/chatting_page.dart';
 import 'package:instagram/presentation/pages/messages/video_call_page.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
+import 'package:instagram/presentation/pages/profile/widgets/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/get_post_info.dart';
 
 late FlutterLocalNotificationsPlugin _normalLocalNotifications;
