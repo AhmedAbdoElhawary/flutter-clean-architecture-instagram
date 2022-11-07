@@ -4,7 +4,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
-import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_of_post.dart';
+import 'package:instagram/presentation/pages/comments/widgets/comment_of_post.dart';
 
 class CommentsPageForMobile extends StatefulWidget {
   final ValueNotifier<Post> postInfo;

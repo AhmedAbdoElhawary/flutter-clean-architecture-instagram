@@ -9,7 +9,7 @@ import 'package:instagram/core/translations/app_lang.dart';
 import 'package:instagram/core/translations/translations.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/pages/register/login_page.dart';
-import 'package:instagram/presentation/widgets/belong_to/register_w/get_my_user_info.dart';
+import 'package:instagram/presentation/pages/register/widgets/get_my_user_info.dart';
 import 'package:instagram/presentation/widgets/global/others/multi_bloc_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

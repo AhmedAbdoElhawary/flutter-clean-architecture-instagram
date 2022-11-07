@@ -16,7 +16,7 @@ import 'package:instagram/data/models/child_classes/post/story.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instagram/presentation/widgets/belong_to/register_w/popup_calling.dart';
+import 'package:instagram/presentation/pages/register/widgets/popup_calling.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_multi_posts_display.dart';
 import 'package:shared_preferences/shared_preferences.dart';
