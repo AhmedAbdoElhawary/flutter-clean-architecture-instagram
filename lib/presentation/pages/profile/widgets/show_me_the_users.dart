@@ -1,17 +1,18 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:instagram/config/routes/app_routes.dart';
+import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
-import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
+import 'package:instagram/presentation/pages/profile/widgets/which_profile_page.dart';
+
 import '../../../cubit/follow/follow_cubit.dart';
-import '../../global/circle_avatar_image/circle_avatar_of_profile_image.dart';
-import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
+import '../../../widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 
 class ShowMeTheUsers extends StatefulWidget {
   final List<UserPersonalInfo> usersInfo;

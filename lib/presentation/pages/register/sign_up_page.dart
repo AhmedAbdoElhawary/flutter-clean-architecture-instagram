@@ -9,8 +9,8 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/domain/entities/registered_user.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
-import 'package:instagram/presentation/widgets/belong_to/register_w/get_my_user_info.dart';
-import 'package:instagram/presentation/widgets/belong_to/register_w/register_widgets.dart';
+import 'package:instagram/presentation/pages/register/widgets/get_my_user_info.dart';
+import 'package:instagram/presentation/pages/register/widgets/register_widgets.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

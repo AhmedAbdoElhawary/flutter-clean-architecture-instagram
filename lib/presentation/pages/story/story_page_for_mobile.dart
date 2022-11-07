@@ -11,7 +11,7 @@ import 'package:instagram/data/models/parent_classes/without_sub_classes/user_pe
 import 'package:instagram/presentation/customPackages/story_view/story_controller.dart';
 import 'package:instagram/presentation/customPackages/story_view/story_view.dart';
 import 'package:instagram/presentation/customPackages/story_view/utils.dart';
-import 'package:instagram/presentation/widgets/belong_to/story_w/story_swipe.dart';
+import 'package:instagram/presentation/pages/story/widgets/story_swipe.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
