@@ -1,26 +1,27 @@
 import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
-import 'package:instagram/presentation/pages/video/play_this_video.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/animated_dialog.dart';
-import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
-import 'package:get/get.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram/config/routes/app_routes.dart';
-import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/send_to_users.dart';
+import 'package:instagram/presentation/pages/profile/widgets/which_profile_page.dart';
+import 'package:instagram/presentation/pages/time_line/widgets/animated_dialog.dart';
+import 'package:instagram/presentation/pages/time_line/widgets/send_to_users.dart';
+import 'package:instagram/presentation/pages/video/play_this_video.dart';
 import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_posts_display.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
