@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:math' as math;
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,7 +15,7 @@ import 'package:instagram/data/models/parent_classes/without_sub_classes/user_pe
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/customPackages/crop_image/crop_image.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/points_scroll_bar.dart';
+import 'package:instagram/presentation/pages/time_line/widgets/points_scroll_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
 /// [PopupNewPost] it's not clean yet.

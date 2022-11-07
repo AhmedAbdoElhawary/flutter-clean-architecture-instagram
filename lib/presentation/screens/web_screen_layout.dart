@@ -19,7 +19,7 @@ import 'package:instagram/presentation/pages/profile/personal_profile_page.dart'
 import 'package:instagram/presentation/pages/shop/shop_page.dart';
 import 'package:instagram/presentation/pages/time_line/all_user_time_line/all_users_time_line.dart';
 import 'package:instagram/presentation/pages/time_line/my_own_time_line/home_page.dart';
-import 'package:instagram/presentation/widgets/belong_to/screens_w.dart';
+import 'package:instagram/presentation/widgets/global/screens_w.dart';
 import 'package:instagram/presentation/widgets/global/others/notification_card_info.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/web/new_post.dart';
 

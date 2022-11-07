@@ -6,8 +6,8 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/domain/entities/registered_user.dart';
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
-import 'package:instagram/presentation/widgets/belong_to/register_w/get_my_user_info.dart';
-import 'package:instagram/presentation/widgets/belong_to/register_w/register_widgets.dart';
+import 'package:instagram/presentation/pages/register/widgets/get_my_user_info.dart';
+import 'package:instagram/presentation/pages/register/widgets/register_widgets.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,6 +33,9 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
     isToastShowed.dispose();
     isUserIdReady.dispose();
+    validateEmail.dispose();
+    validatePassword.dispose();
+
   }
 
   @override

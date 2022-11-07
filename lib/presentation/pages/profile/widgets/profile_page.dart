@@ -1,8 +1,8 @@
-import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
@@ -13,13 +13,14 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/profile/followers_info_page.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/custom_videos_grid_view.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_grid_view.dart';
+import 'package:instagram/presentation/pages/profile/widgets/custom_videos_grid_view.dart';
+import 'package:instagram/presentation/pages/profile/widgets/profile_grid_view.dart';
+import 'package:instagram/presentation/pages/time_line/widgets/read_more_text.dart';
+import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/web/follow_card.dart';
 import 'package:shimmer/shimmer.dart';
+
 import '../../../../data/models/parent_classes/without_sub_classes/user_personal_info.dart';
-import '../../global/circle_avatar_image/circle_avatar_of_profile_image.dart';
-import '../time_line_w/read_more_text.dart';
 
 class ProfilePage extends StatefulWidget {
   final String userId;

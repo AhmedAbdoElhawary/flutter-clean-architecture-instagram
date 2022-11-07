@@ -9,8 +9,8 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/domain/entities/registered_user.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/searchAboutUser/search_about_user_bloc.dart';
-import 'package:instagram/presentation/widgets/belong_to/register_w/get_my_user_info.dart';
-import 'package:instagram/presentation/widgets/belong_to/register_w/register_widgets.dart';
+import 'package:instagram/presentation/pages/register/widgets/get_my_user_info.dart';
+import 'package:instagram/presentation/pages/register/widgets/register_widgets.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elevated_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,18 +18,6 @@ import '../../../core/functions/toast_show.dart';
 import '../../../data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import '../../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../../cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
-
-class TextsControllers {
-  final TextEditingController emailController;
-  final TextEditingController passwordController;
-  final TextEditingController fullNameController;
-
-  TextsControllers({
-    required this.emailController,
-    required this.passwordController,
-    required this.fullNameController,
-  });
-}
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -81,13 +69,12 @@ class _SignUpPageState extends State<SignUpPage> {
               blueColor: validate ? true : false,
               onPressed: () async {
                 if (validate) {
-                  TextsControllers textsControllers = TextsControllers(
-                    emailController: emailController,
-                    passwordController: passwordController,
-                    fullNameController: fullNameController,
-                  );
                   pushToPage(context,
-                      page: UserNamePage(textsControllers),
+                      page: UserNamePage(
+                        emailController: emailController,
+                        passwordController: passwordController,
+                        fullNameController: fullNameController,
+                      ),
                       withoutRoot: false,
                       withoutPageTransition: true);
                 }
@@ -100,18 +87,31 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 }
 
-class UserNamePage extends StatelessWidget {
-  final TextsControllers textsControllers;
-  UserNamePage(this.textsControllers, {Key? key}) : super(key: key);
+class UserNamePage extends StatefulWidget {
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final TextEditingController fullNameController;
+  const UserNamePage({
+    Key? key,
+    required this.emailController,
+    required this.passwordController,
+    required this.fullNameController,
+  }) : super(key: key);
 
+  @override
+  State<UserNamePage> createState() => _UserNamePageState();
+}
+
+class _UserNamePageState extends State<UserNamePage> {
   final userNameController = TextEditingController();
 
-  final RxBool isToastShowed = false.obs;
+  bool isToastShowed = false;
 
-  final RxBool validateEdits = false.obs;
-  final RxBool isFieldEmpty = true.obs;
+  bool validateEdits = false;
 
-  final RxBool isHeMovedToHome = false.obs;
+  bool isFieldEmpty = true;
+
+  bool isHeMovedToHome = false;
 
   @override
   Widget build(BuildContext context) {
@@ -188,13 +188,15 @@ class UserNamePage extends StatelessWidget {
         if (state is SearchAboutUserBlocLoaded) {
           usersWithSameUserName = state.users;
         }
-        validateEdits.value = usersWithSameUserName.isEmpty;
-        if (userNameController.text.isEmpty) {
-          validateEdits.value = false;
-          isFieldEmpty.value = true;
-        } else {
-          isFieldEmpty.value = false;
-        }
+        setState(() {
+          validateEdits = usersWithSameUserName.isEmpty;
+          if (userNameController.text.isEmpty) {
+            validateEdits = false;
+            isFieldEmpty = true;
+          } else {
+            isFieldEmpty = false;
+          }
+        });
       },
       child: customTextField(context),
       listenWhen: (previous, current) =>
@@ -208,8 +210,7 @@ class UserNamePage extends StatelessWidget {
       child: SizedBox(
         height: isThatMobile ? null : 37,
         width: double.infinity,
-        child: Obx(
-          () => TextFormField(
+        child:TextFormField(
             controller: userNameController,
             cursorColor: ColorManager.teal,
             style: getNormalStyle(
@@ -222,19 +223,18 @@ class UserNamePage extends StatelessWidget {
               fillColor: const Color.fromARGB(48, 232, 232, 232),
               filled: true,
               focusedBorder: outlineInputBorder(),
-              suffixIcon: isFieldEmpty.value
+              suffixIcon: isFieldEmpty
                   ? null
-                  : (validateEdits.value ? rightIcon() : wrongIcon()),
+                  : (validateEdits ? rightIcon() : wrongIcon()),
               enabledBorder: outlineInputBorder(),
               contentPadding: EdgeInsets.symmetric(
                   horizontal: 10, vertical: isThatMobile ? 15 : 5),
-              errorText: isFieldEmpty.value || validateEdits.value
+              errorText: isFieldEmpty || validateEdits
                   ? null
                   : StringsManager.thisUserNameExist.tr,
               errorStyle: getNormalStyle(color: ColorManager.red),
             ),
-          ),
-        ),
+          ) ,
       ),
     );
   }
@@ -263,35 +263,36 @@ class UserNamePage extends StatelessWidget {
     return Builder(builder: (context) {
       FireStoreAddNewUserCubit userCubit =
           FireStoreAddNewUserCubit.get(context);
-      return Obx(
-        () => BlocConsumer<FirebaseAuthCubit, FirebaseAuthCubitState>(
-          listener: (context, state) {
-            if (state is CubitAuthConfirmed) {
-              addNewUser(state, userCubit);
-              moveToMain(state);
-            } else if (state is CubitAuthFailed && !isToastShowed.value) {
-              authFailed(state);
-            }
-          },
-          builder: (context, authState) {
-            return CustomElevatedButton(
-              isItDone: authState is! CubitAuthConfirming,
-              nameOfButton: StringsManager.signUp.tr,
-              blueColor: validateEdits.value,
-              onPressed: () async {
-                FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
+      return BlocConsumer<FirebaseAuthCubit, FirebaseAuthCubitState>(
+        listenWhen: (previous, current) => previous != current,
+        listener: (context, state) {
+          if (state is CubitAuthConfirmed) {
+            addNewUser(state, userCubit);
+            moveToMain(state);
+          } else if (state is CubitAuthFailed && !isToastShowed) {
+            ToastShow.toastStateError(state.error);
+          }
+        },
+        buildWhen: (previous, current) => previous != current,
+        builder: (context, authState) {
+          return CustomElevatedButton(
+            isItDone: authState is! CubitAuthConfirming,
+            nameOfButton: StringsManager.signUp.tr,
+            blueColor: validateEdits,
+            onPressed: () async {
+              FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
 
-                if (validateEdits.value) {
-                  isToastShowed.value = false;
-                  await authCubit.signUp(RegisteredUser(
-                    email: textsControllers.emailController.text,
-                    password: textsControllers.passwordController.text,
-                  ));
-                }
-              },
-            );
-          },
-        ),
+              if (validateEdits) {
+                setState(() => isToastShowed = false);
+
+                await authCubit.signUp(RegisteredUser(
+                  email: widget.emailController.text,
+                  password: widget.passwordController.text,
+                ));
+              }
+            },
+          );
+        },
       );
     });
   }
@@ -300,8 +301,9 @@ class UserNamePage extends StatelessWidget {
     myPersonalId = authState.user.uid;
 
     final SharedPreferences sharePrefs = injector<SharedPreferences>();
-    if (!isHeMovedToHome.value) {
-      isHeMovedToHome.value = true;
+    if (!isHeMovedToHome) {
+      setState(() => isHeMovedToHome = true);
+
       if (myPersonalId.isNotEmpty) {
         await sharePrefs.setString("myPersonalId", myPersonalId);
         Get.offAll(GetMyPersonalInfo(myPersonalId: myPersonalId));
@@ -311,19 +313,8 @@ class UserNamePage extends StatelessWidget {
     }
   }
 
-  authFailed(CubitAuthFailed authState) {
-    isToastShowed.value = true;
-    String error;
-    try {
-      error = authState.error.split(RegExp(r']'))[1];
-    } catch (e) {
-      error = authState.error;
-    }
-    ToastShow.toast(error);
-  }
-
   addNewUser(CubitAuthConfirmed authState, FireStoreAddNewUserCubit userCubit) {
-    String fullName = textsControllers.fullNameController.text;
+    String fullName = widget.fullNameController.text;
     List<dynamic> charactersOfName = [];
     String nameOfLower = fullName.toLowerCase();
 
@@ -339,12 +330,16 @@ class UserNamePage extends StatelessWidget {
       bio: "",
       profileImageUrl: "",
       userId: authState.user.uid,
+
+      /// I have some issues when set those as initial value in UserPersonalInfo
       followerPeople: const [],
       followedPeople: const [],
       posts: const [],
       chatsOfGroups: const [],
       stories: const [],
       lastThreePostUrls: const [],
+
+      /// -------------------------------->
     );
     userCubit.addNewUser(newUserInfo);
   }

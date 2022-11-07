@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/points_scroll_bar.dart';
+import 'package:instagram/presentation/pages/time_line/widgets/points_scroll_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memory_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/common/jump_arrow.dart';

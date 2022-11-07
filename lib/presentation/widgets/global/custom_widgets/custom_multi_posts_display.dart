@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker_plus/image_picker_plus.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_slider.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/points_scroll_bar.dart';
+import 'package:instagram/presentation/pages/time_line/widgets/image_slider.dart';
+import 'package:instagram/presentation/pages/time_line/widgets/points_scroll_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memory_image_display.dart';
 
 class CustomMultiImagesDisplay extends StatelessWidget {

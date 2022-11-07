@@ -7,9 +7,9 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/StoryCubit/story_cubit.dart';
+import 'package:instagram/presentation/pages/profile/widgets/which_profile_page.dart';
 import 'package:instagram/presentation/pages/story/story_for_web.dart';
 import 'package:instagram/presentation/pages/story/story_page_for_mobile.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

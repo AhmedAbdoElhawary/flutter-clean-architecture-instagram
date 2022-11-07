@@ -1,17 +1,18 @@
-import 'package:get/get.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
+import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/models/parent_classes/without_sub_classes/comment.dart';
 import 'package:instagram/data/models/child_classes/notification.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/comment.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/domain/entities/notification_check.dart';
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
@@ -20,9 +21,8 @@ import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/re
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/repliesInfo/reply_info_cubit.dart';
 import 'package:instagram/presentation/pages/profile/users_who_likes_for_mobile.dart';
 import 'package:instagram/presentation/pages/profile/users_who_likes_for_web.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
+import 'package:instagram/presentation/pages/profile/widgets/which_profile_page.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
-import 'package:instagram/core/functions/toast_show.dart';
 
 class CommentInfo extends StatefulWidget {
   final int index;
@@ -178,14 +178,14 @@ class _CommentInfoState extends State<CommentInfo> {
   }
 
   Row rowOfCommentator(
-      BuildContext context, bool isLiked, String hashTageOfUserName) {
+      BuildContext context, bool isLiked, String hashTagOfUserName) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         profileImage(context),
         const SizedBox(width: 8),
-        buildCommentInfo(context, hashTageOfUserName),
+        buildCommentInfo(context, hashTagOfUserName),
         if (!widget.commentInfo.isLoading) loveButton(isLiked, context)
       ],
     );

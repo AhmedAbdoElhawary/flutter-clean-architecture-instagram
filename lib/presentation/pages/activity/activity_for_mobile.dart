@@ -9,7 +9,7 @@ import 'package:instagram/data/models/child_classes/notification.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/show_me_the_users.dart';
+import 'package:instagram/presentation/pages/profile/widgets/show_me_the_users.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/others/notification_card_info.dart';
 
