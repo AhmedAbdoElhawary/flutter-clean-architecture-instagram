@@ -1,12 +1,13 @@
 import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'in_view_state.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/smart_refresher.dart';
-import 'package:flutter/foundation.dart';
+import 'package:instagram/presentation/pages/time_line/widgets/smart_refresher.dart';
 // ignore: depend_on_referenced_packages
 import 'package:stream_transform/stream_transform.dart';
 
+import 'in_view_state.dart';
 import 'widget_data.dart';
 
 class InViewNotifier extends StatefulWidget {

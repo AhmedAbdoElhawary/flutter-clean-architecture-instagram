@@ -16,7 +16,7 @@ import 'package:instagram/presentation/cubit/notification/notification_cubit.dar
 import 'package:instagram/presentation/cubit/postInfoCubit/commentsInfo/cubit/comments_info_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
-import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.dart';
+import 'package:instagram/presentation/pages/comments/widgets/comment_box.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_post_display.dart';
 import 'package:instagram/presentation/widgets/global/others/image_of_post.dart';
