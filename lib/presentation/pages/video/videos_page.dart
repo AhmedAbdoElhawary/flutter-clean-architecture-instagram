@@ -1,10 +1,12 @@
 import 'dart:typed_data';
-import 'package:get/get.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/config/routes/app_routes.dart';
+import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -18,11 +20,11 @@ import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/pages/profile/users_who_likes_for_mobile.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
-import 'package:instagram/presentation/widgets/belong_to/videos_w/reel_video_play.dart';
-import 'package:instagram/core/functions/toast_show.dart';
+import 'package:instagram/presentation/pages/profile/widgets/which_profile_page.dart';
+import 'package:instagram/presentation/pages/video/widgets/reel_video_play.dart';
 import 'package:instagram/presentation/widgets/global/others/share_button.dart';
 import 'package:shimmer/shimmer.dart';
+
 import '../../../core/utility/constant.dart';
 
 class VideosPage extends StatefulWidget {

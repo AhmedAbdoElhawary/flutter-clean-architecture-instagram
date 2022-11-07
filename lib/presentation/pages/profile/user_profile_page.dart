@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/functions/toast_show.dart';
@@ -18,10 +18,10 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc
 import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/pages/messages/chatting_page.dart';
+import 'package:instagram/presentation/pages/profile/widgets/bottom_sheet.dart';
+import 'package:instagram/presentation/pages/profile/widgets/profile_page.dart';
+import 'package:instagram/presentation/pages/profile/widgets/recommendation_people.dart';
 import 'package:instagram/presentation/screens/web_screen_layout.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/profile_page.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/recommendation_people.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
