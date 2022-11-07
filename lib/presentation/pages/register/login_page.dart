@@ -33,6 +33,9 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
     isToastShowed.dispose();
     isUserIdReady.dispose();
+    validateEmail.dispose();
+    validatePassword.dispose();
+
   }
 
   @override
