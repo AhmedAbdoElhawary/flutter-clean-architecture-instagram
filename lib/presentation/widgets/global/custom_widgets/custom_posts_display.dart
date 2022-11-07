@@ -3,8 +3,8 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_of_post_for_time_line.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/all_catch_up_icon.dart';
+import 'package:instagram/presentation/pages/time_line/widgets/all_catch_up_icon.dart';
+import 'package:instagram/presentation/pages/time_line/widgets/image_of_post_for_time_line.dart';
 
 class CustomPostsDisplay extends StatefulWidget {
   final List<Post> postsInfo;
