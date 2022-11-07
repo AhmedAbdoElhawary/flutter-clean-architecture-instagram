@@ -6,7 +6,7 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/screens/responsive_layout.dart';
 import 'package:instagram/presentation/screens/web_screen_layout.dart';
-import 'package:instagram/presentation/widgets/belong_to/register_w/popup_calling.dart';
+import 'package:instagram/presentation/pages/register/widgets/popup_calling.dart';
 
 class GetMyPersonalInfo extends StatefulWidget {
   final String myPersonalId;

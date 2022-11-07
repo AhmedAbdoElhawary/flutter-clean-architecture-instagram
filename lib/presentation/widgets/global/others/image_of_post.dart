@@ -1,7 +1,7 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
@@ -10,9 +10,9 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
-import 'package:instagram/data/models/parent_classes/without_sub_classes/comment.dart';
 import 'package:instagram/data/models/child_classes/notification.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/comment.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/domain/entities/notification_check.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
@@ -21,14 +21,14 @@ import 'package:instagram/presentation/cubit/notification/notification_cubit.dar
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
+import 'package:instagram/presentation/pages/comments/widgets/comment_box.dart';
+import 'package:instagram/presentation/pages/comments/widgets/comment_of_post.dart';
+import 'package:instagram/presentation/pages/profile/widgets/bottom_sheet.dart';
+import 'package:instagram/presentation/pages/profile/widgets/which_profile_page.dart';
 import 'package:instagram/presentation/pages/time_line/my_own_time_line/update_post_info.dart';
+import 'package:instagram/presentation/pages/time_line/widgets/image_slider.dart';
+import 'package:instagram/presentation/pages/time_line/widgets/points_scroll_bar.dart';
 import 'package:instagram/presentation/pages/video/play_this_video.dart';
-import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_box.dart';
-import 'package:instagram/presentation/widgets/belong_to/comments_w/comment_of_post.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/which_profile_page.dart';
-import 'package:instagram/presentation/widgets/belong_to/profile_w/bottom_sheet.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/image_slider.dart';
-import 'package:instagram/presentation/widgets/belong_to/time_line_w/points_scroll_bar.dart';
 import 'package:instagram/presentation/widgets/global/aimation/like_popup_animation.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
@@ -90,16 +90,18 @@ class _ImageOfPostState extends State<ImageOfPost>
 
   @override
   void initState() {
-    playTheVideo=widget.playTheVideo;
+    playTheVideo = widget.playTheVideo;
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
+
   @override
   void didUpdateWidget(covariant ImageOfPost oldWidget) {
-    playTheVideo=widget.playTheVideo;
+    playTheVideo = widget.playTheVideo;
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.didUpdateWidget(oldWidget);
   }
+
   @override
   void dispose() {
     commentTextController.dispose();
@@ -309,8 +311,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                       child: GestureDetector(
                         onTap: () {
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                            setState(() =>
-                                playTheVideo = !playTheVideo);
+                            setState(() => playTheVideo = !playTheVideo);
                           });
                         },
                         child: Container(
@@ -586,7 +587,7 @@ class _ImageOfPostState extends State<ImageOfPost>
   }
 
   Widget buildSingleImage(Post postInfo) {
-    return  NetworkDisplay(
+    return NetworkDisplay(
       blurHash: postInfo.blurHash,
       aspectRatio: postInfo.aspectRatio,
       url: postInfo.postUrl,
