@@ -2,9 +2,6 @@
 
 Instagram clean architecture using flutter and firebase as ( frontend & backend ) with almost all functionalities
 
-## You can support me.
- <a href="https://www.paypal.com/paypalme/AhmedAbdoElhawary"><img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-medium.png"></a>
-
 ## Contact
 
 You will find me on 
