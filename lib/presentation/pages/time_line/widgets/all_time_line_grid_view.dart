@@ -9,15 +9,16 @@ import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_n
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart';
 
+// ignore: must_be_immutable
 class AllTimeLineGridView extends StatefulWidget {
-  final List<Post> postsImagesInfo;
-  final List<Post> postsVideosInfo;
-  final List<Post> allPostsInfo;
+  List<Post> postsImagesInfo;
+  List<Post> postsVideosInfo;
+  List<Post> allPostsInfo;
   final ValueNotifier<bool> isThatEndOfList;
   final AsyncValueSetter<int> onRefreshData;
   final ValueNotifier<bool> reloadData;
 
-  const AllTimeLineGridView(
+  AllTimeLineGridView(
       {required this.postsImagesInfo,
       required this.postsVideosInfo,
       required this.isThatEndOfList,
@@ -55,41 +56,66 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
 
   @override
   Widget build(BuildContext context) {
-    return InViewNotifierCustomScrollView(
-      slivers: [
-        SliverStaggeredGrid.countBuilder(
-          crossAxisSpacing: isThatMobile ? 1.5 : 30,
-          mainAxisSpacing: isThatMobile ? 1.5 : 30,
-          crossAxisCount: 3,
-          itemCount: lengthOfGrid,
-          itemBuilder: (context, index) {
-            _structurePostDisplay(index);
-            return inViewWidget(index, postInfo);
-          },
-          staggeredTileBuilder: (index) {
-            bool firstCondition = isThatMobile ? index == 2 : index == 1;
-            bool secondCondition =
-                isThatMobile ? index % 11 == 0 : index % 14 == 0;
+    if (isThatMobile) {
+      return InViewNotifierCustomScrollView(
+        slivers: [
+          SliverStaggeredGrid.countBuilder(
+            crossAxisSpacing: isThatMobile ? 1.5 : 30,
+            mainAxisSpacing: isThatMobile ? 1.5 : 30,
+            crossAxisCount: 3,
+            itemCount: lengthOfGrid,
+            itemBuilder: (context, index) {
+              _structurePostDisplay(index);
+              return inViewWidget(index, postInfo);
+            },
+            staggeredTileBuilder: (index) {
+              double num = (index == (isThatMobile ? 2 : 1) ||
+                      (index % 11 == 0 && index != 0))
+                  ? 2
+                  : 1;
+              return StaggeredTile.count(num.toInt(), num);
+            },
+          )
+        ],
+        onRefreshData: widget.onRefreshData,
+        postsIds: widget.allPostsInfo,
+        isThatEndOfList: widget.isThatEndOfList,
+        initialInViewIds: const ['0'],
+        isInViewPortCondition:
+            (double deltaTop, double deltaBottom, double viewPortDimension) {
+          return deltaTop < (0.6 * viewPortDimension) &&
+              deltaBottom > (0.1 * viewPortDimension);
+        },
+      );
+    } else {
+      return SingleChildScrollView(child: Center(child: SizedBox(width: 910, child: _gridView())));
+    }
+  }
 
-            double num2 =
-                (firstCondition || (secondCondition && index != 0)) ? 2 : 1;
-            int num1 = (isThatMobile ? 1 : num2).toInt();
-            if (index == lengthOfGrid - 1) {
-              num2 = postInfo.isThatMix || postInfo.isThatImage ? num2 : 2;
-            }
-
-            return StaggeredTile.count(num1, num2);
-          },
-        ),
-      ],
-      onRefreshData: widget.onRefreshData,
-      postsIds: widget.allPostsInfo,
-      isThatEndOfList: widget.isThatEndOfList,
-      initialInViewIds: const ['0'],
-      isInViewPortCondition:
-          (double deltaTop, double deltaBottom, double viewPortDimension) {
-        return deltaTop < (0.6 * viewPortDimension) &&
-            deltaBottom > (0.1 * viewPortDimension);
+  StaggeredGridView _gridView() {
+    return StaggeredGridView.countBuilder(
+      crossAxisSpacing: isThatMobile ? 1.5 : 30,
+      mainAxisSpacing: isThatMobile ? 1.5 : 30,
+      crossAxisCount: 3,
+      shrinkWrap: true,
+      primary: false,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: lengthOfGrid,
+      itemBuilder: (context, index) {
+        _structurePostDisplay(index);
+        return CustomGridViewDisplay(
+          postClickedInfo: postInfo,
+          postsInfo: widget.allPostsInfo,
+          index: index,
+          isThatProfile: false,
+        );
+      },
+      staggeredTileBuilder: (index) {
+        double num =
+            (index == (isThatMobile ? 2 : 1) || (index % 11 == 0 && index != 0))
+                ? 2
+                : 1;
+        return StaggeredTile.count(num.toInt(), num);
       },
     );
   }
@@ -109,10 +135,9 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
         indexOfPostsVideo = 0;
         indexOfPostsImage = 0;
       }
-      bool firstCondition = isThatMobile ? index == 2 : index == 1;
-      bool secondCondition = isThatMobile ? index % 11 == 0 : index % 14 == 0;
 
-      if ((firstCondition || (secondCondition && index != 0)) &&
+      if ((index == (isThatMobile ? 2 : 1) ||
+              (index % 11 == 0 && index != 0)) &&
           indexOfPostsVideo < widget.postsVideosInfo.length) {
         postInfo = widget.postsVideosInfo[indexOfPostsVideo];
         indexOfPostsVideo++;

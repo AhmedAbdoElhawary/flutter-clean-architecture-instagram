@@ -96,18 +96,13 @@ class AllUsersTimeLinePage extends StatelessWidget {
               isThatImage ? imagePosts.add(element) : videoPosts.add(element);
             }
 
-            return Center(
-              child: SizedBox(
-                width: isThatMobile ? null : 910,
-                child: AllTimeLineGridView(
-                  onRefreshData: (int index) => getData(context, index),
-                  postsImagesInfo: imagePosts,
-                  postsVideosInfo: videoPosts,
-                  isThatEndOfList: isThatEndOfList,
-                  reloadData: reloadData,
-                  allPostsInfo: state.allPostInfo,
-                ),
-              ),
+            return AllTimeLineGridView(
+              onRefreshData: (int index) => getData(context, index),
+              postsImagesInfo: imagePosts,
+              postsVideosInfo: videoPosts,
+              isThatEndOfList: isThatEndOfList,
+              reloadData: reloadData,
+              allPostsInfo: state.allPostInfo,
             );
           } else if (state is CubitPostFailed) {
             ToastShow.toastStateError(state);
@@ -118,7 +113,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
                   color: Theme.of(context).focusColor, fontSize: 18),
             ));
           } else {
-            return loadingWidget(context);
+          return loadingWidget(context);
           }
         },
       ),
@@ -142,9 +137,11 @@ class AllUsersTimeLinePage extends StatelessWidget {
                   color: ColorManager.lightDarkGray, width: double.infinity);
             },
             staggeredTileBuilder: (index) {
-              double num =
-                  (index == 2 || (index % 11 == 0 && index != 0)) ? 2 : 1;
-              return StaggeredTile.count(1, num);
+              double num = (index == (isThatMobile ? 2 : 1) ||
+                      (index % 11 == 0 && index != 0))
+                  ? 2
+                  : 1;
+              return StaggeredTile.count(num.toInt(), num);
             },
           ),
         ),

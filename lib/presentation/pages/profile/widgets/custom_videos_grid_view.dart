@@ -1,9 +1,9 @@
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
-import 'package:instagram/presentation/widgets/global/popup_widgets/mobile/popup_post.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_grid_view_display.dart';
 
 class CustomVideosGridView extends StatefulWidget {
   final List<Post> postsInfo;
@@ -23,42 +23,33 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
     bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
 
     return widget.postsInfo.isNotEmpty
-        ? GridView(
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 150,
-              mainAxisExtent: 215,
-              crossAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
-              mainAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
-              childAspectRatio: 1.0,
-            ),
-            primary: false,
-            shrinkWrap: true,
+        ? StaggeredGridView.countBuilder(
             padding: const EdgeInsetsDirectional.only(bottom: 1.5, top: 1.5),
-            children: widget.postsInfo.map((postInfo) {
-              return createGridTileWidget(postInfo);
-            }).toList())
+            crossAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
+            mainAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
+            crossAxisCount: 3,
+            primary: false,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: widget.postsInfo.length,
+            itemBuilder: (context, index) => CustomGridViewDisplay(
+              postClickedInfo: widget.postsInfo[index],
+              postsInfo: widget.postsInfo,
+              index: index,
+              playThisVideo: true,
+              showVideoCover: true,
+            ),
+            staggeredTileBuilder: (index) {
+              Post postsInfo = widget.postsInfo[index];
+              bool condition = postsInfo.isThatMix || postsInfo.isThatImage;
+              double num = condition ? 1 : 2;
+              return StaggeredTile.count(1, num);
+            },
+          )
         : Center(
             child: Text(
             StringsManager.noPosts.tr,
             style: Theme.of(context).textTheme.bodyLarge,
           ));
-  }
-
-  Widget createGridTileWidget(Post postInfo) {
-    return Builder(
-        builder: (context) => PopupPostCard(
-          postClickedInfo: postInfo,
-          postsInfo: widget.postsInfo,
-          isThatProfile: true,
-          postClickedWidget:NetworkDisplay(
-            cachingWidth: 238,
-            cachingHeight: 430,
-            blurHash: postInfo.blurHash,
-
-            aspectRatio:  0.65,
-            url: postInfo.coverOfVideoUrl,
-          )
-        ),
-      );
   }
 }

@@ -310,9 +310,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                     Flexible(
                       child: GestureDetector(
                         onTap: () {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
                             setState(() => playTheVideo = !playTheVideo);
-                          });
                         },
                         child: Container(
                           height: double.infinity,
@@ -557,33 +555,31 @@ class _ImageOfPostState extends State<ImageOfPost>
     return Stack(
       alignment: Alignment.center,
       children: [
-
         PlayThisVideo(
           videoUrl: postInfo.postUrl,
           blurHash: postInfo.blurHash,
           play: playTheVideo,
           withoutSound: !isSoundOn,
         ),
-        if (!playTheVideo)
-          Align(
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.play_arrow_rounded,
-              color: ColorManager.white,
-              size: isThatMobile ? 100 : 200,
-            ),
-          ),
         Positioned(
           bottom: 0,
           right: 0,
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(18.0),
             child: GestureDetector(
               onTap: () => setState(() => isSoundOn = !isSoundOn),
               child: VolumeIcon(isVolumeOn: isSoundOn),
             ),
           ),
-        )
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: Icon(
+            Icons.play_arrow_rounded,
+            color: playTheVideo ? ColorManager.transparent : ColorManager.white,
+            size: isThatMobile ? 100 : 200,
+          ),
+        ),
       ],
     );
   }

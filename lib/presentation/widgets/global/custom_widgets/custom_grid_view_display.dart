@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
+import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/presentation/widgets/global/others/play_this_video.dart';
@@ -13,6 +14,7 @@ class CustomGridViewDisplay extends StatefulWidget {
   final bool isThatProfile;
   final int index;
   final bool playThisVideo;
+  final bool showVideoCover;
   final ValueChanged<int>? removeThisPost;
   const CustomGridViewDisplay(
       {required this.index,
@@ -20,6 +22,7 @@ class CustomGridViewDisplay extends StatefulWidget {
       this.isThatProfile = true,
       this.playThisVideo = false,
       required this.postClickedInfo,
+      this.showVideoCover = false,
       this.removeThisPost,
       Key? key})
       : super(key: key);
@@ -71,24 +74,32 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
       );
 
   Widget buildCardVideo({bool? playVideo}) {
-    if(!widget.isThatProfile && playVideo == null){
+    if (!widget.isThatProfile && playVideo == null && !widget.showVideoCover) {
       return PlayThisVideo(
         videoUrl: widget.postClickedInfo.postUrl,
         blurHash: widget.postClickedInfo.blurHash,
         play: playVideo ?? widget.playThisVideo,
         withoutSound: true,
       );
-    }else{
-      return
-       NetworkDisplay(
-        cachingWidth: 238,
-        cachingHeight: 430,
-        blurHash: widget.postClickedInfo.blurHash,
-        aspectRatio: 0.65,
-        url: widget.postClickedInfo.coverOfVideoUrl,
+    } else {
+      return Stack(
+        children: [
+          NetworkDisplay(
+            cachingWidth: 238,
+            cachingHeight: 430,
+            blurHash: widget.postClickedInfo.blurHash,
+            url: widget.postClickedInfo.coverOfVideoUrl,
+          ),
+          const Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(Icons.slow_motion_video,
+                    color: ColorManager.white, size: 20),
+              )),
+        ],
       );
     }
-
   }
 
   Stack buildCardImage() {
