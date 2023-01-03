@@ -14,6 +14,7 @@ import 'package:instagram/presentation/customPackages/story_view/story_controlle
 import 'package:instagram/presentation/customPackages/story_view/story_view.dart';
 import 'package:instagram/presentation/customPackages/story_view/utils.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/common/jump_arrow.dart';
 import 'package:instagram/presentation/customPackages/snapping.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -87,9 +88,7 @@ class StoryPageForWebState extends State<StoryPageForWeb> {
           child: ScrollSnapList(
             itemBuilder: (_, index) {
               if (index == widget.storiesOwnersInfo.length) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return ThineCircularProgress();
               }
               return SizedBox(
                 width: widthOfStory,
