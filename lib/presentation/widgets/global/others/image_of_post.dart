@@ -563,15 +563,6 @@ class _ImageOfPostState extends State<ImageOfPost>
           play: playTheVideo,
           withoutSound: !isSoundOn,
         ),
-        if (!playTheVideo)
-          Align(
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.play_arrow_rounded,
-              color: ColorManager.white,
-              size: isThatMobile ? 100 : 200,
-            ),
-          ),
         Positioned(
           bottom: 0,
           right: 0,
@@ -582,7 +573,15 @@ class _ImageOfPostState extends State<ImageOfPost>
               child: VolumeIcon(isVolumeOn: isSoundOn),
             ),
           ),
-        )
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: Icon(
+            Icons.play_arrow_rounded,
+            color: playTheVideo ? ColorManager.transparent : ColorManager.white,
+            size: isThatMobile ? 100 : 200,
+          ),
+        ),
       ],
     );
   }
