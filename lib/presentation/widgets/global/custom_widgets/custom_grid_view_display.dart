@@ -13,6 +13,7 @@ class CustomGridViewDisplay extends StatefulWidget {
   final bool isThatProfile;
   final int index;
   final bool playThisVideo;
+  final bool showVideoCover;
   final ValueChanged<int>? removeThisPost;
   const CustomGridViewDisplay(
       {required this.index,
@@ -20,6 +21,7 @@ class CustomGridViewDisplay extends StatefulWidget {
       this.isThatProfile = true,
       this.playThisVideo = false,
       required this.postClickedInfo,
+      this.showVideoCover = false,
       this.removeThisPost,
       Key? key})
       : super(key: key);
@@ -48,8 +50,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
       return GestureDetector(
         onTap: onTapPostForWeb,
         onLongPressEnd: (_) => onTapPostForWeb,
-        child:
-            isThatImage ? buildCardImage() : buildCardVideo(playVideo: false),
+        child: isThatImage ? buildCardImage() : buildCardVideo(),
       );
     }
   }
@@ -71,16 +72,15 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
       );
 
   Widget buildCardVideo({bool? playVideo}) {
-    if(!widget.isThatProfile && playVideo == null){
+    if (!widget.isThatProfile && playVideo == null && !widget.showVideoCover) {
       return PlayThisVideo(
         videoUrl: widget.postClickedInfo.postUrl,
         blurHash: widget.postClickedInfo.blurHash,
         play: playVideo ?? widget.playThisVideo,
         withoutSound: true,
       );
-    }else{
-      return
-       NetworkDisplay(
+    } else {
+      return NetworkDisplay(
         cachingWidth: 238,
         cachingHeight: 430,
         blurHash: widget.postClickedInfo.blurHash,
@@ -88,7 +88,6 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
         url: widget.postClickedInfo.coverOfVideoUrl,
       );
     }
-
   }
 
   Stack buildCardImage() {
