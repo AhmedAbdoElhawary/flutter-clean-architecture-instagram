@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:video_player/video_player.dart';
 
 class PlayThisVideo extends StatefulWidget {
   final String videoUrl;
-  final String coverOfVideoUrl;
   final String blurHash;
   final double aspectRatio;
   final bool isThatFromMemory;
@@ -13,7 +11,6 @@ class PlayThisVideo extends StatefulWidget {
   const PlayThisVideo({
     Key? key,
     required this.videoUrl,
-    this.coverOfVideoUrl = "",
     this.blurHash = "",
     this.withoutSound = false,
     this.isThatFromMemory = false,
@@ -30,7 +27,9 @@ class PlayThisVideoState extends State<PlayThisVideo> {
 
   @override
   void initState() {
-    _controller = widget.isThatFromMemory
+    super.initState();
+
+  _controller = widget.isThatFromMemory
         ? VideoPlayerController.asset(widget.videoUrl)
         : VideoPlayerController.network(widget.videoUrl);
     _initializeVideoPlayerFuture = _controller.initialize().then((_) {
@@ -47,7 +46,6 @@ class PlayThisVideoState extends State<PlayThisVideo> {
         _controller.setVolume(1);
       }
     }
-    super.initState();
   }
 
   @override
@@ -55,9 +53,7 @@ class PlayThisVideoState extends State<PlayThisVideo> {
     if (widget.play) {
       _controller.play();
       _controller.setLooping(true);
-      setState(() {
-        if (widget.withoutSound) _controller.setVolume(0);
-      });
+      if (widget.withoutSound)  _controller.setVolume(0);
     } else {
       _controller.pause();
     }
@@ -77,15 +73,6 @@ class PlayThisVideoState extends State<PlayThisVideo> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.coverOfVideoUrl.isNotEmpty) {
-      return NetworkDisplay(
-        cachingWidth: 238,
-        cachingHeight: 430,
-        blurHash: widget.blurHash,
-        aspectRatio: widget.aspectRatio,
-        url: widget.coverOfVideoUrl,
-      );
-    } else {
       return FutureBuilder(
         future: _initializeVideoPlayerFuture,
         builder: (context, snapshot) {
@@ -100,7 +87,6 @@ class PlayThisVideoState extends State<PlayThisVideo> {
           }
         },
       );
-    }
   }
 
   Widget buildSizedBox() {
