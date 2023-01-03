@@ -29,6 +29,7 @@ class _GetMyPersonalInfoState extends State<GetMyPersonalInfo> {
           setState(() => isHeMovedToHome = true);
 
           if (userState is CubitMyPersonalInfoLoaded) {
+
             myPersonalId = widget.myPersonalId;
             Get.offAll(
               ResponsiveLayout(
