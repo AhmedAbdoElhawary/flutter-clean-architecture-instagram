@@ -46,17 +46,32 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   ValueNotifier<bool> reBuild = ValueNotifier(false);
   ValueNotifier<bool> loading = ValueNotifier(false);
+  ValueNotifier<int> tabBarIndex = ValueNotifier(0);
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final bodyHeight = mediaQuery.size.height -
-        AppBar().preferredSize.height -
-        mediaQuery.padding.top;
-    return defaultTabController(bodyHeight);
+    return isThatMobile ? buildForMobile() : buildForWeb();
   }
 
-  Widget defaultTabController(double bodyHeight) {
+  Widget buildForWeb() {
+    return SingleChildScrollView(
+      child: Center(
+        child: SizedBox(
+          width: isThatMobile ? null : 920,
+          child: DefaultTabController(
+            length: 3,
+            child: ValueListenableBuilder(
+              valueListenable: widget.userInfo,
+              builder: (context, UserPersonalInfo userInfoValue, child) =>
+                  widgetsAboveTapBarsForWeb(userInfoValue),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildForMobile() {
     return Center(
       child: SizedBox(
         width: isThatMobile ? null : 920,
@@ -70,11 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 return [
                   SliverList(
                     delegate: SliverChildListDelegate(
-                      isThatMobile
-                          ? widgetsAboveTapBarsForMobile(
-                              userInfoValue, bodyHeight)
-                          : widgetsAboveTapBarsForWeb(
-                              userInfoValue, bodyHeight),
+                      widgetsAboveTapBarsForMobile(userInfoValue),
                     ),
                   ),
                 ];
@@ -114,7 +125,9 @@ class _ProfilePageState extends State<ProfilePage> {
             !widget.isThatMyPersonalId) {
           return columnOfWidgets(state.postsInfo);
         } else {
-          return const _LoadingGridView();
+          return isThatMobile
+              ? const SingleChildScrollView(child: _LoadingGridView())
+              : const _LoadingGridView();
         }
       },
     );
@@ -122,20 +135,23 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Column columnOfWidgets(List<Post> postsInfo) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        const _TabBarIcons(),
-        _TabBarsViews(postsInfo: postsInfo,userId: widget.userId),
+        _TabBarIcons(tapBarIndex: tabBarIndex),
+        _TabBarsViews(
+            postsInfo: postsInfo,
+            userId: widget.userId,
+            tapBarIndex: tabBarIndex),
       ],
     );
   }
 
-  widgetsAboveTapBarsForWeb(UserPersonalInfo userInfo, double bodyHeight) {
+  Widget widgetsAboveTapBarsForWeb(UserPersonalInfo userInfo) {
     double widthOfScreen = MediaQuery.of(context).size.width;
     bool isWidthAboveMinimum = widthOfScreen > 800;
-    return [
-      SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
+    return Column(
+      children: [
+        Row(
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
@@ -191,12 +207,16 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ],
         ),
-      ),
-    ];
+        tapBar(),
+      ],
+    );
   }
 
-  List<Widget> widgetsAboveTapBarsForMobile(
-      UserPersonalInfo userInfo, double bodyHeight) {
+  List<Widget> widgetsAboveTapBarsForMobile(UserPersonalInfo userInfo) {
+    final mediaQuery = MediaQuery.of(context);
+    final bodyHeight = mediaQuery.size.height -
+        AppBar().preferredSize.height -
+        mediaQuery.padding.top;
     return [
       GestureDetector(
         onVerticalDragStart: (e) async {
@@ -349,22 +369,20 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 class _LoadingGridView extends StatelessWidget {
-  const _LoadingGridView({
-    Key? key
-  }) : super(key: key);
-
+  const _LoadingGridView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const _TabBarIcons(),
-          Shimmer.fromColors(
-            baseColor: Theme.of(context).textTheme.headlineSmall!.color!,
-            highlightColor: Theme.of(context).textTheme.titleLarge!.color!,
+    return Column(
+      children: [
+        _TabBarIcons(tapBarIndex: ValueNotifier(0)),
+        Shimmer.fromColors(
+          baseColor: Theme.of(context).textTheme.headlineSmall!.color!,
+          highlightColor: Theme.of(context).textTheme.titleLarge!.color!,
+          child: SizedBox(
+            width: 900,
             child: GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -382,50 +400,69 @@ class _LoadingGridView extends StatelessWidget {
               itemCount: 15,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
 class _TabBarsViews extends StatelessWidget {
-  const _TabBarsViews({Key? key,required this.postsInfo,required this.userId,}) : super(key: key);
+  const _TabBarsViews({
+    Key? key,
+    required this.postsInfo,
+    required this.userId,
+    required this.tapBarIndex,
+  }) : super(key: key);
   final List<Post> postsInfo;
+  final ValueNotifier<int> tapBarIndex;
+
   final String userId;
 
   @override
   Widget build(BuildContext context) {
-    List<Post> videosPostsInfo = postsInfo
-        .where((element) => !(element.isThatMix || element.isThatImage))
-        .toList();
-
-    List<Post> imagesPostsInfo = postsInfo
-        .where((element) => (element.isThatMix || element.isThatImage))
-        .toList();
-    return Expanded(
-      child: TabBarView(
-        children: [
-          ProfileGridView(postsInfo: imagesPostsInfo, userId: userId),
-          CustomVideosGridView(
-              postsInfo: videosPostsInfo, userId: userId),
-          ProfileGridView(postsInfo: imagesPostsInfo, userId: userId),
-        ],
-      ),
-    );
+    if (isThatMobile) {
+      return Expanded(
+        child: TabBarView(children: _tabBarsWidgets(postsInfo, userId)),
+      );
+    } else {
+      return SizedBox(
+        width: 900,
+        child: ValueListenableBuilder(
+          valueListenable: tapBarIndex,
+          builder: (context, int index, child) =>
+              _tabBarsWidgets(postsInfo, userId)[index],
+        ),
+      );
+    }
   }
 }
 
+List<Widget> _tabBarsWidgets(List<Post> postsInfo, String userId) {
+  List<Post> videosPostsInfo = postsInfo
+      .where((element) => !(element.isThatMix || element.isThatImage))
+      .toList();
+
+  List<Post> imagesPostsInfo = postsInfo
+      .where((element) => (element.isThatMix || element.isThatImage))
+      .toList();
+  return [
+    ProfileGridView(postsInfo: imagesPostsInfo, userId: userId),
+    CustomVideosGridView(postsInfo: videosPostsInfo, userId: userId),
+    ProfileGridView(postsInfo: imagesPostsInfo, userId: userId),
+  ];
+}
+
 class _TabBarIcons extends StatelessWidget {
-  const _TabBarIcons({
-    Key? key
-  }) : super(key: key);
-
-
+  const _TabBarIcons({Key? key, required this.tapBarIndex}) : super(key: key);
+  final ValueNotifier<int> tapBarIndex;
   @override
   Widget build(BuildContext context) {
     bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
 
     return TabBar(
+      onTap: (value) {
+        tapBarIndex.value = value;
+      },
       unselectedLabelColor: ColorManager.grey,
       labelColor: isWidthAboveMinimum
           ? ColorManager.black
