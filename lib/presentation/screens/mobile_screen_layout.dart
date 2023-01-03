@@ -51,7 +51,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
                 ]),
             controller: controller,
             tabBuilder: (context, index) {
-              WidgetsBinding.instance.addPostFrameCallback((_) async {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
                 playMainReelVideos.value = controller.index == 2 ? true : false;
                 playHomeVideo.value = controller.index == 0 ? true : false;
               });
