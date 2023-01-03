@@ -3,7 +3,7 @@ import 'package:instagram/data/models/child_classes/notification.dart';
 import 'package:instagram/domain/repositories/firestore_notification.dart';
 
 class CreateNotificationUseCase implements UseCase<String, CustomNotification> {
-  final FirestoreNotificationRepository _notificationRepository;
+  final FireStoreNotificationRepository _notificationRepository;
   CreateNotificationUseCase(this._notificationRepository);
   @override
   Future<String> call({required CustomNotification params}) {
