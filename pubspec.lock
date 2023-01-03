@@ -168,7 +168,7 @@ packages:
       name: camera
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.0+1"
+    version: "0.10.1"
   camera_android:
     dependency: transitive
     description:
@@ -587,7 +587,7 @@ packages:
       name: image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.0"
+    version: "3.3.0"
   image_crop:
     dependency: transitive
     description:
@@ -601,7 +601,7 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.5+3"
+    version: "0.8.6"
   image_picker_android:
     dependency: transitive
     description:
@@ -622,7 +622,7 @@ packages:
       name: image_picker_ios
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.6"
+    version: "0.8.6+4"
   image_picker_platform_interface:
     dependency: transitive
     description:
@@ -636,7 +636,7 @@ packages:
       name: image_picker_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.4"
+    version: "0.5.5+2"
   intl:
     dependency: transitive
     description:
@@ -846,7 +846,7 @@ packages:
       name: photo_manager
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.1"
+    version: "2.5.2"
   platform:
     dependency: transitive
     description:
