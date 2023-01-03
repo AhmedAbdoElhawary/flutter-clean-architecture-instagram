@@ -258,7 +258,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           sharePrefs.clear();
           Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
             CupertinoPageRoute(
-                builder: (_) => LoginPage(sharePrefs: sharePrefs),
+                builder: (_) => const LoginPage(),
                 maintainState: false),
             (route) => false,
           );
