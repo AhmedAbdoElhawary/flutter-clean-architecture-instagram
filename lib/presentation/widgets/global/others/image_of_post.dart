@@ -557,7 +557,6 @@ class _ImageOfPostState extends State<ImageOfPost>
     return Stack(
       alignment: Alignment.center,
       children: [
-
         PlayThisVideo(
           videoUrl: postInfo.postUrl,
           blurHash: postInfo.blurHash,
@@ -577,7 +576,7 @@ class _ImageOfPostState extends State<ImageOfPost>
           bottom: 0,
           right: 0,
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(18.0),
             child: GestureDetector(
               onTap: () => setState(() => isSoundOn = !isSoundOn),
               child: VolumeIcon(isVolumeOn: isSoundOn),

@@ -370,7 +370,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
 class _LoadingGridView extends StatelessWidget {
   const _LoadingGridView({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
@@ -382,7 +381,7 @@ class _LoadingGridView extends StatelessWidget {
           baseColor: Theme.of(context).textTheme.headlineSmall!.color!,
           highlightColor: Theme.of(context).textTheme.titleLarge!.color!,
           child: SizedBox(
-            width: 900,
+            width: isThatMobile ? null : 920,
             child: GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -426,7 +425,7 @@ class _TabBarsViews extends StatelessWidget {
       );
     } else {
       return SizedBox(
-        width: 900,
+        width: 920,
         child: ValueListenableBuilder(
           valueListenable: tapBarIndex,
           builder: (context, int index, child) =>
