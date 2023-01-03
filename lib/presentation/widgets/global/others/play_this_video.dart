@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram/core/utility/constant.dart';
 import 'package:video_player/video_player.dart';
 
 class PlayThisVideo extends StatefulWidget {
@@ -24,12 +25,14 @@ class PlayThisVideo extends StatefulWidget {
 class PlayThisVideoState extends State<PlayThisVideo> {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
-
+  late double aspectRatio;
   @override
   void initState() {
     super.initState();
+    aspectRatio = widget.aspectRatio;
+    if (!isThatMobile && aspectRatio == 0.65) aspectRatio = 0.56;
 
-  _controller = widget.isThatFromMemory
+    _controller = widget.isThatFromMemory
         ? VideoPlayerController.asset(widget.videoUrl)
         : VideoPlayerController.network(widget.videoUrl);
     _initializeVideoPlayerFuture = _controller.initialize().then((_) {
@@ -53,7 +56,7 @@ class PlayThisVideoState extends State<PlayThisVideo> {
     if (widget.play) {
       _controller.play();
       _controller.setLooping(true);
-      if (widget.withoutSound)  _controller.setVolume(0);
+      if (widget.withoutSound) _controller.setVolume(0);
     } else {
       _controller.pause();
     }
@@ -73,20 +76,19 @@ class PlayThisVideoState extends State<PlayThisVideo> {
 
   @override
   Widget build(BuildContext context) {
-      return FutureBuilder(
-        future: _initializeVideoPlayerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return AspectRatio(
-              aspectRatio: widget.aspectRatio,
-              child: VideoPlayer(_controller),
-            );
-          } else {
-            return AspectRatio(
-                aspectRatio: widget.aspectRatio, child: buildSizedBox());
-          }
-        },
-      );
+    return FutureBuilder(
+      future: _initializeVideoPlayerFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return AspectRatio(
+            aspectRatio: aspectRatio,
+            child: VideoPlayer(_controller),
+          );
+        } else {
+          return AspectRatio(aspectRatio: aspectRatio, child: buildSizedBox());
+        }
+      },
+    );
   }
 
   Widget buildSizedBox() {
