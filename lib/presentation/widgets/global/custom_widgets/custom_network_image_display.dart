@@ -72,7 +72,7 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
     return OctoImage(
       image: CachedNetworkImageProvider(widget.url,
           maxWidth: cachingWidth, maxHeight: cachingHeight),
-      errorBuilder: (context, url, error) => buildError(error.toString()??""),
+      errorBuilder: (context, url, error) => buildError(),
       fit: BoxFit.cover,
       width:widget.width?? double.infinity,
       height: widget.height ?? height,
@@ -82,7 +82,7 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
     );
   }
 
-  SizedBox buildError(String error) {
+  SizedBox buildError() {
     return SizedBox(
       width: double.infinity,
       height: widget.aspectRatio,

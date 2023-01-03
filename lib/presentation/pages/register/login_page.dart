@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/domain/entities/registered_user.dart';
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instagram/presentation/pages/register/widgets/get_my_user_info.dart';
@@ -12,14 +13,14 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_elev
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
-  final SharedPreferences sharePrefs;
-  const LoginPage({Key? key, required this.sharePrefs}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final SharedPreferences sharePrefs=injector<SharedPreferences>();
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   RxBool isHeMovedToHome = false.obs;
@@ -78,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
     isUserIdReady.value = true;
     myPersonalId = userId;
     if (myPersonalId.isNotEmpty) {
-      await widget.sharePrefs.setString("myPersonalId", myPersonalId);
+      await sharePrefs.setString("myPersonalId", myPersonalId);
       Get.offAll(GetMyPersonalInfo(myPersonalId: myPersonalId));
     } else {
       ToastShow.toast(StringsManager.somethingWrong.tr);
