@@ -716,21 +716,19 @@ class _PopupNewPostState extends State<PopupNewPost> {
   }
 
   Future<void> pickAnotherImage() async {
-    List<XFile>? image = await ImagePicker().pickMultiImage();
-    if (image != null) {
-      for (final img in image) {
-        Uint8List unitImage = await img.readAsBytes();
-        SelectedByte byte = SelectedByte(
-            isThatImage: true,
-            selectedByte: unitImage,
-            selectedFile: File(img.path));
-        selectedImagesInByte.add(byte);
-        selectedImage.value = unitImage;
-        selectedImages.value.add(unitImage);
-      }
-      setState(() {
-        indexOfSelectedImage = image.length - 1;
-      });
+    List<XFile> image = await ImagePicker().pickMultiImage();
+    for (final img in image) {
+      Uint8List unitImage = await img.readAsBytes();
+      SelectedByte byte = SelectedByte(
+          isThatImage: true,
+          selectedByte: unitImage,
+          selectedFile: File(img.path));
+      selectedImagesInByte.add(byte);
+      selectedImage.value = unitImage;
+      selectedImages.value.add(unitImage);
     }
+    setState(() {
+      indexOfSelectedImage = image.length - 1;
+    });
   }
 }
