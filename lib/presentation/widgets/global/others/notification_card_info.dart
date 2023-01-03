@@ -11,6 +11,7 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/child_classes/notification.dart';
 import 'package:instagram/presentation/pages/profile/widgets/which_profile_page.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/get_post_info.dart';
 
 class NotificationCardInfo extends StatefulWidget {
@@ -141,10 +142,15 @@ class _NotificationCardInfoState extends State<NotificationCardInfo> {
                   ));
                 }
               },
-              child: Image.network(widget.notificationInfo.postImageUrl,
-                  height: 45, width: 45),
+              child: NetworkDisplay(
+                url: widget.notificationInfo.postImageUrl,
+                height: 45,
+                width: 45,
+                cachingHeight: 90,
+                cachingWidth: 90,
+              ),
             ),
-        ]),
+        ],),
       ),
     );
   }
