@@ -3,7 +3,7 @@ import 'package:instagram/data/models/child_classes/notification.dart';
 import 'package:instagram/domain/entities/notification_check.dart';
 import 'package:instagram/domain/repositories/firestore_notification.dart';
 
-class FireStoreNotificationRepoImpl implements FirestoreNotificationRepository {
+class FireStoreNotificationRepoImpl implements FireStoreNotificationRepository {
   @override
   Future<String> createNotification(
       {required CustomNotification newNotification}) async {
