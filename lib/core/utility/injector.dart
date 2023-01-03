@@ -131,7 +131,7 @@ Future<void> initializeDependencies() async {
         ()=>FirestoreStoryRepositoryImpl(),
   );
   // notification
-  injector.registerLazySingleton<FirestoreNotificationRepository>(
+  injector.registerLazySingleton<FireStoreNotificationRepository>(
         ()=>FireStoreNotificationRepoImpl(),
   );
   // calling rooms repository
