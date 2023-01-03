@@ -4,7 +4,7 @@ import 'package:instagram/domain/repositories/firestore_notification.dart';
 
 class GetNotificationsUseCase
     implements UseCase<List<CustomNotification>, String> {
-  final FirestoreNotificationRepository _notificationRepository;
+  final FireStoreNotificationRepository _notificationRepository;
   GetNotificationsUseCase(this._notificationRepository);
   @override
   Future<List<CustomNotification>> call({required String params}) {
