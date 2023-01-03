@@ -400,15 +400,20 @@ class _CommentInfoState extends State<CommentInfo> {
   }
 
   CustomNotification createNotification(Comment commentInfo) {
+    Post postInfo = widget.postInfo.value;
+    String imageUrl = postInfo.isThatImage
+        ? (postInfo.imagesUrls.length > 1
+            ? postInfo.imagesUrls[0]
+            : postInfo.postUrl)
+        : postInfo.coverOfVideoUrl;
+
     return CustomNotification(
       text: "liked your comment:${commentInfo.theComment}",
-      postId: widget.postInfo.value.postUid,
-      postImageUrl: widget.postInfo.value.imagesUrls.length > 1
-          ? widget.postInfo.value.imagesUrls[0]
-          : widget.postInfo.value.postUrl,
+      postId: postInfo.postUid,
+      postImageUrl: imageUrl,
       time: DateReformat.dateOfNow(),
       senderId: myPersonalId,
-      receiverId: widget.postInfo.value.publisherId,
+      receiverId: postInfo.publisherId,
       personalUserName: widget.myPersonalInfo.userName,
       personalProfileImageUrl: widget.myPersonalInfo.profileImageUrl,
       isThatLike: false,
