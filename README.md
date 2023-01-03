@@ -19,7 +19,7 @@ You will find me on
   * Arabic & English language
   * Dark & Light theme 
 
-* Custome gallery & camera & video display like Instagram "my package" [image picker plus ](https://github.com/AhmedAbdoElhawary/image_picker_plus.git)
+* Custom gallery & camera & video display like Instagram "my package" [image picker plus ](https://github.com/AhmedAbdoElhawary/image_picker_plus.git)
  <a href="https://pub.dev/packages/image_picker_plus"><img src="https://img.shields.io/pub/v/image_picker_plus.svg" width="80"></a>
 
 

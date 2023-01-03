@@ -3,7 +3,7 @@ import 'package:instagram/domain/entities/notification_check.dart';
 import 'package:instagram/domain/repositories/firestore_notification.dart';
 
 class DeleteNotificationUseCase implements UseCase<void, NotificationCheck> {
-  final FirestoreNotificationRepository _notificationRepository;
+  final FireStoreNotificationRepository _notificationRepository;
   DeleteNotificationUseCase(this._notificationRepository);
   @override
   Future<void> call({required NotificationCheck params}) {

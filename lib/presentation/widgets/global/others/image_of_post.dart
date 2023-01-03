@@ -28,7 +28,7 @@ import 'package:instagram/presentation/pages/profile/widgets/which_profile_page.
 import 'package:instagram/presentation/pages/time_line/my_own_time_line/update_post_info.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/image_slider.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/points_scroll_bar.dart';
-import 'package:instagram/presentation/pages/video/play_this_video.dart';
+import 'package:instagram/presentation/widgets/global/others/play_this_video.dart';
 import 'package:instagram/presentation/widgets/global/aimation/like_popup_animation.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
@@ -469,9 +469,11 @@ class _ImageOfPostState extends State<ImageOfPost>
     return CustomNotification(
       text: "liked your photo.",
       postId: postInfo.postUid,
-      postImageUrl: postInfo.imagesUrls.length > 1
-          ? postInfo.imagesUrls[0]
-          : postInfo.postUrl,
+      postImageUrl: postInfo.isThatImage
+          ? (postInfo.imagesUrls.length > 1
+              ? postInfo.imagesUrls[0]
+              : postInfo.postUrl)
+          : postInfo.coverOfVideoUrl,
       time: DateReformat.dateOfNow(),
       senderId: myPersonalId,
       receiverId: postInfo.publisherId,
@@ -555,9 +557,9 @@ class _ImageOfPostState extends State<ImageOfPost>
     return Stack(
       alignment: Alignment.center,
       children: [
+
         PlayThisVideo(
           videoUrl: postInfo.postUrl,
-          coverOfVideoUrl: postInfo.coverOfVideoUrl,
           blurHash: postInfo.blurHash,
           play: playTheVideo,
           withoutSound: !isSoundOn,

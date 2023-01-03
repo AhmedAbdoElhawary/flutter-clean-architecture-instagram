@@ -326,7 +326,7 @@ Total : 412 files,  28383 codes, 666 comments, 3211 blanks, all 32260 lines
 | [lib/presentation/pages/time_line/all_user_time_line/search_about_user.dart](/lib/presentation/pages/time_line/all_user_time_line/search_about_user.dart) | Dart | 128 | 1 | 11 | 140 |
 | [lib/presentation/pages/time_line/my_own_time_line/home_page.dart](/lib/presentation/pages/time_line/my_own_time_line/home_page.dart) | Dart | 796 | 1 | 46 | 843 |
 | [lib/presentation/pages/time_line/my_own_time_line/update_post_info.dart](/lib/presentation/pages/time_line/my_own_time_line/update_post_info.dart) | Dart | 199 | 0 | 13 | 212 |
-| [lib/presentation/pages/video/play_this_video.dart](/lib/presentation/pages/video/play_this_video.dart) | Dart | 113 | 0 | 10 | 123 |
+| [lib/presentation/pages/video/play_this_video.dart](/lib/presentation/widgets/global/others/play_this_video.dart) | Dart | 113 | 0 | 10 | 123 |
 | [lib/presentation/pages/video/videos_page.dart](/lib/presentation/pages/video/videos_page.dart) | Dart | 443 | 0 | 30 | 473 |
 | [lib/presentation/screens/mobile_screen_layout.dart](/lib/presentation/screens/mobile_screen_layout.dart) | Dart | 125 | 0 | 15 | 140 |
 | [lib/presentation/screens/responsive_layout.dart](/lib/presentation/screens/responsive_layout.dart) | Dart | 15 | 0 | 3 | 18 |

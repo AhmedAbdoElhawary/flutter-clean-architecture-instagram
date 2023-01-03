@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:instagram/presentation/pages/video/play_this_video.dart';
+import 'package:instagram/presentation/widgets/global/others/play_this_video.dart';
 import 'story_controller.dart';
 
 /// Widget to display animated gifs or still images. Shows a loader while image

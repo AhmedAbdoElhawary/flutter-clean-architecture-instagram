@@ -134,7 +134,7 @@ class _ShowNotifications extends StatefulWidget {
 
   const _ShowNotifications({
     Key? key,
-    required this.notifications,
+    required this.notifications
   }) : super(key: key);
 
   @override

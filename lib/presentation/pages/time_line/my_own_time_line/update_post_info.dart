@@ -13,7 +13,7 @@ import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/profile/widgets/which_profile_page.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/image_slider.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/points_scroll_bar.dart';
-import 'package:instagram/presentation/pages/video/play_this_video.dart';
+import 'package:instagram/presentation/widgets/global/others/play_this_video.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_name.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
@@ -182,9 +182,8 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                     )
                   : PlayThisVideo(
                       videoUrl: postInfo.postUrl,
-                      coverOfVideoUrl: postInfo.coverOfVideoUrl,
                       blurHash: postInfo.blurHash,
-                      play: false,
+                      play: true,
                     )),
         ),
       ),

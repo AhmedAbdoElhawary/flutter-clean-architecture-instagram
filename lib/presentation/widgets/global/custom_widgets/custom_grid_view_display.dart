@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
-import 'package:instagram/presentation/pages/video/play_this_video.dart';
+import 'package:instagram/presentation/widgets/global/others/play_this_video.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/others/image_of_post.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/mobile/popup_post.dart';
@@ -71,15 +71,24 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
       );
 
   Widget buildCardVideo({bool? playVideo}) {
-    return PlayThisVideo(
-      videoUrl: widget.postClickedInfo.postUrl,
-      coverOfVideoUrl: !widget.isThatProfile && playVideo == null
-          ? ""
-          : widget.postClickedInfo.coverOfVideoUrl,
-      blurHash: widget.postClickedInfo.blurHash,
-      play: playVideo ?? widget.playThisVideo,
-      withoutSound: true,
-    );
+    if(!widget.isThatProfile && playVideo == null){
+      return PlayThisVideo(
+        videoUrl: widget.postClickedInfo.postUrl,
+        blurHash: widget.postClickedInfo.blurHash,
+        play: playVideo ?? widget.playThisVideo,
+        withoutSound: true,
+      );
+    }else{
+      return
+       NetworkDisplay(
+        cachingWidth: 238,
+        cachingHeight: 430,
+        blurHash: widget.postClickedInfo.blurHash,
+        aspectRatio: 0.65,
+        url: widget.postClickedInfo.coverOfVideoUrl,
+      );
+    }
+
   }
 
   Stack buildCardImage() {
