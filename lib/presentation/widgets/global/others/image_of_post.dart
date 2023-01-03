@@ -310,9 +310,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                     Flexible(
                       child: GestureDetector(
                         onTap: () {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
                             setState(() => playTheVideo = !playTheVideo);
-                          });
                         },
                         child: Container(
                           height: double.infinity,
