@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           themeMode: ThemeOfApp().theme,
           home: AnimatedSplashScreen.withScreenFunction(
             screenFunction: () async {
-              String? myId = await initialFunction();
+              String? myId = await initializeDefaultValues();
 
               return myId == null
                   ? const LoginPage()
