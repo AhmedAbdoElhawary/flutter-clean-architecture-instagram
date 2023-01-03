@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
-import 'package:instagram/presentation/pages/video/play_this_video.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/mobile/popup_post.dart';
 
 class CustomVideosGridView extends StatefulWidget {
@@ -44,17 +44,21 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
           ));
   }
 
-  Widget createGridTileWidget(Post postInfo) => Builder(
+  Widget createGridTileWidget(Post postInfo) {
+    return Builder(
         builder: (context) => PopupPostCard(
           postClickedInfo: postInfo,
           postsInfo: widget.postsInfo,
           isThatProfile: true,
-          postClickedWidget: PlayThisVideo(
-            videoUrl: postInfo.postUrl,
-            coverOfVideoUrl: postInfo.coverOfVideoUrl,
+          postClickedWidget:NetworkDisplay(
+            cachingWidth: 238,
+            cachingHeight: 430,
             blurHash: postInfo.blurHash,
-            play: false,
-          ),
+
+            aspectRatio:  0.65,
+            url: postInfo.coverOfVideoUrl,
+          )
         ),
       );
+  }
 }
