@@ -17,7 +17,7 @@ import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
 import 'package:instagram/presentation/pages/profile/widgets/which_profile_page.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/animated_dialog.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/send_to_users.dart';
-import 'package:instagram/presentation/pages/video/play_this_video.dart';
+import 'package:instagram/presentation/widgets/global/others/play_this_video.dart';
 import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
@@ -451,7 +451,6 @@ class _PopupPostCardState extends State<PopupPostCard> {
                           height: screenSize.height - 200,
                           child: PlayThisVideo(
                             videoUrl: postInfo.postUrl,
-                            coverOfVideoUrl: postInfo.coverOfVideoUrl,
                             blurHash: postInfo.blurHash,
                             play: true,
                           ),
