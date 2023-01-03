@@ -75,9 +75,11 @@ class AllUsersTimeLinePage extends StatelessWidget {
           BlocBuilder<PostCubit, PostState>(
         bloc: BlocProvider.of<PostCubit>(context)..getAllPostInfo(),
         buildWhen: (previous, current) {
-          if (previous != current && current is CubitAllPostsLoaded) {
+          if (previous != current &&
+              (current is CubitAllPostsLoaded || current is CubitPostFailed)) {
             return true;
           }
+
           if (value && current is CubitAllPostsLoaded) {
             rebuildUsersInfo.value = false;
             return true;
@@ -111,9 +113,9 @@ class AllUsersTimeLinePage extends StatelessWidget {
             ToastShow.toastStateError(state);
             return Center(
                 child: Text(
-              StringsManager.noPosts.tr,
+              StringsManager.somethingWrong.tr,
               style: getNormalStyle(
-                  color: Theme.of(context).focusColor, fontSize: 20),
+                  color: Theme.of(context).focusColor, fontSize: 18),
             ));
           } else {
             return loadingWidget(context);
