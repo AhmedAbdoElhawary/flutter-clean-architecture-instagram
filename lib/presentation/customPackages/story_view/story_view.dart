@@ -6,7 +6,7 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/customPackages/story_view/story_image_for_web.dart';
-import 'package:instagram/presentation/pages/video/play_this_video.dart';
+import 'package:instagram/presentation/widgets/global/others/play_this_video.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'story_video.dart';
 import 'story_controller.dart';
