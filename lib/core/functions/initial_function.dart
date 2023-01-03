@@ -9,7 +9,7 @@ import 'package:instagram/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 
-Future<String?> initialFunction() async {
+Future<String?> initializeDefaultValues() async {
   await GetStorage.init();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
