@@ -36,7 +36,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
   final multiSelectionMode = ValueNotifier(false);
   final expandImage = ValueNotifier(false);
   final imagesControllerNotifier = ValueNotifier(false);
-
+  bool isClickedShare = false;
   ScrollController imagesController = ScrollController();
   final _cropKey = GlobalKey<WebCustomCropState>();
   int indexOfSelectedImage = 0;
@@ -180,7 +180,11 @@ class _PopupNewPostState extends State<PopupNewPost> {
 
   Future<void> onTapButton(UserPersonalInfo personalInfo,
       UserInfoCubit userCubit, BuildContext builder2context) async {
-    if (createPostButton == CreatePostButton.share) {
+    if (createPostButton == CreatePostButton.share && !isClickedShare) {
+      setState(() {
+        isClickedShare = true;
+      });
+
       if (!multiSelectionMode.value) {
         if (selectedImage.value != null) {
           selectedImages.value = [selectedImage.value!];
@@ -197,7 +201,10 @@ class _PopupNewPostState extends State<PopupNewPost> {
         });
       }
       await createPost(personalInfo, userCubit, builder2context);
-    } else {
+      setState(() {
+        isClickedShare = false;
+      });
+    } else if (!isClickedShare) {
       setState(() {
         createPostButton = CreatePostButton.share;
       });

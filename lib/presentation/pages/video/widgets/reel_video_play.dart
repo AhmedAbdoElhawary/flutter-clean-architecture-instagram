@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:video_player/video_player.dart';
 
 class ReelVideoPlay extends StatefulWidget {
@@ -75,9 +76,7 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
                   builder: (context, child) => VideoPlayer(_controller),
                 );
               } else {
-                return const Center(
-                  child: CircularProgressIndicator(color: ColorManager.white),
-                );
+                return ThineCircularProgress(color: ColorManager.white);
               }
             },
           ),

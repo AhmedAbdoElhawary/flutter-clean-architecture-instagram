@@ -17,6 +17,7 @@ import 'package:instagram/presentation/pages/profile/widgets/custom_videos_grid_
 import 'package:instagram/presentation/pages/profile/widgets/profile_grid_view.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/read_more_text.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/web/follow_card.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -113,149 +114,17 @@ class _ProfilePageState extends State<ProfilePage> {
             !widget.isThatMyPersonalId) {
           return columnOfWidgets(state.postsInfo);
         } else {
-          return loadingWidget();
+          return const _LoadingGridView();
         }
       },
-    );
-  }
-
-  Widget loadingWidget() {
-    bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          tabBarIcons(),
-          Shimmer.fromColors(
-            baseColor: Theme.of(context).textTheme.headlineSmall!.color!,
-            highlightColor: Theme.of(context).textTheme.titleLarge!.color!,
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              primary: false,
-              padding: const EdgeInsetsDirectional.only(bottom: 1.5, top: 1.5),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
-                mainAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
-              ),
-              itemBuilder: (_, __) {
-                return Container(
-                    color: ColorManager.lightDarkGray, width: double.infinity);
-              },
-              itemCount: 15,
-            ),
-          ),
-        ],
-      ),
     );
   }
 
   Column columnOfWidgets(List<Post> postsInfo) {
     return Column(
       children: [
-        tabBarIcons(),
-        tapBarView(postsInfo),
-      ],
-    );
-  }
-
-  Expanded tapBarView(List<Post> postsInfo) {
-    List<Post> videosPostsInfo = postsInfo
-        .where((element) => !(element.isThatMix || element.isThatImage))
-        .toList();
-
-    List<Post> imagesPostsInfo = postsInfo
-        .where((element) => (element.isThatMix || element.isThatImage))
-        .toList();
-    return Expanded(
-      child: TabBarView(
-        children: [
-          ProfileGridView(postsInfo: imagesPostsInfo, userId: widget.userId),
-          CustomVideosGridView(
-              postsInfo: videosPostsInfo, userId: widget.userId),
-          ProfileGridView(postsInfo: imagesPostsInfo, userId: widget.userId),
-        ],
-      ),
-    );
-  }
-
-  TabBar tabBarIcons() {
-    bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
-    return TabBar(
-      unselectedLabelColor: ColorManager.grey,
-      labelColor: isWidthAboveMinimum
-          ? ColorManager.black
-          : (isThatMobile ? Theme.of(context).focusColor : ColorManager.blue),
-      labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w100),
-      indicatorSize: isThatMobile ? null : TabBarIndicatorSize.label,
-      isScrollable: isWidthAboveMinimum ? true : false,
-      labelPadding: isWidthAboveMinimum
-          ? const EdgeInsetsDirectional.only(
-              start: 50, end: 50, top: 5, bottom: 3)
-          : null,
-      indicatorWeight: isWidthAboveMinimum ? 2 : (isThatMobile ? 2 : 0),
-      indicator: isThatMobile
-          ? null
-          : BoxDecoration(
-              border: Border(
-                top: BorderSide(
-                    color: isWidthAboveMinimum
-                        ? Theme.of(context).focusColor
-                        : ColorManager.transparent,
-                    width: 1),
-              ),
-            ),
-      tabs: [
-        Tab(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.grid_on_rounded,
-                size: isWidthAboveMinimum ? 14 : null,
-              ),
-              if (isWidthAboveMinimum) ...[
-                const SizedBox(width: 8),
-                Text(
-                  StringsManager.postsCap.tr,
-                ),
-              ],
-            ],
-          ),
-        ),
-        Tab(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SvgPicture.asset(
-                IconsAssets.videoIcon,
-                color: Theme.of(context).errorColor,
-                height: isWidthAboveMinimum ? 14 : 22.5,
-              ),
-              if (isWidthAboveMinimum) ...[
-                const SizedBox(width: 8),
-                Text(StringsManager.reels.tr),
-              ],
-            ],
-          ),
-        ),
-        Tab(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.play_arrow_rounded,
-                size: isWidthAboveMinimum ? 22 : 38,
-              ),
-              if (isWidthAboveMinimum) ...[
-                const SizedBox(width: 8),
-                Text(StringsManager.videos.tr),
-              ],
-            ],
-          ),
-        ),
+        const _TabBarIcons(),
+        _TabBarsViews(postsInfo: postsInfo,userId: widget.userId),
       ],
     );
   }
@@ -296,20 +165,18 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 30.0),
-                    child: SingleChildScrollView(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          personalNumbersInfo(userInfo.posts, userInfo,
-                              isThatFollowers: null),
-                          const SizedBox(width: 20),
-                          personalNumbersInfo(userInfo.followerPeople, userInfo,
-                              isThatFollowers: true),
-                          const SizedBox(width: 20),
-                          personalNumbersInfo(userInfo.followedPeople, userInfo,
-                              isThatFollowers: false),
-                        ],
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        personalNumbersInfo(userInfo.posts, userInfo,
+                            isThatFollowers: null),
+                        const SizedBox(width: 20),
+                        personalNumbersInfo(userInfo.followerPeople, userInfo,
+                            isThatFollowers: true),
+                        const SizedBox(width: 20),
+                        personalNumbersInfo(userInfo.followedPeople, userInfo,
+                            isThatFollowers: false),
+                      ],
                     ),
                   ),
                   Text(userInfo.name,
@@ -345,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   switchInCurve: Curves.easeIn,
                   child: loadingValue
                       ? customDragLoading(bodyHeight)
-                      : Container()),
+                      : const SizedBox()),
             ),
             personalPhotoAndNumberInfo(userInfo, bodyHeight),
             Padding(
@@ -375,12 +242,9 @@ class _ProfilePageState extends State<ProfilePage> {
       height: bodyHeight * .09,
       width: double.infinity,
       color: Theme.of(context).backgroundColor,
-      child: Center(
-        child: CircularProgressIndicator(
-          strokeWidth: 1.5,
-          color: ColorManager.black38,
-          backgroundColor: Theme.of(context).dividerColor,
-        ),
+      child: ThineCircularProgress(
+        color: ColorManager.black38,
+        backgroundColor: Theme.of(context).dividerColor,
       ),
     );
   }
@@ -481,5 +345,162 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       );
     });
+  }
+}
+
+class _LoadingGridView extends StatelessWidget {
+  const _LoadingGridView({
+    Key? key
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const _TabBarIcons(),
+          Shimmer.fromColors(
+            baseColor: Theme.of(context).textTheme.headlineSmall!.color!,
+            highlightColor: Theme.of(context).textTheme.titleLarge!.color!,
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              primary: false,
+              padding: const EdgeInsetsDirectional.only(bottom: 1.5, top: 1.5),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
+                mainAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
+              ),
+              itemBuilder: (_, __) {
+                return Container(
+                    color: ColorManager.lightDarkGray, width: double.infinity);
+              },
+              itemCount: 15,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TabBarsViews extends StatelessWidget {
+  const _TabBarsViews({Key? key,required this.postsInfo,required this.userId,}) : super(key: key);
+  final List<Post> postsInfo;
+  final String userId;
+
+  @override
+  Widget build(BuildContext context) {
+    List<Post> videosPostsInfo = postsInfo
+        .where((element) => !(element.isThatMix || element.isThatImage))
+        .toList();
+
+    List<Post> imagesPostsInfo = postsInfo
+        .where((element) => (element.isThatMix || element.isThatImage))
+        .toList();
+    return Expanded(
+      child: TabBarView(
+        children: [
+          ProfileGridView(postsInfo: imagesPostsInfo, userId: userId),
+          CustomVideosGridView(
+              postsInfo: videosPostsInfo, userId: userId),
+          ProfileGridView(postsInfo: imagesPostsInfo, userId: userId),
+        ],
+      ),
+    );
+  }
+}
+
+class _TabBarIcons extends StatelessWidget {
+  const _TabBarIcons({
+    Key? key
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
+
+    return TabBar(
+      unselectedLabelColor: ColorManager.grey,
+      labelColor: isWidthAboveMinimum
+          ? ColorManager.black
+          : (isThatMobile ? Theme.of(context).focusColor : ColorManager.blue),
+      labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w100),
+      indicatorSize: isThatMobile ? null : TabBarIndicatorSize.label,
+      isScrollable: isWidthAboveMinimum ? true : false,
+      labelPadding: isWidthAboveMinimum
+          ? const EdgeInsetsDirectional.only(
+              start: 50, end: 50, top: 5, bottom: 3)
+          : null,
+      indicatorWeight: isWidthAboveMinimum ? 2 : (isThatMobile ? 2 : 0),
+      indicator: isThatMobile
+          ? null
+          : BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                    color: isWidthAboveMinimum
+                        ? Theme.of(context).focusColor
+                        : ColorManager.transparent,
+                    width: 1),
+              ),
+            ),
+      tabs: [
+        Tab(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.grid_on_rounded,
+                size: isWidthAboveMinimum ? 14 : null,
+              ),
+              if (isWidthAboveMinimum) ...[
+                const SizedBox(width: 8),
+                Text(
+                  StringsManager.postsCap.tr,
+                ),
+              ],
+            ],
+          ),
+        ),
+        Tab(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                IconsAssets.videoIcon,
+                color: Theme.of(context).errorColor,
+                height: isWidthAboveMinimum ? 14 : 22.5,
+              ),
+              if (isWidthAboveMinimum) ...[
+                const SizedBox(width: 8),
+                Text(StringsManager.reels.tr),
+              ],
+            ],
+          ),
+        ),
+        Tab(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.play_arrow_rounded,
+                size: isWidthAboveMinimum ? 22 : 38,
+              ),
+              if (isWidthAboveMinimum) ...[
+                const SizedBox(width: 8),
+                Text(StringsManager.videos.tr),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

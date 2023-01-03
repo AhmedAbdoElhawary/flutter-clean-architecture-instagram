@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
 class CustomElevatedButton extends StatefulWidget {
   final String nameOfButton;
@@ -60,7 +61,7 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
       child: SizedBox(
           height: 20,
           width: 20,
-          child: CircularProgressIndicator(
+          child: ThineCircularProgress(
               color: ColorManager.white, strokeWidth: 2)),
     );
   }

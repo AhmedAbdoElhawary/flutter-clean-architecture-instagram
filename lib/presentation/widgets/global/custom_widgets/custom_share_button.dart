@@ -7,6 +7,7 @@ import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/cubit/message_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
 class CustomShareButton extends StatefulWidget {
   final Post postInfo;
@@ -137,7 +138,7 @@ class _CustomShareButtonState extends State<CustomShareButton> {
       child: SizedBox(
           height: 20,
           width: 20,
-          child: CircularProgressIndicator(
+          child: ThineCircularProgress(
               color: ColorManager.white, strokeWidth: 2)),
     );
   }

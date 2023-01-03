@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'story_controller.dart';
 import 'utils.dart';
 import 'package:video_player/video_player.dart';
@@ -119,7 +120,7 @@ class StoryVideoState extends State<StoryVideo> {
         child: SizedBox(
           width: 70,
           height: 70,
-          child: CircularProgressIndicator(
+          child: ThineCircularProgress(
             valueColor:
                 AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
             strokeWidth: 3,
