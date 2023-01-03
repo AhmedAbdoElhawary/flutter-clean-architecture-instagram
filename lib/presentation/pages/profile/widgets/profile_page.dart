@@ -17,6 +17,7 @@ import 'package:instagram/presentation/pages/profile/widgets/custom_videos_grid_
 import 'package:instagram/presentation/pages/profile/widgets/profile_grid_view.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/read_more_text.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/web/follow_card.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -375,12 +376,9 @@ class _ProfilePageState extends State<ProfilePage> {
       height: bodyHeight * .09,
       width: double.infinity,
       color: Theme.of(context).backgroundColor,
-      child: Center(
-        child: CircularProgressIndicator(
-          strokeWidth: 1.5,
-          color: ColorManager.black38,
-          backgroundColor: Theme.of(context).dividerColor,
-        ),
+      child: ThineCircularProgress(
+        color: ColorManager.black38,
+        backgroundColor: Theme.of(context).dividerColor,
       ),
     );
   }
