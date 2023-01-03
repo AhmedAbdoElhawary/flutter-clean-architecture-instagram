@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SmarterRefresh extends StatefulWidget {
@@ -135,7 +136,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
             child = Container();
             break;
           default:
-            child = circularProgressIndicator(context);
+            child = thineCircularProgress(context);
             break;
         }
         return SizedBox(
@@ -169,13 +170,13 @@ class _SmarterRefreshState extends State<SmarterRefresh>
       alignment: Alignment.center,
       child: FadeTransition(
         opacity: _scaleController,
-        child: circularProgressIndicator(context),
+        child: thineCircularProgress(context),
       ),
     );
   }
 
-  CircularProgressIndicator circularProgressIndicator(BuildContext context) {
-    return CircularProgressIndicator(
+  ThineCircularProgress thineCircularProgress(BuildContext context) {
+    return ThineCircularProgress(
       strokeWidth: 1.5,
       color: Theme.of(context).iconTheme.color,
       backgroundColor: Theme.of(context).dividerColor,
