@@ -257,13 +257,14 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
 
   CustomNotification createNotification(
       String textWithOneSpaces, UserPersonalInfo myPersonalInfo) {
+    Post postInfo=widget.postInfo.value;
     return CustomNotification(
       text: "commented: $textWithOneSpaces",
-      postId: widget.postInfo.value.postUid,
-      postImageUrl: widget.postInfo.value.postUrl,
+      postId: postInfo.postUid,
+      postImageUrl: postInfo.isThatImage?postInfo.postUrl:postInfo.coverOfVideoUrl,
       time: DateReformat.dateOfNow(),
       senderId: myPersonalId,
-      receiverId: widget.postInfo.value.publisherId,
+      receiverId: postInfo.publisherId,
       personalUserName: myPersonalInfo.userName,
       personalProfileImageUrl: myPersonalInfo.profileImageUrl,
       isThatLike: false,
