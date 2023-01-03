@@ -118,7 +118,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
                   color: Theme.of(context).focusColor, fontSize: 18),
             ));
           } else {
-            return loadingWidget(context);
+          return loadingWidget(context);
           }
         },
       ),
@@ -142,9 +142,11 @@ class AllUsersTimeLinePage extends StatelessWidget {
                   color: ColorManager.lightDarkGray, width: double.infinity);
             },
             staggeredTileBuilder: (index) {
-              double num =
-                  (index == 2 || (index % 11 == 0 && index != 0)) ? 2 : 1;
-              return StaggeredTile.count(1, num);
+              double num = (index == (isThatMobile ? 2 : 1) ||
+                      (index % 11 == 0 && index != 0))
+                  ? 2
+                  : 1;
+              return StaggeredTile.count(num.toInt(), num);
             },
           ),
         ),
