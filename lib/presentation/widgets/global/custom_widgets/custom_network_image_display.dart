@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram/presentation/pages/video/play_this_video.dart';
+import 'package:instagram/presentation/widgets/global/others/play_this_video.dart';
 // ignore: depend_on_referenced_packages
 import 'package:octo_image/octo_image.dart';
 
@@ -10,6 +10,8 @@ class NetworkDisplay extends StatefulWidget {
   final double aspectRatio;
   final bool isThatImage;
   final double? height;
+  final double? width;
+
   const NetworkDisplay({
     Key? key,
     required this.url,
@@ -17,6 +19,8 @@ class NetworkDisplay extends StatefulWidget {
     this.cachingHeight = 720,
     this.cachingWidth = 720,
     this.height,
+    this.width,
+
     this.blurHash = "",
     this.aspectRatio = 0,
   }) : super(key: key);
@@ -68,9 +72,9 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
     return OctoImage(
       image: CachedNetworkImageProvider(widget.url,
           maxWidth: cachingWidth, maxHeight: cachingHeight),
-      errorBuilder: (context, url, error) => buildError(),
+      errorBuilder: (context, url, error) => buildError(error.toString()??""),
       fit: BoxFit.cover,
-      width: double.infinity,
+      width:widget.width?? double.infinity,
       height: widget.height ?? height,
       placeholderBuilder: widget.blurHash.isNotEmpty
           ? OctoPlaceholder.blurHash(widget.blurHash)
@@ -78,7 +82,7 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
     );
   }
 
-  SizedBox buildError() {
+  SizedBox buildError(String error) {
     return SizedBox(
       width: double.infinity,
       height: widget.aspectRatio,
