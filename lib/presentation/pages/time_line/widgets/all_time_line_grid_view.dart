@@ -56,34 +56,66 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
 
   @override
   Widget build(BuildContext context) {
-    return InViewNotifierCustomScrollView(
-      slivers: [
-        SliverStaggeredGrid.countBuilder(
-          crossAxisSpacing: isThatMobile ? 1.5 : 30,
-          mainAxisSpacing: isThatMobile ? 1.5 : 30,
-          crossAxisCount: 3,
-          itemCount: lengthOfGrid,
-          itemBuilder: (context, index) {
-            _structurePostDisplay(index);
-            return inViewWidget(index, postInfo);
-          },
-          staggeredTileBuilder: (index) {
-            double num = (index == (isThatMobile ? 2 : 1) ||
-                    (index % 11 == 0 && index != 0))
+    if (isThatMobile) {
+      return InViewNotifierCustomScrollView(
+        slivers: [
+          SliverStaggeredGrid.countBuilder(
+            crossAxisSpacing: isThatMobile ? 1.5 : 30,
+            mainAxisSpacing: isThatMobile ? 1.5 : 30,
+            crossAxisCount: 3,
+            itemCount: lengthOfGrid,
+            itemBuilder: (context, index) {
+              _structurePostDisplay(index);
+              return inViewWidget(index, postInfo);
+            },
+            staggeredTileBuilder: (index) {
+              double num = (index == (isThatMobile ? 2 : 1) ||
+                      (index % 11 == 0 && index != 0))
+                  ? 2
+                  : 1;
+              return StaggeredTile.count(num.toInt(), num);
+            },
+          )
+        ],
+        onRefreshData: widget.onRefreshData,
+        postsIds: widget.allPostsInfo,
+        isThatEndOfList: widget.isThatEndOfList,
+        initialInViewIds: const ['0'],
+        isInViewPortCondition:
+            (double deltaTop, double deltaBottom, double viewPortDimension) {
+          return deltaTop < (0.6 * viewPortDimension) &&
+              deltaBottom > (0.1 * viewPortDimension);
+        },
+      );
+    } else {
+      return SingleChildScrollView(child: Center(child: SizedBox(width: 910, child: _gridView())));
+    }
+  }
+
+  StaggeredGridView _gridView() {
+    return StaggeredGridView.countBuilder(
+      crossAxisSpacing: isThatMobile ? 1.5 : 30,
+      mainAxisSpacing: isThatMobile ? 1.5 : 30,
+      crossAxisCount: 3,
+      shrinkWrap: true,
+      primary: false,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: lengthOfGrid,
+      itemBuilder: (context, index) {
+        _structurePostDisplay(index);
+        return CustomGridViewDisplay(
+          postClickedInfo: postInfo,
+          postsInfo: widget.allPostsInfo,
+          index: index,
+          isThatProfile: false,
+        );
+      },
+      staggeredTileBuilder: (index) {
+        double num =
+            (index == (isThatMobile ? 2 : 1) || (index % 11 == 0 && index != 0))
                 ? 2
                 : 1;
-            return StaggeredTile.count(num.toInt(), num);
-          },
-        ),
-      ],
-      onRefreshData: widget.onRefreshData,
-      postsIds: widget.allPostsInfo,
-      isThatEndOfList: widget.isThatEndOfList,
-      initialInViewIds: const ['0'],
-      isInViewPortCondition:
-          (double deltaTop, double deltaBottom, double viewPortDimension) {
-        return deltaTop < (0.6 * viewPortDimension) &&
-            deltaBottom > (0.1 * viewPortDimension);
+        return StaggeredTile.count(num.toInt(), num);
       },
     );
   }
