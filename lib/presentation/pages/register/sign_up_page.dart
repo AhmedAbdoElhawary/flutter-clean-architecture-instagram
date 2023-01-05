@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
@@ -69,14 +68,13 @@ class _SignUpPageState extends State<SignUpPage> {
               blueColor: validate ? true : false,
               onPressed: () async {
                 if (validate) {
-                  pushToPage(context,
-                      page: UserNamePage(
+                  Get.to(
+                      UserNamePage(
                         emailController: emailController,
                         passwordController: passwordController,
                         fullNameController: fullNameController,
                       ),
-                      withoutRoot: false,
-                      withoutPageTransition: true);
+                      duration: const Duration(seconds: 0));
                 }
               },
             );
@@ -179,28 +177,29 @@ class _UserNamePageState extends State<UserNamePage> {
   }
 
   Widget userNameTextField(BuildContext context) {
-    return BlocListener<SearchAboutUserBloc, SearchAboutUserState>(
+    return BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
       bloc: BlocProvider.of<SearchAboutUserBloc>(context)
         ..add(FindSpecificUser(userNameController.text,
             searchForSingleLetter: true)),
-      listener: (context, state) {
+      buildWhen: (previous, current) =>
+          previous != current && current is SearchAboutUserBlocLoaded,
+      builder: (context, state) {
         List<UserPersonalInfo> usersWithSameUserName = [];
+
         if (state is SearchAboutUserBlocLoaded) {
           usersWithSameUserName = state.users;
         }
-        setState(() {
-          validateEdits = usersWithSameUserName.isEmpty;
-          if (userNameController.text.isEmpty) {
-            validateEdits = false;
-            isFieldEmpty = true;
-          } else {
-            isFieldEmpty = false;
-          }
-        });
+        WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+              validateEdits = usersWithSameUserName.isEmpty;
+              if (userNameController.text.isEmpty) {
+                validateEdits = false;
+                isFieldEmpty = true;
+              } else {
+                isFieldEmpty = false;
+              }
+            }));
+        return customTextField(context);
       },
-      child: customTextField(context),
-      listenWhen: (previous, current) =>
-          previous != current && (current is SearchAboutUserBlocLoaded),
     );
   }
 
@@ -210,31 +209,36 @@ class _UserNamePageState extends State<UserNamePage> {
       child: SizedBox(
         height: isThatMobile ? null : 37,
         width: double.infinity,
-        child:TextFormField(
-            controller: userNameController,
-            cursorColor: ColorManager.teal,
-            style: getNormalStyle(
-                color: Theme.of(context).focusColor, fontSize: 15),
-            decoration: InputDecoration(
-              hintText: StringsManager.username.tr,
-              hintStyle: isThatMobile
-                  ? getNormalStyle(color: Theme.of(context).indicatorColor)
-                  : getNormalStyle(color: ColorManager.black54, fontSize: 12),
-              fillColor: const Color.fromARGB(48, 232, 232, 232),
-              filled: true,
-              focusedBorder: outlineInputBorder(),
-              suffixIcon: isFieldEmpty
-                  ? null
-                  : (validateEdits ? rightIcon() : wrongIcon()),
-              enabledBorder: outlineInputBorder(),
-              contentPadding: EdgeInsets.symmetric(
-                  horizontal: 10, vertical: isThatMobile ? 15 : 5),
-              errorText: isFieldEmpty || validateEdits
-                  ? null
-                  : StringsManager.thisUserNameExist.tr,
-              errorStyle: getNormalStyle(color: ColorManager.red),
-            ),
-          ) ,
+        child: TextField(
+          controller: userNameController,
+          cursorColor: ColorManager.teal,
+          style:
+              getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
+          decoration: InputDecoration(
+            hintText: StringsManager.username.tr,
+            hintStyle: isThatMobile
+                ? getNormalStyle(color: Theme.of(context).indicatorColor)
+                : getNormalStyle(color: ColorManager.black54, fontSize: 12),
+            fillColor: const Color.fromARGB(48, 232, 232, 232),
+            filled: true,
+            focusedBorder: outlineInputBorder(),
+            suffixIcon: isFieldEmpty
+                ? null
+                : (validateEdits ? rightIcon() : wrongIcon()),
+            enabledBorder: outlineInputBorder(),
+            contentPadding: EdgeInsets.symmetric(
+                horizontal: 10, vertical: isThatMobile ? 15 : 5),
+            errorText: (isFieldEmpty || validateEdits)
+                ? null
+                : (isThatMobile ? StringsManager.thisUserNameExist.tr : null),
+            errorStyle: getNormalStyle(color: ColorManager.red),
+          ),
+          onChanged: (value) {
+            SearchAboutUserBloc.get(context).add(FindSpecificUser(
+                userNameController.text,
+                searchForSingleLetter: true));
+          },
+        ),
       ),
     );
   }
@@ -255,7 +259,7 @@ class _UserNamePageState extends State<UserNamePage> {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(isThatMobile ? 5.0 : 1.0),
       borderSide: BorderSide(
-          color: ColorManager.lightGrey, width: isThatMobile ? 1.0 : 0.3),
+          color: ColorManager.lightGrey, width: isThatMobile ? 1.0 : 0.8),
     );
   }
 
