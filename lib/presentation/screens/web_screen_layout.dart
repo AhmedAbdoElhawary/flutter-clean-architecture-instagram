@@ -40,8 +40,8 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
 
   @override
   void initState() {
-    super.initState();
     pageController = PageController(initialPage: pageOfController);
+    super.initState();
   }
 
   @override
@@ -213,11 +213,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
   }
 
   onSelectedProfileMenu(int item) {
-    if (item == 0) {
-      navigationTapped(5);
-      return;
-    } else if (item == 1) {
-    } else {}
+    if (item == 0) navigationTapped(5);
   }
 
   List<PopupMenuEntry<int>> profileItems() => [
@@ -265,12 +261,12 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
 
   List<Widget> homeScreenItems() {
     return [
-        const _HomePage(),
-        MessagesForWeb(selectedTextingUser: widget.userInfoForMessagePage),
-        const ShopPage(),
-        AllUsersTimeLinePage(),
-        const _PersonalProfilePage(),
-      ];
+      const _HomePage(),
+      MessagesForWeb(selectedTextingUser: widget.userInfoForMessagePage),
+      const ShopPage(),
+      AllUsersTimeLinePage(),
+      const _PersonalProfilePage(),
+    ];
   }
 
   SvgPicture icons(String icon, bool value, {bool biggerIcon = false}) {
