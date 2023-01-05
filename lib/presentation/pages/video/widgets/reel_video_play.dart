@@ -76,7 +76,7 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
                   builder: (context, child) => VideoPlayer(_controller),
                 );
               } else {
-                return ThineCircularProgress(color: ColorManager.white);
+                return const ThineCircularProgress(color: ColorManager.white);
               }
             },
           ),
