@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
@@ -123,11 +122,12 @@ class _SignUpPageState extends State<RegisterWidgets> {
             validate: widget.validatePassword,
           ),
           if (!widget.isThatLogIn) ...[
+            if (!isThatMobile) const SizedBox(height: 10),
             Flexible(
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: isThatMobile ? 4 : 0,
-                    vertical: isThatMobile ? 15 : 10),
+                    vertical: isThatMobile ? 15 : 0),
                 child: Row(
                   children: [
                     const SizedBox(width: 13),
@@ -161,6 +161,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
                 ),
               ),
             ),
+            if (!isThatMobile) const SizedBox(height: 10),
           ],
           widget.customTextButton,
           const SizedBox(height: 15),
@@ -217,14 +218,11 @@ class _SignUpPageState extends State<RegisterWidgets> {
     return InkWell(
         onTap: () {
           if (widget.isThatLogIn) {
-            Navigator.push(
-              context,
-              CupertinoPageRoute(
-                builder: (context) => const SignUpPage(),
-              ),
-            );
+            Get.to(const SignUpPage(),
+                preventDuplicates: true,
+                duration: const Duration(milliseconds: 0));
           } else {
-            Navigator.pop(context);
+            Get.back();
           }
         },
         child: registerText());
