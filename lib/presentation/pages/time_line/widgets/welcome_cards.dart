@@ -132,13 +132,10 @@ class _CardsForWebState extends State<_CardsForWeb> {
 
   @override
   Widget build(BuildContext context) {
-    double widthOfScreen = MediaQuery.of(context).size.width;
-    double halfOfWidth = widthOfScreen / 2;
-    double heightOfStory =
-        (halfOfWidth < 515 ? widthOfScreen : halfOfWidth) + 100;
-    double widthOfStory =
-        (halfOfWidth < 515 ? halfOfWidth : halfOfWidth / 2) + 80;
-
+    Size size = MediaQuery.of(context).size;
+    double widthOfScreen = size.width;
+    double heightOfStory=widthOfScreen < 900? 980:1500;
+    double widthOfStory=widthOfScreen < 900? 340:520;
     return ScrollSnapList(
       itemBuilder: (_, index) {
         bool active = currentPage == index;
@@ -156,22 +153,29 @@ class _CardsForWebState extends State<_CardsForWeb> {
                       active: active, userInfo: widget.users[index]),
                 ),
                 if (currentPage == index) ...[
-                  _JumpArrow(scrollPageController: _scrollPageController),
-                  _JumpArrow(
+                  if (index != 0)
+                    _JumpArrow(
                       scrollPageController: _scrollPageController,
-                      isThatBack: false)
+                      indexOfCurrentCard: index,
+                      lengthOfCards: widget.users.length,
+                      itemSize: widthOfStory,
+                      onItemFocus: onItemFocus,
+                    ),
+                  if (index != widget.users.length - 1)
+                    _JumpArrow(
+                        scrollPageController: _scrollPageController,
+                        indexOfCurrentCard: index,
+                        lengthOfCards: widget.users.length,
+                        itemSize: widthOfStory,
+                        onItemFocus: onItemFocus,
+                        isThatBack: false)
                 ],
               ],
             ),
           ),
         );
       },
-      onItemFocus: (pos) {
-        setState(() => currentPage = pos);
-        if (kDebugMode) {
-          print('Done! $pos');
-        }
-      },
+      onItemFocus: onItemFocus,
       itemSize: widthOfStory,
       listController: _scrollPageController,
       initialIndex: initialPage,
@@ -185,6 +189,13 @@ class _CardsForWebState extends State<_CardsForWeb> {
       itemCount: widget.users.length,
     );
   }
+
+  void onItemFocus(pos) {
+    setState(() => currentPage = pos);
+    if (kDebugMode) {
+      print('Done! $pos');
+    }
+  }
 }
 
 class _JumpArrow extends StatelessWidget {
@@ -192,11 +203,18 @@ class _JumpArrow extends StatelessWidget {
     Key? key,
     required ScrollController scrollPageController,
     this.isThatBack = true,
+    required this.indexOfCurrentCard,
+    required this.lengthOfCards,
+    required this.itemSize,
+    required this.onItemFocus,
   })  : _scrollPageController = scrollPageController,
         super(key: key);
-
+  final int lengthOfCards;
+  final int indexOfCurrentCard;
   final ScrollController _scrollPageController;
   final bool isThatBack;
+  final double itemSize;
+  final void Function(int) onItemFocus;
 
   @override
   Widget build(BuildContext context) {
@@ -205,24 +223,39 @@ class _JumpArrow extends StatelessWidget {
       child: GestureDetector(
         onTap: () async {
           if (isThatBack) {
-            _scrollPageController.animateTo(
-              _scrollPageController.offset -
-                  MediaQuery.of(context).size.width / 4,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
+            focusToItem(indexOfCurrentCard - 1);
           } else {
-            _scrollPageController.animateTo(
-              _scrollPageController.offset +
-                  MediaQuery.of(context).size.width / 4,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
+            focusToItem(indexOfCurrentCard + 1);
           }
         },
         child: SizedBox(child: ArrowJump(isThatBack: isThatBack)),
       ),
     );
+  }
+
+  double _calcCardLocation(int cardIndex) {
+    if (cardIndex < 0) {
+      cardIndex = 0;
+    } else if (cardIndex > lengthOfCards - 1) {
+      cardIndex = lengthOfCards - 1;
+    }
+    onItemFocus(cardIndex);
+    return (cardIndex * itemSize);
+  }
+
+  void _animateScroll(double location) {
+    Future.delayed(Duration.zero, () {
+      _scrollPageController.animateTo(
+        location,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.ease,
+      );
+    });
+  }
+
+  void focusToItem(int index) {
+    double targetLoc = _calcCardLocation(index);
+    _animateScroll(targetLoc);
   }
 }
 
@@ -308,10 +341,7 @@ class _UserCardInfo extends StatelessWidget {
 }
 
 class _BuildUserBrief extends StatelessWidget {
-  const _BuildUserBrief({
-    Key? key,
-    required this.userInfo,
-  }) : super(key: key);
+  const _BuildUserBrief({Key? key, required this.userInfo}) : super(key: key);
   final UserPersonalInfo userInfo;
 
   @override
@@ -320,12 +350,14 @@ class _BuildUserBrief extends StatelessWidget {
         ? userInfo.lastThreePostUrls.sublist(0, 3)
         : userInfo.lastThreePostUrls;
     bool isIFollowHim = userInfo.followerPeople.contains(myPersonalId);
+    double width = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             CircleAvatarOfProfileImage(
                 userInfo: userInfo, bodyHeight: 900, showColorfulCircle: false),
@@ -360,8 +392,9 @@ class _BuildUserBrief extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsetsDirectional.only(end: 1),
                         child: SizedBox(
-                            height: isThatMobile ? 70 : 100,
-                            width: isThatMobile ? 70 : 100,
+                            height:
+                                isThatMobile ? 70 : (width > 900 ? 110 : 95),
+                            width: isThatMobile ? 70 : (width > 900 ? 110 : 95),
                             child: NetworkDisplay(
                               url: imageUrl,
                               cachingWidth: isThatMobile ? 140 : 200,
@@ -373,7 +406,7 @@ class _BuildUserBrief extends StatelessWidget {
                 ],
               ],
             ),
-            const SizedBox(height: 37),
+            const SizedBox(height: 30),
             GestureDetector(
               onTap: () async {
                 FollowCubit followCubit = FollowCubit.get(context);
