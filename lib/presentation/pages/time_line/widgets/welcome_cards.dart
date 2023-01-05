@@ -26,41 +26,112 @@ class WelcomeCards extends StatefulWidget {
 }
 
 class WelcomeCardsState extends State<WelcomeCards> {
-  final ValueNotifier<int> _selectedIndex = ValueNotifier(0);
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: double.maxFinite,
+      child: isThatMobile
+          ? CustomSmartRefresh(
+              onRefreshData: widget.onRefreshData, child: const _GetAllUsers())
+          : const _GetAllUsers(),
+    );
+  }
+}
+
+class _GetAllUsers extends StatelessWidget {
+  const _GetAllUsers({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const _WelcomeTexts(),
+        Flexible(
+          child: BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState>(
+            bloc: UsersInfoReelTimeBloc.get(context)
+              ..add(LoadAllUsersInfoInfo()),
+            buildWhen: (previous, current) =>
+                previous != current && (current is AllUsersInfoLoaded),
+            builder: (context, state) {
+              if (state is AllUsersInfoLoaded) {
+                List<UserPersonalInfo> users = state.allUsersInfoInReelTime;
+                if (users.isEmpty) {
+                  return Center(
+                    child: Text(
+                      StringsManager.noUsers.tr,
+                      style:
+                          getNormalStyle(color: Theme.of(context).focusColor),
+                    ),
+                  );
+                } else {
+                  if (isThatMobile) {
+                    return _PagesViewForMobile(users: users);
+                  } else {
+                    return _CardsForWeb(users: users);
+                  }
+                }
+              } else {
+                return const ThineCircularProgress();
+              }
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PagesViewForMobile extends StatefulWidget {
+  const _PagesViewForMobile({Key? key, required this.users}) : super(key: key);
+  final List<UserPersonalInfo> users;
+
+  @override
+  State<_PagesViewForMobile> createState() => _PagesViewForMobileState();
+}
+
+class _PagesViewForMobileState extends State<_PagesViewForMobile> {
+  int _selectedIndex = 0;
   PageController pageController = PageController(viewportFraction: 0.7);
+  @override
+  Widget build(BuildContext context) {
+    return PageView.builder(
+      itemCount: widget.users.length,
+      controller: pageController,
+      physics: const BouncingScrollPhysics(),
+      onPageChanged: (index) {
+        setState(() {
+          _selectedIndex = index;
+        });
+      },
+      itemBuilder: (context, index) {
+        bool active = _selectedIndex == index;
+        return _UserCardInfo(active: active, userInfo: widget.users[index]);
+      },
+    );
+  }
+}
+
+class _CardsForWeb extends StatefulWidget {
+  final List<UserPersonalInfo> users;
+  const _CardsForWeb({Key? key, required this.users}) : super(key: key);
+
+  @override
+  State<_CardsForWeb> createState() => _CardsForWebState();
+}
+
+class _CardsForWebState extends State<_CardsForWeb> {
   int currentPage = 0;
-  late ScrollController _scrollPageController;
+  final ScrollController _scrollPageController = ScrollController();
   double initialPage = 0;
   @override
   void initState() {
     super.initState();
     initialPage = currentPage.toDouble();
-    _scrollPageController = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    _selectedIndex.dispose();
-    pageController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return welcomeCards();
-  }
-
-  Widget welcomeCards() {
-    return SizedBox(
-      height: double.maxFinite,
-      child: isThatMobile
-          ? CustomSmartRefresh(
-              onRefreshData: widget.onRefreshData, child: suggestionsFriends())
-          : suggestionsFriends(),
-    );
-  }
-
-  Widget buildColumn(List<UserPersonalInfo> users) {
     double widthOfScreen = MediaQuery.of(context).size.width;
     double halfOfWidth = widthOfScreen / 2;
     double heightOfStory =
@@ -81,11 +152,14 @@ class WelcomeCardsState extends State<WelcomeCards> {
                 SizedBox(
                   height: heightOfStory,
                   width: widthOfStory,
-                  child: _UserCardInfo(active: active, userInfo: users[index]),
+                  child: _UserCardInfo(
+                      active: active, userInfo: widget.users[index]),
                 ),
                 if (currentPage == index) ...[
-                  buildJumpArrow(),
-                  buildJumpArrow(isThatBack: false),
+                  _JumpArrow(scrollPageController: _scrollPageController),
+                  _JumpArrow(
+                      scrollPageController: _scrollPageController,
+                      isThatBack: false)
                 ],
               ],
             ),
@@ -108,106 +182,45 @@ class WelcomeCardsState extends State<WelcomeCards> {
           print('Done!');
         }
       },
-      itemCount: users.length,
-    );
-  }
-
-  Widget suggestionsFriends() {
-    return Column(
-      children: [
-        const _WelcomeTexts(),
-        Flexible(
-          child: BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState>(
-            bloc: UsersInfoReelTimeBloc.get(context)
-              ..add(LoadAllUsersInfoInfo()),
-            buildWhen: (previous, current) =>
-                previous != current && (current is AllUsersInfoLoaded),
-            builder: (context, state) {
-              if (state is AllUsersInfoLoaded) {
-                List<UserPersonalInfo> users = state.allUsersInfoInReelTime;
-                if (users.isEmpty) {
-                  return emptyText();
-                } else {
-                  if (isThatMobile) {
-                    return _PagesView(
-                        selectedIndex: _selectedIndex,
-                        users: users,
-                        pageController: pageController);
-                  } else {
-                    return buildColumn(users);
-                  }
-                }
-              } else {
-                return const ThineCircularProgress();
-              }
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget buildJumpArrow({bool isThatBack = true}) {
-    return GestureDetector(
-      onTap: () async {
-        if (isThatBack) {
-          _scrollPageController.animateTo(
-            _scrollPageController.offset -
-                MediaQuery.of(context).size.width / 4,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        } else {
-          _scrollPageController.animateTo(
-            _scrollPageController.offset +
-                MediaQuery.of(context).size.width / 4,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        }
-      },
-      child: SizedBox(child: ArrowJump(isThatBack: isThatBack)),
-    );
-  }
-
-  Widget emptyText() {
-    return Center(
-      child: Text(
-        StringsManager.noUsers.tr,
-        style: getNormalStyle(color: Theme.of(context).focusColor),
-      ),
+      itemCount: widget.users.length,
     );
   }
 }
 
-class _PagesView extends StatelessWidget {
-  const _PagesView({
+class _JumpArrow extends StatelessWidget {
+  const _JumpArrow({
     Key? key,
-    required ValueNotifier<int> selectedIndex,
-    required this.users,
-    required this.pageController,
-  })  : _selectedIndex = selectedIndex,
+    required ScrollController scrollPageController,
+    this.isThatBack = true,
+  })  : _scrollPageController = scrollPageController,
         super(key: key);
 
-  final ValueNotifier<int> _selectedIndex;
-  final List<UserPersonalInfo> users;
-  final PageController pageController;
+  final ScrollController _scrollPageController;
+  final bool isThatBack;
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: _selectedIndex,
-      builder: (context, int selectedIndexValue, child) => PageView.builder(
-        itemCount: users.length,
-        controller: pageController,
-        physics: const BouncingScrollPhysics(),
-        onPageChanged: (index) {
-          _selectedIndex.value = index;
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: GestureDetector(
+        onTap: () async {
+          if (isThatBack) {
+            _scrollPageController.animateTo(
+              _scrollPageController.offset -
+                  MediaQuery.of(context).size.width / 4,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          } else {
+            _scrollPageController.animateTo(
+              _scrollPageController.offset +
+                  MediaQuery.of(context).size.width / 4,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          }
         },
-        itemBuilder: (context, index) {
-          bool active = selectedIndexValue == index;
-          return _UserCardInfo(active: active, userInfo: users[index]);
-        },
+        child: SizedBox(child: ArrowJump(isThatBack: isThatBack)),
       ),
     );
   }
