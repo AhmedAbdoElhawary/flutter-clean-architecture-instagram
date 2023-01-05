@@ -400,20 +400,20 @@ class _BuildStoriesLine extends StatelessWidget {
                     tag: hashTag,
                     child: GestureDetector(
                       onTap: () {
-                        Widget page;
                         if (isThatMobile) {
-                          page = StoryPageForMobile(
+                          Widget page = StoryPageForMobile(
                               user: publisherInfo,
                               hashTag: hashTag,
                               storiesOwnersInfo: storiesOwnersInfo!);
+                          pushToPage(context,
+                              page: page, withoutPageTransition: true);
                         } else {
-                          page = StoryPageForWeb(
+                          Widget page = StoryPageForWeb(
                               user: publisherInfo,
                               hashTag: hashTag,
                               storiesOwnersInfo: storiesOwnersInfo!);
+                          Get.to(page);
                         }
-                        pushToPage(context,
-                            page: page, withoutPageTransition: true);
                       },
                       child: CircleAvatarOfProfileImage(
                         userInfo: publisherInfo,
