@@ -88,7 +88,7 @@ class StoryPageForWebState extends State<StoryPageForWeb> {
           child: ScrollSnapList(
             itemBuilder: (_, index) {
               if (index == widget.storiesOwnersInfo.length) {
-                return ThineCircularProgress();
+                return const ThineCircularProgress();
               }
               return SizedBox(
                 width: widthOfStory,
