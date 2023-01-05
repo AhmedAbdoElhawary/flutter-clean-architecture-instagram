@@ -180,10 +180,7 @@ class ScrollSnapListState extends State<ScrollSnapList> {
     }
 
     if (widget.focusOnItemTap) {
-      return GestureDetector(
-        onTap: () => focusToItem(index),
-        child: child,
-      );
+      return GestureDetector(onTap: () => focusToItem(index), child: child);
     }
 
     return child;
@@ -329,17 +326,8 @@ class ScrollSnapListState extends State<ScrollSnapList> {
                 keyboardDismissBehavior: widget.keyboardDismissBehavior,
                 padding: widget.listViewPadding ??
                     (widget.scrollDirection == Axis.horizontal
-                        ? EdgeInsets.symmetric(
-                            horizontal: max(
-                            0,
-                            listPadding,
-                          ))
-                        : EdgeInsets.symmetric(
-                            vertical: max(
-                              0,
-                              listPadding,
-                            ),
-                          )),
+                        ? EdgeInsets.symmetric(horizontal: max(0, listPadding))
+                        : EdgeInsets.symmetric(vertical: max(0, listPadding))),
                 reverse: widget.reverse,
                 scrollDirection: widget.scrollDirection,
                 itemBuilder: _buildListItem,

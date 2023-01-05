@@ -48,19 +48,11 @@ class StoryPageForWebState extends State<StoryPageForWeb> {
   }
 
   @override
-  void dispose() {
-    // _scrollPageController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    double widthOfScreen = MediaQuery.of(context).size.width;
-    double halfOfWidth = widthOfScreen / 2;
-    double heightOfStory =
-        (halfOfWidth < 515 ? widthOfScreen : halfOfWidth) + 50;
-    double widthOfStory =
-        (halfOfWidth < 515 ? halfOfWidth : halfOfWidth / 2) + 80;
+    Size size = MediaQuery.of(context).size;
+    double widthOfScreen = size.width;
+    double heightOfStory = size.height < 600 ? 600 : size.height - 100;
+    double widthOfStory = widthOfScreen < 900 ? 463 : 560;
 
     return Scaffold(
       backgroundColor: ColorManager.veryDarkGray,
@@ -100,10 +92,12 @@ class StoryPageForWebState extends State<StoryPageForWeb> {
                         height: heightOfStory,
                         width: widthOfStory,
                         child: StoryWidget(
-                          storiesOwnersInfo: widget.storiesOwnersInfo,
+                          allMainStoriesOwnersInfo: widget.storiesOwnersInfo,
                           user: widget.storiesOwnersInfo[index],
                           scrollControl: _scrollPageController,
                           currentPage: ValueNotifier(currentPage),
+                          onItemFocus: onItemFocus,
+                          itemSize: widthOfStory,
                           indexOfPage: ValueNotifier(index),
                           hashTag: "${widget.hashTag} , $index",
                         ),
@@ -113,14 +107,7 @@ class StoryPageForWebState extends State<StoryPageForWeb> {
                 ),
               );
             },
-            onItemFocus: (pos) {
-              setState(() {
-                currentPage = pos;
-              });
-              if (kDebugMode) {
-                print('Done! $pos');
-              }
-            },
+            onItemFocus: onItemFocus,
             itemSize: widthOfStory,
             listController: _scrollPageController,
             initialIndex: initialPage,
@@ -137,6 +124,13 @@ class StoryPageForWebState extends State<StoryPageForWeb> {
       ],
     );
   }
+
+  void onItemFocus(pos) {
+    setState(() => currentPage = pos);
+    if (kDebugMode) {
+      print('Done! $pos');
+    }
+  }
 }
 
 class StoryWidget extends StatefulWidget {
@@ -144,17 +138,21 @@ class StoryWidget extends StatefulWidget {
   final ScrollController scrollControl;
   final ValueNotifier<int> currentPage;
   final ValueNotifier<int> indexOfPage;
-  final List<UserPersonalInfo> storiesOwnersInfo;
+  final List<UserPersonalInfo> allMainStoriesOwnersInfo;
   final String hashTag;
+  final void Function(int) onItemFocus;
+  final double itemSize;
 
   const StoryWidget({
     Key? key,
     required this.user,
     required this.currentPage,
     required this.indexOfPage,
-    required this.storiesOwnersInfo,
+    required this.allMainStoriesOwnersInfo,
     required this.scrollControl,
     required this.hashTag,
+    required this.onItemFocus,
+    required this.itemSize,
   }) : super(key: key);
 
   @override
@@ -198,14 +196,10 @@ class StoryWidgetState extends State<StoryWidget> {
 
   void handleCompleted() async {
     _sharePrefs.setBool(widget.user.userId, true);
-    widget.scrollControl.animateTo(
-      widget.scrollControl.offset + MediaQuery.of(context).size.width / 4,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-
-    int currentIndex = widget.storiesOwnersInfo.indexOf(widget.user);
-    bool isLastPage = widget.storiesOwnersInfo.length - 1 == currentIndex;
+    focusToItem(widget.indexOfPage.value + 1);
+    int currentIndex = widget.allMainStoriesOwnersInfo.indexOf(widget.user);
+    bool isLastPage =
+        widget.allMainStoriesOwnersInfo.length - 1 == currentIndex;
     if (isLastPage) {
       Navigator.of(context).maybePop();
     }
@@ -227,155 +221,150 @@ class StoryWidgetState extends State<StoryWidget> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: GestureDetector(
-              onLongPressStart: (e) {
-                storyController.value.pause();
-                opacityLevel.value = 0;
-              },
-              onLongPressEnd: (e) {
-                opacityLevel.value = 1;
-                storyController.value.play();
-              },
-              child: ValueListenableBuilder(
-                valueListenable: opacityLevel,
-                builder: (context, double opacityLevelValue, child) => Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: <Widget>[
-                    Material(
-                      type: MaterialType.transparency,
-                      child: ValueListenableBuilder(
-                        valueListenable: storyController,
-                        builder: (context, StoryController storyControllerValue,
-                                child) =>
-                            StoryView(
-                          inline: true,
-                          opacityLevel: opacityLevelValue,
-                          progressPosition: ProgressPosition.top,
-                          storyItems: storyItems,
-                          controller: storyControllerValue,
-                          onComplete: handleCompleted,
-                          onVerticalSwipeComplete: (direction) {
-                            if (isThatMobile &&
-                                (direction == Direction.down ||
-                                    direction == Direction.up)) {
-                              Navigator.of(context).maybePop();
-                            }
-                          },
-                          onStoryShow: (storyItem) {
-                            final currentIndexOfOfStory =
-                                storyItems.indexOf(storyItem);
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              setState(() {
-                                isFirstStory.value = 0 == currentIndexOfOfStory;
-                                isLastStory.value = storyItems.length - 1 ==
-                                    currentIndexOfOfStory;
-                              });
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: GestureDetector(
+            onLongPressStart: (e) {
+              storyController.value.pause();
+              opacityLevel.value = 0;
+            },
+            onLongPressEnd: (e) {
+              opacityLevel.value = 1;
+              storyController.value.play();
+            },
+            child: ValueListenableBuilder(
+              valueListenable: opacityLevel,
+              builder: (context, double opacityLevelValue, child) => Stack(
+                alignment: AlignmentDirectional.center,
+                children: <Widget>[
+                  Material(
+                    type: MaterialType.transparency,
+                    child: ValueListenableBuilder(
+                      valueListenable: storyController,
+                      builder: (context, StoryController storyControllerValue,
+                              child) =>
+                          StoryView(
+                        inline: true,
+                        opacityLevel: opacityLevelValue,
+                        progressPosition: ProgressPosition.top,
+                        storyItems: storyItems,
+                        controller: storyControllerValue,
+                        onComplete: handleCompleted,
+                        onVerticalSwipeComplete: (direction) {
+                          if (isThatMobile &&
+                              (direction == Direction.down ||
+                                  direction == Direction.up)) {
+                            Navigator.of(context).maybePop();
+                          }
+                        },
+                        onStoryShow: (storyItem) {
+                          final currentIndexOfOfStory =
+                              storyItems.indexOf(storyItem);
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            setState(() {
+                              isFirstStory.value = 0 == currentIndexOfOfStory;
+                              isLastStory.value = storyItems.length - 1 ==
+                                  currentIndexOfOfStory;
                             });
+                          });
 
-                            if (isLastStory.value) {
-                              _sharePrefs.setBool(widget.user.userId, true);
-                            }
-                            if (currentIndexOfOfStory > 0) {
-                              date.value = widget
-                                  .user.storiesInfo![currentIndexOfOfStory];
-                            }
-                          },
-                        ),
+                          if (isLastStory.value) {
+                            _sharePrefs.setBool(widget.user.userId, true);
+                          }
+                          if (currentIndexOfOfStory > 0) {
+                            date.value =
+                                widget.user.storiesInfo![currentIndexOfOfStory];
+                          }
+                        },
                       ),
                     ),
-                    AnimatedOpacity(
-                      opacity: opacityLevelValue,
-                      duration: const Duration(milliseconds: 250),
-                      child: ValueListenableBuilder(
-                        valueListenable: date,
-                        builder: (context, Story? value, child) =>
-                            ProfileWidget(
-                          storyController: storyController,
-                          user: widget.user,
-                          storyInfo: value!,
-                          hashTag: widget.hashTag,
-                        ),
+                  ),
+                  AnimatedOpacity(
+                    opacity: opacityLevelValue,
+                    duration: const Duration(milliseconds: 250),
+                    child: ValueListenableBuilder(
+                      valueListenable: date,
+                      builder: (context, Story? value, child) => ProfileWidget(
+                        storyController: storyController,
+                        user: widget.user,
+                        storyInfo: value!,
+                        hashTag: widget.hashTag,
                       ),
                     ),
-                    AnimatedOpacity(
-                      opacity: opacityLevelValue,
-                      duration: const Duration(milliseconds: 250),
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.all(15.0),
-                          child: widget.user.userId == myPersonalId
-                              ? const Icon(
-                                  Icons.delete_rounded,
-                                  color: Colors.white,
-                                  size: 25,
-                                )
-                              : Row(children: [
-                                  Expanded(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(35),
-                                        border: Border.all(
-                                          color: Colors
-                                              .white, //                   <--- border color
-                                          width: 0.5,
-                                        ),
+                  ),
+                  AnimatedOpacity(
+                    opacity: opacityLevelValue,
+                    duration: const Duration(milliseconds: 250),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.all(15.0),
+                        child: widget.user.userId == myPersonalId
+                            ? const Icon(
+                                Icons.delete_rounded,
+                                color: Colors.white,
+                                size: 25,
+                              )
+                            : Row(children: [
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(35),
+                                      border: Border.all(
+                                        color: Colors
+                                            .white, //                   <--- border color
+                                        width: 0.5,
                                       ),
-                                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                                      height: 40,
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.only(
-                                                start: 8.0, end: 20),
-                                        child: Center(
-                                          child: TextFormField(
-                                            keyboardType:
-                                                TextInputType.multiline,
-                                            cursorColor: Colors.teal,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                            onTap: () {
-                                              storyController.value.pause();
-                                            },
-                                            showCursor: true,
-                                            maxLines: null,
-                                            decoration:
-                                                const InputDecoration.collapsed(
-                                                    hintText: StringsManager
-                                                        .sendMessage,
-                                                    border: InputBorder.none,
-                                                    hintStyle: TextStyle(
-                                                        color: Colors.grey)),
-                                            autofocus: false,
-                                            cursorWidth: 1.5,
-                                          ),
+                                    ),
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    height: 40,
+                                    child: Padding(
+                                      padding: const EdgeInsetsDirectional.only(
+                                          start: 8.0, end: 20),
+                                      child: Center(
+                                        child: TextFormField(
+                                          keyboardType: TextInputType.multiline,
+                                          cursorColor: Colors.teal,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge,
+                                          onTap: () {
+                                            storyController.value.pause();
+                                          },
+                                          showCursor: true,
+                                          maxLines: null,
+                                          decoration:
+                                              const InputDecoration.collapsed(
+                                                  hintText: StringsManager
+                                                      .sendMessage,
+                                                  border: InputBorder.none,
+                                                  hintStyle: TextStyle(
+                                                      color: Colors.grey)),
+                                          autofocus: false,
+                                          cursorWidth: 1.5,
                                         ),
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 25),
-                                  SvgPicture.asset(
-                                    IconsAssets.loveIcon,
-                                    width: .5,
-                                    color: Colors.white,
-                                    height: 25,
-                                  ),
-                                  const SizedBox(width: 25),
-                                  SvgPicture.asset(
-                                    IconsAssets.send2Icon,
-                                    color: Colors.white,
-                                    height: 23,
-                                  ),
-                                ]),
-                        ),
+                                ),
+                                const SizedBox(width: 25),
+                                SvgPicture.asset(
+                                  IconsAssets.loveIcon,
+                                  width: .5,
+                                  color: Colors.white,
+                                  height: 25,
+                                ),
+                                const SizedBox(width: 25),
+                                SvgPicture.asset(
+                                  IconsAssets.send2Icon,
+                                  color: Colors.white,
+                                  height: 23,
+                                ),
+                              ]),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -384,7 +373,7 @@ class StoryWidgetState extends State<StoryWidget> {
           if (!(widget.currentPage.value == 0 && isFirstStory.value))
             buildJumpArrow(),
           if (!(widget.currentPage.value >=
-                  widget.storiesOwnersInfo.length - 1 &&
+                  widget.allMainStoriesOwnersInfo.length - 1 &&
               isLastStory.value))
             buildJumpArrow(isThatBack: false),
         ],
@@ -400,11 +389,7 @@ class StoryWidgetState extends State<StoryWidget> {
           return;
         }
         if (isFirstStory.value) {
-          widget.scrollControl.animateTo(
-            widget.scrollControl.offset - MediaQuery.of(context).size.width / 4,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
+          focusToItem(widget.indexOfPage.value - 1);
           return;
         }
         storyController.value.previous();
@@ -413,6 +398,33 @@ class StoryWidgetState extends State<StoryWidget> {
           // width: widthOfStory + 100,
           child: ArrowJump(isThatBack: isThatBack)),
     );
+  }
+
+  double _calcCardLocation(int cardIndex) {
+    int lengthOfStory = widget.allMainStoriesOwnersInfo.length;
+
+    if (cardIndex < 0) {
+      cardIndex = 0;
+    } else if (cardIndex > lengthOfStory - 1) {
+      cardIndex = lengthOfStory - 1;
+    }
+    widget.onItemFocus(cardIndex);
+    return (cardIndex * widget.itemSize);
+  }
+
+  void _animateScroll(double location) {
+    Future.delayed(Duration.zero, () {
+      widget.scrollControl.animateTo(
+        location,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.ease,
+      );
+    });
+  }
+
+  void focusToItem(int index) {
+    double targetLoc = _calcCardLocation(index);
+    _animateScroll(targetLoc);
   }
 }
 
