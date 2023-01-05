@@ -31,11 +31,7 @@ class SearchAboutUserBloc
       String receiverId, bool searchForSingleLetter) async* {
     _searchAboutUserUseCase
         .call(paramsOne: receiverId, paramsTwo: searchForSingleLetter)
-        .listen(
-          (users) => add(
-            UpdateUser(users),
-          ),
-        );
+        .listen((users) => add(UpdateUser(users)));
   }
 
   Stream<SearchAboutUserState> _mapUpdateSearchToState(
