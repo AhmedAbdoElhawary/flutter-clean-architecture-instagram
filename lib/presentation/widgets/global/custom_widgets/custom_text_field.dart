@@ -71,8 +71,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   String? _validateEmail() {
-    RegExp regex = RegExp(
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+    RegExp regex = RegExp(r'''
+^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$''');
 
     if (!regex.hasMatch(widget.controller.text)) {
       setState(() => widget.validate!.value = false);
@@ -97,7 +97,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(isThatMobile ? 5.0 : 1.0),
       borderSide: BorderSide(
-          color: ColorManager.lightGrey, width: isThatMobile ? 1.0 : 0.3),
+          color: ColorManager.lightGrey, width: isThatMobile ? 1.0 : 0.8),
     );
   }
 }

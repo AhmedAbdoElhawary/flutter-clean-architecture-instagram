@@ -36,6 +36,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
 
   Future<void> getUserInfo(
     String userId, {
+
     bool isThatMyPersonalId = true,
     bool getDeviceToken = false,
   }) async {
