@@ -67,6 +67,8 @@ You will find me on
 * Push Notifications
 * Send post to chats
 
+## SnapShots for web/desktop
+### Soon
 
 ## SnapShots
 
