@@ -22,11 +22,16 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_mult
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
-class CreateStoryPage extends StatefulWidget {
+class CreateStoryPagePar {
   final SelectedImagesDetails storiesDetails;
 
-  const CreateStoryPage({Key? key, required this.storiesDetails})
-      : super(key: key);
+  const CreateStoryPagePar({Key? key, required this.storiesDetails});
+}
+
+class CreateStoryPage extends StatefulWidget {
+  final CreateStoryPagePar createStoryPagePar;
+
+  const CreateStoryPage(this.createStoryPagePar, {Key? key}) : super(key: key);
 
   @override
   State<CreateStoryPage> createState() => _CreateStoryPageState();
@@ -37,7 +42,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
   late List<SelectedByte> selectedFiles;
   @override
   void initState() {
-    selectedFiles = widget.storiesDetails.selectedFiles;
+    selectedFiles = widget.createStoryPagePar.storiesDetails.selectedFiles;
     super.initState();
   }
 
@@ -49,7 +54,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
         child: Column(
           children: [
             Expanded(
-              child: widget.storiesDetails.multiSelectionMode
+              child: widget.createStoryPagePar.storiesDetails.multiSelectionMode
                   ? CustomMultiImagesDisplay(selectedImages: selectedFiles)
                   : Image.file(selectedFiles[0].selectedFile),
             ),
