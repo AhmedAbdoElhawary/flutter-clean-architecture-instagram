@@ -1186,7 +1186,7 @@ class _ChatMessagesState extends State<ChatMessages>
 
     return TextButton(
       onPressed: () {
-        Go(context).push( page: UserProfilePage(userId: userId));
+        Go(context).push(page: UserProfilePage(userId: userId));
       },
       child: Text(
         StringsManager.viewProfile.tr,
