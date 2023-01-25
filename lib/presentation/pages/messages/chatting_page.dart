@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
@@ -15,16 +14,22 @@ import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
-class ChattingPage extends StatefulWidget {
+class ChattingPageParameters {
   final SenderInfo? messageDetails;
   final String chatUid;
   final bool isThatGroup;
 
-  const ChattingPage(
+  const ChattingPageParameters(
       {Key? key,
       this.messageDetails,
       this.chatUid = "",
-      this.isThatGroup = false})
+      this.isThatGroup = false});
+}
+
+class ChattingPage extends StatefulWidget {
+  final ChattingPageParameters chattingPageParameters;
+
+  const ChattingPage({Key? key, required this.chattingPageParameters})
       : super(key: key);
 
   @override
@@ -33,22 +38,34 @@ class ChattingPage extends StatefulWidget {
 
 class _ChattingPageState extends State<ChattingPage>
     with TickerProviderStateMixin {
+  late SenderInfo? messageDetails;
+  late String chatUid;
+  late bool isThatGroup;
+
   final ValueNotifier<Message?> deleteThisMessage = ValueNotifier(null);
 
   final unSend = ValueNotifier(false);
 
   @override
+  void initState() {
+    messageDetails = widget.chattingPageParameters.messageDetails;
+    chatUid = widget.chattingPageParameters.chatUid;
+    isThatGroup = widget.chattingPageParameters.isThatGroup;
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return widget.messageDetails != null
-        ? scaffold(widget.messageDetails!)
+    return messageDetails != null
+        ? scaffold(messageDetails!)
         : getUserInfo(context);
   }
 
   Widget getUserInfo(BuildContext context) {
     return BlocBuilder<MessageCubit, MessageState>(
       bloc: MessageCubit.get(context)
-        ..getSpecificChatInfo(
-            isThatGroup: widget.isThatGroup, chatUid: widget.chatUid),
+        ..getSpecificChatInfo(isThatGroup: isThatGroup, chatUid: chatUid),
       buildWhen: (previous, current) =>
           previous != current && current is GetSpecificChatLoaded,
       builder: (context, state) {
