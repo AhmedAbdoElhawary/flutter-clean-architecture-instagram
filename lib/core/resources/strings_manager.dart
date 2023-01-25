@@ -173,4 +173,7 @@ class StringsManager {
   static const String editInfo = "editInfo";
 
   static const String changeProfilePhoto = "changeProfilePhoto";
+
+  static const String noRouteFound = "noRouteFound";
+
 }
