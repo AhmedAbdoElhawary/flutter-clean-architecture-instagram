@@ -344,7 +344,7 @@ class _ProfilePageState extends State<UserProfilePage> {
     return Expanded(
       child: GestureDetector(
         onTap: () async {
-          pushToPage(context,
+          Go(context).push(
               page: BlocProvider<MessageBloc>(
                 create: (context) => injector<MessageBloc>(),
                 child: ChattingPage(
