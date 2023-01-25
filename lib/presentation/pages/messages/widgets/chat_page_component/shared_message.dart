@@ -29,7 +29,7 @@ class SharedMessage extends StatelessWidget {
   Widget sharedMessage(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        pushToPage(context,
+        Go(context).push(
             page: GetsPostInfoAndDisplay(
               postId: messageInfo.sharedPostId,
               appBarText: StringsManager.post.tr,
