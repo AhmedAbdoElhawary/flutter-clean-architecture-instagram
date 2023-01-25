@@ -149,7 +149,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
     );
   }
 
-  pushToProfilePage(Post postInfo) => pushToPage(context,
+  pushToProfilePage(Post postInfo) => Go(context).push(
       page: WhichProfilePage(userId: postInfo.publisherId), withoutRoot: false);
 
   void _updateImageIndex(int index, _) {
