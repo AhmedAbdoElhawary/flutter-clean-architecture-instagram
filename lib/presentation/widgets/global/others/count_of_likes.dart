@@ -19,7 +19,7 @@ class CountOfLikes extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (isThatMobile) {
-          pushToPage(context,
+          Go(context).push(
               page: UsersWhoLikesForMobile(
                 showSearchBar: true,
                 usersIds: postInfo.likes,
