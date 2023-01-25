@@ -1,4 +1,5 @@
 const Map<String, String> ar = {
+  "noRouteFound":"لا توجد شاشه",
   "or": "أو",
   "less": "أقل",
   "reel": "ريل",
