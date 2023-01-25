@@ -107,8 +107,7 @@ class VideosPageState extends State<VideosPage> {
                       .pickVideo(source: ImageSource.camera);
               if (details != null) {
                 if (!mounted) return;
-                await pushToPage(
-                  context,
+                await Go(context).push(
                   page: CreatePostPage(selectedFilesDetails: details),
                 );
                 widget.stopVideo.value = true;
@@ -254,7 +253,7 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
   goToUserProfile(UserPersonalInfo personalInfo) async {
     widget.stopVideo.value = false;
 
-    await pushToPage(context,
+    await Go(context).push(
         page: WhichProfilePage(
             userId: personalInfo.userId, userName: personalInfo.userName),
         withoutRoot: false);
@@ -384,7 +383,7 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
 
   goToCommentPage(Post videoInfo) async {
     widget.stopVideo.value = false;
-    await pushToPage(context,
+    await Go(context).push(
         page: CommentsPageForMobile(postInfo: ValueNotifier(videoInfo)));
     widget.stopVideo.value = true;
   }
@@ -404,7 +403,7 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
     return InkWell(
       onTap: () async {
         widget.stopVideo.value = false;
-        await pushToPage(context,
+        await Go(context).push(
             page: UsersWhoLikesForMobile(
               showSearchBar: true,
               usersIds: videoInfo.likes,
