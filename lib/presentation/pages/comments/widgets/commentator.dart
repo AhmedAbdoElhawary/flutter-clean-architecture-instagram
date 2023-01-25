@@ -262,7 +262,6 @@ class _CommentInfoState extends State<CommentInfo> {
         onTap: () {
           if (isThatMobile) {
             Go(context).push(
-
               page: UsersWhoLikesForMobile(
                 showSearchBar: false,
                 usersIds: widget.commentInfo.likes,
@@ -319,8 +318,8 @@ class _CommentInfoState extends State<CommentInfo> {
                     String userName = hashTagName[0].replaceAll('@', '');
                     await Go(context).push(
                         page: WhichProfilePage(
-                          userName: userName,
-                        ));
+                      userName: userName,
+                    ));
                   },
               ),
             TextSpan(

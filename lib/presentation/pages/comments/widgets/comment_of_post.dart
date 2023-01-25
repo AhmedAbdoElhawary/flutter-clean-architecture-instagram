@@ -138,7 +138,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
                             widget.postInfo.value.datePublished,
                             widget.postInfo.value.datePublished),
                         style: getNormalStyle(
-                            color: Theme.of(context).bottomAppBarColor),
+                            color: Theme.of(context).bottomAppBarTheme.color!),
                       ),
                     ),
                     const Divider(color: ColorManager.black26),
