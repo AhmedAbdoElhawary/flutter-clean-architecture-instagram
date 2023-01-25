@@ -7,19 +7,29 @@ import 'package:instagram/data/models/parent_classes/without_sub_classes/user_pe
 import 'package:instagram/presentation/cubit/callingRooms/bloc/calling_status_bloc.dart';
 import 'package:instagram/presentation/pages/messages/video_call_page.dart';
 import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.dart';
-
-class VideoCallPage extends StatelessWidget {
+class VideoCallPagePar{
   final List<UserPersonalInfo> usersInfo;
   final UserPersonalInfo myPersonalInfo;
 
-  const VideoCallPage({
+  const VideoCallPagePar({
     Key? key,
     required this.usersInfo,
     required this.myPersonalInfo,
+  });
+
+}
+class VideoCallPage extends StatelessWidget {
+  final VideoCallPagePar videoCallPagePar;
+
+  const VideoCallPage(this.videoCallPagePar,{
+    Key? key
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final List<UserPersonalInfo> usersInfo=videoCallPagePar.usersInfo;
+    final UserPersonalInfo myPersonalInfo=videoCallPagePar.myPersonalInfo;
+
     return Scaffold(
       // backgroundColor: ColorManager.lowOpacityGrey,
       body: SafeArea(
@@ -74,7 +84,7 @@ class VideoCallPage extends StatelessWidget {
 
   Widget canceledText(CallingRoomsLoaded roomsState, BuildContext context) {
     List<dynamic> usersIds = [];
-    usersInfo.where((element) {
+    videoCallPagePar. usersInfo.where((element) {
       usersIds.add(element.userId);
       return true;
     }).toList();
@@ -97,9 +107,9 @@ class VideoCallPage extends StatelessWidget {
       });
     });
     if (state.error == "Busy") {
-      String message = usersInfo.length > 1
+      String message = videoCallPagePar.usersInfo.length > 1
           ? "They are all busy..."
-          : '${usersInfo[0].name} is Busy...';
+          : '${videoCallPagePar.usersInfo[0].name} is Busy...';
       return Center(child: Text(message));
     } else {
       return const Center(child: Text("Call ended..."));
