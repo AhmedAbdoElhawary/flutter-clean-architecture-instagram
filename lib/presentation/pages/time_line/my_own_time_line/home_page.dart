@@ -405,7 +405,7 @@ class _BuildStoriesLine extends StatelessWidget {
                               user: publisherInfo,
                               hashTag: hashTag,
                               storiesOwnersInfo: storiesOwnersInfo!);
-                          pushToPage(context,
+                          Go(context).push(
                               page: page, withoutPageTransition: true);
                         } else {
                           Widget page = StoryPageForWeb(
@@ -488,8 +488,7 @@ class _MyOwnStoryState extends State<_MyOwnStory> {
           isThatStory: true,
         );
         if (!mounted || details == null) return;
-        await pushToPage(
-          context,
+        await Go(context).push(
           page: CreatePostPage(selectedFilesDetails: details),
         );
         widget.reLoadData.value = true;
