@@ -15,17 +15,23 @@ import 'package:instagram/presentation/pages/story/widgets/story_swipe.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class StoryPageForMobile extends StatefulWidget {
+class StoryPagePar {
   final UserPersonalInfo user;
   final List<UserPersonalInfo> storiesOwnersInfo;
   final String hashTag;
 
-  const StoryPageForMobile({
+  const StoryPagePar({
     required this.user,
     required this.storiesOwnersInfo,
     this.hashTag = "",
     Key? key,
-  }) : super(key: key);
+  });
+}
+
+class StoryPageForMobile extends StatefulWidget {
+  final StoryPagePar storyPagePar;
+  const StoryPageForMobile(this.storyPagePar, {Key? key})
+      : super(key: key);
 
   @override
   StoryPageForMobileState createState() => StoryPageForMobileState();
@@ -33,13 +39,19 @@ class StoryPageForMobile extends StatefulWidget {
 
 class StoryPageForMobileState extends State<StoryPageForMobile> {
   late PageController controller;
+  late final UserPersonalInfo user;
+  late final List<UserPersonalInfo> storiesOwnersInfo;
+  late final String hashTag;
 
   @override
   void initState() {
-    super.initState();
+    user = widget.storyPagePar.user;
+    storiesOwnersInfo = widget.storyPagePar.storiesOwnersInfo;
+    hashTag = widget.storyPagePar.hashTag;
 
-    final initialPage = widget.storiesOwnersInfo.indexOf(widget.user);
+    final initialPage = storiesOwnersInfo.indexOf(user);
     controller = PageController(initialPage: initialPage);
+    super.initState();
   }
 
   @override
@@ -55,12 +67,12 @@ class StoryPageForMobileState extends State<StoryPageForMobile> {
       body: SafeArea(
         child: StorySwipe(
           controller: controller,
-          children: widget.storiesOwnersInfo
+          children: storiesOwnersInfo
               .map((user) => StoryWidget(
-                    storiesOwnersInfo: widget.storiesOwnersInfo,
+                    storiesOwnersInfo: storiesOwnersInfo,
                     user: user,
                     controller: controller,
-                    hashTag: widget.hashTag,
+                    hashTag: hashTag,
                   ))
               .toList(),
         ),
