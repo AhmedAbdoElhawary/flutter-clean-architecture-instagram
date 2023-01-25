@@ -28,10 +28,6 @@ class SelectForGroupChat extends StatefulWidget {
 class _SelectForGroupChatState extends State<SelectForGroupChat> {
   final selectedUsersInfo = ValueNotifier<List<UserPersonalInfo>>([]);
   final ScrollController scrollController = ScrollController();
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +132,7 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
             child: GestureDetector(
               onTap: () {
                 pushToPage(context,
-                    page: GroupMessages(
+                    page: _GroupMessages(
                         selectedUsersInfoValue: selectedUsersInfoValue));
               },
               child: Text("Chat",
@@ -287,16 +283,16 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
   }
 }
 
-class GroupMessages extends StatefulWidget {
+class _GroupMessages extends StatefulWidget {
   final List<UserPersonalInfo> selectedUsersInfoValue;
-  const GroupMessages({Key? key, required this.selectedUsersInfoValue})
+  const _GroupMessages({Key? key, required this.selectedUsersInfoValue})
       : super(key: key);
 
   @override
-  State<GroupMessages> createState() => _GroupMessagesState();
+  State<_GroupMessages> createState() => _GroupMessagesState();
 }
 
-class _GroupMessagesState extends State<GroupMessages> {
+class _GroupMessagesState extends State<_GroupMessages> {
   late SenderInfo messageDetails;
   @override
   void initState() {
@@ -305,7 +301,7 @@ class _GroupMessagesState extends State<GroupMessages> {
   }
 
   @override
-  void didUpdateWidget(covariant GroupMessages oldWidget) {
+  void didUpdateWidget(covariant _GroupMessages oldWidget) {
     init();
     super.didUpdateWidget(oldWidget);
   }
