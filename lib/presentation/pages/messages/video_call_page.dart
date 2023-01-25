@@ -15,7 +15,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 enum UserCallingType { sender, receiver }
 
-class CallPage extends StatefulWidget {
+class CallPageParameters {
   final String channelName;
   final String userCallingId;
 
@@ -23,20 +23,34 @@ class CallPage extends StatefulWidget {
   final UserCallingType userCallingType;
   final ClientRole role;
 
-  const CallPage({
+  const CallPageParameters({
     Key? key,
     required this.channelName,
     this.userCallingId = "",
     required this.userCallingType,
     required this.role,
     this.usersInfo,
-  }) : super(key: key);
+  });
+}
+
+class CallPage extends StatefulWidget {
+  final CallPageParameters callPageParameters;
+
+  const CallPage(this.callPageParameters, {Key? key}) : super(key: key);
 
   @override
   CallPageState createState() => CallPageState();
 }
 
 class CallPageState extends State<CallPage> {
+  late final String channelName;
+  late final String userCallingId;
+
+  late final List<UserPersonalInfo>? usersInfo;
+  late final UserCallingType userCallingType;
+  late final ClientRole role;
+
+
   final _users = <int>[];
   final _infoStrings = <String>[];
   bool muted = false;
@@ -44,6 +58,28 @@ class CallPageState extends State<CallPage> {
 
   late RtcEngine _engine;
   late UserPersonalInfo myPersonalInfo;
+
+  @override
+  void initState() {
+    channelName= widget.callPageParameters.channelName;
+    userCallingId= widget.callPageParameters.userCallingId;
+    usersInfo= widget.callPageParameters.usersInfo;
+    userCallingType= widget.callPageParameters.userCallingType;
+    role= widget.callPageParameters.role;
+
+    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
+
+    initialize();
+    super.initState();
+
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
+  }
   @override
   void dispose() {
     _users.clear();
@@ -54,21 +90,6 @@ class CallPageState extends State<CallPage> {
   Future<void> _dispose() async {
     await _engine.leaveChannel();
     await _engine.destroy();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
-
-    initialize();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    WidgetsBinding.instance.addPostFrameCallback((_) async => await onJoin());
   }
 
   Future<void> onJoin() async {
@@ -99,7 +120,7 @@ class CallPageState extends State<CallPage> {
     VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
     configuration.dimensions = const VideoDimensions(width: 1920, height: 1080);
     await _engine.setVideoEncoderConfiguration(configuration);
-    await _engine.joinChannel(null, widget.channelName, null, 0);
+    await _engine.joinChannel(null, channelName, null, 0);
   }
 
   /// Create agora sdk instance and initialize
@@ -107,7 +128,7 @@ class CallPageState extends State<CallPage> {
     _engine = await RtcEngine.create(agoraAppId);
     await _engine.enableVideo();
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    await _engine.setClientRole(widget.role);
+    await _engine.setClientRole(role);
   }
 
   /// Add agora event handlers
@@ -150,12 +171,12 @@ class CallPageState extends State<CallPage> {
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
     final List<StatefulWidget> list = [];
-    if (widget.role == ClientRole.Broadcaster) {
+    if (role == ClientRole.Broadcaster) {
       list.add(const rtc_local_view.SurfaceView());
     }
     for (var uid in _users) {
       list.add(
-          rtc_remote_view.SurfaceView(channelId: widget.channelName, uid: uid));
+          rtc_remote_view.SurfaceView(channelId: channelName, uid: uid));
     }
     return list;
   }
@@ -180,12 +201,12 @@ class CallPageState extends State<CallPage> {
       WidgetsBinding.instance
           .addPostFrameCallback((_) => setState(() => moreThanOne = true));
     }
-    if (widget.userCallingType == UserCallingType.receiver &&
+    if (userCallingType == UserCallingType.receiver &&
         views.length == 1 &&
         moreThanOne) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await CallingRoomsCubit.get(context)
-            .deleteTheRoom(channelId: widget.channelName);
+            .deleteTheRoom(channelId: channelName);
         setState(() => amICalling = false);
       });
       Navigator.of(context).maybePop();
@@ -224,7 +245,7 @@ class CallPageState extends State<CallPage> {
 
   /// Toolbar layout
   Widget _toolbar() {
-    if (widget.role == ClientRole.Audience) return Container();
+    if (role == ClientRole.Audience) return Container();
     return Container(
       alignment: Alignment.bottomCenter,
       padding: const EdgeInsets.symmetric(vertical: 48),
@@ -276,7 +297,7 @@ class CallPageState extends State<CallPage> {
     setState(() => amICalling = false);
     CallingRoomsCubit.get(context).leaveTheRoom(
       userId: myPersonalInfo.userId,
-      channelId: widget.channelName,
+      channelId: channelName,
       isThatAfterJoining: true,
     );
     Navigator.of(context).maybePop();
@@ -296,7 +317,7 @@ class CallPageState extends State<CallPage> {
   @override
   Widget build(BuildContext context) {
     final views = _getRenderViews();
-    final int? numOfUsers = widget.usersInfo?.length;
+    final int? numOfUsers = usersInfo?.length;
     return Material(
       child: Center(
         child: Stack(
@@ -338,39 +359,7 @@ class CallPageState extends State<CallPage> {
                   ),
                 ),
               ),
-              Positioned(
-                top: 130,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (widget.usersInfo != null) ...[
-                      if (numOfUsers == 1) ...[
-                        buildCircleAvatar(0, 1000),
-                      ] else if (numOfUsers != 0) ...[
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: buildCircleAvatar(0, 700),
-                        ),
-                        Positioned(
-                            height: -15,
-                            left: -10,
-                            child: buildCircleAvatar(1, 700)),
-                      ],
-                      const SizedBox(height: 30),
-                      ...List.generate(numOfUsers!, (index) {
-                        return Text(widget.usersInfo![index].name,
-                            style: getNormalStyle(
-                                color: ColorManager.white, fontSize: 25));
-                      }),
-                    ],
-                    const SizedBox(height: 10),
-                    Text('Connecting...',
-                        style: getNormalStyle(
-                            color: ColorManager.white, fontSize: 16.5)),
-                  ],
-                ),
-              ),
+              _SubInfoWidget(usersInfo: usersInfo, numOfUsers: numOfUsers),
             ] else ...[
               _toolbar(),
             ],
@@ -380,10 +369,59 @@ class CallPageState extends State<CallPage> {
     );
   }
 
+}
+
+class _SubInfoWidget extends StatelessWidget {
+  const _SubInfoWidget({
+    Key? key,
+    required this.usersInfo,
+    required this.numOfUsers,
+  }) : super(key: key);
+
+  final List<UserPersonalInfo>? usersInfo;
+  final int? numOfUsers;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 130,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (usersInfo != null) ...[
+            if (numOfUsers == 1) ...[
+              buildCircleAvatar(0, 1000),
+            ] else if (numOfUsers != 0) ...[
+              Align(
+                alignment: Alignment.bottomRight,
+                child: buildCircleAvatar(0, 700),
+              ),
+              Positioned(
+                  height: -15,
+                  left: -10,
+                  child: buildCircleAvatar(1, 700)),
+            ],
+            const SizedBox(height: 30),
+            ...List.generate(numOfUsers!, (index) {
+              return Text(usersInfo![index].name,
+                  style: getNormalStyle(
+                      color: ColorManager.white, fontSize: 25));
+            }),
+          ],
+          const SizedBox(height: 10),
+          Text('Connecting...',
+              style: getNormalStyle(
+                  color: ColorManager.white, fontSize: 16.5)),
+        ],
+      ),
+    );
+  }
+
   Widget buildCircleAvatar(int index, double bodyHeight) {
     return CircleAvatarOfProfileImage(
       bodyHeight: bodyHeight,
-      userInfo: widget.usersInfo![index],
+      userInfo: usersInfo![index],
       disablePressed: true,
       showColorfulCircle: false,
     );
