@@ -109,7 +109,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
       child: Text(
         DateReformat.fullDigitsFormat(
             postInfoValue.datePublished, postInfoValue.datePublished),
-        style: getNormalStyle(color: Theme.of(context).bottomAppBarColor),
+        style: getNormalStyle(color: Theme.of(context).bottomAppBarTheme.color!),
       ),
     );
   }
@@ -177,7 +177,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
                   decoration: InputDecoration(
                     hintText: StringsManager.addComment.tr,
                     hintStyle: TextStyle(
-                        color: Theme.of(context).bottomAppBarColor,
+                        color: Theme.of(context).bottomAppBarTheme.color!,
                         fontSize: 14),
                     fillColor: ColorManager.black,
                     focusedBorder: InputBorder.none,
@@ -257,11 +257,12 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
 
   CustomNotification createNotification(
       String textWithOneSpaces, UserPersonalInfo myPersonalInfo) {
-    Post postInfo=widget.postInfo.value;
+    Post postInfo = widget.postInfo.value;
     return CustomNotification(
       text: "commented: $textWithOneSpaces",
       postId: postInfo.postUid,
-      postImageUrl: postInfo.isThatImage?postInfo.postUrl:postInfo.coverOfVideoUrl,
+      postImageUrl:
+          postInfo.isThatImage ? postInfo.postUrl : postInfo.coverOfVideoUrl,
       time: DateReformat.dateOfNow(),
       senderId: myPersonalId,
       receiverId: postInfo.publisherId,
@@ -291,8 +292,8 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
       child: GestureDetector(
         onTap: () {
           if (isThatMobile) {
-            Go(context).push(
-                page: CommentsPageForMobile(postInfo: widget.postInfo));
+            Go(context)
+                .push(page: CommentsPageForMobile(postInfo: widget.postInfo));
           } else {
             Navigator.of(
               context,

@@ -20,7 +20,6 @@ class NetworkDisplay extends StatefulWidget {
     this.cachingWidth = 720,
     this.height,
     this.width,
-
     this.blurHash = "",
     this.aspectRatio = 0,
   }) : super(key: key);
@@ -74,7 +73,7 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
           maxWidth: cachingWidth, maxHeight: cachingHeight),
       errorBuilder: (context, url, error) => buildError(),
       fit: BoxFit.cover,
-      width:widget.width?? double.infinity,
+      width: widget.width ?? double.infinity,
       height: widget.height ?? height,
       placeholderBuilder: widget.blurHash.isNotEmpty
           ? OctoPlaceholder.blurHash(widget.blurHash)

@@ -56,9 +56,9 @@ class CustomAppBar {
             onTap: () {
               Go(context).push(
                   page: BlocProvider<UsersInfoCubit>(
-                    create: (context) => injector<UsersInfoCubit>(),
-                    child: const MessagesPageForMobile(),
-                  ));
+                create: (context) => injector<UsersInfoCubit>(),
+                child: const MessagesPageForMobile(),
+              ));
             },
           ),
         );
@@ -99,8 +99,7 @@ class CustomAppBar {
               ],
             ),
             onTap: () {
-              Go(context).push(
-                  page: const ActivityPage(), withoutRoot: false);
+              Go(context).push(page: const ActivityPage(), withoutRoot: false);
             },
           ),
         );
@@ -206,15 +205,17 @@ class CustomAppBar {
           child: CircleAvatarOfProfileImage(
             bodyHeight: 280,
             userInfo: userInfo[0],
-            showColorfulCircle: false,disablePressed: false,
+            showColorfulCircle: false,
+            disablePressed: false,
           ),
         ),
         Align(
           alignment: Alignment.center,
-          child:CircleAvatarOfProfileImage(
+          child: CircleAvatarOfProfileImage(
             bodyHeight: 280,
             userInfo: userInfo[1],
-            showColorfulCircle: false,disablePressed: false,
+            showColorfulCircle: false,
+            disablePressed: false,
           ),
         ),
       ],

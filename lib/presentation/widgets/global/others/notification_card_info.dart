@@ -54,103 +54,105 @@ class _NotificationCardInfoState extends State<NotificationCardInfo> {
       child: Padding(
         padding: EdgeInsetsDirectional.only(
             start: 15, top: 15, end: 15, bottom: !isThatMobile ? 5 : 0),
-        child: Row(children: [
-          CircleAvatar(
-            backgroundColor: ColorManager.customGrey,
-            backgroundImage: profileImage.isNotEmpty
-                ? CachedNetworkImageProvider(profileImage,
-                    maxWidth: 165, maxHeight: 165)
-                : null,
-            radius: 25,
-            child: profileImage.isEmpty
-                ? Icon(
-                    Icons.person,
-                    color: Theme.of(context).primaryColor,
-                    size: 25,
-                  )
-                : null,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text.rich(
-              TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "${widget.notificationInfo.personalUserName} ",
-                    style: Theme.of(context).textTheme.displayMedium,
-                  ),
-                  if (hashOfUserName.isNotEmpty) ...[
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: ColorManager.customGrey,
+              backgroundImage: profileImage.isNotEmpty
+                  ? CachedNetworkImageProvider(profileImage,
+                      maxWidth: 165, maxHeight: 165)
+                  : null,
+              radius: 25,
+              child: profileImage.isEmpty
+                  ? Icon(
+                      Icons.person,
+                      color: Theme.of(context).primaryColor,
+                      size: 25,
+                    )
+                  : null,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text.rich(
+                TextSpan(
+                  children: <TextSpan>[
                     TextSpan(
-                      text: "${hashOfUserName[0]} ",
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      text: "${widget.notificationInfo.personalUserName} ",
+                      style: Theme.of(context).textTheme.displayMedium,
                     ),
+                    if (hashOfUserName.isNotEmpty) ...[
+                      TextSpan(
+                        text: "${hashOfUserName[0]} ",
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      TextSpan(
+                        text: "${hashOfUserName[1]} ",
+                        style: getNormalStyle(color: ColorManager.blue),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () async {
+                            String userName =
+                                hashOfUserName[1].replaceAll('@', '');
+                            await Go(context).push(
+                                page: WhichProfilePage(userName: userName));
+                          },
+                      ),
+                      TextSpan(
+                        text: "${hashOfUserName[2]} ",
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ] else ...[
+                      TextSpan(
+                        text: "${widget.notificationInfo.text} ",
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ],
                     TextSpan(
-                      text: "${hashOfUserName[1]} ",
-                      style: getNormalStyle(color: ColorManager.blue),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () async {
-                          String userName =
-                              hashOfUserName[1].replaceAll('@', '');
-                          await Go(context).push(
-                              page: WhichProfilePage(userName: userName));
-                        },
-                    ),
-                    TextSpan(
-                      text: "${hashOfUserName[2]} ",
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ] else ...[
-                    TextSpan(
-                      text: "${widget.notificationInfo.text} ",
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      text: reformatDate,
+                      style: Theme.of(context).textTheme.displayLarge,
                     ),
                   ],
-                  TextSpan(
-                    text: reformatDate,
-                    style: Theme.of(context).textTheme.displayLarge,
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: 10),
-          if (widget.notificationInfo.isThatPost &&
-              widget.notificationInfo.postImageUrl.isNotEmpty)
-            GestureDetector(
-              onTap: () {
-                String appBarText;
-                if (widget.notificationInfo.isThatPost &&
-                    widget.notificationInfo.isThatLike) {
-                  appBarText = StringsManager.post.tr;
-                } else {
-                  appBarText = StringsManager.comments.tr;
-                }
-                if (isThatMobile) {
-                  Go(context).push(
-                      page: GetsPostInfoAndDisplay(
+            const SizedBox(width: 10),
+            if (widget.notificationInfo.isThatPost &&
+                widget.notificationInfo.postImageUrl.isNotEmpty)
+              GestureDetector(
+                onTap: () {
+                  String appBarText;
+                  if (widget.notificationInfo.isThatPost &&
+                      widget.notificationInfo.isThatLike) {
+                    appBarText = StringsManager.post.tr;
+                  } else {
+                    appBarText = StringsManager.comments.tr;
+                  }
+                  if (isThatMobile) {
+                    Go(context).push(
+                        page: GetsPostInfoAndDisplay(
+                          postId: widget.notificationInfo.postId,
+                          appBarText: appBarText,
+                        ),
+                        withoutRoot: false);
+                  } else {
+                    Navigator.of(context).push(HeroDialogRoute(
+                      builder: (context) => GetsPostInfoAndDisplay(
                         postId: widget.notificationInfo.postId,
                         appBarText: appBarText,
+                        fromHeroRoute: true,
                       ),
-                      withoutRoot: false);
-                } else {
-                  Navigator.of(context).push(HeroDialogRoute(
-                    builder: (context) => GetsPostInfoAndDisplay(
-                      postId: widget.notificationInfo.postId,
-                      appBarText: appBarText,
-                      fromHeroRoute: true,
-                    ),
-                  ));
-                }
-              },
-              child: NetworkDisplay(
-                url: widget.notificationInfo.postImageUrl,
-                height: 45,
-                width: 45,
-                cachingHeight: 90,
-                cachingWidth: 90,
+                    ));
+                  }
+                },
+                child: NetworkDisplay(
+                  url: widget.notificationInfo.postImageUrl,
+                  height: 45,
+                  width: 45,
+                  cachingHeight: 90,
+                  cachingWidth: 90,
+                ),
               ),
-            ),
-        ],),
+          ],
+        ),
       ),
     );
   }

@@ -46,7 +46,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
         child: Center(
           child: TextField(
             onTap: () {
-              Go(context).push( page: const SearchAboutUserPage());
+              Go(context).push(page: const SearchAboutUserPage());
             },
             readOnly: true,
             decoration: InputDecoration(
@@ -113,7 +113,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
                   color: Theme.of(context).focusColor, fontSize: 18),
             ));
           } else {
-          return loadingWidget(context);
+            return loadingWidget(context);
           }
         },
       ),

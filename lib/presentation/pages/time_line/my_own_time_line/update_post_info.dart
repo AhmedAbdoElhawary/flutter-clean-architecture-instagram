@@ -140,7 +140,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                       borderSide: BorderSide(color: ColorManager.blue),
                     ),
                     hintStyle:
-                        TextStyle(color: Theme.of(context).bottomAppBarColor),
+                        TextStyle(color: Theme.of(context).bottomAppBarTheme.color!),
                   ),
                 ),
               ),

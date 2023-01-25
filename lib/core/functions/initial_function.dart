@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 
 Future<String?> initializeDefaultValues() async {
-
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await initializeDependencies();
   await GetStorage.init();

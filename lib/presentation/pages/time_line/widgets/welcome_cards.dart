@@ -134,8 +134,8 @@ class _CardsForWebState extends State<_CardsForWeb> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double widthOfScreen = size.width;
-    double heightOfStory=widthOfScreen < 900? 980:1500;
-    double widthOfStory=widthOfScreen < 900? 340:520;
+    double heightOfStory = widthOfScreen < 900 ? 980 : 1500;
+    double widthOfStory = widthOfScreen < 900 ? 340 : 520;
     return ScrollSnapList(
       itemBuilder: (_, index) {
         bool active = currentPage == index;
@@ -449,7 +449,7 @@ class _FollowButton extends StatelessWidget {
             isIFollowHim ? Theme.of(context).primaryColor : ColorManager.blue,
         border: Border.all(
           color: isIFollowHim
-              ? Theme.of(context).bottomAppBarColor
+              ? Theme.of(context).bottomAppBarTheme.color!
               : ColorManager.transparent,
           width: 0,
         ),

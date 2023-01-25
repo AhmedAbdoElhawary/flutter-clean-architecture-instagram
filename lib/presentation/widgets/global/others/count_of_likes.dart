@@ -21,10 +21,10 @@ class CountOfLikes extends StatelessWidget {
         if (isThatMobile) {
           Go(context).push(
               page: UsersWhoLikesForMobile(
-                showSearchBar: true,
-                usersIds: postInfo.likes,
-                isThatMyPersonalId: postInfo.publisherId == myPersonalId,
-              ));
+            showSearchBar: true,
+            usersIds: postInfo.likes,
+            isThatMyPersonalId: postInfo.publisherId == myPersonalId,
+          ));
         } else {
           Navigator.of(context).push(
             HeroDialogRoute(

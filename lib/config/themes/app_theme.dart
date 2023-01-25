@@ -12,22 +12,20 @@ class AppTheme {
       primarySwatch: Colors.grey,
       hintColor: ColorManager.lowOpacityGrey,
       shadowColor: ColorManager.veryLowOpacityGrey,
-      bottomAppBarColor: ColorManager.black26,
       focusColor: ColorManager.black,
       disabledColor: ColorManager.black54,
       dialogBackgroundColor: ColorManager.black87,
       hoverColor:
           isThatMobile ? ColorManager.black45 : ColorManager.transparent,
       indicatorColor: ColorManager.black38,
-
       dividerColor: ColorManager.black12,
-      backgroundColor: ColorManager.lightBlack,
+        cardColor: ColorManager.lightBlack,
       scaffoldBackgroundColor:
           isThatMobile ? ColorManager.white : ColorManager.customGreyForWeb,
       iconTheme: const IconThemeData(color: ColorManager.black38),
       chipTheme:
           const ChipThemeData(backgroundColor: ColorManager.veryLowOpacityGrey),
-      errorColor: ColorManager.black,
+      highlightColor: ColorManager.black,
       canvasColor: ColorManager.transparent,
       splashColor: ColorManager.white,
       appBarTheme: AppBarTheme(
@@ -50,6 +48,7 @@ class AppTheme {
         titleSmall: getNormalStyle(color: ColorManager.darkWhite),
         titleMedium: getNormalStyle(color: ColorManager.lightGrey),
       ),
+      bottomAppBarTheme: const BottomAppBarTheme(color: ColorManager.black26),
     );
   }
 
@@ -62,15 +61,14 @@ class AppTheme {
       shadowColor: ColorManager.darkGray,
       focusColor: ColorManager.white,
       dialogBackgroundColor: ColorManager.white,
+      highlightColor: ColorManager.grey,
       hoverColor: isThatMobile ? ColorManager.grey : ColorManager.transparent,
       indicatorColor: ColorManager.grey,
       dividerColor: ColorManager.grey,
-      bottomAppBarColor: ColorManager.grey,
       iconTheme: const IconThemeData(color: ColorManager.white),
       chipTheme:
           const ChipThemeData(backgroundColor: ColorManager.lightDarkGray),
-      backgroundColor: ColorManager.darkGray,
-      errorColor: ColorManager.grey,
+      cardColor:  ColorManager.darkGray,
       disabledColor: ColorManager.white,
       scaffoldBackgroundColor: ColorManager.black,
       canvasColor: ColorManager.transparent,
@@ -95,6 +93,7 @@ class AppTheme {
         titleSmall: getNormalStyle(color: ColorManager.darkGray),
         titleMedium: getNormalStyle(color: ColorManager.darkGray),
       ),
+      bottomAppBarTheme: const BottomAppBarTheme(color: ColorManager.grey),
     );
   }
 }

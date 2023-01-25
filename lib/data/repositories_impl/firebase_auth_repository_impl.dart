@@ -18,7 +18,6 @@ class FirebaseAuthRepositoryImpl implements FirebaseAuthRepository {
   @override
   Future<void> signOut({required String userId}) async {
     try {
-
       await FirebaseAuthentication.signOut();
       await FireStoreNotification.deleteDeviceToken(userId: userId);
       return;

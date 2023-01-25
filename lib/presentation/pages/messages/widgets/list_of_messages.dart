@@ -139,9 +139,9 @@ class _ListOfMessagesState extends State<ListOfMessages> {
                 } else {
                   Go(context).push(
                       page: BlocProvider<MessageBloc>(
-                        create: (context) => injector<MessageBloc>(),
-                        child: ChattingPage(messageDetails: usersInfo[index]),
-                      ));
+                    create: (context) => injector<MessageBloc>(),
+                    child: ChattingPage(messageDetails: usersInfo[index]),
+                  ));
                 }
               },
               child: Row(

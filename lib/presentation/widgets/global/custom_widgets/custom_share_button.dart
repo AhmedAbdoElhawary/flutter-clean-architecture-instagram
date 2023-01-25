@@ -138,8 +138,8 @@ class _CustomShareButtonState extends State<CustomShareButton> {
       child: SizedBox(
           height: 20,
           width: 20,
-          child: ThineCircularProgress(
-              color: ColorManager.white, strokeWidth: 2)),
+          child:
+              ThineCircularProgress(color: ColorManager.white, strokeWidth: 2)),
     );
   }
 }

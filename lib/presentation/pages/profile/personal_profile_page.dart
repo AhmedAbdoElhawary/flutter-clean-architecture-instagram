@@ -258,8 +258,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           sharePrefs.clear();
           Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
             CupertinoPageRoute(
-                builder: (_) => const LoginPage(),
-                maintainState: false),
+                builder: (_) => const LoginPage(), maintainState: false),
             (route) => false,
           );
         });
@@ -299,7 +298,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           onTap: () async {
             Navigator.maybePop(context);
             Future.delayed(Duration.zero, () async {
-              await Go(context).push( page: EditProfilePage(userInfo));
+              await Go(context).push(page: EditProfilePage(userInfo));
               rebuildUserInfo.value = true;
               userInfo = myPersonalInfo;
             });
@@ -309,7 +308,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
               border: Border.all(
-                  color: Theme.of(context).bottomAppBarColor, width: 1.0),
+                  color: Theme.of(context).bottomAppBarTheme.color!, width: 1.0),
               borderRadius: BorderRadius.circular(20.0),
             ),
             child: Center(
@@ -387,7 +386,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       isThatStory: true,
     );
     if (!mounted || details == null) return;
-    await Go(context).push( page: CreateStoryPage(storiesDetails: details));
+    await Go(context).push(page: CreateStoryPage(storiesDetails: details));
     rebuildUserInfo.value = true;
   }
 

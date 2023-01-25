@@ -110,7 +110,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         border: InputBorder.none,
                         hintText: StringsManager.writeACaption.tr,
                         hintStyle: TextStyle(
-                            color: Theme.of(context).bottomAppBarColor),
+                            color: Theme.of(context).bottomAppBarTheme.color!),
                       ),
                     ),
                   ),

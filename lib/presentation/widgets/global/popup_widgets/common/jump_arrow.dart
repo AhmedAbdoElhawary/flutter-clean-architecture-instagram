@@ -10,7 +10,6 @@ class ArrowJump extends StatelessWidget {
     Key? key,
     this.isThatBack = true,
     this.topPadding = false,
-
     this.makeArrowBigger = false,
   }) : super(key: key);
 
@@ -22,7 +21,9 @@ class ArrowJump extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsetsDirectional.only(
-          start: isThatBack ? 10.0 : 0.0, end: isThatBack ? 0.0 : 10.0,top: topPadding?10:0),
+          start: isThatBack ? 10.0 : 0.0,
+          end: isThatBack ? 0.0 : 10.0,
+          top: topPadding ? 10 : 0),
       child: Align(
         alignment: isThatBack ? Alignment.centerLeft : Alignment.centerRight,
         child: Container(

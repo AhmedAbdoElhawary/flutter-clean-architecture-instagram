@@ -123,7 +123,7 @@ Future<void> _pushToPage(
   }
 
   // ignore: use_build_context_synchronously
-  await Go(context).push( page: page);
+  await Go(context).push(page: page);
 }
 
 AndroidNotificationDetails _videoCallAndroidNotificationDetails(

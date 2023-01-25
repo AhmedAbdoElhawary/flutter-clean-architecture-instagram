@@ -20,7 +20,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final SharedPreferences sharePrefs=injector<SharedPreferences>();
+  final SharedPreferences sharePrefs = injector<SharedPreferences>();
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   RxBool isHeMovedToHome = false.obs;
@@ -36,7 +36,6 @@ class _LoginPageState extends State<LoginPage> {
     isUserIdReady.dispose();
     validateEmail.dispose();
     validatePassword.dispose();
-
   }
 
   @override

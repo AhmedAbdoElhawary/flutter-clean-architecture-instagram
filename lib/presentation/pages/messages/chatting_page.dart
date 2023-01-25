@@ -177,7 +177,7 @@ class _ChattingPageState extends State<ChattingPage>
   TextButton viewProfileButton(UserPersonalInfo userInfo) {
     return TextButton(
       onPressed: () {
-        Go(context).push( page: UserProfilePage(userId: userInfo.userId));
+        Go(context).push(page: UserProfilePage(userId: userInfo.userId));
       },
       child: Text(StringsManager.viewProfile.tr,
           style: TextStyle(
