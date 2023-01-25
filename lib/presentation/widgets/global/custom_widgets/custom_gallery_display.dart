@@ -83,8 +83,7 @@ class CustomImagePickerPlus {
     }
 
     //ignore: use_build_context_synchronously
-    await pushToPage(
-      context,
+    await Go(context).push(
       page: CreatePostPage(selectedFilesDetails: details),
     );
   }
