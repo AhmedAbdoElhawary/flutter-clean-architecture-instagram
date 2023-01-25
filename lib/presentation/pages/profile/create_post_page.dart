@@ -18,10 +18,14 @@ import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/register/widgets/popup_calling.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-
-class CreatePostPage extends StatefulWidget {
+class CreatePostPagePar{
   final SelectedImagesDetails selectedFilesDetails;
-  const CreatePostPage({required this.selectedFilesDetails, Key? key})
+  const CreatePostPagePar({required this.selectedFilesDetails, Key? key});
+
+}
+class CreatePostPage extends StatefulWidget {
+  final CreatePostPagePar createPostPagePar;
+  const CreatePostPage({required this.createPostPagePar, Key? key})
       : super(key: key);
 
   @override
@@ -42,10 +46,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
   late File firstImage;
   @override
   void initState() {
+
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-    selectedByte = widget.selectedFilesDetails.selectedFiles;
-    firstSelectedByte = widget.selectedFilesDetails.selectedFiles[0];
-    multiSelectionMode = widget.selectedFilesDetails.multiSelectionMode;
+    selectedByte = widget.createPostPagePar.selectedFilesDetails.selectedFiles;
+    firstSelectedByte = widget.createPostPagePar.selectedFilesDetails.selectedFiles[0];
+    multiSelectionMode = widget.createPostPagePar.selectedFilesDetails.multiSelectionMode;
     isThatImage = firstSelectedByte.isThatImage;
     firstImage = firstSelectedByte.selectedFile;
     super.initState();
@@ -237,7 +242,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   Post addPostInfo(String blurHash) {
     return Post(
-      aspectRatio: widget.selectedFilesDetails.aspectRatio,
+      aspectRatio: widget.createPostPagePar.selectedFilesDetails.aspectRatio,
       publisherId: myPersonalId,
       datePublished: DateReformat.dateOfNow(),
       caption: captionController.text,
