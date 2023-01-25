@@ -190,7 +190,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
               : ColorManager.blue,
           border: isThatFollower
               ? Border.all(
-                  color: Theme.of(context).bottomAppBarColor, width: 1.0)
+                  color: Theme.of(context).bottomAppBarTheme.color!, width: 1.0)
               : null,
           borderRadius: BorderRadius.circular(isThatMobile ? 15 : 5),
         ),
