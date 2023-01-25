@@ -19,18 +19,16 @@ class MessageBloc extends Bloc<MessageEvent, MessageBlocState> {
   Stream<MessageBlocState> mapEventToState(
     MessageEvent event,
   ) async* {
-
-      if (event is LoadMessagesForSingleChat) {
-        yield* _mapLoadMessagesToState(event.receiverId);
-      } else if (event is UpdateMessages) {
-        yield* _mapUpdateMessagesToState(event);
-      }
-      if (event is LoadMessagesForGroupChat) {
-        yield* _mapLoadMessagesForGroupToState(event.groupChatUid);
-      } else if (event is UpdateMessagesForGroup) {
-        yield* _mapUpdateMessagesForGroupToState(event);
-      }
-
+    if (event is LoadMessagesForSingleChat) {
+      yield* _mapLoadMessagesToState(event.receiverId);
+    } else if (event is UpdateMessages) {
+      yield* _mapUpdateMessagesToState(event);
+    }
+    if (event is LoadMessagesForGroupChat) {
+      yield* _mapLoadMessagesForGroupToState(event.groupChatUid);
+    } else if (event is UpdateMessagesForGroup) {
+      yield* _mapUpdateMessagesForGroupToState(event);
+    }
   }
 
   static MessageBloc get(BuildContext context) => BlocProvider.of(context);
