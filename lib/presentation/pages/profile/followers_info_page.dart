@@ -12,31 +12,55 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circ
 
 import '../../cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 
-class FollowersInfoPage extends StatefulWidget {
+class FollowersInfoPagePar {
   final ValueNotifier<UserPersonalInfo> userInfo;
   final int initialIndex;
   final VoidCallback updateFollowersCallback;
-  const FollowersInfoPage({
+  const FollowersInfoPagePar({
     Key? key,
     required this.userInfo,
     this.initialIndex = 0,
     required this.updateFollowersCallback,
-  }) : super(key: key);
+  });
+}
+
+class FollowersInfoPage extends StatefulWidget {
+  final FollowersInfoPagePar followersInfoPagePar;
+  const FollowersInfoPage(this.followersInfoPagePar, {Key? key})
+      : super(key: key);
 
   @override
   State<FollowersInfoPage> createState() => _FollowersInfoPageState();
 }
 
 class _FollowersInfoPageState extends State<FollowersInfoPage> {
-  ValueNotifier<bool> rebuildUsersInfo = ValueNotifier(false);
+  final ValueNotifier<bool> rebuildUsersInfo = ValueNotifier(false);
+  late final ValueNotifier<UserPersonalInfo> userInfo;
+  late final int initialIndex;
+  late final VoidCallback updateFollowersCallback;
+  @override
+  void initState() {
+    userInfo = widget.followersInfoPagePar.userInfo;
+    initialIndex = widget.followersInfoPagePar.initialIndex;
+    updateFollowersCallback =
+        widget.followersInfoPagePar.updateFollowersCallback;
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    rebuildUsersInfo.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      initialIndex: widget.initialIndex,
+      initialIndex: initialIndex,
       child: ValueListenableBuilder(
-        valueListenable: widget.userInfo,
+        valueListenable: userInfo,
         builder: (context, UserPersonalInfo userInfoValue, child) => Scaffold(
           appBar: isThatMobile ? buildAppBar(context, userInfoValue) : null,
           body: ValueListenableBuilder(
@@ -63,8 +87,8 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
                 if (state is CubitFollowersAndFollowingsLoaded) {
                   return _TapBarView(
                     state: state,
-                    userInfo: widget.userInfo,
-                    updateCallback: widget.updateFollowersCallback,
+                    userInfo: userInfo,
+                    updateCallback: updateFollowersCallback,
                   );
                 }
                 if (state is CubitGettingSpecificUsersFailed) {
