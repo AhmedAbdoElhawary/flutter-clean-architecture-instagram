@@ -34,6 +34,7 @@ class StoryCubit extends Cubit<StoryState> {
       return storyId;
     }).catchError((e) {
       emit(CubitStoryFailed(e));
+      return "Cubit Story Failed";
     });
   }
 
