@@ -299,7 +299,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           onTap: () async {
             Navigator.maybePop(context);
             Future.delayed(Duration.zero, () async {
-              await pushToPage(context, page: EditProfilePage(userInfo));
+              await Go(context).push( page: EditProfilePage(userInfo));
               rebuildUserInfo.value = true;
               userInfo = myPersonalInfo;
             });
@@ -387,7 +387,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       isThatStory: true,
     );
     if (!mounted || details == null) return;
-    await pushToPage(context, page: CreateStoryPage(storiesDetails: details));
+    await Go(context).push( page: CreateStoryPage(storiesDetails: details));
     rebuildUserInfo.value = true;
   }
 
