@@ -256,12 +256,14 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       if (state is CubitAuthSignOut) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           sharePrefs.clear();
-          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-            CupertinoPageRoute(
-                builder: (_) => const LoginPage(),
-                maintainState: false),
-            (route) => false,
-          );
+          Navigator.of(context, rootNavigator: true)
+              .pushNamedAndRemoveUntil(Routes.login, (route) => false);
+          // Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+          //   CupertinoPageRoute(
+          //       builder: (_) => const LoginPage(),
+          //       maintainState: false),
+          //   (route) => false,
+          // );
         });
       } else if (state is CubitAuthConfirming) {
         ToastShow.toast(StringsManager.loading.tr);
