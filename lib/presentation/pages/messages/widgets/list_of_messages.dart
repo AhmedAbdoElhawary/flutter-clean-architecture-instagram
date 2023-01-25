@@ -137,7 +137,7 @@ class _ListOfMessagesState extends State<ListOfMessages> {
                 if (widget.selectChatting != null) {
                   widget.selectChatting!(usersInfo[index]);
                 } else {
-                  pushToPage(context,
+                  Go(context).push(
                       page: BlocProvider<MessageBloc>(
                         create: (context) => injector<MessageBloc>(),
                         child: ChattingPage(messageDetails: usersInfo[index]),
