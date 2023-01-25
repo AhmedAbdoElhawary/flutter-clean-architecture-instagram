@@ -86,7 +86,7 @@ class _CommentBoxState extends State<CommentBox> {
                   decoration: InputDecoration.collapsed(
                       hintText: StringsManager.addComment.tr,
                       hintStyle: TextStyle(
-                          color: Theme.of(context).bottomAppBarColor)),
+                          color: Theme.of(context).bottomAppBarTheme.color!)),
                   autofocus: false,
                   controller: widget.textController,
                   onChanged: (e) => setState(() {}),
@@ -180,11 +180,12 @@ class _CommentBoxState extends State<CommentBox> {
 
   CustomNotification createNotification(
       String textWithOneSpaces, UserPersonalInfo myPersonalInfo) {
-   Post postInfo= widget.postInfo.value;
+    Post postInfo = widget.postInfo.value;
     return CustomNotification(
       text: "commented: $textWithOneSpaces",
       postId: postInfo.postUid,
-      postImageUrl: postInfo.isThatImage?postInfo.postUrl:postInfo.coverOfVideoUrl,
+      postImageUrl:
+          postInfo.isThatImage ? postInfo.postUrl : postInfo.coverOfVideoUrl,
       time: DateReformat.dateOfNow(),
       senderId: myPersonalId,
       receiverId: widget.postInfo.value.publisherId,
