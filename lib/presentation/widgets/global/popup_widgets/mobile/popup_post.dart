@@ -131,7 +131,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
           : null,
       body: CustomPostsDisplay(postsInfo: widget.postsInfo),
     );
-    pushToPage(context, page: page, withoutRoot: false);
+    Go(context).push( page: page, withoutRoot: false);
   }
 
   void onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
@@ -240,7 +240,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
       }
       if (!mounted) return;
 
-      pushToPage(context, page: page, withoutRoot: false);
+      Go(context).push( page: page, withoutRoot: false);
     }
     if (shareVisibility.value) draggableBottomSheet();
 
