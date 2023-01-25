@@ -9,12 +9,17 @@ import 'package:instagram/domain/entities/calling_status.dart';
 import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/pages/messages/video_call_page.dart';
-
-class CallingRingingPage extends StatefulWidget {
+class CallingRingingPagePar{
   final String channelId;
   final VoidCallback clearMoving;
-  const CallingRingingPage(
-      {Key? key, required this.channelId, required this.clearMoving})
+  const CallingRingingPagePar(
+      {Key? key, required this.channelId, required this.clearMoving});
+
+}
+class CallingRingingPage extends StatefulWidget {
+  final CallingRingingPagePar callingRingingPagePar;
+  const CallingRingingPage(this.callingRingingPagePar,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -23,9 +28,12 @@ class CallingRingingPage extends StatefulWidget {
 
 class _CallingRingingPageState extends State<CallingRingingPage> {
   bool pop = false;
+  late final String channelId;
+
   @override
   void dispose() {
-    widget.clearMoving();
+    channelId=widget.callingRingingPagePar.channelId;
+    widget.callingRingingPagePar.clearMoving();
     super.dispose();
   }
 
@@ -36,7 +44,7 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
       body: SafeArea(
         child: BlocBuilder<CallingRoomsCubit, CallingRoomsState>(
           bloc: CallingRoomsCubit.get(context)
-            ..getUsersInfoInThisRoom(channelId: widget.channelId),
+            ..getUsersInfoInThisRoom(channelId: channelId),
           builder: (context, state) {
             if (pop) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -58,13 +66,13 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
   Future<void> onTapAcceptButton() async {
     UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     await CallingRoomsCubit.get(context).joinToRoom(
-        channelId: widget.channelId, myPersonalInfo: myPersonalInfo);
+        channelId: channelId, myPersonalInfo: myPersonalInfo);
     if (!mounted) return;
 
     await pushToPage(
       context,
       page: CallPage(
-        channelName: widget.channelId,
+        channelName: channelId,
         role: ClientRole.Broadcaster,
         userCallingType: UserCallingType.receiver,
       ),
@@ -78,7 +86,7 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
     UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     await CallingRoomsCubit.get(context).leaveTheRoom(
       userId: myPersonalInfo.userId,
-      channelId: widget.channelId,
+      channelId: channelId,
       isThatAfterJoining: false,
     );
     if (!mounted) return;
