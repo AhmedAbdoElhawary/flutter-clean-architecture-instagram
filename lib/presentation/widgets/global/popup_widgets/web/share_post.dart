@@ -81,31 +81,31 @@ class _PopupSharePostState extends State<PopupSharePost> {
                               ),
                             ),
                     ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: GestureDetector(
-                            onTap: () {
-                              double pos = scrollController.offset + 600;
-                              scrollController.animateTo(pos,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.easeInOutQuart);
-                            },
-                            child: const ArrowJump(topPadding: true)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: GestureDetector(
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: GestureDetector(
                           onTap: () {
-                            double pos = scrollController.offset - 600;
-                            pos = pos < 0 ? 0 : pos;
+                            double pos = scrollController.offset + 600;
                             scrollController.animateTo(pos,
                                 duration: const Duration(milliseconds: 500),
                                 curve: Curves.easeInOutQuart);
                           },
-                          child: const ArrowJump(
-                              isThatBack: false, topPadding: true),
-                        ),
+                          child: const ArrowJump(topPadding: true)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: GestureDetector(
+                        onTap: () {
+                          double pos = scrollController.offset - 600;
+                          pos = pos < 0 ? 0 : pos;
+                          scrollController.animateTo(pos,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeInOutQuart);
+                        },
+                        child: const ArrowJump(
+                            isThatBack: false, topPadding: true),
                       ),
+                    ),
                   ],
                 ),
                 Flexible(fit: FlexFit.loose, flex: 1, child: buildUsers()),
