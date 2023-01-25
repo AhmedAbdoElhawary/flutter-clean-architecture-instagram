@@ -194,7 +194,7 @@ class _CommentInfoState extends State<CommentInfo> {
   GestureDetector profileImage(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        pushToPage(context,
+        Go(context).push(
             page: WhichProfilePage(
                 userId: widget.commentInfo.whoCommentInfo!.userId),
             withoutRoot: false);
@@ -261,8 +261,8 @@ class _CommentInfoState extends State<CommentInfo> {
       child: InkWell(
         onTap: () {
           if (isThatMobile) {
-            pushToPage(
-              context,
+            Go(context).push(
+
               page: UsersWhoLikesForMobile(
                 showSearchBar: false,
                 usersIds: widget.commentInfo.likes,
@@ -295,7 +295,7 @@ class _CommentInfoState extends State<CommentInfo> {
       BuildContext context, String hashTageOfUserName) {
     return GestureDetector(
       onTap: () {
-        pushToPage(context,
+        Go(context).push(
             page: WhichProfilePage(
                 userId: widget.commentInfo.whoCommentInfo!.userId));
       },
@@ -317,7 +317,7 @@ class _CommentInfoState extends State<CommentInfo> {
                   ..onTap = () async {
                     List<String> hashTagName = hashTageOfUserName.split(" ");
                     String userName = hashTagName[0].replaceAll('@', '');
-                    await pushToPage(context,
+                    await Go(context).push(
                         page: WhichProfilePage(
                           userName: userName,
                         ));
