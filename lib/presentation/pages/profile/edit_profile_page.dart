@@ -17,11 +17,16 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gall
 
 import '../../../core/functions/toast_show.dart';
 import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-
-class EditProfilePage extends StatefulWidget {
+class EditProfilePagePar{
   final UserPersonalInfo userInfo;
 
-  const EditProfilePage(this.userInfo, {Key? key}) : super(key: key);
+  const EditProfilePagePar(this.userInfo, {Key? key});
+
+}
+class EditProfilePage extends StatefulWidget {
+  final EditProfilePagePar editProfilePagePar;
+
+  const EditProfilePage(this.editProfilePagePar, {Key? key}) : super(key: key);
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -49,7 +54,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   void initState() {
-    userInfo = widget.userInfo;
+    userInfo = widget.editProfilePagePar.userInfo;
     nameController = TextEditingController(text: userInfo.name);
     userNameController = TextEditingController(text: userInfo.userName);
     bioController = TextEditingController(text: userInfo.bio);
