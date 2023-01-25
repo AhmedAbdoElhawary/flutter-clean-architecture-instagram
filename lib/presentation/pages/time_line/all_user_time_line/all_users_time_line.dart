@@ -46,7 +46,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
         child: Center(
           child: TextField(
             onTap: () {
-              pushToPage(context, page: const SearchAboutUserPage());
+              Go(context).push( page: const SearchAboutUserPage());
             },
             readOnly: true,
             decoration: InputDecoration(
