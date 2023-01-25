@@ -29,7 +29,7 @@ class ChattingPageParameters {
 class ChattingPage extends StatefulWidget {
   final ChattingPageParameters chattingPageParameters;
 
-  const ChattingPage({Key? key, required this.chattingPageParameters})
+  const ChattingPage(this.chattingPageParameters,{Key? key })
       : super(key: key);
 
   @override
