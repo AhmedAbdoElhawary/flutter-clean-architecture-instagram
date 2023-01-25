@@ -1,15 +1,12 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
-import 'package:instagram/core/utility/injector.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/callingRooms/calling_rooms_cubit.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/pages/messages/chatting_page.dart';
 import 'package:instagram/presentation/pages/messages/video_call_page.dart';
@@ -96,34 +93,33 @@ Future<void> _pushToPage(
   required dynamic userCallingId,
   required dynamic isThatGroupChat,
 }) async {
-  Widget page;
   if (route == "post") {
-    page = GetsPostInfoAndDisplay(
+    GetsPostInfoAndDisplayPar arg = GetsPostInfoAndDisplayPar(
       postId: routeParameterId,
       appBarText: StringsManager.post.tr,
     );
+    await Navigator.of(context).pushNamed(Routes.chattingPage, arguments: arg);
   } else if (route == "profile") {
-    page = WhichProfilePage(userId: routeParameterId);
+    WhichProfilePageParameters arg =
+        WhichProfilePageParameters(userId: routeParameterId);
+    await Navigator.of(context).pushNamed(Routes.chattingPage, arguments: arg);
   } else if (route == "call") {
     UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     await CallingRoomsCubit.get(context).joinToRoom(
         channelId: routeParameterId, myPersonalInfo: myPersonalInfo);
-    page = CallPage(
+    CallPageParameters arg = CallPageParameters(
       channelName: routeParameterId,
       role: ClientRole.Broadcaster,
       userCallingId: userCallingId,
       userCallingType: UserCallingType.receiver,
     );
-  } else {
-    page = BlocProvider<MessageBloc>(
-      create: (context) => injector<MessageBloc>(),
-      child:
-          ChattingPage(chatUid: routeParameterId, isThatGroup: isThatGroupChat),
-    );
-  }
 
-  // ignore: use_build_context_synchronously
-  await pushToPage(context, page: page);
+    await Navigator.of(context).pushNamed(Routes.callPage, arguments: arg);
+  } else {
+    ChattingPageParameters arg = ChattingPageParameters(
+        chatUid: routeParameterId, isThatGroup: isThatGroupChat);
+    await Navigator.of(context).pushNamed(Routes.chattingPage, arguments: arg);
+  }
 }
 
 AndroidNotificationDetails _videoCallAndroidNotificationDetails(
