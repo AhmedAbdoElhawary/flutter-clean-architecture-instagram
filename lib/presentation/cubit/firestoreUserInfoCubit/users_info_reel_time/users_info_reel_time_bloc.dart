@@ -18,7 +18,7 @@ class UsersInfoReelTimeBloc
 
   static UsersInfoReelTimeBloc get(BuildContext context) =>
       BlocProvider.of(context);
-   UserPersonalInfo? myPersonalInfoInReelTime;
+  UserPersonalInfo? myPersonalInfoInReelTime;
   List<UserPersonalInfo> allUsersInfoInReelTime = [];
 
   static UserPersonalInfo? getMyInfoInReelTime(BuildContext context) =>
