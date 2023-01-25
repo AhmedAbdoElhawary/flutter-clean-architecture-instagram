@@ -5,11 +5,16 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/presentation/pages/comments/widgets/comment_of_post.dart';
+class CommentsPageForMobilePar{
+final ValueNotifier<Post> postInfo;
 
+const CommentsPageForMobilePar({Key? key, required this.postInfo});
+
+}
 class CommentsPageForMobile extends StatefulWidget {
-  final ValueNotifier<Post> postInfo;
+  final CommentsPageForMobilePar commentsPageForMobilePar;
 
-  const CommentsPageForMobile({Key? key, required this.postInfo})
+  const CommentsPageForMobile(this.commentsPageForMobilePar,{Key? key})
       : super(key: key);
 
   @override
@@ -22,7 +27,7 @@ class _CommentsPageForMobileState extends State<CommentsPageForMobile> {
     return Scaffold(
       appBar: isThatMobile ? appBar(context) : null,
       body: CommentsOfPost(
-        postInfo: widget.postInfo,
+        postInfo: widget.commentsPageForMobilePar.postInfo,
         selectedCommentInfo: ValueNotifier(null),
         textController: ValueNotifier(TextEditingController()),
       ),
