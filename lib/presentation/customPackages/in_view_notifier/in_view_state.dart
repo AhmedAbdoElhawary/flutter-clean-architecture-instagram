@@ -62,7 +62,7 @@ class InViewState extends ChangeNotifier {
 
       //Retrieve the viewport related to the scroll area
       final RenderAbstractViewport viewport =
-          RenderAbstractViewport.of(renderObject)!;
+          RenderAbstractViewport.of(renderObject);
       final double vpHeight = notification.metrics.viewportDimension;
       final RevealedOffset vpOffset =
           viewport.getOffsetToReveal(renderObject, 0.0);
