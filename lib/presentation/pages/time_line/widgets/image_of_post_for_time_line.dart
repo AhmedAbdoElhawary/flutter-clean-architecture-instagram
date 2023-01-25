@@ -291,7 +291,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
       child: GestureDetector(
         onTap: () {
           if (isThatMobile) {
-            pushToPage(context,
+            Go(context).push(
                 page: CommentsPageForMobile(postInfo: widget.postInfo));
           } else {
             Navigator.of(

@@ -135,7 +135,7 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
             padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 18),
             child: GestureDetector(
               onTap: () {
-                pushToPage(context,
+                Go(context).push(
                     page: GroupMessages(
                         selectedUsersInfoValue: selectedUsersInfoValue));
               },

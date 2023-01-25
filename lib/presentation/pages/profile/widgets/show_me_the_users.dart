@@ -70,7 +70,7 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
     return InkWell(
       onTap: () async {
         Navigator.of(context).maybePop();
-        await pushToPage(context,
+        await Go(context).push(
             page: WhichProfilePage(userId: userInfo.userId),
             withoutRoot: false);
       },

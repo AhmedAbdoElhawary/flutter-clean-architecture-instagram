@@ -54,7 +54,7 @@ class CustomAppBar {
               ],
             ),
             onTap: () {
-              pushToPage(context,
+              Go(context).push(
                   page: BlocProvider<UsersInfoCubit>(
                     create: (context) => injector<UsersInfoCubit>(),
                     child: const MessagesPageForMobile(),
@@ -99,7 +99,7 @@ class CustomAppBar {
               ],
             ),
             onTap: () {
-              pushToPage(context,
+              Go(context).push(
                   page: const ActivityPage(), withoutRoot: false);
             },
           ),
@@ -178,7 +178,7 @@ class CustomAppBar {
             UserPersonalInfo myPersonalInfo =
                 UserInfoCubit.getMyPersonalInfo(context);
             amICalling = true;
-            await pushToPage(context,
+            await Go(context).push(
                 page: VideoCallPage(
                     usersInfo: usersInfo, myPersonalInfo: myPersonalInfo),
                 withoutRoot: false,

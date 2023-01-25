@@ -47,7 +47,7 @@ class _NotificationCardInfoState extends State<NotificationCardInfo> {
     List<String> hashOfUserName = hashUserName(widget.notificationInfo.text);
     return InkWell(
       onTap: () async {
-        await pushToPage(context,
+        await Go(context).push(
             page: WhichProfilePage(userId: widget.notificationInfo.senderId),
             withoutRoot: false);
       },
@@ -91,7 +91,7 @@ class _NotificationCardInfoState extends State<NotificationCardInfo> {
                         ..onTap = () async {
                           String userName =
                               hashOfUserName[1].replaceAll('@', '');
-                          await pushToPage(context,
+                          await Go(context).push(
                               page: WhichProfilePage(userName: userName));
                         },
                     ),
@@ -126,7 +126,7 @@ class _NotificationCardInfoState extends State<NotificationCardInfo> {
                   appBarText = StringsManager.comments.tr;
                 }
                 if (isThatMobile) {
-                  pushToPage(context,
+                  Go(context).push(
                       page: GetsPostInfoAndDisplay(
                         postId: widget.notificationInfo.postId,
                         appBarText: appBarText,

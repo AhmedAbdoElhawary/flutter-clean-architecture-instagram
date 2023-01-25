@@ -340,7 +340,7 @@ class _ProfilePageState extends State<ProfilePage> {
           onTap: () async {
             if (isThatFollowers != null) {
               if (isThatMobile) {
-                await pushToPage(context,
+                await Go(context).push(
                     page: FollowersInfoPage(
                       userInfo: widget.userInfo,
                       initialIndex: usersIds == userInfo.followerPeople ? 0 : 1,

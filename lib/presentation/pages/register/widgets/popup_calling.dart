@@ -29,7 +29,7 @@ class _PopupCallingState extends State<PopupCalling> {
               state.myPersonalInfoInReelTime.channelId.isNotEmpty) {
             if (!isHeMoved) {
               isHeMoved = true;
-              pushToPage(context,
+              Go(context).push(
                   page: CallingRingingPage(
                       channelId: state.myPersonalInfoInReelTime.channelId,
                       clearMoving: clearMoving),

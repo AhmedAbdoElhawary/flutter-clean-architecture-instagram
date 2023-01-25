@@ -96,7 +96,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
 
   onPressedImage(BuildContext context) async {
     if (!widget.showColorfulCircle) {
-      await pushToPage(context,
+      await Go(context).push(
           page: WhichProfilePage(userId: widget.userInfo?.userId));
     } else if (widget.userInfo?.stories.isNotEmpty ?? false) {
       Widget page = BlocBuilder<StoryCubit, StoryState>(
@@ -132,7 +132,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
           }
         },
       );
-      pushToPage(context, page: page);
+      Go(context).push( page: page);
       setState(() {});
     }
   }

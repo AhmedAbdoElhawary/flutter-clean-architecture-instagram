@@ -121,7 +121,7 @@ class _ImageOfPostState extends State<ImageOfPost>
     if (widget.popupWebContainer) {
       Navigator.of(context).maybePop();
     }
-    return pushToPage(context,
+    return Go(context).push(
         page: WhichProfilePage(userId: postInfo.publisherId));
   }
 
@@ -689,7 +689,7 @@ class _ImageOfPostState extends State<ImageOfPost>
       return GestureDetector(
           onTap: () async {
             Navigator.maybePop(context);
-            await pushToPage(context,
+            await Go(context).push(
                 page: UpdatePostInfo(oldPostInfo: postInfoValue));
           },
           child: textOfOrders(StringsManager.edit.tr));
@@ -788,7 +788,7 @@ class _ImageOfPostState extends State<ImageOfPost>
         child: iconsOfImagePost(IconsAssets.commentIcon),
         onTap: () {
           if (isThatMobile) {
-            pushToPage(context,
+            Go(context).push(
                 page: CommentsPageForMobile(postInfo: widget.postInfo));
           } else {
             if (!widget.popupWebContainer) {

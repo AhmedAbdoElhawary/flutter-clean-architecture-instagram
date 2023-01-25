@@ -27,6 +27,8 @@ class MyApp extends StatelessWidget {
       init: AppLanguage(),
       builder: (controller) {
         return GetMaterialApp(
+          defaultTransition: Transition.noTransition,
+          transitionDuration: const Duration(seconds: 0),
           translations: Translation(),
           locale: Locale(controller.appLocale),
           fallbackLocale: const Locale('en'),
@@ -36,13 +38,7 @@ class MyApp extends StatelessWidget {
           darkTheme: AppTheme.dark,
           themeMode: ThemeOfApp().theme,
           home: AnimatedSplashScreen.withScreenFunction(
-            screenFunction: () async {
-              String? myId = await initializeDefaultValues();
-
-              return myId == null
-                  ? const LoginPage()
-                  : GetMyPersonalInfo(myPersonalId: myId);
-            },
+            screenFunction: screenFunction,
             centered: true,
             splash: IconsAssets.splashIcon,
             backgroundColor: ColorManager.white,
@@ -52,6 +48,14 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+}
+
+Future<Widget> screenFunction() async {
+  String? myId = await initializeDefaultValues();
+
+  return myId == null
+      ? const LoginPage()
+      : GetMyPersonalInfo(myPersonalId: myId);
 }
 
 _defineThePlatform(BuildContext context) {
