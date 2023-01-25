@@ -28,12 +28,16 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circ
 import '../../../core/utility/constant.dart';
 import '../../../data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-
-class UserProfilePage extends StatefulWidget {
+class UserProfilePageParameters{
   final String userId;
   final String userName;
 
-  const UserProfilePage({Key? key, required this.userId, this.userName = ''})
+  const UserProfilePageParameters({Key? key, required this.userId, this.userName = ''});
+
+}
+class UserProfilePage extends StatefulWidget {
+  final UserProfilePageParameters userProfilePageParameters;
+  const UserProfilePage(this.userProfilePageParameters,{Key? key})
       : super(key: key);
 
   @override
@@ -44,10 +48,14 @@ class _ProfilePageState extends State<UserProfilePage> {
   ValueNotifier<bool> rebuildUserInfo = ValueNotifier(false);
   late UserPersonalInfo myPersonalInfo;
   late ValueNotifier<UserPersonalInfo> userInfo;
-
+  late final String userId;
+  late final String userName;
   @override
   initState() {
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+
+    userId=widget.userProfilePageParameters.userId;
+    userName=widget.userProfilePageParameters.userName;
     super.initState();
   }
 
@@ -63,11 +71,11 @@ class _ProfilePageState extends State<UserProfilePage> {
   }
 
   Future<void> getData() async {
-    widget.userName.isNotEmpty
+    userName.isNotEmpty
         ? (await BlocProvider.of<UserInfoCubit>(context)
-            .getUserFromUserName(widget.userName))
+            .getUserFromUserName(userName))
         : (await BlocProvider.of<UserInfoCubit>(context)
-            .getUserInfo(widget.userId, isThatMyPersonalId: false));
+            .getUserInfo(userId, isThatMyPersonalId: false));
     rebuildUserInfo.value = true;
   }
 
@@ -76,11 +84,11 @@ class _ProfilePageState extends State<UserProfilePage> {
       valueListenable: rebuildUserInfo,
       builder: (context, bool rebuildUserInfoValue, child) =>
           BlocBuilder<UserInfoCubit, UserInfoState>(
-        bloc: widget.userName.isNotEmpty
+        bloc: userName.isNotEmpty
             ? (BlocProvider.of<UserInfoCubit>(context)
-              ..getUserFromUserName(widget.userName))
+              ..getUserFromUserName(userName))
             : (BlocProvider.of<UserInfoCubit>(context)
-              ..getUserInfo(widget.userId, isThatMyPersonalId: false)),
+              ..getUserInfo(userId, isThatMyPersonalId: false)),
         buildWhen: (previous, current) {
           if (previous != current && current is CubitUserLoaded) {
             return true;
@@ -101,7 +109,7 @@ class _ProfilePageState extends State<UserProfilePage> {
                   : null,
               body: ProfilePage(
                 isThatMyPersonalId: false,
-                userId: widget.userId,
+                userId: userId,
                 getData: getData,
                 userInfo: userInfo,
                 widgetsAboveTapBars: isThatMobile
