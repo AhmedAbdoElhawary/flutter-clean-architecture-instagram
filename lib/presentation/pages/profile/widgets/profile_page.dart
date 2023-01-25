@@ -261,7 +261,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Container(
       height: bodyHeight * .09,
       width: double.infinity,
-      color: Theme.of(context).backgroundColor,
+      color: Theme.of(context).cardColor,
       child: ThineCircularProgress(
         color: ColorManager.black38,
         backgroundColor: Theme.of(context).dividerColor,
@@ -342,10 +342,10 @@ class _ProfilePageState extends State<ProfilePage> {
               if (isThatMobile) {
                 await Go(context).push(
                     page: FollowersInfoPage(
-                      userInfo: widget.userInfo,
-                      initialIndex: usersIds == userInfo.followerPeople ? 0 : 1,
-                      updateFollowersCallback: updateUserInfo,
-                    ));
+                  userInfo: widget.userInfo,
+                  initialIndex: usersIds == userInfo.followerPeople ? 0 : 1,
+                  updateFollowersCallback: updateUserInfo,
+                ));
               } else {
                 await Navigator.of(context).push(
                   HeroDialogRoute(
@@ -511,7 +511,7 @@ class _TabBarIcons extends StatelessWidget {
             children: [
               SvgPicture.asset(
                 IconsAssets.videoIcon,
-                color: Theme.of(context).errorColor,
+                color: Theme.of(context).highlightColor,
                 height: isWidthAboveMinimum ? 14 : 22.5,
               ),
               if (isWidthAboveMinimum) ...[
