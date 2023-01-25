@@ -8,19 +8,27 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circ
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_posts_display.dart';
 import 'package:instagram/presentation/widgets/global/others/image_of_post.dart';
 
-class GetsPostInfoAndDisplay extends StatelessWidget {
+class GetsPostInfoAndDisplayPar {
   final String postId;
   final String appBarText;
   final bool fromHeroRoute;
-  const GetsPostInfoAndDisplay({
+  const GetsPostInfoAndDisplayPar({
     Key? key,
     required this.postId,
     required this.appBarText,
     this.fromHeroRoute = false,
-  }) : super(key: key);
+  });
+}
+
+class GetsPostInfoAndDisplay extends StatelessWidget {
+  final GetsPostInfoAndDisplayPar getsPostInfoAndDisplayPar;
+  const GetsPostInfoAndDisplay(this.getsPostInfoAndDisplayPar, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final String postId=getsPostInfoAndDisplayPar.postId;
+    final String appBarText=getsPostInfoAndDisplayPar.appBarText;
     return Scaffold(
       appBar: isThatMobile
           ? CustomAppBar.oneTitleAppBar(context, appBarText,
