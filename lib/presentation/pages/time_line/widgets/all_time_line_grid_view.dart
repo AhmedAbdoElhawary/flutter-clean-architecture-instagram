@@ -88,7 +88,8 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
         },
       );
     } else {
-      return SingleChildScrollView(child: Center(child: SizedBox(width: 910, child: _gridView())));
+      return SingleChildScrollView(
+          child: Center(child: SizedBox(width: 910, child: _gridView())));
     }
   }
 
