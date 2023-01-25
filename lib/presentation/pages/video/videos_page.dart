@@ -383,8 +383,8 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
 
   goToCommentPage(Post videoInfo) async {
     widget.stopVideo.value = false;
-    await Go(context).push(
-        page: CommentsPageForMobile(postInfo: ValueNotifier(videoInfo)));
+    await Go(context)
+        .push(page: CommentsPageForMobile(postInfo: ValueNotifier(videoInfo)));
     widget.stopVideo.value = true;
   }
 
