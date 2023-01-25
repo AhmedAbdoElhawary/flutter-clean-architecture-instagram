@@ -13,6 +13,7 @@ import 'package:instagram/data/models/parent_classes/without_sub_classes/user_pe
 import 'package:instagram/presentation/customPackages/story_view/story_controller.dart';
 import 'package:instagram/presentation/customPackages/story_view/story_view.dart';
 import 'package:instagram/presentation/customPackages/story_view/utils.dart';
+import 'package:instagram/presentation/pages/story/story_page_for_mobile.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/common/jump_arrow.dart';
@@ -20,16 +21,9 @@ import 'package:instagram/presentation/customPackages/snapping.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StoryPageForWeb extends StatefulWidget {
-  final UserPersonalInfo user;
-  final List<UserPersonalInfo> storiesOwnersInfo;
-  final String hashTag;
-
-  const StoryPageForWeb({
-    Key? key,
-    this.hashTag = "",
-    required this.user,
-    required this.storiesOwnersInfo,
-  }) : super(key: key);
+  final StoryPagePar storyPagePar;
+  const StoryPageForWeb(this.storyPagePar, {Key? key})
+      : super(key: key);
 
   @override
   StoryPageForWebState createState() => StoryPageForWebState();
@@ -39,12 +33,21 @@ class StoryPageForWebState extends State<StoryPageForWeb> {
   int currentPage = 0;
   late ScrollController _scrollPageController;
   double initialPage = 0;
+  late final UserPersonalInfo user;
+  late final List<UserPersonalInfo> storiesOwnersInfo;
+  late final String hashTag;
+
   @override
   void initState() {
-    super.initState();
-    currentPage = widget.storiesOwnersInfo.indexOf(widget.user);
+    user = widget.storyPagePar.user;
+    storiesOwnersInfo = widget.storyPagePar.storiesOwnersInfo;
+    hashTag = widget.storyPagePar.hashTag;
+
+    currentPage = storiesOwnersInfo.indexOf(user);
     initialPage = currentPage.toDouble();
     _scrollPageController = ScrollController();
+    super.initState();
+
   }
 
   @override
@@ -79,7 +82,7 @@ class StoryPageForWebState extends State<StoryPageForWeb> {
         Expanded(
           child: ScrollSnapList(
             itemBuilder: (_, index) {
-              if (index == widget.storiesOwnersInfo.length) {
+              if (index == storiesOwnersInfo.length) {
                 return const ThineCircularProgress();
               }
               return SizedBox(
@@ -92,14 +95,14 @@ class StoryPageForWebState extends State<StoryPageForWeb> {
                         height: heightOfStory,
                         width: widthOfStory,
                         child: StoryWidget(
-                          allMainStoriesOwnersInfo: widget.storiesOwnersInfo,
-                          user: widget.storiesOwnersInfo[index],
+                          allMainStoriesOwnersInfo: storiesOwnersInfo,
+                          user: storiesOwnersInfo[index],
                           scrollControl: _scrollPageController,
                           currentPage: ValueNotifier(currentPage),
                           onItemFocus: onItemFocus,
                           itemSize: widthOfStory,
                           indexOfPage: ValueNotifier(index),
-                          hashTag: "${widget.hashTag} , $index",
+                          hashTag: "${hashTag} , $index",
                         ),
                       ),
                     ],
@@ -118,7 +121,7 @@ class StoryPageForWebState extends State<StoryPageForWeb> {
                 print('Done!');
               }
             },
-            itemCount: widget.storiesOwnersInfo.length,
+            itemCount: storiesOwnersInfo.length,
           ),
         ),
       ],
