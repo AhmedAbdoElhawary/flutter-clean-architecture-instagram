@@ -346,11 +346,10 @@ class _ProfilePageState extends State<UserProfilePage> {
         onTap: () async {
           Go(context).push(
               page: BlocProvider<MessageBloc>(
-                create: (context) => injector<MessageBloc>(),
-                child: ChattingPage(
-                    messageDetails:
-                        SenderInfo(receiversInfo: [userInfo.value])),
-              ));
+            create: (context) => injector<MessageBloc>(),
+            child: ChattingPage(
+                messageDetails: SenderInfo(receiversInfo: [userInfo.value])),
+          ));
         },
         child: containerOfFollowText(
           text: StringsManager.message.tr,
@@ -371,7 +370,7 @@ class _ProfilePageState extends State<UserProfilePage> {
             ? Theme.of(context).primaryColor
             : ColorManager.blue,
         border: Border.all(
-            color: Theme.of(context).bottomAppBarColor,
+            color: Theme.of(context).bottomAppBarTheme.color!,
             width: isThatFollowers ? 1.0 : 0),
         borderRadius: BorderRadius.circular(20.0),
       ),
