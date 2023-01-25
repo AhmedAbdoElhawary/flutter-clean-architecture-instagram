@@ -9,7 +9,8 @@ class ProfileGridView extends StatefulWidget {
   final List<Post> postsInfo;
   final String userId;
 
-  const ProfileGridView({required this.userId, required this.postsInfo, Key? key})
+  const ProfileGridView(
+      {required this.userId, required this.postsInfo, Key? key})
       : super(key: key);
 
   @override
