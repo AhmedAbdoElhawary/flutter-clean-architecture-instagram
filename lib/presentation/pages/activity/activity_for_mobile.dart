@@ -132,10 +132,8 @@ class _ActivityPageState extends State<ActivityPage> {
 class _ShowNotifications extends StatefulWidget {
   final List<CustomNotification> notifications;
 
-  const _ShowNotifications({
-    Key? key,
-    required this.notifications
-  }) : super(key: key);
+  const _ShowNotifications({Key? key, required this.notifications})
+      : super(key: key);
 
   @override
   State<_ShowNotifications> createState() => _ShowNotificationsState();
