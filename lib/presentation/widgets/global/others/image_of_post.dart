@@ -121,8 +121,8 @@ class _ImageOfPostState extends State<ImageOfPost>
     if (widget.popupWebContainer) {
       Navigator.of(context).maybePop();
     }
-    return Go(context).push(
-        page: WhichProfilePage(userId: postInfo.publisherId));
+    return Go(context)
+        .push(page: WhichProfilePage(userId: postInfo.publisherId));
   }
 
   Widget buildPostForMobile({required double bodyHeight}) {
@@ -171,7 +171,7 @@ class _ImageOfPostState extends State<ImageOfPost>
         child: Text(
           DateReformat.fullDigitsFormat(
               postInfoValue.datePublished, postInfoValue.datePublished),
-          style: getNormalStyle(color: Theme.of(context).bottomAppBarColor),
+          style: getNormalStyle(color: Theme.of(context).bottomAppBarTheme.color!),
         ),
       ),
       if (showCommentBox || minimumWidth)
@@ -310,7 +310,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                     Flexible(
                       child: GestureDetector(
                         onTap: () {
-                            setState(() => playTheVideo = !playTheVideo);
+                          setState(() => playTheVideo = !playTheVideo);
                         },
                         child: Container(
                           height: double.infinity,
@@ -689,8 +689,8 @@ class _ImageOfPostState extends State<ImageOfPost>
       return GestureDetector(
           onTap: () async {
             Navigator.maybePop(context);
-            await Go(context).push(
-                page: UpdatePostInfo(oldPostInfo: postInfoValue));
+            await Go(context)
+                .push(page: UpdatePostInfo(oldPostInfo: postInfoValue));
           },
           child: textOfOrders(StringsManager.edit.tr));
     });
@@ -788,8 +788,8 @@ class _ImageOfPostState extends State<ImageOfPost>
         child: iconsOfImagePost(IconsAssets.commentIcon),
         onTap: () {
           if (isThatMobile) {
-            Go(context).push(
-                page: CommentsPageForMobile(postInfo: widget.postInfo));
+            Go(context)
+                .push(page: CommentsPageForMobile(postInfo: widget.postInfo));
           } else {
             if (!widget.popupWebContainer) {
               WidgetsBinding.instance.addPostFrameCallback((_) {

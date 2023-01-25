@@ -405,8 +405,8 @@ class _BuildStoriesLine extends StatelessWidget {
                               user: publisherInfo,
                               hashTag: hashTag,
                               storiesOwnersInfo: storiesOwnersInfo!);
-                          Go(context).push(
-                              page: page, withoutPageTransition: true);
+                          Go(context)
+                              .push(page: page, withoutPageTransition: true);
                         } else {
                           Widget page = StoryPageForWeb(
                               user: publisherInfo,
