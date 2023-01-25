@@ -41,9 +41,9 @@ class _ShareButtonState extends State<ShareButton> {
       onTap: () async {
         if (isThatMobile) {
           if (widget.shareWidget != null) {
-             Navigator.of(context).maybePop();
+            Navigator.of(context).maybePop();
           }
-            await draggableBottomSheet();
+          await draggableBottomSheet();
         } else {
           Navigator.of(context).push(heroDialogRoute());
         }
@@ -56,7 +56,6 @@ class _ShareButtonState extends State<ShareButton> {
           ),
     );
   }
-
 
   HeroDialogRoute<dynamic> heroDialogRoute() {
     return HeroDialogRoute(
