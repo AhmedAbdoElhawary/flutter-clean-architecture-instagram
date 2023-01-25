@@ -131,7 +131,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
           : null,
       body: CustomPostsDisplay(postsInfo: widget.postsInfo),
     );
-    Go(context).push( page: page, withoutRoot: false);
+    Go(context).push(page: page, withoutRoot: false);
   }
 
   void onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
@@ -193,15 +193,15 @@ class _PopupPostCardState extends State<PopupPostCard> {
     });
 
     _popupEmptyDialog = _createPopupEmptyDialog();
-    Overlay.of(context)!.insert(_popupEmptyDialog!);
+    Overlay.of(context).insert(_popupEmptyDialog!);
   }
 
   onLongPressPost() {
     loveStatusAnimation.value = const SizedBox();
     _popupDialog = _createPopupDialog(widget.postClickedInfo);
-    Overlay.of(context)!.insert(_popupDialog!);
+    Overlay.of(context).insert(_popupDialog!);
     _popupEmptyDialog = _createPopupEmptyDialog();
-    Overlay.of(context)!.insert(_popupEmptyDialog!);
+    Overlay.of(context).insert(_popupEmptyDialog!);
   }
 
   void onLongPressEnd(LongPressEndDetails details) async {
@@ -240,7 +240,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
       }
       if (!mounted) return;
 
-      Go(context).push( page: page, withoutRoot: false);
+      Go(context).push(page: page, withoutRoot: false);
     }
     if (shareVisibility.value) draggableBottomSheet();
 
