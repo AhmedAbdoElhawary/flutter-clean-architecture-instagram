@@ -43,7 +43,7 @@ class _ListOfBodyWidgets extends StatelessWidget {
         children: <Widget>[
           SvgPicture.asset(
             IconsAssets.minusIcon,
-            color: Theme.of(context).errorColor,
+            color: Theme.of(context).highlightColor,
             height: 40,
           ),
           headIcon,
