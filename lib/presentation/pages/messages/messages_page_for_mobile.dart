@@ -21,7 +21,7 @@ class MessagesPageForMobile extends StatelessWidget {
       actions: [
         IconButton(
           onPressed: () {
-            pushToPage(context, page: const SelectForGroupChat());
+            Go(context).push( page: const SelectForGroupChat());
           },
           icon: Icon(
             Icons.add,
