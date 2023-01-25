@@ -171,7 +171,8 @@ class _SendToUsersState extends State<SendToUsers> {
           padding: const EdgeInsetsDirectional.only(end: 20),
           child: GestureDetector(
             onTap: () async {
-              List<UserPersonalInfo> selectedUsers=widget.selectedUsersInfo.value;
+              List<UserPersonalInfo> selectedUsers =
+                  widget.selectedUsersInfo.value;
               setState(() {
                 if (!selectedUsersValue.contains(userInfo)) {
                   selectedUsers.add(userInfo);
@@ -179,7 +180,8 @@ class _SendToUsersState extends State<SendToUsers> {
                   selectedUsers.remove(userInfo);
                 }
 
-                if (widget.maxExtentUsersList != null&&selectedUsers.length>5) {
+                if (widget.maxExtentUsersList != null &&
+                    selectedUsers.length > 5) {
                   widget.maxExtentUsersList!();
                 }
 

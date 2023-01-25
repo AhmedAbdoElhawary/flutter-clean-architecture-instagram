@@ -62,7 +62,6 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
     if (!mounted) return;
 
     await Go(context).push(
-
       page: CallPage(
         channelName: widget.channelId,
         role: ClientRole.Broadcaster,
