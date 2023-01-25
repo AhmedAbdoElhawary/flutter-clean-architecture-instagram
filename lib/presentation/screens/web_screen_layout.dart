@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -25,10 +26,16 @@ import 'package:instagram/presentation/widgets/global/popup_widgets/web/new_post
 
 int pageOfController = 0;
 
-class WebScreenLayout extends StatefulWidget {
+class WebScreenLayoutParameters {
   final Widget? body;
   final UserPersonalInfo? userInfoForMessagePage;
-  const WebScreenLayout({Key? key, this.body, this.userInfoForMessagePage})
+  const WebScreenLayoutParameters(
+      {Key? key, this.body, this.userInfoForMessagePage});
+}
+
+class WebScreenLayout extends StatefulWidget {
+  final WebScreenLayoutParameters? webScreenLayoutParameters;
+  const WebScreenLayout(this.webScreenLayoutParameters,{Key? key})
       : super(key: key);
 
   @override
@@ -37,10 +44,14 @@ class WebScreenLayout extends StatefulWidget {
 
 class _WebScreenLayoutState extends State<WebScreenLayout> {
   late PageController pageController;
-
+  late final Widget? body;
+  late final UserPersonalInfo? userInfoForMessagePage;
   @override
   void initState() {
     pageController = PageController(initialPage: pageOfController);
+    body = widget.webScreenLayoutParameters?.body;
+    userInfoForMessagePage =
+        widget.webScreenLayoutParameters?.userInfoForMessagePage;
     super.initState();
   }
 
@@ -55,10 +66,10 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
   }
 
   void navigationTapped(int page) {
-    if (widget.body != null) {
+    if (body != null) {
       setState(() => page = page);
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => const WebScreenLayout()));
+
+      Navigator.of(context).pushNamed(Routes.webScreenLayout);
     } else {
       pageController.jumpToPage(page);
       setState(() => pageOfController = page);
@@ -82,7 +93,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
         children: [
           appBar(context),
           Expanded(
-            child: widget.body ??
+            child: body ??
                 PageView(
                   physics: const NeverScrollableScrollPhysics(),
                   controller: pageController,
@@ -263,7 +274,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
   List<Widget> homeScreenItems() {
     return [
       const _HomePage(),
-      MessagesForWeb(selectedTextingUser: widget.userInfoForMessagePage),
+      MessagesForWeb(selectedTextingUser: userInfoForMessagePage),
       const ShopPage(),
       AllUsersTimeLinePage(),
       const _PersonalProfilePage(),
