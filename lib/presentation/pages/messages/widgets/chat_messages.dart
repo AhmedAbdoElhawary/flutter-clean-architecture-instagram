@@ -87,7 +87,6 @@ class _ChatMessagesState extends State<ChatMessages>
   @override
   void dispose() {
     _colorAnimationController.dispose();
-    globalMessagesInfo.dispose();
     indexOfGarbageMessage.dispose();
     deleteThisMessage.dispose();
     newMessageInfo.dispose();
