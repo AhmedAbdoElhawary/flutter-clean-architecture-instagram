@@ -68,7 +68,7 @@ You will find me on
 * Send post to chats
 
 ## SnapShots for web/desktop
-### Soon
+### You see it from here [google drive](https://drive.google.com/file/d/11LyKgpP4kvnP1yLgykwpPj1t7euEFJjK/view?usp=sharing)
 
 ## SnapShots
 
@@ -225,18 +225,13 @@ $ cd flutter-clean-architecture-instagram/
  - [x] Calling video and voice in chat
  - [x] Create group chat
  - [x] Calling video and voice in group chat
- - [ ] Add stickers on chat
  - [x] Send posts to chats
  - [x] control in the dimension of selected image & video from the gallery
  - [x] Custom gallery display
  - [x] Improve display loading of posts when opening the app
- - [ ] Turn off commenting on a post
- - [ ] Hide Like count of a post
  - [x] share post
  - [x] Make like, comment, and share of animation container post touchy when long pressed on post
- - [ ] Create store screens
- - [ ] Make it stable for web & desktop
- - [ ] Create a live
+ - [x] Make it stable for web
  - [ ] Clean-up more code
 
 
