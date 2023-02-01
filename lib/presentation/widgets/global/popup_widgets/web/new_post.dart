@@ -218,10 +218,8 @@ class _PopupNewPostState extends State<PopupNewPost> {
     String blurHash = await CustomBlurHash.blurHashEncode(selectedImage.value!);
     Post postInfo = addPostInfo(personalInfo, blurHash);
     if (!mounted) return;
-
     PostCubit postCubit =
         BlocProvider.of<PostCubit>(builder2context, listen: false);
-
     await postCubit.createPost(postInfo, selectedImagesInByte);
     if (postCubit.newPostInfo != null) {
       await userCubit.updateUserPostsInfo(
@@ -607,6 +605,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
                               onTap: () {
                                 setState(() {
                                   selectedImages.value.removeAt(i);
+                                  selectedImagesInByte.removeAt(i);
                                   if (selectedImages.value.isNotEmpty) {
                                     int prevIndex = i != 0 ? i - 1 : i;
                                     indexOfSelectedImage = prevIndex;

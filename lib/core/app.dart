@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
           themeMode: ThemeOfApp().theme,
+
           home: AnimatedSplashScreen.withScreenFunction(
             screenFunction: screenFunction,
             centered: true,

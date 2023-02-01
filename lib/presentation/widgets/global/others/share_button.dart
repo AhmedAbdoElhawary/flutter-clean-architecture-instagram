@@ -83,10 +83,7 @@ class _ShareButtonState extends State<ShareButton> {
         cornerRadius: 16,
         minHeight: 200,
         color: Theme.of(context).splashColor,
-        snapSpec: const SnapSpec(
-          initialSnap: 1,
-          snappings: [.4, 1, .7],
-        ),
+        snapSpec: const SnapSpec(initialSnap: 1, snappings: [.4, 1, .7]),
         builder: buildSheet,
         headerBuilder: (context, state) =>
             Material(child: upperWidgets(context)),
