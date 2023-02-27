@@ -67,8 +67,18 @@ You will find me on
 * Push Notifications
 * Send post to chats
 
-## SnapShots for web/desktop
-### You see it from here [google drive](https://drive.google.com/file/d/11LyKgpP4kvnP1yLgykwpPj1t7euEFJjK/view?usp=sharing)
+## SnapShots for web
+### You can see the screen record from here [google drive](https://drive.google.com/file/d/11LyKgpP4kvnP1yLgykwpPj1t7euEFJjK/view?usp=sharing)
+
+<p>
+<img src="https://user-images.githubusercontent.com/88978546/221562376-b44f5012-fa11-4bbf-9060-09cf8bb6397c.png"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/221562397-9998296f-2819-4b76-858e-0dcc18aed4d2.png"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/221562415-7d2e150a-833e-4020-9af4-b82864522d59.png"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/221562430-d4d250a0-e3c5-4b29-8376-08e92ea2b095.png"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/221563596-6b1ba30d-aecb-409e-a5a5-7fbf7f979a0a.png"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/221564852-459da62f-99b7-4104-98dc-67cb18a4cf4e.png"   width="32%" height="50%">
+
+</p>
 
 ## SnapShots
 
