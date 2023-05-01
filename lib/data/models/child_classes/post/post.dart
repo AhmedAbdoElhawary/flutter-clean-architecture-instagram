@@ -44,7 +44,8 @@ class Post extends ParentPost {
       QueryDocumentSnapshot<Map<String, dynamic>>? query}) {
     dynamic snap = doc ?? query;
     dynamic aspect = snap.data()?["aspectRatio"];
-    if (aspect is int) aspect.toDouble();
+    if (aspect is int) aspect = aspect.toDouble();
+
     return Post(
       caption: snap.data()?["caption"] ?? "",
       datePublished: snap.data()?["datePublished"] ?? "",
