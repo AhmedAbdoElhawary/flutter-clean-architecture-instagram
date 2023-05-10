@@ -124,29 +124,6 @@ You will find me on
 
 </p>
 
-
-### |----------- Edit post ----------|-------- Notifications ---------|-------- Activity page --------|
-
-<p>
-<img src="https://user-images.githubusercontent.com/88978546/193094494-8cc71b18-4f08-4535-be25-6d5e2624c5ab.gif"   width="32%" height="50%">
-<img src="https://user-images.githubusercontent.com/88978546/193094512-a09a0b7a-aeff-45bc-b3e6-d93b271c94ef.gif"   width="32%" height="50%">
-<img src="https://user-images.githubusercontent.com/88978546/193094534-d66b3819-b726-47c5-897c-476a27a84a96.gif"   width="32%" height="50%">
-</p>
-
-### |--------------------------- Chatting ----------------------------|
-
-<p>
-<img src="https://user-images.githubusercontent.com/88978546/173257255-4fdd1318-3e21-47e4-bc4b-3f3809dc5b9c.gif"   width="32%" height="50%">
-<img src="https://user-images.githubusercontent.com/88978546/173257249-3aef7bd3-8174-45ce-9af9-73696ff20c8d.gif"   width="32%" height="50%">
-</p>
-
-### |-------------------------- Video call ---------------------------|
-
-<p>
-<img src="https://user-images.githubusercontent.com/88978546/193158603-31563c80-91c5-4044-a984-f4067436bb41.gif"   width="32%" height="50%">
-<img src="https://user-images.githubusercontent.com/88978546/193158607-e559285c-3fa3-461a-b0ab-a0d4737189a7.gif"   width="32%" height="50%">
-</p>
-
 ## Getting started
 
 #### 1. [Setup Flutter](https://flutter.io/setup/)
