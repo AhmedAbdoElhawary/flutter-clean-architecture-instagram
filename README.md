@@ -2,14 +2,10 @@
 
 Instagram clean architecture using flutter and firebase as ( frontend & backend ) with almost all functionalities
 
-## Contact
+## If you want to work with me, you can find me here:
 
-My email: ahmedabdoelhawari12345work@gmail.com
-
-You will find me on 
-
-<a href="https://www.linkedin.com/in/ahmedabdoelhawary"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" width="40"></a>
-
+- [My Email](ahmedabdoelhawari12345work@gmail.com)
+- <a href="https://www.linkedin.com/in/ahmedabdoelhawary"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" width="40"></a>
 
 ### Notes 
 * I didn't publish the keys such as messaging, agora, firebase web, or even google-services.json. So follow the steps (3. Setup the app) to add them.
@@ -69,6 +65,19 @@ You will find me on
 * Push Notifications
 * Send post to chats
 
+## SnapShots for web
+### You can see the screen record from here [google drive](https://drive.google.com/file/d/11LyKgpP4kvnP1yLgykwpPj1t7euEFJjK/view?usp=sharing)
+
+<p>
+<img src="https://user-images.githubusercontent.com/88978546/221562376-b44f5012-fa11-4bbf-9060-09cf8bb6397c.png"   width="45%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/221562397-9998296f-2819-4b76-858e-0dcc18aed4d2.png"   width="45%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/221562415-7d2e150a-833e-4020-9af4-b82864522d59.png"   width="45%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/221562430-d4d250a0-e3c5-4b29-8376-08e92ea2b095.png"   width="45%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/221563596-6b1ba30d-aecb-409e-a5a5-7fbf7f979a0a.png"   width="45%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/221564852-459da62f-99b7-4104-98dc-67cb18a4cf4e.png"   width="45%" height="50%">
+
+</p>
+
 ## SnapShots
 
 ### |--------- Sign page ----------|------- Welcome page --------|-------------- Stories ----------|
@@ -124,6 +133,29 @@ You will find me on
 <img src="https://user-images.githubusercontent.com/88978546/193094453-79d480b3-1774-41c7-853c-eb537748b74d.gif"   width="32%" height="50%">
 <img src="https://user-images.githubusercontent.com/88978546/193094469-21358a55-443c-4d48-8ecd-95d0095d2b25.gif"   width="32%" height="50%">
 
+</p>
+
+
+### |----------- Edit post ----------|-------- Notifications ---------|-------- Activity page --------|
+
+<p>
+<img src="https://user-images.githubusercontent.com/88978546/193094494-8cc71b18-4f08-4535-be25-6d5e2624c5ab.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193094512-a09a0b7a-aeff-45bc-b3e6-d93b271c94ef.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193094534-d66b3819-b726-47c5-897c-476a27a84a96.gif"   width="32%" height="50%">
+</p>
+
+### |--------------------------- Chatting ----------------------------|
+
+<p>
+<img src="https://user-images.githubusercontent.com/88978546/173257255-4fdd1318-3e21-47e4-bc4b-3f3809dc5b9c.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/173257249-3aef7bd3-8174-45ce-9af9-73696ff20c8d.gif"   width="32%" height="50%">
+</p>
+
+### |-------------------------- Video call ---------------------------|
+
+<p>
+<img src="https://user-images.githubusercontent.com/88978546/193158603-31563c80-91c5-4044-a984-f4067436bb41.gif"   width="32%" height="50%">
+<img src="https://user-images.githubusercontent.com/88978546/193158607-e559285c-3fa3-461a-b0ab-a0d4737189a7.gif"   width="32%" height="50%">
 </p>
 
 ## Getting started
