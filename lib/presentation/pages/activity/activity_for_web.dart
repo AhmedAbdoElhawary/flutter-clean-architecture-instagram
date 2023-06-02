@@ -15,14 +15,13 @@ class ActivityForWeb extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       child: SvgPicture.asset(
         IconsAssets.add2Icon,
-        color: Theme.of(context).focusColor,
+        colorFilter: ColorFilter.mode(
+            Theme.of(context).focusColor, BlendMode.srcIn),
         height: 700,
         width: 500,
       ),
       itemBuilder: (context) => [
-        const PopupMenuItem<Widget>(
-          child: ActivityPage(),
-        ),
+        const PopupMenuItem<Widget>(child: ActivityPage()),
       ],
     );
   }

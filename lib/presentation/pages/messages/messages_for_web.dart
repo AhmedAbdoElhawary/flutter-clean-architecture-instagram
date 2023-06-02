@@ -161,13 +161,15 @@ class _MessagesForWebState extends State<MessagesForWeb> {
                     SvgPicture.asset(
                       IconsAssets.phone,
                       height: 27,
-                      color: Theme.of(context).focusColor,
+                      colorFilter: ColorFilter.mode(
+                          Theme.of(context).focusColor, BlendMode.srcIn),
                     ),
                     const SizedBox(width: 20),
                     SvgPicture.asset(
                       IconsAssets.videoPoint,
                       height: 25,
-                      color: Theme.of(context).focusColor,
+                      colorFilter: ColorFilter.mode(
+                          Theme.of(context).focusColor, BlendMode.srcIn),
                     ),
                     const SizedBox(width: 25),
                   ],

@@ -48,9 +48,10 @@ class ShowMicWithText extends StatelessWidget {
                         EdgeInsetsDirectional.all(isButtonPressed ? 8.0 : 0),
                     child: SvgPicture.asset(
                       "assets/icons/microphone.svg",
-                      color: (isButtonPressed)
-                          ? ColorManager.white
-                          : Theme.of(context).focusColor,
+                      colorFilter: ColorFilter.mode(
+                          (isButtonPressed)
+                              ? ColorManager.white
+                              : Theme.of(context).focusColor , BlendMode.srcIn),
                     ),
                   ),
                 ),

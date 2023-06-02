@@ -60,7 +60,8 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
           },
           icon: SvgPicture.asset(
             IconsAssets.cancelIcon,
-            color: Theme.of(context).focusColor,
+            colorFilter: ColorFilter.mode(
+                Theme.of(context).focusColor, BlendMode.srcIn),
             height: 27,
           )),
       title: Text(

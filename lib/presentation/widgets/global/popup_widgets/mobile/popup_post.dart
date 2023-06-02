@@ -532,7 +532,8 @@ class _PopupPostCardState extends State<PopupPostCard> {
                   ? IconsAssets.commentIcon
                   : IconsAssets.profileIcon,
               height: 28,
-              color: Theme.of(context).focusColor,
+              colorFilter: ColorFilter.mode(
+                  Theme.of(context).focusColor, BlendMode.srcIn),
             ),
           ),
           SizedBox(
@@ -540,14 +541,16 @@ class _PopupPostCardState extends State<PopupPostCard> {
             child: SvgPicture.asset(
               IconsAssets.send1Icon,
               height: 23,
-              color: Theme.of(context).focusColor,
+              colorFilter: ColorFilter.mode(
+                  Theme.of(context).focusColor, BlendMode.srcIn),
             ),
           ),
           SizedBox(
             key: menuKey,
             child: SvgPicture.asset(
               IconsAssets.menuHorizontalIcon,
-              color: Theme.of(context).focusColor,
+              colorFilter: ColorFilter.mode(
+                  Theme.of(context).focusColor, BlendMode.srcIn),
             ),
           ),
         ],

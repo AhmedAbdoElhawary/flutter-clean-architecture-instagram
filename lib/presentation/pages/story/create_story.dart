@@ -75,7 +75,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
         children: <Widget>[
           SvgPicture.asset(
             IconsAssets.minusIcon,
-            color: Theme.of(context).focusColor,
+            colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
             height: 40,
           ),
           Text(StringsManager.create.tr,
@@ -108,33 +108,34 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
 
   Future<void> createStory(
       UserPersonalInfo personalInfo, UserInfoCubit userCubit) async {
-    if (isItDone) {
-      setState(() => isItDone = false);
-      for (final storyDetails in selectedFiles) {
-        Uint8List story = storyDetails.selectedByte;
-        if (!storyDetails.isThatImage) {
-          story = await createThumbnail(storyDetails.selectedFile) ?? story;
+
+      if (isItDone) {
+        setState(() => isItDone = false);
+        for (final storyDetails in selectedFiles) {
+          Uint8List story = storyDetails.selectedByte;
+          if (!storyDetails.isThatImage) {
+            story = await createThumbnail(storyDetails.selectedFile) ?? story;
+          }
+          String blurHash = await CustomBlurHash.blurHashEncode(story);
+          Story storyInfo =
+          addStoryInfo(personalInfo, blurHash, storyDetails.isThatImage);
+          if (!mounted) return;
+          StoryCubit storyCubit = StoryCubit.get(context);
+          await storyCubit.createStory(storyInfo, story);
+          if (storyCubit.storyId != '') {
+            userCubit.updateMyStories(storyId: storyCubit.storyId);
+          }
+          final SharedPreferences sharePrefs =
+          await SharedPreferences.getInstance();
+          WidgetsBinding.instance
+              .addPostFrameCallback((_) => setState(() => isItDone = true));
+          sharePrefs.remove(myPersonalId);
+          if (!mounted) return;
+          Navigator.of(context).pushAndRemoveUntil(
+            CupertinoPageRoute(builder: (_) => PopupCalling(myPersonalId)),
+                (route) => false,
+          );
         }
-        String blurHash = await CustomBlurHash.blurHashEncode(story);
-        Story storyInfo =
-            addStoryInfo(personalInfo, blurHash, storyDetails.isThatImage);
-        if (!mounted) return;
-        StoryCubit storyCubit = StoryCubit.get(context);
-        await storyCubit.createStory(storyInfo, story);
-        if (storyCubit.storyId != '') {
-          userCubit.updateMyStories(storyId: storyCubit.storyId);
-        }
-        final SharedPreferences sharePrefs =
-            await SharedPreferences.getInstance();
-        WidgetsBinding.instance
-            .addPostFrameCallback((_) => setState(() => isItDone = true));
-        sharePrefs.remove(myPersonalId);
-        if (!mounted) return;
-        Navigator.of(context).pushAndRemoveUntil(
-          CupertinoPageRoute(builder: (_) => PopupCalling(myPersonalId)),
-          (route) => false,
-        );
-      }
     }
   }
 
