@@ -1,10 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
+import 'package:instagram/config/themes/theme_service.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -17,7 +17,6 @@ import 'package:instagram/presentation/pages/profile/widgets/custom_videos_grid_
 import 'package:instagram/presentation/pages/profile/widgets/profile_grid_view.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/read_more_text.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/web/follow_card.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -28,14 +27,12 @@ class ProfilePage extends StatefulWidget {
   final bool isThatMyPersonalId;
   final ValueNotifier<UserPersonalInfo> userInfo;
   final List<Widget> widgetsAboveTapBars;
-  final AsyncCallback getData;
 
   const ProfilePage(
       {required this.widgetsAboveTapBars,
       required this.isThatMyPersonalId,
       required this.userInfo,
       required this.userId,
-      required this.getData,
       Key? key})
       : super(key: key);
 
@@ -45,7 +42,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   ValueNotifier<bool> reBuild = ValueNotifier(false);
-  ValueNotifier<bool> loading = ValueNotifier(false);
   ValueNotifier<int> tabBarIndex = ValueNotifier(0);
 
   @override
@@ -218,55 +214,28 @@ class _ProfilePageState extends State<ProfilePage> {
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
     return [
-      GestureDetector(
-        onVerticalDragStart: (e) async {
-          loading.value = true;
-          await widget.getData();
-        },
-        child: Column(
-          children: [
-            ValueListenableBuilder(
-              valueListenable: loading,
-              builder: (context, bool loadingValue, child) => AnimatedSwitcher(
-                  duration: const Duration(seconds: 1),
-                  switchInCurve: Curves.easeIn,
-                  child: loadingValue
-                      ? customDragLoading(bodyHeight)
-                      : const SizedBox()),
+      Column(
+        children: [
+          personalPhotoAndNumberInfo(userInfo, bodyHeight),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 15.0, top: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(userInfo.name,
+                    style: Theme.of(context).textTheme.displayMedium),
+                ReadMore(userInfo.bio, 4),
+                const SizedBox(height: 10),
+                Row(
+                  children: widget.widgetsAboveTapBars,
+                ),
+              ],
             ),
-            personalPhotoAndNumberInfo(userInfo, bodyHeight),
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 15.0, top: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(userInfo.name,
-                      style: Theme.of(context).textTheme.displayMedium),
-                  ReadMore(userInfo.bio, 4),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: widget.widgetsAboveTapBars,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     ];
-  }
-
-  Container customDragLoading(double bodyHeight) {
-    return Container(
-      height: bodyHeight * .09,
-      width: double.infinity,
-      color: Theme.of(context).cardColor,
-      child: ThineCircularProgress(
-        color: ColorManager.black38,
-        backgroundColor: Theme.of(context).dividerColor,
-      ),
-    );
   }
 
   Row personalPhotoAndNumberInfo(UserPersonalInfo userInfo, double bodyHeight) {
@@ -509,10 +478,20 @@ class _TabBarIcons extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SvgPicture.asset(
-                IconsAssets.videoIcon,
-                color: Theme.of(context).highlightColor,
-                height: isWidthAboveMinimum ? 14 : 22.5,
+              ValueListenableBuilder(
+                valueListenable: tapBarIndex,
+                builder: (context, int tapBarIndexValue, child) =>
+                    SvgPicture.asset(
+                  IconsAssets.videoIcon,
+                  colorFilter: ColorFilter.mode(
+                      tapBarIndexValue == 1
+                          ? ThemeOfApp().isThemeDark()
+                              ? ColorManager.white
+                              : ColorManager.black
+                          : ColorManager.grey,
+                      BlendMode.srcIn),
+                  height: isWidthAboveMinimum ? 14 : 22.5,
+                ),
               ),
               if (isWidthAboveMinimum) ...[
                 const SizedBox(width: 8),
