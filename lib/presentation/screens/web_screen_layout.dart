@@ -12,8 +12,6 @@ import 'package:instagram/core/widgets/svg_pictures.dart';
 import 'package:instagram/data/models/child_classes/notification.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/messages/messages_for_web.dart';
@@ -200,9 +198,6 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
   }
 
   PopupMenuButton<int> buildPopupMenuButton(BuildContext context) {
-    UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-    UserPersonalInfo? info = UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
-    if (isMyInfoInReelTimeReady && info != null) myPersonalInfo = info;
     return PopupMenuButton<int>(
       tooltip: "Show profile menu",
       elevation: 20,
@@ -210,7 +205,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
       position: PopupMenuPosition.under,
       color: Theme.of(context).splashColor,
       offset: const Offset(90, 12),
-      icon: PersonalImageIcon(myPersonalInfo: myPersonalInfo),
+      icon: const PersonalImageIcon(),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       onSelected: (int item) => onSelectedProfileMenu(item),
       itemBuilder: (context) => profileItems(),
@@ -289,7 +284,8 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
     return SvgPicture.asset(
       icon,
       height: biggerIcon ? 30 : 25,
-      color: Theme.of(context).focusColor,
+      colorFilter:
+          ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
     );
   }
 }
