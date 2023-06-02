@@ -62,15 +62,6 @@ class _ProfilePageState extends State<UserProfilePage> {
     return scaffold();
   }
 
-  Future<void> getData() async {
-    widget.userName.isNotEmpty
-        ? (await BlocProvider.of<UserInfoCubit>(context)
-            .getUserFromUserName(widget.userName))
-        : (await BlocProvider.of<UserInfoCubit>(context)
-            .getUserInfo(widget.userId, isThatMyPersonalId: false));
-    rebuildUserInfo.value = true;
-  }
-
   Widget scaffold() {
     return ValueListenableBuilder(
       valueListenable: rebuildUserInfo,
@@ -102,7 +93,6 @@ class _ProfilePageState extends State<UserProfilePage> {
               body: ProfilePage(
                 isThatMyPersonalId: false,
                 userId: widget.userId,
-                getData: getData,
                 userInfo: userInfo,
                 widgetsAboveTapBars: isThatMobile
                     ? widgetsAboveTapBarsForMobile(state)
