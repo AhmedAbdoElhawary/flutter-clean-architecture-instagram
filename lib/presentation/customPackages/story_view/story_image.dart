@@ -47,7 +47,7 @@ class ImageLoader {
         ui.ImmutableBuffer immutable =
             await ui.ImmutableBuffer.fromUint8List(imageBytes);
         PaintingBinding.instance
-            .instantiateImageCodecFromBuffer(immutable)
+            .instantiateImageCodecWithSize(immutable)
             .then((codec) {
           frames = codec;
           onComplete();
