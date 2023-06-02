@@ -63,7 +63,7 @@ class FirestoreComment {
       Comment commentReformat = Comment.fromSnapComment(snap);
 
       UserPersonalInfo commentatorInfo =
-          await FirestoreUser.getUserInfo(commentReformat.whoCommentId);
+          await FireStoreUser.getUserInfo(commentReformat.whoCommentId);
       commentReformat.whoCommentInfo = commentatorInfo;
 
       allComments.add(commentReformat);
@@ -77,7 +77,7 @@ class FirestoreComment {
     if (snap.exists) {
       Comment theCommentInfo = Comment.fromSnapComment(snap);
       UserPersonalInfo commentatorInfo =
-          await FirestoreUser.getUserInfo(theCommentInfo.whoCommentId);
+          await FireStoreUser.getUserInfo(theCommentInfo.whoCommentId);
       theCommentInfo.whoCommentInfo = commentatorInfo;
 
       return theCommentInfo;

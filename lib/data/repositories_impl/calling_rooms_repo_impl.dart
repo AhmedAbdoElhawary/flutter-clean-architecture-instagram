@@ -17,7 +17,7 @@ class CallingRoomsRepoImpl implements CallingRoomsRepository {
           myPersonalInfo: myPersonalInfo,
           initialNumberOfUsers: callThoseUsersInfo.length + 1);
 
-      List<bool> isUsersAvailable = await FirestoreUser.updateChannelId(
+      List<bool> isUsersAvailable = await FireStoreUser.updateChannelId(
           callThoseUsers: callThoseUsersInfo,
           channelId: channelId,
           myPersonalId: myPersonalInfo.userId);
@@ -26,7 +26,7 @@ class CallingRoomsRepoImpl implements CallingRoomsRepository {
         if (isUsersAvailable[i]) {
           isAnyOneAvailable = true;
           UserPersonalInfo receiverInfo =
-              await FirestoreUser.getUserInfo(callThoseUsersInfo[i].userId);
+              await FireStoreUser.getUserInfo(callThoseUsersInfo[i].userId);
           String token = receiverInfo.deviceToken;
           if (token.isNotEmpty) {
             String body = "Calling you";
@@ -76,7 +76,7 @@ class CallingRoomsRepoImpl implements CallingRoomsRepository {
     required bool isThatAfterJoining,
   }) async {
     try {
-      await FirestoreUser.cancelJoiningToRoom(userId);
+      await FireStoreUser.cancelJoiningToRoom(userId);
       await FireStoreCallingRooms.removeThisUserFromRoom(
           channelId: channelId,
           userId: userId,
@@ -101,7 +101,7 @@ class CallingRoomsRepoImpl implements CallingRoomsRepository {
   Future<void> deleteTheRoom(
       {required String channelId, required List<dynamic> usersIds}) async {
     try {
-      await FirestoreUser.clearChannelsIds(
+      await FireStoreUser.clearChannelsIds(
           usersIds: usersIds, myPersonalId: myPersonalId);
       return await FireStoreCallingRooms.deleteTheRoom(channelId: channelId);
     } catch (e) {

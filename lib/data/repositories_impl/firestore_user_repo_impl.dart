@@ -17,7 +17,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   @override
   Future<void> addNewUser(UserPersonalInfo newUserInfo) async {
     try {
-      await FirestoreUser.createUser(newUserInfo);
+      await FireStoreUser.createUser(newUserInfo);
       await FireStoreNotification.createNewDeviceToken(
           userId: newUserInfo.userId, myPersonalInfo: newUserInfo);
     } catch (e) {
@@ -29,7 +29,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   Future<UserPersonalInfo> getPersonalInfo(
       {required String userId, bool getDeviceToken = false}) async {
     try {
-      UserPersonalInfo myPersonalInfo = await FirestoreUser.getUserInfo(userId);
+      UserPersonalInfo myPersonalInfo = await FireStoreUser.getUserInfo(userId);
       if (isThatMobile && getDeviceToken) {
         UserPersonalInfo updateInfo =
             await FireStoreNotification.createNewDeviceToken(
@@ -46,7 +46,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   Future<UserPersonalInfo> updateUserInfo(
       {required UserPersonalInfo userInfo}) async {
     try {
-      await FirestoreUser.updateUserInfo(userInfo);
+      await FireStoreUser.updateUserInfo(userInfo);
       return getPersonalInfo(userId: userInfo.userId);
     } catch (e) {
       return Future.error(e.toString());
@@ -57,7 +57,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   Future<UserPersonalInfo> updateUserPostsInfo(
       {required String userId, required Post postInfo}) async {
     try {
-      await FirestoreUser.updateUserPosts(userId: userId, postInfo: postInfo);
+      await FireStoreUser.updateUserPosts(userId: userId, postInfo: postInfo);
       return await getPersonalInfo(userId: userId);
     } catch (e) {
       return Future.error(e.toString());
@@ -72,7 +72,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
     try {
       String imageUrl = await FirebaseStoragePost.uploadData(
           data: photo, folderName: 'personalImage');
-      await FirestoreUser.updateProfileImage(
+      await FireStoreUser.updateProfileImage(
           imageUrl: imageUrl, userId: userId);
       await FirebaseStoragePost.deleteImageFromStorage(previousImageUrl);
       return imageUrl;
@@ -87,12 +87,12 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
       required List<dynamic> followingsIds}) async {
     try {
       List<UserPersonalInfo> followersInfo =
-          await FirestoreUser.getSpecificUsersInfo(
+          await FireStoreUser.getSpecificUsersInfo(
               usersIds: followersIds,
               fieldName: "followers",
               userUid: myPersonalId);
       List<UserPersonalInfo> followingsInfo =
-          await FirestoreUser.getSpecificUsersInfo(
+          await FireStoreUser.getSpecificUsersInfo(
               usersIds: followingsIds,
               fieldName: "following",
               userUid: myPersonalId);
@@ -107,7 +107,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   Future<void> followThisUser(
       String followingUserId, String myPersonalId) async {
     try {
-      return await FirestoreUser.followThisUser(followingUserId, myPersonalId);
+      return await FireStoreUser.followThisUser(followingUserId, myPersonalId);
     } catch (e) {
       return Future.error(e.toString());
     }
@@ -117,7 +117,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   Future<void> unFollowThisUser(
       String followingUserId, String myPersonalId) async {
     try {
-      return await FirestoreUser.unFollowThisUser(
+      return await FireStoreUser.unFollowThisUser(
           followingUserId, myPersonalId);
     } catch (e) {
       return Future.error(e.toString());
@@ -131,7 +131,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
     required List<dynamic> usersIds,
   }) async {
     try {
-      return await FirestoreUser.getSpecificUsersInfo(usersIds: usersIds);
+      return await FireStoreUser.getSpecificUsersInfo(usersIds: usersIds);
     } catch (e) {
       return Future.error(e.toString());
     }
@@ -141,7 +141,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   Future<List<UserPersonalInfo>> getAllUnFollowersUsers(
       UserPersonalInfo myPersonalInfo) {
     try {
-      return FirestoreUser.getAllUnFollowersUsers(myPersonalInfo);
+      return FireStoreUser.getAllUnFollowersUsers(myPersonalInfo);
     } catch (e) {
       return Future.error(e.toString());
     }
@@ -149,16 +149,16 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
 
   @override
   Stream<UserPersonalInfo> getMyPersonalInfo() =>
-      FirestoreUser.getMyPersonalInfoInReelTime();
+      FireStoreUser.getMyPersonalInfoInReelTime();
 
   @override
-  Stream<List<UserPersonalInfo>> getAllUsers() => FirestoreUser.getAllUsers();
+  Stream<List<UserPersonalInfo>> getAllUsers() => FireStoreUser.getAllUsers();
 
   @override
   Future<UserPersonalInfo?> getUserFromUserName(
       {required String userName}) async {
     try {
-      return await FirestoreUser.getUserFromUserName(userName: userName);
+      return await FireStoreUser.getUserFromUserName(userName: userName);
     } catch (e) {
       return Future.error(e.toString());
     }
@@ -167,7 +167,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
   @override
   Stream<List<UserPersonalInfo>> searchAboutUser(
           {required String name, required bool searchForSingleLetter}) =>
-      FirestoreUser.searchAboutUser(
+      FireStoreUser.searchAboutUser(
           name: name, searchForSingleLetter: searchForSingleLetter);
 
   @override
@@ -196,7 +196,7 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
           chatId: messageInfo.senderId,
           message: messageInfo);
 
-      await FirestoreUser.sendNotification(
+      await FireStoreUser.sendNotification(
           userId: messageInfo.receiversIds[0], message: messageInfo);
 
       return myMessageInfo;
@@ -243,13 +243,13 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
         SenderInfo coverChatInfo =
             await FireStoreGroupChat.getChatInfo(chatId: chatUid);
         SenderInfo messageDetails =
-            await FirestoreUser.extractUsersForGroupChatInfo(coverChatInfo);
+            await FireStoreUser.extractUsersForGroupChatInfo(coverChatInfo);
         return messageDetails;
       } else {
         SenderInfo coverChatInfo =
-            await FirestoreUser.getChatOfUser(chatUid: chatUid);
+            await FireStoreUser.getChatOfUser(chatUid: chatUid);
         SenderInfo messageDetails =
-            await FirestoreUser.extractUsersForSingleChatInfo(coverChatInfo);
+            await FireStoreUser.extractUsersForSingleChatInfo(coverChatInfo);
         return messageDetails;
       }
     } catch (e) {
@@ -265,10 +265,10 @@ class FirebaseUserRepoImpl implements FirestoreUserRepository {
           await FireStoreGroupChat.getSpecificChatsInfo(
               chatsIds: myPersonalInfo.chatsOfGroups);
       List<SenderInfo> allChatsInfo =
-          await FirestoreUser.getMessagesOfChat(userId: myPersonalInfo.userId);
+          await FireStoreUser.getMessagesOfChat(userId: myPersonalInfo.userId);
       List<SenderInfo> allChats = allChatsInfo + allChatsOfGroupsInfo;
       List<SenderInfo> allUsersInfo =
-          await FirestoreUser.extractUsersChatInfo(messagesDetails: allChats);
+          await FireStoreUser.extractUsersChatInfo(messagesDetails: allChats);
       return allUsersInfo;
     } catch (e) {
       return Future.error(e.toString());

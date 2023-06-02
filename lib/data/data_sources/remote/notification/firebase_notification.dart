@@ -37,7 +37,7 @@ class FireStoreNotification {
     userCollection
         .update({"numberOfNewNotifications": FieldValue.increment(1)});
     UserPersonalInfo receiverInfo =
-        await FirestoreUser.getUserInfo(newNotification.receiverId);
+        await FireStoreUser.getUserInfo(newNotification.receiverId);
     String token = receiverInfo.deviceToken;
     if (token.isNotEmpty) {
       await DeviceNotification.pushNotification(

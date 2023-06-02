@@ -7,7 +7,7 @@ import 'package:instagram/data/models/child_classes/post/story.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/domain/repositories/story_repository.dart';
 
-class FirestoreStoryRepositoryImpl implements FirestoreStoryRepository {
+class FireStoreStoryRepositoryImpl implements FirestoreStoryRepository {
   @override
   Future<String> createStory(
       {required Story storyInfo, required Uint8List file}) async {
@@ -18,7 +18,7 @@ class FirestoreStoryRepositoryImpl implements FirestoreStoryRepository {
           data: file, folderName: fileName);
       storyInfo.storyUrl = postUrl;
       String storyUid = await FireStoreStory.createStory(storyInfo);
-      await FirestoreUser.updateUserStories(
+      await FireStoreUser.updateUserStories(
           userId: storyInfo.publisherId, storyId: storyUid);
       return storyUid;
     } catch (e) {
@@ -31,7 +31,7 @@ class FirestoreStoryRepositoryImpl implements FirestoreStoryRepository {
       {required List<dynamic> usersIds}) async {
     try {
       List<UserPersonalInfo> usersInfo =
-          await FirestoreUser.getSpecificUsersInfo(
+          await FireStoreUser.getSpecificUsersInfo(
               usersIds: usersIds, userUid: myPersonalId, fieldName: 'stories');
       return await FireStoreStory.getStoriesInfo(usersInfo);
     } catch (e) {
@@ -52,7 +52,7 @@ class FirestoreStoryRepositoryImpl implements FirestoreStoryRepository {
   @override
   Future<void> deleteThisStory({required String storyId}) async {
     try {
-      await FirestoreUser.deleteThisStory(storyId: storyId);
+      await FireStoreUser.deleteThisStory(storyId: storyId);
       await FireStoreStory.deleteThisStory(storyId: storyId);
     } catch (e) {
       return Future.error(e.toString());

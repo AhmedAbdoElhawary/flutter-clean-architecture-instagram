@@ -43,7 +43,7 @@ class FireStoreReply {
       Comment replyReformat = Comment.fromSnapReply(snap);
 
       UserPersonalInfo whoReplyInfo =
-          await FirestoreUser.getUserInfo(replyReformat.whoCommentId);
+          await FireStoreUser.getUserInfo(replyReformat.whoCommentId);
       replyReformat.whoCommentInfo = whoReplyInfo;
 
       allReplies.add(replyReformat);
