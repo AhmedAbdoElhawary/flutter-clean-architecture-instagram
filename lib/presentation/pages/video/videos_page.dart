@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/toast_show.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
@@ -18,14 +17,18 @@ import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
-import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 import 'package:instagram/presentation/pages/profile/users_who_likes_for_mobile.dart';
 import 'package:instagram/presentation/pages/profile/widgets/which_profile_page.dart';
-import 'package:instagram/presentation/pages/video/widgets/reel_video_play.dart';
+import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
+import 'package:instagram/presentation/widgets/global/custom_widgets/custom_gallery_display.dart';
 import 'package:instagram/presentation/widgets/global/others/share_button.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../core/utility/constant.dart';
+
+part 'widgets/reel_video_play.dart';
 
 class VideosPage extends StatefulWidget {
   final ValueNotifier<bool> stopVideo;
@@ -40,9 +43,26 @@ class VideosPage extends StatefulWidget {
 class VideosPageState extends State<VideosPage> {
   ValueNotifier<Uint8List?> videoFile = ValueNotifier(null);
   ValueNotifier<bool> rebuildUserInfo = ValueNotifier(false);
+  final ValueNotifier<bool> stopVideo = ValueNotifier(false);
+
+  @override
+  void initState() {
+    if (stopVideo.value) stopVideo.value = widget.stopVideo.value;
+
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant VideosPage oldWidget) {
+    if (stopVideo.value) stopVideo.value = widget.stopVideo.value;
+
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   void dispose() {
     widget.stopVideo.value = false;
+    stopVideo.dispose();
     videoFile.dispose();
     rebuildUserInfo.dispose();
     super.dispose();
@@ -102,16 +122,9 @@ class VideosPageState extends State<VideosPage> {
             onPressed: () async {
               widget.stopVideo.value = false;
 
-              final SelectedImagesDetails? details =
-                  await ImagePickerPlus(context)
-                      .pickVideo(source: ImageSource.camera);
-              if (details != null) {
-                if (!mounted) return;
-                await Go(context).push(
-                  page: CreatePostPage(selectedFilesDetails: details),
-                );
-                widget.stopVideo.value = true;
-              }
+              await CustomImagePickerPlus.pickVideo(context);
+
+              widget.stopVideo.value = true;
             },
             icon: const Icon(Icons.camera_alt,
                 size: 30, color: ColorManager.white),
@@ -166,26 +179,31 @@ class VideosPageState extends State<VideosPage> {
           SizedBox(
               height: double.infinity,
               child: ValueListenableBuilder(
-                valueListenable: widget.stopVideo,
-                builder: (context, bool stopVideoValue, child) => ReelVideoPlay(
+                valueListenable: stopVideo,
+                builder: (context, bool stopVideoValue, child) =>
+                    _ReelVideoPlay(
                   videoInfo: videoInfo,
                   stopVideo: stopVideoValue,
                 ),
               )),
-          _VerticalButtons(videoInfo: videoInfo, stopVideo: widget.stopVideo),
-          _HorizontalButtons(videoInfo: videoInfo, stopVideo: widget.stopVideo),
+          _VerticalButtons(videoInfo: videoInfo, videoPlaying: videoPlaying),
+          _HorizontalButtons(videoInfo: videoInfo, videoPlaying: videoPlaying),
         ]);
       },
     );
+  }
+
+  void videoPlaying(bool playVideo) {
+    stopVideo.value = playVideo;
   }
 }
 
 class _HorizontalButtons extends StatefulWidget {
   final ValueNotifier<Post> videoInfo;
-  final ValueNotifier<bool> stopVideo;
+  final ValueChanged<bool> videoPlaying;
 
   const _HorizontalButtons(
-      {Key? key, required this.videoInfo, required this.stopVideo})
+      {Key? key, required this.videoInfo, required this.videoPlaying})
       : super(key: key);
 
   @override
@@ -251,13 +269,12 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
   }
 
   goToUserProfile(UserPersonalInfo personalInfo) async {
-    widget.stopVideo.value = false;
+    widget.videoPlaying(false);
 
     await Go(context).push(
         page: WhichProfilePage(
-            userId: personalInfo.userId, userName: personalInfo.userName),
-        withoutRoot: false);
-    widget.stopVideo.value = true;
+            userId: personalInfo.userId, userName: personalInfo.userName));
+    widget.videoPlaying(true);
   }
 
   Widget followButton(UserPersonalInfo userInfo) {
@@ -315,10 +332,10 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
 
 class _VerticalButtons extends StatefulWidget {
   final ValueNotifier<Post> videoInfo;
-  final ValueNotifier<bool> stopVideo;
+  final ValueChanged<bool> videoPlaying;
 
   const _VerticalButtons(
-      {Key? key, required this.videoInfo, required this.stopVideo})
+      {Key? key, required this.videoInfo, required this.videoPlaying})
       : super(key: key);
 
   @override
@@ -353,7 +370,8 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
                 GestureDetector(
                   child: SvgPicture.asset(
                     IconsAssets.menuHorizontalIcon,
-                    color: ColorManager.white,
+                    colorFilter: const ColorFilter.mode(
+                        ColorManager.white, BlendMode.srcIn),
                     height: 25,
                   ),
                 ),
@@ -382,10 +400,10 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
   }
 
   goToCommentPage(Post videoInfo) async {
-    widget.stopVideo.value = false;
+    widget.videoPlaying(false);
     await Go(context)
         .push(page: CommentsPageForMobile(postInfo: ValueNotifier(videoInfo)));
-    widget.stopVideo.value = true;
+    widget.videoPlaying(true);
   }
 
   GestureDetector commentButton(Post videoInfo) {
@@ -393,7 +411,8 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
       onTap: () async => goToCommentPage(videoInfo),
       child: SvgPicture.asset(
         IconsAssets.commentIcon,
-        color: ColorManager.white,
+        colorFilter:
+            const ColorFilter.mode(ColorManager.white, BlendMode.srcIn),
         height: 35,
       ),
     );
@@ -402,15 +421,14 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
   Widget numberOfLikes(Post videoInfo) {
     return InkWell(
       onTap: () async {
-        widget.stopVideo.value = false;
+        widget.videoPlaying(false);
         await Go(context).push(
             page: UsersWhoLikesForMobile(
-              showSearchBar: true,
-              usersIds: videoInfo.likes,
-              isThatMyPersonalId: videoInfo.publisherId == myPersonalId,
-            ),
-            withoutRoot: false);
-        widget.stopVideo.value = true;
+          showSearchBar: true,
+          usersIds: videoInfo.likes,
+          isThatMyPersonalId: videoInfo.publisherId == myPersonalId,
+        ));
+        widget.videoPlaying(true);
       },
       child: SizedBox(
         width: 30,
