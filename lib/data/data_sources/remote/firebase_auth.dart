@@ -20,5 +20,11 @@ class FirebaseAuthentication {
     return user;
   }
 
+  static Future<bool> isThisEmailToken({required String email}) async {
+    List<String> data=await _firebaseAuth.fetchSignInMethodsForEmail(email);
+
+    return data.isNotEmpty;
+  }
+
   static Future signOut() async => await _firebaseAuth.signOut();
 }
