@@ -8,17 +8,17 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/presentation/pages/profile/create_post_page.dart';
 
 class CustomImagePickerPlus {
-  static Future<void> pickBoth(BuildContext context) async {
+  static Future<void> pickFromBoth(BuildContext context) async {
     ImagePickerPlus picker = ImagePickerPlus(context);
-    await picker.pickBoth(
+    await picker.pickImage(
       source: ImageSource.both,
-      multiSelection: true,
+      multiImages: true,
       galleryDisplaySettings: GalleryDisplaySettings(
         showImagePreview: true,
         cropImage: true,
         tabsTexts: tapsNames(),
         appTheme: appTheme(context),
-        sendRequestFunction: (details) async {
+        callbackFunction: (details) async {
           await moveToCreationPage(context, details);
         },
       ),
@@ -39,6 +39,24 @@ class CustomImagePickerPlus {
       ),
     );
     return details;
+  }
+
+  static Future<void> pickVideo(BuildContext context,
+      {ImageSource source = ImageSource.both}) async {
+    ImagePickerPlus picker = ImagePickerPlus(context);
+
+    await picker.pickVideo(
+      source: source,
+      galleryDisplaySettings: GalleryDisplaySettings(
+        showImagePreview: true,
+        cropImage: true,
+        tabsTexts: tapsNames(),
+        appTheme: appTheme(context),
+        callbackFunction: (details) async {
+          await moveToCreationPage(context, details);
+        },
+      ),
+    );
   }
 
   static SliverGridDelegateWithFixedCrossAxisCount _sliverGridDelegate(
