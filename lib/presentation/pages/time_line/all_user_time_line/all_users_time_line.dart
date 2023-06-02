@@ -141,7 +141,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
                       (index % 11 == 0 && index != 0))
                   ? 2
                   : 1;
-              return StaggeredTile.count(num.toInt(), num);
+              return StaggeredTile.count(isThatMobile ? 1 : num.toInt(), num);
             },
           ),
         ),
