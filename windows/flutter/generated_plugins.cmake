@@ -5,7 +5,9 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   agora_rtc_engine
   audioplayers_windows
+  firebase_core
   permission_handler_windows
+  record_windows
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

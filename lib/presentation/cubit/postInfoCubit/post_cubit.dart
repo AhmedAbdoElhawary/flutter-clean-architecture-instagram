@@ -42,7 +42,6 @@ class PostCubit extends Cubit<PostState> {
         .then((postInfo) {
       newPostInfo = postInfo;
       emit(CubitPostLoaded(postInfo));
-      return postInfo;
     }).catchError((e) {
       emit(CubitPostFailed(e));
     });

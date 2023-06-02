@@ -1,3 +1,4 @@
+
 import 'package:instagram/domain/entities/notification_check.dart';
 
 // ignore: must_be_immutable

@@ -64,9 +64,9 @@ class _SendToUsersState extends State<SendToUsers> {
           return Text(StringsManager.somethingWrong.tr);
         } else {
           return isThatMobile
-              ? Column(
+              ? const Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
+                  children: [
                     SizedBox(height: 1, child: ThineLinearProgress()),
                   ],
                 )
