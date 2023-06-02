@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker_plus/image_picker_plus.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
@@ -39,6 +40,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late UserPersonalInfo userInfo;
 
   bool reBuild = false;
+  bool isImageChanged = false;
   bool userNameChanging = false;
   bool validateEdits = true;
   @override
@@ -119,7 +121,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
             },
             icon: SvgPicture.asset(
               IconsAssets.cancelIcon,
-              color: Theme.of(context).focusColor,
+              colorFilter: ColorFilter.mode(
+                  Theme.of(context).focusColor, BlendMode.srcIn),
               height: 27,
             )),
         title: Text(
@@ -144,6 +147,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 builder: (context, bool isImageUploadValue, child) =>
                     IconButton(
                   onPressed: () async {
+                    bool isNameChanged = nameController.text == userInfo.name;
+                    bool isUserNameChanged =
+                        userNameController.text == userInfo.userName;
+                    bool isBioChanged = bioController.text == userInfo.bio;
+
+                    if (isBioChanged &&
+                        isUserNameChanged &&
+                        isNameChanged &&
+                        !isImageChanged) {
+                      Go(context).back();
+                    }
+
                     if (isImageUploadValue) {
                       reBuild = true;
                       List<dynamic> charactersOfName = [];
@@ -174,7 +189,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         Future.delayed(Duration.zero, () {
                           reBuild = false;
 
-                          Navigator.of(context).maybePop();
+                          Go(context).back();
                         });
                       });
                     }
@@ -218,7 +233,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         const SizedBox(height: 15),
         Center(
           child: InkWell(
-            onTap: () async => onTapChangeImage(updateUserCubit),
+            onTap: () async {
+              onTapChangeImage(updateUserCubit);
+            },
             child: Text(
               StringsManager.changeProfilePhoto.tr,
               style: getNormalStyle(fontSize: 18, color: ColorManager.blue),
@@ -261,6 +278,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         userId: userInfo.userId,
         previousImageUrl: userInfo.profileImageUrl);
     isImageUpload.value = true;
+    isImageChanged = true;
   }
 
   static Future<SelectedImagesDetails?> pushToCustomGallery(
