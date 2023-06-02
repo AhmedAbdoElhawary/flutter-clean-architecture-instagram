@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/routes/customRoutes/hero_dialog_route.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -40,9 +41,8 @@ class _ShareButtonState extends State<ShareButton> {
     return GestureDetector(
       onTap: () async {
         if (isThatMobile) {
-          if (widget.shareWidget != null) {
-            Navigator.of(context).maybePop();
-          }
+          if (widget.shareWidget != null) Go(context).back();
+
           await draggableBottomSheet();
         } else {
           Navigator.of(context).push(heroDialogRoute());
@@ -69,9 +69,11 @@ class _ShareButtonState extends State<ShareButton> {
   SvgPicture iconsOfImagePost(String path) {
     return SvgPicture.asset(
       path,
-      color: widget.isThatForVideoPage
-          ? ColorManager.white
-          : Theme.of(context).focusColor,
+      colorFilter: ColorFilter.mode(
+          widget.isThatForVideoPage
+              ? ColorManager.white
+              : Theme.of(context).focusColor,
+          BlendMode.srcIn),
       height: !widget.isThatForVideoPage ? 22 : 25,
     );
   }

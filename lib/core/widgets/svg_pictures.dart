@@ -18,7 +18,8 @@ class InstagramLogo extends StatelessWidget {
         child: SvgPicture.asset(
           IconsAssets.instagramLogo,
           height: 32,
-          color: color ?? Theme.of(context).focusColor,
+          colorFilter: ColorFilter.mode(
+              color ?? Theme.of(context).focusColor, BlendMode.srcIn),
         ),
       );
 }
