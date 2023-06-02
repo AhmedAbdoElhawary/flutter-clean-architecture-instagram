@@ -36,4 +36,15 @@ class FirebaseAuthRepositoryImpl implements FirebaseAuthRepository {
       return Future.error(e.toString());
     }
   }
+
+  @override
+  Future<bool> isThisEmailToken({required String email}) async {
+    try {
+      bool isThisEmailToken =
+          await FirebaseAuthentication.isThisEmailToken(email: email);
+      return isThisEmailToken;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
 }
