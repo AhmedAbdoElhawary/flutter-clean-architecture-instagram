@@ -2,13 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
+import 'package:instagram/data/models/child_classes/notification.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
+import 'package:instagram/domain/entities/notification_check.dart';
+import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/cubit/follow/follow_cubit.dart';
+import 'package:instagram/presentation/cubit/notification/notification_cubit.dart';
 import 'package:instagram/presentation/customPackages/snapping.dart';
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
@@ -368,8 +373,7 @@ class _BuildUserBrief extends StatelessWidget {
             ),
             Text(
               userInfo.name,
-              style: getNormalStyle(
-                  color: Theme.of(context).textTheme.headlineMedium!.color!),
+              style: getNormalStyle(color: ColorManager.grey),
             ),
             const SizedBox(height: 20),
             Row(
@@ -409,17 +413,35 @@ class _BuildUserBrief extends StatelessWidget {
             const SizedBox(height: 30),
             GestureDetector(
               onTap: () async {
+                UserPersonalInfo myPersonalInfo =
+                    UserInfoCubit.getMyPersonalInfo(context);
+
                 FollowCubit followCubit = FollowCubit.get(context);
                 if (isIFollowHim) {
                   await followCubit.unFollowThisUser(
                       followingUserId: userInfo.userId,
                       myPersonalId: myPersonalId);
+
+                  myPersonalInfo.followedPeople.remove(userInfo.userId);
                   userInfo.followerPeople.remove(myPersonalId);
+
+                  if (context.mounted) return;
+                  BlocProvider.of<NotificationCubit>(context)
+                      .deleteNotification(
+                          notificationCheck: createNotificationCheck(userInfo));
                 } else {
                   await followCubit.followThisUser(
                       followingUserId: userInfo.userId,
                       myPersonalId: myPersonalId);
+
+                  myPersonalInfo.followedPeople.add(userInfo.userId);
                   userInfo.followerPeople.add(myPersonalId);
+
+                  if (context.mounted) return;
+                  BlocProvider.of<NotificationCubit>(context)
+                      .createNotification(
+                          newNotification:
+                              createNotification(userInfo, myPersonalInfo));
                 }
               },
               child: _FollowButton(isIFollowHim),
@@ -427,6 +449,30 @@ class _BuildUserBrief extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  NotificationCheck createNotificationCheck(UserPersonalInfo userInfo) {
+    return NotificationCheck(
+      senderId: myPersonalId,
+      receiverId: userInfo.userId,
+      isThatLike: false,
+      isThatPost: false,
+    );
+  }
+
+  CustomNotification createNotification(
+      UserPersonalInfo userInfo, UserPersonalInfo myPersonalInfo) {
+    return CustomNotification(
+      text: "started following you.",
+      time: DateReformat.dateOfNow(),
+      senderId: myPersonalId,
+      receiverId: userInfo.userId,
+      personalUserName: myPersonalInfo.userName,
+      personalProfileImageUrl: myPersonalInfo.profileImageUrl,
+      isThatLike: false,
+      isThatPost: false,
+      senderName: myPersonalInfo.userName,
     );
   }
 }
