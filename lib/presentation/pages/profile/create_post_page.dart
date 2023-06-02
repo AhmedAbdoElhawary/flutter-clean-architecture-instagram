@@ -173,7 +173,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
         builder: (context, bool isItDoneValue, child) => !isItDoneValue
             ? const CustomCircularProgress(ColorManager.blue)
             : IconButton(
-                onPressed: () async => createPost(context),
+                onPressed: ()  async {
+                  createPost(context);
+                },
                 icon: const Icon(
                   Icons.check_rounded,
                   size: 30,

@@ -63,7 +63,8 @@ class _CommentInfoState extends State<CommentInfo> {
   Widget build(BuildContext context) {
     bool isLiked = widget.commentInfo.likes.contains(myPersonalId);
     return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 10.0, end: 10),
+      padding: EdgeInsetsDirectional.only(
+          start: 10.0, end: widget.isThatReply ? 0 : 10),
       child: Column(
         children: [
           rowOfCommentator(context, isLiked, widget.commentInfo.theComment),
@@ -316,10 +317,8 @@ class _CommentInfoState extends State<CommentInfo> {
                   ..onTap = () async {
                     List<String> hashTagName = hashTageOfUserName.split(" ");
                     String userName = hashTagName[0].replaceAll('@', '');
-                    await Go(context).push(
-                        page: WhichProfilePage(
-                      userName: userName,
-                    ));
+                    await Go(context)
+                        .push(page: WhichProfilePage(userName: userName));
                   },
               ),
             TextSpan(
@@ -336,16 +335,8 @@ class _CommentInfoState extends State<CommentInfo> {
   Widget loveButton(bool isLiked, BuildContext context) {
     return GestureDetector(
       child: !isLiked
-          ? const Icon(
-              Icons.favorite_border,
-              size: 15,
-              color: Colors.grey,
-            )
-          : const Icon(
-              Icons.favorite,
-              size: 15,
-              color: Colors.red,
-            ),
+          ? const Icon(Icons.favorite_border, size: 15, color: Colors.grey)
+          : const Icon(Icons.favorite, size: 15, color: Colors.red),
       onTap: () {
         setState(() {
           if (isLiked) {

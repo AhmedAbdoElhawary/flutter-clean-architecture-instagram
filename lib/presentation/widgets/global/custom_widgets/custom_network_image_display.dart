@@ -21,7 +21,7 @@ class NetworkDisplay extends StatefulWidget {
     this.height,
     this.width,
     this.blurHash = "",
-    this.aspectRatio = 0,
+    this.aspectRatio = 0.0,
   }) : super(key: key);
 
   @override
@@ -76,7 +76,7 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
       width: widget.width ?? double.infinity,
       height: widget.height ?? height,
       placeholderBuilder: widget.blurHash.isNotEmpty
-          ? OctoPlaceholder.blurHash(widget.blurHash)
+          ? OctoPlaceholder.blurHash(widget.blurHash, fit: BoxFit.cover)
           : (context) => Center(child: loadingWidget()),
     );
   }

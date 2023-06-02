@@ -25,7 +25,7 @@ class AppTheme {
       iconTheme: const IconThemeData(color: ColorManager.black38),
       chipTheme:
           const ChipThemeData(backgroundColor: ColorManager.veryLowOpacityGrey),
-      highlightColor: ColorManager.black,
+      highlightColor: ColorManager.lowOpacityGrey,
       canvasColor: ColorManager.transparent,
       splashColor: ColorManager.white,
       appBarTheme: AppBarTheme(
