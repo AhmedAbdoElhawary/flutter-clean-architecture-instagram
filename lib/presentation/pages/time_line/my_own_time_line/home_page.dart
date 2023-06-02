@@ -19,7 +19,7 @@ import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/specific_users_posts_cubit.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_list.dart';
 import 'package:instagram/presentation/customPackages/in_view_notifier/in_view_notifier_widget.dart';
-import 'package:instagram/presentation/pages/profile/create_post_page.dart';
+import 'package:instagram/presentation/pages/story/create_story.dart';
 import 'package:instagram/presentation/pages/story/story_for_web.dart';
 import 'package:instagram/presentation/pages/story/story_page_for_mobile.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/all_catch_up_icon.dart';
@@ -368,7 +368,7 @@ class _BuildStoriesLine extends StatelessWidget {
     final bodyHeight = mediaQuery.size.height -
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
-
+    final storiesLength = storiesOwnersInfo?.length ?? 0;
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 10),
       child: SizedBox(
@@ -376,59 +376,62 @@ class _BuildStoriesLine extends StatelessWidget {
         height: 600 * 0.153,
         child: Stack(
           children: [
-            if (personalInfo.stories.isEmpty) ...[
-              _MyOwnStory(reLoadData: reLoadData, personalInfo: personalInfo),
-              const SizedBox(width: 12),
-            ],
-            SingleChildScrollView(
+            CustomScrollView(
               scrollDirection: Axis.horizontal,
               controller: scrollController,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                primary: false,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: storiesOwnersInfo?.length ?? 0,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(width: 12),
-                itemBuilder: (BuildContext context, int index) {
+              slivers: [
+                if (personalInfo.stories.isEmpty) ...[
+                  SliverPadding(
+                    padding: const EdgeInsetsDirectional.only(end: 12),
+                    sliver: SliverToBoxAdapter(
+                        child: _MyOwnStory(
+                            reLoadData: reLoadData,
+                            personalInfo: personalInfo)),
+                  ),
+                ],
+                SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
                   UserPersonalInfo publisherInfo = storiesOwnersInfo![index];
                   String hashTag = isThatMobile
                       ? "${publisherInfo.userId.hashCode} for mobile"
                       : "${publisherInfo.userId.hashCode} for web";
                   return Hero(
                     tag: hashTag,
-                    child: GestureDetector(
-                      onTap: () {
-                        if (isThatMobile) {
-                          Widget page = StoryPageForMobile(
-                              user: publisherInfo,
-                              hashTag: hashTag,
-                              storiesOwnersInfo: storiesOwnersInfo!);
-                          Go(context)
-                              .push(page: page, withoutPageTransition: true);
-                        } else {
-                          Widget page = StoryPageForWeb(
-                              user: publisherInfo,
-                              hashTag: hashTag,
-                              storiesOwnersInfo: storiesOwnersInfo!);
-                          Get.to(page);
-                        }
-                      },
-                      child: CircleAvatarOfProfileImage(
-                        userInfo: publisherInfo,
-                        bodyHeight:
-                            isThatMobile ? bodyHeight * 1.1 : bodyHeight * 0.69,
-                        thisForStoriesLine: true,
-                        nameOfCircle: index == 0 &&
-                                publisherInfo.userId == personalInfo.userId
-                            ? StringsManager.yourStory.tr
-                            : "",
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.only(
+                          end: index != storiesLength - 1 ? 12 : 0),
+                      child: GestureDetector(
+                        onTap: () {
+                          if (isThatMobile) {
+                            Widget page = StoryPageForMobile(
+                                user: publisherInfo,
+                                hashTag: hashTag,
+                                storiesOwnersInfo: storiesOwnersInfo!);
+                            Go(context)
+                                .push(page: page, withoutPageTransition: true);
+                          } else {
+                            Widget page = StoryPageForWeb(
+                                user: publisherInfo,
+                                hashTag: hashTag,
+                                storiesOwnersInfo: storiesOwnersInfo!);
+                            Get.to(page);
+                          }
+                        },
+                        child: CircleAvatarOfProfileImage(
+                          userInfo: publisherInfo,
+                          bodyHeight:
+                              isThatMobile ? bodyHeight : bodyHeight * 0.69,
+                          thisForStoriesLine: true,
+                          nameOfCircle: index == 0 &&
+                                  publisherInfo.userId == personalInfo.userId
+                              ? StringsManager.yourStory.tr
+                              : "",
+                        ),
                       ),
                     ),
                   );
-                },
-              ),
+                }, childCount: storiesLength))
+              ],
             ),
             if (!isThatMobile && (storiesOwnersInfo?.length ?? 0) > 5) ...[
               Padding(
@@ -488,8 +491,9 @@ class _MyOwnStoryState extends State<_MyOwnStory> {
           isThatStory: true,
         );
         if (!mounted || details == null) return;
+
         await Go(context).push(
-          page: CreatePostPage(selectedFilesDetails: details),
+          page: CreateStoryPage(storiesDetails: details),
         );
         widget.reLoadData.value = true;
       },

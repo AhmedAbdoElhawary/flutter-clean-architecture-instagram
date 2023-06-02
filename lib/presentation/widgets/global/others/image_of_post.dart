@@ -84,21 +84,17 @@ class _ImageOfPostState extends State<ImageOfPost>
   bool isSoundOn = true;
   late bool playTheVideo;
 
-  bool isLiked = false;
   bool isHeartAnimation = false;
-  late UserPersonalInfo myPersonalInfo;
 
   @override
   void initState() {
     playTheVideo = widget.playTheVideo;
-    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
 
   @override
   void didUpdateWidget(covariant ImageOfPost oldWidget) {
     playTheVideo = widget.playTheVideo;
-    myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.didUpdateWidget(oldWidget);
   }
 
@@ -171,7 +167,8 @@ class _ImageOfPostState extends State<ImageOfPost>
         child: Text(
           DateReformat.fullDigitsFormat(
               postInfoValue.datePublished, postInfoValue.datePublished),
-          style: getNormalStyle(color: Theme.of(context).bottomAppBarTheme.color!),
+          style:
+              getNormalStyle(color: Theme.of(context).bottomAppBarTheme.color!),
         ),
       ),
       if (showCommentBox || minimumWidth)
@@ -181,7 +178,7 @@ class _ImageOfPostState extends State<ImageOfPost>
             postInfo: widget.postInfo,
             selectedCommentInfo: widget.selectedCommentInfo,
             textController: widget.textController.value,
-            userPersonalInfo: myPersonalInfo,
+            userPersonalInfo: UserInfoCubit.getMyPersonalInfo(context),
             expandCommentBox: true,
             currentFocus: ValueNotifier(FocusScopeNode()),
             makeSelectedCommentNullable: makeSelectedCommentNullable,
@@ -464,6 +461,8 @@ class _ImageOfPostState extends State<ImageOfPost>
   }
 
   CustomNotification createNotification(Post postInfo) {
+    UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+
     return CustomNotification(
       text: "liked your photo.",
       postId: postInfo.postUid,
@@ -494,7 +493,8 @@ class _ImageOfPostState extends State<ImageOfPost>
   SvgPicture iconsOfImagePost(String path, {bool lowHeight = false}) {
     return SvgPicture.asset(
       path,
-      color: Theme.of(context).focusColor,
+      colorFilter:
+          ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
       height: lowHeight ? 22 : 28,
     );
   }
@@ -510,11 +510,17 @@ class _ImageOfPostState extends State<ImageOfPost>
             onDoubleTap: () {
               setState(() {
                 isHeartAnimation = true;
-                this.isLiked = true;
                 if (!isLiked) {
                   BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
                       postId: postInfo.postUid, userId: myPersonalId);
                   postInfo.likes.add(myPersonalId);
+
+                  if (widget.rebuildPreviousWidget != null) {
+                    widget.rebuildPreviousWidget!();
+                  }
+                  BlocProvider.of<NotificationCubit>(context)
+                      .createNotification(
+                          newNotification: createNotification(postInfo));
                 }
               });
             },
@@ -603,7 +609,8 @@ class _ImageOfPostState extends State<ImageOfPost>
         !isThatMobile
             ? IconsAssets.menuHorizontal2Icon
             : IconsAssets.menuHorizontalIcon,
-        color: Theme.of(context).focusColor,
+        colorFilter:
+            ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
         height: 23,
       ),
       onTap: () async => isThatMobile ? bottomSheet() : popupContainerForWeb(),
@@ -639,7 +646,8 @@ class _ImageOfPostState extends State<ImageOfPost>
         SvgPicture.asset(
           IconsAssets.shareCircle,
           height: 50,
-          color: Theme.of(context).focusColor,
+          colorFilter:
+              ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
         ),
         const SizedBox(height: 10),
         buildText(StringsManager.share.tr),

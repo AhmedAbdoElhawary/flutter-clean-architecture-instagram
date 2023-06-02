@@ -4,11 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
-import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cubit.dart';
-import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/profile/personal_profile_page.dart';
 import 'package:instagram/presentation/pages/shop/shop_page.dart';
@@ -28,7 +24,6 @@ class MobileScreenLayout extends StatefulWidget {
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   ValueNotifier<bool> playHomeVideo = ValueNotifier(false);
   ValueNotifier<bool> playMainReelVideos = ValueNotifier(false);
-
   CupertinoTabController controller = CupertinoTabController();
 
   @override
@@ -115,16 +110,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
         )),
       );
 
-  BottomNavigationBarItem personalImageItem() {
-    UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-    UserPersonalInfo? info = UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
-    if (isMyInfoInReelTimeReady && info != null) myPersonalInfo = info;
-
-    return BottomNavigationBarItem(
-        icon: PersonalImageIcon(
-      myPersonalInfo: myPersonalInfo,
-    ));
-  }
+  BottomNavigationBarItem personalImageItem() =>
+      const BottomNavigationBarItem(icon: PersonalImageIcon());
 
   BottomNavigationBarItem navigationBarItem(String icon, bool value,
       {bool smallIcon = false}) {
@@ -132,7 +119,9 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       icon: SvgPicture.asset(
         icon,
         height: smallIcon ? 23 : 25,
-        color: value ? ColorManager.white : Theme.of(context).focusColor,
+        colorFilter: ColorFilter.mode(
+            value ? ColorManager.white : Theme.of(context).focusColor,
+            BlendMode.srcIn),
       ),
     );
   }

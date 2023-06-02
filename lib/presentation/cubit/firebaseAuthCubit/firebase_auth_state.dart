@@ -12,6 +12,16 @@ class CubitAuthConfirmed extends FirebaseAuthCubitState {
   CubitAuthConfirmed(this.user);
 }
 
+class CubitEmailVerificationLoaded extends FirebaseAuthCubitState {
+  final bool isThisEmailToken;
+
+  CubitEmailVerificationLoaded(this.isThisEmailToken);
+}
+
+class CubitEmailVerificationLoading extends FirebaseAuthCubitState {
+  CubitEmailVerificationLoading();
+}
+
 class CubitAuthSignOut extends FirebaseAuthCubitState {}
 
 class CubitAuthFailed extends FirebaseAuthCubitState {
