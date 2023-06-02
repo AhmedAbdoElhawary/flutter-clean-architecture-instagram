@@ -274,13 +274,15 @@ class StoryWidgetState extends State<StoryWidget> {
                                     SvgPicture.asset(
                                       IconsAssets.loveIcon,
                                       width: .5,
-                                      color: Colors.white,
+                                      colorFilter: const ColorFilter.mode(
+                                          ColorManager.white, BlendMode.srcIn),
                                       height: 25,
                                     ),
                                     const SizedBox(width: 25),
                                     SvgPicture.asset(
                                       IconsAssets.send2Icon,
-                                      color: Colors.white,
+                                      colorFilter: const ColorFilter.mode(
+                                          ColorManager.white, BlendMode.srcIn),
                                       height: 23,
                                     ),
                                   ],

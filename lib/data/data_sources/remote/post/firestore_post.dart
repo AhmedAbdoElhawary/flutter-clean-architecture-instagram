@@ -24,7 +24,7 @@ class FireStorePost {
 
   static Future<void> deletePost({required Post postInfo}) async {
     await _fireStorePostCollection.doc(postInfo.postUid).delete();
-    await FirestoreUser.removeUserPost(postId: postInfo.postUid);
+    await FireStoreUser.removeUserPost(postId: postInfo.postUid);
   }
 
   static Future<Post> updatePost({required Post postInfo}) async {
@@ -57,14 +57,14 @@ class FireStorePost {
           Post postReformat = Post.fromQuery(doc: snap);
           if (postReformat.postUrl.isNotEmpty) {
             UserPersonalInfo publisherInfo =
-                await FirestoreUser.getUserInfo(postReformat.publisherId);
+                await FireStoreUser.getUserInfo(postReformat.publisherId);
             postReformat.publisherInfo = publisherInfo;
             postsInfo.add(postReformat);
           } else {
             await deletePost(postInfo: postReformat);
           }
         } else {
-          FirestoreUser.removeUserPost(postId: postsIds[i]);
+          FireStoreUser.removeUserPost(postId: postsIds[i]);
         }
       } catch (e) {
         continue;
@@ -101,7 +101,7 @@ class FireStorePost {
       if (skippedVideoUid == doc.id) continue;
       Post postReformat = Post.fromQuery(query: doc);
       UserPersonalInfo publisherInfo =
-          await FirestoreUser.getUserInfo(postReformat.publisherId);
+          await FireStoreUser.getUserInfo(postReformat.publisherId);
       postReformat.publisherInfo = publisherInfo;
 
       allPosts.add(postReformat);

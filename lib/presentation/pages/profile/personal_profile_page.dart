@@ -63,15 +63,6 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     return scaffold();
   }
 
-  Future<void> getData() async {
-    widget.userName.isNotEmpty
-        ? (await BlocProvider.of<UserInfoCubit>(context)
-            .getUserFromUserName(widget.userName))
-        : (await BlocProvider.of<UserInfoCubit>(context)
-            .getUserInfo(widget.personalId));
-    rebuildUserInfo.value = true;
-  }
-
   Widget scaffold() {
     return WillPopScope(
       onWillPop: () async => true,
@@ -105,7 +96,6 @@ class _ProfilePageState extends State<PersonalProfilePage> {
                     : null,
                 body: ProfilePage(
                   isThatMyPersonalId: true,
-                  getData: getData,
                   userId: state.userPersonalInfo.userId,
                   userInfo: ValueNotifier(state.userPersonalInfo),
                   widgetsAboveTapBars: isThatMobile
@@ -137,7 +127,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           IconButton(
             icon: SvgPicture.asset(
               IconsAssets.addIcon,
-              color: Theme.of(context).focusColor,
+              colorFilter: ColorFilter.mode(
+                  Theme.of(context).focusColor, BlendMode.srcIn),
               height: 22.5,
             ),
             onPressed: () => bottomSheet(),
@@ -145,7 +136,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           IconButton(
             icon: SvgPicture.asset(
               IconsAssets.menuIcon,
-              color: Theme.of(context).focusColor,
+              colorFilter: ColorFilter.mode(
+                  Theme.of(context).focusColor, BlendMode.srcIn),
               height: 30,
             ),
             onPressed: () async => bottomSheet(createNewData: false),
@@ -240,8 +232,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     return GestureDetector(
       onTap: () {
         Get.changeThemeMode(
-            ThemeOfApp().loadThemeFromBox() ? ThemeMode.light : ThemeMode.dark);
-        ThemeOfApp().saveThemeToBox(!ThemeOfApp().loadThemeFromBox());
+            ThemeOfApp().isThemeDark() ? ThemeMode.light : ThemeMode.dark);
+        ThemeOfApp().saveThemeToBox(!ThemeOfApp().isThemeDark());
         darkTheme.value = ThemeMode.dark == ThemeOfApp().theme;
       },
       child: createSizedBox(StringsManager.changeTheme.tr,
@@ -308,7 +300,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
               border: Border.all(
-                  color: Theme.of(context).bottomAppBarTheme.color!, width: 1.0),
+                  color: Theme.of(context).bottomAppBarTheme.color!,
+                  width: 1.0),
               borderRadius: BorderRadius.circular(20.0),
             ),
             child: Center(
@@ -372,15 +365,23 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             nameOfPath: IconsAssets.addInstagramStoryIcon));
   }
 
+  /// TODO: handle the video selection (aspect ratio especially)
   Widget createVideo() {
     return InkWell(
-        onTap: () async => createNewStory(false),
+        onTap: () async {
+          Navigator.maybePop(context);
+
+          await CustomImagePickerPlus.pickVideo(context);
+
+          rebuildUserInfo.value = true;
+        },
         child: createSizedBox(StringsManager.reel.tr,
             nameOfPath: IconsAssets.videoIcon));
   }
 
   createNewStory(bool isThatStory) async {
     Navigator.maybePop(context);
+
     SelectedImagesDetails? details = await CustomImagePickerPlus.pickImage(
       context,
       isThatStory: true,
@@ -392,7 +393,9 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   createNewPost() async {
     Navigator.maybePop(context);
-    await CustomImagePickerPlus.pickBoth(context);
+
+    await CustomImagePickerPlus.pickFromBoth(context);
+
     rebuildUserInfo.value = true;
   }
 
@@ -410,11 +413,14 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         builder: (context, bool themeValue, child) {
           Color themeOfApp =
               themeValue ? ColorManager.white : ColorManager.black;
+
           return Row(children: [
             nameOfPath.isNotEmpty
                 ? SvgPicture.asset(
                     nameOfPath,
-                    color: Theme.of(context).dialogBackgroundColor,
+                    colorFilter: ColorFilter.mode(
+                        Theme.of(context).dialogBackgroundColor,
+                        BlendMode.srcIn),
                     height: 25,
                   )
                 : Icon(icon, color: themeOfApp),

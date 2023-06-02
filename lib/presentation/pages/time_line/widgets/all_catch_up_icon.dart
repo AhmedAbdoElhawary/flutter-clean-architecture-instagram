@@ -24,7 +24,8 @@ class AllCatchUpIcon extends StatelessWidget {
             child: SvgPicture.asset(
               IconsAssets.noMoreData,
               height: size,
-              color: ColorManager.white,
+              colorFilter: const ColorFilter.mode(
+                  ColorManager.white , BlendMode.srcIn),
             ),
           ),
           shaderCallback: (Rect bounds) {

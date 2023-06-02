@@ -45,7 +45,8 @@ class CustomAppBar {
               children: [
                 SvgPicture.asset(
                   IconsAssets.messengerIcon,
-                  color: Theme.of(context).focusColor,
+                  colorFilter: ColorFilter.mode(
+                      Theme.of(context).focusColor, BlendMode.srcIn),
                   height: 22.5,
                 ),
                 if (state is MyPersonalInfoLoaded &&
@@ -90,7 +91,8 @@ class CustomAppBar {
               children: [
                 SvgPicture.asset(
                   IconsAssets.favorite,
-                  color: Theme.of(context).focusColor,
+                  colorFilter: ColorFilter.mode(
+                      Theme.of(context).focusColor, BlendMode.srcIn),
                   height: 30,
                 ),
                 if (state is MyPersonalInfoLoaded &&
@@ -114,7 +116,8 @@ class CustomAppBar {
         padding: const EdgeInsetsDirectional.only(end: 13.0),
         child: SvgPicture.asset(
           IconsAssets.add2Icon,
-          color: Theme.of(context).focusColor,
+          colorFilter: ColorFilter.mode(
+              Theme.of(context).focusColor, BlendMode.srcIn),
           height: 22.5,
         ),
       ),
@@ -122,7 +125,7 @@ class CustomAppBar {
   }
 
   static Future<void> _pushToCustomGallery(BuildContext context) async {
-    await CustomImagePickerPlus.pickBoth(context);
+      await CustomImagePickerPlus.pickFromBoth(context);
   }
 
   static AppBar chattingAppBar(
@@ -168,26 +171,31 @@ class CustomAppBar {
           child: SvgPicture.asset(
             IconsAssets.phone,
             height: 27,
-            color: Theme.of(context).focusColor,
+            colorFilter: ColorFilter.mode(
+                Theme.of(context).focusColor, BlendMode.srcIn),
           ),
         ),
         const SizedBox(width: 20),
         GestureDetector(
           onTap: () async {
-            UserPersonalInfo myPersonalInfo =
-                UserInfoCubit.getMyPersonalInfo(context);
-            amICalling = true;
-            await Go(context).push(
-                page: VideoCallPage(
-                    usersInfo: usersInfo, myPersonalInfo: myPersonalInfo),
-                withoutRoot: false,
-                withoutPageTransition: true);
-            amICalling = false;
+
+              UserPersonalInfo myPersonalInfo =
+                  UserInfoCubit.getMyPersonalInfo(context);
+              amICalling = true;
+              await Go(context).push(
+                  page: VideoCallPage(
+                      usersInfo: usersInfo, myPersonalInfo: myPersonalInfo),
+                  withoutRoot: false,
+                  withoutPageTransition: true);
+              amICalling = false;
+
+
           },
           child: SvgPicture.asset(
             IconsAssets.videoPoint,
             height: 25,
-            color: Theme.of(context).focusColor,
+            colorFilter: ColorFilter.mode(
+                Theme.of(context).focusColor, BlendMode.srcIn),
           ),
         ),
         const SizedBox(width: 15),
@@ -251,7 +259,8 @@ class CustomAppBar {
           IconButton(
             icon: SvgPicture.asset(
               IconsAssets.menuHorizontalIcon,
-              color: Theme.of(context).focusColor,
+              colorFilter: ColorFilter.mode(
+                  Theme.of(context).focusColor, BlendMode.srcIn),
               height: 22.5,
             ),
             onPressed: () => bottomSheet,

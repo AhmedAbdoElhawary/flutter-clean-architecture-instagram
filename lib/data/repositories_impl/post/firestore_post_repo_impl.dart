@@ -77,7 +77,7 @@ class FireStorePostRepositoryImpl implements FireStorePostRepository {
   @override
   Future<List> getSpecificUsersPosts(List<dynamic> usersIds) async {
     try {
-      return await FirestoreUser.getSpecificUsersPosts(usersIds);
+      return await FireStoreUser.getSpecificUsersPosts(usersIds);
     } catch (e) {
       return Future.error(e.toString());
     }

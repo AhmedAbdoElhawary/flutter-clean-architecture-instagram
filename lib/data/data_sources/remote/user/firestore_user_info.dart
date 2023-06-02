@@ -10,7 +10,7 @@ import 'package:instagram/data/models/parent_classes/without_sub_classes/user_pe
 import '../../../../core/utility/constant.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/push_notification.dart';
 
-class FirestoreUser {
+class FireStoreUser {
   static final _fireStoreUserCollection =
       FirebaseFirestore.instance.collection('users');
 
@@ -20,7 +20,6 @@ class FirestoreUser {
         .set(newUserInfo.toMap());
   }
 
-  // update channelId for user
   static Future<List<bool>> updateChannelId(
       {required List<UserPersonalInfo> callThoseUsers,
       required String myPersonalId,
@@ -53,7 +52,7 @@ class FirestoreUser {
         "chatsOfGroups": FieldValue.arrayUnion([messageInfo.chatOfGroupId])
       });
 
-      await FirestoreUser.sendNotification(
+      await FireStoreUser.sendNotification(
           userId: userId, message: messageInfo);
     }
     await _fireStoreUserCollection.doc(messageInfo.senderId).update({

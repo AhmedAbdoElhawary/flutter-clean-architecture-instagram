@@ -60,8 +60,8 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
       return InViewNotifierCustomScrollView(
         slivers: [
           SliverStaggeredGrid.countBuilder(
-            crossAxisSpacing: isThatMobile ? 1.5 : 30,
-            mainAxisSpacing: isThatMobile ? 1.5 : 30,
+            crossAxisSpacing: 1.5,
+            mainAxisSpacing: 1.5,
             crossAxisCount: 3,
             itemCount: lengthOfGrid,
             itemBuilder: (context, index) {
@@ -69,11 +69,9 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
               return inViewWidget(index, postInfo);
             },
             staggeredTileBuilder: (index) {
-              double num = (index == (isThatMobile ? 2 : 1) ||
-                      (index % 11 == 0 && index != 0))
-                  ? 2
-                  : 1;
-              return StaggeredTile.count(num.toInt(), num);
+              double num =
+                  (index == 2 || (index % 11 == 0 && index != 0)) ? 2 : 1;
+              return StaggeredTile.count(1, num);
             },
           )
         ],
@@ -95,8 +93,8 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
 
   StaggeredGridView _gridView() {
     return StaggeredGridView.countBuilder(
-      crossAxisSpacing: isThatMobile ? 1.5 : 30,
-      mainAxisSpacing: isThatMobile ? 1.5 : 30,
+      crossAxisSpacing: 30,
+      mainAxisSpacing: 30,
       crossAxisCount: 3,
       shrinkWrap: true,
       primary: false,
@@ -112,10 +110,7 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
         );
       },
       staggeredTileBuilder: (index) {
-        double num =
-            (index == (isThatMobile ? 2 : 1) || (index % 11 == 0 && index != 0))
-                ? 2
-                : 1;
+        double num = (index == 1 || (index % 11 == 0 && index != 0)) ? 2 : 1;
         return StaggeredTile.count(num.toInt(), num);
       },
     );

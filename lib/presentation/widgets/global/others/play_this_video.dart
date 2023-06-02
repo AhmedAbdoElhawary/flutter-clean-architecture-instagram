@@ -32,9 +32,10 @@ class PlayThisVideoState extends State<PlayThisVideo> {
     aspectRatio = widget.aspectRatio;
     if (!isThatMobile && aspectRatio == 0.65) aspectRatio = 0.56;
 
-    _controller = widget.isThatFromMemory
-        ? VideoPlayerController.asset(widget.videoUrl)
-        : VideoPlayerController.network(widget.videoUrl);
+      _controller = widget.isThatFromMemory
+          ? VideoPlayerController.asset(widget.videoUrl)
+          : VideoPlayerController.network(widget.videoUrl);
+
     _initializeVideoPlayerFuture = _controller.initialize().then((_) {
       setState(() {});
     });

@@ -28,4 +28,6 @@ class Go {
           duration: const Duration(milliseconds: 0));
     }
   }
+
+  back() => Navigator.maybePop(context);
 }

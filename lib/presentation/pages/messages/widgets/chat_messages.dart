@@ -422,7 +422,8 @@ class _ChatMessagesState extends State<ChatMessages>
     return SvgPicture.asset(
       IconsAssets.send2Icon,
       height: 15,
-      color: Theme.of(context).focusColor,
+      colorFilter:
+          ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
     );
   }
 
@@ -969,13 +970,15 @@ class _ChatMessagesState extends State<ChatMessages>
       child: SvgPicture.asset(
         "assets/icons/sticker.svg",
         height: 25,
-        color: Theme.of(context).focusColor,
+        colorFilter:
+            ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
       ),
     );
   }
 
   Future<void> onSelectImage(
       MessageCubit messageCubit, ImageSource source) async {
+
     SelectedImagesDetails? pickImage =
         await CustomImagePickerPlus.pickImage(context, source: source);
     if (pickImage != null) {
@@ -1022,7 +1025,8 @@ class _ChatMessagesState extends State<ChatMessages>
       child: SvgPicture.asset(
         isThatMobile ? IconsAssets.gallery : IconsAssets.galleryBold,
         height: isThatMobile ? 23 : 26,
-        color: Theme.of(context).focusColor,
+        colorFilter:
+            ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
       ),
     );
   }

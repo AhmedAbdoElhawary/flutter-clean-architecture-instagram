@@ -17,6 +17,7 @@ import 'package:instagram/domain/repositories/post/comment/reply_repository.dart
 import 'package:instagram/domain/repositories/post/post_repository.dart';
 import 'package:instagram/domain/repositories/story_repository.dart';
 import 'package:instagram/domain/repositories/user_repository.dart';
+import 'package:instagram/domain/use_cases/auth/email_verification_usecase.dart';
 import 'package:instagram/domain/use_cases/auth/log_in_auth_usecase.dart';
 import 'package:instagram/domain/use_cases/auth/sign_out_auth_usecase.dart';
 import 'package:instagram/domain/use_cases/auth/sign_up_auth_usecase.dart';
@@ -128,7 +129,7 @@ Future<void> initializeDependencies() async {
   );
   // story
   injector.registerLazySingleton<FirestoreStoryRepository>(
-    () => FirestoreStoryRepositoryImpl(),
+    () => FireStoreStoryRepositoryImpl(),
   );
   // notification
   injector.registerLazySingleton<FireStoreNotificationRepository>(
@@ -150,8 +151,12 @@ Future<void> initializeDependencies() async {
 
   injector.registerLazySingleton<SignUpAuthUseCase>(
       () => SignUpAuthUseCase(injector()));
+
   injector.registerLazySingleton<SignOutAuthUseCase>(
       () => SignOutAuthUseCase(injector()));
+
+  injector.registerLazySingleton<EmailVerificationUseCase>(
+      () => EmailVerificationUseCase(injector()));
   // *
   // FireStore user useCases
   injector.registerLazySingleton<AddNewUserUseCase>(
@@ -314,7 +319,7 @@ Future<void> initializeDependencies() async {
 
   // auth Blocs
   injector.registerFactory<FirebaseAuthCubit>(
-    () => FirebaseAuthCubit(injector(), injector(), injector()),
+    () => FirebaseAuthCubit(injector(), injector(), injector(), injector()),
   );
   // *
 

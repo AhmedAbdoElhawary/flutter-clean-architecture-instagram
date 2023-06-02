@@ -14,7 +14,7 @@ class FirebaseGroupMessageRepoImpl implements FireStoreGroupMessageRepository {
     try {
       Message messageDetails =
           await FireStoreGroupChat.createChatForGroups(messageInfo);
-      await FirestoreUser.updateChatsOfGroups(messageInfo: messageDetails);
+      await FireStoreUser.updateChatsOfGroups(messageInfo: messageDetails);
       return messageDetails;
     } catch (e) {
       return Future.error(e.toString());
@@ -47,7 +47,7 @@ class FirebaseGroupMessageRepoImpl implements FireStoreGroupMessageRepository {
           updateLastMessage: updateLastMessage, message: messageInfo);
 
       for (final userId in messageInfo.receiversIds) {
-        await FirestoreUser.sendNotification(
+        await FireStoreUser.sendNotification(
             userId: userId, message: messageInfo);
       }
 

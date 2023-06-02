@@ -131,8 +131,7 @@ class _NotificationCardInfoState extends State<NotificationCardInfo> {
                         page: GetsPostInfoAndDisplay(
                           postId: widget.notificationInfo.postId,
                           appBarText: appBarText,
-                        ),
-                        withoutRoot: false);
+                        ));
                   } else {
                     Navigator.of(context).push(HeroDialogRoute(
                       builder: (context) => GetsPostInfoAndDisplay(

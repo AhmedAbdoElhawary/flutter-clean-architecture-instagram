@@ -98,7 +98,8 @@ class _SignUpPageState extends State<RegisterWidgets> {
           if (!widget.isThatLogIn) const Spacer(),
           SvgPicture.asset(
             IconsAssets.instagramLogo,
-            color: Theme.of(context).focusColor,
+            colorFilter:
+                ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
             height: 50,
           ),
           const SizedBox(height: 30),
@@ -107,12 +108,15 @@ class _SignUpPageState extends State<RegisterWidgets> {
             controller: widget.emailController,
             isThatEmail: true,
             validate: widget.validateEmail,
+            isThatLogin: widget.isThatLogIn,
           ),
           SizedBox(height: isThatMobile ? 15 : 6.5),
           if (!widget.isThatLogIn && widget.fullNameController != null) ...[
             CustomTextField(
-                hint: StringsManager.fullName.tr,
-                controller: widget.fullNameController!),
+              hint: StringsManager.fullName.tr,
+              controller: widget.fullNameController!,
+              isThatLogin: widget.isThatLogIn,
+            ),
             SizedBox(height: isThatMobile ? 15 : 6.5),
           ],
           CustomTextField(
@@ -120,6 +124,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
             controller: widget.passwordController,
             isThatEmail: false,
             validate: widget.validatePassword,
+            isThatLogin: widget.isThatLogIn,
           ),
           if (!widget.isThatLogIn) ...[
             if (!isThatMobile) const SizedBox(height: 10),
