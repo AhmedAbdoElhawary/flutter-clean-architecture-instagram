@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -79,7 +78,7 @@ class WebCustomCrop extends StatefulWidget {
 }
 
 class WebCustomCropState extends State<WebCustomCrop>
-    with TickerProviderStateMixin, Drag {
+    with TickerProviderStateMixin {
   final _surfaceKey = GlobalKey();
 
   late final AnimationController _activeController;
