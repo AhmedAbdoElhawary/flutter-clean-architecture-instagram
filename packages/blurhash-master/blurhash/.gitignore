@@ -1,0 +1,9 @@
+*.lock
+.DS_Store
+.dart_tool/
+.idea/
+
+.packages
+.pub/
+
+build/
