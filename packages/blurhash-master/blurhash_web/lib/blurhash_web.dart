@@ -4,11 +4,11 @@ import 'package:image/image.dart' as img;
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
-class BlurhashPlugin {
+class BlurHashPlugin {
   static void registerWith(Registrar registrar) {
-    final MethodChannel channel =
-        MethodChannel('blurhash', const StandardMethodCodec());
-    final BlurhashPlugin instance = BlurhashPlugin();
+    const MethodChannel channel =
+        MethodChannel('blurhash', StandardMethodCodec());
+    final BlurHashPlugin instance = BlurHashPlugin();
     channel.setMethodCallHandler(instance.handleMethodCall);
   }
 
