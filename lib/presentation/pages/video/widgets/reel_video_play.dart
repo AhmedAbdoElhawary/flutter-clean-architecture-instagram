@@ -1,23 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:instagram/core/resources/color_manager.dart';
-import 'package:instagram/data/models/child_classes/post/post.dart';
-import 'package:instagram/presentation/widgets/global/aimation/fade_animation.dart';
-import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
-import 'package:video_player/video_player.dart';
+part of '../videos_page.dart';
 
-class ReelVideoPlay extends StatefulWidget {
+class _ReelVideoPlay extends StatefulWidget {
   final ValueNotifier<Post> videoInfo;
   final bool stopVideo;
 
-  const ReelVideoPlay(
+  const _ReelVideoPlay(
       {Key? key, required this.videoInfo, required this.stopVideo})
       : super(key: key);
 
   @override
-  State<ReelVideoPlay> createState() => _ReelVideoPlayState();
+  State<_ReelVideoPlay> createState() => _ReelVideoPlayState();
 }
 
-class _ReelVideoPlayState extends State<ReelVideoPlay> {
+class _ReelVideoPlayState extends State<_ReelVideoPlay> {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
   final ValueNotifier<Widget> videoStatusAnimation =
@@ -26,6 +21,7 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
   @override
   void initState() {
     super.initState();
+
     _controller = VideoPlayerController.network(widget.videoInfo.value.postUrl)
       ..setLooping(true)
       ..initialize().then((_) => _controller.play());
@@ -33,8 +29,9 @@ class _ReelVideoPlayState extends State<ReelVideoPlay> {
   }
 
   @override
-  void didUpdateWidget(covariant ReelVideoPlay oldWidget) {
+  void didUpdateWidget(covariant _ReelVideoPlay oldWidget) {
     if (!oldWidget.stopVideo) {
+
       _initializeVideoPlayerFuture = _controller.pause();
       _controller.pause();
     } else {
