@@ -1,6 +1,6 @@
 # flutter-clean-architecture-instagram
 
-Instagram clean architecture using flutter and firebase as ( frontend & backend ) with almost all functionalities
+Instagram clean architecture using Flutter and Firebase ( frontend & backend ) with almost all functionalities
 
 ## If you want to work with me, you can find me here:
 
@@ -23,9 +23,9 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
 * Post features
   * Support images & videos 
   * Support multi images in one post or mixin with them
-  * Like on a post and view all likes with their profiles
+  * Like on a post and view all like with their profiles
   * Comment on a post and replay on a (comment & replay)
-    * Like on a comment & replay and view all likes with their profiles
+    * Like on a comment & replay and view all like with their profiles
   * Edit post
   * Delete post
   * Unfollow the user of the post
@@ -33,11 +33,11 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
 * My Timelines Screen
   * Custom posts & stories feed based on followers & followings
   * Refresh the posts info
-  * Loading more posts (it displays five by five posts)
+  * Loading more posts (it displays five-by-five posts)
 
 * All Timelines Screen
   * View all user's posts (images & videos)
-  * Change screen from a grid layout to a timeline layout
+  * Change the screen from a grid layout to a timeline layout
 
 * Search for a user based on username
 
@@ -48,7 +48,7 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
 * Profile Screen
   * Follow / Unfollow Users
   * Display images & videos in a separate view
-  * Change screen from a grid layout to a timeline layout
+  * Change the screen from a grid layout to a timeline layout
   * Edit profile info
   
 * Chat Screen
@@ -62,7 +62,7 @@ Instagram clean architecture using flutter and firebase as ( frontend & backend 
     * Group video call
 
 * Push Notifications
-* Send post to chats
+* Send posts to chats
 
 ## SnapShots for web
 ### You can see the screen record from here [google drive](https://drive.google.com/file/d/11LyKgpP4kvnP1yLgykwpPj1t7euEFJjK/view?usp=sharing)
@@ -170,7 +170,7 @@ $ cd flutter-clean-architecture-instagram/
 
 ## 3. Setup the app
 
-### . Setup the firebase services
+### . Setup the Firebase services
 
 
 1. You'll need to create a Firebase instance. Follow the instructions at https://console.firebase.google.com.
@@ -194,52 +194,52 @@ $ cd flutter-clean-architecture-instagram/
 * Select "Start in production mode" and "Enable"
 
 
-6. Add a Flutter app with firebase
+6. Add a Flutter app with Firebase
 
-* Recently google add to the firebase method to connect with your flutter app directly without making android and ios separately.
+* Recently google add to the Firebase method to connect with your Flutter app directly without making Android and ios separately.
 * Click "Project Overview" in the left-hand menu
 * Click on the flutter icon button
-* Just follow the steps carefully
+* follow the steps carefully
 * When you run flutterfire configure --project=^project name^ support android, ios, and web
 
 5. Enable the Firebase Messaging
 * Go to the Firebase Console
 * Click "Messaging" in the left-hand menu
-* Click on the android icon button
-* Click on create your first campaign
+* Click on the Android icon button
+* Click on Create your first campaign
 * Now go to project settings and cloud Messaging and copy the server key in Cloud Messaging API
 * Search for notificationKey in this project by a tap on control+shift+f in the IDE and set the server key as a string like this "key=^server key^" 
 
 ### . Setup agora
 * Go to https://www.agora.io/en/ and sign in
-* Go to console by clicking on the account icon
+* Go to the console by clicking on the account icon
 * Click on Project Management in the left-hand menu
 * Click on Create New Project
 
 * Now the most important step in the agora
-  * Select "Testing mode: APP ID" not "secured mode" (if you select secured mode, It will be one channel available and you can't make another one in your app. in other words you can't make a private channel between two users or more, all users that use your app will go to the same calling room)
+  * Select "Testing mode: APP ID" not "secured mode" (if you select secured mode, It will be one channel available and you can't make another one in your app. In other words, you can't make a private channel between two users or more, all users that use your app will go to the same calling room)
 
 *  Set project name and Social/Chatroom in Use Case and click on submit
 
-* Click on config on the project and copy App ID
+* Click on config on the project and copy the App ID
 
-* Search about agoraAppId in this project by a tap on control+shift+f in the IDE and set the App ID as a string
+* Search about agoraAppId in this project by a tap on control+shift+f in the IDE and setting the App ID as a string
  
 
 ## What's Next?
  - [x] Notifications for likes, comments, follows, etc
  - [x] Caching of Profiles, Images, Etc.
  - [x] Calling video and voice in chat
- - [x] Create group chat
+ - [x] Create a group chat
  - [x] Calling video and voice in group chat
  - [x] Send posts to chats
- - [x] control in the dimension of selected image & video from the gallery
+ - [x] control in the dimension of selected images & video from the gallery
  - [x] Custom gallery display
  - [x] Improve display loading of posts when opening the app
  - [x] share post
  - [x] Make like, comment, and share of animation container post touchy when long pressed on post
- - [x] Make it stable for web
- - [ ] Clean-up more code
+ - [x] Make it stable for the web
+ - [ ] Clean up more code
 
 
 
