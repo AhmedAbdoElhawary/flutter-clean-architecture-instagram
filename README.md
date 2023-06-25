@@ -170,61 +170,161 @@ $ cd flutter-clean-architecture-instagram/
 
 ## 3. Setup the app
 
-### . Setup the Firebase services
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+
+<h4 id="third-connection-with-firebase">.Connection with Firebase</h4>
+<ol>
+<li>Run this line in your PowerShell:</li>
+</ol>
+<pre class=" language-javascript"><code class="prism  language-javascript">Set<span class="token operator">-</span>ExecutionPolicy RemoteSigned 
+</code></pre>
+<ul>
+<li>Then, press <code>y</code> to comfirm</li>
+</ul>
+<ol start="2">
+<li>We need to log in with Firebase. run this line:</li>
+</ol>
+<pre class=" language-bash"><code class="prism  language-bash">firebase login
+</code></pre>
+<ul>
+<li>Then, press <code>y</code> to comfirm</li>
+<li>Then, choose the account that you want to create Firebase services with it.</li>
+<li>Then, press Allow</li>
+</ul>
+<ol start="3">
+<li>In PowerShell, write the disk that the project is exciting. For example, I have <strong>InstaAwesome</strong> in D. So, I will write it Like this:</li>
+</ol>
+<pre class=" language-bash"><code class="prism  language-bash">d:
+</code></pre>
+<ol start="4">
+<li>Add the following line, replacing <code>&lt;path-to-project-root&gt;</code> with the path to the project root:</li>
+</ol>
+<pre class=" language-bash"><code class="prism  language-bash"><span class="token function">cd</span> <span class="token operator">&lt;</span>path-to-project-root<span class="token operator">&gt;</span>
+</code></pre>
+<ol start="5">
+<li>Then, run this line:</li>
+</ol>
+<pre class=" language-bash"><code class="prism  language-bash">flutterfire configure
+</code></pre>
+<ul>
+<li>
+<p>Select <code>Create a new project</code> and press enter<br>
+<a href="https://ibb.co/MRr4cCH"><img src="https://i.ibb.co/VvRZgqG/Screenshot-91.png" alt="Screenshot-91" border="0"></a></p>
+</li>
+<li>
+<p>Write project name with this <strong>format</strong> <code>my-cool-project</code><br>
+<a href="https://ibb.co/8NXDw82"><img src="https://i.ibb.co/XjVZPJp/Screenshot-92.png" alt="Screenshot-92" border="0"></a></p>
+</li>
+<li>
+<p>Select <code>android</code>, <code>ios</code>, and <code>web</code>. dis select <code>macos</code> right now, And press Enter<br>
+<a href="https://ibb.co/9wgSwgY"><img src="https://i.ibb.co/YDQwDQj/Screenshot-93.png" alt="Screenshot-93" border="0"></a></p>
+</li>
+</ul>
+<h5 id="enable-firebase-services">Enable Firebase services</h5>
+<p>Enable those services: <code>Authentication</code>, <code>Firestor Database</code>, <code>Storage</code>, and <code>Messaging</code>. And take the ‘Cloud Messaging server key’ copy from ‘Cloud Messaging’ in ‘Project settings’.</p>
+<ol>
+<li>
+<p>Enable <code>Email/Password</code> in <code>Authentication</code>:<br>
+<a href="https://ibb.co/chf7r8N"><img src="https://i.ibb.co/9HKCr4q/Screenshot-94.png" alt="Screenshot-94" border="0"></a><br>
+<a href="https://ibb.co/824JWyB"><img src="https://i.ibb.co/J2FNfYd/Screenshot-95.png" alt="Screenshot-95" border="0"></a><br>
+<a href="https://ibb.co/xGLrH7K"><img src="https://i.ibb.co/P4jVQ6s/Screenshot-98.png" alt="Screenshot-98" border="0"></a></p>
+</li>
+<li>
+<p>Enable <code>Firestor Database</code>:<br>
+<a href="https://ibb.co/Y8s8Wpg"><img src="https://i.ibb.co/jGXG5gt/Screenshot-99.png" alt="Screenshot-99" border="0"></a><br>
+<a href="https://ibb.co/QQRvHwZ"><img src="https://i.ibb.co/bmZ5v9x/Screenshot-100.png" alt="Screenshot-100" border="0"></a><br>
+<a href="https://ibb.co/LS6D9hx"><img src="https://i.ibb.co/TcRDPq4/Screenshot-101.png" alt="Screenshot-101" border="0"></a></p>
+</li>
+</ol>
+<ul>
+<li>Change <code>allow read, write: if false;</code> to <code>allow read, write: if true;</code><br>
+<a href="https://ibb.co/BCpyF9d"><img src="https://i.ibb.co/Vq1g5sr/Screenshot-102.png" alt="Screenshot-102" border="0"></a><br>
+<a href="https://ibb.co/q92s51S"><img src="https://i.ibb.co/jGjMR4N/Screenshot-103.png" alt="Screenshot-103" border="0"></a></li>
+</ul>
+<ol start="3">
+<li>
+<p>Enable <code>Storage</code> the same as <code>Firebase Database</code>:<br>
+<a href="https://ibb.co/KyNjsB4"><img src="https://i.ibb.co/PCTZWJX/Screenshot-104.png" alt="Screenshot-104" border="0"></a><br>
+<a href="https://ibb.co/MCV8qNc"><img src="https://i.ibb.co/875zF8r/Screenshot-105.png" alt="Screenshot-105" border="0"></a><br>
+<a href="https://ibb.co/nbcJxb0"><img src="https://i.ibb.co/W6yJm63/Screenshot-106.png" alt="Screenshot-106" border="0"></a></p>
+</li>
+<li>
+<p>Enable <code>Messaging</code><br>
+<a href="https://ibb.co/Yf7Dp8T"><img src="https://i.ibb.co/WBWDgFp/Screenshot-107.png" alt="Screenshot-107" border="0"></a><br>
+<a href="https://ibb.co/KG6v7YY"><img src="https://i.ibb.co/b319Lxx/Screenshot-108.png" alt="Screenshot-108" border="0"></a><br>
+<a href="https://ibb.co/DVDD2Tm"><img src="https://i.ibb.co/r7GGrNq/Screenshot-110.png" alt="Screenshot-110" border="0"></a><br>
+<a href="https://ibb.co/b1Dwthz"><img src="https://i.ibb.co/7vLMhc2/Screenshot-111.png" alt="Screenshot-111" border="0"></a><br>
+<a href="https://ibb.co/8X75M0L"><img src="https://i.ibb.co/SJ3nNP4/Screenshot-112.png" alt="Screenshot-112" border="0"></a></p>
+</li>
+<li>
+<p>Enable <code>Messaging Server key</code><br>
+<a href="https://ibb.co/LgBd4RX"><img src="https://i.ibb.co/7pBt7Cd/Screenshot-109.png" alt="Screenshot-109" border="0"></a><br>
+<a href="https://ibb.co/jG47rSR"><img src="https://i.ibb.co/nfkhLFC/Screenshot-114.png" alt="Screenshot-114" border="0"></a><br>
+<a href="https://ibb.co/rHMXfhB"><img src="https://i.ibb.co/yq5xBCz/Screenshot-115.png" alt="Screenshot-115" border="0"></a></p>
+</li>
+</ol>
+<ul>
+<li>
+<p>Take the server key copy:<br>
+<a href="https://ibb.co/XYtMfwJ"><img src="https://i.ibb.co/NTKbg4Y/Screenshot-118.png" alt="Screenshot-118" border="0"></a></p>
+</li>
+<li>
+<p>Then, past the key in the project <code>lib\core\utility\private_keys.dart</code> in <code>notificationKey</code> after <code>=</code> like this:<br>
+<a href="https://ibb.co/K5KPG6S"><img src="https://i.ibb.co/PrDLYx0/Screenshot-123.png" alt="Screenshot-123" border="0"></a></p>
+</li>
+</ul>
+<h4 id="enable-agora-services">.Connection with Agora</h4>
+<p>Agora is a real-time communication platform that provides a set of APIs and SDKs for adding voice↳</p>
+<h5 id="step-1-create-an-agora-account-and-get-a-test-key">Step 1: Create an Agora Account and Get a Test Key</h5>
+<p>Before we can connect our Flutter app with Agora, we need to create an Agora account and get a test key. Here are the steps to get an Agora test key:</p>
+<ol>
+<li>
+<p>Go to the <a href="https://www.agora.io/en/">Agora website</a> and sign up for an account.</p>
+</li>
+<li>
+<p>After you have signed up, log in to the <a href="https://console.agora.io/projects">Agora Project Management</a> with your account credentials.<br>
+<a href="https://ibb.co/N7jJ6sj"><img src="https://i.ibb.co/1bqPfLq/Screenshot-124.png" alt="Screenshot-124" border="0"></a></p>
+</li>
+<li>
+<p>Click on the “Create a Project”<br>
+<a href="https://ibb.co/Z1w1pvs"><img src="https://i.ibb.co/CsXs34d/Screenshot-125.png" alt="Screenshot-125" border="0"></a></p>
+</li>
+<li>
+<p>Enter a name for your project and select any Use Case.</p>
+</li>
+<li>
+<p>Select <code>Testing mode: APP ID</code></p>
+</li>
+<li>
+<p>Press <code>Sumbit</code><br>
+<a href="https://ibb.co/TwkmdGM"><img src="https://i.ibb.co/yNXW7CF/Screenshot-126.png" alt="Screenshot-126" border="0"></a></p>
+</li>
+<li>
+<p>Take <code>App ID</code> copy<br>
+<a href="https://ibb.co/7z1QCdd"><img src="https://i.ibb.co/b3KFmMM/Screenshot-127.png" alt="Screenshot-127" border="0"></a></p>
+</li>
+<li>
+<p>Past it in <code>agoraAppId</code> variable.<br>
+<a href="https://ibb.co/tMXmPw1"><img src="https://i.ibb.co/PZQmzsV/Screenshot-128.png" alt="Screenshot-128" border="0"></a></p>
+</li>
+</ol>
+<h4 id="congratulations-the-project-is-ready.">Congratulations! The project is ready.</h4>
+</div>
+</body>
+
+</html>
 
 
-1. You'll need to create a Firebase instance. Follow the instructions at https://console.firebase.google.com.
-2. Once your Firebase instance is created, you'll need to enable Email/Password authentication.
-
-* Go to the Firebase Console for your new instance.
-* Click "Authentication" in the left-hand menu
-* Click the "sign-in method" tab
-* Click "Email/Password" and enable it
-
-4. Enable the Cloud Firestore
-* Go to the Firebase Console
-* Click "Firebase Database" in the left-hand menu
-* Click on the "Create Database" button
-* Select "Start in production mode" and "Enable"
-
-5. Enable the Firebase Storage
-* Go to the Firebase Console
-* Click "Storage" in the left-hand menu
-* Click on the "Create Storage" button
-* Select "Start in production mode" and "Enable"
-
-
-6. Add a Flutter app with Firebase
-
-* Recently google add to the Firebase method to connect with your Flutter app directly without making Android and ios separately.
-* Click "Project Overview" in the left-hand menu
-* Click on the flutter icon button
-* follow the steps carefully
-* When you run flutterfire configure --project=^project name^ support android, ios, and web
-
-5. Enable the Firebase Messaging
-* Go to the Firebase Console
-* Click "Messaging" in the left-hand menu
-* Click on the Android icon button
-* Click on Create your first campaign
-* Now go to project settings and cloud Messaging and copy the server key in Cloud Messaging API
-* Search for notificationKey in this project by a tap on control+shift+f in the IDE and set the server key as a string like this "key=^server key^" 
-
-### . Setup agora
-* Go to https://www.agora.io/en/ and sign in
-* Go to the console by clicking on the account icon
-* Click on Project Management in the left-hand menu
-* Click on Create New Project
-
-* Now the most important step in the agora
-  * Select "Testing mode: APP ID" not "secured mode" (if you select secured mode, It will be one channel available and you can't make another one in your app. In other words, you can't make a private channel between two users or more, all users that use your app will go to the same calling room)
-
-*  Set project name and Social/Chatroom in Use Case and click on submit
-
-* Click on config on the project and copy the App ID
-
-* Search about agoraAppId in this project by a tap on control+shift+f in the IDE and setting the App ID as a string
- 
 
 ## What's Next?
  - [x] Notifications for likes, comments, follows, etc
@@ -249,5 +349,4 @@ $ cd flutter-clean-architecture-instagram/
 3. Make required changes and commit (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
 5. Create a new Pull Request
-
 
