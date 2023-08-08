@@ -14,6 +14,7 @@ import 'package:instagram/domain/entities/sender_info.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/message/bloc/message_bloc.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_cubit.dart';
 import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_reel_time/users_info_reel_time_bloc.dart';
+import 'package:instagram/presentation/pages/messages/chatting_page.dart';
 import 'package:instagram/presentation/pages/messages/widgets/chat_messages.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
@@ -135,9 +136,21 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
             padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 18),
             child: GestureDetector(
               onTap: () {
-                Go(context).push(
-                    page: GroupMessages(
-                        selectedUsersInfoValue: selectedUsersInfoValue));
+                if (selectedUsersInfoValue.isEmpty) return;
+
+                if (selectedUsersInfoValue.length > 1) {
+                  Go(context).push(
+                      page: GroupMessages(
+                          selectedUsersInfoValue: selectedUsersInfoValue));
+                } else {
+                  Go(context).push(
+                      page: BlocProvider<MessageBloc>(
+                    create: (context) => injector<MessageBloc>(),
+                    child: ChattingPage(
+                        messageDetails:
+                            SenderInfo(receiversInfo: selectedUsersInfoValue)),
+                  ));
+                }
               },
               child: Text("Chat",
                   style: getMediumStyle(
