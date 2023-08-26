@@ -169,7 +169,8 @@ $ cd flutter-clean-architecture-instagram/
 ```
 
 ## 3. Setup the app
-
+<details>
+  <summary>Click to expand</summary>
 
 <!DOCTYPE html>
 <html>
@@ -323,6 +324,8 @@ $ cd flutter-clean-architecture-instagram/
 </body>
 
 </html>
+
+</details>
 
 
 
