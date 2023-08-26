@@ -169,6 +169,7 @@ $ cd flutter-clean-architecture-instagram/
 ```
 
 ## 3. Setup the app
+### I made the setup with more details and visuals to make it easy for any level to set up the app.
 <details>
   <summary>Click to expand</summary>
 
