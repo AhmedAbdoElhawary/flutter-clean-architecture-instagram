@@ -63,8 +63,7 @@ dependencies:
   video_player: ^2.6.1
   shimmer: ^2.0.0
   get_storage: ^2.1.1
-  blurhash:
-    path: packages/blurhash-master/blurhash
+  blurhash: ^1.1.1
   get: ^4.6.5
   video_thumbnail: ^0.5.3
   permission_handler: ^10.2.0
@@ -75,7 +74,6 @@ dependencies:
   firebase_messaging: ^14.4.1
   agora_rtc_engine: ^5.3.0
   flutter_local_notifications: ^9.7.0
-  sliding_sheet: ^0.5.2
   scrollable_positioned_list: ^0.3.5
   flutter_launcher_icons: ^0.13.1
 

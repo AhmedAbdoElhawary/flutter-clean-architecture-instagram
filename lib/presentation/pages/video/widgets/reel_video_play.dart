@@ -22,7 +22,7 @@ class _ReelVideoPlayState extends State<_ReelVideoPlay> {
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.network(widget.videoInfo.value.postUrl)
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoInfo.value.postUrl))
       ..setLooping(true)
       ..initialize().then((_) => _controller.play());
     _initializeVideoPlayerFuture = _controller.initialize();

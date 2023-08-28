@@ -13,6 +13,7 @@ import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 import 'package:instagram/presentation/cubit/postInfoCubit/postLikes/post_likes_cubit.dart';
+import 'package:instagram/presentation/customPackages/sliding_sheet/sliding_sheet.dart';
 import 'package:instagram/presentation/pages/comments/comments_for_mobile.dart';
 import 'package:instagram/presentation/pages/profile/widgets/which_profile_page.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/animated_dialog.dart';
@@ -23,7 +24,6 @@ import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_network_image_display.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_posts_display.dart';
-import 'package:sliding_sheet/sliding_sheet.dart';
 
 class _PositionDimension {
   final double positionTop;
