@@ -10,9 +10,9 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
+import 'package:instagram/presentation/customPackages/sliding_sheet/sliding_sheet.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/send_to_users.dart';
 import 'package:instagram/presentation/widgets/global/popup_widgets/web/share_post.dart';
-import 'package:sliding_sheet/sliding_sheet.dart';
 
 class ShareButton extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
