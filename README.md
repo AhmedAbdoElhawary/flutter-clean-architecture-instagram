@@ -186,7 +186,7 @@ $ cd flutter-clean-architecture-instagram/
 
 <h4 id="third-connection-with-firebase">.Connection with Firebase</h4>
 <ol>
-<li>Run this line in your PowerShell:</li>
+<li>Run this line in your PowerShell as administrator:</li>
 </ol>
 <pre class=" language-javascript"><code class="prism  language-javascript">Set<span class="token operator">-</span>ExecutionPolicy RemoteSigned 
 </code></pre>
@@ -194,7 +194,7 @@ $ cd flutter-clean-architecture-instagram/
 <li>Then, press <code>y</code> to comfirm</li>
 </ul>
 <ol start="2">
-<li>We need to log in with Firebase. run this line:</li>
+<li>We need to log in with Firebase. Run this line:</li>
 </ol>
 <pre class=" language-bash"><code class="prism  language-bash">firebase login
 </code></pre>
@@ -214,6 +214,11 @@ $ cd flutter-clean-architecture-instagram/
 <pre class=" language-bash"><code class="prism  language-bash"><span class="token function">cd</span> <span class="token operator">&lt;</span>path-to-project-root<span class="token operator">&gt;</span>
 </code></pre>
 <ol start="5">
+<li>Then, run this line:</li>
+</ol>
+<pre class=" language-bash"><code class="prism  language-bash">dart pub global activate flutterfire_cli
+</code></pre>
+<ol start="6">
 <li>Then, run this line:</li>
 </ol>
 <pre class=" language-bash"><code class="prism  language-bash">flutterfire configure
