@@ -32,13 +32,14 @@ dependencies:
   flutter:
     sdk: flutter
 
+
   bloc: ^7.0.3
   flutter_bloc: ^7.0.1
-  cloud_firestore: ^4.5.3
-  firebase_auth: ^4.4.2
-  firebase_core: ^2.10.0
-  firebase_storage: ^11.1.1
-  firebase_crashlytics: ^3.1.2
+  cloud_firestore: ^4.9.0
+  firebase_auth: ^4.8.0
+  firebase_core: ^2.15.1
+  firebase_storage: ^11.2.6
+  firebase_crashlytics: ^3.3.5
   flutter_svg: ^2.0.5
   readmore: ^2.2.0
   equatable: ^2.0.5
@@ -50,35 +51,35 @@ dependencies:
       url: https://github.com/peng8350/flutter_pulltorefresh
   carousel_slider: ^4.2.1
   inview_notifier_list: ^3.0.0
-  audioplayers: ^4.0.1
-  audio_video_progress_bar: ^1.0.1
+  audioplayers: ^5.1.0
+  audio_video_progress_bar: ^2.0.0
   flutter_phoenix: ^1.1.1
-  easy_localization: ^3.0.1
+  easy_localization: ^3.0.2
   animated_text_kit: ^4.2.2
   record: ^4.4.4
   flutter_image_compress: ^1.1.3
-  image_picker: ^0.8.7+4
+  image_picker: ^1.0.4
   flutter_staggered_grid_view: ^0.4.1
   cached_network_image: ^3.2.3
-  video_player: ^2.6.1
-  shimmer: ^2.0.0
+  video_player: ^2.7.0
+  shimmer: ^3.0.0
   get_storage: ^2.1.1
   blurhash: ^1.1.1
   get: ^4.6.5
   video_thumbnail: ^0.5.3
-  permission_handler: ^10.2.0
-  overlay_support: ^2.0.1
+  permission_handler: ^10.4.3
+  overlay_support: ^2.1.0
   flutter_blurhash: ^0.7.0
-  path_provider: ^2.0.14
+  path_provider: ^2.1.1
   animated_splash_screen: ^1.3.0
   firebase_messaging: ^14.4.1
   agora_rtc_engine: ^5.3.0
   flutter_local_notifications: ^9.7.0
-  scrollable_positioned_list: ^0.3.5
+  scrollable_positioned_list: ^0.3.8
   flutter_launcher_icons: ^0.13.1
 
   # My package
-  image_picker_plus: ^0.5.6+2
+  image_picker_plus: ^0.5.9
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
