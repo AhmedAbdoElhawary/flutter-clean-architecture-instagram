@@ -1,29 +1,39 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:instagram/core/translations/local_storage/local_storage.dart';
+import 'package:get_storage/get_storage.dart';
 
 class AppLanguage extends GetxController {
-  String appLocale = 'en';
+  static String tag = "app_lang";
+  static AppLanguage getInstance() {
+    if (Get.isRegistered<AppLanguage>(tag: tag)) {
+      return Get.find<AppLanguage>(tag: tag);
+    }
+    return Get.put(AppLanguage(), tag: tag);
+  }
+
+  final getStorage = GetStorage("AppLang");
+
+  void saveLanguageToDisk(String lang) async {
+    await getStorage.write('lang', lang);
+  }
+
+  String get languageSelected => getStorage.read<String?>('lang') ?? "en";
+
+  bool get isLangEnglish => languageSelected == "en";
 
   @override
   void onInit() async {
     super.onInit();
-    LocalStorage localStorage = LocalStorage();
 
-    appLocale = await localStorage.languageSelected ?? 'en';
+    Get.updateLocale(Locale(languageSelected));
     update();
-    Get.updateLocale(Locale(appLocale));
   }
 
   void changeLanguage() async {
-    LocalStorage localStorage = LocalStorage();
-
-    if (appLocale == 'en') {
-      appLocale = 'ar';
-      localStorage.saveLanguageToDisk('ar');
+    if (languageSelected == 'en') {
+      saveLanguageToDisk('ar');
     } else {
-      appLocale = 'en';
-      localStorage.saveLanguageToDisk('en');
+      saveLanguageToDisk('en');
     }
     update();
   }
