@@ -119,7 +119,7 @@ class _ListOfMessagesState extends State<ListOfMessages> {
   }
 
   ListView buildListView(List<SenderInfo> usersInfo, num bodyHeight) {
-    bool isThatEnglish = AppLanguage().appLocale == "en";
+    bool isThatEnglish = AppLanguage.getInstance().isLangEnglish;
     return ListView.separated(
         physics: widget.freezeListView
             ? const NeverScrollableScrollPhysics()
