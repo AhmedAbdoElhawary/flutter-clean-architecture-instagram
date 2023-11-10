@@ -24,19 +24,20 @@ class MyApp extends StatelessWidget {
 
   Widget materialApp(BuildContext context) {
     return GetBuilder<AppLanguage>(
-      init: AppLanguage(),
+      init: AppLanguage.getInstance(),
+      tag: AppLanguage.tag,
       builder: (controller) {
         return GetMaterialApp(
           defaultTransition: Transition.noTransition,
           transitionDuration: const Duration(seconds: 0),
           translations: Translation(),
-          locale: Locale(controller.appLocale),
+          locale: Locale(controller.languageSelected),
           fallbackLocale: const Locale('en'),
           debugShowCheckedModeBanner: false,
           title: 'Instagram',
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
-          themeMode: ThemeOfApp().theme,
+          themeMode: ThemeOfApp.theme,
 
           home: AnimatedSplashScreen.withScreenFunction(
             screenFunction: screenFunction,
