@@ -490,7 +490,8 @@ class _MyOwnStoryState extends State<_MyOwnStory> {
           context,
           isThatStory: true,
         );
-        if (!mounted || details == null) return;
+        if (!context.mounted) return;
+        if (details == null) return;
 
         await Go(context).push(
           page: CreateStoryPage(storiesDetails: details),
