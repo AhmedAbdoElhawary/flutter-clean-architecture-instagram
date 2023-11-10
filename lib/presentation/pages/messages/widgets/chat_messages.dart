@@ -58,6 +58,7 @@ class _ChatMessagesState extends State<ChatMessages>
   final isDeleteMessageDone = ValueNotifier(false);
   final isMessageLoaded = ValueNotifier(false);
   final appearIcons = ValueNotifier(true);
+  final isSending = ValueNotifier(false);
   final unSend = ValueNotifier(false);
   final reLoad = ValueNotifier(false);
   late List<UserPersonalInfo> receiversInfo;
@@ -95,6 +96,7 @@ class _ChatMessagesState extends State<ChatMessages>
     isDeleteMessageDone.dispose();
     isMessageLoaded.dispose();
     appearIcons.dispose();
+    isSending.dispose();
     unSend.dispose();
     reLoad.dispose();
     records.dispose();
@@ -345,7 +347,8 @@ class _ChatMessagesState extends State<ChatMessages>
 
     String theDate = DateReformat.fullDigitsFormat(
         messageInfo.datePublished, previousDateOfMessage);
-    bool isLangArabic = AppLanguage().appLocale == "ar";
+    bool isLangArabic = !AppLanguage.getInstance().isLangEnglish;
+
     return Column(
       children: [
         if (theDate.isNotEmpty)
@@ -782,32 +785,26 @@ class _ChatMessagesState extends State<ChatMessages>
             if (textValue.text.isNotEmpty) {
               return sendButton(messageCubit, textValue);
             } else {
-              return GetBuilder<AppLanguage>(
-                init: AppLanguage(),
-                builder: (controller) {
-                  return Row(
-                    children: [
-                      const SizedBox(width: 10),
-                      recordButton(context, messageCubit),
-                      if (controller.appLocale == 'en')
-                        const SizedBox(width: 10),
-                      ValueListenableBuilder(
-                        valueListenable: appearIcons,
-                        builder: (context, bool appearIconsValue, child) =>
-                            Visibility(
-                          visible: appearIconsValue,
-                          child: Row(
-                            children: [
-                              pickPhoto(messageCubit),
-                              const SizedBox(width: 15),
-                              pickSticker(),
-                            ],
-                          ),
-                        ),
+              return Row(
+                children: [
+                  const SizedBox(width: 10),
+                  recordButton(context, messageCubit),
+                  if (AppLanguage.getInstance().isLangEnglish) const SizedBox(width: 10),
+                  ValueListenableBuilder(
+                    valueListenable: appearIcons,
+                    builder: (context, bool appearIconsValue, child) =>
+                        Visibility(
+                      visible: appearIconsValue,
+                      child: Row(
+                        children: [
+                          pickPhoto(messageCubit),
+                          const SizedBox(width: 15),
+                          pickSticker(),
+                        ],
                       ),
-                    ],
-                  );
-                },
+                    ),
+                  ),
+                ],
               );
             }
           },
@@ -930,34 +927,43 @@ class _ChatMessagesState extends State<ChatMessages>
       MessageCubit messageCubit, TextEditingController textValue) {
     return ValueListenableBuilder(
       valueListenable: appearIcons,
-      builder: (context, bool appearIconsValue, child) => Visibility(
-        visible: appearIconsValue,
-        child: GestureDetector(
-          onTap: () async {
-            if (_textController.value.text.isNotEmpty) {
-              bool isThatGroup =
-                  messageDetails.lastMessage?.isThatGroup ?? false;
+      builder: (context, bool appearIconsValue, child) =>
+          ValueListenableBuilder(
+        valueListenable: isSending,
+        builder: (context, bool isSendingValue, child) => Visibility(
+          visible: appearIconsValue,
+          child: GestureDetector(
+            onTap: () async {
+              if (isSendingValue) return;
 
-              if (messageDetails.isThatGroupChat || isThatGroup) {
-                await MessageForGroupChatCubit.get(context)
-                    .sendMessage(messageInfo: newMessageForGroup());
+              isSending.value = true;
+
+              if (_textController.value.text.isNotEmpty) {
+                bool isThatGroup =
+                    messageDetails.lastMessage?.isThatGroup ?? false;
+
+                if (messageDetails.isThatGroupChat || isThatGroup) {
+                  await MessageForGroupChatCubit.get(context)
+                      .sendMessage(messageInfo: newMessageForGroup());
+                  if (!mounted) return;
+                  updateGroupChat();
+                } else {
+                  messageCubit.sendMessage(messageInfo: newMessage());
+                }
                 if (!mounted) return;
-                updateGroupChat();
-              } else {
-                messageCubit.sendMessage(messageInfo: newMessage());
-              }
-              if (!mounted) return;
 
-              if (isThatMobile) scrollToLastIndex(context);
-              _textController.value.text = "";
-            }
-          },
-          child: Text(
-            StringsManager.send.tr,
-            style: getMediumStyle(
-              color: textValue.text.isNotEmpty
-                  ? const Color.fromARGB(255, 33, 150, 243)
-                  : const Color.fromARGB(255, 147, 198, 246),
+                if (isThatMobile) scrollToLastIndex(context);
+                _textController.value.text = "";
+              }
+              isSending.value = false;
+            },
+            child: Text(
+              StringsManager.send.tr,
+              style: getMediumStyle(
+                color: textValue.text.isNotEmpty
+                    ? const Color.fromARGB(255, 33, 150, 243)
+                    : const Color.fromARGB(255, 147, 198, 246),
+              ),
             ),
           ),
         ),
@@ -978,7 +984,6 @@ class _ChatMessagesState extends State<ChatMessages>
 
   Future<void> onSelectImage(
       MessageCubit messageCubit, ImageSource source) async {
-
     SelectedImagesDetails? pickImage =
         await CustomImagePickerPlus.pickImage(context, source: source);
     if (pickImage != null) {
