@@ -425,7 +425,7 @@ class _BuildUserBrief extends StatelessWidget {
                   myPersonalInfo.followedPeople.remove(userInfo.userId);
                   userInfo.followerPeople.remove(myPersonalId);
 
-                  if (context.mounted) return;
+                  if (!context.mounted) return;
                   BlocProvider.of<NotificationCubit>(context)
                       .deleteNotification(
                           notificationCheck: createNotificationCheck(userInfo));
@@ -437,7 +437,7 @@ class _BuildUserBrief extends StatelessWidget {
                   myPersonalInfo.followedPeople.add(userInfo.userId);
                   userInfo.followerPeople.add(myPersonalId);
 
-                  if (context.mounted) return;
+                  if (!context.mounted) return;
                   BlocProvider.of<NotificationCubit>(context)
                       .createNotification(
                           newNotification:

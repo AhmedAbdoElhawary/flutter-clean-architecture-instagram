@@ -135,18 +135,14 @@ class SharedMessage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GetBuilder<AppLanguage>(
-              init: AppLanguage(),
-              builder: (controller) {
-                return Text(
-                  controller.appLocale == 'en'
-                      ? "${userInfo?.name} ${messageInfo.message}"
-                      : "${messageInfo.message} ${userInfo?.name}",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: getNormalStyle(color: Theme.of(context).focusColor),
-                );
-              }),
+          Text(
+            AppLanguage.getInstance().isLangEnglish
+                ? "${userInfo?.name} ${messageInfo.message}"
+                : "${messageInfo.message} ${userInfo?.name}",
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: getNormalStyle(color: Theme.of(context).focusColor),
+          ),
         ],
       ),
     );

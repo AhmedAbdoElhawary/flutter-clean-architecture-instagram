@@ -11,6 +11,7 @@ class CallingStatusBloc extends Bloc<CallingStatusEvent, CallingStatusState> {
 
   CallingStatusBloc(this._getCallingStatusUseCase)
       : super(CallingStatusInitial());
+
   static CallingStatusBloc get(BuildContext context) =>
       BlocProvider.of(context);
 

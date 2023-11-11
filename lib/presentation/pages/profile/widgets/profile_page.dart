@@ -485,7 +485,7 @@ class _TabBarIcons extends StatelessWidget {
                   IconsAssets.videoIcon,
                   colorFilter: ColorFilter.mode(
                       tapBarIndexValue == 1
-                          ? ThemeOfApp().isThemeDark()
+                          ? ThemeOfApp.isThemeDark()
                               ? ColorManager.white
                               : ColorManager.black
                           : ColorManager.grey,

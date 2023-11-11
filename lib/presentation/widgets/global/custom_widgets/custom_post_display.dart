@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:instagram/core/translations/app_lang.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/comment.dart';
@@ -80,28 +79,24 @@ class _CustomPostDisplayState extends State<CustomPostDisplay>
       Post postInfoValue, double bodyHeight, BuildContext context) {
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 11.5),
-      child: GetBuilder<AppLanguage>(
-          init: AppLanguage(),
-          builder: (AppLanguage controller) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (postInfoValue.likes.isNotEmpty)
-                  CountOfLikes(postInfo: postInfoValue),
-                const SizedBox(height: 5),
-                if (controller.appLocale == 'en') ...[
-                  ReadMore(
-                      "${postInfoValue.publisherInfo!.name} ${postInfoValue.caption}",
-                      2),
-                ] else ...[
-                  ReadMore(
-                      "${postInfoValue.caption} ${postInfoValue.publisherInfo!.name}",
-                      2),
-                ],
-              ],
-            );
-          }),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (postInfoValue.likes.isNotEmpty)
+            CountOfLikes(postInfo: postInfoValue),
+          const SizedBox(height: 5),
+          if (AppLanguage.getInstance().isLangEnglish) ...[
+            ReadMore(
+                "${postInfoValue.publisherInfo!.name} ${postInfoValue.caption}",
+                2),
+          ] else ...[
+            ReadMore(
+                "${postInfoValue.caption} ${postInfoValue.publisherInfo!.name}",
+                2),
+          ],
+        ],
+      ),
     );
   }
 }

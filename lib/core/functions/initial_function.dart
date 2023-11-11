@@ -10,12 +10,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 
 Future<String?> initializeDefaultValues() async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await initializeDependencies();
-  await GetStorage.init();
+
+  await Future.wait([
+   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
+   initializeDependencies(),
+   GetStorage.init("AppLang"),
+   if(!kIsWeb)_crashlytics(),
+  ]);
 
   if (!kIsWeb) {
-    await _crashlytics();
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   }
@@ -28,7 +31,7 @@ Future<String?> initializeDefaultValues() async {
   return myId;
 }
 
-_crashlytics() async {
+Future<void> _crashlytics() async {
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   if (kDebugMode) {
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
