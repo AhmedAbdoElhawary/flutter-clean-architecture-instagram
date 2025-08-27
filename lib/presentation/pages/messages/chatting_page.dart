@@ -21,11 +21,10 @@ class ChattingPage extends StatefulWidget {
   final bool isThatGroup;
 
   const ChattingPage(
-      {Key? key,
+      {super.key,
       this.messageDetails,
       this.chatUid = "",
-      this.isThatGroup = false})
-      : super(key: key);
+      this.isThatGroup = false});
 
   @override
   State<ChattingPage> createState() => _ChattingPageState();

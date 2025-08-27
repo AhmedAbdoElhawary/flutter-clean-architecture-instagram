@@ -33,8 +33,8 @@ class CircleAvatarOfProfileImage extends StatefulWidget {
     this.disablePressed = false,
     this.thisForStoriesLine = false,
     this.showColorfulCircle = true,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<CircleAvatarOfProfileImage> createState() =>
