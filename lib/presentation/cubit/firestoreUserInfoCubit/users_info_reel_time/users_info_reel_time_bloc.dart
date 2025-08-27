@@ -32,9 +32,9 @@ class UsersInfoReelTimeBloc
       BlocProvider.of<UsersInfoReelTimeBloc>(context).myPersonalInfoInReelTime;
 
   Future<void> _onLoadMyInfo(
-      LoadMyPersonalInfo event,
-      Emitter<UsersInfoReelTimeState> emit,
-      ) async {
+    LoadMyPersonalInfo event,
+    Emitter<UsersInfoReelTimeState> emit,
+  ) async {
     await emit.forEach<UserPersonalInfo>(
       _getMyInfoUseCase.call(params: null),
       onData: (myInfo) {
@@ -46,9 +46,9 @@ class UsersInfoReelTimeBloc
   }
 
   void _onUpdateMyInfo(
-      UpdateMyPersonalInfo event,
-      Emitter<UsersInfoReelTimeState> emit,
-      ) {
+    UpdateMyPersonalInfo event,
+    Emitter<UsersInfoReelTimeState> emit,
+  ) {
     myPersonalInfoInReelTime = event.myPersonalInfoInReelTime;
     isMyInfoInReelTimeReady = true;
 
@@ -57,9 +57,9 @@ class UsersInfoReelTimeBloc
   }
 
   Future<void> _onLoadAllUsersInfo(
-      LoadAllUsersInfoInfo event,
-      Emitter<UsersInfoReelTimeState> emit,
-      ) async {
+    LoadAllUsersInfoInfo event,
+    Emitter<UsersInfoReelTimeState> emit,
+  ) async {
     await emit.forEach<List<UserPersonalInfo>>(
       _getAllUsersUseCase.call(params: null),
       onData: (allUsers) {
@@ -71,9 +71,9 @@ class UsersInfoReelTimeBloc
   }
 
   void _onUpdateAllUsersInfo(
-      UpdateAllUsersInfoInfo event,
-      Emitter<UsersInfoReelTimeState> emit,
-      ) {
+    UpdateAllUsersInfoInfo event,
+    Emitter<UsersInfoReelTimeState> emit,
+  ) {
     allUsersInfoInReelTime = event.allUsersInfoInReelTime;
     emit(AllUsersInfoLoaded(
         allUsersInfoInReelTime: event.allUsersInfoInReelTime));

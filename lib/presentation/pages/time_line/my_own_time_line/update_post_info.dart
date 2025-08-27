@@ -60,8 +60,8 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
           },
           icon: SvgPicture.asset(
             IconsAssets.cancelIcon,
-            colorFilter: ColorFilter.mode(
-                Theme.of(context).focusColor, BlendMode.srcIn),
+            colorFilter:
+                ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
             height: 27,
           )),
       title: Text(
@@ -87,7 +87,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                 await PostCubit.get(context)
                     .updatePostInfo(postInfo: updatedPostInfo)
                     .then((value) {
-                if(context.mounted)  Navigator.maybePop(context);
+                  if (context.mounted) Navigator.maybePop(context);
                 });
               },
               icon: const Icon(
@@ -140,8 +140,8 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                     enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: ColorManager.blue),
                     ),
-                    hintStyle:
-                        TextStyle(color: Theme.of(context).bottomAppBarTheme.color!),
+                    hintStyle: TextStyle(
+                        color: Theme.of(context).bottomAppBarTheme.color!),
                   ),
                 ),
               ),
@@ -150,7 +150,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
     );
   }
 
-  pushToProfilePage(Post postInfo) => Go(context).push(
+  Future pushToProfilePage(Post postInfo) => Go(context).push(
       page: WhichProfilePage(userId: postInfo.publisherId), withoutRoot: false);
 
   void _updateImageIndex(int index, _) {
