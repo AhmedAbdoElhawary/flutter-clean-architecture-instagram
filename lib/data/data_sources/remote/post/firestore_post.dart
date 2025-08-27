@@ -109,28 +109,28 @@ class FireStorePost {
     return allPosts;
   }
 
-  static putLikeOnThisPost(
+  static Future<void> putLikeOnThisPost(
       {required String postId, required String userId}) async {
     await _fireStorePostCollection.doc(postId).update({
       'likes': FieldValue.arrayUnion([userId])
     });
   }
 
-  static removeTheLikeOnThisPost(
+  static Future<void> removeTheLikeOnThisPost(
       {required String postId, required String userId}) async {
     await _fireStorePostCollection.doc(postId).update({
       'likes': FieldValue.arrayRemove([userId])
     });
   }
 
-  static putCommentOnThisPost(
+  static Future<void> putCommentOnThisPost(
       {required String postId, required String commentId}) async {
     await _fireStorePostCollection.doc(postId).update({
       'comments': FieldValue.arrayUnion([commentId])
     });
   }
 
-  static removeTheCommentOnThisPost(
+  static Future<void> removeTheCommentOnThisPost(
       {required String postId, required String commentId}) async {
     await _fireStorePostCollection.doc(postId).update({
       'comments': FieldValue.arrayRemove([commentId])

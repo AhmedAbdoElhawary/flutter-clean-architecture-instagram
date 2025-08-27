@@ -32,7 +32,7 @@ class FirestoreComment {
     });
   }
 
-  static putReplyOnThisComment({
+  static Future<void> putReplyOnThisComment({
     required String commentId,
     required String replyId,
   }) async {

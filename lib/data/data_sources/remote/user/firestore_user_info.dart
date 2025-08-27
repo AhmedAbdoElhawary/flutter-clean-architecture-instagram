@@ -267,14 +267,14 @@ class FireStoreUser {
     return SenderInfo(lastMessage: messageInfo);
   }
 
-  static updateProfileImage(
+  static Future<void> updateProfileImage(
       {required String imageUrl, required String userId}) async {
     await _fireStoreUserCollection.doc(userId).update({
       "profileImageUrl": imageUrl,
     });
   }
 
-  static updateUserInfo(UserPersonalInfo userInfo) async {
+  static Future<void> updateUserInfo(UserPersonalInfo userInfo) async {
     await _fireStoreUserCollection
         .doc(userInfo.userId)
         .update(userInfo.toMap());
@@ -324,7 +324,7 @@ class FireStoreUser {
         .update({'lastThreePostUrls': FieldValue.arrayUnion(lastPosts)});
   }
 
-  static removeUserPost({required String postId}) async {
+  static Future<void> removeUserPost({required String postId}) async {
     QuerySnapshot<Map<String, dynamic>> document =
         await _fireStoreUserCollection
             .where("posts", arrayContains: postId)
@@ -336,14 +336,15 @@ class FireStoreUser {
     }
   }
 
-  static updateUserStories(
+  static Future<void> updateUserStories(
       {required String userId, required String storyId}) async {
     await _fireStoreUserCollection.doc(userId).update({
       'stories': FieldValue.arrayUnion([storyId])
     });
   }
 
-  static followThisUser(String followingUserId, String myPersonalId) async {
+  static Future<void> followThisUser(
+      String followingUserId, String myPersonalId) async {
     await _fireStoreUserCollection.doc(followingUserId).update({
       'followers': FieldValue.arrayUnion([myPersonalId])
     });
@@ -353,7 +354,8 @@ class FireStoreUser {
     });
   }
 
-  static unFollowThisUser(String followingUserId, String myPersonalId) async {
+  static Future<void> unFollowThisUser(
+      String followingUserId, String myPersonalId) async {
     await _fireStoreUserCollection.doc(followingUserId).update({
       'followers': FieldValue.arrayRemove([myPersonalId])
     });
@@ -363,7 +365,7 @@ class FireStoreUser {
     });
   }
 
-  static arrayRemoveOfField({
+  static Future<void> arrayRemoveOfField({
     required String fieldName,
     required String removeThisId,
     required String userUid,
@@ -373,7 +375,7 @@ class FireStoreUser {
     });
   }
 
-  static deleteThisStory({required String storyId}) async {
+  static Future<void> deleteThisStory({required String storyId}) async {
     await _fireStoreUserCollection.doc(myPersonalId).update({
       'stories': FieldValue.arrayRemove([storyId])
     });
