@@ -11,8 +11,8 @@ class LikePopupAnimation extends StatefulWidget {
     required this.onEnd,
     this.duration = const Duration(milliseconds: 150),
     required this.isAnimating,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<LikePopupAnimation> createState() => _LikePopupAnimationState();

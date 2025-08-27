@@ -7,11 +7,11 @@ class ArrowJump extends StatelessWidget {
   final bool topPadding;
 
   const ArrowJump({
-    Key? key,
+    super.key,
     this.isThatBack = true,
     this.topPadding = false,
     this.makeArrowBigger = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
