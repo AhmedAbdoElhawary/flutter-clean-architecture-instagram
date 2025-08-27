@@ -12,12 +12,12 @@ class RecordView extends StatefulWidget {
   final int lengthOfRecord;
 
   const RecordView({
-    Key? key,
+    super.key,
     required this.urlRecord,
     required this.isThatMe,
     required this.isThatLocalRecorded,
     required this.lengthOfRecord,
-  }) : super(key: key);
+  });
 
   @override
   RecordViewState createState() => RecordViewState();

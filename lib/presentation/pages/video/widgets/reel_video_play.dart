@@ -5,8 +5,7 @@ class _ReelVideoPlay extends StatefulWidget {
   final bool stopVideo;
 
   const _ReelVideoPlay(
-      {Key? key, required this.videoInfo, required this.stopVideo})
-      : super(key: key);
+      {required this.videoInfo, required this.stopVideo});
 
   @override
   State<_ReelVideoPlay> createState() => _ReelVideoPlayState();
