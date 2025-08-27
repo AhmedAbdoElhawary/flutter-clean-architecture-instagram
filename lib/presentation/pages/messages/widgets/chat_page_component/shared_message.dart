@@ -16,10 +16,10 @@ class SharedMessage extends StatelessWidget {
   final Message messageInfo;
   final bool isThatMe;
   const SharedMessage({
-    Key? key,
+    super.key,
     required this.messageInfo,
     required this.isThatMe,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

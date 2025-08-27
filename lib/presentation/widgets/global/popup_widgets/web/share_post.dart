@@ -15,10 +15,10 @@ class PopupSharePost extends StatefulWidget {
   final UserPersonalInfo publisherInfo;
 
   const PopupSharePost({
-    Key? key,
+    super.key,
     required this.publisherInfo,
     required this.postInfo,
-  }) : super(key: key);
+  });
 
   @override
   State<PopupSharePost> createState() => _PopupSharePostState();
