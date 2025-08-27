@@ -64,7 +64,7 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
         : buildOcto(height);
   }
 
-  Widget buildOcto(height) {
+  Widget buildOcto(double? height) {
     int cachingHeight = widget.cachingHeight;
     int cachingWidth = widget.cachingWidth;
     if (widget.aspectRatio != 1 && cachingHeight == 720) cachingHeight = 960;
@@ -76,10 +76,10 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
       width: widget.width ?? double.infinity,
       height: widget.height ?? height,
       placeholderBuilder:
-      // widget.blurHash.isNotEmpty
-      //     ? OctoPlaceholder.(widget.blurHash, fit: BoxFit.cover)
-      //     :
-    (context) => Center(child: loadingWidget()),
+          // widget.blurHash.isNotEmpty
+          //     ? OctoPlaceholder.(widget.blurHash, fit: BoxFit.cover)
+          //     :
+          (context) => Center(child: loadingWidget()),
     );
   }
 

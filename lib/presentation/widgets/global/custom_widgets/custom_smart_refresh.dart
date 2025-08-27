@@ -23,7 +23,7 @@ class _CustomSmartRefreshState extends State<CustomSmartRefresh>
     super.initState();
   }
 
-  init() {
+  void init() {
     _aniController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 2000));
     _scaleController =
@@ -69,7 +69,7 @@ class _CustomSmartRefreshState extends State<CustomSmartRefresh>
     );
   }
 
-  onSmarterRefresh() {
+  void onSmarterRefresh() {
     widget.onRefreshData(0).whenComplete(() {
       _refreshController.value.refreshCompleted();
       _refreshController.value.loadComplete();
