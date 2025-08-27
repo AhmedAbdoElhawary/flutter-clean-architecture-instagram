@@ -15,8 +15,8 @@ class ActivityForWeb extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       child: SvgPicture.asset(
         IconsAssets.add2Icon,
-        colorFilter: ColorFilter.mode(
-            Theme.of(context).focusColor, BlendMode.srcIn),
+        colorFilter:
+            ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
         height: 700,
         width: 500,
       ),
