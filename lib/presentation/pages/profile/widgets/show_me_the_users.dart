@@ -23,14 +23,14 @@ class ShowMeTheUsers extends StatefulWidget {
   final VoidCallback? updateFollowedCallback;
 
   const ShowMeTheUsers({
-    Key? key,
+    super.key,
     this.updateFollowedCallback,
     required this.isThatMyPersonalId,
     this.showColorfulCircle = true,
     this.isThatFollower = true,
     required this.usersInfo,
     required this.emptyText,
-  }) : super(key: key);
+  });
 
   @override
   State<ShowMeTheUsers> createState() => _ShowMeTheUsersState();

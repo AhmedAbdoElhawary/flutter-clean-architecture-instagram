@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram/core/resources/strings_manager.dart';
 
 class ShopPage extends StatelessWidget {
-  const ShopPage({Key? key}) : super(key: key);
+  const ShopPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -6,8 +6,7 @@ import 'sound_recorder_notifier.dart';
 /// Used this class to show counter and mic Icon
 class ShowCounter extends StatelessWidget {
   final SoundRecordNotifier soundRecorderState;
-  const ShowCounter({required this.soundRecorderState, Key? key})
-      : super(key: key);
+  const ShowCounter({required this.soundRecorderState, super.key});
 
   @override
   Widget build(BuildContext context) {
