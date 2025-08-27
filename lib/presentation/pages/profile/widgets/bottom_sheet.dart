@@ -7,10 +7,10 @@ class CustomBottomSheet extends StatelessWidget {
   final Widget headIcon;
   final Widget bodyText;
   const CustomBottomSheet({
-    Key? key,
+    super.key,
     required this.headIcon,
     required this.bodyText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +28,9 @@ class _ListOfBodyWidgets extends StatelessWidget {
   final Widget headIcon;
   final Widget bodyText;
   const _ListOfBodyWidgets({
-    Key? key,
     required this.headIcon,
     required this.bodyText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

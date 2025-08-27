@@ -14,7 +14,7 @@ import 'package:instagram/presentation/pages/register/widgets/get_my_user_info.d
 import 'package:instagram/presentation/widgets/global/others/multi_bloc_provider.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

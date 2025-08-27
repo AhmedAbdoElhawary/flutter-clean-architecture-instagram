@@ -19,17 +19,14 @@ class AllUsersTimeLinePage extends StatelessWidget {
   final ValueNotifier<bool> isThatEndOfList = ValueNotifier(false);
   final ValueNotifier<bool> reloadData = ValueNotifier(true);
 
-  AllUsersTimeLinePage({Key? key}) : super(key: key);
+  AllUsersTimeLinePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     rebuildUsersInfo.value = false;
-    return WillPopScope(
-      onWillPop: () async => true,
-      child: Scaffold(
-        appBar: isThatMobile ? searchAppBar(context) : null,
-        body: blocBuilder(),
-      ),
+    return Scaffold(
+      appBar: isThatMobile ? searchAppBar(context) : null,
+      body: blocBuilder(),
     );
   }
 

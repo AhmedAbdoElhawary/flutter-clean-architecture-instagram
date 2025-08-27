@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AnimatedDialog extends StatefulWidget {
-  const AnimatedDialog({Key? key, required this.child}) : super(key: key);
+  const AnimatedDialog({super.key, required this.child});
 
   final Widget child;
 
@@ -33,7 +33,7 @@ class AnimatedDialogState extends State<AnimatedDialog>
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.black.withOpacity(opacityAnimation.value),
+      color: Colors.black.withValues(alpha:opacityAnimation.value),
       child: Center(
         child: FadeTransition(
           opacity: scaleAnimation,

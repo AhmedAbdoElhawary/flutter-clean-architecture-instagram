@@ -25,8 +25,7 @@ class AllTimeLineGridView extends StatefulWidget {
       required this.allPostsInfo,
       required this.onRefreshData,
       required this.reloadData,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   State<AllTimeLineGridView> createState() => _CustomGridViewState();
