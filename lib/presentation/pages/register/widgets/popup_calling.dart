@@ -42,7 +42,7 @@ class _PopupCallingState extends State<PopupCalling> {
     );
   }
 
-  clearMoving() {
+  void clearMoving() {
     isHeMoved = false;
   }
 }

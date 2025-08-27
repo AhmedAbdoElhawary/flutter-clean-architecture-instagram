@@ -196,7 +196,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
     Overlay.of(context).insert(_popupEmptyDialog!);
   }
 
-  onLongPressPost() {
+  void onLongPressPost() {
     loveStatusAnimation.value = const SizedBox();
     _popupDialog = _createPopupDialog(widget.postClickedInfo);
     Overlay.of(context).insert(_popupDialog!);
@@ -357,7 +357,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
     );
   }
 
-  clearTextsController(bool clearText) {
+  void clearTextsController(bool clearText) {
     setState(() {
       if (clearText) {
         _bottomSheetMessageTextController.clear();
@@ -366,7 +366,7 @@ class _PopupPostCardState extends State<PopupPostCard> {
     });
   }
 
-  Widget buildSheet(context, state) => Material(
+  Widget buildSheet(BuildContext context, SheetState state) => Material(
         child: SendToUsers(
           publisherInfo: widget.postClickedInfo.publisherInfo!,
           messageTextController: _bottomSheetMessageTextController,
