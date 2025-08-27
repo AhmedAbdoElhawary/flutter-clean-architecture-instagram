@@ -20,7 +20,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_app_
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_linears_progress.dart';
 
 class SelectForGroupChat extends StatefulWidget {
-  const SelectForGroupChat({Key? key}) : super(key: key);
+  const SelectForGroupChat({super.key});
 
   @override
   State<SelectForGroupChat> createState() => _SelectForGroupChatState();
@@ -302,8 +302,7 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
 
 class GroupMessages extends StatefulWidget {
   final List<UserPersonalInfo> selectedUsersInfoValue;
-  const GroupMessages({Key? key, required this.selectedUsersInfoValue})
-      : super(key: key);
+  const GroupMessages({super.key, required this.selectedUsersInfoValue});
 
   @override
   State<GroupMessages> createState() => _GroupMessagesState();

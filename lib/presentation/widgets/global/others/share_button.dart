@@ -19,11 +19,10 @@ class ShareButton extends StatefulWidget {
   final Widget? shareWidget;
   final bool isThatForVideoPage;
   const ShareButton(
-      {Key? key,
+      {super.key,
       required this.postInfo,
       this.shareWidget,
-      this.isThatForVideoPage = false})
-      : super(key: key);
+      this.isThatForVideoPage = false});
 
   @override
   State<ShareButton> createState() => _ShareButtonState();

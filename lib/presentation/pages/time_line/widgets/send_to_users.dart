@@ -23,7 +23,7 @@ class SendToUsers extends StatefulWidget {
   final bool freezeListScroll;
   final VoidCallback? maxExtentUsersList;
   const SendToUsers({
-    Key? key,
+    super.key,
     this.checkBox = false,
     this.freezeListScroll = true,
     required this.publisherInfo,
@@ -32,7 +32,7 @@ class SendToUsers extends StatefulWidget {
     required this.selectedUsersInfo,
     required this.messageTextController,
     required this.postInfo,
-  }) : super(key: key);
+  });
 
   @override
   State<SendToUsers> createState() => _SendToUsersState();
