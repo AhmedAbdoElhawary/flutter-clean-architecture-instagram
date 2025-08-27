@@ -51,7 +51,8 @@ class ShowMicWithText extends StatelessWidget {
                       colorFilter: ColorFilter.mode(
                           (isButtonPressed)
                               ? ColorManager.white
-                              : Theme.of(context).focusColor , BlendMode.srcIn),
+                              : Theme.of(context).focusColor,
+                          BlendMode.srcIn),
                     ),
                   ),
                 ),

@@ -12,13 +12,13 @@ part of 'sheet.dart';
 /// The `resizeToAvoidBottomInset` parameter can be used to avoid the keyboard from obscuring
 /// the content bottom sheet.
 Future<T?> showSlidingBottomSheet<T>(
-    BuildContext context, {
-      required SlidingSheetDialog Function(BuildContext context) builder,
-      Widget Function(BuildContext context, SlidingSheet sheet)? parentBuilder,
-      RouteSettings? routeSettings,
-      bool useRootNavigator = false,
-      bool resizeToAvoidBottomInset = true,
-    }) {
+  BuildContext context, {
+  required SlidingSheetDialog Function(BuildContext context) builder,
+  Widget Function(BuildContext context, SlidingSheet sheet)? parentBuilder,
+  RouteSettings? routeSettings,
+  bool useRootNavigator = false,
+  bool resizeToAvoidBottomInset = true,
+}) {
   SlidingSheetDialog dialog = builder(context);
   final SheetController controller = dialog.controller ?? SheetController();
 
@@ -238,15 +238,15 @@ class SlidingSheetDialog {
 /// A transparent route for a bottom sheet dialog.
 class SlidingSheetRoute<T> extends PageRoute<T> {
   final Widget Function(BuildContext, Animation<double>, SlidingSheetRoute<T>)
-  builder;
+      builder;
   final Duration duration;
   SlidingSheetRoute({
     required this.builder,
     required this.duration,
     super.settings,
   }) : super(
-    fullscreenDialog: false,
-  );
+          fullscreenDialog: false,
+        );
 
   @override
   bool get opaque => false;
@@ -268,9 +268,9 @@ class SlidingSheetRoute<T> extends PageRoute<T> {
 
   @override
   Widget buildPage(
-      BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      ) =>
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) =>
       builder(context, animation, this);
 }
