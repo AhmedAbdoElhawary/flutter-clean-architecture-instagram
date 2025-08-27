@@ -20,44 +20,33 @@ class ChattingPage extends StatefulWidget {
   final String chatUid;
   final bool isThatGroup;
 
-  const ChattingPage(
-      {super.key,
-      this.messageDetails,
-      this.chatUid = "",
-      this.isThatGroup = false});
+  const ChattingPage({super.key, this.messageDetails, this.chatUid = "", this.isThatGroup = false});
 
   @override
   State<ChattingPage> createState() => _ChattingPageState();
 }
 
-class _ChattingPageState extends State<ChattingPage>
-    with TickerProviderStateMixin {
+class _ChattingPageState extends State<ChattingPage> with TickerProviderStateMixin {
   final ValueNotifier<Message?> deleteThisMessage = ValueNotifier(null);
 
   final unSend = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
-    return widget.messageDetails != null
-        ? scaffold(widget.messageDetails!)
-        : getUserInfo(context);
+    return widget.messageDetails != null ? scaffold(widget.messageDetails!) : getUserInfo(context);
   }
 
   Widget getUserInfo(BuildContext context) {
     return BlocBuilder<MessageCubit, MessageState>(
-      bloc: MessageCubit.get(context)
-        ..getSpecificChatInfo(
-            isThatGroup: widget.isThatGroup, chatUid: widget.chatUid),
-      buildWhen: (previous, current) =>
-          previous != current && current is GetSpecificChatLoaded,
+      bloc: MessageCubit.get(context)..getSpecificChatInfo(isThatGroup: widget.isThatGroup, chatUid: widget.chatUid),
+      buildWhen: (previous, current) => previous != current && current is GetSpecificChatLoaded,
       builder: (context, state) {
         if (state is GetSpecificChatLoaded) {
           return scaffold(state.coverMessageDetails);
         } else if (state is GetMessageFailed) {
           ToastShow.toast(state.error);
 
-          return Scaffold(
-              body: Center(child: Text(StringsManager.somethingWrong.tr)));
+          return Scaffold(body: Center(child: Text(StringsManager.somethingWrong.tr)));
         } else {
           return const Scaffold(body: ThineCircularProgress());
         }
@@ -67,26 +56,19 @@ class _ChattingPageState extends State<ChattingPage>
 
   Scaffold scaffold(SenderInfo messageDetails) {
     return Scaffold(
-      appBar: isThatMobile
-          ? CustomAppBar.chattingAppBar(messageDetails.receiversInfo!, context)
-          : null,
+      appBar: isThatMobile ? CustomAppBar.chattingAppBar(messageDetails.receiversInfo!, context) : null,
       body: GestureDetector(
           onTap: () {
             unSend.value = false;
             deleteThisMessage.value = null;
           },
-          child: isThatMobile
-              ? ChatMessages(messageDetails: messageDetails)
-              : buildBodyForWeb(messageDetails)),
+          child: isThatMobile ? ChatMessages(messageDetails: messageDetails) : buildBodyForWeb(messageDetails)),
     );
   }
 
   Widget buildBodyForWeb(SenderInfo messageDetails) {
     return Column(
-      children: [
-        buildUserInfo(messageDetails.receiversInfo![0]),
-        ChatMessages(messageDetails: messageDetails)
-      ],
+      children: [buildUserInfo(messageDetails.receiversInfo![0]), ChatMessages(messageDetails: messageDetails)],
     );
   }
 
@@ -120,20 +102,14 @@ class _ChattingPageState extends State<ChattingPage>
       children: [
         Text(
           userInfo.userName,
-          style: TextStyle(
-              color: Theme.of(context).focusColor,
-              fontSize: 14,
-              fontWeight: FontWeight.w300),
+          style: TextStyle(color: Theme.of(context).focusColor, fontSize: 14, fontWeight: FontWeight.w300),
         ),
         const SizedBox(
           width: 10,
         ),
         Text(
           "Instagram",
-          style: TextStyle(
-              color: Theme.of(context).focusColor,
-              fontSize: 14,
-              fontWeight: FontWeight.w300),
+          style: TextStyle(color: Theme.of(context).focusColor, fontSize: 14, fontWeight: FontWeight.w300),
         ),
       ],
     );
@@ -142,10 +118,7 @@ class _ChattingPageState extends State<ChattingPage>
   Text nameOfUser(UserPersonalInfo userInfo) {
     return Text(
       userInfo.name,
-      style: TextStyle(
-          color: Theme.of(context).focusColor,
-          fontSize: 16,
-          fontWeight: FontWeight.w400),
+      style: TextStyle(color: Theme.of(context).focusColor, fontSize: 16, fontWeight: FontWeight.w400),
     );
   }
 
@@ -155,18 +128,14 @@ class _ChattingPageState extends State<ChattingPage>
       children: [
         Text(
           "${userInfo.followerPeople.length} ${StringsManager.followers.tr}",
-          style: TextStyle(
-              color: Theme.of(context).textTheme.titleSmall!.color,
-              fontSize: 13),
+          style: TextStyle(color: Theme.of(context).textTheme.titleSmall!.color, fontSize: 13),
         ),
         const SizedBox(
           width: 15,
         ),
         Text(
           "${userInfo.posts.length} ${StringsManager.posts.tr}",
-          style: TextStyle(
-              fontSize: 13,
-              color: Theme.of(context).textTheme.titleSmall!.color),
+          style: TextStyle(fontSize: 13, color: Theme.of(context).textTheme.titleSmall!.color),
         ),
       ],
     );
@@ -178,9 +147,7 @@ class _ChattingPageState extends State<ChattingPage>
         Go(context).push(page: UserProfilePage(userId: userInfo.userId));
       },
       child: Text(StringsManager.viewProfile.tr,
-          style: TextStyle(
-              color: Theme.of(context).focusColor,
-              fontWeight: FontWeight.normal)),
+          style: TextStyle(color: Theme.of(context).focusColor, fontWeight: FontWeight.normal)),
     );
   }
 }

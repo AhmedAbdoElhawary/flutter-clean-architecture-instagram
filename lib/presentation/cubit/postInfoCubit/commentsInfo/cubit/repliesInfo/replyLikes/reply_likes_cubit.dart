@@ -9,32 +9,24 @@ part 'reply_likes_state.dart';
 class ReplyLikesCubit extends Cubit<ReplyLikesState> {
   final PutLikeOnThisReplyUseCase _putLikeOnThisReplyUseCase;
   final RemoveLikeOnThisReplyUseCase _removeLikeOnThisReplyUseCase;
-  ReplyLikesCubit(
-      this._putLikeOnThisReplyUseCase, this._removeLikeOnThisReplyUseCase)
-      : super(ReplyLikesInitial());
+  ReplyLikesCubit(this._putLikeOnThisReplyUseCase, this._removeLikeOnThisReplyUseCase) : super(ReplyLikesInitial());
 
   static ReplyLikesCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future<void> putLikeOnThisReply(
-      {required String replyId, required String myPersonalId}) async {
+  Future<void> putLikeOnThisReply({required String replyId, required String myPersonalId}) async {
     emit(CubitReplyLikesLoading());
 
-    await _putLikeOnThisReplyUseCase
-        .call(paramsOne: replyId, paramsTwo: myPersonalId)
-        .then((_) {
+    await _putLikeOnThisReplyUseCase.call(paramsOne: replyId, paramsTwo: myPersonalId).then((_) {
       emit(CubitReplyLikesLoaded());
     }).catchError((e) {
       emit(CubitReplyLikesFailed(e.toString()));
     });
   }
 
-  Future<void> removeLikeOnThisReply(
-      {required String replyId, required String myPersonalId}) async {
+  Future<void> removeLikeOnThisReply({required String replyId, required String myPersonalId}) async {
     emit(CubitReplyLikesLoading());
 
-    await _removeLikeOnThisReplyUseCase
-        .call(paramsOne: replyId, paramsTwo: myPersonalId)
-        .then((_) {
+    await _removeLikeOnThisReplyUseCase.call(paramsOne: replyId, paramsTwo: myPersonalId).then((_) {
       emit(CubitReplyLikesLoaded());
     }).catchError((e) {
       emit(CubitReplyLikesFailed(e.toString()));

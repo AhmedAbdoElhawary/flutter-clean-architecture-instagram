@@ -69,8 +69,7 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
     int cachingWidth = widget.cachingWidth;
     if (widget.aspectRatio != 1 && cachingHeight == 720) cachingHeight = 960;
     return OctoImage(
-      image: CachedNetworkImageProvider(widget.url,
-          maxWidth: cachingWidth, maxHeight: cachingHeight),
+      image: CachedNetworkImageProvider(widget.url, maxWidth: cachingWidth, maxHeight: cachingHeight),
       errorBuilder: (context, url, error) => buildError(),
       fit: BoxFit.cover,
       width: widget.width ?? double.infinity,
@@ -87,8 +86,7 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
     return SizedBox(
       width: double.infinity,
       height: widget.aspectRatio,
-      child: Icon(Icons.warning_amber_rounded,
-          size: 30, color: Theme.of(context).focusColor),
+      child: Icon(Icons.warning_amber_rounded, size: 30, color: Theme.of(context).focusColor),
     );
   }
 

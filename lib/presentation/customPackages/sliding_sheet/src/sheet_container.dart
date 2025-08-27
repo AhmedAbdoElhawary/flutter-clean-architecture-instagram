@@ -98,8 +98,7 @@ class ElevatedContainer extends StatelessWidget {
     if (elevation == 0) return child;
 
     return SheetListenerBuilder(
-      buildWhen: (oldState, newState) =>
-          elevateWhen(oldState) != elevateWhen(newState),
+      buildWhen: (oldState, newState) => elevateWhen(oldState) != elevateWhen(newState),
       builder: (context, state) {
         return SheetContainer(
           shadowColor: shadowColor,

@@ -32,12 +32,7 @@ class ThineCircularProgress extends StatelessWidget {
   final double strokeWidth;
   final Animation<Color?>? valueColor;
 
-  const ThineCircularProgress(
-      {super.key,
-      this.strokeWidth = 1.0,
-      this.backgroundColor,
-      this.color,
-      this.valueColor});
+  const ThineCircularProgress({super.key, this.strokeWidth = 1.0, this.backgroundColor, this.color, this.valueColor});
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +43,7 @@ class ThineCircularProgress extends StatelessWidget {
               valueColor: valueColor,
               strokeWidth: strokeWidth,
               color: color ?? Theme.of(context).focusColor)
-          : CupertinoActivityIndicator(
-              color: color ?? Theme.of(context).focusColor),
+          : CupertinoActivityIndicator(color: color ?? Theme.of(context).focusColor),
     );
   }
 }

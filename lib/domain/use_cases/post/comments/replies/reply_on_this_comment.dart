@@ -9,7 +9,6 @@ class ReplyOnThisCommentUseCase implements UseCase<Comment, Comment> {
 
   @override
   Future<Comment> call({required Comment params}) async {
-    return await _replayOnThisCommentRepository.replyOnThisComment(
-        replyInfo: params);
+    return await _replayOnThisCommentRepository.replyOnThisComment(replyInfo: params);
   }
 }

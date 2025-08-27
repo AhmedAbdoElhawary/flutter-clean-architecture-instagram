@@ -30,8 +30,7 @@ class Post extends ParentPost {
   });
 
   static Post fromQuery(
-      {DocumentSnapshot<Map<String, dynamic>>? doc,
-      QueryDocumentSnapshot<Map<String, dynamic>>? query}) {
+      {DocumentSnapshot<Map<String, dynamic>>? doc, QueryDocumentSnapshot<Map<String, dynamic>>? query}) {
     dynamic snap = doc ?? query;
     dynamic aspect = snap.data()?["aspectRatio"];
     if (aspect is int) aspect = aspect.toDouble();

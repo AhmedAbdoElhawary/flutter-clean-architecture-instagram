@@ -32,10 +32,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   ValueNotifier<bool> isImageUpload = ValueNotifier(true);
   TextEditingController nameController = TextEditingController(text: "");
   TextEditingController userNameController = TextEditingController(text: "");
-  final TextEditingController pronounsController =
-      TextEditingController(text: "");
-  final TextEditingController websiteController =
-      TextEditingController(text: "");
+  final TextEditingController pronounsController = TextEditingController(text: "");
+  final TextEditingController websiteController = TextEditingController(text: "");
   TextEditingController bioController = TextEditingController(text: "");
   late UserPersonalInfo userInfo;
 
@@ -94,13 +92,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Scaffold buildScaffold(BuildContext context, UserInfoState getUserState,
-      UserInfoCubit updateUserCubit) {
+  Scaffold buildScaffold(BuildContext context, UserInfoState getUserState, UserInfoCubit updateUserCubit) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      appBar: isThatMobile
-          ? buildAppBar(context, getUserState, updateUserCubit)
-          : null,
+      appBar: isThatMobile ? buildAppBar(context, getUserState, updateUserCubit) : null,
       body: Column(
         children: [
           circleAvatarAndTextFields(context, updateUserCubit),
@@ -109,8 +104,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  AppBar buildAppBar(BuildContext context, UserInfoState getUserState,
-      UserInfoCubit updateUserCubit) {
+  AppBar buildAppBar(BuildContext context, UserInfoState getUserState, UserInfoCubit updateUserCubit) {
     return AppBar(
         iconTheme: IconThemeData(color: Theme.of(context).focusColor),
         elevation: 0,
@@ -121,41 +115,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
             },
             icon: SvgPicture.asset(
               IconsAssets.cancelIcon,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).focusColor, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
               height: 27,
             )),
         title: Text(
           StringsManager.editProfile.tr,
-          style:
-              getMediumStyle(color: Theme.of(context).focusColor, fontSize: 20),
+          style: getMediumStyle(color: Theme.of(context).focusColor, fontSize: 20),
         ),
         actions: actionsWidgets(getUserState, updateUserCubit));
   }
 
-  List<Widget> actionsWidgets(
-      dynamic getUserState, UserInfoCubit updateUserCubit) {
+  List<Widget> actionsWidgets(dynamic getUserState, UserInfoCubit updateUserCubit) {
     return [
       if (validateEdits) ...[
         getUserState is! CubitMyPersonalInfoLoaded
-            ? Transform.scale(
-                scaleY: 1,
-                scaleX: 1.2,
-                child: const CustomCircularProgress(ColorManager.blue))
+            ? Transform.scale(scaleY: 1, scaleX: 1.2, child: const CustomCircularProgress(ColorManager.blue))
             : ValueListenableBuilder(
                 valueListenable: isImageUpload,
-                builder: (context, bool isImageUploadValue, child) =>
-                    IconButton(
+                builder: (context, bool isImageUploadValue, child) => IconButton(
                   onPressed: () async {
                     bool isNameChanged = nameController.text == userInfo.name;
-                    bool isUserNameChanged =
-                        userNameController.text == userInfo.userName;
+                    bool isUserNameChanged = userNameController.text == userInfo.userName;
                     bool isBioChanged = bioController.text == userInfo.bio;
 
-                    if (isBioChanged &&
-                        isUserNameChanged &&
-                        isNameChanged &&
-                        !isImageChanged) {
+                    if (isBioChanged && isUserNameChanged && isNameChanged && !isImageChanged) {
                       Go(context).back();
                     }
 
@@ -164,8 +147,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       List<dynamic> charactersOfName = [];
                       String name = nameController.text.toLowerCase();
                       for (int i = 0; i < name.length; i++) {
-                        charactersOfName =
-                            charactersOfName + [name.substring(0, i + 1)];
+                        charactersOfName = charactersOfName + [name.substring(0, i + 1)];
                       }
                       UserPersonalInfo updatedUserInfo = UserPersonalInfo(
                         followerPeople: userInfo.followerPeople,
@@ -183,9 +165,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         lastThreePostUrls: userInfo.lastThreePostUrls,
                         chatsOfGroups: userInfo.chatsOfGroups,
                       );
-                      await updateUserCubit
-                          .updateUserInfo(updatedUserInfo)
-                          .whenComplete(() {
+                      await updateUserCubit.updateUserInfo(updatedUserInfo).whenComplete(() {
                         Future.delayed(Duration.zero, () {
                           reBuild = false;
 
@@ -207,12 +187,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Icon checkIcon(bool light) {
-    return Icon(Icons.check_rounded,
-        size: 30, color: light ? ColorManager.lightBlue : ColorManager.blue);
+    return Icon(Icons.check_rounded, size: 30, color: light ? ColorManager.lightBlue : ColorManager.blue);
   }
 
-  Expanded circleAvatarAndTextFields(
-      BuildContext context, UserInfoCubit updateUserCubit) {
+  Expanded circleAvatarAndTextFields(BuildContext context, UserInfoCubit updateUserCubit) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsetsDirectional.all(10),
@@ -270,19 +248,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
     SelectedImagesDetails? details = await pushToCustomGallery(context);
     if (details == null) return;
     isImageUpload.value = false;
-    Uint8List pickImage =
-        await (details.selectedFiles[0].selectedFile).readAsBytes();
+    Uint8List pickImage = await (details.selectedFiles[0].selectedFile).readAsBytes();
 
     await updateUserCubit.uploadProfileImage(
-        photo: pickImage,
-        userId: userInfo.userId,
-        previousImageUrl: userInfo.profileImageUrl);
+        photo: pickImage, userId: userInfo.userId, previousImageUrl: userInfo.profileImageUrl);
     isImageUpload.value = true;
     isImageChanged = true;
   }
 
-  static Future<SelectedImagesDetails?> pushToCustomGallery(
-      BuildContext context) async {
+  static Future<SelectedImagesDetails?> pushToCustomGallery(BuildContext context) async {
     ImagePickerPlus picker = ImagePickerPlus(context);
     SelectedImagesDetails? details = await picker.pickImage(
       source: ImageSource.both,
@@ -299,15 +273,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget userNameTextField(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: isImageUpload,
-      builder: (context, bool isImageUploadValue, child) =>
-          BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
+      builder: (context, bool isImageUploadValue, child) => BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
         bloc: BlocProvider.of<SearchAboutUserBloc>(context)
-          ..add(FindSpecificUser(userNameController.text,
-              searchForSingleLetter: true)),
+          ..add(FindSpecificUser(userNameController.text, searchForSingleLetter: true)),
         buildWhen: (previous, current) =>
-            previous != current &&
-            (current is SearchAboutUserBlocLoaded) &&
-            isImageUploadValue,
+            previous != current && (current is SearchAboutUserBlocLoaded) && isImageUploadValue,
         builder: (context, state) {
           List<UserPersonalInfo> usersWithSameUserName = [];
           if (state is SearchAboutUserBlocLoaded) {
@@ -328,23 +298,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  TextFormField userNameTextFormField(
-      TextEditingController controller, String text,
-      {required bool uniqueUserName}) {
+  TextFormField userNameTextFormField(TextEditingController controller, String text, {required bool uniqueUserName}) {
     return TextFormField(
       cursorColor: ColorManager.teal,
       controller: controller,
       style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
       decoration: InputDecoration(
         labelText: text,
-        suffixIcon: !userNameChanging
-            ? null
-            : (uniqueUserName && validateEdits ? rightIcon() : wrongIcon()),
-        labelStyle: getNormalStyle(
-            color: !uniqueUserName ? ColorManager.red : ColorManager.grey),
-        errorText: uniqueUserName && validateEdits
-            ? null
-            : StringsManager.thisUserNameExist.tr,
+        suffixIcon: !userNameChanging ? null : (uniqueUserName && validateEdits ? rightIcon() : wrongIcon()),
+        labelStyle: getNormalStyle(color: !uniqueUserName ? ColorManager.red : ColorManager.grey),
+        errorText: uniqueUserName && validateEdits ? null : StringsManager.thisUserNameExist.tr,
         errorStyle: getNormalStyle(color: ColorManager.red),
       ),
       onChanged: (value) {
@@ -385,17 +348,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
       child: ValueListenableBuilder(
         valueListenable: isImageUpload,
         builder: (context, bool isImageUploadValue, child) => CircleAvatar(
-          backgroundImage: isImageUploadValue && hasUserPhoto
-              ? NetworkImage(userInfo.profileImageUrl)
-              : null,
+          backgroundImage: isImageUploadValue && hasUserPhoto ? NetworkImage(userInfo.profileImageUrl) : null,
           radius: 50,
           backgroundColor: Theme.of(context).focusColor,
           child: ClipOval(
             child: !isImageUploadValue
                 ? const ThineCircularProgress(color: ColorManager.white)
-                : (!hasUserPhoto
-                    ? Icon(Icons.person, color: Theme.of(context).primaryColor)
-                    : null),
+                : (!hasUserPhoto ? Icon(Icons.person, color: Theme.of(context).primaryColor) : null),
           ),
         ),
       ),

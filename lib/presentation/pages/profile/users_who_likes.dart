@@ -25,10 +25,8 @@ class UsersWhoLikes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-      bloc: BlocProvider.of<UsersInfoCubit>(context)
-        ..getSpecificUsersInfo(usersIds: usersIds),
-      buildWhen: (previous, current) =>
-          previous != current && current is CubitGettingSpecificUsersLoaded,
+      bloc: BlocProvider.of<UsersInfoCubit>(context)..getSpecificUsersInfo(usersIds: usersIds),
+      buildWhen: (previous, current) => previous != current && current is CubitGettingSpecificUsersLoaded,
       builder: (context, state) {
         if (state is CubitGettingSpecificUsersLoaded) {
           return ShowMeTheUsers(
@@ -41,8 +39,7 @@ class UsersWhoLikes extends StatelessWidget {
         if (state is CubitGettingSpecificUsersFailed) {
           ToastShow.toastStateError(state);
           return Center(
-            child: Text(StringsManager.somethingWrong.tr,
-                style: Theme.of(context).textTheme.bodyLarge),
+            child: Text(StringsManager.somethingWrong.tr, style: Theme.of(context).textTheme.bodyLarge),
           );
         } else {
           return const Center(child: ThineCircularProgress());

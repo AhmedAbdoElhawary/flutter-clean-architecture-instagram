@@ -8,8 +8,7 @@ class FirebaseAuthRepositoryImpl implements FirebaseAuthRepository {
   @override
   Future<User> logIn(RegisteredUser userInfo) async {
     try {
-      return await FirebaseAuthentication.logIn(
-          email: userInfo.email, password: userInfo.password);
+      return await FirebaseAuthentication.logIn(email: userInfo.email, password: userInfo.password);
     } catch (e) {
       return Future.error(e.toString());
     }
@@ -29,8 +28,7 @@ class FirebaseAuthRepositoryImpl implements FirebaseAuthRepository {
   @override
   Future<User> signUp(RegisteredUser newUserInfo) async {
     try {
-      User userId = await FirebaseAuthentication.signUp(
-          email: newUserInfo.email, password: newUserInfo.password);
+      User userId = await FirebaseAuthentication.signUp(email: newUserInfo.email, password: newUserInfo.password);
       return userId;
     } catch (e) {
       return Future.error(e.toString());
@@ -40,8 +38,7 @@ class FirebaseAuthRepositoryImpl implements FirebaseAuthRepository {
   @override
   Future<bool> isThisEmailToken({required String email}) async {
     try {
-      bool isThisEmailToken =
-          await FirebaseAuthentication.isThisEmailToken(email: email);
+      bool isThisEmailToken = await FirebaseAuthentication.isThisEmailToken(email: email);
       return isThisEmailToken;
     } catch (e) {
       return Future.error(e.toString());

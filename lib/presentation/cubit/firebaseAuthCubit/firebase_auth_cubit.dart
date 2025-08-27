@@ -15,12 +15,11 @@ class FirebaseAuthCubit extends Cubit<FirebaseAuthCubitState> {
   EmailVerificationUseCase emailVerificationUseCase;
   User? user;
 
-  FirebaseAuthCubit(this.signUpAuthUseCase, this.logInAuthUseCase,
-      this.emailVerificationUseCase, this.signOutAuthUseCase)
+  FirebaseAuthCubit(
+      this.signUpAuthUseCase, this.logInAuthUseCase, this.emailVerificationUseCase, this.signOutAuthUseCase)
       : super(CubitInitial());
 
-  static FirebaseAuthCubit get(BuildContext context) =>
-      BlocProvider.of(context);
+  static FirebaseAuthCubit get(BuildContext context) => BlocProvider.of(context);
 
   Future<User?> signUp(RegisteredUser newUserInfo) async {
     emit(CubitAuthConfirming());

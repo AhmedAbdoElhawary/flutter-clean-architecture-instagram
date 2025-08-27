@@ -9,8 +9,7 @@ class FireStoreAddNewUserCubit extends Cubit<FirestoreAddNewUserState> {
 
   FireStoreAddNewUserCubit(this._addNewUserUseCase) : super(CubitInitial());
 
-  static FireStoreAddNewUserCubit get(BuildContext context) =>
-      BlocProvider.of(context);
+  static FireStoreAddNewUserCubit get(BuildContext context) => BlocProvider.of(context);
 
   void addNewUser(UserPersonalInfo newUserInfo) {
     emit(CubitUserAdding());

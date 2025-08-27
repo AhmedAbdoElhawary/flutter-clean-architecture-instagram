@@ -35,8 +35,7 @@ class UsersWhoLikesForMobile extends StatelessWidget {
     return AppBar(
       elevation: 0,
       backgroundColor: Theme.of(context).primaryColor,
-      title: Text(StringsManager.likes.tr,
-          style: Theme.of(context).textTheme.bodyLarge),
+      title: Text(StringsManager.likes.tr, style: Theme.of(context).textTheme.bodyLarge),
     );
   }
 }

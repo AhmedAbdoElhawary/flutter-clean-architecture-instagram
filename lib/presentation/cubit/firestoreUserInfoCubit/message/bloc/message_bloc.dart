@@ -13,8 +13,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageBlocState> {
   final GetMessagesUseCase _getMessagesUseCase;
   final GetMessagesGroGroupChatUseCase _getMessagesGroGroupChatUseCase;
 
-  MessageBloc(this._getMessagesUseCase, this._getMessagesGroGroupChatUseCase)
-      : super(MessageBlocInitial()) {
+  MessageBloc(this._getMessagesUseCase, this._getMessagesGroGroupChatUseCase) : super(MessageBlocInitial()) {
     on<LoadMessagesForSingleChat>(_onLoadMessagesForSingleChat);
     on<UpdateMessages>(_onUpdateMessages);
     on<LoadMessagesForGroupChat>(_onLoadMessagesForGroupChat);

@@ -11,14 +11,11 @@ class InstagramLogo extends StatelessWidget {
   const InstagramLogo({super.key, this.color, this.enableOnTapForWeb = false});
   @override
   Widget build(BuildContext context) => GestureDetector(
-        onTap: enableOnTapForWeb
-            ? () => Get.offAll(const WebScreenLayout())
-            : null,
+        onTap: enableOnTapForWeb ? () => Get.offAll(const WebScreenLayout()) : null,
         child: SvgPicture.asset(
           IconsAssets.instagramLogo,
           height: 32,
-          colorFilter: ColorFilter.mode(
-              color ?? Theme.of(context).focusColor, BlendMode.srcIn),
+          colorFilter: ColorFilter.mode(color ?? Theme.of(context).focusColor, BlendMode.srcIn),
         ),
       );
 }

@@ -29,8 +29,7 @@ class SheetListenerBuilder extends StatefulWidget {
 class SheetListenerBuilderState extends State<SheetListenerBuilder> {
   SheetState _state = SheetState.inital();
 
-  late final ValueNotifier<SheetState> _notifier = SheetState.notifier(context)
-    ..addListener(_listener);
+  late final ValueNotifier<SheetState> _notifier = SheetState.notifier(context)..addListener(_listener);
 
   @override
   void didChangeDependencies() {
@@ -41,8 +40,7 @@ class SheetListenerBuilderState extends State<SheetListenerBuilder> {
 
   void _listener() {
     final newState = _notifier.value;
-    final shouldRebuild =
-        widget.buildWhen == null || widget.buildWhen!(_state, newState);
+    final shouldRebuild = widget.buildWhen == null || widget.buildWhen!(_state, newState);
 
     if (shouldRebuild) {
       _state = newState;

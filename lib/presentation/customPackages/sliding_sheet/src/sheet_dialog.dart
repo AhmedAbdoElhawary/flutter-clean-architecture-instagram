@@ -237,8 +237,7 @@ class SlidingSheetDialog {
 
 /// A transparent route for a bottom sheet dialog.
 class SlidingSheetRoute<T> extends PageRoute<T> {
-  final Widget Function(BuildContext, Animation<double>, SlidingSheetRoute<T>)
-      builder;
+  final Widget Function(BuildContext, Animation<double>, SlidingSheetRoute<T>) builder;
   final Duration duration;
   SlidingSheetRoute({
     required this.builder,

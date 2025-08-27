@@ -80,10 +80,7 @@ class SnapSpec {
 
   /// private
   static bool isSnap(double? snap) =>
-      snap == expanded ||
-      snap == headerFooterSnap ||
-      snap == headerSnap ||
-      snap == footerSnap;
+      snap == expanded || snap == headerFooterSnap || snap == headerSnap || snap == footerSnap;
 
   double get minSnap => snappings.first;
   double get maxSnap => snappings.last;
@@ -123,11 +120,7 @@ class SnapSpec {
 
   @override
   int get hashCode {
-    return snap.hashCode ^
-        snappings.hashCode ^
-        initialSnap.hashCode ^
-        positioning.hashCode ^
-        onSnap.hashCode;
+    return snap.hashCode ^ snappings.hashCode ^ initialSnap.hashCode ^ positioning.hashCode ^ onSnap.hashCode;
   }
 }
 
@@ -157,8 +150,7 @@ class ScrollSpec {
   const ScrollSpec.overscroll({Color? color}) : this(overscrollColor: color);
 
   /// Creates an iOS bouncing scroll effect.
-  const ScrollSpec.bouncingScroll()
-      : this(physics: const BouncingScrollPhysics());
+  const ScrollSpec.bouncingScroll() : this(physics: const BouncingScrollPhysics());
 
   @override
   String toString() {
@@ -178,10 +170,7 @@ class ScrollSpec {
 
   @override
   int get hashCode {
-    return overscroll.hashCode ^
-        overscrollColor.hashCode ^
-        physics.hashCode ^
-        showScrollbar.hashCode;
+    return overscroll.hashCode ^ overscrollColor.hashCode ^ physics.hashCode ^ showScrollbar.hashCode;
   }
 }
 
@@ -216,17 +205,13 @@ class ParallaxSpec {
   }) : assert(amount >= 0.0 && amount <= 1.0);
 
   @override
-  String toString() =>
-      'ParallaxSpec(enabled: $enabled, amount: $amount, extent: $endExtent)';
+  String toString() => 'ParallaxSpec(enabled: $enabled, amount: $amount, extent: $endExtent)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is ParallaxSpec &&
-        other.enabled == enabled &&
-        other.amount == amount &&
-        other.endExtent == endExtent;
+    return other is ParallaxSpec && other.enabled == enabled && other.amount == amount && other.endExtent == endExtent;
   }
 
   @override

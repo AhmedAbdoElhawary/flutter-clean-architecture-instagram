@@ -17,8 +17,7 @@ Future<String?> initializeDefaultValues() async {
   ]);
 
   if (!kIsWeb) {
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   }
 
   FirebaseMessaging.onBackgroundMessage(_backgroundHandler);

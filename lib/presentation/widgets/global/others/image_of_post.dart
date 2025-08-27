@@ -72,10 +72,8 @@ class ImageOfPost extends StatefulWidget {
   State<ImageOfPost> createState() => _ImageOfPostState();
 }
 
-class _ImageOfPostState extends State<ImageOfPost>
-    with SingleTickerProviderStateMixin {
-  final ValueNotifier<TextEditingController> commentTextController =
-      ValueNotifier(TextEditingController());
+class _ImageOfPostState extends State<ImageOfPost> with SingleTickerProviderStateMixin {
+  final ValueNotifier<TextEditingController> commentTextController = ValueNotifier(TextEditingController());
   ValueChanged<Post>? selectedPostInfo;
 
   ValueNotifier<bool> isSaved = ValueNotifier(false);
@@ -108,17 +106,14 @@ class _ImageOfPostState extends State<ImageOfPost>
 
   @override
   Widget build(BuildContext context) {
-    return !widget.popupWebContainer
-        ? buildPostForMobile(bodyHeight: 700)
-        : buildPostForWeb(bodyHeight: 700);
+    return !widget.popupWebContainer ? buildPostForMobile(bodyHeight: 700) : buildPostForWeb(bodyHeight: 700);
   }
 
   Future pushToProfilePage(Post postInfo) {
     if (widget.popupWebContainer) {
       Navigator.of(context).maybePop();
     }
-    return Go(context)
-        .push(page: WhichProfilePage(userId: postInfo.publisherId));
+    return Go(context).push(page: WhichProfilePage(userId: postInfo.publisherId));
   }
 
   Widget buildPostForMobile({required double bodyHeight}) {
@@ -142,12 +137,10 @@ class _ImageOfPostState extends State<ImageOfPost>
           ),
           imageOfPost(postInfoValue),
           Padding(
-            padding:
-                const EdgeInsetsDirectional.only(start: 8, top: 10, bottom: 8),
+            padding: const EdgeInsetsDirectional.only(start: 8, top: 10, bottom: 8),
             child: buildPostInteraction(postInfoValue, showScrollBar: true),
           ),
-          if (!isThatMobile && widget.popupWebContainer)
-            ...likesAndCommentBox(postInfoValue),
+          if (!isThatMobile && widget.popupWebContainer) ...likesAndCommentBox(postInfoValue),
         ],
       ),
     );
@@ -165,10 +158,8 @@ class _ImageOfPostState extends State<ImageOfPost>
       Padding(
         padding: const EdgeInsetsDirectional.all(10),
         child: Text(
-          DateReformat.fullDigitsFormat(
-              postInfoValue.datePublished, postInfoValue.datePublished),
-          style:
-              getNormalStyle(color: Theme.of(context).bottomAppBarTheme.color!),
+          DateReformat.fullDigitsFormat(postInfoValue.datePublished, postInfoValue.datePublished),
+          style: getNormalStyle(color: Theme.of(context).bottomAppBarTheme.color!),
         ),
       ),
       if (showCommentBox || minimumWidth)
@@ -196,8 +187,7 @@ class _ImageOfPostState extends State<ImageOfPost>
         commentButton(context, postInfoValue),
         ShareButton(postInfo: ValueNotifier(postInfoValue)),
         const Spacer(),
-        if (postInfoValue.imagesUrls.length > 1 && showScrollBar)
-          scrollBar(postInfoValue),
+        if (postInfoValue.imagesUrls.length > 1 && showScrollBar) scrollBar(postInfoValue),
         const Spacer(),
         const Spacer(),
         saveButton(),
@@ -205,14 +195,12 @@ class _ImageOfPostState extends State<ImageOfPost>
     );
   }
 
-  Row buildPublisherInfo(double bodyHeight, Post postInfoValue,
-      {bool makeCircleAvatarBigger = false}) {
+  Row buildPublisherInfo(double bodyHeight, Post postInfoValue, {bool makeCircleAvatarBigger = false}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CircleAvatarOfProfileImage(
-          bodyHeight:
-              makeCircleAvatarBigger ? bodyHeight * .6 : bodyHeight * .5,
+          bodyHeight: makeCircleAvatarBigger ? bodyHeight * .6 : bodyHeight * .5,
           userInfo: postInfoValue.publisherInfo!,
         ),
         const SizedBox(width: 5),
@@ -244,8 +232,7 @@ class _ImageOfPostState extends State<ImageOfPost>
               closeButton(),
               if (widget.showSliderArrow) ...[
                 if (widget.indexOfPost != 0) buildJumpArrow(),
-                if (widget.indexOfPost < widget.postsInfo.value.length - 1)
-                  buildJumpArrow(isThatBack: false),
+                if (widget.indexOfPost < widget.postsInfo.value.length - 1) buildJumpArrow(isThatBack: false),
               ],
             ],
           ),
@@ -257,8 +244,7 @@ class _ImageOfPostState extends State<ImageOfPost>
   Widget buildJumpArrow({bool isThatBack = true}) {
     return GestureDetector(
       onTap: () async {
-        int index =
-            isThatBack ? widget.indexOfPost - 1 : widget.indexOfPost + 1;
+        int index = isThatBack ? widget.indexOfPost - 1 : widget.indexOfPost + 1;
         await Navigator.of(context).maybePop();
         if (!mounted) return;
         Navigator.of(context).push(
@@ -294,9 +280,7 @@ class _ImageOfPostState extends State<ImageOfPost>
             ? Container(
                 width: 300,
                 padding: const EdgeInsets.only(top: 10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: ColorManager.white),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: ColorManager.white),
                 child: buildNormalPostDisplay(bodyHeight))
             : SizedBox(
                 height: withOfScreen / 2,
@@ -312,9 +296,8 @@ class _ImageOfPostState extends State<ImageOfPost>
                         child: Container(
                           height: double.infinity,
                           decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(5),
-                                topLeft: Radius.circular(5)),
+                            borderRadius:
+                                BorderRadius.only(bottomLeft: Radius.circular(5), topLeft: Radius.circular(5)),
                             color: ColorManager.black,
                           ),
                           child: imageOfPost(widget.postInfo.value),
@@ -325,9 +308,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                       height: withOfScreen / 2,
                       width: 500,
                       decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(5),
-                            topRight: Radius.circular(5)),
+                        borderRadius: BorderRadius.only(bottomRight: Radius.circular(5), topRight: Radius.circular(5)),
                         color: ColorManager.white,
                       ),
                       child: Column(
@@ -337,13 +318,11 @@ class _ImageOfPostState extends State<ImageOfPost>
                           Container(
                             decoration: const BoxDecoration(
                               border: Border(
-                                bottom: BorderSide(
-                                    color: ColorManager.black38, width: 0.08),
+                                bottom: BorderSide(color: ColorManager.black38, width: 0.08),
                               ),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 15),
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                               child: buildPublisherInfo(
                                 bodyHeight,
                                 postInfoValue,
@@ -359,13 +338,11 @@ class _ImageOfPostState extends State<ImageOfPost>
                           Container(
                             decoration: const BoxDecoration(
                               border: Border(
-                                top: BorderSide(
-                                    color: ColorManager.black38, width: 0.08),
+                                top: BorderSide(color: ColorManager.black38, width: 0.08),
                               ),
                             ),
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.only(
-                                  start: 10, top: 10, bottom: 8),
+                              padding: const EdgeInsetsDirectional.only(start: 10, top: 10, bottom: 8),
                               child: buildPostInteraction(postInfoValue),
                             ),
                           ),
@@ -419,24 +396,23 @@ class _ImageOfPostState extends State<ImageOfPost>
       onTap: () async {
         setState(() {
           if (isLiked) {
-            BlocProvider.of<PostLikesCubit>(context).removeTheLikeOnThisPost(
-                postId: postInfo.postUid, userId: myPersonalId);
+            BlocProvider.of<PostLikesCubit>(context)
+                .removeTheLikeOnThisPost(postId: postInfo.postUid, userId: myPersonalId);
             postInfo.likes.remove(myPersonalId);
             if (widget.rebuildPreviousWidget != null) {
               widget.rebuildPreviousWidget!();
             }
 
-            BlocProvider.of<NotificationCubit>(context).deleteNotification(
-                notificationCheck: createNotificationCheck(postInfo));
+            BlocProvider.of<NotificationCubit>(context)
+                .deleteNotification(notificationCheck: createNotificationCheck(postInfo));
           } else {
-            BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
-                postId: postInfo.postUid, userId: myPersonalId);
+            BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(postId: postInfo.postUid, userId: myPersonalId);
             postInfo.likes.add(myPersonalId);
             if (widget.rebuildPreviousWidget != null) {
               widget.rebuildPreviousWidget!();
             }
-            BlocProvider.of<NotificationCubit>(context).createNotification(
-                newNotification: createNotification(postInfo));
+            BlocProvider.of<NotificationCubit>(context)
+                .createNotification(newNotification: createNotification(postInfo));
           }
         });
       },
@@ -467,9 +443,7 @@ class _ImageOfPostState extends State<ImageOfPost>
       text: "liked your photo.",
       postId: postInfo.postUid,
       postImageUrl: postInfo.isThatImage
-          ? (postInfo.imagesUrls.length > 1
-              ? postInfo.imagesUrls[0]
-              : postInfo.postUrl)
+          ? (postInfo.imagesUrls.length > 1 ? postInfo.imagesUrls[0] : postInfo.postUrl)
           : postInfo.coverOfVideoUrl,
       time: DateReformat.dateOfNow(),
       senderId: myPersonalId,
@@ -493,8 +467,7 @@ class _ImageOfPostState extends State<ImageOfPost>
   SvgPicture iconsOfImagePost(String path, {bool lowHeight = false}) {
     return SvgPicture.asset(
       path,
-      colorFilter:
-          ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+      colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
       height: lowHeight ? 22 : 28,
     );
   }
@@ -511,16 +484,15 @@ class _ImageOfPostState extends State<ImageOfPost>
               setState(() {
                 isHeartAnimation = true;
                 if (!isLiked) {
-                  BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
-                      postId: postInfo.postUid, userId: myPersonalId);
+                  BlocProvider.of<PostLikesCubit>(context)
+                      .putLikeOnThisPost(postId: postInfo.postUid, userId: myPersonalId);
                   postInfo.likes.add(myPersonalId);
 
                   if (widget.rebuildPreviousWidget != null) {
                     widget.rebuildPreviousWidget!();
                   }
                   BlocProvider.of<NotificationCubit>(context)
-                      .createNotification(
-                          newNotification: createNotification(postInfo));
+                      .createNotification(newNotification: createNotification(postInfo));
                 }
               });
             },
@@ -534,9 +506,7 @@ class _ImageOfPostState extends State<ImageOfPost>
                       updateImageIndex: _updateImageIndex,
                       showPointsScrollBar: widget.popupWebContainer,
                     )
-                  : (postInfo.isThatImage
-                      ? buildSingleImage(postInfo)
-                      : videoPlayer(postInfo)),
+                  : (postInfo.isThatImage ? buildSingleImage(postInfo) : videoPlayer(postInfo)),
             ),
           ),
         ),
@@ -547,8 +517,7 @@ class _ImageOfPostState extends State<ImageOfPost>
             child: LikePopupAnimation(
               isAnimating: isHeartAnimation,
               duration: const Duration(milliseconds: 700),
-              child: const Icon(Icons.favorite,
-                  color: ColorManager.white, size: 100),
+              child: const Icon(Icons.favorite, color: ColorManager.white, size: 100),
               onEnd: () => setState(() => isHeartAnimation = false),
             ),
           ),
@@ -606,11 +575,8 @@ class _ImageOfPostState extends State<ImageOfPost>
   Widget menuButton() {
     return GestureDetector(
       child: SvgPicture.asset(
-        !isThatMobile
-            ? IconsAssets.menuHorizontal2Icon
-            : IconsAssets.menuHorizontalIcon,
-        colorFilter:
-            ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+        !isThatMobile ? IconsAssets.menuHorizontal2Icon : IconsAssets.menuHorizontalIcon,
+        colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
         height: 23,
       ),
       onTap: () async => isThatMobile ? bottomSheet() : popupContainerForWeb(),
@@ -626,9 +592,7 @@ class _ImageOfPostState extends State<ImageOfPost>
             postInfo: widget.postInfo,
             shareWidget: shareWidget(),
           ),
-          bodyText: widget.postInfo.value.publisherId == myPersonalId
-              ? ordersOfMyPost()
-              : ordersOfOtherUser(),
+          bodyText: widget.postInfo.value.publisherId == myPersonalId ? ordersOfMyPost() : ordersOfOtherUser(),
         );
       },
     );
@@ -646,8 +610,7 @@ class _ImageOfPostState extends State<ImageOfPost>
         SvgPicture.asset(
           IconsAssets.shareCircle,
           height: 50,
-          colorFilter:
-              ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+          colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
         ),
         const SizedBox(height: 10),
         buildText(StringsManager.share.tr),
@@ -681,8 +644,7 @@ class _ImageOfPostState extends State<ImageOfPost>
       return GestureDetector(
           onTap: () async {
             Navigator.of(context).maybePop();
-            await PostCubit.get(context)
-                .deletePostInfo(postInfo: postInfoValue);
+            await PostCubit.get(context).deletePostInfo(postInfo: postInfoValue);
             if (widget.reLoadData != null) widget.reLoadData!();
             if (widget.removeThisPost != null) {
               widget.removeThisPost!(widget.indexOfPost);
@@ -697,8 +659,7 @@ class _ImageOfPostState extends State<ImageOfPost>
       return GestureDetector(
           onTap: () async {
             Navigator.maybePop(context);
-            await Go(context)
-                .push(page: UpdatePostInfo(oldPostInfo: postInfoValue));
+            await Go(context).push(page: UpdatePostInfo(oldPostInfo: postInfoValue));
           },
           child: textOfOrders(StringsManager.edit.tr));
     });
@@ -718,8 +679,7 @@ class _ImageOfPostState extends State<ImageOfPost>
   Builder unFollowButton() {
     return Builder(builder: (context) {
       FollowCubit followCubit = BlocProvider.of<FollowCubit>(context);
-      UserPersonalInfo myPersonalInfo =
-          UserInfoCubit.getMyPersonalInfo(context);
+      UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
       List iFollowThem = myPersonalInfo.followedPeople;
       return ValueListenableBuilder(
         valueListenable: widget.postInfo,
@@ -727,8 +687,7 @@ class _ImageOfPostState extends State<ImageOfPost>
             onTap: () async {
               await Navigator.of(context).maybePop();
               await followCubit.unFollowThisUser(
-                  followingUserId: widget.postInfo.value.publisherId,
-                  myPersonalId: myPersonalId);
+                  followingUserId: widget.postInfo.value.publisherId, myPersonalId: myPersonalId);
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 setState(() {
                   if (widget.reLoadData != null) widget.reLoadData!();
@@ -761,9 +720,7 @@ class _ImageOfPostState extends State<ImageOfPost>
   }
 
   Widget buildText(String text) {
-    return Text(text,
-        style:
-            getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15));
+    return Text(text, style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15));
   }
 
   ValueListenableBuilder<bool> saveButton() {
@@ -796,8 +753,7 @@ class _ImageOfPostState extends State<ImageOfPost>
         child: iconsOfImagePost(IconsAssets.commentIcon),
         onTap: () {
           if (isThatMobile) {
-            Go(context)
-                .push(page: CommentsPageForMobile(postInfo: widget.postInfo));
+            Go(context).push(page: CommentsPageForMobile(postInfo: widget.postInfo));
           } else {
             if (!widget.popupWebContainer) {
               WidgetsBinding.instance.addPostFrameCallback((_) {

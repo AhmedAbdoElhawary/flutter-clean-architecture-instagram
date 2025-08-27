@@ -48,9 +48,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final bodyHeight = mediaQuery.size.height -
-        AppBar().preferredSize.height -
-        mediaQuery.padding.top;
+    final bodyHeight = mediaQuery.size.height - AppBar().preferredSize.height - mediaQuery.padding.top;
 
     centerItemIndex ??= ((bodyHeight / 2) / bodyHeight).floor();
     return valueListener(bodyHeight);
@@ -65,15 +63,13 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
     );
   }
 
-  InViewNotifierList inViewNotifierList(
-      List<Post> postsValue, double bodyHeight) {
+  InViewNotifierList inViewNotifierList(List<Post> postsValue, double bodyHeight) {
     return InViewNotifierList(
       onRefreshData: getData,
       postsIds: postsValue,
       isThatEndOfList: isThatEndOfList,
       initialInViewIds: const ['0'],
-      isInViewPortCondition:
-          (double deltaTop, double deltaBottom, double vpHeight) {
+      isInViewPortCondition: (double deltaTop, double deltaBottom, double vpHeight) {
         return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
       },
       itemCount: postsValue.length,
@@ -92,8 +88,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
           return InViewNotifierWidget(
             id: '$index',
             builder: (_, bool isInView, __) {
-              return columnOfWidgets(
-                  bodyHeight, postsValue[index], index, isInView);
+              return columnOfWidgets(bodyHeight, postsValue[index], index, isInView);
             },
           );
         },
@@ -101,16 +96,13 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
     );
   }
 
-  Widget columnOfWidgets(
-      double bodyHeight, Post postInfo, int index, bool playTheVideo) {
+  Widget columnOfWidgets(double bodyHeight, Post postInfo, int index, bool playTheVideo) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         posts(index, postInfo, bodyHeight, playTheVideo),
         const Divider(color: ColorManager.lightGrey, thickness: .15),
-        if (widget.showCatchUp &&
-            isThatEndOfList.value &&
-            index == postsInfo.value.length - 1) ...[
+        if (widget.showCatchUp && isThatEndOfList.value && index == postsInfo.value.length - 1) ...[
           const AllCatchUpIcon(),
         ]
       ],

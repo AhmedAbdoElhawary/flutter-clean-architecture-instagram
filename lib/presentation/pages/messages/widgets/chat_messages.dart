@@ -46,8 +46,7 @@ class ChatMessages extends StatefulWidget {
   State<ChatMessages> createState() => _ChatMessagesState();
 }
 
-class _ChatMessagesState extends State<ChatMessages>
-    with TickerProviderStateMixin {
+class _ChatMessagesState extends State<ChatMessages> with TickerProviderStateMixin {
   final ValueNotifier<List<Message>> globalMessagesInfo = ValueNotifier([]);
   final ValueNotifier<int?> indexOfGarbageMessage = ValueNotifier(null);
   final ValueNotifier<Message?> deleteThisMessage = ValueNotifier(null);
@@ -106,17 +105,14 @@ class _ChatMessagesState extends State<ChatMessages>
   @override
   void initState() {
     resetValues();
-    _colorAnimationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
-    _colorTween = ColorTween(begin: Colors.purple, end: Colors.blue)
-        .animate(_colorAnimationController);
+    _colorAnimationController = AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    _colorTween = ColorTween(begin: Colors.purple, end: Colors.blue).animate(_colorAnimationController);
     super.initState();
   }
 
   void resetValues() {
     messageDetails = widget.messageDetails;
-    myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context) ??
-        UserInfoCubit.getMyPersonalInfo(context);
+    myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context) ?? UserInfoCubit.getMyPersonalInfo(context);
     globalMessagesInfo.value = [];
     indexOfGarbageMessage.value = null;
     deleteThisMessage.value = null;
@@ -153,9 +149,7 @@ class _ChatMessagesState extends State<ChatMessages>
         indexOfGarbageMessage.value = null;
         unSend.value = false;
       },
-      child: messageDetails.isThatGroupChat || check
-          ? buildGroupChat(context)
-          : buildSingleChat(context),
+      child: messageDetails.isThatGroupChat || check ? buildGroupChat(context) : buildSingleChat(context),
     );
   }
 
@@ -165,18 +159,14 @@ class _ChatMessagesState extends State<ChatMessages>
     } else {
       return ValueListenableBuilder(
         valueListenable: reLoad,
-        builder: (context, bool reLoadValue, child) =>
-            BlocBuilder<MessageBloc, MessageBlocState>(
+        builder: (context, bool reLoadValue, child) => BlocBuilder<MessageBloc, MessageBlocState>(
           bloc: BlocProvider.of<MessageBloc>(context)
-            ..add(LoadMessagesForGroupChat(
-                groupChatUid: messageDetails.lastMessage!.chatOfGroupId)),
+            ..add(LoadMessagesForGroupChat(groupChatUid: messageDetails.lastMessage!.chatOfGroupId)),
           builder: (context, state) {
             if (state is MessageBlocLoaded) {
               return buildMessages(context, state.messages);
             } else {
-              return isThatMobile
-                  ? buildCircularProgress()
-                  : const ThineLinearProgress();
+              return isThatMobile ? buildCircularProgress() : const ThineLinearProgress();
             }
           },
         ),
@@ -187,17 +177,13 @@ class _ChatMessagesState extends State<ChatMessages>
   Widget buildSingleChat(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: reLoad,
-      builder: (context, bool reLoadValue, child) =>
-          BlocBuilder<MessageBloc, MessageBlocState>(
-        bloc: BlocProvider.of<MessageBloc>(context)
-          ..add(LoadMessagesForSingleChat(receiversInfo[0].userId)),
+      builder: (context, bool reLoadValue, child) => BlocBuilder<MessageBloc, MessageBlocState>(
+        bloc: BlocProvider.of<MessageBloc>(context)..add(LoadMessagesForSingleChat(receiversInfo[0].userId)),
         builder: (context, state) {
           if (state is MessageBlocLoaded) {
             return buildMessages(context, state.messages);
           } else {
-            return isThatMobile
-                ? buildCircularProgress()
-                : const ThineLinearProgress();
+            return isThatMobile ? buildCircularProgress() : const ThineLinearProgress();
           }
         },
       ),
@@ -207,18 +193,15 @@ class _ChatMessagesState extends State<ChatMessages>
   Widget buildMessages(BuildContext context, List<Message> messages) {
     return ValueListenableBuilder(
       valueListenable: newMessageInfo,
-      builder: (context, Message? newMessageValue, child) =>
-          ValueListenableBuilder(
+      builder: (context, Message? newMessageValue, child) => ValueListenableBuilder(
         valueListenable: globalMessagesInfo,
-        builder: (context, List<Message> globalMessagesValue, child) =>
-            ValueListenableBuilder(
+        builder: (context, List<Message> globalMessagesValue, child) => ValueListenableBuilder(
           valueListenable: isMessageLoaded,
           builder: (context, bool isMessageLoadedValue, child) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (messages.length >= globalMessagesValue.length) {
                 globalMessagesInfo.value = messages;
-                if (itemIndex < globalMessagesValue.length - 1 &&
-                    isThatMobile) {
+                if (itemIndex < globalMessagesValue.length - 1 && isThatMobile) {
                   itemIndex = globalMessagesValue.length - 1;
                   scrollToLastIndex(context);
                 }
@@ -236,37 +219,30 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  Widget whichListOfMessages(
-      List<Message> globalMessagesValue, BuildContext context) {
+  Widget whichListOfMessages(List<Message> globalMessagesValue, BuildContext context) {
     return isThatMobile
         ? buildMassagesForMobile(globalMessagesValue, context)
         : buildMassagesForWeb(globalMessagesValue, context);
   }
 
-  Widget buildMassagesForMobile(
-      List<Message> globalMessagesValue, BuildContext context) {
+  Widget buildMassagesForMobile(List<Message> globalMessagesValue, BuildContext context) {
     return Stack(
       children: [
         Padding(
-            padding: const EdgeInsetsDirectional.only(
-                end: 10, start: 10, top: 10, bottom: 10),
+            padding: const EdgeInsetsDirectional.only(end: 10, start: 10, top: 10, bottom: 10),
             child: globalMessagesValue.isNotEmpty
                 ? notificationListenerForMobile(globalMessagesValue)
                 : buildUserInfo(context)),
-        Align(
-            alignment: Alignment.bottomCenter,
-            child: fieldOfMessageForMobile()),
+        Align(alignment: Alignment.bottomCenter, child: fieldOfMessageForMobile()),
       ],
     );
   }
 
-  Stack buildMassagesForWeb(
-      List<Message> globalMessagesValue, BuildContext context) {
+  Stack buildMassagesForWeb(List<Message> globalMessagesValue, BuildContext context) {
     return Stack(
       children: [
         Padding(
-            padding: EdgeInsetsDirectional.only(
-                end: 10, start: 10, top: 10, bottom: isThatMobile ? 10 : 25),
+            padding: EdgeInsetsDirectional.only(end: 10, start: 10, top: 10, bottom: isThatMobile ? 10 : 25),
             child: listViewForWeb(globalMessagesValue)),
         Align(alignment: Alignment.bottomCenter, child: fieldOfMessageForWeb())
       ],
@@ -279,16 +255,13 @@ class _ChatMessagesState extends State<ChatMessages>
         itemBuilder: (context, index) {
           return Column(
             children: [
-              buildTheMessage(globalMessagesValue,
-                  globalMessagesValue[index].datePublished, index),
-              if (index == globalMessagesValue.length - 1)
-                const SizedBox(height: 50),
+              buildTheMessage(globalMessagesValue, globalMessagesValue[index].datePublished, index),
+              if (index == globalMessagesValue.length - 1) const SizedBox(height: 50),
             ],
           );
         },
         itemCount: globalMessagesValue.length,
-        separatorBuilder: (BuildContext context, int index) =>
-            const SizedBox(height: 5));
+        separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 5));
   }
 
   Widget notificationListenerForMobile(List<Message> globalMessagesValue) {
@@ -309,16 +282,13 @@ class _ChatMessagesState extends State<ChatMessages>
           return Column(
             children: [
               if (index == 0) buildUserInfo(context),
-              buildTheMessage(globalMessagesValue,
-                  globalMessagesValue[indexForMobile].datePublished, index),
-              if (index == globalMessagesValue.length - 1)
-                const SizedBox(height: 50),
+              buildTheMessage(globalMessagesValue, globalMessagesValue[indexForMobile].datePublished, index),
+              if (index == globalMessagesValue.length - 1) const SizedBox(height: 50),
             ],
           );
         },
         itemCount: globalMessagesValue.length,
-        separatorBuilder: (BuildContext context, int index) =>
-            const SizedBox(height: 5));
+        separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 5));
   }
 
   Widget buildCircularProgress() => const ThineCircularProgress();
@@ -340,13 +310,11 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  Widget buildTheMessage(
-      List<Message> messagesInfo, String previousDateOfMessage, int index) {
+  Widget buildTheMessage(List<Message> messagesInfo, String previousDateOfMessage, int index) {
     Message messageInfo = messagesInfo[index];
     bool isThatMe = messageInfo.senderId == myPersonalId;
 
-    String theDate = DateReformat.fullDigitsFormat(
-        messageInfo.datePublished, previousDateOfMessage);
+    String theDate = DateReformat.fullDigitsFormat(messageInfo.datePublished, previousDateOfMessage);
     bool isLangArabic = !AppLanguage.getInstance().isLangEnglish;
 
     return Column(
@@ -378,8 +346,7 @@ class _ChatMessagesState extends State<ChatMessages>
                 },
                 child: ValueListenableBuilder(
                   valueListenable: newMessageInfo,
-                  builder: (context, Message? newMessageInfoValue, child) =>
-                      Column(
+                  builder: (context, Message? newMessageInfoValue, child) => Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -406,8 +373,7 @@ class _ChatMessagesState extends State<ChatMessages>
 
   Visibility buildSendLoadingIcon(Message messageInfo, bool rotateIcon) {
     return Visibility(
-      visible: messageInfo.senderId == myPersonalId &&
-          messageInfo.messageUid.isEmpty,
+      visible: messageInfo.senderId == myPersonalId && messageInfo.messageUid.isEmpty,
       child: Padding(
         padding: const EdgeInsetsDirectional.only(start: 5.0),
         child: rotateIcon
@@ -425,23 +391,18 @@ class _ChatMessagesState extends State<ChatMessages>
     return SvgPicture.asset(
       IconsAssets.send2Icon,
       height: 15,
-      colorFilter:
-          ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+      colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
     );
   }
 
-  BlocBuilder<UserInfoCubit, UserInfoState> senderNameText(
-      BuildContext context, Message messageInfo) {
+  BlocBuilder<UserInfoCubit, UserInfoState> senderNameText(BuildContext context, Message messageInfo) {
     return BlocBuilder<UserInfoCubit, UserInfoState>(
-      buildWhen: (previous, current) =>
-          previous != current && current is CubitUserLoaded,
-      bloc: UserInfoCubit.get(context)
-        ..getUserInfo(messageInfo.senderId, isThatMyPersonalId: false),
+      buildWhen: (previous, current) => previous != current && current is CubitUserLoaded,
+      bloc: UserInfoCubit.get(context)..getUserInfo(messageInfo.senderId, isThatMyPersonalId: false),
       builder: (context, state) {
         UserPersonalInfo? userInfo;
         if (state is CubitUserLoaded) userInfo = state.userPersonalInfo;
-        return Text(userInfo?.name ?? "",
-            style: getNormalStyle(color: ColorManager.grey));
+        return Text(userInfo?.name ?? "", style: getNormalStyle(color: ColorManager.grey));
       },
     );
   }
@@ -450,25 +411,18 @@ class _ChatMessagesState extends State<ChatMessages>
     String message = messageInfo.message;
     String imageUrl = messageInfo.imageUrl;
     String recordedUrl = messageInfo.recordedUrl;
-    Widget messageWidget =
-        messageInfo.isThatRecord || messageInfo.recordedUrl.isNotEmpty
-            ? recordMessage(messageInfo.lengthOfRecord, recordedUrl, isThatMe)
-            : (messageInfo.isThatPost
-                ? SharedMessage(messageInfo: messageInfo, isThatMe: isThatMe)
-                : (messageInfo.isThatImage
-                    ? imageMessage(messageInfo, imageUrl)
-                    : textMessage(message, isThatMe)));
+    Widget messageWidget = messageInfo.isThatRecord || messageInfo.recordedUrl.isNotEmpty
+        ? recordMessage(messageInfo.lengthOfRecord, recordedUrl, isThatMe)
+        : (messageInfo.isThatPost
+            ? SharedMessage(messageInfo: messageInfo, isThatMe: isThatMe)
+            : (messageInfo.isThatImage ? imageMessage(messageInfo, imageUrl) : textMessage(message, isThatMe)));
     return Align(
-      alignment: isThatMe
-          ? AlignmentDirectional.centerEnd
-          : AlignmentDirectional.centerStart,
+      alignment: isThatMe ? AlignmentDirectional.centerEnd : AlignmentDirectional.centerStart,
       child: Container(
         decoration: BoxDecoration(
           color: messageInfo.isThatPost
               ? (Theme.of(context).textTheme.titleMedium?.color)
-              : (isThatMe
-                  ? _colorTween.value
-                  : Theme.of(context).textTheme.titleMedium?.color),
+              : (isThatMe ? _colorTween.value : Theme.of(context).textTheme.titleMedium?.color),
           borderRadius: BorderRadiusDirectional.only(
             bottomStart: Radius.circular(isThatMe ? 24 : 0),
             bottomEnd: Radius.circular(isThatMe ? 0 : 24),
@@ -478,8 +432,7 @@ class _ChatMessagesState extends State<ChatMessages>
         ),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         padding: !messageInfo.isThatImage
-            ? const EdgeInsetsDirectional.only(
-                start: 10, end: 10, bottom: 8, top: 8)
+            ? const EdgeInsetsDirectional.only(start: 10, end: 10, bottom: 8, top: 8)
             : const EdgeInsetsDirectional.all(0),
         child: messageWidget,
       ),
@@ -490,34 +443,25 @@ class _ChatMessagesState extends State<ChatMessages>
     String message = messageInfo.message;
     String imageUrl = messageInfo.imageUrl;
     String recordedUrl = messageInfo.recordedUrl;
-    Widget messageWidget =
-        messageInfo.isThatRecord || messageInfo.recordedUrl.isNotEmpty
-            ? recordMessage(messageInfo.lengthOfRecord, recordedUrl, isThatMe)
-            : (messageInfo.isThatPost
-                ? SharedMessage(messageInfo: messageInfo, isThatMe: isThatMe)
-                : (messageInfo.isThatImage
-                    ? imageMessage(messageInfo, imageUrl)
-                    : textMessage(message, isThatMe)));
+    Widget messageWidget = messageInfo.isThatRecord || messageInfo.recordedUrl.isNotEmpty
+        ? recordMessage(messageInfo.lengthOfRecord, recordedUrl, isThatMe)
+        : (messageInfo.isThatPost
+            ? SharedMessage(messageInfo: messageInfo, isThatMe: isThatMe)
+            : (messageInfo.isThatImage ? imageMessage(messageInfo, imageUrl) : textMessage(message, isThatMe)));
     Widget child = buildMessage(isThatMe, messageInfo, messageWidget);
 
     return Align(
-      alignment: isThatMe
-          ? AlignmentDirectional.centerEnd
-          : AlignmentDirectional.centerStart,
+      alignment: isThatMe ? AlignmentDirectional.centerEnd : AlignmentDirectional.centerStart,
       child: child,
     );
   }
 
-  Container buildMessage(
-      bool isThatMe, Message messageInfo, Widget messageWidget) {
+  Container buildMessage(bool isThatMe, Message messageInfo, Widget messageWidget) {
     return Container(
       decoration: BoxDecoration(
-        color: isThatMe
-            ? Theme.of(context).textTheme.titleMedium?.color
-            : ColorManager.white,
+        color: isThatMe ? Theme.of(context).textTheme.titleMedium?.color : ColorManager.white,
         borderRadius: const BorderRadiusDirectional.all(Radius.circular(25)),
-        border:
-            isThatMe ? null : Border.all(color: ColorManager.lowOpacityGrey),
+        border: isThatMe ? null : Border.all(color: ColorManager.lowOpacityGrey),
       ),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       padding: !messageInfo.isThatImage
@@ -527,8 +471,7 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  ValueListenableBuilder<String> recordMessage(
-      int lengthOfRecord, String recordedUrl, bool isThatMe) {
+  ValueListenableBuilder<String> recordMessage(int lengthOfRecord, String recordedUrl, bool isThatMe) {
     return ValueListenableBuilder(
       valueListenable: records,
       builder: (context, String recordsValue, child) => SizedBox(
@@ -536,8 +479,7 @@ class _ChatMessagesState extends State<ChatMessages>
         child: RecordView(
           urlRecord: recordedUrl.isEmpty ? recordsValue : recordedUrl,
           isThatLocalRecorded: recordedUrl.isEmpty,
-          lengthOfRecord:
-              recordedUrl.isEmpty ? tempLengthOfRecord : lengthOfRecord,
+          lengthOfRecord: recordedUrl.isEmpty ? tempLengthOfRecord : lengthOfRecord,
           isThatMe: isThatMe,
         ),
       ),
@@ -561,21 +503,16 @@ class _ChatMessagesState extends State<ChatMessages>
               valueListenable: newMessageInfo,
               builder: (context, Message? newMessageValue, child) {
                 Uint8List? image = newMessageValue?.localImage;
-                return image != null
-                    ? MemoryDisplay(imagePath: image)
-                    : Container(color: ColorManager.purple);
+                return image != null ? MemoryDisplay(imagePath: image) : Container(color: ColorManager.purple);
               },
             ),
     );
   }
 
   Text textMessage(String message, bool isThatMe) {
-    TextStyle style = isThatMe
-        ? getNormalStyle(color: ColorManager.white)
-        : getNormalStyle(color: Theme.of(context).focusColor);
-    style = isThatMobile
-        ? style
-        : getNormalStyle(color: Theme.of(context).focusColor);
+    TextStyle style =
+        isThatMe ? getNormalStyle(color: ColorManager.white) : getNormalStyle(color: Theme.of(context).focusColor);
+    style = isThatMobile ? style : getNormalStyle(color: Theme.of(context).focusColor);
     return Text(message, style: style);
   }
 
@@ -591,16 +528,11 @@ class _ChatMessagesState extends State<ChatMessages>
 
   Widget textForm() => Stack(
         children: [
-          Align(
-              alignment: Alignment.bottomCenter,
-              child:
-                  Container(height: 25, color: Theme.of(context).primaryColor)),
+          Align(alignment: Alignment.bottomCenter, child: Container(height: 25, color: Theme.of(context).primaryColor)),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(35)),
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(35)),
               height: 50,
               padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
               margin: const EdgeInsetsDirectional.only(start: 10, end: 10),
@@ -640,8 +572,7 @@ class _ChatMessagesState extends State<ChatMessages>
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Icon(Icons.favorite_border_rounded,
-            size: 27, color: ColorManager.black),
+        const Icon(Icons.favorite_border_rounded, size: 27, color: ColorManager.black),
         const SizedBox(width: 10),
         messageTextField(),
         ValueListenableBuilder(
@@ -657,8 +588,7 @@ class _ChatMessagesState extends State<ChatMessages>
                     children: [
                       pickPhoto(messageCubit),
                       const SizedBox(width: 10),
-                      const Icon(Icons.favorite_border_rounded,
-                          size: 27, color: ColorManager.black),
+                      const Icon(Icons.favorite_border_rounded, size: 27, color: ColorManager.black),
                     ],
                   ),
                 ],
@@ -679,23 +609,17 @@ class _ChatMessagesState extends State<ChatMessages>
             bool isThatMe = messageValue?.senderId == myPersonalId;
             return ValueListenableBuilder(
               valueListenable: isDeleteMessageDone,
-              builder: (context, bool messageDoneValue, child) =>
-                  ValueListenableBuilder(
+              builder: (context, bool messageDoneValue, child) => ValueListenableBuilder(
                 valueListenable: indexOfGarbageMessage,
-                builder: (context, int? indexOfGarbageMessageValue, child) =>
-                    BlocBuilder<MessageCubit, MessageState>(
-                  buildWhen: (previous, current) =>
-                      previous != current && (current is DeleteMessageLoaded),
+                builder: (context, int? indexOfGarbageMessageValue, child) => BlocBuilder<MessageCubit, MessageState>(
+                  buildWhen: (previous, current) => previous != current && (current is DeleteMessageLoaded),
                   builder: (context, state) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (unSendValue &&
-                          indexOfGarbageMessageValue != null &&
-                          messageDoneValue) {
+                      if (unSendValue && indexOfGarbageMessageValue != null && messageDoneValue) {
                         isDeleteMessageDone.value = false;
                         unSend.value = false;
                         deleteThisMessage.value = null;
-                        globalMessagesInfo.value
-                            .removeAt(indexOfGarbageMessageValue);
+                        globalMessagesInfo.value.removeAt(indexOfGarbageMessageValue);
                       }
                     });
 
@@ -704,42 +628,30 @@ class _ChatMessagesState extends State<ChatMessages>
                       color: Theme.of(context).primaryColor,
                       width: double.infinity,
                       child: Padding(
-                        padding: const EdgeInsetsDirectional.only(
-                            start: 80, end: 80),
+                        padding: const EdgeInsetsDirectional.only(start: 80, end: 80),
                         child: Row(
-                          mainAxisAlignment: isThatMe
-                              ? MainAxisAlignment.spaceBetween
-                              : MainAxisAlignment.center,
+                          mainAxisAlignment: isThatMe ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(StringsManager.reply.tr,
-                                style: getBoldStyle(
-                                    color: Theme.of(context).focusColor,
-                                    fontSize: 15)),
+                                style: getBoldStyle(color: Theme.of(context).focusColor, fontSize: 15)),
                             if (isThatMe)
                               GestureDetector(
                                 onTap: () async {
-                                  Message? deleteMessage =
-                                      deleteThisMessage.value;
-                                  List<Message> globalMessages =
-                                      globalMessagesInfo.value;
+                                  Message? deleteMessage = deleteThisMessage.value;
+                                  List<Message> globalMessages = globalMessagesInfo.value;
 
                                   if (deleteMessage != null) {
                                     isDeleteMessageDone.value = true;
                                     Message? replacedMessage;
-                                    if (globalMessages.last.messageUid ==
-                                        deleteMessage.messageUid) {
+                                    if (globalMessages.last.messageUid == deleteMessage.messageUid) {
                                       int length = globalMessages.length;
-                                      replacedMessage = length > 1
-                                          ? globalMessages[length - 2]
-                                          : null;
+                                      replacedMessage = length > 1 ? globalMessages[length - 2] : null;
                                     }
-                                    await MessageCubit.get(context)
-                                        .deleteMessage(
-                                            messageInfo: deleteMessage,
-                                            replacedMessage: replacedMessage,
-                                            isThatOnlyMessageInChat:
-                                                globalMessages.length <= 1);
+                                    await MessageCubit.get(context).deleteMessage(
+                                        messageInfo: deleteMessage,
+                                        replacedMessage: replacedMessage,
+                                        isThatOnlyMessageInChat: globalMessages.length <= 1);
                                     globalMessages.remove(deleteMessage);
                                     reLoad.value = true;
                                     setState(() {});
@@ -747,9 +659,7 @@ class _ChatMessagesState extends State<ChatMessages>
                                 },
                                 child: Text(
                                   StringsManager.unSend.tr,
-                                  style: getBoldStyle(
-                                      color: Theme.of(context).focusColor,
-                                      fontSize: 15),
+                                  style: getBoldStyle(color: Theme.of(context).focusColor, fontSize: 15),
                                 ),
                               ),
                           ],
@@ -789,12 +699,10 @@ class _ChatMessagesState extends State<ChatMessages>
                 children: [
                   const SizedBox(width: 10),
                   recordButton(context, messageCubit),
-                  if (AppLanguage.getInstance().isLangEnglish)
-                    const SizedBox(width: 10),
+                  if (AppLanguage.getInstance().isLangEnglish) const SizedBox(width: 10),
                   ValueListenableBuilder(
                     valueListenable: appearIcons,
-                    builder: (context, bool appearIconsValue, child) =>
-                        Visibility(
+                    builder: (context, bool appearIconsValue, child) => Visibility(
                       visible: appearIconsValue,
                       child: Row(
                         children: [
@@ -814,8 +722,7 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  SocialMediaRecorder recordButton(
-      BuildContext context, MessageCubit messageCubit) {
+  SocialMediaRecorder recordButton(BuildContext context, MessageCubit messageCubit) {
     return SocialMediaRecorder(
       showIcons: showIcons,
       slideToCancelText: StringsManager.slideToCancel.tr,
@@ -833,17 +740,14 @@ class _ChatMessagesState extends State<ChatMessages>
           newMessageInfo.value = newMessageForGroup(isThatRecord: true);
           if (!mounted) return;
 
-          await MessageForGroupChatCubit.get(context).sendMessage(
-              messageInfo: newMessageForGroup(isThatRecord: true),
-              recordFile: soundFile);
+          await MessageForGroupChatCubit.get(context)
+              .sendMessage(messageInfo: newMessageForGroup(isThatRecord: true), recordFile: soundFile);
           if (!mounted) return;
           updateGroupChat();
         } else {
           newMessageInfo.value = newMessage(isThatRecord: true);
 
-          await messageCubit.sendMessage(
-              messageInfo: newMessage(isThatRecord: true),
-              recordFile: soundFile);
+          await messageCubit.sendMessage(messageInfo: newMessage(isThatRecord: true), recordFile: soundFile);
         }
         newMessageInfo.value = null;
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -862,8 +766,7 @@ class _ChatMessagesState extends State<ChatMessages>
     Message lastMessage = MessageForGroupChatCubit.getLastMessage(context);
     messageDetails.lastMessage = lastMessage;
     isGroupIdEmpty = messageDetails.lastMessage?.chatOfGroupId.isEmpty ?? true;
-    myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context) ??
-        UserInfoCubit.getMyPersonalInfo(context);
+    myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context) ?? UserInfoCubit.getMyPersonalInfo(context);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {});
@@ -904,15 +807,13 @@ class _ChatMessagesState extends State<ChatMessages>
           visible: appearIconsValue,
           child: ValueListenableBuilder(
             valueListenable: _textController,
-            builder: (context, TextEditingController textValue, child) =>
-                TextFormField(
+            builder: (context, TextEditingController textValue, child) => TextFormField(
               style: Theme.of(context).textTheme.bodyLarge,
               keyboardType: TextInputType.multiline,
               cursorColor: ColorManager.teal,
               maxLines: null,
               decoration: InputDecoration.collapsed(
-                  hintText: StringsManager.messageP.tr,
-                  hintStyle: const TextStyle(color: ColorManager.grey)),
+                  hintText: StringsManager.messageP.tr, hintStyle: const TextStyle(color: ColorManager.grey)),
               autofocus: false,
               controller: textValue,
               onChanged: (e) => setState(() {}),
@@ -924,12 +825,10 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  Widget sendButton(
-      MessageCubit messageCubit, TextEditingController textValue) {
+  Widget sendButton(MessageCubit messageCubit, TextEditingController textValue) {
     return ValueListenableBuilder(
       valueListenable: appearIcons,
-      builder: (context, bool appearIconsValue, child) =>
-          ValueListenableBuilder(
+      builder: (context, bool appearIconsValue, child) => ValueListenableBuilder(
         valueListenable: isSending,
         builder: (context, bool isSendingValue, child) => Visibility(
           visible: appearIconsValue,
@@ -940,12 +839,10 @@ class _ChatMessagesState extends State<ChatMessages>
               isSending.value = true;
 
               if (_textController.value.text.isNotEmpty) {
-                bool isThatGroup =
-                    messageDetails.lastMessage?.isThatGroup ?? false;
+                bool isThatGroup = messageDetails.lastMessage?.isThatGroup ?? false;
 
                 if (messageDetails.isThatGroupChat || isThatGroup) {
-                  await MessageForGroupChatCubit.get(context)
-                      .sendMessage(messageInfo: newMessageForGroup());
+                  await MessageForGroupChatCubit.get(context).sendMessage(messageInfo: newMessageForGroup());
                   if (!mounted) return;
                   updateGroupChat();
                 } else {
@@ -977,16 +874,13 @@ class _ChatMessagesState extends State<ChatMessages>
       child: SvgPicture.asset(
         "assets/icons/sticker.svg",
         height: 25,
-        colorFilter:
-            ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
       ),
     );
   }
 
-  Future<void> onSelectImage(
-      MessageCubit messageCubit, ImageSource source) async {
-    SelectedImagesDetails? pickImage =
-        await CustomImagePickerPlus.pickImage(context, source: source);
+  Future<void> onSelectImage(MessageCubit messageCubit, ImageSource source) async {
+    SelectedImagesDetails? pickImage = await CustomImagePickerPlus.pickImage(context, source: source);
     if (pickImage != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         setState(() => isMessageLoaded.value = true);
@@ -997,24 +891,18 @@ class _ChatMessagesState extends State<ChatMessages>
       bool isThatGroup = messageDetails.lastMessage?.isThatGroup ?? false;
 
       if (messageDetails.isThatGroupChat || isThatGroup) {
-        newMessageInfo.value =
-            newMessageForGroup(blurHash: blurHash, isThatImage: true);
+        newMessageInfo.value = newMessageForGroup(blurHash: blurHash, isThatImage: true);
         newMessageInfo.value?.localImage = byte;
 
-        await MessageForGroupChatCubit.get(context).sendMessage(
-            messageInfo:
-                newMessageForGroup(blurHash: blurHash, isThatImage: true),
-            pathOfPhoto: byte);
+        await MessageForGroupChatCubit.get(context)
+            .sendMessage(messageInfo: newMessageForGroup(blurHash: blurHash, isThatImage: true), pathOfPhoto: byte);
 
         if (!mounted) return;
         updateGroupChat();
       } else {
-        newMessageInfo.value =
-            newMessage(blurHash: blurHash, isThatImage: true);
+        newMessageInfo.value = newMessage(blurHash: blurHash, isThatImage: true);
         newMessageInfo.value?.localImage = byte;
-        messageCubit.sendMessage(
-            messageInfo: newMessage(blurHash: blurHash, isThatImage: true),
-            pathOfPhoto: byte);
+        messageCubit.sendMessage(messageInfo: newMessage(blurHash: blurHash, isThatImage: true), pathOfPhoto: byte);
       }
 
       if (!mounted) return;
@@ -1031,8 +919,7 @@ class _ChatMessagesState extends State<ChatMessages>
       child: SvgPicture.asset(
         isThatMobile ? IconsAssets.gallery : IconsAssets.galleryBold,
         height: isThatMobile ? 23 : 26,
-        colorFilter:
-            ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
       ),
     );
   }
@@ -1061,10 +948,7 @@ class _ChatMessagesState extends State<ChatMessages>
     );
   }
 
-  Message newMessage(
-      {String blurHash = "",
-      bool isThatImage = false,
-      bool isThatRecord = false}) {
+  Message newMessage({String blurHash = "", bool isThatImage = false, bool isThatRecord = false}) {
     dynamic userId = receiversInfo[0].userId;
     return Message(
       datePublished: DateReformat.dateOfNow(),
@@ -1108,10 +992,7 @@ class _ChatMessagesState extends State<ChatMessages>
         ),
       );
     } else {
-      return CircleAvatarOfProfileImage(
-          userInfo: receiversInfo[0],
-          bodyHeight: 950,
-          showColorfulCircle: false);
+      return CircleAvatarOfProfileImage(userInfo: receiversInfo[0], bodyHeight: 950, showColorfulCircle: false);
     }
   }
 
@@ -1121,20 +1002,14 @@ class _ChatMessagesState extends State<ChatMessages>
       children: [
         Text(
           receiversInfo[0].userName,
-          style: TextStyle(
-              color: Theme.of(context).focusColor,
-              fontSize: 14,
-              fontWeight: FontWeight.w300),
+          style: TextStyle(color: Theme.of(context).focusColor, fontSize: 14, fontWeight: FontWeight.w300),
         ),
         const SizedBox(
           width: 10,
         ),
         Text(
           "Instagram",
-          style: TextStyle(
-              color: Theme.of(context).focusColor,
-              fontSize: 14,
-              fontWeight: FontWeight.w300),
+          style: TextStyle(color: Theme.of(context).focusColor, fontSize: 14, fontWeight: FontWeight.w300),
         ),
       ],
     );
@@ -1156,13 +1031,8 @@ class _ChatMessagesState extends State<ChatMessages>
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 2.0),
                 child: Text(
-                  index == 2
-                      ? "....."
-                      : "${receiversInfo[index].name}${length > 1 ? ',' : ""}",
-                  style: TextStyle(
-                      color: Theme.of(context).focusColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400),
+                  index == 2 ? "....." : "${receiversInfo[index].name}${length > 1 ? ',' : ""}",
+                  style: TextStyle(color: Theme.of(context).focusColor, fontSize: 16, fontWeight: FontWeight.w400),
                 ),
               );
             },
@@ -1199,8 +1069,7 @@ class _ChatMessagesState extends State<ChatMessages>
       },
       child: Text(
         StringsManager.viewProfile.tr,
-        style: TextStyle(
-            color: Theme.of(context).focusColor, fontWeight: FontWeight.normal),
+        style: TextStyle(color: Theme.of(context).focusColor, fontWeight: FontWeight.normal),
       ),
     );
   }

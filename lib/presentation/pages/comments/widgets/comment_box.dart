@@ -66,8 +66,7 @@ class _CommentBoxState extends State<CommentBox> {
         Padding(
           padding: const EdgeInsetsDirectional.only(start: 8, end: 8),
           child: Row(
-            crossAxisAlignment: widget.expandCommentBox ||
-                    widget.textController.text.length < 70
+            crossAxisAlignment: widget.expandCommentBox || widget.textController.text.length < 70
                 ? CrossAxisAlignment.center
                 : CrossAxisAlignment.end,
             children: [
@@ -85,15 +84,13 @@ class _CommentBoxState extends State<CommentBox> {
                   maxLines: widget.expandCommentBox ? 1 : null,
                   decoration: InputDecoration.collapsed(
                       hintText: StringsManager.addComment.tr,
-                      hintStyle: TextStyle(
-                          color: Theme.of(context).bottomAppBarTheme.color!)),
+                      hintStyle: TextStyle(color: Theme.of(context).bottomAppBarTheme.color!)),
                   autofocus: false,
                   controller: widget.textController,
                   onChanged: (e) => setState(() {}),
                 ),
               ),
-              if (widget.textController.text.isEmpty &&
-                  !widget.isThatCommentScreen) ...[
+              if (widget.textController.text.isEmpty && !widget.isThatCommentScreen) ...[
                 GestureDetector(
                   onTap: () {
                     setState(() {
@@ -116,20 +113,16 @@ class _CommentBoxState extends State<CommentBox> {
               ] else ...[
                 ValueListenableBuilder(
                   valueListenable: widget.selectedCommentInfo,
-                  builder: (context, Comment? selectedComment, child) =>
-                      InkWell(
+                  builder: (context, Comment? selectedComment, child) => InkWell(
                     onTap: () {
                       if (widget.textController.text.isNotEmpty) {
-                        postTheComment(
-                            widget.userPersonalInfo, selectedComment);
+                        postTheComment(widget.userPersonalInfo, selectedComment);
                       }
                     },
                     child: Text(
                       StringsManager.post.tr,
                       style: getNormalStyle(
-                          color: widget.textController.text.isNotEmpty
-                              ? ColorManager.blue
-                              : ColorManager.lightBlue),
+                          color: widget.textController.text.isNotEmpty ? ColorManager.blue : ColorManager.lightBlue),
                     ),
                   ),
                 ),
@@ -141,17 +134,13 @@ class _CommentBoxState extends State<CommentBox> {
     );
   }
 
-  Future<void> postTheComment(
-      UserPersonalInfo myPersonalInfo, Comment? selectedComment) async {
+  Future<void> postTheComment(UserPersonalInfo myPersonalInfo, Comment? selectedComment) async {
     final whitespaceRE = RegExp(r"\s+");
-    String textWithOneSpaces =
-        widget.textController.text.replaceAll(whitespaceRE, " ");
+    String textWithOneSpaces = widget.textController.text.replaceAll(whitespaceRE, " ");
 
     if (selectedComment == null) {
-      CommentsInfoCubit commentsInfoCubit =
-          BlocProvider.of<CommentsInfoCubit>(context);
-      await commentsInfoCubit.addComment(
-          commentInfo: newCommentInfo(myPersonalInfo, textWithOneSpaces));
+      CommentsInfoCubit commentsInfoCubit = BlocProvider.of<CommentsInfoCubit>(context);
+      await commentsInfoCubit.addComment(commentInfo: newCommentInfo(myPersonalInfo, textWithOneSpaces));
       widget.makeSelectedCommentNullable(true);
 
       /// Just to recount the number of comments in the previous page
@@ -162,30 +151,25 @@ class _CommentBoxState extends State<CommentBox> {
         });
       }
     } else {
-      Comment replyInfo = newReplyInfo(
-          selectedComment, myPersonalInfo.userId, textWithOneSpaces);
-      await ReplyInfoCubit.get(context)
-          .replyOnThisComment(replyInfo: replyInfo);
+      Comment replyInfo = newReplyInfo(selectedComment, myPersonalInfo.userId, textWithOneSpaces);
+      await ReplyInfoCubit.get(context).replyOnThisComment(replyInfo: replyInfo);
       widget.makeSelectedCommentNullable(false);
       if (!mounted) return;
-      await PostCubit.get(context)
-          .updatePostInfo(postInfo: widget.postInfo.value);
+      await PostCubit.get(context).updatePostInfo(postInfo: widget.postInfo.value);
     }
     if (!mounted) return;
 
-    BlocProvider.of<NotificationCubit>(context).createNotification(
-        newNotification: createNotification(textWithOneSpaces, myPersonalInfo));
+    BlocProvider.of<NotificationCubit>(context)
+        .createNotification(newNotification: createNotification(textWithOneSpaces, myPersonalInfo));
     setState(() {});
   }
 
-  CustomNotification createNotification(
-      String textWithOneSpaces, UserPersonalInfo myPersonalInfo) {
+  CustomNotification createNotification(String textWithOneSpaces, UserPersonalInfo myPersonalInfo) {
     Post postInfo = widget.postInfo.value;
     return CustomNotification(
       text: "commented: $textWithOneSpaces",
       postId: postInfo.postUid,
-      postImageUrl:
-          postInfo.isThatImage ? postInfo.postUrl : postInfo.coverOfVideoUrl,
+      postImageUrl: postInfo.isThatImage ? postInfo.postUrl : postInfo.coverOfVideoUrl,
       time: DateReformat.dateOfNow(),
       senderId: myPersonalId,
       receiverId: widget.postInfo.value.publisherId,
@@ -197,30 +181,25 @@ class _CommentBoxState extends State<CommentBox> {
   }
 
   Container customDivider() => Container(
-      margin: const EdgeInsetsDirectional.only(bottom: 8),
-      color: Colors.grey,
-      width: double.infinity,
-      height: 0.2);
+      margin: const EdgeInsetsDirectional.only(bottom: 8), color: Colors.grey, width: double.infinity, height: 0.2);
 
   Widget textOfEmoji(String emoji) {
     return GestureDetector(
       onTap: () {
         setState(() {
           widget.textController.text = widget.textController.text + emoji;
-          widget.textController.selection = TextSelection.fromPosition(
-              TextPosition(offset: widget.textController.text.length));
+          widget.textController.selection =
+              TextSelection.fromPosition(TextPosition(offset: widget.textController.text.length));
         });
       },
       child: Text(
         emoji,
-        style:
-            getNormalStyle(fontSize: 24, color: Theme.of(context).focusColor),
+        style: getNormalStyle(fontSize: 24, color: Theme.of(context).focusColor),
       ),
     );
   }
 
-  Comment newCommentInfo(
-      UserPersonalInfo myPersonalInfo, String textWithOneSpaces) {
+  Comment newCommentInfo(UserPersonalInfo myPersonalInfo, String textWithOneSpaces) {
     return Comment(
       theComment: textWithOneSpaces,
       whoCommentId: myPersonalInfo.userId,
@@ -231,8 +210,7 @@ class _CommentBoxState extends State<CommentBox> {
     );
   }
 
-  Comment newReplyInfo(
-      Comment commentInfo, String myPersonalId, String textWithOneSpaces) {
+  Comment newReplyInfo(Comment commentInfo, String myPersonalId, String textWithOneSpaces) {
     return Comment(
       datePublished: DateReformat.dateOfNow(),
       parentCommentId: commentInfo.parentCommentId,

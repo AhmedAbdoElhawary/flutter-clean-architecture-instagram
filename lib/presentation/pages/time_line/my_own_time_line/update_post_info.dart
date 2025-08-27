@@ -41,12 +41,8 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final bodyHeight = mediaQuery.size.height -
-        AppBar().preferredSize.height -
-        mediaQuery.padding.top;
-    return Scaffold(
-        appBar: isThatMobile ? buildAppBar(context) : null,
-        body: buildSizedBox(bodyHeight, context));
+    final bodyHeight = mediaQuery.size.height - AppBar().preferredSize.height - mediaQuery.padding.top;
+    return Scaffold(appBar: isThatMobile ? buildAppBar(context) : null, body: buildSizedBox(bodyHeight, context));
   }
 
   AppBar buildAppBar(BuildContext context) {
@@ -60,14 +56,12 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
           },
           icon: SvgPicture.asset(
             IconsAssets.cancelIcon,
-            colorFilter:
-                ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+            colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
             height: 27,
           )),
       title: Text(
         StringsManager.editInfo.tr,
-        style:
-            getMediumStyle(color: Theme.of(context).focusColor, fontSize: 20),
+        style: getMediumStyle(color: Theme.of(context).focusColor, fontSize: 20),
       ),
       actions: [actionsWidgets()],
     );
@@ -76,17 +70,12 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
   Widget actionsWidgets() {
     return BlocBuilder<PostCubit, PostState>(builder: (context, state) {
       return state is CubitUpdatePostLoading
-          ? Transform.scale(
-              scaleY: 1,
-              scaleX: 1.2,
-              child: const CustomCircularProgress(ColorManager.blue))
+          ? Transform.scale(scaleY: 1, scaleX: 1.2, child: const CustomCircularProgress(ColorManager.blue))
           : IconButton(
               onPressed: () async {
                 Post updatedPostInfo = widget.oldPostInfo;
                 updatedPostInfo.caption = controller.text;
-                await PostCubit.get(context)
-                    .updatePostInfo(postInfo: updatedPostInfo)
-                    .then((value) {
+                await PostCubit.get(context).updatePostInfo(postInfo: updatedPostInfo).then((value) {
                   if (context.mounted) Navigator.maybePop(context);
                 });
               },
@@ -119,8 +108,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                     const SizedBox(width: 5),
                     InkWell(
                         onTap: () => pushToProfilePage(widget.oldPostInfo),
-                        child: NameOfCircleAvatar(
-                            widget.oldPostInfo.publisherInfo!.name, false)),
+                        child: NameOfCircleAvatar(widget.oldPostInfo.publisherInfo!.name, false)),
                   ],
                 ),
               ),
@@ -130,8 +118,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                 child: TextFormField(
                   controller: controller,
                   cursorColor: ColorManager.teal,
-                  style: getNormalStyle(
-                      color: Theme.of(context).focusColor, fontSize: 15),
+                  style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
                   decoration: InputDecoration(
                     hintText: StringsManager.writeACaption.tr,
                     focusedBorder: const UnderlineInputBorder(
@@ -140,8 +127,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                     enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: ColorManager.blue),
                     ),
-                    hintStyle: TextStyle(
-                        color: Theme.of(context).bottomAppBarTheme.color!),
+                    hintStyle: TextStyle(color: Theme.of(context).bottomAppBarTheme.color!),
                   ),
                 ),
               ),
@@ -150,16 +136,15 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
     );
   }
 
-  Future pushToProfilePage(Post postInfo) => Go(context).push(
-      page: WhichProfilePage(userId: postInfo.publisherId), withoutRoot: false);
+  Future pushToProfilePage(Post postInfo) =>
+      Go(context).push(page: WhichProfilePage(userId: postInfo.publisherId), withoutRoot: false);
 
   void _updateImageIndex(int index, _) {
     initPosition.value = index;
   }
 
   List<Widget> imageOfPost(Post postInfo, double bodyHeight) {
-    String postUrl =
-        postInfo.postUrl.isNotEmpty ? postInfo.postUrl : postInfo.imagesUrls[0];
+    String postUrl = postInfo.postUrl.isNotEmpty ? postInfo.postUrl : postInfo.imagesUrls[0];
     bool isThatImage = postInfo.isThatImage;
     return [
       GestureDetector(
@@ -197,8 +182,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
             children: [
               ValueListenableBuilder(
                 valueListenable: initPosition,
-                builder: (BuildContext context, int value, Widget? child) =>
-                    PointsScrollBar(
+                builder: (BuildContext context, int value, Widget? child) => PointsScrollBar(
                   photoCount: postInfo.imagesUrls.length,
                   activePhotoIndex: value,
                 ),

@@ -19,8 +19,7 @@ class SearchAboutUserPage extends StatefulWidget {
 }
 
 class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
-  final ValueNotifier<TextEditingController> _textController =
-      ValueNotifier(TextEditingController());
+  final ValueNotifier<TextEditingController> _textController = ValueNotifier(TextEditingController());
 
   @override
   void dispose() {
@@ -31,17 +30,13 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final bodyHeight = mediaQuery.size.height -
-        AppBar().preferredSize.height -
-        mediaQuery.padding.top;
+    final bodyHeight = mediaQuery.size.height - AppBar().preferredSize.height - mediaQuery.padding.top;
 
     return Scaffold(
       appBar: isThatMobile ? buildAppBar(context) : null,
       body: BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
-        bloc: BlocProvider.of<SearchAboutUserBloc>(context)
-          ..add(FindSpecificUser(_textController.value.text)),
-        buildWhen: (previous, current) =>
-            previous != current && (current is SearchAboutUserBlocLoaded),
+        bloc: BlocProvider.of<SearchAboutUserBloc>(context)..add(FindSpecificUser(_textController.value.text)),
+        buildWhen: (previous, current) => previous != current && (current is SearchAboutUserBlocLoaded),
         builder: (context, state) {
           if (state is SearchAboutUserBlocLoaded) {
             List<UserPersonalInfo> stateUsersInfo = state.users;
@@ -52,29 +47,18 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
 
                   return ListTile(
                     title: Text(stateUsersInfo[index].userName,
-                        style: getNormalStyle(
-                            fontSize: 15, color: Theme.of(context).focusColor)),
+                        style: getNormalStyle(fontSize: 15, color: Theme.of(context).focusColor)),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(stateUsersInfo[index].name,
-                            style: getNormalStyle(
-                                fontSize: 13,
-                                color: Theme.of(context).disabledColor)),
-                        if (stateUsersInfo[index]
-                            .followerPeople
-                            .contains(myPersonalId)) ...[
+                            style: getNormalStyle(fontSize: 13, color: Theme.of(context).disabledColor)),
+                        if (stateUsersInfo[index].followerPeople.contains(myPersonalId)) ...[
                           Text(StringsManager.youFollowHim.tr,
-                              style: getNormalStyle(
-                                  fontSize: 10,
-                                  color: Theme.of(context).disabledColor)),
-                        ] else if (stateUsersInfo[index]
-                            .followedPeople
-                            .contains(myPersonalId)) ...[
+                              style: getNormalStyle(fontSize: 10, color: Theme.of(context).disabledColor)),
+                        ] else if (stateUsersInfo[index].followedPeople.contains(myPersonalId)) ...[
                           Text(StringsManager.followers.tr,
-                              style: getNormalStyle(
-                                  fontSize: 10,
-                                  color: Theme.of(context).disabledColor)),
+                              style: getNormalStyle(fontSize: 10, color: Theme.of(context).disabledColor)),
                         ],
                       ],
                     ),
@@ -87,18 +71,15 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
                       ),
                     ),
                     onTap: () {
-                      Go(context).push(
-                          page: WhichProfilePage(
-                              userId: stateUsersInfo[index].userId),
-                          withoutRoot: false);
+                      Go(context)
+                          .push(page: WhichProfilePage(userId: stateUsersInfo[index].userId), withoutRoot: false);
                     },
                   );
                 },
                 itemCount:
                     //  _textController.text.isEmpty?0:
                     stateUsersInfo.length,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(
+                separatorBuilder: (BuildContext context, int index) => const SizedBox(
                       height: 10,
                     ));
           } else {
@@ -117,9 +98,7 @@ class _SearchAboutUserPageState extends State<SearchAboutUserPage> {
       title: Container(
         width: double.infinity,
         height: 35,
-        decoration: BoxDecoration(
-            color: Theme.of(context).shadowColor,
-            borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(color: Theme.of(context).shadowColor, borderRadius: BorderRadius.circular(10)),
         child: TextFormField(
           style: Theme.of(context).textTheme.bodyLarge,
           controller: _textController.value,

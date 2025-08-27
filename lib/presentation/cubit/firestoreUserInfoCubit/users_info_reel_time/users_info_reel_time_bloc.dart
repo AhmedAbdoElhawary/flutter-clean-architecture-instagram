@@ -9,24 +9,21 @@ import 'package:instagram/domain/use_cases/user/my_personal_info.dart';
 part 'users_info_reel_time_event.dart';
 part 'users_info_reel_time_state.dart';
 
-class UsersInfoReelTimeBloc
-    extends Bloc<UsersInfoReelTimeEvent, UsersInfoReelTimeState> {
+class UsersInfoReelTimeBloc extends Bloc<UsersInfoReelTimeEvent, UsersInfoReelTimeState> {
   final GetMyInfoUseCase _getMyInfoUseCase;
   final GetAllUsersUseCase _getAllUsersUseCase;
 
   UserPersonalInfo? myPersonalInfoInReelTime;
   List<UserPersonalInfo> allUsersInfoInReelTime = [];
 
-  UsersInfoReelTimeBloc(this._getMyInfoUseCase, this._getAllUsersUseCase)
-      : super(MyPersonalInfoInitial()) {
+  UsersInfoReelTimeBloc(this._getMyInfoUseCase, this._getAllUsersUseCase) : super(MyPersonalInfoInitial()) {
     on<LoadMyPersonalInfo>(_onLoadMyInfo);
     on<UpdateMyPersonalInfo>(_onUpdateMyInfo);
     on<LoadAllUsersInfoInfo>(_onLoadAllUsersInfo);
     on<UpdateAllUsersInfoInfo>(_onUpdateAllUsersInfo);
   }
 
-  static UsersInfoReelTimeBloc get(BuildContext context) =>
-      BlocProvider.of(context);
+  static UsersInfoReelTimeBloc get(BuildContext context) => BlocProvider.of(context);
 
   static UserPersonalInfo? getMyInfoInReelTime(BuildContext context) =>
       BlocProvider.of<UsersInfoReelTimeBloc>(context).myPersonalInfoInReelTime;
@@ -52,8 +49,7 @@ class UsersInfoReelTimeBloc
     myPersonalInfoInReelTime = event.myPersonalInfoInReelTime;
     isMyInfoInReelTimeReady = true;
 
-    emit(MyPersonalInfoLoaded(
-        myPersonalInfoInReelTime: event.myPersonalInfoInReelTime));
+    emit(MyPersonalInfoLoaded(myPersonalInfoInReelTime: event.myPersonalInfoInReelTime));
   }
 
   Future<void> _onLoadAllUsersInfo(
@@ -75,7 +71,6 @@ class UsersInfoReelTimeBloc
     Emitter<UsersInfoReelTimeState> emit,
   ) {
     allUsersInfoInReelTime = event.allUsersInfoInReelTime;
-    emit(AllUsersInfoLoaded(
-        allUsersInfoInReelTime: event.allUsersInfoInReelTime));
+    emit(AllUsersInfoLoaded(allUsersInfoInReelTime: event.allUsersInfoInReelTime));
   }
 }

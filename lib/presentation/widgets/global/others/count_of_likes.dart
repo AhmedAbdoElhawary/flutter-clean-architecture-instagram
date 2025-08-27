@@ -36,10 +36,8 @@ class CountOfLikes extends StatelessWidget {
           );
         }
       },
-      child: Text(
-          '$likes ${likes > 1 ? StringsManager.likes.tr : StringsManager.like.tr}',
-          textAlign: TextAlign.left,
-          style: Theme.of(context).textTheme.displayMedium),
+      child: Text('$likes ${likes > 1 ? StringsManager.likes.tr : StringsManager.like.tr}',
+          textAlign: TextAlign.left, style: Theme.of(context).textTheme.displayMedium),
     );
   }
 }

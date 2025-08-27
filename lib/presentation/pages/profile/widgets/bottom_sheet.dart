@@ -42,8 +42,7 @@ class _ListOfBodyWidgets extends StatelessWidget {
         children: <Widget>[
           SvgPicture.asset(
             IconsAssets.minusIcon,
-            colorFilter: ColorFilter.mode(
-                Theme.of(context).highlightColor, BlendMode.srcIn),
+            colorFilter: ColorFilter.mode(Theme.of(context).highlightColor, BlendMode.srcIn),
             height: 40,
           ),
           headIcon,

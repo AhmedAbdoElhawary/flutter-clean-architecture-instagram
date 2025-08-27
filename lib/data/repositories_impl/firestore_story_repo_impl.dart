@@ -9,17 +9,14 @@ import 'package:instagram/domain/repositories/story_repository.dart';
 
 class FireStoreStoryRepositoryImpl implements FirestoreStoryRepository {
   @override
-  Future<String> createStory(
-      {required Story storyInfo, required Uint8List file}) async {
+  Future<String> createStory({required Story storyInfo, required Uint8List file}) async {
     try {
       String fileName = storyInfo.isThatImage ? "jpg" : "mp4";
 
-      String postUrl = await FirebaseStoragePost.uploadData(
-          data: file, folderName: fileName);
+      String postUrl = await FirebaseStoragePost.uploadData(data: file, folderName: fileName);
       storyInfo.storyUrl = postUrl;
       String storyUid = await FireStoreStory.createStory(storyInfo);
-      await FireStoreUser.updateUserStories(
-          userId: storyInfo.publisherId, storyId: storyUid);
+      await FireStoreUser.updateUserStories(userId: storyInfo.publisherId, storyId: storyUid);
       return storyUid;
     } catch (e) {
       return Future.error(e.toString());
@@ -27,12 +24,10 @@ class FireStoreStoryRepositoryImpl implements FirestoreStoryRepository {
   }
 
   @override
-  Future<List<UserPersonalInfo>> getStoriesInfo(
-      {required List<dynamic> usersIds}) async {
+  Future<List<UserPersonalInfo>> getStoriesInfo({required List<dynamic> usersIds}) async {
     try {
       List<UserPersonalInfo> usersInfo =
-          await FireStoreUser.getSpecificUsersInfo(
-              usersIds: usersIds, userUid: myPersonalId, fieldName: 'stories');
+          await FireStoreUser.getSpecificUsersInfo(usersIds: usersIds, userUid: myPersonalId, fieldName: 'stories');
       return await FireStoreStory.getStoriesInfo(usersInfo);
     } catch (e) {
       return Future.error(e.toString());
@@ -40,8 +35,7 @@ class FireStoreStoryRepositoryImpl implements FirestoreStoryRepository {
   }
 
   @override
-  Future<UserPersonalInfo> getSpecificStoriesInfo(
-      {required UserPersonalInfo userInfo}) async {
+  Future<UserPersonalInfo> getSpecificStoriesInfo({required UserPersonalInfo userInfo}) async {
     try {
       return (await FireStoreStory.getStoriesInfo([userInfo]))[0];
     } catch (e) {

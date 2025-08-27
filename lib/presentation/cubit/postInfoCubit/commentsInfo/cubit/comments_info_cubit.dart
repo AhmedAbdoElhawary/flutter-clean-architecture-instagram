@@ -12,11 +12,9 @@ class CommentsInfoCubit extends Cubit<CommentsInfoState> {
   final AddCommentUseCase _addCommentUseCase;
   List<Comment> commentsOfThePost = [];
 
-  CommentsInfoCubit(this._getSpecificCommentsUseCase, this._addCommentUseCase)
-      : super(CommentsInfoInitial());
+  CommentsInfoCubit(this._getSpecificCommentsUseCase, this._addCommentUseCase) : super(CommentsInfoInitial());
 
-  static CommentsInfoCubit get(BuildContext context) =>
-      BlocProvider.of(context);
+  static CommentsInfoCubit get(BuildContext context) => BlocProvider.of(context);
 
   Future<void> getSpecificComments({required String postId}) async {
     emit(CubitCommentsInfoLoading());
@@ -30,9 +28,7 @@ class CommentsInfoCubit extends Cubit<CommentsInfoState> {
 
   Future<void> addComment({required Comment commentInfo}) async {
     emit(CubitCommentsInfoLoading());
-    await _addCommentUseCase
-        .call(params: commentInfo)
-        .then((updatedCommentInfo) {
+    await _addCommentUseCase.call(params: commentInfo).then((updatedCommentInfo) {
       commentsOfThePost = [updatedCommentInfo] + commentsOfThePost;
       emit(CubitCommentsInfoLoaded(commentsOfThePost));
     }).catchError((e) {

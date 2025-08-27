@@ -39,10 +39,8 @@ class SharedMessage extends StatelessWidget {
       child: SizedBox(
         width: 240,
         child: BlocBuilder<UserInfoCubit, UserInfoState>(
-            buildWhen: (previous, current) =>
-                previous != current && current is CubitUserLoaded,
-            bloc: UserInfoCubit.get(context)
-              ..getUserInfo(messageInfo.senderId, isThatMyPersonalId: false),
+            buildWhen: (previous, current) => previous != current && current is CubitUserLoaded,
+            bloc: UserInfoCubit.get(context)..getUserInfo(messageInfo.senderId, isThatMyPersonalId: false),
             builder: (context, state) {
               UserPersonalInfo? userInfo;
               if (state is CubitUserLoaded) userInfo = state.userPersonalInfo;
@@ -100,8 +98,7 @@ class SharedMessage extends StatelessWidget {
 
   Widget _createPhotoTitle(BuildContext context, UserPersonalInfo? userInfo) {
     return Container(
-      padding: const EdgeInsetsDirectional.only(
-          bottom: 5, top: 5, end: 10, start: 15),
+      padding: const EdgeInsetsDirectional.only(bottom: 5, top: 5, end: 10, start: 15),
       height: 50,
       width: double.infinity,
       color: Theme.of(context).textTheme.titleSmall!.color,

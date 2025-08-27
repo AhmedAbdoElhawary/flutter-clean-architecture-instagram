@@ -7,18 +7,15 @@ import 'package:instagram/domain/use_cases/user/search_about_user.dart';
 part 'search_about_user_event.dart';
 part 'search_about_user_state.dart';
 
-class SearchAboutUserBloc
-    extends Bloc<SearchAboutUserEvent, SearchAboutUserState> {
+class SearchAboutUserBloc extends Bloc<SearchAboutUserEvent, SearchAboutUserState> {
   final SearchAboutUserUseCase _searchAboutUserUseCase;
 
-  SearchAboutUserBloc(this._searchAboutUserUseCase)
-      : super(SearchAboutUserInitial()) {
+  SearchAboutUserBloc(this._searchAboutUserUseCase) : super(SearchAboutUserInitial()) {
     on<FindSpecificUser>(_onFindSpecificUser);
     on<UpdateUser>(_onUpdateUser);
   }
 
-  static SearchAboutUserBloc get(BuildContext context) =>
-      BlocProvider.of(context);
+  static SearchAboutUserBloc get(BuildContext context) => BlocProvider.of(context);
 
   Future<void> _onFindSpecificUser(
     FindSpecificUser event,

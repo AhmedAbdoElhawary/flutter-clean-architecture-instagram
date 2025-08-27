@@ -52,9 +52,7 @@ class _ImagesSliderState extends State<ImagesSlider> {
         aspectRatio: widget.aspectRatio,
         child: ValueListenableBuilder(
           valueListenable: initPosition,
-          builder:
-              (BuildContext context, int initPositionValue, Widget? child) =>
-                  Stack(
+          builder: (BuildContext context, int initPositionValue, Widget? child) => Stack(
             alignment: Alignment.bottomCenter,
             children: [
               CarouselSlider.builder(
@@ -105,16 +103,14 @@ class _ImagesSliderState extends State<ImagesSlider> {
                   GestureDetector(
                       onTap: () {
                         initPosition.value--;
-                        _controller.animateToPage(initPosition.value,
-                            curve: Curves.easeInOut);
+                        _controller.animateToPage(initPosition.value, curve: Curves.easeInOut);
                       },
                       child: const ArrowJump()),
                 if (initPositionValue < widget.imagesUrls.length - 1)
                   GestureDetector(
                     onTap: () {
                       initPosition.value++;
-                      _controller.animateToPage(initPosition.value,
-                          curve: Curves.easeInOut);
+                      _controller.animateToPage(initPosition.value, curve: Curves.easeInOut);
                     },
                     child: const ArrowJump(isThatBack: false),
                   ),

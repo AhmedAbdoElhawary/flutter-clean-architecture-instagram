@@ -26,8 +26,7 @@ class CustomImagePickerPlus {
   }
 
   static Future<SelectedImagesDetails?> pickImage(BuildContext context,
-      {ImageSource source = ImageSource.gallery,
-      bool isThatStory = false}) async {
+      {ImageSource source = ImageSource.gallery, bool isThatStory = false}) async {
     ImagePickerPlus picker = ImagePickerPlus(context);
     SelectedImagesDetails? details = await picker.pickImage(
       source: source,
@@ -41,8 +40,7 @@ class CustomImagePickerPlus {
     return details;
   }
 
-  static Future<void> pickVideo(BuildContext context,
-      {ImageSource source = ImageSource.both}) async {
+  static Future<void> pickVideo(BuildContext context, {ImageSource source = ImageSource.both}) async {
     ImagePickerPlus picker = ImagePickerPlus(context);
 
     await picker.pickVideo(
@@ -59,8 +57,7 @@ class CustomImagePickerPlus {
     );
   }
 
-  static SliverGridDelegateWithFixedCrossAxisCount _sliverGridDelegate(
-      bool isThatStory) {
+  static SliverGridDelegateWithFixedCrossAxisCount _sliverGridDelegate(bool isThatStory) {
     return SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: isThatStory ? 3 : 4,
       crossAxisSpacing: 1.7,
@@ -90,8 +87,7 @@ class CustomImagePickerPlus {
     );
   }
 
-  static Future<void> moveToCreationPage(
-      BuildContext context, SelectedImagesDetails details) async {
+  static Future<void> moveToCreationPage(BuildContext context, SelectedImagesDetails details) async {
     for (final selectedFiles in details.selectedFiles) {
       if (!selectedFiles.isThatImage) continue;
       File file = selectedFiles.selectedFile;

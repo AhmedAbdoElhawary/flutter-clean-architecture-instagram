@@ -24,15 +24,12 @@ class _PopupCallingState extends State<PopupCalling> {
       bloc: UsersInfoReelTimeBloc.get(context)..add(LoadMyPersonalInfo()),
       builder: (context, state) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (state is MyPersonalInfoLoaded &&
-              !amICalling &&
-              state.myPersonalInfoInReelTime.channelId.isNotEmpty) {
+          if (state is MyPersonalInfoLoaded && !amICalling && state.myPersonalInfoInReelTime.channelId.isNotEmpty) {
             if (!isHeMoved) {
               isHeMoved = true;
               Go(context).push(
-                  page: CallingRingingPage(
-                      channelId: state.myPersonalInfoInReelTime.channelId,
-                      clearMoving: clearMoving),
+                  page:
+                      CallingRingingPage(channelId: state.myPersonalInfoInReelTime.channelId, clearMoving: clearMoving),
                   withoutRoot: false);
             }
           }

@@ -41,25 +41,20 @@ class _NotificationCardInfoState extends State<NotificationCardInfo> {
 
   @override
   Widget build(BuildContext context) {
-    String reformatDate =
-        DateReformat.oneDigitFormat(widget.notificationInfo.time);
+    String reformatDate = DateReformat.oneDigitFormat(widget.notificationInfo.time);
     List<String> hashOfUserName = hashUserName(widget.notificationInfo.text);
     return InkWell(
       onTap: () async {
-        await Go(context).push(
-            page: WhichProfilePage(userId: widget.notificationInfo.senderId),
-            withoutRoot: false);
+        await Go(context).push(page: WhichProfilePage(userId: widget.notificationInfo.senderId), withoutRoot: false);
       },
       child: Padding(
-        padding: EdgeInsetsDirectional.only(
-            start: 15, top: 15, end: 15, bottom: !isThatMobile ? 5 : 0),
+        padding: EdgeInsetsDirectional.only(start: 15, top: 15, end: 15, bottom: !isThatMobile ? 5 : 0),
         child: Row(
           children: [
             CircleAvatar(
               backgroundColor: ColorManager.customGrey,
               backgroundImage: profileImage.isNotEmpty
-                  ? CachedNetworkImageProvider(profileImage,
-                      maxWidth: 165, maxHeight: 165)
+                  ? CachedNetworkImageProvider(profileImage, maxWidth: 165, maxHeight: 165)
                   : null,
               radius: 25,
               child: profileImage.isEmpty
@@ -89,10 +84,8 @@ class _NotificationCardInfoState extends State<NotificationCardInfo> {
                         style: getNormalStyle(color: ColorManager.blue),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () async {
-                            String userName =
-                                hashOfUserName[1].replaceAll('@', '');
-                            await Go(context).push(
-                                page: WhichProfilePage(userName: userName));
+                            String userName = hashOfUserName[1].replaceAll('@', '');
+                            await Go(context).push(page: WhichProfilePage(userName: userName));
                           },
                       ),
                       TextSpan(
@@ -114,13 +107,11 @@ class _NotificationCardInfoState extends State<NotificationCardInfo> {
               ),
             ),
             const SizedBox(width: 10),
-            if (widget.notificationInfo.isThatPost &&
-                widget.notificationInfo.postImageUrl.isNotEmpty)
+            if (widget.notificationInfo.isThatPost && widget.notificationInfo.postImageUrl.isNotEmpty)
               GestureDetector(
                 onTap: () {
                   String appBarText;
-                  if (widget.notificationInfo.isThatPost &&
-                      widget.notificationInfo.isThatLike) {
+                  if (widget.notificationInfo.isThatPost && widget.notificationInfo.isThatLike) {
                     appBarText = StringsManager.post.tr;
                   } else {
                     appBarText = StringsManager.comments.tr;

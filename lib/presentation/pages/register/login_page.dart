@@ -56,8 +56,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget blocBuilder() {
     return ValueListenableBuilder(
       valueListenable: isToastShowed,
-      builder: (context, bool isToastShowedValue, child) =>
-          BlocListener<FirebaseAuthCubit, FirebaseAuthCubitState>(
+      builder: (context, bool isToastShowedValue, child) => BlocListener<FirebaseAuthCubit, FirebaseAuthCubitState>(
         listenWhen: (previous, current) => previous != current,
         listener: (context, state) {
           if (state is CubitAuthConfirmed) {
@@ -90,11 +89,9 @@ class _LoginPageState extends State<LoginPage> {
 
     return ValueListenableBuilder(
       valueListenable: isUserIdReady,
-      builder: (context, bool isUserIdReadyValue, child) =>
-          ValueListenableBuilder(
+      builder: (context, bool isUserIdReadyValue, child) => ValueListenableBuilder(
         valueListenable: validateEmail,
-        builder: (context, bool validateEmailValue, child) =>
-            ValueListenableBuilder(
+        builder: (context, bool validateEmailValue, child) => ValueListenableBuilder(
           valueListenable: validatePassword,
           builder: (context, bool validatePasswordValue, child) {
             bool validate = validatePasswordValue && validateEmailValue;
@@ -107,9 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                 if (validate) {
                   isUserIdReady.value = false;
                   isToastShowed.value = false;
-                  await authCubit.logIn(RegisteredUser(
-                      email: emailController.text,
-                      password: passwordController.text));
+                  await authCubit.logIn(RegisteredUser(email: emailController.text, password: passwordController.text));
                 }
               },
             );

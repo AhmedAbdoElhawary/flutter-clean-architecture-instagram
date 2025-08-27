@@ -27,22 +27,16 @@ class PopupFollowCard extends StatelessWidget {
         child: Material(
           color: ColorManager.white,
           elevation: 2,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(
               children: [
-                TheHeadWidgets(
-                    text: isThatFollower
-                        ? StringsManager.followers.tr
-                        : StringsManager.following.tr),
+                TheHeadWidgets(text: isThatFollower ? StringsManager.followers.tr : StringsManager.following.tr),
                 customDivider(),
                 Expanded(
                   child: GetUsersInfo(
-                      usersIds: usersIds,
-                      isThatFollowers: isThatFollower,
-                      isThatMyPersonalId: isThatMyPersonalId),
+                      usersIds: usersIds, isThatFollowers: isThatFollower, isThatMyPersonalId: isThatMyPersonalId),
                 ),
               ],
             ),
@@ -52,6 +46,5 @@ class PopupFollowCard extends StatelessWidget {
     );
   }
 
-  Widget customDivider() =>
-      const Divider(color: ColorManager.grey, thickness: 0.2);
+  Widget customDivider() => const Divider(color: ColorManager.grey, thickness: 0.2);
 }

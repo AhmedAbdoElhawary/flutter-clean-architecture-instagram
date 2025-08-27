@@ -17,8 +17,7 @@ class Story extends ParentPost {
     super.isThatImage = true,
   });
 
-  static Story fromSnap(
-      {required DocumentSnapshot<Map<String, dynamic>> docSnap}) {
+  static Story fromSnap({required DocumentSnapshot<Map<String, dynamic>> docSnap}) {
     return Story(
       caption: docSnap.data()?["caption"] ?? "",
       datePublished: docSnap.data()?["datePublished"] ?? "",

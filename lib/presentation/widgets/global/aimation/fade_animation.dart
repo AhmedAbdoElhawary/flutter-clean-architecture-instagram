@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class FadeAnimation extends StatefulWidget {
-  const FadeAnimation(
-      {super.key,
-      required this.child,
-      this.duration = const Duration(milliseconds: 1500)});
+  const FadeAnimation({super.key, required this.child, this.duration = const Duration(milliseconds: 1500)});
 
   final Widget child;
   final Duration duration;
@@ -13,15 +10,13 @@ class FadeAnimation extends StatefulWidget {
   FadeAnimationState createState() => FadeAnimationState();
 }
 
-class FadeAnimationState extends State<FadeAnimation>
-    with SingleTickerProviderStateMixin {
+class FadeAnimationState extends State<FadeAnimation> with SingleTickerProviderStateMixin {
   late AnimationController animationController;
 
   @override
   void initState() {
     super.initState();
-    animationController =
-        AnimationController(duration: widget.duration, vsync: this);
+    animationController = AnimationController(duration: widget.duration, vsync: this);
     animationController.forward(from: 0.0);
   }
 

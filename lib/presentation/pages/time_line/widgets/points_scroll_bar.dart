@@ -19,9 +19,7 @@ class PointsScrollBar extends StatelessWidget {
         height: isActive ? 6 : 4.0,
         width: isActive ? 6 : 4.0,
         decoration: BoxDecoration(
-          color: isActive
-              ? (makePointsWhite ? ColorManager.white : ColorManager.blue)
-              : ColorManager.grey,
+          color: isActive ? (makePointsWhite ? ColorManager.white : ColorManager.blue) : ColorManager.grey,
           borderRadius: BorderRadius.circular(3.0),
         ),
       ),
@@ -33,9 +31,7 @@ class PointsScrollBar extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: List.generate(photoCount, (i) => i)
-          .map((i) => _buildDot(isActive: i == activePhotoIndex))
-          .toList(),
+      children: List.generate(photoCount, (i) => i).map((i) => _buildDot(isActive: i == activePhotoIndex)).toList(),
     );
   }
 }

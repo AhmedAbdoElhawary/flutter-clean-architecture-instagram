@@ -3,13 +3,11 @@ import 'package:instagram/domain/entities/calling_status.dart';
 
 abstract class CallingRoomsRepository {
   Future<String> createCallingRoom(
-      {required UserPersonalInfo myPersonalInfo,
-      required List<UserPersonalInfo> callThoseUsersInfo});
+      {required UserPersonalInfo myPersonalInfo, required List<UserPersonalInfo> callThoseUsersInfo});
 
   Stream<bool> getCallingStatus({required String channelUid});
 
-  Future<String> joinToRoom(
-      {required String channelId, required UserPersonalInfo myPersonalInfo});
+  Future<String> joinToRoom({required String channelId, required UserPersonalInfo myPersonalInfo});
 
   Future<void> leaveTheRoom({
     required String userId,
@@ -17,8 +15,6 @@ abstract class CallingRoomsRepository {
     required bool isThatAfterJoining,
   });
 
-  Future<List<UsersInfoInCallingRoom>> getUsersInfoInThisRoom(
-      {required String channelId});
-  Future<void> deleteTheRoom(
-      {required String channelId, required List<dynamic> usersIds});
+  Future<List<UsersInfoInCallingRoom>> getUsersInfoInThisRoom({required String channelId});
+  Future<void> deleteTheRoom({required String channelId, required List<dynamic> usersIds});
 }

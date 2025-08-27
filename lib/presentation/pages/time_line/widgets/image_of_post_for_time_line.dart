@@ -44,10 +44,8 @@ class PostOfTimeLine extends StatefulWidget {
   State<PostOfTimeLine> createState() => _PostOfTimeLineState();
 }
 
-class _PostOfTimeLineState extends State<PostOfTimeLine>
-    with TickerProviderStateMixin {
-  final ValueNotifier<TextEditingController> commentTextController =
-      ValueNotifier(TextEditingController());
+class _PostOfTimeLineState extends State<PostOfTimeLine> with TickerProviderStateMixin {
+  final ValueNotifier<TextEditingController> commentTextController = ValueNotifier(TextEditingController());
   @override
   dispose() {
     commentTextController.dispose();
@@ -79,24 +77,21 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
               removeThisPost: widget.removeThisPost,
               selectedCommentInfo: ValueNotifier(null),
             ),
-            Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 8),
-                  if (postInfoValue.comments.isNotEmpty) ...[
-                    numberOfComment(postInfoValue),
-                    const SizedBox(height: 8),
-                  ],
-                  if (isThatMobile) ...[
-                    buildCommentBox(bodyHeight),
-                    buildPublishingDate(postInfoValue, context),
-                  ] else ...[
-                    buildPublishingDate(postInfoValue, context),
-                    const Divider(),
-                    buildCommentBox(bodyHeight),
-                  ],
-                ]),
+            Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const SizedBox(height: 8),
+              if (postInfoValue.comments.isNotEmpty) ...[
+                numberOfComment(postInfoValue),
+                const SizedBox(height: 8),
+              ],
+              if (isThatMobile) ...[
+                buildCommentBox(bodyHeight),
+                buildPublishingDate(postInfoValue, context),
+              ] else ...[
+                buildPublishingDate(postInfoValue, context),
+                const Divider(),
+                buildCommentBox(bodyHeight),
+              ],
+            ]),
           ],
         ),
       ),
@@ -107,10 +102,8 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 11.5, top: 5.0),
       child: Text(
-        DateReformat.fullDigitsFormat(
-            postInfoValue.datePublished, postInfoValue.datePublished),
-        style:
-            getNormalStyle(color: Theme.of(context).bottomAppBarTheme.color!),
+        DateReformat.fullDigitsFormat(postInfoValue.datePublished, postInfoValue.datePublished),
+        style: getNormalStyle(color: Theme.of(context).bottomAppBarTheme.color!),
       ),
     );
   }
@@ -127,8 +120,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
               padding: EdgeInsets.only(bottom: media),
               child: ValueListenableBuilder(
                 valueListenable: commentTextController,
-                builder: (context, TextEditingController textValue, child) =>
-                    CommentBox(
+                builder: (context, TextEditingController textValue, child) => CommentBox(
                   isThatCommentScreen: false,
                   postInfo: widget.postInfo,
                   textController: textValue,
@@ -159,9 +151,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
         child: ValueListenableBuilder(
           valueListenable: commentTextController,
           builder: (context, TextEditingController textValue, child) => Row(
-            crossAxisAlignment: textValue.text.length < 70
-                ? CrossAxisAlignment.center
-                : CrossAxisAlignment.end,
+            crossAxisAlignment: textValue.text.length < 70 ? CrossAxisAlignment.center : CrossAxisAlignment.end,
             children: [
               CircleAvatarOfProfileImage(
                 userInfo: widget.postInfo.value.publisherInfo!,
@@ -177,9 +167,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
                   cursorColor: ColorManager.teal,
                   decoration: InputDecoration(
                     hintText: StringsManager.addComment.tr,
-                    hintStyle: TextStyle(
-                        color: Theme.of(context).bottomAppBarTheme.color!,
-                        fontSize: 14),
+                    hintStyle: TextStyle(color: Theme.of(context).bottomAppBarTheme.color!, fontSize: 14),
                     fillColor: ColorManager.black,
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
@@ -219,9 +207,8 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
                     child: Text(
                       StringsManager.post.tr,
                       style: getNormalStyle(
-                          color: commentTextController.value.text.isNotEmpty
-                              ? ColorManager.blue
-                              : ColorManager.lightBlue),
+                          color:
+                              commentTextController.value.text.isNotEmpty ? ColorManager.blue : ColorManager.lightBlue),
                     ),
                   ),
                 ),
@@ -235,35 +222,29 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
 
   Future<void> postTheComment(UserPersonalInfo userInfo) async {
     final whitespaceRE = RegExp(r"\s+");
-    String textWithOneSpaces =
-        commentTextController.value.text.replaceAll(whitespaceRE, " ");
+    String textWithOneSpaces = commentTextController.value.text.replaceAll(whitespaceRE, " ");
 
-    CommentsInfoCubit commentsInfoCubit =
-        BlocProvider.of<CommentsInfoCubit>(context);
-    await commentsInfoCubit.addComment(
-        commentInfo: newCommentInfo(userInfo, textWithOneSpaces));
+    CommentsInfoCubit commentsInfoCubit = BlocProvider.of<CommentsInfoCubit>(context);
+    await commentsInfoCubit.addComment(commentInfo: newCommentInfo(userInfo, textWithOneSpaces));
     makeSelectedCommentNullable(true);
     if (!mounted) return;
 
-    await PostCubit.get(context)
-        .updatePostInfo(postInfo: widget.postInfo.value);
+    await PostCubit.get(context).updatePostInfo(postInfo: widget.postInfo.value);
     if (!mounted) return;
 
-    BlocProvider.of<NotificationCubit>(context).createNotification(
-        newNotification: createNotification(textWithOneSpaces, userInfo));
+    BlocProvider.of<NotificationCubit>(context)
+        .createNotification(newNotification: createNotification(textWithOneSpaces, userInfo));
 
     /// To rebuild number of comments
     setState(() {});
   }
 
-  CustomNotification createNotification(
-      String textWithOneSpaces, UserPersonalInfo myPersonalInfo) {
+  CustomNotification createNotification(String textWithOneSpaces, UserPersonalInfo myPersonalInfo) {
     Post postInfo = widget.postInfo.value;
     return CustomNotification(
       text: "commented: $textWithOneSpaces",
       postId: postInfo.postUid,
-      postImageUrl:
-          postInfo.isThatImage ? postInfo.postUrl : postInfo.coverOfVideoUrl,
+      postImageUrl: postInfo.isThatImage ? postInfo.postUrl : postInfo.coverOfVideoUrl,
       time: DateReformat.dateOfNow(),
       senderId: myPersonalId,
       receiverId: postInfo.publisherId,
@@ -274,8 +255,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
     );
   }
 
-  Comment newCommentInfo(
-      UserPersonalInfo myPersonalInfo, String textWithOneSpaces) {
+  Comment newCommentInfo(UserPersonalInfo myPersonalInfo, String textWithOneSpaces) {
     return Comment(
       theComment: textWithOneSpaces,
       whoCommentId: myPersonalInfo.userId,
@@ -293,15 +273,13 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
       child: GestureDetector(
         onTap: () {
           if (isThatMobile) {
-            Go(context)
-                .push(page: CommentsPageForMobile(postInfo: widget.postInfo));
+            Go(context).push(page: CommentsPageForMobile(postInfo: widget.postInfo));
           } else {
             Navigator.of(
               context,
             ).push(HeroDialogRoute(
               builder: (context) => ImageOfPost(
-                postInfo:
-                    ValueNotifier(widget.postsInfo.value[widget.indexOfPost]),
+                postInfo: ValueNotifier(widget.postsInfo.value[widget.indexOfPost]),
                 playTheVideo: widget.playTheVideo,
                 indexOfPost: widget.indexOfPost,
                 postsInfo: widget.postsInfo,

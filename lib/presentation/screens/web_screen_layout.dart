@@ -58,8 +58,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
   void navigationTapped(int page) {
     if (widget.body != null) {
       setState(() => page = page);
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => const WebScreenLayout()));
+      Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => const WebScreenLayout()));
     } else {
       pageController.jumpToPage(page);
       setState(() => pageOfController = page);
@@ -123,9 +122,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
                   Center(
                     child: IconButton(
                       icon: Icon(
-                        pageOfController == 0
-                            ? Icons.home_rounded
-                            : Icons.home_outlined,
+                        pageOfController == 0 ? Icons.home_rounded : Icons.home_outlined,
                         color: Theme.of(context).focusColor,
                         size: 32,
                       ),
@@ -137,8 +134,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
               ),
               const SizedBox(width: 5),
               IconButton(
-                icon: icons(IconsAssets.messengerIcon, pageOfController == 1,
-                    biggerIcon: true),
+                icon: icons(IconsAssets.messengerIcon, pageOfController == 1, biggerIcon: true),
                 onPressed: () => navigationTapped(1),
               ),
               const SizedBox(width: 5),
@@ -154,35 +150,28 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
               const SizedBox(width: 5),
               PopupMenuButton<int>(
                 tooltip: "Show notifications",
-                constraints:
-                    const BoxConstraints.tightFor(height: 360, width: 500),
+                constraints: const BoxConstraints.tightFor(height: 360, width: 500),
                 position: PopupMenuPosition.under,
                 elevation: 20,
                 color: Theme.of(context).splashColor,
                 offset: const Offset(90, 12),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                 child: Icon(
-                  pageOfController == 4
-                      ? Icons.favorite_rounded
-                      : Icons.favorite_border_rounded,
+                  pageOfController == 4 ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                   color: Theme.of(context).focusColor,
                   size: 28,
                 ),
                 itemBuilder: (context) {
                   WidgetsBinding.instance.addPostFrameCallback((_) async {
-                    await NotificationCubit.get(context)
-                        .getNotifications(userId: myPersonalId);
+                    await NotificationCubit.get(context).getNotifications(userId: myPersonalId);
                   });
-                  List<CustomNotification> notifications =
-                      NotificationCubit.get(context).notifications;
+                  List<CustomNotification> notifications = NotificationCubit.get(context).notifications;
 
                   return List<PopupMenuEntry<int>>.generate(
                     notifications.length,
                     (index) => PopupMenuItem<int>(
                       value: index,
-                      child: NotificationCardInfo(
-                          notificationInfo: notifications[index]),
+                      child: NotificationCardInfo(notificationInfo: notifications[index]),
                     ),
                   );
                 },
@@ -220,8 +209,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
         await authCubit.signOut(userId: myPersonalId);
 
         await sharePrefs.clear();
-        Get.offAll(const LoginPage(),
-            duration: const Duration(milliseconds: 0));
+        Get.offAll(const LoginPage(), duration: const Duration(milliseconds: 0));
       });
     }
   }
@@ -236,8 +224,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
               Expanded(
                 child: Text(
                   "Profile",
-                  style: getNormalStyle(
-                      color: Theme.of(context).focusColor, fontSize: 15),
+                  style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
                 ),
               ),
             ],
@@ -252,8 +239,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
               Expanded(
                 child: Text(
                   "Settings",
-                  style: getNormalStyle(
-                      color: Theme.of(context).focusColor, fontSize: 15),
+                  style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
                 ),
               ),
             ],
@@ -263,8 +249,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
           value: 2,
           child: Text(
             "Log Out",
-            style: getNormalStyle(
-                color: Theme.of(context).focusColor, fontSize: 15),
+            style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
           ),
         ),
       ];
@@ -283,8 +268,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
     return SvgPicture.asset(
       icon,
       height: biggerIcon ? 30 : 25,
-      colorFilter:
-          ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+      colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
     );
   }
 }

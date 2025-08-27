@@ -37,9 +37,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
       title: Container(
         width: double.infinity,
         height: 35,
-        decoration: BoxDecoration(
-            color: Theme.of(context).shadowColor,
-            borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(color: Theme.of(context).shadowColor, borderRadius: BorderRadius.circular(10)),
         child: Center(
           child: TextField(
             onTap: () {
@@ -48,8 +46,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
             readOnly: true,
             decoration: InputDecoration(
                 contentPadding: const EdgeInsetsDirectional.all(2.0),
-                prefixIcon: Icon(Icons.search_rounded,
-                    color: Theme.of(context).focusColor),
+                prefixIcon: Icon(Icons.search_rounded, color: Theme.of(context).focusColor),
                 hintText: StringsManager.search.tr,
                 hintStyle: Theme.of(context).textTheme.displayLarge,
                 border: InputBorder.none),
@@ -68,12 +65,10 @@ class AllUsersTimeLinePage extends StatelessWidget {
   ValueListenableBuilder<bool> blocBuilder() {
     return ValueListenableBuilder(
       valueListenable: rebuildUsersInfo,
-      builder: (context, bool value, child) =>
-          BlocBuilder<PostCubit, PostState>(
+      builder: (context, bool value, child) => BlocBuilder<PostCubit, PostState>(
         bloc: BlocProvider.of<PostCubit>(context)..getAllPostInfo(),
         buildWhen: (previous, current) {
-          if (previous != current &&
-              (current is CubitAllPostsLoaded || current is CubitPostFailed)) {
+          if (previous != current && (current is CubitAllPostsLoaded || current is CubitPostFailed)) {
             return true;
           }
 
@@ -106,8 +101,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
             return Center(
                 child: Text(
               StringsManager.somethingWrong.tr,
-              style: getNormalStyle(
-                  color: Theme.of(context).focusColor, fontSize: 18),
+              style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 18),
             ));
           } else {
             return loadingWidget(context);
@@ -133,10 +127,7 @@ class AllUsersTimeLinePage extends StatelessWidget {
             itemCount: 16,
             itemBuilder: (context, index) {
               // replicate staggered tile height logic
-              double num = (index == (isThatMobile ? 2 : 1) ||
-                      (index % 11 == 0 && index != 0))
-                  ? 2
-                  : 1;
+              double num = (index == (isThatMobile ? 2 : 1) || (index % 11 == 0 && index != 0)) ? 2 : 1;
 
               // compute tile height based on screen width
               final double screenWidth = MediaQuery.of(context).size.width;
