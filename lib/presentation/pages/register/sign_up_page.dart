@@ -19,7 +19,7 @@ import '../../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../../cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({super.key});
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -91,11 +91,11 @@ class UserNamePage extends StatefulWidget {
   final TextEditingController passwordController;
   final TextEditingController fullNameController;
   const UserNamePage({
-    Key? key,
+    super.key,
     required this.emailController,
     required this.passwordController,
     required this.fullNameController,
-  }) : super(key: key);
+  });
 
   @override
   State<UserNamePage> createState() => _UserNamePageState();
@@ -218,7 +218,7 @@ class _UserNamePageState extends State<UserNamePage> {
           decoration: InputDecoration(
             hintText: StringsManager.username.tr,
             hintStyle: isThatMobile
-                ? getNormalStyle(color: Theme.of(context).indicatorColor)
+                ? getNormalStyle(color: Theme.of(context).tabBarTheme.indicatorColor!)
                 : getNormalStyle(color: ColorManager.black54, fontSize: 12),
             fillColor: const Color.fromARGB(48, 232, 232, 232),
             filled: true,

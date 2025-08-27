@@ -15,8 +15,7 @@ class SmarterRefresh extends StatefulWidget {
       required this.child,
       required this.isThatEndOfList,
       required this.posts,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   State<SmarterRefresh> createState() => _SmarterRefreshState();

@@ -12,11 +12,11 @@ class ShowMicWithText extends StatelessWidget {
   final SoundRecordNotifier soundRecorderState;
   // ignore: sort_constructors_first
   const ShowMicWithText({
-    Key? key,
+    super.key,
     required this.shouldShowText,
     required this.soundRecorderState,
     required this.slideToCancelText,
-  }) : super(key: key);
+  });
   final colorizeTextStyle = const TextStyle(
     fontSize: 14.0,
     fontFamily: 'Horizon',
