@@ -116,8 +116,8 @@ class CustomAppBar {
         padding: const EdgeInsetsDirectional.only(end: 13.0),
         child: SvgPicture.asset(
           IconsAssets.add2Icon,
-          colorFilter: ColorFilter.mode(
-              Theme.of(context).focusColor, BlendMode.srcIn),
+          colorFilter:
+              ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
           height: 22.5,
         ),
       ),
@@ -125,7 +125,7 @@ class CustomAppBar {
   }
 
   static Future<void> _pushToCustomGallery(BuildContext context) async {
-      await CustomImagePickerPlus.pickFromBoth(context);
+    await CustomImagePickerPlus.pickFromBoth(context);
   }
 
   static AppBar chattingAppBar(
@@ -171,31 +171,28 @@ class CustomAppBar {
           child: SvgPicture.asset(
             IconsAssets.phone,
             height: 27,
-            colorFilter: ColorFilter.mode(
-                Theme.of(context).focusColor, BlendMode.srcIn),
+            colorFilter:
+                ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
           ),
         ),
         const SizedBox(width: 20),
         GestureDetector(
           onTap: () async {
-
-              UserPersonalInfo myPersonalInfo =
-                  UserInfoCubit.getMyPersonalInfo(context);
-              amICalling = true;
-              await Go(context).push(
-                  page: VideoCallPage(
-                      usersInfo: usersInfo, myPersonalInfo: myPersonalInfo),
-                  withoutRoot: false,
-                  withoutPageTransition: true);
-              amICalling = false;
-
-
+            UserPersonalInfo myPersonalInfo =
+                UserInfoCubit.getMyPersonalInfo(context);
+            amICalling = true;
+            await Go(context).push(
+                page: VideoCallPage(
+                    usersInfo: usersInfo, myPersonalInfo: myPersonalInfo),
+                withoutRoot: false,
+                withoutPageTransition: true);
+            amICalling = false;
           },
           child: SvgPicture.asset(
             IconsAssets.videoPoint,
             height: 25,
-            colorFilter: ColorFilter.mode(
-                Theme.of(context).focusColor, BlendMode.srcIn),
+            colorFilter:
+                ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
           ),
         ),
         const SizedBox(width: 15),

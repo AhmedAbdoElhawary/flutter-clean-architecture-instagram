@@ -56,7 +56,7 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
     }
   }
 
-  onTapPostForWeb() => Navigator.of(context).push(
+  Future onTapPostForWeb() => Navigator.of(context).push(
         HeroDialogRoute(
           builder: (context) => ImageOfPost(
             postInfo: ValueNotifier(widget.postClickedInfo),
