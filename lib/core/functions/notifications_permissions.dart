@@ -59,8 +59,7 @@ Future<void> _listenFCM(BuildContext context) async {
           notification.body,
           payload: "$route,$routeParameterId,$userCallingId,$isThatGroupChat",
           NotificationDetails(
-              android: _videoCallAndroidNotificationDetails(
-                  channel: _videoCallChannel, isThatCalling: true)),
+              android: _videoCallAndroidNotificationDetails(channel: _videoCallChannel, isThatCalling: true)),
         );
       } else {
         _normalLocalNotifications.show(
@@ -68,17 +67,16 @@ Future<void> _listenFCM(BuildContext context) async {
           notification.title,
           notification.body,
           payload: "$route,$routeParameterId",
-          NotificationDetails(
-              android: _videoCallAndroidNotificationDetails(
-                  channel: _normalChannel)),
+          NotificationDetails(android: _videoCallAndroidNotificationDetails(channel: _normalChannel)),
         );
       }
     }
   });
 
   /// When app is onBackground
-  FirebaseMessaging.onMessageOpenedApp
-      .listen((m) async => await _handleMessage(context, m));
+  FirebaseMessaging.onMessageOpenedApp.listen((m) async {
+    if (context.mounted) await _handleMessage(context, m);
+  });
 }
 
 Future<void> _handleMessage(BuildContext context, RemoteMessage message) async {
@@ -106,8 +104,8 @@ Future<void> _pushToPage(
     page = WhichProfilePage(userId: routeParameterId);
   } else if (route == "call") {
     UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-    await CallingRoomsCubit.get(context).joinToRoom(
-        channelId: routeParameterId, myPersonalInfo: myPersonalInfo);
+    await CallingRoomsCubit.get(context)
+        .joinToRoom(channelId: routeParameterId, myPersonalInfo: myPersonalInfo);
     page = CallPage(
       channelName: routeParameterId,
       role: ClientRole.Broadcaster,
@@ -117,8 +115,7 @@ Future<void> _pushToPage(
   } else {
     page = BlocProvider<MessageBloc>(
       create: (context) => injector<MessageBloc>(),
-      child:
-          ChattingPage(chatUid: routeParameterId, isThatGroup: isThatGroupChat),
+      child: ChattingPage(chatUid: routeParameterId, isThatGroup: isThatGroupChat),
     );
   }
 
@@ -154,13 +151,11 @@ Future<void> _loadFCM(BuildContext context) async {
   _videoCallLocalNotifications = FlutterLocalNotificationsPlugin();
 
   await _normalLocalNotifications
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(_normalChannel);
 
   await _videoCallLocalNotifications
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(_videoCallChannel);
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -168,8 +163,8 @@ Future<void> _loadFCM(BuildContext context) async {
     badge: true,
     sound: true,
   );
-  const InitializationSettings initializationSettings = InitializationSettings(
-      android: AndroidInitializationSettings("launch_background"));
+  const InitializationSettings initializationSettings =
+      InitializationSettings(android: AndroidInitializationSettings("launch_background"));
 
   /// when app opened and select the message
   _normalLocalNotifications.initialize(initializationSettings,
@@ -184,8 +179,7 @@ Future<void> _loadFCM(BuildContext context) async {
 }
 
 Future<void> _detailsWhenAppClose(BuildContext context) async {
-  final normalDetails =
-      await _normalLocalNotifications.getNotificationAppLaunchDetails();
+  final normalDetails = await _normalLocalNotifications.getNotificationAppLaunchDetails();
   if (normalDetails != null && normalDetails.didNotificationLaunchApp) {
     String? payload = normalDetails.payload;
     if (payload != null) {
@@ -193,8 +187,7 @@ Future<void> _detailsWhenAppClose(BuildContext context) async {
       int length = data.length;
       dynamic userCallingId = length > 2 ? data[2] : "";
       if (userCallingId != "") {
-        final videoDetails = await _videoCallLocalNotifications
-            .getNotificationAppLaunchDetails();
+        final videoDetails = await _videoCallLocalNotifications.getNotificationAppLaunchDetails();
         if (videoDetails != null && videoDetails.didNotificationLaunchApp) {
           // ignore: use_build_context_synchronously
           await _onSelectNotification(context, videoDetails.payload);
@@ -231,8 +224,7 @@ _onSelectNotification(BuildContext context, String? payload) async {
   }
 }
 
-AndroidNotificationChannel _androidNotificationChannel(
-    {bool isThatCalling = false}) {
+AndroidNotificationChannel _androidNotificationChannel({bool isThatCalling = false}) {
   final int id = DateTime.now().microsecondsSinceEpoch ~/ 1000;
 
   return AndroidNotificationChannel(

@@ -16,8 +16,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/get_post_in
 
 class NotificationCardInfo extends StatefulWidget {
   final CustomNotification notificationInfo;
-  const NotificationCardInfo({Key? key, required this.notificationInfo})
-      : super(key: key);
+  const NotificationCardInfo({super.key, required this.notificationInfo});
 
   @override
   State<NotificationCardInfo> createState() => _NotificationCardInfoState();
