@@ -238,7 +238,7 @@ class ScrollSnapListState extends State<ScrollSnapList> {
                 : constraint.maxHeight) -
             widget.itemSize;
       case SelectedItemAnchor.start:
-      return 0;
+        return 0;
     }
   }
 

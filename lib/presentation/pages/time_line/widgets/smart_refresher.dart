@@ -34,7 +34,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
     super.initState();
   }
 
-  init() {
+  void init() {
     _aniController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 2000));
     _scaleController =
@@ -88,7 +88,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
     );
   }
 
-  onSmarterRefresh() {
+  void onSmarterRefresh() {
     widget.onRefreshData(0).whenComplete(() {
       _refreshController.value.refreshCompleted();
       _refreshController.value.loadComplete();
@@ -97,7 +97,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
     });
   }
 
-  onSmarterLoading() {
+  void onSmarterLoading() {
     if (!widget.isThatEndOfList.value) {
       widget.onRefreshData(lengthOfPosts.value).whenComplete(() {
         _refreshController.value.loadComplete();
