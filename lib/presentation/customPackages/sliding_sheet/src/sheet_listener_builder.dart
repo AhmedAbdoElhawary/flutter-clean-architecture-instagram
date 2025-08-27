@@ -17,10 +17,10 @@ class SheetListenerBuilder extends StatefulWidget {
   /// Creates a widget that can be used to react to changes in the [SheetState]
   /// of a [SlidingSheet].
   const SheetListenerBuilder({
-    Key? key,
+    super.key,
     required this.builder,
     this.buildWhen,
-  }) : super(key: key);
+  });
 
   @override
   SheetListenerBuilderState createState() => SheetListenerBuilderState();

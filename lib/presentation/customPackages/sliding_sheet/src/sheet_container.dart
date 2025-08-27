@@ -20,7 +20,7 @@ class SheetContainer extends StatelessWidget {
   final AlignmentGeometry? alignment;
   final BoxConstraints? constraints;
   const SheetContainer({
-    Key? key,
+    super.key,
     this.duration,
     this.borderRadius = 0.0,
     this.elevation = 0.0,
@@ -34,7 +34,7 @@ class SheetContainer extends StatelessWidget {
     this.boxShadows,
     this.alignment,
     this.constraints,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -86,12 +86,12 @@ class ElevatedContainer extends StatelessWidget {
   final bool Function(SheetState state) elevateWhen;
   final Widget child;
   const ElevatedContainer({
-    Key? key,
+    super.key,
     required this.shadowColor,
     required this.elevation,
     required this.elevateWhen,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

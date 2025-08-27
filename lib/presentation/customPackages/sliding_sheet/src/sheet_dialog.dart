@@ -65,7 +65,7 @@ Future<T?> showSlidingBottomSheet<T>(
               color: dialog.color ??
                   theme.bottomSheetTheme.backgroundColor ??
                   theme.dialogTheme.backgroundColor ??
-                  theme.dialogBackgroundColor,
+                  theme.dialogTheme.backgroundColor,
               backdropColor: dialog.backdropColor,
               shadowColor: dialog.shadowColor,
               elevation: dialog.elevation,
@@ -243,9 +243,8 @@ class SlidingSheetRoute<T> extends PageRoute<T> {
   SlidingSheetRoute({
     required this.builder,
     required this.duration,
-    RouteSettings? settings,
+    super.settings,
   }) : super(
-    settings: settings,
     fullscreenDialog: false,
   );
 
