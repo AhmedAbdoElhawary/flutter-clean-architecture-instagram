@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:instagram/presentation/widgets/global/others/play_this_video.dart';
 // ignore: depend_on_referenced_packages
 import 'package:octo_image/octo_image.dart';
@@ -69,16 +70,21 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
     int cachingWidth = widget.cachingWidth;
     if (widget.aspectRatio != 1 && cachingHeight == 720) cachingHeight = 960;
     return OctoImage(
-      image: CachedNetworkImageProvider(widget.url, maxWidth: cachingWidth, maxHeight: cachingHeight),
+      image: CachedNetworkImageProvider(
+        widget.url,
+        maxWidth: cachingWidth,
+        maxHeight: cachingHeight,
+      ),
       errorBuilder: (context, url, error) => buildError(),
       fit: BoxFit.cover,
       width: widget.width ?? double.infinity,
       height: widget.height ?? height,
-      placeholderBuilder:
-          // widget.blurHash.isNotEmpty
-          //     ? OctoPlaceholder.(widget.blurHash, fit: BoxFit.cover)
-          //     :
-          (context) => Center(child: loadingWidget()),
+      placeholderBuilder: widget.blurHash.isNotEmpty
+          ? (context) => BlurHash(
+                hash: widget.blurHash,
+                imageFit: BoxFit.cover,
+              )
+          : (context) => Center(child: loadingWidget()),
     );
   }
 
