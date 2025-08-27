@@ -21,7 +21,8 @@ class InheritedInViewWidget extends InheritedWidget {
   // ignore: annotate_overrides
   final Widget child;
 
-  const InheritedInViewWidget({super.key, this.inViewState, required this.child})
+  const InheritedInViewWidget(
+      {super.key, this.inViewState, required this.child})
       : super(child: child);
 
   @override

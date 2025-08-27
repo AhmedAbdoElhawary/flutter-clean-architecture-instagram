@@ -36,7 +36,8 @@ class WelcomeCardsState extends State<WelcomeCards> {
     return SizedBox(
       height: double.maxFinite,
       child: isThatMobile
-          ? CustomSmartRefresh(onRefreshData: widget.onRefreshData, child: const _GetAllUsers())
+          ? CustomSmartRefresh(
+              onRefreshData: widget.onRefreshData, child: const _GetAllUsers())
           : const _GetAllUsers(),
     );
   }
@@ -53,8 +54,10 @@ class _GetAllUsers extends StatelessWidget {
         const _WelcomeTexts(),
         Flexible(
           child: BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState>(
-            bloc: UsersInfoReelTimeBloc.get(context)..add(LoadAllUsersInfoInfo()),
-            buildWhen: (previous, current) => previous != current && (current is AllUsersInfoLoaded),
+            bloc: UsersInfoReelTimeBloc.get(context)
+              ..add(LoadAllUsersInfoInfo()),
+            buildWhen: (previous, current) =>
+                previous != current && (current is AllUsersInfoLoaded),
             builder: (context, state) {
               if (state is AllUsersInfoLoaded) {
                 List<UserPersonalInfo> users = state.allUsersInfoInReelTime;
@@ -62,7 +65,8 @@ class _GetAllUsers extends StatelessWidget {
                   return Center(
                     child: Text(
                       StringsManager.noUsers.tr,
-                      style: getNormalStyle(color: Theme.of(context).focusColor),
+                      style:
+                          getNormalStyle(color: Theme.of(context).focusColor),
                     ),
                   );
                 } else {
@@ -150,7 +154,8 @@ class _CardsForWebState extends State<_CardsForWeb> {
                 SizedBox(
                   height: heightOfStory,
                   width: widthOfStory,
-                  child: _UserCardInfo(active: active, userInfo: widget.users[index]),
+                  child: _UserCardInfo(
+                      active: active, userInfo: widget.users[index]),
                 ),
                 if (currentPage == index) ...[
                   if (index != 0)
@@ -190,7 +195,7 @@ class _CardsForWebState extends State<_CardsForWeb> {
     );
   }
 
-  void onItemFocus(pos) {
+  void onItemFocus(int pos) {
     setState(() => currentPage = pos);
     if (kDebugMode) {
       print('Done! $pos');
@@ -268,20 +273,25 @@ class _WelcomeTexts extends StatelessWidget {
           padding: const EdgeInsets.all(30.0),
           child: Text(
             StringsManager.welcomeToInstagram.tr,
-            style: getMediumStyle(color: Theme.of(context).focusColor, fontSize: 22),
+            style: getMediumStyle(
+                color: Theme.of(context).focusColor, fontSize: 22),
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 5.0),
           child: Text(
             StringsManager.followPeopleToSee.tr,
-            style: getNormalStyle(color: Theme.of(context).textTheme.headlineMedium!.color!, fontSize: 14),
+            style: getNormalStyle(
+                color: Theme.of(context).textTheme.headlineMedium!.color!,
+                fontSize: 14),
           ),
         ),
         Center(
           child: Text(
             StringsManager.videosTheyShare.tr,
-            style: getNormalStyle(color: Theme.of(context).textTheme.headlineMedium!.color!, fontSize: 14),
+            style: getNormalStyle(
+                color: Theme.of(context).textTheme.headlineMedium!.color!,
+                fontSize: 14),
           ),
         ),
       ],
@@ -301,7 +311,8 @@ class _UserCardInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double margin = active ? 0 : 25;
-    double width = MediaQuery.of(context).size.width - (isThatMobile ? 120 : 200);
+    double width =
+        MediaQuery.of(context).size.width - (isThatMobile ? 120 : 200);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -317,7 +328,7 @@ class _UserCardInfo extends StatelessWidget {
                 color: Theme.of(context).splashColor,
                 boxShadow: [
                   BoxShadow(
-                    color: ColorManager.grey.withValues(alpha:.15),
+                    color: ColorManager.grey.withValues(alpha: .15),
                     spreadRadius: 10,
                     blurRadius: 10,
                     offset: const Offset(0, 1),
@@ -350,7 +361,8 @@ class _BuildUserBrief extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatarOfProfileImage(userInfo: userInfo, bodyHeight: 900, showColorfulCircle: false),
+            CircleAvatarOfProfileImage(
+                userInfo: userInfo, bodyHeight: 900, showColorfulCircle: false),
             const SizedBox(height: 10),
             Text(
               userInfo.userName,
@@ -370,7 +382,8 @@ class _BuildUserBrief extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 20.0),
                       child: Text(
                         StringsManager.noPosts.tr,
-                        style: getNormalStyle(color: Theme.of(context).focusColor),
+                        style:
+                            getNormalStyle(color: Theme.of(context).focusColor),
                       ),
                     ),
                   ),
@@ -380,7 +393,8 @@ class _BuildUserBrief extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsetsDirectional.only(end: 1),
                         child: SizedBox(
-                            height: isThatMobile ? 70 : (width > 900 ? 110 : 95),
+                            height:
+                                isThatMobile ? 70 : (width > 900 ? 110 : 95),
                             width: isThatMobile ? 70 : (width > 900 ? 110 : 95),
                             child: NetworkDisplay(
                               url: imageUrl,
@@ -396,29 +410,35 @@ class _BuildUserBrief extends StatelessWidget {
             const SizedBox(height: 30),
             GestureDetector(
               onTap: () async {
-                UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+                UserPersonalInfo myPersonalInfo =
+                    UserInfoCubit.getMyPersonalInfo(context);
 
                 FollowCubit followCubit = FollowCubit.get(context);
                 if (isIFollowHim) {
                   await followCubit.unFollowThisUser(
-                      followingUserId: userInfo.userId, myPersonalId: myPersonalId);
+                      followingUserId: userInfo.userId,
+                      myPersonalId: myPersonalId);
 
                   myPersonalInfo.followedPeople.remove(userInfo.userId);
                   userInfo.followerPeople.remove(myPersonalId);
 
                   if (!context.mounted) return;
                   BlocProvider.of<NotificationCubit>(context)
-                      .deleteNotification(notificationCheck: createNotificationCheck(userInfo));
+                      .deleteNotification(
+                          notificationCheck: createNotificationCheck(userInfo));
                 } else {
                   await followCubit.followThisUser(
-                      followingUserId: userInfo.userId, myPersonalId: myPersonalId);
+                      followingUserId: userInfo.userId,
+                      myPersonalId: myPersonalId);
 
                   myPersonalInfo.followedPeople.add(userInfo.userId);
                   userInfo.followerPeople.add(myPersonalId);
 
                   if (!context.mounted) return;
                   BlocProvider.of<NotificationCubit>(context)
-                      .createNotification(newNotification: createNotification(userInfo, myPersonalInfo));
+                      .createNotification(
+                          newNotification:
+                              createNotification(userInfo, myPersonalInfo));
                 }
               },
               child: _FollowButton(isIFollowHim),
@@ -438,7 +458,8 @@ class _BuildUserBrief extends StatelessWidget {
     );
   }
 
-  CustomNotification createNotification(UserPersonalInfo userInfo, UserPersonalInfo myPersonalInfo) {
+  CustomNotification createNotification(
+      UserPersonalInfo userInfo, UserPersonalInfo myPersonalInfo) {
     return CustomNotification(
       text: "started following you.",
       time: DateReformat.dateOfNow(),
@@ -464,14 +485,17 @@ class _FollowButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
-        color: isIFollowHim ? Theme.of(context).primaryColor : ColorManager.blue,
+        color:
+            isIFollowHim ? Theme.of(context).primaryColor : ColorManager.blue,
         border: Border.all(
-          color: isIFollowHim ? Theme.of(context).bottomAppBarTheme.color! : ColorManager.transparent,
+          color: isIFollowHim
+              ? Theme.of(context).bottomAppBarTheme.color!
+              : ColorManager.transparent,
           width: 0,
         ),
         boxShadow: [
           BoxShadow(
-            color: ColorManager.grey.withValues(alpha:.1),
+            color: ColorManager.grey.withValues(alpha: .1),
             spreadRadius: 2,
             blurRadius: 2,
             offset: const Offset(0, 1),
@@ -479,8 +503,10 @@ class _FollowButton extends StatelessWidget {
         ],
       ),
       child: isIFollowHim
-          ? Text(StringsManager.following.tr, style: getNormalStyle(color: Theme.of(context).focusColor))
-          : Text(StringsManager.follow.tr, style: getNormalStyle(color: ColorManager.white)),
+          ? Text(StringsManager.following.tr,
+              style: getNormalStyle(color: Theme.of(context).focusColor))
+          : Text(StringsManager.follow.tr,
+              style: getNormalStyle(color: ColorManager.white)),
     );
   }
 }
