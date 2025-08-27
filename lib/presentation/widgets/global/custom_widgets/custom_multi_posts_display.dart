@@ -7,8 +7,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memo
 class CustomMultiImagesDisplay extends StatelessWidget {
   final initPosition = ValueNotifier(0);
   final List<SelectedByte> selectedImages;
-  CustomMultiImagesDisplay({Key? key, required this.selectedImages})
-      : super(key: key);
+  CustomMultiImagesDisplay({super.key, required this.selectedImages});
   @override
   Widget build(BuildContext context) {
     return Column(

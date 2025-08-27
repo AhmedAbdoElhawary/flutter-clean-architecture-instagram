@@ -24,8 +24,7 @@ class CustomGridViewDisplay extends StatefulWidget {
       required this.postClickedInfo,
       this.showVideoCover = false,
       this.removeThisPost,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   State<CustomGridViewDisplay> createState() => _CustomGridViewDisplayState();
