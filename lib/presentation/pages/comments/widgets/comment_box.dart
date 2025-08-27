@@ -26,7 +26,7 @@ class CommentBox extends StatefulWidget {
   final ValueChanged<bool> makeSelectedCommentNullable;
   final bool expandCommentBox;
   const CommentBox({
-    Key? key,
+    super.key,
     required this.currentFocus,
     this.expandCommentBox = false,
     required this.postInfo,
@@ -35,7 +35,7 @@ class CommentBox extends StatefulWidget {
     required this.userPersonalInfo,
     this.isThatCommentScreen = true,
     required this.makeSelectedCommentNullable,
-  }) : super(key: key);
+  });
 
   @override
   State<CommentBox> createState() => _CommentBoxState();
