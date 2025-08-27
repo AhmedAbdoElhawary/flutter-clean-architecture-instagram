@@ -17,7 +17,7 @@ class CustomPostDisplay extends StatefulWidget {
   final ValueChanged<int>? removeThisPost;
 
   const CustomPostDisplay({
-    Key? key,
+    super.key,
     this.reLoadData,
     required this.textController,
     required this.selectedCommentInfo,
@@ -26,7 +26,7 @@ class CustomPostDisplay extends StatefulWidget {
     required this.playTheVideo,
     required this.postsInfo,
     this.removeThisPost,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomPostDisplay> createState() => _CustomPostDisplayState();

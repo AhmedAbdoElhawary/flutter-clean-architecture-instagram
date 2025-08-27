@@ -17,14 +17,14 @@ class CustomShareButton extends StatefulWidget {
   final List<UserPersonalInfo> selectedUsersInfo;
   final ValueChanged<bool> clearTexts;
   const CustomShareButton({
-    Key? key,
+    super.key,
     required this.publisherInfo,
     required this.clearTexts,
     required this.textOfButton,
     required this.messageTextController,
     required this.selectedUsersInfo,
     required this.postInfo,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomShareButton> createState() => _CustomShareButtonState();

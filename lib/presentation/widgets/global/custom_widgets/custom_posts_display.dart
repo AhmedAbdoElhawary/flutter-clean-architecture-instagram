@@ -11,10 +11,10 @@ class CustomPostsDisplay extends StatefulWidget {
   final bool showCatchUp;
 
   const CustomPostsDisplay({
-    Key? key,
+    super.key,
     required this.postsInfo,
     this.showCatchUp = true,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomPostsDisplay> createState() => _HomeScreenState();
