@@ -322,7 +322,7 @@ class _GroupMessagesState extends State<GroupMessages> {
     super.didUpdateWidget(oldWidget);
   }
 
-  init() {
+  void init() {
     List ids = [];
     for (final userInfo in widget.selectedUsersInfoValue) {
       ids.add(userInfo.userId);

@@ -25,7 +25,8 @@ class SheetExtent {
 
   late ValueNotifier<double?> _currentExtent;
   double get currentExtent => _currentExtent.value!;
-  set currentExtent(double value) => _currentExtent.value = math.min(value, maxExtent);
+  set currentExtent(double value) =>
+      _currentExtent.value = math.min(value, maxExtent);
 
   double get sheetHeight => childHeight + headerHeight + footerHeight;
 
@@ -101,7 +102,9 @@ class SlidingSheetScrollController extends ScrollController {
 
     // Adjust the animation duration for a snap to give it a more
     // realistic feel.
-    final num distanceFactor = ((currentExtent - snap).abs() / (maxExtent - minExtent)).clamp(0.33, 1.0);
+    final num distanceFactor =
+        ((currentExtent - snap).abs() / (maxExtent - minExtent))
+            .clamp(0.33, 1.0);
     final speedFactor = 1.0 - ((velocity.abs() / 2500) * 0.33).clamp(0.0, 0.66);
     duration ??= this.duration * (distanceFactor * speedFactor);
 
@@ -224,8 +227,11 @@ class SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
   bool get shouldScroll => pixels > 0.0 && extent.isAtMax;
   bool get isCoveringFullExtent => scrollController.sheet.isScrollable;
   bool get shouldMakeSheetNonDismissable =>
-      sheet.didCompleteInitialRoute && !isDismissable && currentExtent < minExtent;
-  bool get isBottomSheetBelowMinExtent => fromBottomSheet && currentExtent < minExtent;
+      sheet.didCompleteInitialRoute &&
+      !isDismissable &&
+      currentExtent < minExtent;
+  bool get isBottomSheetBelowMinExtent =>
+      fromBottomSheet && currentExtent < minExtent;
 
   @override
   bool applyContentDimensions(double minScrollExtent, double maxScrollExtent) {
@@ -247,10 +253,12 @@ class SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
     inDrag = true;
 
     final isNotAtMinOrMaxExtent = !(extent.isAtMin || extent.isAtMax);
-    final scrollsUpWhenAtMinExtent = extent.isAtMin && (delta < 0 || fromBottomSheet);
+    final scrollsUpWhenAtMinExtent =
+        extent.isAtMin && (delta < 0 || fromBottomSheet);
     final scrollsDownWhenAtMaxExtent = extent.isAtMax && delta > 0;
-    final shouldAddPixelDeltaToExtent =
-        isNotAtMinOrMaxExtent || scrollsUpWhenAtMinExtent || scrollsDownWhenAtMaxExtent;
+    final shouldAddPixelDeltaToExtent = isNotAtMinOrMaxExtent ||
+        scrollsUpWhenAtMinExtent ||
+        scrollsDownWhenAtMaxExtent;
     if (!shouldScroll && shouldAddPixelDeltaToExtent) {
       final adjustedDelta = adjustDelta(-delta);
       extent.addPixelDelta(adjustedDelta);
@@ -277,8 +285,11 @@ class SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
   void didEndScroll() {
     super.didEndScroll();
 
-    final canSnapToNextExtent = snap && !extent.isAtMax && !extent.isAtMin && !shouldScroll;
-    if (inDrag && !shouldMakeSheetNonDismissable && (canSnapToNextExtent || isBottomSheetBelowMinExtent)) {
+    final canSnapToNextExtent =
+        snap && !extent.isAtMax && !extent.isAtMin && !shouldScroll;
+    if (inDrag &&
+        !shouldMakeSheetNonDismissable &&
+        (canSnapToNextExtent || isBottomSheetBelowMinExtent)) {
       goSnapped(0.0);
     }
   }
@@ -293,7 +304,10 @@ class SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
     // There is an issue with the bouncing scroll physics that when the sheet doesn't cover the full extent
     // the bounce back of the simulation would be so fast to close the sheet again, although it was swiped
     // upwards. Here we soften the bounce back to prevent that from happening.
-    if (isMovingDown && !inDrag && (scrollSpec.physics is BouncingScrollPhysics) && !isCoveringFullExtent) {
+    if (isMovingDown &&
+        !inDrag &&
+        (scrollSpec.physics is BouncingScrollPhysics) &&
+        !isCoveringFullExtent) {
       velocity /= 8;
     }
 
@@ -302,7 +316,9 @@ class SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
       return;
     }
 
-    if (velocity == 0.0 || (isMovingDown && shouldScroll) || (isMovingUp && extent.isAtMax)) {
+    if (velocity == 0.0 ||
+        (isMovingDown && shouldScroll) ||
+        (isMovingUp && extent.isAtMax)) {
       super.goBallistic(velocity);
       return;
     }
@@ -316,7 +332,8 @@ class SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
     velocity = velocity.abs();
     const flingThreshold = 1700;
 
-    void snapTo(double snap) => scrollController.snapToExtent(snap, context.vsync, velocity: velocity);
+    void snapTo(double snap) =>
+        scrollController.snapToExtent(snap, context.vsync, velocity: velocity);
 
     if (velocity > flingThreshold) {
       if (!isMovingUp) {
@@ -338,7 +355,8 @@ class SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
 
       final slow = velocity < snapToNextThreshold;
       final target = !slow
-          ? ((isMovingUp ? 1 : -1) * (((velocity * .45) * (1 - currentExtent)) / flingThreshold)) +
+          ? ((isMovingUp ? 1 : -1) *
+                  (((velocity * .45) * (1 - currentExtent)) / flingThreshold)) +
               currentExtent
           : currentExtent;
 
@@ -347,7 +365,8 @@ class SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
           final stop = snappings[i];
           final valid = slow ||
               !greaterThanCurrent ||
-              ((isMovingUp && stop >= target) || (!isMovingUp && stop <= target));
+              ((isMovingUp && stop >= target) ||
+                  (!isMovingUp && stop <= target));
 
           if (valid) {
             final dis = (stop - target).abs();
@@ -384,7 +403,8 @@ class SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
     }
   }
 
-  Future<void> runScrollSimulation(double velocity, {double friction = 0.015}) async {
+  Future<void> runScrollSimulation(double velocity,
+      {double friction = 0.015}) async {
     // Create scroll metrics for tolerance
     final metrics = FixedScrollMetrics(
       minScrollExtent: 0.0,
@@ -392,7 +412,8 @@ class SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
       pixels: currentExtent,
       viewportDimension: 1.0, // arbitrary non-zero viewport
       axisDirection: AxisDirection.down,
-      devicePixelRatio: WidgetsBinding.instance.platformDispatcher.views.first.devicePixelRatio,
+      devicePixelRatio: WidgetsBinding
+          .instance.platformDispatcher.views.first.devicePixelRatio,
     );
 
     final simulation = ClampingScrollSimulation(
@@ -413,21 +434,25 @@ class SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
       lastDelta = ballisticController.value;
       extent.addPixelDelta(delta);
 
-      final shouldStopScrollOnBottomSheets =
-          fromBottomSheet && (currentExtent <= 0.0 || shouldMakeSheetNonDismissable);
+      final shouldStopScrollOnBottomSheets = fromBottomSheet &&
+          (currentExtent <= 0.0 || shouldMakeSheetNonDismissable);
       final shouldStopOnUpFling = velocity > 0 && extent.isAtMax;
-      final shouldStopOnDownFling = velocity < 0 && (shouldStopScrollOnBottomSheets || extent.isAtMin);
+      final shouldStopOnDownFling =
+          velocity < 0 && (shouldStopScrollOnBottomSheets || extent.isAtMin);
 
       if (shouldStopOnUpFling || shouldStopOnDownFling) {
         // Add tolerance-based velocity
         velocity = ballisticController.velocity +
-            (physics.toleranceFor(metrics).velocity * ballisticController.velocity.sign);
+            (physics.toleranceFor(metrics).velocity *
+                ballisticController.velocity.sign);
 
         super.goBallistic(shouldMakeSheetNonDismissable ? 0.0 : velocity);
         ballisticController.stop();
 
         // Pop the route when reaching 0.0 extent.
-        if (fromBottomSheet && currentExtent <= 0.0 && !shouldMakeSheetNonDismissable) {
+        if (fromBottomSheet &&
+            currentExtent <= 0.0 &&
+            !shouldMakeSheetNonDismissable) {
           onPop(0.0);
         }
       }
