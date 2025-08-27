@@ -7,8 +7,8 @@ import 'package:instagram/core/resources/strings_manager.dart';
 
 class AllCatchUpIcon extends StatelessWidget {
   const AllCatchUpIcon({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

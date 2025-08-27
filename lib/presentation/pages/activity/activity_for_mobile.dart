@@ -15,7 +15,7 @@ import 'package:instagram/presentation/widgets/global/others/notification_card_i
 
 /// Not clean enough
 class ActivityPage extends StatefulWidget {
-  const ActivityPage({Key? key}) : super(key: key);
+  const ActivityPage({super.key});
 
   @override
   State<ActivityPage> createState() => _ActivityPageState();
@@ -132,8 +132,7 @@ class _ActivityPageState extends State<ActivityPage> {
 class _ShowNotifications extends StatefulWidget {
   final List<CustomNotification> notifications;
 
-  const _ShowNotifications({Key? key, required this.notifications})
-      : super(key: key);
+  const _ShowNotifications({required this.notifications});
 
   @override
   State<_ShowNotifications> createState() => _ShowNotificationsState();
