@@ -11,11 +11,11 @@ class PopupFollowCard extends StatelessWidget {
   final bool isThatMyPersonalId;
 
   const PopupFollowCard({
-    Key? key,
+    super.key,
     required this.isThatMyPersonalId,
     this.isThatFollower = true,
     required this.usersIds,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

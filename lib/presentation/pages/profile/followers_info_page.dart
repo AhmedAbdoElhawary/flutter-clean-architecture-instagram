@@ -17,11 +17,11 @@ class FollowersInfoPage extends StatefulWidget {
   final int initialIndex;
   final VoidCallback updateFollowersCallback;
   const FollowersInfoPage({
-    Key? key,
+    super.key,
     required this.userInfo,
     this.initialIndex = 0,
     required this.updateFollowersCallback,
-  }) : super(key: key);
+  });
 
   @override
   State<FollowersInfoPage> createState() => _FollowersInfoPageState();
@@ -113,11 +113,10 @@ class _TapBarView extends StatelessWidget {
   final ValueNotifier<UserPersonalInfo> userInfo;
   final VoidCallback updateCallback;
   const _TapBarView({
-    Key? key,
     required this.userInfo,
     required this.state,
     required this.updateCallback,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
