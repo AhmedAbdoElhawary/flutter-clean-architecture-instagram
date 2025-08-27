@@ -15,7 +15,7 @@ import 'package:instagram/presentation/widgets/global/screens_w.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   final String userId;
-  const MobileScreenLayout(this.userId, {Key? key}) : super(key: key);
+  const MobileScreenLayout(this.userId, {super.key});
 
   @override
   State<MobileScreenLayout> createState() => _MobileScreenLayoutState();
