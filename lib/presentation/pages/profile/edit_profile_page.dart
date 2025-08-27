@@ -22,7 +22,7 @@ import '../../cubit/firestoreUserInfoCubit/user_info_cubit.dart';
 class EditProfilePage extends StatefulWidget {
   final UserPersonalInfo userInfo;
 
-  const EditProfilePage(this.userInfo, {Key? key}) : super(key: key);
+  const EditProfilePage(this.userInfo, {super.key});
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -189,7 +189,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         Future.delayed(Duration.zero, () {
                           reBuild = false;
 
-                          Go(context).back();
+                          if(context.mounted)  Go(context).back();
                         });
                       });
                     }
