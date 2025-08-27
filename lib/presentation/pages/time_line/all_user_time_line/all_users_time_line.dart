@@ -124,21 +124,35 @@ class AllUsersTimeLinePage extends StatelessWidget {
         child: Shimmer.fromColors(
           baseColor: Theme.of(context).textTheme.headlineSmall!.color!,
           highlightColor: Theme.of(context).textTheme.titleLarge!.color!,
-          child: StaggeredGridView.countBuilder(
+          child: MasonryGridView.count(
             crossAxisSpacing: isThatMobile ? 1.5 : 30,
             mainAxisSpacing: isThatMobile ? 1.5 : 30,
             crossAxisCount: 3,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
             itemCount: 16,
-            itemBuilder: (_, __) {
-              return Container(
-                  color: ColorManager.lightDarkGray, width: double.infinity);
-            },
-            staggeredTileBuilder: (index) {
+            itemBuilder: (context, index) {
+              // replicate staggered tile height logic
               double num = (index == (isThatMobile ? 2 : 1) ||
                       (index % 11 == 0 && index != 0))
                   ? 2
                   : 1;
-              return StaggeredTile.count(isThatMobile ? 1 : num.toInt(), num);
+
+              // compute tile height based on screen width
+              final double screenWidth = MediaQuery.of(context).size.width;
+              final double crossAxisSpacing = isThatMobile ? 1.5 : 30;
+              final double totalSpacing = crossAxisSpacing * (3 - 1);
+              final double tileWidth = (screenWidth - totalSpacing) / 3;
+
+              final double tileHeight = tileWidth * num;
+
+              return SizedBox(
+                height: tileHeight,
+                child: Container(
+                  color: ColorManager.lightDarkGray,
+                  width: double.infinity,
+                ),
+              );
             },
           ),
         ),

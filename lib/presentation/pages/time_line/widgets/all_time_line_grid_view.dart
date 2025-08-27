@@ -18,14 +18,15 @@ class AllTimeLineGridView extends StatefulWidget {
   final AsyncValueSetter<int> onRefreshData;
   final ValueNotifier<bool> reloadData;
 
-  AllTimeLineGridView(
-      {required this.postsImagesInfo,
-      required this.postsVideosInfo,
-      required this.isThatEndOfList,
-      required this.allPostsInfo,
-      required this.onRefreshData,
-      required this.reloadData,
-      super.key});
+  AllTimeLineGridView({
+    required this.postsImagesInfo,
+    required this.postsVideosInfo,
+    required this.isThatEndOfList,
+    required this.allPostsInfo,
+    required this.onRefreshData,
+    required this.reloadData,
+    super.key,
+  });
 
   @override
   State<AllTimeLineGridView> createState() => _CustomGridViewState();
@@ -36,6 +37,7 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
   int indexOfPostsImage = 0;
   late Post postInfo;
   late int lengthOfGrid;
+
   @override
   void initState() {
     lengthOfGrid =
@@ -58,21 +60,16 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
     if (isThatMobile) {
       return InViewNotifierCustomScrollView(
         slivers: [
-          SliverStaggeredGrid.countBuilder(
-            crossAxisSpacing: 1.5,
-            mainAxisSpacing: 1.5,
+          SliverMasonryGrid.count(
             crossAxisCount: 3,
-            itemCount: lengthOfGrid,
+            mainAxisSpacing: 1.5,
+            crossAxisSpacing: 1.5,
+            childCount: lengthOfGrid,
             itemBuilder: (context, index) {
               _structurePostDisplay(index);
               return inViewWidget(index, postInfo);
             },
-            staggeredTileBuilder: (index) {
-              double num =
-                  (index == 2 || (index % 11 == 0 && index != 0)) ? 2 : 1;
-              return StaggeredTile.count(1, num);
-            },
-          )
+          ),
         ],
         onRefreshData: widget.onRefreshData,
         postsIds: widget.allPostsInfo,
@@ -86,15 +83,17 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
       );
     } else {
       return SingleChildScrollView(
-          child: Center(child: SizedBox(width: 910, child: _gridView())));
+        child: Center(child: SizedBox(width: 910, child: _gridView())),
+      );
     }
   }
 
-  StaggeredGridView _gridView() {
-    return StaggeredGridView.countBuilder(
-      crossAxisSpacing: 30,
-      mainAxisSpacing: 30,
+  /// Desktop / Web Masonry Grid
+  MasonryGridView _gridView() {
+    return MasonryGridView.count(
       crossAxisCount: 3,
+      mainAxisSpacing: 30,
+      crossAxisSpacing: 30,
       shrinkWrap: true,
       primary: false,
       physics: const NeverScrollableScrollPhysics(),
@@ -108,14 +107,11 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
           isThatProfile: false,
         );
       },
-      staggeredTileBuilder: (index) {
-        double num = (index == 1 || (index % 11 == 0 && index != 0)) ? 2 : 1;
-        return StaggeredTile.count(num.toInt(), num);
-      },
     );
   }
 
-  _structurePostDisplay(int index) {
+  /// Determines whether to show image or video at a given index
+  void _structurePostDisplay(int index) {
     if (indexOfPostsVideo >= widget.postsVideosInfo.length &&
         indexOfPostsImage < widget.postsImagesInfo.length) {
       postInfo = widget.postsImagesInfo[indexOfPostsImage];
@@ -141,11 +137,13 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
         indexOfPostsImage++;
       }
     }
+
     if (index == widget.allPostsInfo.length - 1) {
       widget.isThatEndOfList.value = true;
     }
   }
 
+  /// Wraps post in an InViewNotifier to handle autoplay for videos
   Container inViewWidget(int index, Post postInfo) {
     return Container(
       width: double.infinity,

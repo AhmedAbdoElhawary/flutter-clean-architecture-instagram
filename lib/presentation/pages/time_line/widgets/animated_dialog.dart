@@ -33,7 +33,7 @@ class AnimatedDialogState extends State<AnimatedDialog>
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.black.withValues(alpha:opacityAnimation.value),
+      color: Colors.black.withValues(alpha: opacityAnimation.value),
       child: Center(
         child: FadeTransition(
           opacity: scaleAnimation,
