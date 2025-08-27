@@ -8,8 +8,8 @@ class LockRecord extends StatefulWidget {
   // ignore: sort_constructors_first
   const LockRecord({
     required this.soundRecorderState,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
   LockRecordState createState() => LockRecordState();
 }

@@ -28,11 +28,11 @@ class ListOfMessages extends StatefulWidget {
   final UserPersonalInfo? additionalUser;
   final bool freezeListView;
   const ListOfMessages({
-    Key? key,
+    super.key,
     this.selectChatting,
     this.freezeListView = false,
     this.additionalUser,
-  }) : super(key: key);
+  });
 
   @override
   State<ListOfMessages> createState() => _ListOfMessagesState();
