@@ -6,7 +6,7 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/users_info_r
 import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle_avatar_of_profile_image.dart';
 
 class PersonalImageIcon extends StatefulWidget {
-  const PersonalImageIcon({Key? key}) : super(key: key);
+  const PersonalImageIcon({super.key});
 
   @override
   State<PersonalImageIcon> createState() => _PersonalImageIconState();

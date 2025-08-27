@@ -14,8 +14,7 @@ class CallingRingingPage extends StatefulWidget {
   final String channelId;
   final VoidCallback clearMoving;
   const CallingRingingPage(
-      {Key? key, required this.channelId, required this.clearMoving})
-      : super(key: key);
+      {super.key, required this.channelId, required this.clearMoving});
 
   @override
   State<CallingRingingPage> createState() => _CallingRingingPageState();
