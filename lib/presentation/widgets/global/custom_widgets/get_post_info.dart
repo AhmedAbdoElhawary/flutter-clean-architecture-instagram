@@ -13,22 +13,18 @@ class GetsPostInfoAndDisplay extends StatelessWidget {
   final String appBarText;
   final bool fromHeroRoute;
   const GetsPostInfoAndDisplay({
-    Key? key,
+    super.key,
     required this.postId,
     required this.appBarText,
     this.fromHeroRoute = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: isThatMobile
-          ? CustomAppBar.oneTitleAppBar(context, appBarText,
-              logoOfInstagram: true)
-          : null,
+      appBar: isThatMobile ? CustomAppBar.oneTitleAppBar(context, appBarText, logoOfInstagram: true) : null,
       body: BlocBuilder<PostCubit, PostState>(
-        bloc: PostCubit.get(context)
-          ..getPostsInfo(postsIds: [postId], isThatMyPosts: false),
+        bloc: PostCubit.get(context)..getPostsInfo(postsIds: [postId], isThatMyPosts: false),
         buildWhen: (previous, current) {
           if (previous != current && current is CubitPostFailed) {
             return true;
@@ -38,8 +34,7 @@ class GetsPostInfoAndDisplay extends StatelessWidget {
         builder: (context, state) {
           if (state is CubitPostsInfoLoaded) {
             if (isThatMobile) {
-              if (state.postsInfo.isNotEmpty &&
-                  state.postsInfo[0].comments.length < 10) {
+              if (state.postsInfo.isNotEmpty && state.postsInfo[0].comments.length < 10) {
                 return CommentsOfPost(
                   postInfo: ValueNotifier(state.postsInfo[0]),
                   textController: ValueNotifier(TextEditingController()),

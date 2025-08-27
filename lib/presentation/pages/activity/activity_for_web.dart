@@ -4,7 +4,7 @@ import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/presentation/pages/activity/activity_for_mobile.dart';
 
 class ActivityForWeb extends StatelessWidget {
-  const ActivityForWeb({Key? key}) : super(key: key);
+  const ActivityForWeb({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +15,7 @@ class ActivityForWeb extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       child: SvgPicture.asset(
         IconsAssets.add2Icon,
-        colorFilter: ColorFilter.mode(
-            Theme.of(context).focusColor, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
         height: 700,
         width: 500,
       ),

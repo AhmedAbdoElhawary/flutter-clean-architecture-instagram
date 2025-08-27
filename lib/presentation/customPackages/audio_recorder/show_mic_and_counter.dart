@@ -12,11 +12,11 @@ class ShowMicWithText extends StatelessWidget {
   final SoundRecordNotifier soundRecorderState;
   // ignore: sort_constructors_first
   const ShowMicWithText({
-    Key? key,
+    super.key,
     required this.shouldShowText,
     required this.soundRecorderState,
     required this.slideToCancelText,
-  }) : super(key: key);
+  });
   final colorizeTextStyle = const TextStyle(
     fontSize: 14.0,
     fontFamily: 'Horizon',
@@ -25,8 +25,7 @@ class ShowMicWithText extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isButtonPressed = soundRecorderState.buttonPressed;
     return Row(
-      mainAxisAlignment:
-          !isButtonPressed ? MainAxisAlignment.start : MainAxisAlignment.end,
+      mainAxisAlignment: !isButtonPressed ? MainAxisAlignment.start : MainAxisAlignment.end,
       children: [
         Center(
           child: Transform.scale(
@@ -40,18 +39,13 @@ class ShowMicWithText extends StatelessWidget {
                 width: isButtonPressed ? 40 : 24,
                 height: isButtonPressed ? 40 : 24,
                 child: Container(
-                  color: (isButtonPressed)
-                      ? ColorManager.blue
-                      : ColorManager.transparent,
+                  color: (isButtonPressed) ? ColorManager.blue : ColorManager.transparent,
                   child: Padding(
-                    padding:
-                        EdgeInsetsDirectional.all(isButtonPressed ? 8.0 : 0),
+                    padding: EdgeInsetsDirectional.all(isButtonPressed ? 8.0 : 0),
                     child: SvgPicture.asset(
                       "assets/icons/microphone.svg",
                       colorFilter: ColorFilter.mode(
-                          (isButtonPressed)
-                              ? ColorManager.white
-                              : Theme.of(context).focusColor , BlendMode.srcIn),
+                          (isButtonPressed) ? ColorManager.white : Theme.of(context).focusColor, BlendMode.srcIn),
                     ),
                   ),
                 ),

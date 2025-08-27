@@ -15,10 +15,10 @@ class PopupSharePost extends StatefulWidget {
   final UserPersonalInfo publisherInfo;
 
   const PopupSharePost({
-    Key? key,
+    super.key,
     required this.publisherInfo,
     required this.postInfo,
-  }) : super(key: key);
+  });
 
   @override
   State<PopupSharePost> createState() => _PopupSharePostState();
@@ -49,21 +49,17 @@ class _PopupSharePostState extends State<PopupSharePost> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 customDivider(
-                  child: TheHeadWidgets(
-                      text: StringsManager.share.tr, makeIconsBigger: true),
+                  child: TheHeadWidgets(text: StringsManager.share.tr, makeIconsBigger: true),
                 ),
                 Container(
                   color: ColorManager.white,
                   padding: const EdgeInsets.only(left: 15, top: 15),
-                  child: Text("To:",
-                      style: getBoldStyle(
-                          color: ColorManager.black, fontSize: 16)),
+                  child: Text("To:", style: getBoldStyle(color: ColorManager.black, fontSize: 16)),
                 ),
                 Stack(
                   children: [
                     Padding(
-                      padding: const EdgeInsetsDirectional.only(
-                          top: 10, bottom: 10, end: 12, start: 18),
+                      padding: const EdgeInsetsDirectional.only(top: 10, bottom: 10, end: 12, start: 18),
                       child: selectedUsersInfo.value.isEmpty
                           ? emptyMessage()
                           : SingleChildScrollView(
@@ -74,8 +70,7 @@ class _PopupSharePostState extends State<PopupSharePost> {
                                 children: [
                                   ...List.generate(
                                     selectedUsersInfo.value.length,
-                                    (i) => buildContainer(
-                                        selectedUsersInfo.value[i].name, i),
+                                    (i) => buildContainer(selectedUsersInfo.value[i].name, i),
                                   ),
                                 ],
                               ),
@@ -87,8 +82,7 @@ class _PopupSharePostState extends State<PopupSharePost> {
                           onTap: () {
                             double pos = scrollController.offset + 600;
                             scrollController.animateTo(pos,
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.easeInOutQuart);
+                                duration: const Duration(milliseconds: 500), curve: Curves.easeInOutQuart);
                           },
                           child: const ArrowJump(topPadding: true)),
                     ),
@@ -99,11 +93,9 @@ class _PopupSharePostState extends State<PopupSharePost> {
                           double pos = scrollController.offset - 600;
                           pos = pos < 0 ? 0 : pos;
                           scrollController.animateTo(pos,
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeInOutQuart);
+                              duration: const Duration(milliseconds: 500), curve: Curves.easeInOutQuart);
                         },
-                        child: const ArrowJump(
-                            isThatBack: false, topPadding: true),
+                        child: const ArrowJump(isThatBack: false, topPadding: true),
                       ),
                     ),
                   ],
@@ -119,9 +111,7 @@ class _PopupSharePostState extends State<PopupSharePost> {
   }
 
   void maxExtentUsersList() {
-    scrollController.animateTo(0.0,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOutQuart);
+    scrollController.animateTo(0.0, duration: const Duration(milliseconds: 500), curve: Curves.easeInOutQuart);
   }
 
   Padding emptyMessage() {
@@ -148,10 +138,7 @@ class _PopupSharePostState extends State<PopupSharePost> {
             Center(
               child: Text(
                 selectedUserName,
-                style: const TextStyle(
-                    fontSize: 15.0,
-                    color: ColorManager.blue,
-                    fontWeight: FontWeight.w500),
+                style: const TextStyle(fontSize: 15.0, color: ColorManager.blue, fontWeight: FontWeight.w500),
               ),
             ),
             const SizedBox(width: 10),
@@ -188,29 +175,23 @@ class _PopupSharePostState extends State<PopupSharePost> {
     );
   }
 
-  BorderSide divider() =>
-      const BorderSide(color: ColorManager.grey, width: 0.1);
+  BorderSide divider() => const BorderSide(color: ColorManager.grey, width: 0.1);
 
   List<Widget> textFiledAndShareButton() => [
         customDivider(
           bottomDivider: false,
           child: Padding(
-            padding: const EdgeInsetsDirectional.only(
-                start: 20, bottom: 10, end: 20, top: 10),
+            padding: const EdgeInsetsDirectional.only(start: 20, bottom: 10, end: 20, top: 10),
             child: selectedUsersInfo.value.isNotEmpty
-                ? messageField(
-                    messageTextController, StringsManager.writeMessage.tr)
+                ? messageField(messageTextController, StringsManager.writeMessage.tr)
                 : null,
           ),
         ),
         Padding(
-          padding:
-              const EdgeInsetsDirectional.only(start: 20, bottom: 20, end: 20),
+          padding: const EdgeInsetsDirectional.only(start: 20, bottom: 20, end: 20),
           child: ValueListenableBuilder(
             valueListenable: selectedUsersInfo,
-            builder:
-                (context, List<UserPersonalInfo> selectedUsersValue, child) =>
-                    CustomShareButton(
+            builder: (context, List<UserPersonalInfo> selectedUsersValue, child) => CustomShareButton(
               postInfo: widget.postInfo,
               clearTexts: clearTextsController,
               publisherInfo: widget.publisherInfo,
@@ -222,7 +203,7 @@ class _PopupSharePostState extends State<PopupSharePost> {
         ),
       ];
 
-  clearTextsController(bool clearText) {
+  void clearTextsController(bool clearText) {
     setState(() {
       if (clearText) messageTextController.clear();
     });

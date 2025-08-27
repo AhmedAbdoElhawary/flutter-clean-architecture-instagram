@@ -33,16 +33,14 @@ class CircleAvatarOfProfileImage extends StatefulWidget {
     this.disablePressed = false,
     this.thisForStoriesLine = false,
     this.showColorfulCircle = true,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  State<CircleAvatarOfProfileImage> createState() =>
-      _CircleAvatarOfProfileImageState();
+  State<CircleAvatarOfProfileImage> createState() => _CircleAvatarOfProfileImageState();
 }
 
-class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
-    with SingleTickerProviderStateMixin {
+class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage> with SingleTickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     if (widget.userInfo?.profileImageUrl.isNotEmpty ?? false) {
@@ -65,9 +63,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
   Widget build(BuildContext context) {
     String? profileImage = widget.userInfo?.profileImageUrl;
     return SizedBox(
-      child: widget.thisForStoriesLine
-          ? buildColumn(profileImage, context)
-          : buildStack(profileImage, context),
+      child: widget.thisForStoriesLine ? buildColumn(profileImage, context) : buildStack(profileImage, context),
     );
   }
 
@@ -81,12 +77,8 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
           buildStack(profileImage, context),
           if (widget.thisForStoriesLine) ...[
             SizedBox(height: widget.bodyHeight * 0.004),
-            if (widget.moveTextMore)
-              SizedBox(height: widget.bodyHeight * 0.015),
-            NameOfCircleAvatar(
-                widget.nameOfCircle.isEmpty
-                    ? widget.userInfo?.name ?? ""
-                    : widget.nameOfCircle,
+            if (widget.moveTextMore) SizedBox(height: widget.bodyHeight * 0.015),
+            NameOfCircleAvatar(widget.nameOfCircle.isEmpty ? widget.userInfo?.name ?? "" : widget.nameOfCircle,
                 widget.thisForStoriesLine),
           ]
         ],
@@ -94,14 +86,12 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     );
   }
 
-  onPressedImage(BuildContext context) async {
+  Future<void> onPressedImage(BuildContext context) async {
     if (!widget.showColorfulCircle) {
-      await Go(context)
-          .push(page: WhichProfilePage(userId: widget.userInfo?.userId));
+      await Go(context).push(page: WhichProfilePage(userId: widget.userInfo?.userId));
     } else if (widget.userInfo?.stories.isNotEmpty ?? false) {
       Widget page = BlocBuilder<StoryCubit, StoryState>(
-        bloc: StoryCubit.get(context)
-          ..getSpecificStoriesInfo(userInfo: widget.userInfo!),
+        bloc: StoryCubit.get(context)..getSpecificStoriesInfo(userInfo: widget.userInfo!),
         buildWhen: (previous, current) {
           if (previous != current && current is SpecificStoriesInfoLoaded) {
             return true;
@@ -115,14 +105,10 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
           if (state is SpecificStoriesInfoLoaded) {
             if (isThatMobile) {
               return StoryPageForMobile(
-                  user: state.userInfo,
-                  hashTag: "${widget.hashTag} for mobile",
-                  storiesOwnersInfo: [state.userInfo]);
+                  user: state.userInfo, hashTag: "${widget.hashTag} for mobile", storiesOwnersInfo: [state.userInfo]);
             } else {
               return StoryPageForWeb(
-                  user: state.userInfo,
-                  hashTag: "${widget.hashTag} for web",
-                  storiesOwnersInfo: [state.userInfo]);
+                  user: state.userInfo, hashTag: "${widget.hashTag} for web", storiesOwnersInfo: [state.userInfo]);
             }
           } else {
             return Scaffold(
@@ -141,8 +127,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     return widget.thisForStoriesLine
         ? stackOfImage(profileImage)
         : GestureDetector(
-            onTap:
-                !widget.disablePressed ? () => onPressedImage(context) : null,
+            onTap: !widget.disablePressed ? () => onPressedImage(context) : null,
             child: stackOfImage(profileImage),
           );
   }
@@ -167,18 +152,14 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
 
   CircleAvatar unColorfulContainer() {
     return CircleAvatar(
-      radius: widget.bodyHeight < 900
-          ? widget.bodyHeight * .052
-          : widget.bodyHeight * .0505,
+      radius: widget.bodyHeight < 900 ? widget.bodyHeight * .052 : widget.bodyHeight * .0505,
       backgroundColor: Theme.of(context).hintColor,
     );
   }
 
   CircleAvatar customSpacer() {
     return CircleAvatar(
-      radius: widget.bodyHeight < 900
-          ? widget.bodyHeight * .05
-          : widget.bodyHeight * .0485,
+      radius: widget.bodyHeight < 900 ? widget.bodyHeight * .05 : widget.bodyHeight * .0485,
       backgroundColor: Theme.of(context).primaryColor,
     );
   }
@@ -188,8 +169,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
       backgroundColor: ColorManager.customGrey,
       backgroundImage: profileImage?.isNotEmpty ?? false
           ? CachedNetworkImageProvider(profileImage!,
-              maxWidth: (widget.bodyHeight).toInt(),
-              maxHeight: (widget.bodyHeight).toInt())
+              maxWidth: (widget.bodyHeight).toInt(), maxHeight: (widget.bodyHeight).toInt())
           : null,
       radius: widget.bodyHeight * .046,
       child: profileImage?.isEmpty ?? true
@@ -206,14 +186,9 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     return Container(
       decoration: BoxDecoration(
           shape: BoxShape.circle,
-          gradient: LinearGradient(
-              begin: begin,
-              end: end,
-              colors: [bottomColor, middleColor, topColor])),
+          gradient: LinearGradient(begin: begin, end: end, colors: [bottomColor, middleColor, topColor])),
       child: CircleAvatar(
-        radius: widget.bodyHeight < 900
-            ? widget.bodyHeight * .0525
-            : widget.bodyHeight * .0505,
+        radius: widget.bodyHeight < 900 ? widget.bodyHeight * .0525 : widget.bodyHeight * .0505,
         backgroundColor: ColorManager.transparent,
       ),
     );

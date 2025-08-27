@@ -14,7 +14,7 @@ import 'package:instagram/presentation/pages/register/widgets/get_my_user_info.d
 import 'package:instagram/presentation/widgets/global/others/multi_bloc_provider.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
           themeMode: ThemeOfApp.theme,
-
           home: AnimatedSplashScreen.withScreenFunction(
             screenFunction: screenFunction,
             centered: true,
@@ -55,14 +54,11 @@ class MyApp extends StatelessWidget {
 Future<Widget> screenFunction() async {
   String? myId = await initializeDefaultValues();
 
-  return myId == null
-      ? const LoginPage()
-      : GetMyPersonalInfo(myPersonalId: myId);
+  return myId == null ? const LoginPage() : GetMyPersonalInfo(myPersonalId: myId);
 }
 
-_defineThePlatform(BuildContext context) {
+void _defineThePlatform(BuildContext context) {
   TargetPlatform platform = Theme.of(context).platform;
-  isThatMobile =
-      platform == TargetPlatform.iOS || platform == TargetPlatform.android;
+  isThatMobile = platform == TargetPlatform.iOS || platform == TargetPlatform.android;
   isThatAndroid = platform == TargetPlatform.android;
 }

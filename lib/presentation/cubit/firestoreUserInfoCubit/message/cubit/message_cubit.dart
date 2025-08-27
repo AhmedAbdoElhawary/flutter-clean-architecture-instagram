@@ -16,8 +16,7 @@ class MessageCubit extends Cubit<MessageState> {
   final DeleteMessageUseCase _deleteMessageUseCase;
   final GetSpecificChatInfo _getSpecificChatInfo;
   List<Message> messagesInfo = [];
-  MessageCubit(this._addMessageUseCase, this._deleteMessageUseCase,
-      this._getSpecificChatInfo)
+  MessageCubit(this._addMessageUseCase, this._deleteMessageUseCase, this._getSpecificChatInfo)
       : super(MessageInitial());
 
   static MessageCubit get(BuildContext context) => BlocProvider.of(context);
@@ -29,10 +28,7 @@ class MessageCubit extends Cubit<MessageState> {
   }) async {
     emit(SendMessageLoading());
     await _addMessageUseCase
-        .call(
-            paramsOne: messageInfo,
-            paramsTwo: pathOfPhoto,
-            paramsThree: recordFile)
+        .call(paramsOne: messageInfo, paramsTwo: pathOfPhoto, paramsThree: recordFile)
         .then((messageInfo) {
       emit(SendMessageLoaded(messageInfo));
     }).catchError((e) {
@@ -40,12 +36,9 @@ class MessageCubit extends Cubit<MessageState> {
     });
   }
 
-  Future<void> getSpecificChatInfo(
-      {required String chatUid, required bool isThatGroup}) async {
+  Future<void> getSpecificChatInfo({required String chatUid, required bool isThatGroup}) async {
     emit(GetSpecificChatLoading());
-    await _getSpecificChatInfo
-        .call(paramsOne: chatUid, paramsTwo: isThatGroup)
-        .then((coverMessageDetails) {
+    await _getSpecificChatInfo.call(paramsOne: chatUid, paramsTwo: isThatGroup).then((coverMessageDetails) {
       emit(GetSpecificChatLoaded(coverMessageDetails));
     }).catchError((e) {
       emit(GetMessageFailed(e.toString()));
@@ -59,10 +52,7 @@ class MessageCubit extends Cubit<MessageState> {
   }) async {
     emit(DeleteMessageLoading());
     await _deleteMessageUseCase
-        .call(
-            paramsOne: messageInfo,
-            paramsTwo: replacedMessage,
-            paramsThree: isThatOnlyMessageInChat)
+        .call(paramsOne: messageInfo, paramsTwo: replacedMessage, paramsThree: isThatOnlyMessageInChat)
         .then((_) {
       emit(DeleteMessageLoaded());
     }).catchError((e) {

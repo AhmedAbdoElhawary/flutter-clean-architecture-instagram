@@ -9,9 +9,11 @@ class CustomVideosGridView extends StatefulWidget {
   final List<Post> postsInfo;
   final String userId;
 
-  const CustomVideosGridView(
-      {required this.userId, required this.postsInfo, Key? key})
-      : super(key: key);
+  const CustomVideosGridView({
+    required this.userId,
+    required this.postsInfo,
+    super.key,
+  });
 
   @override
   State<CustomVideosGridView> createState() => _CustomVideosGridViewState();
@@ -23,7 +25,7 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
     bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
 
     return widget.postsInfo.isNotEmpty
-        ? StaggeredGridView.countBuilder(
+        ? MasonryGridView.count(
             padding: const EdgeInsetsDirectional.only(bottom: 1.5, top: 1.5),
             crossAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
             mainAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
@@ -32,24 +34,29 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: widget.postsInfo.length,
-            itemBuilder: (context, index) => CustomGridViewDisplay(
-              postClickedInfo: widget.postsInfo[index],
-              postsInfo: widget.postsInfo,
-              index: index,
-              playThisVideo: true,
-              showVideoCover: true,
-            ),
-            staggeredTileBuilder: (index) {
-              Post postsInfo = widget.postsInfo[index];
-              bool condition = postsInfo.isThatMix || postsInfo.isThatImage;
-              double num = condition ? 1 : 2;
-              return StaggeredTile.count(1, num);
+            itemBuilder: (context, index) {
+              final post = widget.postsInfo[index];
+              final bool condition = post.isThatMix || post.isThatImage;
+
+              // In the new MasonryGridView, the item height is defined by its content.
+              // To replicate the "taller tile" effect, we can wrap the child with SizedBox.
+              return SizedBox(
+                height: condition ? 200 : 400, // adjust to match your old layout
+                child: CustomGridViewDisplay(
+                  postClickedInfo: post,
+                  postsInfo: widget.postsInfo,
+                  index: index,
+                  playThisVideo: true,
+                  showVideoCover: true,
+                ),
+              );
             },
           )
         : Center(
             child: Text(
-            StringsManager.noPosts.tr,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ));
+              StringsManager.noPosts.tr,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          );
   }
 }

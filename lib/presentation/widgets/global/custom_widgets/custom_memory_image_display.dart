@@ -10,10 +10,10 @@ class MemoryDisplay extends StatefulWidget {
   final Uint8List imagePath;
 
   const MemoryDisplay({
-    Key? key,
+    super.key,
     required this.imagePath,
     this.isThatImage = true,
-  }) : super(key: key);
+  });
 
   @override
   State<MemoryDisplay> createState() => _NetworkImageDisplayState();
@@ -51,8 +51,7 @@ class _NetworkImageDisplayState extends State<MemoryDisplay> {
 
   SizedBox buildError() {
     return SizedBox(
-      child: Icon(Icons.warning_amber_rounded,
-          size: 30, color: Theme.of(context).focusColor),
+      child: Icon(Icons.warning_amber_rounded, size: 30, color: Theme.of(context).focusColor),
     );
   }
 

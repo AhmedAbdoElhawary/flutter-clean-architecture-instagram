@@ -12,13 +12,12 @@ class CustomElevatedButton extends StatefulWidget {
   final bool isThatSignIn;
   final AsyncCallback onPressed;
   const CustomElevatedButton(
-      {Key? key,
+      {super.key,
       required this.isItDone,
       this.blueColor = true,
       this.isThatSignIn = false,
       required this.nameOfButton,
-      required this.onPressed})
-      : super(key: key);
+      required this.onPressed});
 
   @override
   State<CustomElevatedButton> createState() => _CustomElevatedButtonState();
@@ -32,8 +31,7 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
         return await widget.onPressed();
       },
       child: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: 20, vertical: widget.isThatSignIn ? 0 : 20),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: widget.isThatSignIn ? 0 : 20),
         child: Container(
             margin: const EdgeInsetsDirectional.all(3.0),
             padding: EdgeInsetsDirectional.all(isThatMobile ? 15.0 : 10),
@@ -58,25 +56,20 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
 
   Widget circularProgress() {
     return const Center(
-      child: SizedBox(
-          height: 20,
-          width: 20,
-          child:
-              ThineCircularProgress(color: ColorManager.white, strokeWidth: 2)),
+      child: SizedBox(height: 20, width: 20, child: ThineCircularProgress(color: ColorManager.white, strokeWidth: 2)),
     );
   }
 
   BoxDecoration containerStyle() {
     return BoxDecoration(
-      color: !widget.blueColor
-          ? ColorManager.lightBlue
-          : (widget.isItDone ? ColorManager.blue : ColorManager.lightBlue),
+      color:
+          !widget.blueColor ? ColorManager.lightBlue : (widget.isItDone ? ColorManager.blue : ColorManager.lightBlue),
       borderRadius: BorderRadius.circular(isThatMobile ? 10.0 : 5),
       boxShadow: !isThatMobile
           ? null
           : [
               BoxShadow(
-                color: ColorManager.grey.withOpacity(.2),
+                color: ColorManager.grey.withValues(alpha: .2),
                 blurRadius: 5,
                 spreadRadius: 5,
                 offset: const Offset(0.0, 1.0),

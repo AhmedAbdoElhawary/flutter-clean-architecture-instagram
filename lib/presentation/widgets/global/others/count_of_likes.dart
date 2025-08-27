@@ -10,7 +10,7 @@ import 'package:instagram/presentation/pages/profile/users_who_likes_for_web.dar
 
 class CountOfLikes extends StatelessWidget {
   final Post postInfo;
-  const CountOfLikes({Key? key, required this.postInfo}) : super(key: key);
+  const CountOfLikes({super.key, required this.postInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +36,8 @@ class CountOfLikes extends StatelessWidget {
           );
         }
       },
-      child: Text(
-          '$likes ${likes > 1 ? StringsManager.likes.tr : StringsManager.like.tr}',
-          textAlign: TextAlign.left,
-          style: Theme.of(context).textTheme.displayMedium),
+      child: Text('$likes ${likes > 1 ? StringsManager.likes.tr : StringsManager.like.tr}',
+          textAlign: TextAlign.left, style: Theme.of(context).textTheme.displayMedium),
     );
   }
 }

@@ -10,14 +10,14 @@ class PlayThisVideo extends StatefulWidget {
   final bool play;
   final bool withoutSound;
   const PlayThisVideo({
-    Key? key,
+    super.key,
     required this.videoUrl,
     this.blurHash = "",
     this.withoutSound = false,
     this.isThatFromMemory = false,
     this.aspectRatio = 0.65,
     required this.play,
-  }) : super(key: key);
+  });
   @override
   PlayThisVideoState createState() => PlayThisVideoState();
 }

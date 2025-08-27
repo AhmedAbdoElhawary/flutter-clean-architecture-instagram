@@ -24,13 +24,13 @@ class CallPage extends StatefulWidget {
   final ClientRole role;
 
   const CallPage({
-    Key? key,
+    super.key,
     required this.channelName,
     this.userCallingId = "",
     required this.userCallingType,
     required this.role,
     this.usersInfo,
-  }) : super(key: key);
+  });
 
   @override
   CallPageState createState() => CallPageState();
@@ -76,8 +76,7 @@ class CallPageState extends State<CallPage> {
     await _handleCameraAndMic(Permission.microphone);
   }
 
-  Future<void> _handleCameraAndMic(Permission permission) async =>
-      await permission.request();
+  Future<void> _handleCameraAndMic(Permission permission) async => await permission.request();
 
   /// Create your own app id with agora with "testing mode"
   /// it's very simple, just go to https://www.agora.io/en/ and create your own project and get your own app id in [agoraAppId]
@@ -154,14 +153,13 @@ class CallPageState extends State<CallPage> {
       list.add(const rtc_local_view.SurfaceView());
     }
     for (var uid in _users) {
-      list.add(
-          rtc_remote_view.SurfaceView(channelId: widget.channelName, uid: uid));
+      list.add(rtc_remote_view.SurfaceView(channelId: widget.channelName, uid: uid));
     }
     return list;
   }
 
   /// Video view wrapper
-  Widget _videoView(view) {
+  Widget _videoView(Widget view) {
     return Expanded(child: Container(child: view));
   }
 
@@ -177,15 +175,11 @@ class CallPageState extends State<CallPage> {
   Widget _viewRows() {
     final views = _getRenderViews();
     if (views.length > 1) {
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => setState(() => moreThanOne = true));
+      WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => moreThanOne = true));
     }
-    if (widget.userCallingType == UserCallingType.receiver &&
-        views.length == 1 &&
-        moreThanOne) {
+    if (widget.userCallingType == UserCallingType.receiver && views.length == 1 && moreThanOne) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await CallingRoomsCubit.get(context)
-            .deleteTheRoom(channelId: widget.channelName);
+        await CallingRoomsCubit.get(context).deleteTheRoom(channelId: widget.channelName);
         setState(() => amICalling = false);
       });
       Navigator.of(context).maybePop();
@@ -205,17 +199,11 @@ class CallPageState extends State<CallPage> {
         );
       case 3:
         return Column(
-          children: <Widget>[
-            _expandedVideoRow(views.sublist(0, 2)),
-            _expandedVideoRow(views.sublist(2, 3))
-          ],
+          children: <Widget>[_expandedVideoRow(views.sublist(0, 2)), _expandedVideoRow(views.sublist(2, 3))],
         );
       case 4:
         return Column(
-          children: <Widget>[
-            _expandedVideoRow(views.sublist(0, 2)),
-            _expandedVideoRow(views.sublist(2, 4))
-          ],
+          children: <Widget>[_expandedVideoRow(views.sublist(0, 2)), _expandedVideoRow(views.sublist(2, 4))],
         );
       default:
     }
@@ -312,27 +300,22 @@ class CallPageState extends State<CallPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       const SizedBox(width: 10),
-                      const Icon(Icons.video_camera_back_rounded,
-                          color: ColorManager.white, size: 33),
+                      const Icon(Icons.video_camera_back_rounded, color: ColorManager.white, size: 33),
                       const SizedBox(width: 10),
                       GestureDetector(
                         onTap: _onToggleMute,
                         child: Icon(
-                          muted
-                              ? Icons.mic_off_rounded
-                              : Icons.mic_none_rounded,
+                          muted ? Icons.mic_off_rounded : Icons.mic_none_rounded,
                           color: Colors.white,
                           size: 33.0,
                         ),
                       ),
                       const SizedBox(width: 10),
-                      const Icon(Icons.volume_up_rounded,
-                          color: ColorManager.white, size: 33),
+                      const Icon(Icons.volume_up_rounded, color: ColorManager.white, size: 33),
                       const SizedBox(width: 10),
                       GestureDetector(
                         onTap: () => _onCallEnd(context),
-                        child: const Icon(Icons.close_rounded,
-                            color: ColorManager.white, size: 33),
+                        child: const Icon(Icons.close_rounded, color: ColorManager.white, size: 33),
                       ),
                     ],
                   ),
@@ -352,22 +335,16 @@ class CallPageState extends State<CallPage> {
                           alignment: Alignment.bottomRight,
                           child: buildCircleAvatar(0, 700),
                         ),
-                        Positioned(
-                            height: -15,
-                            left: -10,
-                            child: buildCircleAvatar(1, 700)),
+                        Positioned(height: -15, left: -10, child: buildCircleAvatar(1, 700)),
                       ],
                       const SizedBox(height: 30),
                       ...List.generate(numOfUsers!, (index) {
                         return Text(widget.usersInfo![index].name,
-                            style: getNormalStyle(
-                                color: ColorManager.white, fontSize: 25));
+                            style: getNormalStyle(color: ColorManager.white, fontSize: 25));
                       }),
                     ],
                     const SizedBox(height: 10),
-                    Text('Connecting...',
-                        style: getNormalStyle(
-                            color: ColorManager.white, fontSize: 16.5)),
+                    Text('Connecting...', style: getNormalStyle(color: ColorManager.white, fontSize: 16.5)),
                   ],
                 ),
               ),

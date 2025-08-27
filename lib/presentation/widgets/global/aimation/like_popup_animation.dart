@@ -11,23 +11,21 @@ class LikePopupAnimation extends StatefulWidget {
     required this.onEnd,
     this.duration = const Duration(milliseconds: 150),
     required this.isAnimating,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<LikePopupAnimation> createState() => _LikePopupAnimationState();
 }
 
-class _LikePopupAnimationState extends State<LikePopupAnimation>
-    with SingleTickerProviderStateMixin {
+class _LikePopupAnimationState extends State<LikePopupAnimation> with SingleTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<double> scale;
   @override
   void initState() {
     super.initState();
     final halfDuration = widget.duration.inMilliseconds ~/ 2;
-    animationController = AnimationController(
-        duration: Duration(milliseconds: halfDuration), vsync: this);
+    animationController = AnimationController(duration: Duration(milliseconds: halfDuration), vsync: this);
     scale = Tween<double>(begin: 1, end: 1.2).animate(animationController);
   }
 

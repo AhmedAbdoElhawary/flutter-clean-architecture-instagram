@@ -9,8 +9,7 @@ import 'package:instagram/presentation/pages/comments/widgets/comment_of_post.da
 class CommentsPageForMobile extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
 
-  const CommentsPageForMobile({Key? key, required this.postInfo})
-      : super(key: key);
+  const CommentsPageForMobile({super.key, required this.postInfo});
 
   @override
   State<CommentsPageForMobile> createState() => _CommentsPageForMobileState();

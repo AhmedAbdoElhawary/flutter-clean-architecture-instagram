@@ -20,13 +20,8 @@ class UserInfoCubit extends Cubit<UserInfoState> {
   final GetUserFromUserNameUseCase _getUserFromUserNameUseCase;
   late UserPersonalInfo myPersonalInfo;
 
-  UserInfoCubit(
-      this._getUserInfoUseCase,
-      this._updateUserInfoUseCase,
-      this._addPostToUserUseCase,
-      this._getAllUnFollowersUsersUseCase,
-      this._getUserFromUserNameUseCase,
-      this._uploadImageUseCase)
+  UserInfoCubit(this._getUserInfoUseCase, this._updateUserInfoUseCase, this._addPostToUserUseCase,
+      this._getAllUnFollowersUsersUseCase, this._getUserFromUserNameUseCase, this._uploadImageUseCase)
       : super(CubitInitial());
 
   static UserInfoCubit get(BuildContext context) => BlocProvider.of(context);
@@ -40,9 +35,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
     bool getDeviceToken = false,
   }) async {
     emit(CubitUserLoading());
-    await _getUserInfoUseCase
-        .call(paramsOne: userId, paramsTwo: getDeviceToken)
-        .then((UserPersonalInfo userInfo) {
+    await _getUserInfoUseCase.call(paramsOne: userId, paramsTwo: getDeviceToken).then((UserPersonalInfo userInfo) {
       if (isThatMyPersonalId) {
         myPersonalInfo = userInfo;
         emit(CubitMyPersonalInfoLoaded(userInfo));
@@ -56,9 +49,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
 
   Future<void> getAllUnFollowersUsers(UserPersonalInfo myPersonalInfo) async {
     emit(CubitAllUnFollowersUserLoading());
-    await _getAllUnFollowersUsersUseCase
-        .call(params: myPersonalInfo)
-        .then((usersInfo) {
+    await _getAllUnFollowersUsersUseCase.call(params: myPersonalInfo).then((usersInfo) {
       emit(CubitAllUnFollowersUserLoaded(usersInfo));
     }).catchError((e) {
       emit(CubitGetUserInfoFailed(e.toString()));
@@ -103,12 +94,9 @@ class UserInfoCubit extends Cubit<UserInfoState> {
     });
   }
 
-  Future<void> updateUserPostsInfo(
-      {required String userId, required Post postInfo}) async {
+  Future<void> updateUserPostsInfo({required String userId, required Post postInfo}) async {
     emit(CubitUserLoading());
-    await _addPostToUserUseCase
-        .call(paramsOne: userId, paramsTwo: postInfo)
-        .then((userInfo) {
+    await _addPostToUserUseCase.call(paramsOne: userId, paramsTwo: postInfo).then((userInfo) {
       myPersonalInfo = userInfo;
       emit(CubitMyPersonalInfoLoaded(userInfo));
     }).catchError((e) {
@@ -123,14 +111,9 @@ class UserInfoCubit extends Cubit<UserInfoState> {
   }
 
   Future<void> uploadProfileImage(
-      {required Uint8List photo,
-      required String userId,
-      required String previousImageUrl}) async {
+      {required Uint8List photo, required String userId, required String previousImageUrl}) async {
     emit(CubitUserLoading());
-    await _uploadImageUseCase
-        .call(
-            paramsOne: photo, paramsTwo: userId, paramsThree: previousImageUrl)
-        .then((imageUrl) {
+    await _uploadImageUseCase.call(paramsOne: photo, paramsTwo: userId, paramsThree: previousImageUrl).then((imageUrl) {
       myPersonalInfo.profileImageUrl = imageUrl;
       emit(CubitMyPersonalInfoLoaded(myPersonalInfo));
     }).catchError((e) {

@@ -3,7 +3,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 
 class VolumeIcon extends StatelessWidget {
   final bool isVolumeOn;
-  const VolumeIcon({Key? key, this.isVolumeOn = true}) : super(key: key);
+  const VolumeIcon({super.key, this.isVolumeOn = true});
 
   @override
   Widget build(BuildContext context) {

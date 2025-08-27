@@ -23,23 +23,16 @@ class PostCubit extends Cubit<PostState> {
 
   List<Post>? allPostsInfo;
 
-  PostCubit(
-      this._createPostUseCase,
-      this._getPostsInfoUseCase,
-      this._updatePostUseCase,
-      this._deletePostUseCase,
+  PostCubit(this._createPostUseCase, this._getPostsInfoUseCase, this._updatePostUseCase, this._deletePostUseCase,
       this._getAllPostInfoUseCase)
       : super(CubitPostLoading());
 
   static PostCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future<void> createPost(Post postInfo, List<SelectedByte> files,
-      {Uint8List? coverOfVideo}) async {
+  Future<void> createPost(Post postInfo, List<SelectedByte> files, {Uint8List? coverOfVideo}) async {
     newPostInfo = null;
     emit(CubitPostLoading());
-    await _createPostUseCase
-        .call(paramsOne: postInfo, paramsTwo: files, paramsThree: coverOfVideo)
-        .then((postInfo) {
+    await _createPostUseCase.call(paramsOne: postInfo, paramsTwo: files, paramsThree: coverOfVideo).then((postInfo) {
       newPostInfo = postInfo;
       emit(CubitPostLoaded(postInfo));
     }).catchError((e) {
@@ -48,13 +41,9 @@ class PostCubit extends Cubit<PostState> {
   }
 
   Future<void> getPostsInfo(
-      {required List<dynamic> postsIds,
-      required bool isThatMyPosts,
-      int lengthOfCurrentList = -1}) async {
+      {required List<dynamic> postsIds, required bool isThatMyPosts, int lengthOfCurrentList = -1}) async {
     emit(CubitPostLoading());
-    await _getPostsInfoUseCase
-        .call(paramsOne: postsIds, paramsTwo: lengthOfCurrentList)
-        .then((postsInfo) {
+    await _getPostsInfoUseCase.call(paramsOne: postsIds, paramsTwo: lengthOfCurrentList).then((postsInfo) {
       if (isThatMyPosts) {
         myPostsInfo = postsInfo;
         emit(CubitMyPersonalPostsLoaded(postsInfo));
@@ -67,12 +56,9 @@ class PostCubit extends Cubit<PostState> {
     });
   }
 
-  Future<void> getAllPostInfo(
-      {bool isVideosWantedOnly = false, String skippedVideoUid = ""}) async {
+  Future<void> getAllPostInfo({bool isVideosWantedOnly = false, String skippedVideoUid = ""}) async {
     emit(CubitPostLoading());
-    await _getAllPostInfoUseCase
-        .call(paramsOne: isVideosWantedOnly, paramsTwo: skippedVideoUid)
-        .then((allPostsInfo) {
+    await _getAllPostInfoUseCase.call(paramsOne: isVideosWantedOnly, paramsTwo: skippedVideoUid).then((allPostsInfo) {
       this.allPostsInfo = allPostsInfo;
       emit(CubitAllPostsLoaded(allPostsInfo));
     }).catchError((e) {
@@ -98,8 +84,7 @@ class PostCubit extends Cubit<PostState> {
     emit(CubitDeletePostLoading());
     await _deletePostUseCase.call(params: postInfo).then((_) {
       if (myPostsInfo != null) {
-        myPostsInfo!
-            .removeWhere((element) => element.postUid == postInfo.postUid);
+        myPostsInfo!.removeWhere((element) => element.postUid == postInfo.postUid);
         emit(CubitMyPersonalPostsLoaded(myPostsInfo!));
       }
       emit(CubitDeletePostLoaded());

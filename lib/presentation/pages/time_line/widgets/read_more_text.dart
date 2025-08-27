@@ -7,7 +7,7 @@ import 'package:readmore/readmore.dart';
 class ReadMore extends StatelessWidget {
   final String text;
   final int timeLines;
-  const ReadMore(this.text, this.timeLines, {Key? key}) : super(key: key);
+  const ReadMore(this.text, this.timeLines, {super.key});
   @override
   Widget build(BuildContext context) {
     return ReadMoreText(

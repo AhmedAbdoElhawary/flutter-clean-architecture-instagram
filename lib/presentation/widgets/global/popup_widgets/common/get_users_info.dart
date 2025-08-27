@@ -13,11 +13,11 @@ class GetUsersInfo extends StatefulWidget {
   final bool isThatMyPersonalId;
 
   const GetUsersInfo({
-    Key? key,
+    super.key,
     required this.isThatMyPersonalId,
     required this.usersIds,
     this.isThatFollowers = true,
-  }) : super(key: key);
+  });
 
   @override
   State<GetUsersInfo> createState() => _GetUsersInfoState();
@@ -30,13 +30,10 @@ class _GetUsersInfoState extends State<GetUsersInfo> {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: rebuildUsersInfo,
-      builder: (context, bool rebuildValue, child) =>
-          BlocBuilder<UsersInfoCubit, UsersInfoState>(
-        bloc: BlocProvider.of<UsersInfoCubit>(context)
-          ..getSpecificUsersInfo(usersIds: widget.usersIds),
+      builder: (context, bool rebuildValue, child) => BlocBuilder<UsersInfoCubit, UsersInfoState>(
+        bloc: BlocProvider.of<UsersInfoCubit>(context)..getSpecificUsersInfo(usersIds: widget.usersIds),
         buildWhen: (previous, current) {
-          if (previous != current &&
-              (current is CubitGettingSpecificUsersLoaded)) {
+          if (previous != current && (current is CubitGettingSpecificUsersLoaded)) {
             return true;
           }
           if (rebuildValue && (current is CubitGettingSpecificUsersLoaded)) {
@@ -49,9 +46,7 @@ class _GetUsersInfoState extends State<GetUsersInfo> {
           if (state is CubitGettingSpecificUsersLoaded) {
             return ShowMeTheUsers(
               usersInfo: state.specificUsersInfo,
-              emptyText: widget.isThatFollowers
-                  ? StringsManager.noFollowers.tr
-                  : StringsManager.noFollowings.tr,
+              emptyText: widget.isThatFollowers ? StringsManager.noFollowers.tr : StringsManager.noFollowings.tr,
               isThatMyPersonalId: widget.isThatMyPersonalId,
             );
           }

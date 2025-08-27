@@ -186,8 +186,7 @@ class ScrollSnapListState extends State<ScrollSnapList> {
     return child;
   }
 
-  double _calcCardLocation(
-      {double? pixel, required double itemSize, int? index}) {
+  double _calcCardLocation({double? pixel, required double itemSize, int? index}) {
     int cardIndex = index ?? ((pixel! - itemSize / 2) / itemSize).ceil();
 
     if (cardIndex < 0) {
@@ -205,8 +204,7 @@ class ScrollSnapListState extends State<ScrollSnapList> {
   }
 
   void focusToItem(int index) {
-    double targetLoc =
-        _calcCardLocation(index: index, itemSize: widget.itemSize);
+    double targetLoc = _calcCardLocation(index: index, itemSize: widget.itemSize);
     _animateScroll(targetLoc);
   }
 
@@ -227,18 +225,12 @@ class ScrollSnapListState extends State<ScrollSnapList> {
   double calculateListPadding(BoxConstraints constraint) {
     switch (widget.selectedItemAnchor) {
       case SelectedItemAnchor.middle:
-        return (widget.scrollDirection == Axis.horizontal
-                    ? constraint.maxWidth
-                    : constraint.maxHeight) /
-                2 -
+        return (widget.scrollDirection == Axis.horizontal ? constraint.maxWidth : constraint.maxHeight) / 2 -
             widget.itemSize / 2;
       case SelectedItemAnchor.end:
-        return (widget.scrollDirection == Axis.horizontal
-                ? constraint.maxWidth
-                : constraint.maxHeight) -
+        return (widget.scrollDirection == Axis.horizontal ? constraint.maxWidth : constraint.maxHeight) -
             widget.itemSize;
       case SelectedItemAnchor.start:
-      default:
         return 0;
     }
   }
@@ -281,10 +273,8 @@ class ScrollSnapListState extends State<ScrollSnapList> {
                     return true;
                   }
 
-                  double tolerance =
-                      widget.endOfListTolerance ?? (widget.itemSize / 2);
-                  if (scrollInfo.metrics.pixels >=
-                      scrollInfo.metrics.maxScrollExtent - tolerance) {
+                  double tolerance = widget.endOfListTolerance ?? (widget.itemSize / 2);
+                  if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - tolerance) {
                     _onReachEnd();
                   }
 
@@ -297,8 +287,7 @@ class ScrollSnapListState extends State<ScrollSnapList> {
                     _animateScroll(offset);
                   }
                 } else if (scrollInfo is ScrollUpdateNotification) {
-                  if (widget.dynamicItemSize ||
-                      widget.dynamicItemOpacity != null) {
+                  if (widget.dynamicItemSize || widget.dynamicItemOpacity != null) {
                     setState(() {
                       currentPixel = scrollInfo.metrics.pixels;
                     });

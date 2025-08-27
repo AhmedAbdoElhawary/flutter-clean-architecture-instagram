@@ -7,35 +7,37 @@ import 'package:instagram/domain/use_cases/user/search_about_user.dart';
 part 'search_about_user_event.dart';
 part 'search_about_user_state.dart';
 
-class SearchAboutUserBloc
-    extends Bloc<SearchAboutUserEvent, SearchAboutUserState> {
+class SearchAboutUserBloc extends Bloc<SearchAboutUserEvent, SearchAboutUserState> {
   final SearchAboutUserUseCase _searchAboutUserUseCase;
-  SearchAboutUserBloc(this._searchAboutUserUseCase)
-      : super(SearchAboutUserInitial());
 
-  @override
-  Stream<SearchAboutUserState> mapEventToState(
-    SearchAboutUserEvent event,
-  ) async* {
-    if (event is FindSpecificUser) {
-      yield* _mapLoadSearchToState(event.name, event.searchForSingleLetter);
-    } else if (event is UpdateUser) {
-      yield* _mapUpdateSearchToState(event);
-    }
+  SearchAboutUserBloc(this._searchAboutUserUseCase) : super(SearchAboutUserInitial()) {
+    on<FindSpecificUser>(_onFindSpecificUser);
+    on<UpdateUser>(_onUpdateUser);
   }
 
-  static SearchAboutUserBloc get(BuildContext context) =>
-      BlocProvider.of(context);
+  static SearchAboutUserBloc get(BuildContext context) => BlocProvider.of(context);
 
-  Stream<SearchAboutUserState> _mapLoadSearchToState(
-      String receiverId, bool searchForSingleLetter) async* {
-    _searchAboutUserUseCase
-        .call(paramsOne: receiverId, paramsTwo: searchForSingleLetter)
-        .listen((users) => add(UpdateUser(users)));
+  Future<void> _onFindSpecificUser(
+    FindSpecificUser event,
+    Emitter<SearchAboutUserState> emit,
+  ) async {
+    await emit.forEach<List<UserPersonalInfo>>(
+      _searchAboutUserUseCase.call(
+        paramsOne: event.name,
+        paramsTwo: event.searchForSingleLetter,
+      ),
+      onData: (users) {
+        // still keep two-step flow (UpdateUser event) if you want consistency
+        add(UpdateUser(users));
+        return SearchAboutUserBlocLoaded(users: users);
+      },
+    );
   }
 
-  Stream<SearchAboutUserState> _mapUpdateSearchToState(
-      UpdateUser event) async* {
-    yield SearchAboutUserBlocLoaded(users: event.users);
+  void _onUpdateUser(
+    UpdateUser event,
+    Emitter<SearchAboutUserState> emit,
+  ) {
+    emit(SearchAboutUserBlocLoaded(users: event.users));
   }
 }

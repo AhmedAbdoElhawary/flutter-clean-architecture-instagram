@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram/data/models/parent_classes/post/parent_post.dart';
-import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 
 class Post extends ParentPost {
   String postUrl;
@@ -14,34 +13,24 @@ class Post extends ParentPost {
   /// But, i made this way because i have a lot of data in the backend without [isThatMix]
   bool isThatMix = false;
   Post({
-    required String datePublished,
-    required String publisherId,
-    UserPersonalInfo? publisherInfo,
+    required super.datePublished,
+    required super.publisherId,
+    super.publisherInfo,
     this.postUid = "",
     this.coverOfVideoUrl = "",
     this.isThatMix = false,
     this.postUrl = "",
     required this.imagesUrls,
     required this.aspectRatio,
-    String caption = "",
-    required List<dynamic> comments,
-    required String blurHash,
-    required List<dynamic> likes,
-    bool isThatImage = true,
-  }) : super(
-          datePublished: datePublished,
-          likes: likes,
-          comments: comments,
-          publisherId: publisherId,
-          caption: caption,
-          blurHash: blurHash,
-          publisherInfo: publisherInfo,
-          isThatImage: isThatImage,
-        );
+    super.caption,
+    required super.comments,
+    required super.blurHash,
+    required super.likes,
+    super.isThatImage = true,
+  });
 
   static Post fromQuery(
-      {DocumentSnapshot<Map<String, dynamic>>? doc,
-      QueryDocumentSnapshot<Map<String, dynamic>>? query}) {
+      {DocumentSnapshot<Map<String, dynamic>>? doc, QueryDocumentSnapshot<Map<String, dynamic>>? query}) {
     dynamic snap = doc ?? query;
     dynamic aspect = snap.data()?["aspectRatio"];
     if (aspect is int) aspect = aspect.toDouble();

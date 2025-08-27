@@ -8,10 +8,10 @@ class StorySwipe extends StatefulWidget {
   late final PageController controller;
 
   StorySwipe({
-    Key? key,
+    super.key,
     required this.children,
     required this.controller,
-  }) : super(key: key) {
+  }) {
     assert(children.isNotEmpty);
   }
 
@@ -65,11 +65,10 @@ class _SwipeWidget extends StatelessWidget {
   final Widget child;
 
   const _SwipeWidget({
-    Key? key,
     required this.index,
     required this.pageNotifier,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -83,28 +82,8 @@ class _SwipeWidget extends StatelessWidget {
     return Transform(
         alignment: isLeaving ? Alignment.centerRight : Alignment.centerLeft,
         transform: transform,
-        child:
-            // isThatMobile
-            //     ?
-            buildStack(opacity)
-        // : buildStackForWeb(context, opacity),
-        );
+        child: buildStack(opacity));
   }
-  //
-  // Widget buildStackForWeb(BuildContext context, opacity) {
-  //   double widthOfScreen = MediaQuery.of(context).size.width;
-  //   double halfOfWidth = widthOfScreen / 2;
-  //   double heightOfStory =
-  //       (halfOfWidth < 515 ? widthOfScreen : halfOfWidth) + 50;
-  //   double widthOfStory =
-  //       (halfOfWidth < 515 ? halfOfWidth : halfOfWidth / 2) + 80;
-  //
-  //   return SizedBox(
-  //     height: heightOfStory,
-  //     width: widthOfStory,
-  //     child: buildStack(opacity),
-  //   );
-  // }
 
   Stack buildStack(double opacity) {
     return Stack(

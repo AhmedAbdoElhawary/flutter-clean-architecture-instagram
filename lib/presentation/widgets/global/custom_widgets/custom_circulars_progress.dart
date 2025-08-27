@@ -5,7 +5,7 @@ import 'package:instagram/core/utility/constant.dart';
 class CustomCircularProgress extends StatelessWidget {
   final Color color;
 
-  const CustomCircularProgress(this.color, {Key? key}) : super(key: key);
+  const CustomCircularProgress(this.color, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +32,7 @@ class ThineCircularProgress extends StatelessWidget {
   final double strokeWidth;
   final Animation<Color?>? valueColor;
 
-  const ThineCircularProgress(
-      {Key? key,
-      this.strokeWidth = 1.0,
-      this.backgroundColor,
-      this.color,
-      this.valueColor})
-      : super(key: key);
+  const ThineCircularProgress({super.key, this.strokeWidth = 1.0, this.backgroundColor, this.color, this.valueColor});
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +43,7 @@ class ThineCircularProgress extends StatelessWidget {
               valueColor: valueColor,
               strokeWidth: strokeWidth,
               color: color ?? Theme.of(context).focusColor)
-          : CupertinoActivityIndicator(
-              color: color ?? Theme.of(context).focusColor),
+          : CupertinoActivityIndicator(color: color ?? Theme.of(context).focusColor),
     );
   }
 }

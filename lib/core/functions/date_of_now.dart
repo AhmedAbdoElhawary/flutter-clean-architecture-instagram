@@ -18,11 +18,7 @@ class DateReformat {
     return second > 60
         ? (minute > 60
             ? (hour > 24
-                ? (day > 30
-                    ? (week > 4
-                        ? (month > 12 ? "$year y" : "$month m")
-                        : "$week w")
-                    : "$day d")
+                ? (day > 30 ? (week > 4 ? (month > 12 ? "$year y" : "$month m") : "$week w") : "$day d")
                 : "$hour h")
             : "$minute m")
         : "$second s";
@@ -36,8 +32,7 @@ class DateReformat {
     String dateOfToday = DateFormat(" h:m a").format(theActualDate);
     String dateOfDay = DateFormat("EEE h:m a").format(theActualDate);
     String dateOfMonth = DateFormat("MMM d, h:m a").format(theActualDate);
-    String theCompleteDate =
-        DateFormat("MMM d, y  h:m a").format(theActualDate);
+    String theCompleteDate = DateFormat("MMM d, y  h:m a").format(theActualDate);
 
     String theDateOTime = theActualDate.year == now.year
         ? (theActualDate.month == now.month
@@ -48,11 +43,9 @@ class DateReformat {
     DateTime from = _dateTime(theActualDate);
     DateTime to = _dateTime(thePreviousDate);
     int date = from.difference(to).inHours;
-    return (!theActualDate.isAtSameMomentAs(thePreviousDate) && date < 1)
-        ? ""
-        : theDateOTime;
+    return (!theActualDate.isAtSameMomentAs(thePreviousDate) && date < 1) ? "" : theDateOTime;
   }
 }
 
-DateTime _dateTime(DateTime theDate) => DateTime(
-    theDate.year, theDate.month, theDate.day, theDate.hour, theDate.minute);
+DateTime _dateTime(DateTime theDate) =>
+    DateTime(theDate.year, theDate.month, theDate.day, theDate.hour, theDate.minute);

@@ -27,7 +27,7 @@ import '../../../cubit/postInfoCubit/post_cubit.dart';
 class MultiBlocs extends StatelessWidget {
   final Widget materialApp;
 
-  const MultiBlocs(this.materialApp, {Key? key}) : super(key: key);
+  const MultiBlocs(this.materialApp, {super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -19,7 +19,7 @@ import '../../cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import '../../cubit/firestoreUserInfoCubit/add_new_user_cubit.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({super.key});
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -51,37 +51,35 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget customTextButton() {
     return ValueListenableBuilder(
       valueListenable: rememberPassword,
-      builder: (context, bool rememberPasswordValue, child) =>
-          ValueListenableBuilder(
-            valueListenable: validateEmail,
-            builder: (context, bool validateEmailValue, child) =>
-                ValueListenableBuilder(
-                  valueListenable: validatePassword,
-                  builder: (context, bool validatePasswordValue, child) {
-                    bool validate = validatePasswordValue &&
-                        validateEmailValue &&
-                        rememberPasswordValue &&
-                        fullNameController.text.isNotEmpty;
-                    return CustomElevatedButton(
-                      isItDone: true,
-                      isThatSignIn: true,
-                      nameOfButton: StringsManager.next.tr,
-                      blueColor: validate ? true : false,
-                      onPressed: () async {
-                        if (validate) {
-                          Get.to(
-                              UserNamePage(
-                                emailController: emailController,
-                                passwordController: passwordController,
-                                fullNameController: fullNameController,
-                              ),
-                              duration: const Duration(seconds: 0));
-                        }
-                      },
-                    );
-                  },
-                ),
-          ),
+      builder: (context, bool rememberPasswordValue, child) => ValueListenableBuilder(
+        valueListenable: validateEmail,
+        builder: (context, bool validateEmailValue, child) => ValueListenableBuilder(
+          valueListenable: validatePassword,
+          builder: (context, bool validatePasswordValue, child) {
+            bool validate = validatePasswordValue &&
+                validateEmailValue &&
+                rememberPasswordValue &&
+                fullNameController.text.isNotEmpty;
+            return CustomElevatedButton(
+              isItDone: true,
+              isThatSignIn: true,
+              nameOfButton: StringsManager.next.tr,
+              blueColor: validate ? true : false,
+              onPressed: () async {
+                if (validate) {
+                  Get.to(
+                      UserNamePage(
+                        emailController: emailController,
+                        passwordController: passwordController,
+                        fullNameController: fullNameController,
+                      ),
+                      duration: const Duration(seconds: 0));
+                }
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }
@@ -91,11 +89,11 @@ class UserNamePage extends StatefulWidget {
   final TextEditingController passwordController;
   final TextEditingController fullNameController;
   const UserNamePage({
-    Key? key,
+    super.key,
     required this.emailController,
     required this.passwordController,
     required this.fullNameController,
-  }) : super(key: key);
+  });
 
   @override
   State<UserNamePage> createState() => _UserNamePageState();
@@ -119,9 +117,9 @@ class _UserNamePageState extends State<UserNamePage> {
         child: Center(
           child: isThatMobile
               ? SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: buildColumn(context),
-          )
+                  height: MediaQuery.of(context).size.height,
+                  child: buildColumn(context),
+                )
               : buildForWeb(context),
         ),
       ),
@@ -136,8 +134,7 @@ class _UserNamePageState extends State<UserNamePage> {
         const SizedBox(height: 100),
         Text(
           StringsManager.createUserName.tr,
-          style:
-          getMediumStyle(color: Theme.of(context).focusColor, fontSize: 15),
+          style: getMediumStyle(color: Theme.of(context).focusColor, fontSize: 15),
         ),
         const SizedBox(height: 10),
         Center(
@@ -180,10 +177,8 @@ class _UserNamePageState extends State<UserNamePage> {
   Widget userNameTextField(BuildContext context) {
     return BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
       bloc: BlocProvider.of<SearchAboutUserBloc>(context)
-        ..add(FindSpecificUser(userNameController.text,
-            searchForSingleLetter: true)),
-      buildWhen: (previous, current) =>
-      previous != current && current is SearchAboutUserBlocLoaded,
+        ..add(FindSpecificUser(userNameController.text, searchForSingleLetter: true)),
+      buildWhen: (previous, current) => previous != current && current is SearchAboutUserBlocLoaded,
       builder: (context, state) {
         List<UserPersonalInfo> usersWithSameUserName = [];
 
@@ -191,14 +186,14 @@ class _UserNamePageState extends State<UserNamePage> {
           usersWithSameUserName = state.users;
         }
         WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-          validateEdits = usersWithSameUserName.isEmpty;
-          if (userNameController.text.isEmpty) {
-            validateEdits = false;
-            isFieldEmpty = true;
-          } else {
-            isFieldEmpty = false;
-          }
-        }));
+              validateEdits = usersWithSameUserName.isEmpty;
+              if (userNameController.text.isEmpty) {
+                validateEdits = false;
+                isFieldEmpty = true;
+              } else {
+                isFieldEmpty = false;
+              }
+            }));
         return customTextField(context);
       },
     );
@@ -213,31 +208,25 @@ class _UserNamePageState extends State<UserNamePage> {
         child: TextField(
           controller: userNameController,
           cursorColor: ColorManager.teal,
-          style:
-          getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
+          style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
           decoration: InputDecoration(
             hintText: StringsManager.username.tr,
             hintStyle: isThatMobile
-                ? getNormalStyle(color: Theme.of(context).indicatorColor)
+                ? getNormalStyle(color: Theme.of(context).tabBarTheme.indicatorColor!)
                 : getNormalStyle(color: ColorManager.black54, fontSize: 12),
             fillColor: const Color.fromARGB(48, 232, 232, 232),
             filled: true,
             focusedBorder: outlineInputBorder(),
-            suffixIcon: isFieldEmpty
-                ? null
-                : (validateEdits ? rightIcon() : wrongIcon()),
+            suffixIcon: isFieldEmpty ? null : (validateEdits ? rightIcon() : wrongIcon()),
             enabledBorder: outlineInputBorder(),
-            contentPadding: EdgeInsets.symmetric(
-                horizontal: 10, vertical: isThatMobile ? 15 : 5),
-            errorText: (isFieldEmpty || validateEdits)
-                ? null
-                : (isThatMobile ? StringsManager.thisUserNameExist.tr : null),
+            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: isThatMobile ? 15 : 5),
+            errorText:
+                (isFieldEmpty || validateEdits) ? null : (isThatMobile ? StringsManager.thisUserNameExist.tr : null),
             errorStyle: getNormalStyle(color: ColorManager.red),
           ),
           onChanged: (value) {
-            SearchAboutUserBloc.get(context).add(FindSpecificUser(
-                userNameController.text,
-                searchForSingleLetter: true));
+            SearchAboutUserBloc.get(context)
+                .add(FindSpecificUser(userNameController.text, searchForSingleLetter: true));
           },
         ),
       ),
@@ -259,15 +248,13 @@ class _UserNamePageState extends State<UserNamePage> {
   OutlineInputBorder outlineInputBorder() {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(isThatMobile ? 5.0 : 1.0),
-      borderSide: BorderSide(
-          color: ColorManager.lightGrey, width: isThatMobile ? 1.0 : 0.8),
+      borderSide: BorderSide(color: ColorManager.lightGrey, width: isThatMobile ? 1.0 : 0.8),
     );
   }
 
   Widget customTextButton() {
     return Builder(builder: (context) {
-      FireStoreAddNewUserCubit userCubit =
-      FireStoreAddNewUserCubit.get(context);
+      FireStoreAddNewUserCubit userCubit = FireStoreAddNewUserCubit.get(context);
       return BlocConsumer<FirebaseAuthCubit, FirebaseAuthCubitState>(
         listenWhen: (previous, current) => previous != current,
         listener: (context, state) {
@@ -302,7 +289,7 @@ class _UserNamePageState extends State<UserNamePage> {
     });
   }
 
-  moveToMain(CubitAuthConfirmed authState) async {
+  Future<void> moveToMain(CubitAuthConfirmed authState) async {
     myPersonalId = authState.user.uid;
 
     final SharedPreferences sharePrefs = injector<SharedPreferences>();
@@ -318,7 +305,7 @@ class _UserNamePageState extends State<UserNamePage> {
     }
   }
 
-  addNewUser(CubitAuthConfirmed authState, FireStoreAddNewUserCubit userCubit) {
+  void addNewUser(CubitAuthConfirmed authState, FireStoreAddNewUserCubit userCubit) {
     String fullName = widget.fullNameController.text;
     List<dynamic> charactersOfName = [];
     String nameOfLower = fullName.toLowerCase();

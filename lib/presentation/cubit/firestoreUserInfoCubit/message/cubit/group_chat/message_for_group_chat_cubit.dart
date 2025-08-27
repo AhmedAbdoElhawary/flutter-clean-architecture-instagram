@@ -13,28 +13,19 @@ part 'message_for_group_chat_state.dart';
 class MessageForGroupChatCubit extends Cubit<MessageForGroupChatState> {
   final AddMessageForGroupChatUseCase _addMessageForGroupChatUseCase;
   final DeleteMessageForGroupChatUseCase _deleteMessageForGroupChatUseCase;
-  MessageForGroupChatCubit(this._addMessageForGroupChatUseCase,
-      this._deleteMessageForGroupChatUseCase)
+  MessageForGroupChatCubit(this._addMessageForGroupChatUseCase, this._deleteMessageForGroupChatUseCase)
       : super(MessageForGroupChatInitial());
 
   late Message lastMessage;
 
-  static MessageForGroupChatCubit get(BuildContext context) =>
-      BlocProvider.of(context);
+  static MessageForGroupChatCubit get(BuildContext context) => BlocProvider.of(context);
 
-  static Message getLastMessage(BuildContext context) =>
-      BlocProvider.of<MessageForGroupChatCubit>(context).lastMessage;
+  static Message getLastMessage(BuildContext context) => BlocProvider.of<MessageForGroupChatCubit>(context).lastMessage;
 
-  Future<void> sendMessage(
-      {required Message messageInfo,
-      Uint8List? pathOfPhoto,
-      File? recordFile}) async {
+  Future<void> sendMessage({required Message messageInfo, Uint8List? pathOfPhoto, File? recordFile}) async {
     emit(MessageForGroupChatLoading());
     await _addMessageForGroupChatUseCase
-        .call(
-            paramsOne: messageInfo,
-            paramsTwo: pathOfPhoto,
-            paramsThree: recordFile)
+        .call(paramsOne: messageInfo, paramsTwo: pathOfPhoto, paramsThree: recordFile)
         .then((messageInfo) {
       lastMessage = messageInfo;
       emit(MessageForGroupChatLoaded(messageInfo));
@@ -50,10 +41,7 @@ class MessageForGroupChatCubit extends Cubit<MessageForGroupChatState> {
   }) async {
     emit(DeleteMessageForGroupChatLoading());
     await _deleteMessageForGroupChatUseCase
-        .call(
-            paramsOne: chatOfGroupUid,
-            paramsTwo: messageInfo,
-            paramsThree: replacedMessage)
+        .call(paramsOne: chatOfGroupUid, paramsTwo: messageInfo, paramsThree: replacedMessage)
         .then((_) {
       emit(DeleteMessageForGroupChatLoaded());
     }).catchError((e) {

@@ -10,8 +10,7 @@ import 'package:instagram/presentation/pages/register/widgets/popup_calling.dart
 
 class GetMyPersonalInfo extends StatefulWidget {
   final String myPersonalId;
-  const GetMyPersonalInfo({Key? key, required this.myPersonalId})
-      : super(key: key);
+  const GetMyPersonalInfo({super.key, required this.myPersonalId});
 
   @override
   State<GetMyPersonalInfo> createState() => _GetMyPersonalInfoState();
@@ -23,8 +22,7 @@ class _GetMyPersonalInfoState extends State<GetMyPersonalInfo> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<UserInfoCubit, UserInfoState>(
-      bloc: UserInfoCubit.get(context)
-        ..getUserInfo(widget.myPersonalId, getDeviceToken: true),
+      bloc: UserInfoCubit.get(context)..getUserInfo(widget.myPersonalId, getDeviceToken: true),
       listenWhen: (previous, current) => previous != current,
       listener: (context, userState) {
         if (!isHeMovedToHome) {

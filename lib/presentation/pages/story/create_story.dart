@@ -25,8 +25,7 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 class CreateStoryPage extends StatefulWidget {
   final SelectedImagesDetails storiesDetails;
 
-  const CreateStoryPage({Key? key, required this.storiesDetails})
-      : super(key: key);
+  const CreateStoryPage({super.key, required this.storiesDetails});
 
   @override
   State<CreateStoryPage> createState() => _CreateStoryPageState();
@@ -56,8 +55,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
             Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(25.0)),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(25.0)),
               ),
               child: listOfAddPost(),
             ),
@@ -78,15 +76,12 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
             colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
             height: 40,
           ),
-          Text(StringsManager.create.tr,
-              style: getMediumStyle(
-                  color: Theme.of(context).focusColor, fontSize: 20)),
+          Text(StringsManager.create.tr, style: getMediumStyle(color: Theme.of(context).focusColor, fontSize: 20)),
           const Divider(),
           Padding(
             padding: const EdgeInsetsDirectional.only(bottom: 8.0),
             child: Builder(builder: (builderContext) {
-              UserInfoCubit userCubit =
-                  BlocProvider.of<UserInfoCubit>(builderContext, listen: false);
+              UserInfoCubit userCubit = BlocProvider.of<UserInfoCubit>(builderContext, listen: false);
               UserPersonalInfo? personalInfo = userCubit.myPersonalInfo;
 
               return Container(
@@ -106,36 +101,31 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
     );
   }
 
-  Future<void> createStory(
-      UserPersonalInfo personalInfo, UserInfoCubit userCubit) async {
-
-      if (isItDone) {
-        setState(() => isItDone = false);
-        for (final storyDetails in selectedFiles) {
-          Uint8List story = storyDetails.selectedByte;
-          if (!storyDetails.isThatImage) {
-            story = await createThumbnail(storyDetails.selectedFile) ?? story;
-          }
-          String blurHash = await CustomBlurHash.blurHashEncode(story);
-          Story storyInfo =
-          addStoryInfo(personalInfo, blurHash, storyDetails.isThatImage);
-          if (!mounted) return;
-          StoryCubit storyCubit = StoryCubit.get(context);
-          await storyCubit.createStory(storyInfo, story);
-          if (storyCubit.storyId != '') {
-            userCubit.updateMyStories(storyId: storyCubit.storyId);
-          }
-          final SharedPreferences sharePrefs =
-          await SharedPreferences.getInstance();
-          WidgetsBinding.instance
-              .addPostFrameCallback((_) => setState(() => isItDone = true));
-          sharePrefs.remove(myPersonalId);
-          if (!mounted) return;
-          Navigator.of(context).pushAndRemoveUntil(
-            CupertinoPageRoute(builder: (_) => PopupCalling(myPersonalId)),
-                (route) => false,
-          );
+  Future<void> createStory(UserPersonalInfo personalInfo, UserInfoCubit userCubit) async {
+    if (isItDone) {
+      setState(() => isItDone = false);
+      for (final storyDetails in selectedFiles) {
+        Uint8List story = storyDetails.selectedByte;
+        if (!storyDetails.isThatImage) {
+          story = await createThumbnail(storyDetails.selectedFile) ?? story;
         }
+        String blurHash = await CustomBlurHash.blurHashEncode(story);
+        Story storyInfo = addStoryInfo(personalInfo, blurHash, storyDetails.isThatImage);
+        if (!mounted) return;
+        StoryCubit storyCubit = StoryCubit.get(context);
+        await storyCubit.createStory(storyInfo, story);
+        if (storyCubit.storyId != '') {
+          userCubit.updateMyStories(storyId: storyCubit.storyId);
+        }
+        final SharedPreferences sharePrefs = await SharedPreferences.getInstance();
+        WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => isItDone = true));
+        sharePrefs.remove(myPersonalId);
+        if (!mounted) return;
+        Navigator.of(context).pushAndRemoveUntil(
+          CupertinoPageRoute(builder: (_) => PopupCalling(myPersonalId)),
+          (route) => false,
+        );
+      }
     }
   }
 
@@ -148,8 +138,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
     return convertImage;
   }
 
-  Story addStoryInfo(
-      UserPersonalInfo personalInfo, String blurHash, bool isThatImage) {
+  Story addStoryInfo(UserPersonalInfo personalInfo, String blurHash, bool isThatImage) {
     return Story(
       publisherId: personalInfo.userId,
       datePublished: DateReformat.dateOfNow(),

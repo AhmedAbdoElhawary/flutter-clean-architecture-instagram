@@ -8,8 +8,8 @@ class NameOfCircleAvatar extends StatelessWidget {
   const NameOfCircleAvatar(
     this.circleAvatarName,
     this.isForStoriesLine, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,6 @@ class DeleteNotificationUseCase implements UseCase<void, NotificationCheck> {
   DeleteNotificationUseCase(this._notificationRepository);
   @override
   Future<void> call({required NotificationCheck params}) {
-    return _notificationRepository.deleteNotification(
-        notificationCheck: params);
+    return _notificationRepository.deleteNotification(notificationCheck: params);
   }
 }

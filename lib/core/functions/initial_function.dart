@@ -5,22 +5,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/core/utility/injector.dart';
-import 'package:instagram/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 
 Future<String?> initializeDefaultValues() async {
-
   await Future.wait([
-   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
-   initializeDependencies(),
-   GetStorage.init("AppLang"),
-   if(!kIsWeb)_crashlytics(),
+    Firebase.initializeApp(),
+    initializeDependencies(),
+    GetStorage.init("AppLang"),
+    if (!kIsWeb) _crashlytics(),
   ]);
 
   if (!kIsWeb) {
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   }
 
   FirebaseMessaging.onBackgroundMessage(_backgroundHandler);

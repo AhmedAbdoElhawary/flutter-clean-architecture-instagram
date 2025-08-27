@@ -5,7 +5,7 @@ import 'package:instagram/core/resources/strings_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 
 class OrText extends StatelessWidget {
-  const OrText({Key? key}) : super(key: key);
+  const OrText({super.key});
 
   @override
   Widget build(BuildContext context) {

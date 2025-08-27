@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RecommendationPeople extends StatelessWidget {
-  const RecommendationPeople({Key? key}) : super(key: key);
+  const RecommendationPeople({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,13 +12,11 @@ class RecommendationPeople extends StatelessWidget {
         width: 35,
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
-          border: Border.all(
-              color: Theme.of(context).bottomAppBarTheme.color!, width: 1.0),
+          border: Border.all(color: Theme.of(context).bottomAppBarTheme.color!, width: 1.0),
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Center(
-          child: Icon(Icons.person_add_outlined,
-              color: Theme.of(context).focusColor),
+          child: Icon(Icons.person_add_outlined, color: Theme.of(context).focusColor),
         ),
       ),
     );

@@ -7,8 +7,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memo
 class CustomMultiImagesDisplay extends StatelessWidget {
   final initPosition = ValueNotifier(0);
   final List<SelectedByte> selectedImages;
-  CustomMultiImagesDisplay({Key? key, required this.selectedImages})
-      : super(key: key);
+  CustomMultiImagesDisplay({super.key, required this.selectedImages});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,8 +24,7 @@ class CustomMultiImagesDisplay extends StatelessWidget {
                   )
                 : Hero(
                     tag: selectedImages[0],
-                    child: MemoryDisplay(
-                        imagePath: selectedImages[0].selectedByte),
+                    child: MemoryDisplay(imagePath: selectedImages[0].selectedByte),
                   ),
           ),
         ),
@@ -39,8 +37,7 @@ class CustomMultiImagesDisplay extends StatelessWidget {
               children: [
                 ValueListenableBuilder(
                   valueListenable: initPosition,
-                  builder: (BuildContext context, int value, Widget? child) =>
-                      PointsScrollBar(
+                  builder: (BuildContext context, int value, Widget? child) => PointsScrollBar(
                     photoCount: selectedImages.length,
                     activePhotoIndex: value,
                   ),

@@ -1,4 +1,3 @@
-
 import 'package:instagram/domain/entities/notification_check.dart';
 
 // ignore: must_be_immutable
@@ -13,24 +12,18 @@ class CustomNotification extends NotificationCheck {
   String senderName;
   CustomNotification({
     required this.text,
-    required String senderId,
-    String postId = "",
+    required super.senderId,
+    super.postId,
     required this.time,
-    required String receiverId,
-    bool isThatPost = true,
-    bool isThatLike = true,
+    required super.receiverId,
+    super.isThatPost,
+    super.isThatLike,
     this.postImageUrl = "",
     required this.personalUserName,
     this.notificationUid = "",
     required this.personalProfileImageUrl,
     required this.senderName,
-  }) : super(
-          receiverId: receiverId,
-          isThatPost: isThatPost,
-          isThatLike: isThatLike,
-          postId: postId,
-          senderId: senderId,
-        );
+  });
   static CustomNotification fromJson(Map<String, dynamic>? snap) {
     return CustomNotification(
       notificationUid: snap?["notificationUid"] ?? "",

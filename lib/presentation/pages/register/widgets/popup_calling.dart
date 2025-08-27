@@ -9,7 +9,7 @@ import 'package:instagram/presentation/screens/mobile_screen_layout.dart';
 class PopupCalling extends StatefulWidget {
   final String userId;
 
-  const PopupCalling(this.userId, {Key? key}) : super(key: key);
+  const PopupCalling(this.userId, {super.key});
 
   @override
   State<PopupCalling> createState() => _PopupCallingState();
@@ -24,15 +24,12 @@ class _PopupCallingState extends State<PopupCalling> {
       bloc: UsersInfoReelTimeBloc.get(context)..add(LoadMyPersonalInfo()),
       builder: (context, state) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (state is MyPersonalInfoLoaded &&
-              !amICalling &&
-              state.myPersonalInfoInReelTime.channelId.isNotEmpty) {
+          if (state is MyPersonalInfoLoaded && !amICalling && state.myPersonalInfoInReelTime.channelId.isNotEmpty) {
             if (!isHeMoved) {
               isHeMoved = true;
               Go(context).push(
-                  page: CallingRingingPage(
-                      channelId: state.myPersonalInfoInReelTime.channelId,
-                      clearMoving: clearMoving),
+                  page:
+                      CallingRingingPage(channelId: state.myPersonalInfoInReelTime.channelId, clearMoving: clearMoving),
                   withoutRoot: false);
             }
           }
@@ -42,7 +39,7 @@ class _PopupCallingState extends State<PopupCalling> {
     );
   }
 
-  clearMoving() {
+  void clearMoving() {
     isHeMoved = false;
   }
 }

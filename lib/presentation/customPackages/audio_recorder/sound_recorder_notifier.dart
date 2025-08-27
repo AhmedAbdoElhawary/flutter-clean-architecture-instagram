@@ -1,7 +1,8 @@
 import 'dart:async';
 // ignore: depend_on_referenced_packages
-import 'package:uuid/uuid.dart';
 import 'package:record/record.dart';
+// ignore: depend_on_referenced_packages
+import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -24,7 +25,7 @@ class SoundRecordNotifier extends ChangeNotifier {
   String initialStorePathRecord = "";
 
   /// recording mp3 sound Object
-  Record recordMp3 = Record();
+  AudioRecorder recordMp3 = AudioRecorder();
 
   /// recording mp3 sound to check if all permisiion passed
   bool _isAcceptedPermission = false;
@@ -87,7 +88,7 @@ class SoundRecordNotifier extends ChangeNotifier {
   }
 
   /// used to reset all value to initial value when end the record
-  resetEdgePadding() async {
+  Future<void> resetEdgePadding() async {
     isLocked = false;
     edge = 0;
     buttonPressed = false;
@@ -119,13 +120,9 @@ class SoundRecordNotifier extends ChangeNotifier {
     String sdPath = "";
     if (Platform.isIOS) {
       Directory tempDir = await getTemporaryDirectory();
-      sdPath = initialStorePathRecord.isEmpty
-          ? tempDir.path
-          : initialStorePathRecord;
+      sdPath = initialStorePathRecord.isEmpty ? tempDir.path : initialStorePathRecord;
     } else {
-      sdPath = initialStorePathRecord.isEmpty
-          ? "/storage/emulated/0/new_record_sound"
-          : initialStorePathRecord;
+      sdPath = initialStorePathRecord.isEmpty ? "/storage/emulated/0/new_record_sound" : initialStorePathRecord;
     }
     var d = Directory(sdPath);
     if (!d.existsSync()) {
@@ -139,14 +136,14 @@ class SoundRecordNotifier extends ChangeNotifier {
   }
 
   /// used to change the draggable to top value
-  setNewInitialDraggableHeight(double newValue) {
+  void setNewInitialDraggableHeight(double newValue) {
     currentButtonHeihtPlace = newValue;
   }
 
   /// used to change the draggable to top value
   /// or To The X vertical
   /// and update this value in screen
-  updateScrollValue(Offset currentValue, BuildContext context) async {
+  Future<void> updateScrollValue(Offset currentValue, BuildContext context) async {
     if (buttonPressed == true) {
       final x = currentValue;
 
@@ -197,7 +194,7 @@ class SoundRecordNotifier extends ChangeNotifier {
   /// this function to manage counter value
   /// when reached to 60 sec
   /// reset the sec and increase the min by 1
-  _increaseCounterWhilePressed() {
+  void _increaseCounterWhilePressed() {
     if (loopActive) {
       return;
     }
@@ -217,7 +214,7 @@ class SoundRecordNotifier extends ChangeNotifier {
   }
 
   /// this function to start record voice
-  record() async {
+  Future<void> record() async {
     if (!_isAcceptedPermission) {
       await Permission.microphone.request();
       await Permission.manageExternalStorage.request();
@@ -227,7 +224,7 @@ class SoundRecordNotifier extends ChangeNotifier {
       buttonPressed = true;
       String recordFilePath = await getFilePath();
       _timer = Timer(const Duration(milliseconds: 900), () {
-        recordMp3.start(path: recordFilePath);
+        recordMp3.start(RecordConfig(), path: recordFilePath);
       });
       _mapCounterGenerater();
       notifyListeners();
@@ -236,7 +233,7 @@ class SoundRecordNotifier extends ChangeNotifier {
   }
 
   /// to check permission
-  voidInitialSound() async {
+  Future<void> voidInitialSound() async {
     if (Platform.isIOS) _isAcceptedPermission = true;
 
     startRecord = false;

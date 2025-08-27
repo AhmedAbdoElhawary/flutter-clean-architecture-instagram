@@ -10,11 +10,11 @@ class UsersWhoLikesForMobile extends StatelessWidget {
   final bool isThatMyPersonalId;
 
   const UsersWhoLikesForMobile({
-    Key? key,
+    super.key,
     required this.showSearchBar,
     required this.usersIds,
     required this.isThatMyPersonalId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +35,7 @@ class UsersWhoLikesForMobile extends StatelessWidget {
     return AppBar(
       elevation: 0,
       backgroundColor: Theme.of(context).primaryColor,
-      title: Text(StringsManager.likes.tr,
-          style: Theme.of(context).textTheme.bodyLarge),
+      title: Text(StringsManager.likes.tr, style: Theme.of(context).textTheme.bodyLarge),
     );
   }
 }

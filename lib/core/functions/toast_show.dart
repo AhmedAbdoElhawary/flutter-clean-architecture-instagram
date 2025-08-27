@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 
 class ToastShow {
-  static toast(String toast) {
+  static Future<bool?> toast(String toast) {
     return Fluttertoast.showToast(
         msg: toast,
         toastLength: Toast.LENGTH_SHORT,
@@ -13,7 +13,7 @@ class ToastShow {
         textColor: ColorManager.white);
   }
 
-  static toastStateError(dynamic state) {
+  static void toastStateError(dynamic state) {
     String error;
     try {
       error = state.error.split(RegExp(r']'))[1];

@@ -6,33 +6,28 @@ import 'package:instagram/data/models/parent_classes/without_sub_classes/comment
 import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 
 class FirestoreComment {
-  static final _fireStoreCommentCollection =
-      FirebaseFirestore.instance.collection('comments');
+  static final _fireStoreCommentCollection = FirebaseFirestore.instance.collection('comments');
   static Future<String> addComment({required Comment commentInfo}) async {
     DocumentReference<Map<String, dynamic>> commentRef =
         await _fireStoreCommentCollection.add(commentInfo.toMapComment());
 
-    await _fireStoreCommentCollection
-        .doc(commentRef.id)
-        .update({'commentUid': commentRef.id});
+    await _fireStoreCommentCollection.doc(commentRef.id).update({'commentUid': commentRef.id});
     return commentRef.id;
   }
 
-  static Future<void> putLikeOnThisComment(
-      {required String commentId, required String myPersonalId}) async {
+  static Future<void> putLikeOnThisComment({required String commentId, required String myPersonalId}) async {
     await _fireStoreCommentCollection.doc(commentId).update({
       'likes': FieldValue.arrayUnion([myPersonalId])
     });
   }
 
-  static Future<void> removeLikeOnThisComment(
-      {required String commentId, required String myPersonalId}) async {
+  static Future<void> removeLikeOnThisComment({required String commentId, required String myPersonalId}) async {
     await _fireStoreCommentCollection.doc(commentId).update({
       'likes': FieldValue.arrayRemove([myPersonalId])
     });
   }
 
-  static putReplyOnThisComment({
+  static Future<void> putReplyOnThisComment({
     required String commentId,
     required String replyId,
   }) async {
@@ -41,10 +36,8 @@ class FirestoreComment {
     });
   }
 
-  static Future<List<dynamic>?> getRepliesOfComments(
-      {required String commentId}) async {
-    DocumentSnapshot<Map<String, dynamic>> snap =
-        await _fireStoreCommentCollection.doc(commentId).get();
+  static Future<List<dynamic>?> getRepliesOfComments({required String commentId}) async {
+    DocumentSnapshot<Map<String, dynamic>> snap = await _fireStoreCommentCollection.doc(commentId).get();
     if (snap.exists) {
       Comment commentReformat = Comment.fromSnapComment(snap);
 
@@ -54,16 +47,13 @@ class FirestoreComment {
     }
   }
 
-  static Future<List<Comment>> getSpecificComments(
-      {required List<dynamic> commentsIds}) async {
+  static Future<List<Comment>> getSpecificComments({required List<dynamic> commentsIds}) async {
     List<Comment> allComments = [];
     for (int i = 0; i < commentsIds.length; i++) {
-      DocumentSnapshot<Map<String, dynamic>> snap =
-          await _fireStoreCommentCollection.doc(commentsIds[i]).get();
+      DocumentSnapshot<Map<String, dynamic>> snap = await _fireStoreCommentCollection.doc(commentsIds[i]).get();
       Comment commentReformat = Comment.fromSnapComment(snap);
 
-      UserPersonalInfo commentatorInfo =
-          await FireStoreUser.getUserInfo(commentReformat.whoCommentId);
+      UserPersonalInfo commentatorInfo = await FireStoreUser.getUserInfo(commentReformat.whoCommentId);
       commentReformat.whoCommentInfo = commentatorInfo;
 
       allComments.add(commentReformat);
@@ -72,12 +62,10 @@ class FirestoreComment {
   }
 
   static Future<Comment> getCommentInfo({required String commentId}) async {
-    DocumentSnapshot<Map<String, dynamic>> snap =
-        await _fireStoreCommentCollection.doc(commentId).get();
+    DocumentSnapshot<Map<String, dynamic>> snap = await _fireStoreCommentCollection.doc(commentId).get();
     if (snap.exists) {
       Comment theCommentInfo = Comment.fromSnapComment(snap);
-      UserPersonalInfo commentatorInfo =
-          await FireStoreUser.getUserInfo(theCommentInfo.whoCommentId);
+      UserPersonalInfo commentatorInfo = await FireStoreUser.getUserInfo(theCommentInfo.whoCommentId);
       theCommentInfo.whoCommentInfo = commentatorInfo;
 
       return theCommentInfo;

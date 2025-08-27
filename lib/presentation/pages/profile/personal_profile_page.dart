@@ -36,9 +36,7 @@ class PersonalProfilePage extends StatefulWidget {
   final String personalId;
   final String userName;
 
-  const PersonalProfilePage(
-      {Key? key, required this.personalId, this.userName = ''})
-      : super(key: key);
+  const PersonalProfilePage({super.key, required this.personalId, this.userName = ''});
 
   @override
   State<PersonalProfilePage> createState() => _ProfilePageState();
@@ -64,54 +62,45 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   }
 
   Widget scaffold() {
-    return WillPopScope(
-      onWillPop: () async => true,
-      child: ValueListenableBuilder(
-        valueListenable: rebuildUserInfo,
-        builder: (context, bool rebuildValue, child) =>
-            BlocBuilder<UserInfoCubit, UserInfoState>(
-              bloc: widget.userName.isNotEmpty
-                  ? (BlocProvider.of<UserInfoCubit>(context)
-                ..getUserFromUserName(widget.userName))
-                  : (BlocProvider.of<UserInfoCubit>(context)
-                ..getUserInfo(widget.personalId, getDeviceToken: true)),
-              buildWhen: (previous, current) {
-                if (previous != current && current is CubitMyPersonalInfoLoaded) {
-                  return true;
-                }
-                if (previous != current && current is CubitGetUserInfoFailed) {
-                  return true;
-                }
-                if (rebuildValue) {
-                  rebuildUserInfo.value = false;
-                  return true;
-                }
-                return false;
-              },
-              builder: (context, state) {
-                if (state is CubitMyPersonalInfoLoaded) {
-                  return Scaffold(
-                    appBar: isThatMobile
-                        ? appBar(state.userPersonalInfo.userName)
-                        : null,
-                    body: ProfilePage(
-                      isThatMyPersonalId: true,
-                      userId: state.userPersonalInfo.userId,
-                      userInfo: ValueNotifier(state.userPersonalInfo),
-                      widgetsAboveTapBars: isThatMobile
-                          ? widgetsAboveTapBarsForMobile(state.userPersonalInfo)
-                          : widgetsAboveTapBarsForWeb(state.userPersonalInfo),
-                    ),
-                  );
-                } else if (state is CubitGetUserInfoFailed) {
-                  ToastShow.toastStateError(state);
-                  return Text(StringsManager.noPosts.tr,
-                      style: Theme.of(context).textTheme.bodyLarge);
-                } else {
-                  return const ThineCircularProgress();
-                }
-              },
-            ),
+    return ValueListenableBuilder(
+      valueListenable: rebuildUserInfo,
+      builder: (context, bool rebuildValue, child) => BlocBuilder<UserInfoCubit, UserInfoState>(
+        bloc: widget.userName.isNotEmpty
+            ? (BlocProvider.of<UserInfoCubit>(context)..getUserFromUserName(widget.userName))
+            : (BlocProvider.of<UserInfoCubit>(context)..getUserInfo(widget.personalId, getDeviceToken: true)),
+        buildWhen: (previous, current) {
+          if (previous != current && current is CubitMyPersonalInfoLoaded) {
+            return true;
+          }
+          if (previous != current && current is CubitGetUserInfoFailed) {
+            return true;
+          }
+          if (rebuildValue) {
+            rebuildUserInfo.value = false;
+            return true;
+          }
+          return false;
+        },
+        builder: (context, state) {
+          if (state is CubitMyPersonalInfoLoaded) {
+            return Scaffold(
+              appBar: isThatMobile ? appBar(state.userPersonalInfo.userName) : null,
+              body: ProfilePage(
+                isThatMyPersonalId: true,
+                userId: state.userPersonalInfo.userId,
+                userInfo: ValueNotifier(state.userPersonalInfo),
+                widgetsAboveTapBars: isThatMobile
+                    ? widgetsAboveTapBarsForMobile(state.userPersonalInfo)
+                    : widgetsAboveTapBarsForWeb(state.userPersonalInfo),
+              ),
+            );
+          } else if (state is CubitGetUserInfoFailed) {
+            ToastShow.toastStateError(state);
+            return Text(StringsManager.noPosts.tr, style: Theme.of(context).textTheme.bodyLarge);
+          } else {
+            return const ThineCircularProgress();
+          }
+        },
       ),
     );
   }
@@ -120,15 +109,12 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     return AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text(userName,
-            style: getMediumStyle(
-                color: Theme.of(context).focusColor, fontSize: 20)),
+        title: Text(userName, style: getMediumStyle(color: Theme.of(context).focusColor, fontSize: 20)),
         actions: [
           IconButton(
             icon: SvgPicture.asset(
               IconsAssets.addIcon,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).focusColor, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
               height: 22.5,
             ),
             onPressed: () => bottomSheet(),
@@ -136,8 +122,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
           IconButton(
             icon: SvgPicture.asset(
               IconsAssets.menuIcon,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).focusColor, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
               height: 30,
             ),
             onPressed: () async => bottomSheet(createNewData: false),
@@ -160,10 +145,8 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     return ValueListenableBuilder(
         valueListenable: darkTheme,
         builder: (context, bool themeValue, child) {
-          Color themeOfApp =
-          themeValue ? ColorManager.white : ColorManager.black;
-          return Text(StringsManager.create.tr,
-              style: getBoldStyle(color: themeOfApp, fontSize: 17));
+          Color themeOfApp = themeValue ? ColorManager.white : ColorManager.black;
+          return Text(StringsManager.create.tr, style: getBoldStyle(color: themeOfApp, fontSize: 17));
         });
   }
 
@@ -192,8 +175,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     );
   }
 
-  Divider customDivider() =>
-      const Divider(indent: 40, endIndent: 15, color: ColorManager.grey);
+  Divider customDivider() => const Divider(indent: 40, endIndent: 15, color: ColorManager.grey);
 
   Column columnOfThemeData() {
     return Column(
@@ -217,8 +199,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         AppLanguage.getInstance().changeLanguage();
         Phoenix.rebirth(context);
       },
-      child: createSizedBox(StringsManager.changeLanguage.tr,
-          icon: Icons.language_rounded),
+      child: createSizedBox(StringsManager.changeLanguage.tr, icon: Icons.language_rounded),
     );
   }
 
@@ -228,37 +209,33 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         await ThemeOfApp.switchTheme();
         darkTheme.value = ThemeOfApp.isThemeDark();
       },
-      child: createSizedBox(StringsManager.changeTheme.tr,
-          icon: Icons.brightness_4_outlined),
+      child: createSizedBox(StringsManager.changeTheme.tr, icon: Icons.brightness_4_outlined),
     );
   }
 
   Widget logOut() {
-    return BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState>(
-        builder: (context, state) {
-          FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
-          if (state is CubitAuthSignOut) {
-            WidgetsBinding.instance.addPostFrameCallback((_) async {
-              sharePrefs.clear();
-              Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-                CupertinoPageRoute(
-                    builder: (_) => const LoginPage(), maintainState: false),
-                    (route) => false,
-              );
-            });
-          } else if (state is CubitAuthConfirming) {
-            ToastShow.toast(StringsManager.loading.tr);
-          } else if (state is CubitAuthFailed) {
-            ToastShow.toastStateError(state);
-          }
-          return GestureDetector(
-            child: createSizedBox(StringsManager.logOut.tr,
-                icon: Icons.logout_rounded),
-            onTap: () async {
-              await authCubit.signOut(userId: widget.personalId);
-            },
+    return BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState>(builder: (context, state) {
+      FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
+      if (state is CubitAuthSignOut) {
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          sharePrefs.clear();
+          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+            CupertinoPageRoute(builder: (_) => const LoginPage(), maintainState: false),
+            (route) => false,
           );
         });
+      } else if (state is CubitAuthConfirming) {
+        ToastShow.toast(StringsManager.loading.tr);
+      } else if (state is CubitAuthFailed) {
+        ToastShow.toastStateError(state);
+      }
+      return GestureDetector(
+        child: createSizedBox(StringsManager.logOut.tr, icon: Icons.logout_rounded),
+        onTap: () async {
+          await authCubit.signOut(userId: widget.personalId);
+        },
+      );
+    });
   }
 
   List<Widget> widgetsAboveTapBarsForMobile(UserPersonalInfo userInfo) {
@@ -273,16 +250,16 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Expanded editProfileButtonForMobile(UserPersonalInfo userInfo) {
     return Expanded(
       child: Builder(builder: (buildContext) {
-        UserPersonalInfo myPersonalInfo =
-        UserInfoCubit.getMyPersonalInfo(context);
-        UserPersonalInfo? info =
-        UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
+        UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+        UserPersonalInfo? info = UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
         if (isMyInfoInReelTimeReady && info != null) myPersonalInfo = info;
         return InkWell(
           onTap: () async {
             Navigator.maybePop(context);
             Future.delayed(Duration.zero, () async {
-              await Go(context).push(page: EditProfilePage(userInfo));
+              if (mounted) {
+                await Go(context).push(page: EditProfilePage(userInfo));
+              }
               rebuildUserInfo.value = true;
               userInfo = myPersonalInfo;
             });
@@ -291,18 +268,13 @@ class _ProfilePageState extends State<PersonalProfilePage> {
             height: 35.0,
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
-              border: Border.all(
-                  color: Theme.of(context).bottomAppBarTheme.color!,
-                  width: 1.0),
+              border: Border.all(color: Theme.of(context).bottomAppBarTheme.color!, width: 1.0),
               borderRadius: BorderRadius.circular(20.0),
             ),
             child: Center(
               child: Text(
                 StringsManager.editProfile.tr,
-                style: TextStyle(
-                    fontSize: 17.0,
-                    color: Theme.of(context).focusColor,
-                    fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 17.0, color: Theme.of(context).focusColor, fontWeight: FontWeight.w500),
               ),
             ),
           ),
@@ -345,16 +317,14 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Widget createNewLive() {
     return InkWell(
       onTap: () {},
-      child: createSizedBox(StringsManager.live.tr,
-          nameOfPath: IconsAssets.instagramHighlightStoryIcon),
+      child: createSizedBox(StringsManager.live.tr, nameOfPath: IconsAssets.instagramHighlightStoryIcon),
     );
   }
 
   Widget createStory() {
     return InkWell(
         onTap: () async => createNewStory(true),
-        child: createSizedBox(StringsManager.story.tr,
-            nameOfPath: IconsAssets.addInstagramStoryIcon));
+        child: createSizedBox(StringsManager.story.tr, nameOfPath: IconsAssets.addInstagramStoryIcon));
   }
 
   /// TODO: handle the video selection (aspect ratio especially)
@@ -367,24 +337,23 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
           rebuildUserInfo.value = true;
         },
-        child: createSizedBox(StringsManager.reel.tr,
-            nameOfPath: IconsAssets.videoIcon));
+        child: createSizedBox(StringsManager.reel.tr, nameOfPath: IconsAssets.videoIcon));
   }
 
-  createNewStory(bool isThatStory) async {
+  Future<void> createNewStory(bool isThatStory) async {
     Navigator.maybePop(context);
 
     SelectedImagesDetails? details = await CustomImagePickerPlus.pickImage(
       context,
       isThatStory: true,
     );
-    if (!mounted ) return;
+    if (!mounted) return;
     if (details == null) return;
     await Go(context).push(page: CreateStoryPage(storiesDetails: details));
     rebuildUserInfo.value = true;
   }
 
-  createNewPost() async {
+  Future<void> createNewPost() async {
     Navigator.maybePop(context);
 
     await CustomImagePickerPlus.pickFromBoth(context);
@@ -393,29 +362,24 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   }
 
   Widget createPost() {
-    return InkWell(
-        onTap: createNewPost, child: createSizedBox(StringsManager.post.tr));
+    return InkWell(onTap: createNewPost, child: createSizedBox(StringsManager.post.tr));
   }
 
-  Widget createSizedBox(String text,
-      {String nameOfPath = '', IconData icon = Icons.grid_on_rounded}) {
+  Widget createSizedBox(String text, {String nameOfPath = '', IconData icon = Icons.grid_on_rounded}) {
     return SizedBox(
       height: 40,
       child: ValueListenableBuilder(
         valueListenable: darkTheme,
         builder: (context, bool themeValue, child) {
-          Color themeOfApp =
-          themeValue ? ColorManager.white : ColorManager.black;
+          Color themeOfApp = themeValue ? ColorManager.white : ColorManager.black;
 
           return Row(children: [
             nameOfPath.isNotEmpty
                 ? SvgPicture.asset(
-              nameOfPath,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).dialogBackgroundColor,
-                  BlendMode.srcIn),
-              height: 25,
-            )
+                    nameOfPath,
+                    colorFilter: ColorFilter.mode(Theme.of(context).dialogTheme.backgroundColor!, BlendMode.srcIn),
+                    height: 25,
+                  )
                 : Icon(icon, color: themeOfApp),
             const SizedBox(width: 15),
             Text(

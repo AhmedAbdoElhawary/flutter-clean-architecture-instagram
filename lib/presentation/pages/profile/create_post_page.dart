@@ -21,8 +21,7 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 
 class CreatePostPage extends StatefulWidget {
   final SelectedImagesDetails selectedFilesDetails;
-  const CreatePostPage({required this.selectedFilesDetails, Key? key})
-      : super(key: key);
+  const CreatePostPage({required this.selectedFilesDetails, super.key});
 
   @override
   State<CreatePostPage> createState() => _CreatePostPageState();
@@ -62,8 +61,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsetsDirectional.only(
-                  start: 10.0, end: 10, top: 10),
+              padding: const EdgeInsetsDirectional.only(start: 10.0, end: 10, top: 10),
               child: Row(
                 children: [
                   SizedBox(
@@ -104,13 +102,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     child: TextFormField(
                       controller: captionController,
                       cursorColor: ColorManager.teal,
-                      style: getNormalStyle(
-                          color: Theme.of(context).focusColor, fontSize: 15),
+                      style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: StringsManager.writeACaption.tr,
-                        hintStyle: TextStyle(
-                            color: Theme.of(context).bottomAppBarTheme.color!),
+                        hintStyle: TextStyle(color: Theme.of(context).bottomAppBarTheme.color!),
                       ),
                     ),
                   ),
@@ -132,7 +128,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     isSwitched = value;
                   },
                   activeTrackColor: ColorManager.blue,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeThumbColor: Theme.of(context).primaryColor,
                 ),
               ],
             ),
@@ -144,12 +140,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   Padding buildText(String text) {
     return Padding(
-      padding: const EdgeInsetsDirectional.only(
-          start: 7, end: 7, bottom: 10, top: 10),
+      padding: const EdgeInsetsDirectional.only(start: 7, end: 7, bottom: 10, top: 10),
       child: Text(
         text,
-        style:
-            getNormalStyle(fontSize: 16.5, color: Theme.of(context).focusColor),
+        style: getNormalStyle(fontSize: 16.5, color: Theme.of(context).focusColor),
       ),
     );
   }
@@ -173,7 +167,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
         builder: (context, bool isItDoneValue, child) => !isItDoneValue
             ? const CustomCircularProgress(ColorManager.blue)
             : IconButton(
-                onPressed: ()  async {
+                onPressed: () async {
                   createPost(context);
                 },
                 icon: const Icon(
@@ -187,39 +181,32 @@ class _CreatePostPageState extends State<CreatePostPage> {
   }
 
   Future<void> createPost(BuildContext context) async {
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => setState(() => isItDone.value = false));
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => isItDone.value = false));
     Post postInfo;
     File selectedFile = firstSelectedByte.selectedFile;
     Uint8List? convertedBytes;
     if (!isThatImage) {
       convertedBytes = await createThumbnail(selectedFile);
-      String blurHash = convertedBytes != null
-          ? await CustomBlurHash.blurHashEncode(convertedBytes)
-          : "";
+      String blurHash = convertedBytes != null ? await CustomBlurHash.blurHashEncode(convertedBytes) : "";
       postInfo = addPostInfo(blurHash);
     } else {
       Uint8List byte = await selectedFile.readAsBytes();
       String blurHash = await CustomBlurHash.blurHashEncode(byte);
       postInfo = addPostInfo(blurHash);
     }
-    if (!mounted) return;
+    if (!context.mounted) return;
 
     PostCubit postCubit = BlocProvider.of<PostCubit>(context, listen: false);
-    await postCubit.createPost(postInfo, selectedByte,
-        coverOfVideo: convertedBytes);
+    await postCubit.createPost(postInfo, selectedByte, coverOfVideo: convertedBytes);
 
     if (postCubit.newPostInfo != null) {
-      if (!mounted) return;
+      if (!context.mounted) return;
 
-      await UserInfoCubit.get(context).updateUserPostsInfo(
-          userId: myPersonalId, postInfo: postCubit.newPostInfo!);
-      await postCubit.getPostsInfo(
-          postsIds: myPersonalInfo.posts, isThatMyPosts: true);
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => setState(() => isItDone.value = true));
+      await UserInfoCubit.get(context).updateUserPostsInfo(userId: myPersonalId, postInfo: postCubit.newPostInfo!);
+      await postCubit.getPostsInfo(postsIds: myPersonalInfo.posts, isThatMyPosts: true);
+      WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => isItDone.value = true));
     }
-    if (!mounted) return;
+    if (!context.mounted) return;
 
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(

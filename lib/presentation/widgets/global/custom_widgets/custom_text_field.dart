@@ -18,8 +18,7 @@ class CustomTextField extends StatefulWidget {
       required this.isThatLogin,
       this.isThatEmail,
       this.validate,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -31,11 +30,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
   void initState() {
     widget.controller.addListener(() {
       if (widget.controller.text.isNotEmpty) {
-        errorMassage = widget.isThatEmail != null
-            ? (widget.isThatEmail == true
-                ? _validateEmail()
-                : _validatePassword())
-            : null;
+        errorMassage =
+            widget.isThatEmail != null ? (widget.isThatEmail == true ? _validateEmail() : _validatePassword()) : null;
       } else {
         errorMassage = null;
       }
@@ -52,15 +48,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
         height: isThatMobile ? null : 37,
         width: double.infinity,
         child: BlocConsumer<FirebaseAuthCubit, FirebaseAuthCubitState>(
-          bloc: FirebaseAuthCubit.get(context)
-            ..isThisEmailToken(email: widget.controller.text),
-          listenWhen: (previous, current) =>
-              previous != current && current is CubitEmailVerificationLoaded,
+          bloc: FirebaseAuthCubit.get(context)..isThisEmailToken(email: widget.controller.text),
+          listenWhen: (previous, current) => previous != current && current is CubitEmailVerificationLoaded,
           listener: (context, state) {
             if (!widget.isThatLogin) {
-              if (state is CubitEmailVerificationLoaded &&
-                  state.isThisEmailToken &&
-                  widget.isThatEmail == true) {
+              if (state is CubitEmailVerificationLoaded && state.isThisEmailToken && widget.isThatEmail == true) {
                 errorMassage = "This email already exists.";
                 widget.validate?.value = false;
               } else if (widget.isThatEmail == true) {
@@ -69,18 +61,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
               }
             }
           },
-          buildWhen: (previous, current) =>
-              previous != current && current is CubitEmailVerificationLoaded,
+          buildWhen: (previous, current) => previous != current && current is CubitEmailVerificationLoaded,
           builder: (context, state) {
             return TextFormField(
               controller: widget.controller,
               cursorColor: ColorManager.teal,
-              style: getNormalStyle(
-                  color: Theme.of(context).focusColor, fontSize: 15),
+              style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
               decoration: InputDecoration(
                 hintText: widget.hint,
                 hintStyle: isThatMobile
-                    ? getNormalStyle(color: Theme.of(context).indicatorColor)
+                    ? getNormalStyle(color: Theme.of(context).tabBarTheme.indicatorColor!)
                     : getNormalStyle(color: ColorManager.black54, fontSize: 12),
                 fillColor: const Color.fromARGB(48, 232, 232, 232),
                 filled: true,
@@ -88,8 +78,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 enabledBorder: outlineInputBorder(),
                 errorStyle: getNormalStyle(color: ColorManager.red),
                 errorText: isThatMobile ? errorMassage : null,
-                contentPadding: EdgeInsets.symmetric(
-                    horizontal: 10, vertical: isThatMobile ? 15 : 5),
+                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: isThatMobile ? 15 : 5),
               ),
             );
           },
@@ -121,8 +110,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   OutlineInputBorder outlineInputBorder() {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(isThatMobile ? 5.0 : 1.0),
-      borderSide: BorderSide(
-          color: ColorManager.lightGrey, width: isThatMobile ? 1.0 : 0.8),
+      borderSide: BorderSide(color: ColorManager.lightGrey, width: isThatMobile ? 1.0 : 0.8),
     );
   }
 }

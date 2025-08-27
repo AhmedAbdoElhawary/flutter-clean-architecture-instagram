@@ -7,10 +7,10 @@ class CustomBottomSheet extends StatelessWidget {
   final Widget headIcon;
   final Widget bodyText;
   const CustomBottomSheet({
-    Key? key,
+    super.key,
     required this.headIcon,
     required this.bodyText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +28,9 @@ class _ListOfBodyWidgets extends StatelessWidget {
   final Widget headIcon;
   final Widget bodyText;
   const _ListOfBodyWidgets({
-    Key? key,
     required this.headIcon,
     required this.bodyText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +42,7 @@ class _ListOfBodyWidgets extends StatelessWidget {
         children: <Widget>[
           SvgPicture.asset(
             IconsAssets.minusIcon,
-            colorFilter: ColorFilter.mode(
-                Theme.of(context).highlightColor, BlendMode.srcIn),
+            colorFilter: ColorFilter.mode(Theme.of(context).highlightColor, BlendMode.srcIn),
             height: 40,
           ),
           headIcon,

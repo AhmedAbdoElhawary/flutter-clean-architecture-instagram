@@ -6,16 +6,13 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class CustomSmartRefresh extends StatefulWidget {
   final AsyncValueSetter<int> onRefreshData;
   final Widget child;
-  const CustomSmartRefresh(
-      {Key? key, required this.onRefreshData, required this.child})
-      : super(key: key);
+  const CustomSmartRefresh({super.key, required this.onRefreshData, required this.child});
 
   @override
   State<CustomSmartRefresh> createState() => _CustomSmartRefreshState();
 }
 
-class _CustomSmartRefreshState extends State<CustomSmartRefresh>
-    with TickerProviderStateMixin {
+class _CustomSmartRefreshState extends State<CustomSmartRefresh> with TickerProviderStateMixin {
   late AnimationController _aniController, _scaleController, _footerController;
   final _refreshController = ValueNotifier(RefreshController());
   @override
@@ -24,19 +21,15 @@ class _CustomSmartRefreshState extends State<CustomSmartRefresh>
     super.initState();
   }
 
-  init() {
-    _aniController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2000));
-    _scaleController =
-        AnimationController(value: 1, vsync: this, upperBound: 1);
-    _footerController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2000));
+  void init() {
+    _aniController = AnimationController(vsync: this, duration: const Duration(milliseconds: 2000));
+    _scaleController = AnimationController(value: 1, vsync: this, upperBound: 1);
+    _footerController = AnimationController(vsync: this, duration: const Duration(milliseconds: 2000));
     _refreshController.value.headerMode!.addListener(() {
       if (_refreshController.value.headerStatus == RefreshStatus.idle) {
         _scaleController.value = 0.0;
         _aniController.reset();
-      } else if (_refreshController.value.headerStatus ==
-          RefreshStatus.refreshing) {
+      } else if (_refreshController.value.headerStatus == RefreshStatus.refreshing) {
         _aniController.repeat();
       }
     });
@@ -70,7 +63,7 @@ class _CustomSmartRefreshState extends State<CustomSmartRefresh>
     );
   }
 
-  onSmarterRefresh() {
+  void onSmarterRefresh() {
     widget.onRefreshData(0).whenComplete(() {
       _refreshController.value.refreshCompleted();
       _refreshController.value.loadComplete();
@@ -81,8 +74,7 @@ class _CustomSmartRefreshState extends State<CustomSmartRefresh>
     return CustomHeader(
       refreshStyle: RefreshStyle.Behind,
       onOffsetChange: (offset) {
-        if (_refreshController.value.headerMode!.value !=
-            RefreshStatus.refreshing) {
+        if (_refreshController.value.headerMode!.value != RefreshStatus.refreshing) {
           _scaleController.value = offset / 150.0;
         }
       },

@@ -12,50 +12,47 @@ part 'message_state.dart';
 class MessageBloc extends Bloc<MessageEvent, MessageBlocState> {
   final GetMessagesUseCase _getMessagesUseCase;
   final GetMessagesGroGroupChatUseCase _getMessagesGroGroupChatUseCase;
-  MessageBloc(this._getMessagesUseCase, this._getMessagesGroGroupChatUseCase)
-      : super(MessageBlocInitial());
 
-  @override
-  Stream<MessageBlocState> mapEventToState(
-    MessageEvent event,
-  ) async* {
-    if (event is LoadMessagesForSingleChat) {
-      yield* _mapLoadMessagesToState(event.receiverId);
-    } else if (event is UpdateMessages) {
-      yield* _mapUpdateMessagesToState(event);
-    }
-    if (event is LoadMessagesForGroupChat) {
-      yield* _mapLoadMessagesForGroupToState(event.groupChatUid);
-    } else if (event is UpdateMessagesForGroup) {
-      yield* _mapUpdateMessagesForGroupToState(event);
-    }
+  MessageBloc(this._getMessagesUseCase, this._getMessagesGroGroupChatUseCase) : super(MessageBlocInitial()) {
+    on<LoadMessagesForSingleChat>(_onLoadMessagesForSingleChat);
+    on<UpdateMessages>(_onUpdateMessages);
+    on<LoadMessagesForGroupChat>(_onLoadMessagesForGroupChat);
+    on<UpdateMessagesForGroup>(_onUpdateMessagesForGroup);
   }
 
   static MessageBloc get(BuildContext context) => BlocProvider.of(context);
-  Stream<MessageBlocState> _mapLoadMessagesToState(String receiverId) async* {
-    _getMessagesUseCase.call(params: receiverId).listen(
-      (messages) {
-        add(UpdateMessages(messages));
-      },
+
+  Future<void> _onLoadMessagesForSingleChat(
+    LoadMessagesForSingleChat event,
+    Emitter<MessageBlocState> emit,
+  ) async {
+    await emit.forEach<List<Message>>(
+      _getMessagesUseCase.call(params: event.receiverId),
+      onData: (messages) => MessageBlocLoaded(messages: messages),
     );
   }
 
-  Stream<MessageBlocState> _mapUpdateMessagesToState(
-      UpdateMessages event) async* {
-    yield MessageBlocLoaded(messages: event.messages);
+  void _onUpdateMessages(
+    UpdateMessages event,
+    Emitter<MessageBlocState> emit,
+  ) {
+    emit(MessageBlocLoaded(messages: event.messages));
   }
 
-  Stream<MessageBlocState> _mapLoadMessagesForGroupToState(
-      String groupChatUid) async* {
-    _getMessagesGroGroupChatUseCase.call(params: groupChatUid).listen(
-      (messages) {
-        add(UpdateMessagesForGroup(messages));
-      },
+  Future<void> _onLoadMessagesForGroupChat(
+    LoadMessagesForGroupChat event,
+    Emitter<MessageBlocState> emit,
+  ) async {
+    await emit.forEach<List<Message>>(
+      _getMessagesGroGroupChatUseCase.call(params: event.groupChatUid),
+      onData: (messages) => MessageBlocLoaded(messages: messages),
     );
   }
 
-  Stream<MessageBlocState> _mapUpdateMessagesForGroupToState(
-      UpdateMessagesForGroup event) async* {
-    yield MessageBlocLoaded(messages: event.messages);
+  void _onUpdateMessagesForGroup(
+    UpdateMessagesForGroup event,
+    Emitter<MessageBlocState> emit,
+  ) {
+    emit(MessageBlocLoaded(messages: event.messages));
   }
 }

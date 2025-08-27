@@ -39,7 +39,7 @@ class CommentInfo extends StatefulWidget {
   final ValueNotifier<FocusNode> currentFocus;
 
   const CommentInfo(
-      {Key? key,
+      {super.key,
       required this.commentInfo,
       required this.currentFocus,
       this.selectedCommentInfo,
@@ -51,8 +51,7 @@ class CommentInfo extends StatefulWidget {
       required this.rebuildCallback,
       required this.addReply,
       required this.textController,
-      required this.postInfo})
-      : super(key: key);
+      required this.postInfo});
 
   @override
   State<CommentInfo> createState() => _CommentInfoState();
@@ -63,22 +62,18 @@ class _CommentInfoState extends State<CommentInfo> {
   Widget build(BuildContext context) {
     bool isLiked = widget.commentInfo.likes.contains(myPersonalId);
     return Padding(
-      padding: EdgeInsetsDirectional.only(
-          start: 10.0, end: widget.isThatReply ? 0 : 10),
+      padding: EdgeInsetsDirectional.only(start: 10.0, end: widget.isThatReply ? 0 : 10),
       child: Column(
         children: [
           rowOfCommentator(context, isLiked, widget.commentInfo.theComment),
           if (!widget.isThatReply && widget.commentInfo.replies!.isNotEmpty)
-            widget.showMeReplies[widget.index] == false
-                ? textOfReplyCount(context)
-                : showReplies(context),
+            widget.showMeReplies[widget.index] == false ? textOfReplyCount(context) : showReplies(context),
         ],
       ),
     );
   }
 
-  BlocBuilder<ReplyInfoCubit, ReplyInfoState> showReplies(
-      BuildContext context) {
+  BlocBuilder<ReplyInfoCubit, ReplyInfoState> showReplies(BuildContext context) {
     return BlocBuilder<ReplyInfoCubit, ReplyInfoState>(
         bloc: BlocProvider.of<ReplyInfoCubit>(context)
           ..getRepliesOfThisComment(commentId: widget.commentInfo.commentUid),
@@ -94,13 +89,11 @@ class _CommentInfoState extends State<CommentInfo> {
         },
         builder: (context, state) {
           if (state is CubitReplyInfoLoaded) {
-            List<Comment> repliesInfo =
-                BlocProvider.of<ReplyInfoCubit>(context).repliesOnComment;
+            List<Comment> repliesInfo = BlocProvider.of<ReplyInfoCubit>(context).repliesOnComment;
             return Padding(
               padding: const EdgeInsetsDirectional.only(start: 40.0),
               child: ListView.separated(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                   shrinkWrap: true,
                   primary: false,
                   itemBuilder: (context, index) {
@@ -120,15 +113,13 @@ class _CommentInfoState extends State<CommentInfo> {
                     );
                   },
                   itemCount: repliesInfo.length,
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const SizedBox(
+                  separatorBuilder: (BuildContext context, int index) => const SizedBox(
                         height: 20,
                       )),
             );
           } else if (state is CubitReplyInfoFailed) {
             ToastShow.toastStateError(state);
-            return Text(state.toString(),
-                style: Theme.of(context).textTheme.bodyLarge);
+            return Text(state.toString(), style: Theme.of(context).textTheme.bodyLarge);
           } else {
             return textOfLoading(context, StringsManager.loading.tr);
           }
@@ -140,12 +131,10 @@ class _CommentInfoState extends State<CommentInfo> {
       padding: const EdgeInsetsDirectional.only(start: 50.0),
       child: Row(
         children: [
-          Container(
-              color: Theme.of(context).dividerColor, height: 1, width: 40),
+          Container(color: Theme.of(context).dividerColor, height: 1, width: 40),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(loadingText,
-                style: Theme.of(context).textTheme.displayLarge),
+            child: Text(loadingText, style: Theme.of(context).textTheme.displayLarge),
           )
         ],
       ),
@@ -157,8 +146,7 @@ class _CommentInfoState extends State<CommentInfo> {
       padding: const EdgeInsetsDirectional.only(start: 50.0, bottom: 10),
       child: Row(
         children: [
-          Container(
-              color: Theme.of(context).dividerColor, height: 1, width: 40),
+          Container(color: Theme.of(context).dividerColor, height: 1, width: 40),
           const SizedBox(width: 10),
           Expanded(
             child: GestureDetector(
@@ -169,7 +157,7 @@ class _CommentInfoState extends State<CommentInfo> {
               },
               child: Text(
                 "${StringsManager.view.tr} ${widget.commentInfo.replies!.length} ${StringsManager.more.tr} ${widget.commentInfo.replies!.length > 1 ? StringsManager.replies.tr : StringsManager.reply.tr}",
-                style: getNormalStyle(color: Theme.of(context).indicatorColor),
+                style: getNormalStyle(color: Theme.of(context).tabBarTheme.indicatorColor!),
               ),
             ),
           )
@@ -178,8 +166,7 @@ class _CommentInfoState extends State<CommentInfo> {
     );
   }
 
-  Row rowOfCommentator(
-      BuildContext context, bool isLiked, String hashTagOfUserName) {
+  Row rowOfCommentator(BuildContext context, bool isLiked, String hashTagOfUserName) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -195,10 +182,7 @@ class _CommentInfoState extends State<CommentInfo> {
   GestureDetector profileImage(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Go(context).push(
-            page: WhichProfilePage(
-                userId: widget.commentInfo.whoCommentInfo!.userId),
-            withoutRoot: false);
+        Go(context).push(page: WhichProfilePage(userId: widget.commentInfo.whoCommentInfo!.userId), withoutRoot: false);
       },
       child: CircleAvatarOfProfileImage(
         userInfo: widget.commentInfo.whoCommentInfo!,
@@ -211,15 +195,13 @@ class _CommentInfoState extends State<CommentInfo> {
     return Expanded(
       child: Padding(
         padding: const EdgeInsetsDirectional.only(top: 3.0),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              whoCommentUserName(context, hashTageOfUserName),
-              const SizedBox(height: 5),
-              commentOption(context),
-              const SizedBox(height: 15),
-            ]),
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
+          whoCommentUserName(context, hashTageOfUserName),
+          const SizedBox(height: 5),
+          commentOption(context),
+          const SizedBox(height: 15),
+        ]),
       ),
     );
   }
@@ -241,8 +223,8 @@ class _CommentInfoState extends State<CommentInfo> {
       onTap: () async {
         String hashTag = "@${widget.commentInfo.whoCommentInfo!.userName} ";
         widget.textController.value.text = hashTag;
-        widget.textController.value.selection = TextSelection.fromPosition(
-            TextPosition(offset: widget.textController.value.text.length));
+        widget.textController.value.selection =
+            TextSelection.fromPosition(TextPosition(offset: widget.textController.value.text.length));
         Comment commentInfo = widget.commentInfo;
         if (widget.commentInfo.parentCommentId.isEmpty) {
           commentInfo.parentCommentId = commentInfo.commentUid;
@@ -266,8 +248,7 @@ class _CommentInfoState extends State<CommentInfo> {
               page: UsersWhoLikesForMobile(
                 showSearchBar: false,
                 usersIds: widget.commentInfo.likes,
-                isThatMyPersonalId:
-                    widget.commentInfo.whoCommentId == myPersonalId,
+                isThatMyPersonalId: widget.commentInfo.whoCommentId == myPersonalId,
               ),
             );
           } else {
@@ -276,8 +257,7 @@ class _CommentInfoState extends State<CommentInfo> {
                 backgroundColor: ColorManager.black26,
                 builder: (context) => UsersWhoLikesForWeb(
                   usersIds: widget.commentInfo.likes,
-                  isThatMyPersonalId:
-                      widget.commentInfo.whoCommentId == myPersonalId,
+                  isThatMyPersonalId: widget.commentInfo.whoCommentId == myPersonalId,
                 ),
               ),
             );
@@ -291,13 +271,10 @@ class _CommentInfoState extends State<CommentInfo> {
     );
   }
 
-  GestureDetector whoCommentUserName(
-      BuildContext context, String hashTageOfUserName) {
+  GestureDetector whoCommentUserName(BuildContext context, String hashTageOfUserName) {
     return GestureDetector(
       onTap: () {
-        Go(context).push(
-            page: WhichProfilePage(
-                userId: widget.commentInfo.whoCommentInfo!.userId));
+        Go(context).push(page: WhichProfilePage(userId: widget.commentInfo.whoCommentInfo!.userId));
       },
       child: Text.rich(
         TextSpan(
@@ -317,14 +294,12 @@ class _CommentInfoState extends State<CommentInfo> {
                   ..onTap = () async {
                     List<String> hashTagName = hashTageOfUserName.split(" ");
                     String userName = hashTagName[0].replaceAll('@', '');
-                    await Go(context)
-                        .push(page: WhichProfilePage(userName: userName));
+                    await Go(context).push(page: WhichProfilePage(userName: userName));
                   },
               ),
             TextSpan(
               style: TextStyle(color: Theme.of(context).focusColor),
-              text:
-                  " ${widget.isThatReply ? hashTageOfUserName.split(" ")[1] : hashTageOfUserName}",
+              text: " ${widget.isThatReply ? hashTageOfUserName.split(" ")[1] : hashTageOfUserName}",
             )
           ],
         ),
@@ -341,12 +316,10 @@ class _CommentInfoState extends State<CommentInfo> {
         setState(() {
           if (isLiked) {
             if (widget.isThatReply) {
-              BlocProvider.of<ReplyLikesCubit>(context).removeLikeOnThisReply(
-                  replyId: widget.commentInfo.commentUid,
-                  myPersonalId: myPersonalId);
+              BlocProvider.of<ReplyLikesCubit>(context)
+                  .removeLikeOnThisReply(replyId: widget.commentInfo.commentUid, myPersonalId: myPersonalId);
             } else {
-              BlocProvider.of<CommentLikesCubit>(context)
-                  .removeLikeOnThisComment(
+              BlocProvider.of<CommentLikesCubit>(context).removeLikeOnThisComment(
                 postId: widget.commentInfo.postId,
                 commentId: widget.commentInfo.commentUid,
                 myPersonalId: myPersonalId,
@@ -354,9 +327,8 @@ class _CommentInfoState extends State<CommentInfo> {
             }
             widget.commentInfo.likes.remove(myPersonalId);
             //for notification
-            BlocProvider.of<NotificationCubit>(context).deleteNotification(
-                notificationCheck:
-                    createNotificationCheck(widget.postInfo.value));
+            BlocProvider.of<NotificationCubit>(context)
+                .deleteNotification(notificationCheck: createNotificationCheck(widget.postInfo.value));
           } else {
             if (widget.isThatReply) {
               BlocProvider.of<ReplyLikesCubit>(context).putLikeOnThisReply(
@@ -372,8 +344,8 @@ class _CommentInfoState extends State<CommentInfo> {
             }
             widget.commentInfo.likes.add(myPersonalId);
             //for notification
-            BlocProvider.of<NotificationCubit>(context).createNotification(
-                newNotification: createNotification(widget.commentInfo));
+            BlocProvider.of<NotificationCubit>(context)
+                .createNotification(newNotification: createNotification(widget.commentInfo));
           }
         });
       },
@@ -392,9 +364,7 @@ class _CommentInfoState extends State<CommentInfo> {
   CustomNotification createNotification(Comment commentInfo) {
     Post postInfo = widget.postInfo.value;
     String imageUrl = postInfo.isThatImage
-        ? (postInfo.imagesUrls.length > 1
-            ? postInfo.imagesUrls[0]
-            : postInfo.postUrl)
+        ? (postInfo.imagesUrls.length > 1 ? postInfo.imagesUrls[0] : postInfo.postUrl)
         : postInfo.coverOfVideoUrl;
 
     return CustomNotification(

@@ -12,13 +12,13 @@ part of 'sheet.dart';
 /// The `resizeToAvoidBottomInset` parameter can be used to avoid the keyboard from obscuring
 /// the content bottom sheet.
 Future<T?> showSlidingBottomSheet<T>(
-    BuildContext context, {
-      required SlidingSheetDialog Function(BuildContext context) builder,
-      Widget Function(BuildContext context, SlidingSheet sheet)? parentBuilder,
-      RouteSettings? routeSettings,
-      bool useRootNavigator = false,
-      bool resizeToAvoidBottomInset = true,
-    }) {
+  BuildContext context, {
+  required SlidingSheetDialog Function(BuildContext context) builder,
+  Widget Function(BuildContext context, SlidingSheet sheet)? parentBuilder,
+  RouteSettings? routeSettings,
+  bool useRootNavigator = false,
+  bool resizeToAvoidBottomInset = true,
+}) {
   SlidingSheetDialog dialog = builder(context);
   final SheetController controller = dialog.controller ?? SheetController();
 
@@ -65,7 +65,7 @@ Future<T?> showSlidingBottomSheet<T>(
               color: dialog.color ??
                   theme.bottomSheetTheme.backgroundColor ??
                   theme.dialogTheme.backgroundColor ??
-                  theme.dialogBackgroundColor,
+                  theme.dialogTheme.backgroundColor,
               backdropColor: dialog.backdropColor,
               shadowColor: dialog.shadowColor,
               elevation: dialog.elevation,
@@ -237,17 +237,15 @@ class SlidingSheetDialog {
 
 /// A transparent route for a bottom sheet dialog.
 class SlidingSheetRoute<T> extends PageRoute<T> {
-  final Widget Function(BuildContext, Animation<double>, SlidingSheetRoute<T>)
-  builder;
+  final Widget Function(BuildContext, Animation<double>, SlidingSheetRoute<T>) builder;
   final Duration duration;
   SlidingSheetRoute({
     required this.builder,
     required this.duration,
-    RouteSettings? settings,
+    super.settings,
   }) : super(
-    settings: settings,
-    fullscreenDialog: false,
-  );
+          fullscreenDialog: false,
+        );
 
   @override
   bool get opaque => false;
@@ -269,9 +267,9 @@ class SlidingSheetRoute<T> extends PageRoute<T> {
 
   @override
   Widget buildPage(
-      BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      ) =>
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) =>
       builder(context, animation, this);
 }

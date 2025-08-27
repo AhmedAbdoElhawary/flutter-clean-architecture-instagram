@@ -17,17 +17,14 @@ class Go {
   }) async {
     if (isThatMobile) {
       PageRoute route = withoutPageTransition
-          ? MaterialPageRoute(
-              builder: (context) => page, maintainState: !withoutRoot)
-          : CupertinoPageRoute(
-              builder: (context) => page, maintainState: !withoutRoot);
+          ? MaterialPageRoute(builder: (context) => page, maintainState: !withoutRoot)
+          : CupertinoPageRoute(builder: (context) => page, maintainState: !withoutRoot);
       return Navigator.of(context, rootNavigator: withoutRoot).push(route);
     } else {
       return Get.to(WebScreenLayout(body: page),
-          transition: Transition.noTransition,
-          duration: const Duration(milliseconds: 0));
+          transition: Transition.noTransition, duration: const Duration(milliseconds: 0));
     }
   }
 
-  back() => Navigator.maybePop(context);
+  Future<bool> back() => Navigator.maybePop(context);
 }

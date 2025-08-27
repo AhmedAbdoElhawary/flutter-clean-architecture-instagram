@@ -1,1 +1,1 @@
-/// image_crop  => "https://pub.dev/packages/image_crop"
+// image_crop  => "https://pub.dev/packages/image_crop"

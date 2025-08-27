@@ -10,10 +10,10 @@ class UsersWhoLikesForWeb extends StatelessWidget {
   final bool isThatMyPersonalId;
 
   const UsersWhoLikesForWeb({
-    Key? key,
+    super.key,
     required this.usersIds,
     required this.isThatMyPersonalId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,7 @@ class UsersWhoLikesForWeb extends StatelessWidget {
         child: Material(
           color: ColorManager.white,
           elevation: 2,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(
@@ -49,6 +48,5 @@ class UsersWhoLikesForWeb extends StatelessWidget {
     );
   }
 
-  Widget customDivider() =>
-      Container(color: ColorManager.grey, height: 0.5, width: double.infinity);
+  Widget customDivider() => Container(color: ColorManager.grey, height: 0.5, width: double.infinity);
 }

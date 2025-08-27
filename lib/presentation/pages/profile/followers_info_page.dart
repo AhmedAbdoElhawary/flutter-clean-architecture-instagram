@@ -17,11 +17,11 @@ class FollowersInfoPage extends StatefulWidget {
   final int initialIndex;
   final VoidCallback updateFollowersCallback;
   const FollowersInfoPage({
-    Key? key,
+    super.key,
     required this.userInfo,
     this.initialIndex = 0,
     required this.updateFollowersCallback,
-  }) : super(key: key);
+  });
 
   @override
   State<FollowersInfoPage> createState() => _FollowersInfoPageState();
@@ -41,19 +41,15 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
           appBar: isThatMobile ? buildAppBar(context, userInfoValue) : null,
           body: ValueListenableBuilder(
             valueListenable: rebuildUsersInfo,
-            builder: (context, bool rebuildValue, child) =>
-                BlocBuilder<UsersInfoCubit, UsersInfoState>(
+            builder: (context, bool rebuildValue, child) => BlocBuilder<UsersInfoCubit, UsersInfoState>(
               bloc: BlocProvider.of<UsersInfoCubit>(context)
                 ..getFollowersAndFollowingsInfo(
-                    followersIds: userInfoValue.followerPeople,
-                    followingsIds: userInfoValue.followedPeople),
+                    followersIds: userInfoValue.followerPeople, followingsIds: userInfoValue.followedPeople),
               buildWhen: (previous, current) {
-                if (previous != current &&
-                    (current is CubitFollowersAndFollowingsLoaded)) {
+                if (previous != current && (current is CubitFollowersAndFollowingsLoaded)) {
                   return true;
                 }
-                if (rebuildValue &&
-                    (current is CubitFollowersAndFollowingsLoaded)) {
+                if (rebuildValue && (current is CubitFollowersAndFollowingsLoaded)) {
                   rebuildUsersInfo.value = false;
                   return true;
                 }
@@ -90,12 +86,8 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
         indicatorColor: Theme.of(context).focusColor,
         indicatorWeight: 1,
         tabs: [
-          Tab(
-              icon: buildText(context,
-                  "${userInfoValue.followerPeople.length} ${StringsManager.followers.tr}")),
-          Tab(
-              icon: buildText(context,
-                  "${userInfoValue.followedPeople.length} ${StringsManager.following.tr}")),
+          Tab(icon: buildText(context, "${userInfoValue.followerPeople.length} ${StringsManager.followers.tr}")),
+          Tab(icon: buildText(context, "${userInfoValue.followedPeople.length} ${StringsManager.following.tr}")),
         ],
       ),
       title: buildText(context, userInfoValue.userName),
@@ -103,8 +95,7 @@ class _FollowersInfoPageState extends State<FollowersInfoPage> {
   }
 
   Text buildText(BuildContext context, String text) {
-    return Text(text,
-        style: getNormalStyle(color: Theme.of(context).focusColor));
+    return Text(text, style: getNormalStyle(color: Theme.of(context).focusColor));
   }
 }
 
@@ -113,11 +104,10 @@ class _TapBarView extends StatelessWidget {
   final ValueNotifier<UserPersonalInfo> userInfo;
   final VoidCallback updateCallback;
   const _TapBarView({
-    Key? key,
     required this.userInfo,
     required this.state,
     required this.updateCallback,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

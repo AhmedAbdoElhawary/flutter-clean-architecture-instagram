@@ -10,23 +10,18 @@ import 'package:instagram/domain/repositories/calling_rooms_repository.dart';
 class CallingRoomsRepoImpl implements CallingRoomsRepository {
   @override
   Future<String> createCallingRoom(
-      {required UserPersonalInfo myPersonalInfo,
-      required List<UserPersonalInfo> callThoseUsersInfo}) async {
+      {required UserPersonalInfo myPersonalInfo, required List<UserPersonalInfo> callThoseUsersInfo}) async {
     try {
       String channelId = await FireStoreCallingRooms.createCallingRoom(
-          myPersonalInfo: myPersonalInfo,
-          initialNumberOfUsers: callThoseUsersInfo.length + 1);
+          myPersonalInfo: myPersonalInfo, initialNumberOfUsers: callThoseUsersInfo.length + 1);
 
       List<bool> isUsersAvailable = await FireStoreUser.updateChannelId(
-          callThoseUsers: callThoseUsersInfo,
-          channelId: channelId,
-          myPersonalId: myPersonalInfo.userId);
+          callThoseUsers: callThoseUsersInfo, channelId: channelId, myPersonalId: myPersonalInfo.userId);
       bool isAnyOneAvailable = false;
       for (int i = 0; i < isUsersAvailable.length; i++) {
         if (isUsersAvailable[i]) {
           isAnyOneAvailable = true;
-          UserPersonalInfo receiverInfo =
-              await FireStoreUser.getUserInfo(callThoseUsersInfo[i].userId);
+          UserPersonalInfo receiverInfo = await FireStoreUser.getUserInfo(callThoseUsersInfo[i].userId);
           String token = receiverInfo.deviceToken;
           if (token.isNotEmpty) {
             String body = "Calling you";
@@ -39,8 +34,7 @@ class CallingRoomsRepoImpl implements CallingRoomsRepository {
               routeParameterId: channelId,
               isThatGroupChat: callThoseUsersInfo.length > 1,
             );
-            await DeviceNotification.sendPopupNotification(
-                pushNotification: detail);
+            await DeviceNotification.sendPopupNotification(pushNotification: detail);
           }
         }
       }
@@ -58,12 +52,9 @@ class CallingRoomsRepoImpl implements CallingRoomsRepository {
   Stream<bool> getCallingStatus({required String channelUid}) =>
       FireStoreCallingRooms.getCallingStatus(channelUid: channelUid);
   @override
-  Future<String> joinToRoom(
-      {required String channelId,
-      required UserPersonalInfo myPersonalInfo}) async {
+  Future<String> joinToRoom({required String channelId, required UserPersonalInfo myPersonalInfo}) async {
     try {
-      return await FireStoreCallingRooms.joinToRoom(
-          channelId: channelId, myPersonalInfo: myPersonalInfo);
+      return await FireStoreCallingRooms.joinToRoom(channelId: channelId, myPersonalInfo: myPersonalInfo);
     } catch (e) {
       return Future.error(e.toString());
     }
@@ -78,31 +69,25 @@ class CallingRoomsRepoImpl implements CallingRoomsRepository {
     try {
       await FireStoreUser.cancelJoiningToRoom(userId);
       await FireStoreCallingRooms.removeThisUserFromRoom(
-          channelId: channelId,
-          userId: userId,
-          isThatAfterJoining: isThatAfterJoining);
+          channelId: channelId, userId: userId, isThatAfterJoining: isThatAfterJoining);
     } catch (e) {
       return Future.error(e.toString());
     }
   }
 
   @override
-  Future<List<UsersInfoInCallingRoom>> getUsersInfoInThisRoom(
-      {required String channelId}) async {
+  Future<List<UsersInfoInCallingRoom>> getUsersInfoInThisRoom({required String channelId}) async {
     try {
-      return await FireStoreCallingRooms.getUsersInfoInThisRoom(
-          channelId: channelId);
+      return await FireStoreCallingRooms.getUsersInfoInThisRoom(channelId: channelId);
     } catch (e) {
       return Future.error(e.toString());
     }
   }
 
   @override
-  Future<void> deleteTheRoom(
-      {required String channelId, required List<dynamic> usersIds}) async {
+  Future<void> deleteTheRoom({required String channelId, required List<dynamic> usersIds}) async {
     try {
-      await FireStoreUser.clearChannelsIds(
-          usersIds: usersIds, myPersonalId: myPersonalId);
+      await FireStoreUser.clearChannelsIds(usersIds: usersIds, myPersonalId: myPersonalId);
       return await FireStoreCallingRooms.deleteTheRoom(channelId: channelId);
     } catch (e) {
       return Future.error(e.toString());

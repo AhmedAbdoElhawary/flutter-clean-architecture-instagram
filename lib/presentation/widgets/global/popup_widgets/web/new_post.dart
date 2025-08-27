@@ -21,7 +21,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circ
 /// [PopupNewPost] it's not clean yet.
 
 class PopupNewPost extends StatefulWidget {
-  const PopupNewPost({Key? key}) : super(key: key);
+  const PopupNewPost({super.key});
 
   @override
   State<PopupNewPost> createState() => _PopupNewPostState();
@@ -52,9 +52,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
     double? minimumSize;
 
     if (widthOfScreen / 2 < 800 || heightOfScreen / 2 < 400) {
-      minimumSize = widthOfScreen / 2 > heightOfScreen / 2
-          ? heightOfScreen / 2
-          : widthOfScreen / 2;
+      minimumSize = widthOfScreen / 2 > heightOfScreen / 2 ? heightOfScreen / 2 : widthOfScreen / 2;
       if (minimumSize < 290) minimumSize = 290;
     } else {
       minimumSize = null;
@@ -75,10 +73,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
                         color: ColorManager.white,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      width: (minimumSize ?? 780) +
-                          (createPostButton == CreatePostButton.share
-                              ? 350
-                              : 0),
+                      width: (minimumSize ?? 780) + (createPostButton == CreatePostButton.share ? 350 : 0),
                       height: minimumSize ?? 820,
                       child: Column(
                         children: [
@@ -129,8 +124,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
                   }
                 });
               },
-              child: const Icon(Icons.arrow_back_rounded,
-                  size: 28, color: ColorManager.black),
+              child: const Icon(Icons.arrow_back_rounded, size: 28, color: ColorManager.black),
             ),
           ],
           Flexible(
@@ -139,12 +133,10 @@ class _PopupNewPostState extends State<PopupNewPost> {
                 padding: const EdgeInsets.only(top: 12.0, bottom: 8),
                 child: Text(
                   // there is no multi language in real instagram (web version)
-                  selectedImage.value == null ||
-                          createPostButton == CreatePostButton.share
+                  selectedImage.value == null || createPostButton == CreatePostButton.share
                       ? 'Create new post'
                       : 'Crop',
-                  style:
-                      getMediumStyle(color: ColorManager.black, fontSize: 17),
+                  style: getMediumStyle(color: ColorManager.black, fontSize: 17),
                 ),
               ),
             ),
@@ -154,18 +146,13 @@ class _PopupNewPostState extends State<PopupNewPost> {
               valueListenable: isItDone,
               builder: (context, bool isItDoneValue, child) => isItDoneValue
                   ? Builder(builder: (context) {
-                      UserInfoCubit userCubit = BlocProvider.of<UserInfoCubit>(
-                          context,
-                          listen: false);
+                      UserInfoCubit userCubit = BlocProvider.of<UserInfoCubit>(context, listen: false);
                       UserPersonalInfo? personalInfo = userCubit.myPersonalInfo;
 
                       return GestureDetector(
-                        onTap: () =>
-                            onTapButton(personalInfo, userCubit, context),
+                        onTap: () => onTapButton(personalInfo, userCubit, context),
                         child: Text(
-                          createPostButton == CreatePostButton.share
-                              ? "Share"
-                              : "Next",
+                          createPostButton == CreatePostButton.share ? "Share" : "Next",
                           style: getNormalStyle(color: ColorManager.blue),
                         ),
                       );
@@ -178,8 +165,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
     );
   }
 
-  Future<void> onTapButton(UserPersonalInfo personalInfo,
-      UserInfoCubit userCubit, BuildContext builder2context) async {
+  Future<void> onTapButton(UserPersonalInfo personalInfo, UserInfoCubit userCubit, BuildContext builder2context) async {
     if (createPostButton == CreatePostButton.share && !isClickedShare) {
       setState(() {
         isClickedShare = true;
@@ -211,23 +197,17 @@ class _PopupNewPostState extends State<PopupNewPost> {
     }
   }
 
-  Future<void> createPost(UserPersonalInfo personalInfo,
-      UserInfoCubit userCubit, BuildContext builder2context) async {
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => setState(() => isItDone.value = false));
+  Future<void> createPost(UserPersonalInfo personalInfo, UserInfoCubit userCubit, BuildContext builder2context) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => isItDone.value = false));
     String blurHash = await CustomBlurHash.blurHashEncode(selectedImage.value!);
     Post postInfo = addPostInfo(personalInfo, blurHash);
-    if (!mounted) return;
-    PostCubit postCubit =
-        BlocProvider.of<PostCubit>(builder2context, listen: false);
+    if (!mounted || !builder2context.mounted) return;
+    PostCubit postCubit = BlocProvider.of<PostCubit>(builder2context, listen: false);
     await postCubit.createPost(postInfo, selectedImagesInByte);
     if (postCubit.newPostInfo != null) {
-      await userCubit.updateUserPostsInfo(
-          userId: personalInfo.userId, postInfo: postCubit.newPostInfo!);
-      await postCubit.getPostsInfo(
-          postsIds: personalInfo.posts, isThatMyPosts: true);
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => setState(() => isItDone.value = true));
+      await userCubit.updateUserPostsInfo(userId: personalInfo.userId, postInfo: postCubit.newPostInfo!);
+      await postCubit.getPostsInfo(postsIds: personalInfo.posts, isThatMyPosts: true);
+      WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => isItDone.value = true));
     }
     if (!mounted) return;
     Navigator.of(context).maybePop();
@@ -248,8 +228,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
 
   Flexible buildBody() {
     return Flexible(
-      child: (selectedImage.value != null &&
-              createPostButton == CreatePostButton.share)
+      child: (selectedImage.value != null && createPostButton == CreatePostButton.share)
           ? Row(
               children: [
                 Flexible(
@@ -290,9 +269,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
     return ValueListenableBuilder(
       valueListenable: selectedImage,
       builder: (context, Uint8List? selectedImageValue, child) =>
-          selectedImageValue != null
-              ? buildSelectedImage(selectedImageValue)
-              : buildSelectImage(),
+          selectedImageValue != null ? buildSelectedImage(selectedImageValue) : buildSelectImage(),
     );
   }
 
@@ -307,8 +284,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
           },
           child: ValueListenableBuilder(
             valueListenable: imageAspectRatio,
-            builder: (context, double imageAspectRatioValue, child) =>
-                WebCustomCrop.memory(
+            builder: (context, double imageAspectRatioValue, child) => WebCustomCrop.memory(
               selectedImageValue,
               key: _cropKey,
               aspectRatio: imageAspectRatioValue,
@@ -319,10 +295,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
         if (createPostButton == CreatePostButton.share) ...[
           Align(
             alignment: Alignment.center,
-            child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: ColorManager.transparent),
+            child: Container(width: double.infinity, height: double.infinity, color: ColorManager.transparent),
           )
         ],
         if (selectedImages.value.length > 1)
@@ -356,69 +329,60 @@ class _PopupNewPostState extends State<PopupNewPost> {
           children: [
             ValueListenableBuilder(
               valueListenable: expandImage,
-              builder: (context, bool expandImageValue, child) =>
-                  expandImageValue
-                      ? Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Container(
-                            width: 100,
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(165, 58, 58, 58),
-                              border: Border.all(
-                                color: const Color.fromARGB(45, 250, 250, 250),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(height: 8),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      imageAspectRatio.value = 1;
-                                    });
-                                  },
-                                  child: SizedBox(
-                                    child: Text("1:1",
-                                        style: getNormalStyle(
-                                            color: ColorManager.white)),
-                                  ),
-                                ),
-                                const Divider(
-                                    color: ColorManager.white, thickness: 1),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      imageAspectRatio.value = 4 / 5;
-                                    });
-                                  },
-                                  child: SizedBox(
-                                    child: Text("4:5",
-                                        style: getNormalStyle(
-                                            color: ColorManager.white)),
-                                  ),
-                                ),
-                                const Divider(
-                                    color: ColorManager.white, thickness: 1),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      imageAspectRatio.value = 16 / 9;
-                                    });
-                                  },
-                                  child: SizedBox(
-                                    child: Text("16:9",
-                                        style: getNormalStyle(
-                                            color: ColorManager.white)),
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                              ],
-                            ),
+              builder: (context, bool expandImageValue, child) => expandImageValue
+                  ? Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Container(
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(165, 58, 58, 58),
+                          border: Border.all(
+                            color: const Color.fromARGB(45, 250, 250, 250),
                           ),
-                        )
-                      : const SizedBox(),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 8),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  imageAspectRatio.value = 1;
+                                });
+                              },
+                              child: SizedBox(
+                                child: Text("1:1", style: getNormalStyle(color: ColorManager.white)),
+                              ),
+                            ),
+                            const Divider(color: ColorManager.white, thickness: 1),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  imageAspectRatio.value = 4 / 5;
+                                });
+                              },
+                              child: SizedBox(
+                                child: Text("4:5", style: getNormalStyle(color: ColorManager.white)),
+                              ),
+                            ),
+                            const Divider(color: ColorManager.white, thickness: 1),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  imageAspectRatio.value = 16 / 9;
+                                });
+                              },
+                              child: SizedBox(
+                                child: Text("16:9", style: getNormalStyle(color: ColorManager.white)),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                          ],
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
@@ -469,9 +433,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
                     height: 30,
                     width: 30,
                     decoration: BoxDecoration(
-                      color: multiValue
-                          ? Colors.white
-                          : const Color.fromARGB(165, 58, 58, 58),
+                      color: multiValue ? Colors.white : const Color.fromARGB(165, 58, 58, 58),
                       border: Border.all(
                         color: const Color.fromARGB(45, 250, 250, 250),
                       ),
@@ -480,9 +442,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
                     child: Center(
                       child: Icon(
                         Icons.copy,
-                        color: multiValue
-                            ? ColorManager.black
-                            : ColorManager.white,
+                        color: multiValue ? ColorManager.black : ColorManager.white,
                         size: 15,
                       ),
                     ),
@@ -527,8 +487,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
                         ),
                       ),
                       buildImagesList(),
-                      if (!showLeftArrowValue &&
-                          selectedImages.value.length > 5) ...[
+                      if (!showLeftArrowValue && selectedImages.value.length > 5) ...[
                         const SizedBox(width: 10),
                         buildJumpButton(false, showLeftArrowValue),
                       ],
@@ -550,9 +509,8 @@ class _PopupNewPostState extends State<PopupNewPost> {
   Widget buildJumpButton(bool isThatBack, bool showLeftArrowValue) {
     return GestureDetector(
       onTap: () async {
-        double offset = isThatBack
-            ? imagesController.position.minScrollExtent
-            : imagesController.position.maxScrollExtent;
+        double offset =
+            isThatBack ? imagesController.position.minScrollExtent : imagesController.position.maxScrollExtent;
         imagesController.animateTo(
           offset,
           duration: const Duration(milliseconds: 500),
@@ -568,9 +526,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Icon(
-          isThatBack
-              ? Icons.arrow_back_ios_rounded
-              : Icons.arrow_forward_ios_rounded,
+          isThatBack ? Icons.arrow_back_ios_rounded : Icons.arrow_forward_ios_rounded,
           color: ColorManager.black,
           size: 20,
         ),
@@ -590,12 +546,10 @@ class _PopupNewPostState extends State<PopupNewPost> {
                 padding: const EdgeInsets.only(top: 15, bottom: 15, left: 15),
                 child: ValueListenableBuilder(
                   valueListenable: selectedImage,
-                  builder: (context, Uint8List? selectedImageValue, child) =>
-                      Stack(
+                  builder: (context, Uint8List? selectedImageValue, child) => Stack(
                     alignment: Alignment.topRight,
                     children: [
-                      Image.memory(selectedImages.value[i],
-                          width: 100, height: 100, fit: BoxFit.cover),
+                      Image.memory(selectedImages.value[i], width: 100, height: 100, fit: BoxFit.cover),
                       if (selectedImages.value[i] == selectedImageValue) ...[
                         Align(
                           alignment: Alignment.topRight,
@@ -610,19 +564,15 @@ class _PopupNewPostState extends State<PopupNewPost> {
                                     int prevIndex = i != 0 ? i - 1 : i;
                                     indexOfSelectedImage = prevIndex;
 
-                                    selectedImage.value =
-                                        selectedImages.value[prevIndex];
+                                    selectedImage.value = selectedImages.value[prevIndex];
                                   } else {
                                     selectedImage.value = null;
                                   }
                                 });
                               },
                               child: Container(
-                                decoration: const BoxDecoration(
-                                    color: ColorManager.black54,
-                                    shape: BoxShape.circle),
-                                child: const Icon(Icons.close_rounded,
-                                    color: ColorManager.white, size: 20),
+                                decoration: const BoxDecoration(color: ColorManager.black54, shape: BoxShape.circle),
+                                child: const Icon(Icons.close_rounded, color: ColorManager.white, size: 20),
                               ),
                             ),
                           ),
@@ -709,9 +659,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
   Center buildSelectImage() {
     return Center(
       child: ElevatedButton(
-        style: ButtonStyle(
-            backgroundColor:
-                MaterialStateProperty.all<Color>(ColorManager.blue)),
+        style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(ColorManager.blue)),
         onPressed: () => pickAnotherImage(),
         child: Text(
           'Select from computer',
@@ -725,10 +673,7 @@ class _PopupNewPostState extends State<PopupNewPost> {
     List<XFile> image = await ImagePicker().pickMultiImage();
     for (final img in image) {
       Uint8List unitImage = await img.readAsBytes();
-      SelectedByte byte = SelectedByte(
-          isThatImage: true,
-          selectedByte: unitImage,
-          selectedFile: File(img.path));
+      SelectedByte byte = SelectedByte(isThatImage: true, selectedByte: unitImage, selectedFile: File(img.path));
       selectedImagesInByte.add(byte);
       selectedImage.value = unitImage;
       selectedImages.value.add(unitImage);

@@ -15,7 +15,7 @@ import 'package:instagram/presentation/widgets/global/others/notification_card_i
 
 /// Not clean enough
 class ActivityPage extends StatefulWidget {
-  const ActivityPage({Key? key}) : super(key: key);
+  const ActivityPage({super.key});
 
   @override
   State<ActivityPage> createState() => _ActivityPageState();
@@ -44,17 +44,13 @@ class _ActivityPageState extends State<ActivityPage> {
   BlocBuilder<UserInfoCubit, UserInfoState> buildBody(BuildContext context) {
     return BlocBuilder<UserInfoCubit, UserInfoState>(
       bloc: UserInfoCubit.get(context)..getAllUnFollowersUsers(myPersonalInfo),
-      buildWhen: (previous, current) =>
-          (previous != current && current is CubitAllUnFollowersUserLoaded),
+      buildWhen: (previous, current) => (previous != current && current is CubitAllUnFollowersUserLoaded),
       builder: (context, unFollowersState) {
         return BlocBuilder<NotificationCubit, NotificationState>(
-          bloc: NotificationCubit.get(context)
-            ..getNotifications(userId: myPersonalId),
-          buildWhen: (previous, current) =>
-              (previous != current && current is NotificationLoaded),
+          bloc: NotificationCubit.get(context)..getNotifications(userId: myPersonalId),
+          buildWhen: (previous, current) => (previous != current && current is NotificationLoaded),
           builder: (context, notificationState) {
-            if (unFollowersState is CubitAllUnFollowersUserLoaded &&
-                notificationState is NotificationLoaded) {
+            if (unFollowersState is CubitAllUnFollowersUserLoaded && notificationState is NotificationLoaded) {
               return SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -76,8 +72,7 @@ class _ActivityPageState extends State<ActivityPage> {
                   ],
                 ),
               );
-            } else if (notificationState is NotificationFailed &&
-                unFollowersState is CubitAllUnFollowersUserLoaded) {
+            } else if (notificationState is NotificationFailed && unFollowersState is CubitAllUnFollowersUserLoaded) {
               return SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -93,15 +88,13 @@ class _ActivityPageState extends State<ActivityPage> {
                   ],
                 ),
               );
-            } else if (unFollowersState is CubitGetUserInfoFailed &&
-                notificationState is NotificationLoaded) {
+            } else if (unFollowersState is CubitGetUserInfoFailed && notificationState is NotificationLoaded) {
               return SingleChildScrollView(
                 child: _ShowNotifications(
                   notifications: notificationState.notifications,
                 ),
               );
-            } else if (notificationState is NotificationFailed &&
-                unFollowersState is CubitGetUserInfoFailed) {
+            } else if (notificationState is NotificationFailed && unFollowersState is CubitGetUserInfoFailed) {
               ToastShow.toast(notificationState.error);
               return Center(
                 child: Text(
@@ -122,8 +115,7 @@ class _ActivityPageState extends State<ActivityPage> {
       padding: const EdgeInsetsDirectional.all(15),
       child: Text(
         StringsManager.suggestionsForYou.tr,
-        style:
-            getMediumStyle(color: Theme.of(context).focusColor, fontSize: 16),
+        style: getMediumStyle(color: Theme.of(context).focusColor, fontSize: 16),
       ),
     );
   }
@@ -132,8 +124,7 @@ class _ActivityPageState extends State<ActivityPage> {
 class _ShowNotifications extends StatefulWidget {
   final List<CustomNotification> notifications;
 
-  const _ShowNotifications({Key? key, required this.notifications})
-      : super(key: key);
+  const _ShowNotifications({required this.notifications});
 
   @override
   State<_ShowNotifications> createState() => _ShowNotificationsState();
@@ -158,8 +149,7 @@ class _ShowNotificationsState extends State<_ShowNotifications> {
         addAutomaticKeepAlives: false,
         addRepaintBoundaries: false,
         itemBuilder: (context, index) {
-          return NotificationCardInfo(
-              notificationInfo: widget.notifications[index]);
+          return NotificationCardInfo(notificationInfo: widget.notifications[index]);
         },
         separatorBuilder: (context, index) => const SizedBox(height: 10),
         itemCount: widget.notifications.length,

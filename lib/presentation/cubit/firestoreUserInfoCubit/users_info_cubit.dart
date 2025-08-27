@@ -14,14 +14,13 @@ class UsersInfoCubit extends Cubit<UsersInfoState> {
   final GetSpecificUsersUseCase getSpecificUsersUseCase;
   final GetChatUsersInfoAddMessageUseCase _getChatUsersInfoAddMessageUseCase;
 
-  UsersInfoCubit(this.getFollowersAndFollowingsUseCase,
-      this.getSpecificUsersUseCase, this._getChatUsersInfoAddMessageUseCase)
+  UsersInfoCubit(
+      this.getFollowersAndFollowingsUseCase, this.getSpecificUsersUseCase, this._getChatUsersInfoAddMessageUseCase)
       : super(UsersInfoInitial());
   static UsersInfoCubit get(BuildContext context) => BlocProvider.of(context);
 
   Future<void> getFollowersAndFollowingsInfo(
-      {required List<dynamic> followersIds,
-      required List<dynamic> followingsIds}) async {
+      {required List<dynamic> followersIds, required List<dynamic> followingsIds}) async {
     emit(CubitFollowersAndFollowingsLoading());
 
     await getFollowersAndFollowingsUseCase
@@ -42,12 +41,9 @@ class UsersInfoCubit extends Cubit<UsersInfoState> {
     });
   }
 
-  Future<void> getChatUsersInfo(
-      {required UserPersonalInfo myPersonalInfo}) async {
+  Future<void> getChatUsersInfo({required UserPersonalInfo myPersonalInfo}) async {
     emit(CubitGettingChatUsersInfoLoading());
-    await _getChatUsersInfoAddMessageUseCase
-        .call(params: myPersonalInfo)
-        .then((usersInfo) {
+    await _getChatUsersInfoAddMessageUseCase.call(params: myPersonalInfo).then((usersInfo) {
       emit(CubitGettingChatUsersInfoLoaded(usersInfo));
     }).catchError((e) {
       emit(CubitGettingSpecificUsersFailed(e.toString()));

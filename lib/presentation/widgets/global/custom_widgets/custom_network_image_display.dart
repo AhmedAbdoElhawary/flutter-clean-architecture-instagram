@@ -13,7 +13,7 @@ class NetworkDisplay extends StatefulWidget {
   final double? width;
 
   const NetworkDisplay({
-    Key? key,
+    super.key,
     required this.url,
     this.isThatImage = true,
     this.cachingHeight = 720,
@@ -22,7 +22,7 @@ class NetworkDisplay extends StatefulWidget {
     this.width,
     this.blurHash = "",
     this.aspectRatio = 0.0,
-  }) : super(key: key);
+  });
 
   @override
   State<NetworkDisplay> createState() => _NetworkDisplayState();
@@ -64,20 +64,21 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
         : buildOcto(height);
   }
 
-  Widget buildOcto(height) {
+  Widget buildOcto(double? height) {
     int cachingHeight = widget.cachingHeight;
     int cachingWidth = widget.cachingWidth;
     if (widget.aspectRatio != 1 && cachingHeight == 720) cachingHeight = 960;
     return OctoImage(
-      image: CachedNetworkImageProvider(widget.url,
-          maxWidth: cachingWidth, maxHeight: cachingHeight),
+      image: CachedNetworkImageProvider(widget.url, maxWidth: cachingWidth, maxHeight: cachingHeight),
       errorBuilder: (context, url, error) => buildError(),
       fit: BoxFit.cover,
       width: widget.width ?? double.infinity,
       height: widget.height ?? height,
-      placeholderBuilder: widget.blurHash.isNotEmpty
-          ? OctoPlaceholder.blurHash(widget.blurHash, fit: BoxFit.cover)
-          : (context) => Center(child: loadingWidget()),
+      placeholderBuilder:
+          // widget.blurHash.isNotEmpty
+          //     ? OctoPlaceholder.(widget.blurHash, fit: BoxFit.cover)
+          //     :
+          (context) => Center(child: loadingWidget()),
     );
   }
 
@@ -85,8 +86,7 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
     return SizedBox(
       width: double.infinity,
       height: widget.aspectRatio,
-      child: Icon(Icons.warning_amber_rounded,
-          size: 30, color: Theme.of(context).focusColor),
+      child: Icon(Icons.warning_amber_rounded, size: 30, color: Theme.of(context).focusColor),
     );
   }
 

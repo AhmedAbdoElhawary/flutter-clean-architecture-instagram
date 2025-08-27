@@ -15,14 +15,14 @@ class ImagesSlider extends StatefulWidget {
   final Function(int, CarouselPageChangedReason) updateImageIndex;
   final bool isImageFromNetwork;
   const ImagesSlider({
-    Key? key,
+    super.key,
     required this.imagesUrls,
     this.blurHash = "",
     required this.updateImageIndex,
     required this.aspectRatio,
     this.isImageFromNetwork = true,
     this.showPointsScrollBar = false,
-  }) : super(key: key);
+  });
 
   @override
   State<ImagesSlider> createState() => _ImagesSliderState();
@@ -31,7 +31,7 @@ class ImagesSlider extends StatefulWidget {
 class _ImagesSliderState extends State<ImagesSlider> {
   ValueNotifier<int> initPosition = ValueNotifier(0);
   ValueNotifier<double> countOpacity = ValueNotifier(0);
-  final CarouselController _controller = CarouselController();
+  final CarouselSliderController _controller = CarouselSliderController();
   late List<SelectedByte> selectedImages;
   @override
   void didChangeDependencies() {
@@ -52,9 +52,7 @@ class _ImagesSliderState extends State<ImagesSlider> {
         aspectRatio: widget.aspectRatio,
         child: ValueListenableBuilder(
           valueListenable: initPosition,
-          builder:
-              (BuildContext context, int initPositionValue, Widget? child) =>
-                  Stack(
+          builder: (BuildContext context, int initPositionValue, Widget? child) => Stack(
             alignment: Alignment.bottomCenter,
             children: [
               CarouselSlider.builder(
@@ -105,16 +103,14 @@ class _ImagesSliderState extends State<ImagesSlider> {
                   GestureDetector(
                       onTap: () {
                         initPosition.value--;
-                        _controller.animateToPage(initPosition.value,
-                            curve: Curves.easeInOut);
+                        _controller.animateToPage(initPosition.value, curve: Curves.easeInOut);
                       },
                       child: const ArrowJump()),
                 if (initPositionValue < widget.imagesUrls.length - 1)
                   GestureDetector(
                     onTap: () {
                       initPosition.value++;
-                      _controller.animateToPage(initPosition.value,
-                          curve: Curves.easeInOut);
+                      _controller.animateToPage(initPosition.value, curve: Curves.easeInOut);
                     },
                     child: const ArrowJump(isThatBack: false),
                   ),
@@ -145,7 +141,7 @@ class _ImagesSliderState extends State<ImagesSlider> {
               padding: const EdgeInsetsDirectional.all(10),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(25),
                 ),
                 height: 23,
