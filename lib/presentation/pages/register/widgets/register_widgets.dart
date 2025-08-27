@@ -150,7 +150,8 @@ class _SignUpPageState extends State<RegisterWidgets> {
                                       (Set states) {
                                       if (states
                                           .contains(WidgetState.disabled)) {
-                                        return Colors.blue.withValues(alpha:.32);
+                                        return Colors.blue
+                                            .withValues(alpha: .32);
                                       }
                                       return Colors.blue;
                                     })
@@ -247,12 +248,12 @@ class _EmailTextFields extends StatefulWidget {
   final String hint;
   final ValueNotifier<bool>? validate;
   final bool isThatLogin;
-  const _EmailTextFields(
-      {required this.controller,
-      required this.hint,
-      required this.isThatLogin,
-      this.validate,
-     });
+  const _EmailTextFields({
+    required this.controller,
+    required this.hint,
+    required this.isThatLogin,
+    this.validate,
+  });
 
   @override
   State<_EmailTextFields> createState() => _EmailTextFieldsState();
@@ -308,7 +309,8 @@ class _EmailTextFieldsState extends State<_EmailTextFields> {
               decoration: InputDecoration(
                 hintText: widget.hint,
                 hintStyle: isThatMobile
-                    ? getNormalStyle(color: Theme.of(context).tabBarTheme.indicatorColor!)
+                    ? getNormalStyle(
+                        color: Theme.of(context).tabBarTheme.indicatorColor!)
                     : getNormalStyle(color: ColorManager.black54, fontSize: 12),
                 fillColor: const Color.fromARGB(48, 232, 232, 232),
                 filled: true,

@@ -4,8 +4,7 @@ class _ReelVideoPlay extends StatefulWidget {
   final ValueNotifier<Post> videoInfo;
   final bool stopVideo;
 
-  const _ReelVideoPlay(
-      {required this.videoInfo, required this.stopVideo});
+  const _ReelVideoPlay({required this.videoInfo, required this.stopVideo});
 
   @override
   State<_ReelVideoPlay> createState() => _ReelVideoPlayState();
@@ -21,7 +20,8 @@ class _ReelVideoPlayState extends State<_ReelVideoPlay> {
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoInfo.value.postUrl))
+    _controller = VideoPlayerController.networkUrl(
+        Uri.parse(widget.videoInfo.value.postUrl))
       ..setLooping(true)
       ..initialize().then((_) => _controller.play());
     _initializeVideoPlayerFuture = _controller.initialize();
@@ -30,7 +30,6 @@ class _ReelVideoPlayState extends State<_ReelVideoPlay> {
   @override
   void didUpdateWidget(covariant _ReelVideoPlay oldWidget) {
     if (!oldWidget.stopVideo) {
-
       _initializeVideoPlayerFuture = _controller.pause();
       _controller.pause();
     } else {
