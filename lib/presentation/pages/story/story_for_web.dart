@@ -125,7 +125,7 @@ class StoryPageForWebState extends State<StoryPageForWeb> {
     );
   }
 
-  void onItemFocus(pos) {
+  void onItemFocus(int pos) {
     setState(() => currentPage = pos);
     if (kDebugMode) {
       print('Done! $pos');
