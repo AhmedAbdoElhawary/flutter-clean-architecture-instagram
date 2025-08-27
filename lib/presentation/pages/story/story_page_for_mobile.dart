@@ -24,8 +24,8 @@ class StoryPageForMobile extends StatefulWidget {
     required this.user,
     required this.storiesOwnersInfo,
     this.hashTag = "",
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   StoryPageForMobileState createState() => StoryPageForMobileState();
@@ -76,12 +76,12 @@ class StoryWidget extends StatefulWidget {
   final String hashTag;
 
   const StoryWidget({
-    Key? key,
+    super.key,
     required this.user,
     required this.storiesOwnersInfo,
     required this.controller,
     required this.hashTag,
-  }) : super(key: key);
+  });
 
   @override
   StoryWidgetState createState() => StoryWidgetState();
@@ -310,8 +310,8 @@ class ProfileWidget extends StatelessWidget {
     required this.user,
     required this.storyInfo,
     required this.hashTag,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) => Material(
