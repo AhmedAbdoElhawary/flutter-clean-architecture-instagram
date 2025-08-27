@@ -27,12 +27,12 @@ class CommentsOfPost extends StatefulWidget {
   final bool showImage;
 
   const CommentsOfPost({
-    Key? key,
+    super.key,
     required this.selectedCommentInfo,
     required this.textController,
     required this.postInfo,
     this.showImage = false,
-  }) : super(key: key);
+  });
 
   @override
   State<CommentsOfPost> createState() => _CommentsOfPostState();

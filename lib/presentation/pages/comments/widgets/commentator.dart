@@ -39,7 +39,7 @@ class CommentInfo extends StatefulWidget {
   final ValueNotifier<FocusNode> currentFocus;
 
   const CommentInfo(
-      {Key? key,
+      {super.key,
       required this.commentInfo,
       required this.currentFocus,
       this.selectedCommentInfo,
@@ -51,8 +51,7 @@ class CommentInfo extends StatefulWidget {
       required this.rebuildCallback,
       required this.addReply,
       required this.textController,
-      required this.postInfo})
-      : super(key: key);
+      required this.postInfo});
 
   @override
   State<CommentInfo> createState() => _CommentInfoState();
@@ -169,7 +168,7 @@ class _CommentInfoState extends State<CommentInfo> {
               },
               child: Text(
                 "${StringsManager.view.tr} ${widget.commentInfo.replies!.length} ${StringsManager.more.tr} ${widget.commentInfo.replies!.length > 1 ? StringsManager.replies.tr : StringsManager.reply.tr}",
-                style: getNormalStyle(color: Theme.of(context).indicatorColor),
+                style: getNormalStyle(color: Theme.of(context).tabBarTheme.indicatorColor!),
               ),
             ),
           )
