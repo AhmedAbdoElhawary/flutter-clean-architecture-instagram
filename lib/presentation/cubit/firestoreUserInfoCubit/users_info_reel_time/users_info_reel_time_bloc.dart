@@ -13,66 +13,69 @@ class UsersInfoReelTimeBloc
     extends Bloc<UsersInfoReelTimeEvent, UsersInfoReelTimeState> {
   final GetMyInfoUseCase _getMyInfoUseCase;
   final GetAllUsersUseCase _getAllUsersUseCase;
+
+  UserPersonalInfo? myPersonalInfoInReelTime;
+  List<UserPersonalInfo> allUsersInfoInReelTime = [];
+
   UsersInfoReelTimeBloc(this._getMyInfoUseCase, this._getAllUsersUseCase)
-      : super(MyPersonalInfoInitial());
+      : super(MyPersonalInfoInitial()) {
+    on<LoadMyPersonalInfo>(_onLoadMyInfo);
+    on<UpdateMyPersonalInfo>(_onUpdateMyInfo);
+    on<LoadAllUsersInfoInfo>(_onLoadAllUsersInfo);
+    on<UpdateAllUsersInfoInfo>(_onUpdateAllUsersInfo);
+  }
 
   static UsersInfoReelTimeBloc get(BuildContext context) =>
       BlocProvider.of(context);
-  UserPersonalInfo? myPersonalInfoInReelTime;
-  List<UserPersonalInfo> allUsersInfoInReelTime = [];
 
   static UserPersonalInfo? getMyInfoInReelTime(BuildContext context) =>
       BlocProvider.of<UsersInfoReelTimeBloc>(context).myPersonalInfoInReelTime;
 
-  @override
-  Stream<UsersInfoReelTimeState> mapEventToState(
-    UsersInfoReelTimeEvent event,
-  ) async* {
-    if (event is LoadMyPersonalInfo) {
-      yield* _mapLoadMyInfoToState();
-    } else if (event is UpdateMyPersonalInfo) {
-      yield* _mapUpdateMyInfoToState(event);
-    }
-    if (event is LoadAllUsersInfoInfo) {
-      yield* _mapLoadUsersInfoToState();
-    } else if (event is UpdateAllUsersInfoInfo) {
-      yield* _mapUpdateUsersInfoToState(event);
-    }
-  }
-
-  Stream<UsersInfoReelTimeState> _mapLoadMyInfoToState() async* {
-    _getMyInfoUseCase.call(params: null).listen(
-      (myPersonalInfo) {
-        add(UpdateMyPersonalInfo(myPersonalInfo));
+  Future<void> _onLoadMyInfo(
+      LoadMyPersonalInfo event,
+      Emitter<UsersInfoReelTimeState> emit,
+      ) async {
+    await emit.forEach<UserPersonalInfo>(
+      _getMyInfoUseCase.call(params: null),
+      onData: (myInfo) {
+        add(UpdateMyPersonalInfo(myInfo));
+        return MyPersonalInfoLoaded(myPersonalInfoInReelTime: myInfo);
       },
-    ).onError((e) async* {
-      yield MyPersonalInfoFailed(e.toString());
-    });
+      onError: (e, _) => MyPersonalInfoFailed(e.toString()),
+    );
   }
 
-  Stream<UsersInfoReelTimeState> _mapUpdateMyInfoToState(
-      UpdateMyPersonalInfo event) async* {
+  void _onUpdateMyInfo(
+      UpdateMyPersonalInfo event,
+      Emitter<UsersInfoReelTimeState> emit,
+      ) {
     myPersonalInfoInReelTime = event.myPersonalInfoInReelTime;
     isMyInfoInReelTimeReady = true;
 
-    yield MyPersonalInfoLoaded(
-        myPersonalInfoInReelTime: event.myPersonalInfoInReelTime);
+    emit(MyPersonalInfoLoaded(
+        myPersonalInfoInReelTime: event.myPersonalInfoInReelTime));
   }
 
-  Stream<UsersInfoReelTimeState> _mapLoadUsersInfoToState() async* {
-    _getAllUsersUseCase.call(params: null).listen(
-      (allUsersInfo) {
-        add(UpdateAllUsersInfoInfo(allUsersInfo));
+  Future<void> _onLoadAllUsersInfo(
+      LoadAllUsersInfoInfo event,
+      Emitter<UsersInfoReelTimeState> emit,
+      ) async {
+    await emit.forEach<List<UserPersonalInfo>>(
+      _getAllUsersUseCase.call(params: null),
+      onData: (allUsers) {
+        add(UpdateAllUsersInfoInfo(allUsers));
+        return AllUsersInfoLoaded(allUsersInfoInReelTime: allUsers);
       },
-    ).onError((e) async* {
-      yield MyPersonalInfoFailed(e.toString());
-    });
+      onError: (e, _) => MyPersonalInfoFailed(e.toString()),
+    );
   }
 
-  Stream<UsersInfoReelTimeState> _mapUpdateUsersInfoToState(
-      UpdateAllUsersInfoInfo event) async* {
+  void _onUpdateAllUsersInfo(
+      UpdateAllUsersInfoInfo event,
+      Emitter<UsersInfoReelTimeState> emit,
+      ) {
     allUsersInfoInReelTime = event.allUsersInfoInReelTime;
-    yield AllUsersInfoLoaded(
-        allUsersInfoInReelTime: event.allUsersInfoInReelTime);
+    emit(AllUsersInfoLoaded(
+        allUsersInfoInReelTime: event.allUsersInfoInReelTime));
   }
 }
