@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ThineLinearProgress extends StatelessWidget {
-  const ThineLinearProgress({Key? key}) : super(key: key);
+  const ThineLinearProgress({super.key});
 
   @override
   Widget build(BuildContext context) {

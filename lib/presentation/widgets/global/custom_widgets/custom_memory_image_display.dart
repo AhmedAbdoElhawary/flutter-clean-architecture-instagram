@@ -10,10 +10,10 @@ class MemoryDisplay extends StatefulWidget {
   final Uint8List imagePath;
 
   const MemoryDisplay({
-    Key? key,
+    super.key,
     required this.imagePath,
     this.isThatImage = true,
-  }) : super(key: key);
+  });
 
   @override
   State<MemoryDisplay> createState() => _NetworkImageDisplayState();
