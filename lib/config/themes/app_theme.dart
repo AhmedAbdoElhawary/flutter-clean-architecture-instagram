@@ -14,27 +14,23 @@ class AppTheme {
       shadowColor: ColorManager.veryLowOpacityGrey,
       focusColor: ColorManager.black,
       disabledColor: ColorManager.black54,
-      dialogBackgroundColor: ColorManager.black87,
-      hoverColor:
-          isThatMobile ? ColorManager.black45 : ColorManager.transparent,
-      indicatorColor: ColorManager.black38,
+      dialogTheme: DialogThemeData(backgroundColor: ColorManager.black87),
+      hoverColor: isThatMobile ? ColorManager.black45 : ColorManager.transparent,
+      tabBarTheme: TabBarThemeData(indicatorColor: ColorManager.black38),
       dividerColor: ColorManager.black12,
-        cardColor: ColorManager.lightBlack,
-      scaffoldBackgroundColor:
-          isThatMobile ? ColorManager.white : ColorManager.customGreyForWeb,
+      cardColor: ColorManager.lightBlack,
+      scaffoldBackgroundColor: isThatMobile ? ColorManager.white : ColorManager.customGreyForWeb,
       iconTheme: const IconThemeData(color: ColorManager.black38),
-      chipTheme:
-          const ChipThemeData(backgroundColor: ColorManager.veryLowOpacityGrey),
+      chipTheme: const ChipThemeData(backgroundColor: ColorManager.veryLowOpacityGrey),
       highlightColor: ColorManager.lowOpacityGrey,
       canvasColor: ColorManager.transparent,
       splashColor: ColorManager.white,
       appBarTheme: AppBarTheme(
         elevation: 0,
-        color: ColorManager.white,
+        backgroundColor: ColorManager.white,
         shadowColor: ColorManager.lowOpacityGrey,
         iconTheme: const IconThemeData(color: ColorManager.black),
-        titleTextStyle:
-            getNormalStyle(fontSize: FontSize.s16, color: ColorManager.black),
+        titleTextStyle: getNormalStyle(fontSize: FontSize.s16, color: ColorManager.black),
       ),
       textTheme: TextTheme(
         bodyLarge: getNormalStyle(color: ColorManager.black),
@@ -48,7 +44,7 @@ class AppTheme {
         titleSmall: getNormalStyle(color: ColorManager.darkWhite),
         titleMedium: getNormalStyle(color: ColorManager.lightGrey),
       ),
-      bottomAppBarTheme: const BottomAppBarTheme(color: ColorManager.black26),
+      bottomAppBarTheme: const BottomAppBarThemeData(color: ColorManager.black26),
     );
   }
 
@@ -60,15 +56,14 @@ class AppTheme {
       hintColor: ColorManager.darkGray,
       shadowColor: ColorManager.darkGray,
       focusColor: ColorManager.white,
-      dialogBackgroundColor: ColorManager.white,
+      dialogTheme: DialogThemeData(backgroundColor: ColorManager.white),
       highlightColor: ColorManager.grey,
       hoverColor: isThatMobile ? ColorManager.grey : ColorManager.transparent,
-      indicatorColor: ColorManager.grey,
+      tabBarTheme: TabBarThemeData(indicatorColor: ColorManager.grey),
       dividerColor: ColorManager.grey,
       iconTheme: const IconThemeData(color: ColorManager.white),
-      chipTheme:
-          const ChipThemeData(backgroundColor: ColorManager.lightDarkGray),
-      cardColor:  ColorManager.darkGray,
+      chipTheme: const ChipThemeData(backgroundColor: ColorManager.lightDarkGray),
+      cardColor: ColorManager.darkGray,
       disabledColor: ColorManager.white,
       scaffoldBackgroundColor: ColorManager.black,
       canvasColor: ColorManager.transparent,
@@ -76,10 +71,9 @@ class AppTheme {
       appBarTheme: AppBarTheme(
         elevation: 0,
         iconTheme: const IconThemeData(color: ColorManager.white),
-        color: ColorManager.black,
+        backgroundColor: ColorManager.black,
         shadowColor: ColorManager.lowOpacityGrey,
-        titleTextStyle:
-            getNormalStyle(fontSize: FontSize.s16, color: ColorManager.white),
+        titleTextStyle: getNormalStyle(fontSize: FontSize.s16, color: ColorManager.white),
       ),
       textTheme: TextTheme(
         bodyLarge: getNormalStyle(color: ColorManager.white),
@@ -93,7 +87,7 @@ class AppTheme {
         titleSmall: getNormalStyle(color: ColorManager.darkGray),
         titleMedium: getNormalStyle(color: ColorManager.darkGray),
       ),
-      bottomAppBarTheme: const BottomAppBarTheme(color: ColorManager.grey),
+      bottomAppBarTheme: const BottomAppBarThemeData(color: ColorManager.grey),
     );
   }
 }
