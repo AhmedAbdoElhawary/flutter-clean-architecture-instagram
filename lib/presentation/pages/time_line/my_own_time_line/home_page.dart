@@ -35,8 +35,7 @@ class HomePage extends StatefulWidget {
   final String userId;
   final bool playVideo;
 
-  const HomePage({Key? key, required this.userId, this.playVideo = true})
-      : super(key: key);
+  const HomePage({super.key, required this.userId, this.playVideo = true});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -319,12 +318,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
 class _RoundedContainer extends StatelessWidget {
   const _RoundedContainer({
-    Key? key,
     required this.child,
     this.internalPadding = true,
     this.verticalPadding = false,
     this.isThatStory = false,
-  }) : super(key: key);
+  });
   final Widget child;
   final bool internalPadding;
   final bool verticalPadding;
@@ -350,12 +348,11 @@ class _RoundedContainer extends StatelessWidget {
 
 class _BuildStoriesLine extends StatelessWidget {
   const _BuildStoriesLine({
-    Key? key,
     required this.personalInfo,
     required this.reLoadData,
     required this.storiesOwnersInfo,
     required this.scrollController,
-  }) : super(key: key);
+  });
 
   final UserPersonalInfo personalInfo;
   final ValueNotifier<bool> reLoadData;
@@ -469,10 +466,9 @@ class _BuildStoriesLine extends StatelessWidget {
 
 class _MyOwnStory extends StatefulWidget {
   const _MyOwnStory({
-    Key? key,
     required this.reLoadData,
     required this.personalInfo,
-  }) : super(key: key);
+  });
 
   final ValueNotifier<bool> reLoadData;
   final UserPersonalInfo personalInfo;
@@ -504,8 +500,7 @@ class _MyOwnStoryState extends State<_MyOwnStory> {
 }
 
 class _MyOwnStoryChild extends StatelessWidget {
-  const _MyOwnStoryChild({Key? key, required this.personalInfo})
-      : super(key: key);
+  const _MyOwnStoryChild({ required this.personalInfo});
 
   final UserPersonalInfo personalInfo;
 
