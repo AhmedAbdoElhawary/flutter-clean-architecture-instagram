@@ -189,7 +189,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         Future.delayed(Duration.zero, () {
                           reBuild = false;
 
-                          if(context.mounted)  Go(context).back();
+                          if (context.mounted) Go(context).back();
                         });
                       });
                     }
@@ -266,7 +266,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  onTapChangeImage(UserInfoCubit updateUserCubit) async {
+  Future<void> onTapChangeImage(UserInfoCubit updateUserCubit) async {
     SelectedImagesDetails? details = await pushToCustomGallery(context);
     if (details == null) return;
     isImageUpload.value = false;
