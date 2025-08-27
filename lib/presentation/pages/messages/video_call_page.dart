@@ -24,13 +24,13 @@ class CallPage extends StatefulWidget {
   final ClientRole role;
 
   const CallPage({
-    Key? key,
+    super.key,
     required this.channelName,
     this.userCallingId = "",
     required this.userCallingType,
     required this.role,
     this.usersInfo,
-  }) : super(key: key);
+  });
 
   @override
   CallPageState createState() => CallPageState();
