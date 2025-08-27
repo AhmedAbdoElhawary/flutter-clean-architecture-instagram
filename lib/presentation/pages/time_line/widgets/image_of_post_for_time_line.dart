@@ -109,7 +109,8 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
       child: Text(
         DateReformat.fullDigitsFormat(
             postInfoValue.datePublished, postInfoValue.datePublished),
-        style: getNormalStyle(color: Theme.of(context).bottomAppBarTheme.color!),
+        style:
+            getNormalStyle(color: Theme.of(context).bottomAppBarTheme.color!),
       ),
     );
   }
@@ -144,7 +145,7 @@ class _PostOfTimeLineState extends State<PostOfTimeLine>
     }
   }
 
-  makeSelectedCommentNullable(bool isThatComment) {
+  void makeSelectedCommentNullable(bool isThatComment) {
     widget.postInfo.value.comments.add(" ");
     commentTextController.value.text = '';
     Navigator.maybePop(context);

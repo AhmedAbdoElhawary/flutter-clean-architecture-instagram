@@ -113,7 +113,7 @@ class _ImageOfPostState extends State<ImageOfPost>
         : buildPostForWeb(bodyHeight: 700);
   }
 
-  pushToProfilePage(Post postInfo) {
+  Future pushToProfilePage(Post postInfo) {
     if (widget.popupWebContainer) {
       Navigator.of(context).maybePop();
     }
@@ -400,7 +400,7 @@ class _ImageOfPostState extends State<ImageOfPost>
     );
   }
 
-  makeSelectedCommentNullable(bool isThatComment) {
+  void makeSelectedCommentNullable(bool isThatComment) {
     setState(() {
       widget.selectedCommentInfo.value = null;
       widget.textController.value.text = '';
@@ -634,7 +634,7 @@ class _ImageOfPostState extends State<ImageOfPost>
     );
   }
 
-  popupContainerForWeb() => Navigator.of(context).push(
+  Future popupContainerForWeb() => Navigator.of(context).push(
         HeroDialogRoute(
           builder: (context) => const PopupMenuCard(),
         ),

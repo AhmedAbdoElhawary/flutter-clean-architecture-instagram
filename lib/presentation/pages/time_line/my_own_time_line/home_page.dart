@@ -256,7 +256,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     });
   }
 
-  reloadTheData() => reLoadData.value = true;
+  bool reloadTheData() => reLoadData.value = true;
 
   Widget buildUsersStories(BuildContext context) {
     Widget stories = _BuildStoriesLine(
@@ -500,7 +500,7 @@ class _MyOwnStoryState extends State<_MyOwnStory> {
 }
 
 class _MyOwnStoryChild extends StatelessWidget {
-  const _MyOwnStoryChild({ required this.personalInfo});
+  const _MyOwnStoryChild({required this.personalInfo});
 
   final UserPersonalInfo personalInfo;
 
