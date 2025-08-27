@@ -25,11 +25,11 @@ class StoryPageForWeb extends StatefulWidget {
   final String hashTag;
 
   const StoryPageForWeb({
-    Key? key,
+    super.key,
     this.hashTag = "",
     required this.user,
     required this.storiesOwnersInfo,
-  }) : super(key: key);
+  });
 
   @override
   StoryPageForWebState createState() => StoryPageForWebState();
@@ -144,7 +144,7 @@ class StoryWidget extends StatefulWidget {
   final double itemSize;
 
   const StoryWidget({
-    Key? key,
+    super.key,
     required this.user,
     required this.currentPage,
     required this.indexOfPage,
@@ -153,7 +153,7 @@ class StoryWidget extends StatefulWidget {
     required this.hashTag,
     required this.onItemFocus,
     required this.itemSize,
-  }) : super(key: key);
+  });
 
   @override
   StoryWidgetState createState() => StoryWidgetState();
@@ -441,8 +441,8 @@ class ProfileWidget extends StatelessWidget {
     required this.storyInfo,
     required this.storyController,
     required this.hashTag,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final ValueNotifier<bool> isPlaying = ValueNotifier(true);
 

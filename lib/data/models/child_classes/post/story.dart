@@ -1,31 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram/data/models/parent_classes/post/parent_post.dart';
-import 'package:instagram/data/models/parent_classes/without_sub_classes/user_personal_info.dart';
 
 class Story extends ParentPost {
   String storyUrl;
   String storyUid;
   Story({
-    required String datePublished,
-    required String publisherId,
-    UserPersonalInfo? publisherInfo,
+    required super.datePublished,
+    required super.publisherId,
+    super.publisherInfo,
     this.storyUid = "",
     this.storyUrl = "",
-    String caption = "",
-    required List<dynamic> comments,
-    required List<dynamic> likes,
-    required String blurHash,
-    bool isThatImage = true,
-  }) : super(
-          datePublished: datePublished,
-          likes: likes,
-          comments: comments,
-          publisherId: publisherId,
-          caption: caption,
-          blurHash: blurHash,
-          publisherInfo: publisherInfo,
-          isThatImage: isThatImage,
-        );
+    super.caption,
+    required super.comments,
+    required super.likes,
+    required super.blurHash,
+    super.isThatImage = true,
+  });
 
   static Story fromSnap(
       {required DocumentSnapshot<Map<String, dynamic>> docSnap}) {

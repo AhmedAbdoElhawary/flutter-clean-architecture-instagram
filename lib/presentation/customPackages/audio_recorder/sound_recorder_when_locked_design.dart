@@ -13,13 +13,13 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
   final Function(File soundFile, int lengthOfRecord) sendRequestFunction;
   final Color recordIconWhenLockBackGroundColor;
   const SoundRecorderWhenLockedDesign({
-    Key? key,
+    super.key,
     required this.soundRecordNotifier,
     required this.showIcons,
     required this.cancelText,
     required this.sendRequestFunction,
     required this.recordIconWhenLockBackGroundColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
