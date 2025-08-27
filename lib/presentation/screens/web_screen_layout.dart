@@ -30,8 +30,7 @@ int pageOfController = 0;
 class WebScreenLayout extends StatefulWidget {
   final Widget? body;
   final UserPersonalInfo? userInfoForMessagePage;
-  const WebScreenLayout({Key? key, this.body, this.userInfoForMessagePage})
-      : super(key: key);
+  const WebScreenLayout({super.key, this.body, this.userInfoForMessagePage});
 
   @override
   State<WebScreenLayout> createState() => _WebScreenLayoutState();
@@ -291,7 +290,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
 }
 
 class _HomePage extends StatelessWidget {
-  const _HomePage({Key? key}) : super(key: key);
+  const _HomePage();
 
   @override
   Widget build(BuildContext context) {
@@ -303,7 +302,7 @@ class _HomePage extends StatelessWidget {
 }
 
 class _PersonalProfilePage extends StatelessWidget {
-  const _PersonalProfilePage({Key? key}) : super(key: key);
+  const _PersonalProfilePage();
 
   @override
   Widget build(BuildContext context) {

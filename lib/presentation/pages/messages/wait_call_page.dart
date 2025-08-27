@@ -13,10 +13,10 @@ class VideoCallPage extends StatelessWidget {
   final UserPersonalInfo myPersonalInfo;
 
   const VideoCallPage({
-    Key? key,
+    super.key,
     required this.usersInfo,
     required this.myPersonalInfo,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +82,7 @@ class VideoCallPage extends StatelessWidget {
         .deleteTheRoom(channelId: roomsState.channelId, usersIds: usersIds);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(seconds: 2)).then((value) {
-        Navigator.of(context).maybePop();
+        if(context.mounted) Navigator.of(context).maybePop();
       });
     });
     return const Center(
@@ -93,7 +93,7 @@ class VideoCallPage extends StatelessWidget {
   Widget whichFailedText(CallingRoomsFailed state, BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(seconds: 1)).then((value) {
-        Navigator.of(context).maybePop();
+        if(context.mounted) Navigator.of(context).maybePop();
       });
     });
     if (state.error == "Busy") {
