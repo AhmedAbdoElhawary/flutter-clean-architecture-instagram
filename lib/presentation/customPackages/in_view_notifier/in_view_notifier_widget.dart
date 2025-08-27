@@ -8,11 +8,11 @@ class InViewNotifierWidget extends StatefulWidget {
   final Widget? child;
 
   const InViewNotifierWidget({
-    Key? key,
+    super.key,
     required this.id,
     required this.builder,
     this.child,
-  }) : super(key: key);
+  });
 
   @override
   InViewNotifierWidgetState createState() => InViewNotifierWidgetState();
