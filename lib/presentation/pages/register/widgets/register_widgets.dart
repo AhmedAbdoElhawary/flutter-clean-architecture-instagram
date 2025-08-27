@@ -23,7 +23,7 @@ class RegisterWidgets extends StatefulWidget {
   final ValueNotifier<bool>? rememberPassword;
 
   const RegisterWidgets({
-    Key? key,
+    super.key,
     required this.emailController,
     this.isThatLogIn = true,
     required this.passwordController,
@@ -32,7 +32,7 @@ class RegisterWidgets extends StatefulWidget {
     this.rememberPassword,
     required this.validateEmail,
     required this.validatePassword,
-  }) : super(key: key);
+  });
 
   @override
   State<RegisterWidgets> createState() => _SignUpPageState();
@@ -146,11 +146,11 @@ class _SignUpPageState extends State<RegisterWidgets> {
                                   ? ColorManager.white
                                   : ColorManager.blue,
                               fillColor: isThatMobile
-                                  ? MaterialStateProperty.resolveWith(
+                                  ? WidgetStateProperty.resolveWith(
                                       (Set states) {
                                       if (states
-                                          .contains(MaterialState.disabled)) {
-                                        return Colors.blue.withOpacity(.32);
+                                          .contains(WidgetState.disabled)) {
+                                        return Colors.blue.withValues(alpha:.32);
                                       }
                                       return Colors.blue;
                                     })
@@ -252,8 +252,7 @@ class _EmailTextFields extends StatefulWidget {
       required this.hint,
       required this.isThatLogin,
       this.validate,
-      Key? key})
-      : super(key: key);
+     });
 
   @override
   State<_EmailTextFields> createState() => _EmailTextFieldsState();
@@ -309,7 +308,7 @@ class _EmailTextFieldsState extends State<_EmailTextFields> {
               decoration: InputDecoration(
                 hintText: widget.hint,
                 hintStyle: isThatMobile
-                    ? getNormalStyle(color: Theme.of(context).indicatorColor)
+                    ? getNormalStyle(color: Theme.of(context).tabBarTheme.indicatorColor!)
                     : getNormalStyle(color: ColorManager.black54, fontSize: 12),
                 fillColor: const Color.fromARGB(48, 232, 232, 232),
                 filled: true,
