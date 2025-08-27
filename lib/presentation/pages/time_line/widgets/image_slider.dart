@@ -1,5 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart' hide CarouselController;
+import 'package:flutter/material.dart';
 import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/points_scroll_bar.dart';
@@ -31,7 +31,7 @@ class ImagesSlider extends StatefulWidget {
 class _ImagesSliderState extends State<ImagesSlider> {
   ValueNotifier<int> initPosition = ValueNotifier(0);
   ValueNotifier<double> countOpacity = ValueNotifier(0);
-  final CarouselController _controller = CarouselController();
+  final CarouselSliderController _controller = CarouselSliderController();
   late List<SelectedByte> selectedImages;
   @override
   void didChangeDependencies() {
@@ -145,7 +145,7 @@ class _ImagesSliderState extends State<ImagesSlider> {
               padding: const EdgeInsetsDirectional.all(10),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha:0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(25),
                 ),
                 height: 23,

@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  onAuthConfirmed(CubitAuthConfirmed state) async {
+  Future<void> onAuthConfirmed(CubitAuthConfirmed state) async {
     String userId = state.user.uid;
     isUserIdReady.value = true;
     myPersonalId = userId;
