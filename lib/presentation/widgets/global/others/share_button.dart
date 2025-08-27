@@ -196,7 +196,7 @@ class _ShareButtonState extends State<ShareButton> {
     );
   }
 
-  clearTextsController(bool clearText) {
+  void clearTextsController(bool clearText) {
     setState(() {
       if (clearText) {
         _bottomSheetMessageTextController.clear();
@@ -205,7 +205,7 @@ class _ShareButtonState extends State<ShareButton> {
     });
   }
 
-  Widget buildSheet(_, __) => Material(
+  Widget buildSheet(BuildContext _, SheetState __) => Material(
         child: SendToUsers(
           publisherInfo: widget.postInfo.value.publisherInfo!,
           messageTextController: _bottomSheetMessageTextController,

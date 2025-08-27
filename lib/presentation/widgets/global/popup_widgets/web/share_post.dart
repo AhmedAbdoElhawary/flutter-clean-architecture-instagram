@@ -222,7 +222,7 @@ class _PopupSharePostState extends State<PopupSharePost> {
         ),
       ];
 
-  clearTextsController(bool clearText) {
+  void clearTextsController(bool clearText) {
     setState(() {
       if (clearText) messageTextController.clear();
     });
