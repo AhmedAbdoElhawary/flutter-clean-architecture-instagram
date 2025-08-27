@@ -1,5 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide CarouselController;
 import 'package:image_picker_plus/image_picker_plus.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/points_scroll_bar.dart';
@@ -15,14 +15,14 @@ class ImagesSlider extends StatefulWidget {
   final Function(int, CarouselPageChangedReason) updateImageIndex;
   final bool isImageFromNetwork;
   const ImagesSlider({
-    Key? key,
+    super.key,
     required this.imagesUrls,
     this.blurHash = "",
     required this.updateImageIndex,
     required this.aspectRatio,
     this.isImageFromNetwork = true,
     this.showPointsScrollBar = false,
-  }) : super(key: key);
+  });
 
   @override
   State<ImagesSlider> createState() => _ImagesSliderState();
@@ -145,7 +145,7 @@ class _ImagesSliderState extends State<ImagesSlider> {
               padding: const EdgeInsetsDirectional.all(10),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha:0.5),
                   borderRadius: BorderRadius.circular(25),
                 ),
                 height: 23,

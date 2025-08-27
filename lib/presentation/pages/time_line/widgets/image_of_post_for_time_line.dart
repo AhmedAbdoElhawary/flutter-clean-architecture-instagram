@@ -31,14 +31,14 @@ class PostOfTimeLine extends StatefulWidget {
   final ValueNotifier<List<Post>> postsInfo;
 
   const PostOfTimeLine({
-    Key? key,
+    super.key,
     required this.postInfo,
     required this.reLoadData,
     required this.indexOfPost,
     required this.playTheVideo,
     required this.postsInfo,
     required this.removeThisPost,
-  }) : super(key: key);
+  });
 
   @override
   State<PostOfTimeLine> createState() => _PostOfTimeLineState();
