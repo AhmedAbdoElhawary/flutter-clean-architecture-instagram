@@ -28,6 +28,9 @@ class CompressImage {
       outPath,
       quality: 5,
     );
-    return result;
+
+    if(result == null) return null;
+
+    return File(result.path);
   }
 }
