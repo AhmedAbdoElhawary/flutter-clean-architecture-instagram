@@ -10,10 +10,10 @@ class UsersWhoLikesForWeb extends StatelessWidget {
   final bool isThatMyPersonalId;
 
   const UsersWhoLikesForWeb({
-    Key? key,
+    super.key,
     required this.usersIds,
     required this.isThatMyPersonalId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

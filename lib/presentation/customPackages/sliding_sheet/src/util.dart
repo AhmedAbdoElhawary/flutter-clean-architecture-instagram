@@ -18,10 +18,10 @@ class Invisible extends StatelessWidget {
   final bool invisible;
   final Widget? child;
   const Invisible({
-    Key? key,
+    super.key,
     this.invisible = false,
     this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
