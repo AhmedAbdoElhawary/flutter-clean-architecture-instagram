@@ -43,7 +43,7 @@ class WebCustomCrop extends StatefulWidget {
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
     this.onImageError,
-  })  : image = FileImage(file, scale: scale);
+  }) : image = FileImage(file, scale: scale);
   WebCustomCrop.memory(
     Uint8List byte, {
     super.key,
@@ -53,7 +53,7 @@ class WebCustomCrop extends StatefulWidget {
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
     this.onImageError,
-  })  : image = MemoryImage(byte, scale: scale);
+  }) : image = MemoryImage(byte, scale: scale);
 
   WebCustomCrop.asset(
     String assetName, {
@@ -65,7 +65,7 @@ class WebCustomCrop extends StatefulWidget {
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
     this.onImageError,
-  })  : image = AssetImage(assetName, bundle: bundle, package: package);
+  }) : image = AssetImage(assetName, bundle: bundle, package: package);
 
   @override
   State<StatefulWidget> createState() => WebCustomCropState();
@@ -626,7 +626,7 @@ class _CropPainter extends CustomPainter {
 
     final paint = Paint()
       ..isAntiAlias = false
-      ..color = _kCropGridColor.withValues(alpha:  _kCropGridColor.a * active)
+      ..color = _kCropGridColor.withValues(alpha: _kCropGridColor.a * active)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
 
