@@ -84,7 +84,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
   bool buildBlocWhen(CommentsInfoState previous, CommentsInfoState current) =>
       previous != current && current is CubitCommentsInfoLoaded;
 
-  Widget buildBloc(context, state) {
+  Widget buildBloc(BuildContext context, CommentsInfoState state) {
     if (state is CubitCommentsInfoLoaded) {
       return blocLoaded(context, state);
     } else if (state is CubitCommentsInfoFailed) {
@@ -107,7 +107,7 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
         style: getNormalStyle(color: Theme.of(context).focusColor));
   }
 
-  selectedComment(Comment commentInfo) {
+  void selectedComment(Comment commentInfo) {
     setState(() => widget.selectedCommentInfo.value = commentInfo);
   }
 
@@ -259,13 +259,13 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
         makeSelectedCommentNullable: makeSelectedCommentNullable,
       );
 
-  void isScreenRebuild(isRebuild) {
+  void isScreenRebuild(bool isRebuild) {
     setState(() {
       rebuild = isRebuild;
     });
   }
 
-  makeSelectedCommentNullable(bool isThatComment) {
+  void makeSelectedCommentNullable(bool isThatComment) {
     setState(() {
       widget.selectedCommentInfo.value = null;
       widget.textController.value.text = '';

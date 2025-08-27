@@ -168,7 +168,8 @@ class _CommentInfoState extends State<CommentInfo> {
               },
               child: Text(
                 "${StringsManager.view.tr} ${widget.commentInfo.replies!.length} ${StringsManager.more.tr} ${widget.commentInfo.replies!.length > 1 ? StringsManager.replies.tr : StringsManager.reply.tr}",
-                style: getNormalStyle(color: Theme.of(context).tabBarTheme.indicatorColor!),
+                style: getNormalStyle(
+                    color: Theme.of(context).tabBarTheme.indicatorColor!),
               ),
             ),
           )
