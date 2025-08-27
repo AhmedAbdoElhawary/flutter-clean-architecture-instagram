@@ -128,9 +128,9 @@ class _NotificationCardInfoState extends State<NotificationCardInfo> {
                   if (isThatMobile) {
                     Go(context).push(
                         page: GetsPostInfoAndDisplay(
-                          postId: widget.notificationInfo.postId,
-                          appBarText: appBarText,
-                        ));
+                      postId: widget.notificationInfo.postId,
+                      appBarText: appBarText,
+                    ));
                   } else {
                     Navigator.of(context).push(HeroDialogRoute(
                       builder: (context) => GetsPostInfoAndDisplay(

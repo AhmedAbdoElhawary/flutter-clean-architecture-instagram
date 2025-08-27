@@ -43,7 +43,8 @@ class NotificationCubit extends Cubit<NotificationState> {
     });
   }
 
-  deleteNotification({required NotificationCheck notificationCheck}) async {
+  Future<void> deleteNotification(
+      {required NotificationCheck notificationCheck}) async {
     await _deleteNotificationUseCase.call(params: notificationCheck).then((_) {
       emit(NotificationDeleted());
     }).catchError((e) {
