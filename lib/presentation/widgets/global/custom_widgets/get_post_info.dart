@@ -13,11 +13,11 @@ class GetsPostInfoAndDisplay extends StatelessWidget {
   final String appBarText;
   final bool fromHeroRoute;
   const GetsPostInfoAndDisplay({
-    Key? key,
+    super.key,
     required this.postId,
     required this.appBarText,
     this.fromHeroRoute = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

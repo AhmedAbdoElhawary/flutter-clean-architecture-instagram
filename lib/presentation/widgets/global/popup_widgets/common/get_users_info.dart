@@ -13,11 +13,11 @@ class GetUsersInfo extends StatefulWidget {
   final bool isThatMyPersonalId;
 
   const GetUsersInfo({
-    Key? key,
+    super.key,
     required this.isThatMyPersonalId,
     required this.usersIds,
     this.isThatFollowers = true,
-  }) : super(key: key);
+  });
 
   @override
   State<GetUsersInfo> createState() => _GetUsersInfoState();
