@@ -25,41 +25,39 @@ class WebCustomCrop extends StatefulWidget {
   final ValueChanged<bool>? scrollCustomList;
 
   const WebCustomCrop({
-    Key? key,
+    super.key,
     required this.image,
     this.aspectRatio,
     this.maximumScale = 2.0,
     this.scrollCustomList,
     this.alwaysShowGrid = false,
     this.onImageError,
-  }) : super(key: key);
+  });
 
   WebCustomCrop.file(
     File file, {
-    Key? key,
+    super.key,
     double scale = 1.0,
     this.aspectRatio,
     this.scrollCustomList,
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
     this.onImageError,
-  })  : image = FileImage(file, scale: scale),
-        super(key: key);
+  })  : image = FileImage(file, scale: scale);
   WebCustomCrop.memory(
     Uint8List byte, {
-    Key? key,
+    super.key,
     double scale = 1.0,
     this.aspectRatio,
     this.scrollCustomList,
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
     this.onImageError,
-  })  : image = MemoryImage(byte, scale: scale),
-        super(key: key);
+  })  : image = MemoryImage(byte, scale: scale);
 
   WebCustomCrop.asset(
     String assetName, {
-    Key? key,
+    super.key,
     AssetBundle? bundle,
     String? package,
     this.aspectRatio,
@@ -67,8 +65,7 @@ class WebCustomCrop extends StatefulWidget {
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
     this.onImageError,
-  })  : image = AssetImage(assetName, bundle: bundle, package: package),
-        super(key: key);
+  })  : image = AssetImage(assetName, bundle: bundle, package: package);
 
   @override
   State<StatefulWidget> createState() => WebCustomCropState();
@@ -629,7 +626,7 @@ class _CropPainter extends CustomPainter {
 
     final paint = Paint()
       ..isAntiAlias = false
-      ..color = _kCropGridColor.withOpacity(_kCropGridColor.opacity * active)
+      ..color = _kCropGridColor.withValues(alpha:  _kCropGridColor.a * active)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
 

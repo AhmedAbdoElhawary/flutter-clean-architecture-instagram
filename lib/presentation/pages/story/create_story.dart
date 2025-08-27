@@ -25,8 +25,7 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 class CreateStoryPage extends StatefulWidget {
   final SelectedImagesDetails storiesDetails;
 
-  const CreateStoryPage({Key? key, required this.storiesDetails})
-      : super(key: key);
+  const CreateStoryPage({super.key, required this.storiesDetails});
 
   @override
   State<CreateStoryPage> createState() => _CreateStoryPageState();
