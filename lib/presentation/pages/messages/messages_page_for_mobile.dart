@@ -5,7 +5,7 @@ import 'package:instagram/presentation/pages/messages/select_for_group_chat.dart
 import 'package:instagram/presentation/pages/messages/widgets/list_of_messages.dart';
 
 class MessagesPageForMobile extends StatelessWidget {
-  const MessagesPageForMobile({Key? key}) : super(key: key);
+  const MessagesPageForMobile({super.key});
 
   @override
   Widget build(BuildContext context) {

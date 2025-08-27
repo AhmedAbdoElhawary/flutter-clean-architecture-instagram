@@ -16,7 +16,7 @@ import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle
 class MessagesForWeb extends StatefulWidget {
   final UserPersonalInfo? selectedTextingUser;
 
-  const MessagesForWeb({Key? key, this.selectedTextingUser}) : super(key: key);
+  const MessagesForWeb({super.key, this.selectedTextingUser});
 
   @override
   State<MessagesForWeb> createState() => _MessagesForWebState();
