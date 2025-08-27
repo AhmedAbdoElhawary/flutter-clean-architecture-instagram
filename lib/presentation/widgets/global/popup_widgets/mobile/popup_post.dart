@@ -48,12 +48,12 @@ class PopupPostCard extends StatefulWidget {
   final bool isThatProfile;
 
   const PopupPostCard({
-    Key? key,
+    super.key,
     required this.postClickedInfo,
     required this.postClickedWidget,
     required this.postsInfo,
     required this.isThatProfile,
-  }) : super(key: key);
+  });
 
   @override
   State<PopupPostCard> createState() => _PopupPostCardState();
@@ -564,11 +564,10 @@ class _PopupMessageDialog extends StatelessWidget {
   final bool visible;
   final double widgetPositionLeft;
   const _PopupMessageDialog({
-    Key? key,
     required this.message,
     required this.visible,
     required this.widgetPositionLeft,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
