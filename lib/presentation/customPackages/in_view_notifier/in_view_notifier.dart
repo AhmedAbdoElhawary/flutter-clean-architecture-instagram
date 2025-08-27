@@ -39,7 +39,7 @@ class InViewNotifier extends StatefulWidget {
   final ValueNotifier<bool> isThatEndOfList;
   final AsyncValueSetter<int> onRefreshData;
   InViewNotifier({
-    Key? key,
+    super.key,
     required this.child,
     required this.onRefreshData,
     required this.isThatEndOfList,
@@ -50,8 +50,7 @@ class InViewNotifier extends StatefulWidget {
     this.throttleDuration = const Duration(milliseconds: 200),
     required this.isInViewPortCondition,
   })  : assert(endNotificationOffset >= 0.0),
-        scrollDirection = child.scrollDirection,
-        super(key: key);
+        scrollDirection = child.scrollDirection;
 
   @override
   InViewNotifierState createState() => InViewNotifierState();

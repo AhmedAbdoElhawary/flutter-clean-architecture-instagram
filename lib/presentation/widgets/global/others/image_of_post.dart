@@ -54,7 +54,7 @@ class ImageOfPost extends StatefulWidget {
   final ValueChanged<int>? removeThisPost;
 
   const ImageOfPost({
-    Key? key,
+    super.key,
     this.reLoadData,
     required this.postInfo,
     required this.textController,
@@ -66,7 +66,7 @@ class ImageOfPost extends StatefulWidget {
     required this.indexOfPost,
     required this.postsInfo,
     this.removeThisPost,
-  }) : super(key: key);
+  });
 
   @override
   State<ImageOfPost> createState() => _ImageOfPostState();
