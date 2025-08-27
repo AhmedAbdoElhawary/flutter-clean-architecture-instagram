@@ -3,7 +3,7 @@ import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 
 class PopupMenuCard extends StatelessWidget {
-  const PopupMenuCard({Key? key}) : super(key: key);
+  const PopupMenuCard({super.key});
 
   @override
   Widget build(BuildContext context) {
