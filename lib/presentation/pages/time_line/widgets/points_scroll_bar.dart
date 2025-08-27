@@ -6,11 +6,11 @@ class PointsScrollBar extends StatelessWidget {
   final int activePhotoIndex;
   final bool makePointsWhite;
   const PointsScrollBar({
-    Key? key,
+    super.key,
     required this.photoCount,
     this.makePointsWhite = false,
     required this.activePhotoIndex,
-  }) : super(key: key);
+  });
 
   Widget _buildDot({required bool isActive}) {
     return Padding(

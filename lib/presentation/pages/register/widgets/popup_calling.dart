@@ -9,7 +9,7 @@ import 'package:instagram/presentation/screens/mobile_screen_layout.dart';
 class PopupCalling extends StatefulWidget {
   final String userId;
 
-  const PopupCalling(this.userId, {Key? key}) : super(key: key);
+  const PopupCalling(this.userId, {super.key});
 
   @override
   State<PopupCalling> createState() => _PopupCallingState();
