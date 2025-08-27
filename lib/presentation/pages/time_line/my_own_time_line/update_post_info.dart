@@ -22,7 +22,7 @@ import 'package:instagram/presentation/widgets/global/custom_widgets/custom_netw
 class UpdatePostInfo extends StatefulWidget {
   final Post oldPostInfo;
 
-  const UpdatePostInfo({required this.oldPostInfo, Key? key}) : super(key: key);
+  const UpdatePostInfo({required this.oldPostInfo, super.key});
 
   @override
   State<UpdatePostInfo> createState() => _UpdatePostInfoState();
@@ -87,7 +87,7 @@ class _UpdatePostInfoState extends State<UpdatePostInfo> {
                 await PostCubit.get(context)
                     .updatePostInfo(postInfo: updatedPostInfo)
                     .then((value) {
-                  Navigator.maybePop(context);
+                if(context.mounted)  Navigator.maybePop(context);
                 });
               },
               icon: const Icon(
