@@ -73,11 +73,14 @@ class VideosPageState extends State<VideosPage> {
       canPop: true,
       child: ValueListenableBuilder(
           valueListenable: rebuildUserInfo,
-          builder: (context, bool rebuildValue, child) => BlocBuilder<PostCubit, PostState>(
+          builder: (context, bool rebuildValue, child) =>
+              BlocBuilder<PostCubit, PostState>(
                 bloc: BlocProvider.of<PostCubit>(context)
                   ..getAllPostInfo(
                       isVideosWantedOnly: true,
-                      skippedVideoUid: widget.clickedVideo != null ? widget.clickedVideo!.postUid : ""),
+                      skippedVideoUid: widget.clickedVideo != null
+                          ? widget.clickedVideo!.postUid
+                          : ""),
                 buildWhen: (previous, current) {
                   if (previous != current && current is CubitAllPostsLoaded) {
                     return true;
@@ -100,7 +103,8 @@ class VideosPageState extends State<VideosPage> {
                     return Center(
                         child: Text(
                       StringsManager.noVideos.tr,
-                      style: TextStyle(color: Theme.of(context).focusColor, fontSize: 20),
+                      style: TextStyle(
+                          color: Theme.of(context).focusColor, fontSize: 20),
                     ));
                   } else {
                     return loadingWidget();
@@ -121,7 +125,8 @@ class VideosPageState extends State<VideosPage> {
 
               widget.stopVideo.value = true;
             },
-            icon: const Icon(Icons.camera_alt, size: 30, color: ColorManager.white),
+            icon: const Icon(Icons.camera_alt,
+                size: 30, color: ColorManager.white),
           )
         ],
       );
@@ -141,7 +146,8 @@ class VideosPageState extends State<VideosPage> {
           baseColor: Colors.grey[600]!,
           highlightColor: ColorManager.shimmerDarkGrey,
           child: Padding(
-            padding: const EdgeInsetsDirectional.only(end: 25.0, bottom: 20, start: 15),
+            padding: const EdgeInsetsDirectional.only(
+                end: 25.0, bottom: 20, start: 15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +179,8 @@ class VideosPageState extends State<VideosPage> {
               height: double.infinity,
               child: ValueListenableBuilder(
                 valueListenable: stopVideo,
-                builder: (context, bool stopVideoValue, child) => _ReelVideoPlay(
+                builder: (context, bool stopVideoValue, child) =>
+                    _ReelVideoPlay(
                   videoInfo: videoInfo,
                   stopVideo: stopVideoValue,
                 ),
@@ -194,7 +201,8 @@ class _HorizontalButtons extends StatefulWidget {
   final ValueNotifier<Post> videoInfo;
   final ValueChanged<bool> videoPlaying;
 
-  const _HorizontalButtons({required this.videoInfo, required this.videoPlaying});
+  const _HorizontalButtons(
+      {required this.videoInfo, required this.videoPlaying});
 
   @override
   State<_HorizontalButtons> createState() => _HorizontalButtonsState();
@@ -208,7 +216,8 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
 
   Widget horizontalWidgets() {
     return Padding(
-      padding: const EdgeInsetsDirectional.only(end: 25.0, bottom: 20, start: 15),
+      padding:
+          const EdgeInsetsDirectional.only(end: 25.0, bottom: 20, start: 15),
       child: ValueListenableBuilder(
         valueListenable: widget.videoInfo,
         builder: (context, Post videoInfoValue, child) {
@@ -227,7 +236,8 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
                         child: CircleAvatar(
                           radius: 18,
                           backgroundColor: ColorManager.white,
-                          backgroundImage: NetworkImage(personalInfo!.profileImageUrl),
+                          backgroundImage:
+                              NetworkImage(personalInfo!.profileImageUrl),
                         ),
                       ),
                       const SizedBox(
@@ -242,11 +252,13 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
                       const SizedBox(
                         width: 10,
                       ),
-                      if (videoInfoValue.publisherId != myPersonalId) followButton(personalInfo),
+                      if (videoInfoValue.publisherId != myPersonalId)
+                        followButton(personalInfo),
                     ],
                   )),
               const SizedBox(height: 10),
-              Text(videoInfoValue.caption, style: getNormalStyle(color: ColorManager.white)),
+              Text(videoInfoValue.caption,
+                  style: getNormalStyle(color: ColorManager.white)),
             ],
           );
         },
@@ -254,11 +266,12 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
     );
   }
 
-  goToUserProfile(UserPersonalInfo personalInfo) async {
+  Future<void> goToUserProfile(UserPersonalInfo personalInfo) async {
     widget.videoPlaying(false);
 
-    await Go(context)
-        .push(page: WhichProfilePage(userId: personalInfo.userId, userName: personalInfo.userName));
+    await Go(context).push(
+        page: WhichProfilePage(
+            userId: personalInfo.userId, userName: personalInfo.userName));
     widget.videoPlaying(true);
   }
 
@@ -267,21 +280,27 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
       builder: (followContext, stateOfFollow) {
         return Builder(
           builder: (userContext) {
-            UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
+            UserPersonalInfo myPersonalInfo =
+                UserInfoCubit.getMyPersonalInfo(context);
             return GestureDetector(
                 onTap: () async {
                   if (myPersonalInfo.followedPeople.contains(userInfo.userId)) {
                     await BlocProvider.of<FollowCubit>(followContext)
-                        .unFollowThisUser(followingUserId: userInfo.userId, myPersonalId: myPersonalId);
+                        .unFollowThisUser(
+                            followingUserId: userInfo.userId,
+                            myPersonalId: myPersonalId);
                     if (!mounted) return;
-                    BlocProvider.of<UserInfoCubit>(context)
-                        .updateMyFollowings(userId: userInfo.userId, addThisUser: false);
+                    BlocProvider.of<UserInfoCubit>(context).updateMyFollowings(
+                        userId: userInfo.userId, addThisUser: false);
                   } else {
                     await BlocProvider.of<FollowCubit>(followContext)
-                        .followThisUser(followingUserId: userInfo.userId, myPersonalId: myPersonalId);
+                        .followThisUser(
+                            followingUserId: userInfo.userId,
+                            myPersonalId: myPersonalId);
                     if (!mounted) return;
 
-                    BlocProvider.of<UserInfoCubit>(context).updateMyFollowings(userId: userInfo.userId);
+                    BlocProvider.of<UserInfoCubit>(context)
+                        .updateMyFollowings(userId: userInfo.userId);
                   }
                 },
                 child: followText(userInfo, myPersonalInfo));
@@ -291,11 +310,14 @@ class _HorizontalButtonsState extends State<_HorizontalButtons> {
     );
   }
 
-  Container followText(UserPersonalInfo userInfo, UserPersonalInfo myPersonalInfo) {
+  Container followText(
+      UserPersonalInfo userInfo, UserPersonalInfo myPersonalInfo) {
     return Container(
-      padding: const EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 2, top: 2),
+      padding:
+          const EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 2, top: 2),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5), border: Border.all(color: ColorManager.white, width: 1)),
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(color: ColorManager.white, width: 1)),
       child: Text(
         myPersonalInfo.followedPeople.contains(userInfo.userId)
             ? StringsManager.following.tr
@@ -338,12 +360,14 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
                 commentButton(videoInfoValue),
                 buildSizedBox(),
                 numberOfComment(videoInfoValue),
-                ShareButton(postInfo: widget.videoInfo, isThatForVideoPage: true),
+                ShareButton(
+                    postInfo: widget.videoInfo, isThatForVideoPage: true),
                 sizedBox(),
                 GestureDetector(
                   child: SvgPicture.asset(
                     IconsAssets.menuHorizontalIcon,
-                    colorFilter: const ColorFilter.mode(ColorManager.white, BlendMode.srcIn),
+                    colorFilter: const ColorFilter.mode(
+                        ColorManager.white, BlendMode.srcIn),
                     height: 25,
                   ),
                 ),
@@ -371,9 +395,10 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
     );
   }
 
-  goToCommentPage(Post videoInfo) async {
+  Future<void> goToCommentPage(Post videoInfo) async {
     widget.videoPlaying(false);
-    await Go(context).push(page: CommentsPageForMobile(postInfo: ValueNotifier(videoInfo)));
+    await Go(context)
+        .push(page: CommentsPageForMobile(postInfo: ValueNotifier(videoInfo)));
     widget.videoPlaying(true);
   }
 
@@ -382,7 +407,8 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
       onTap: () async => goToCommentPage(videoInfo),
       child: SvgPicture.asset(
         IconsAssets.commentIcon,
-        colorFilter: const ColorFilter.mode(ColorManager.white, BlendMode.srcIn),
+        colorFilter:
+            const ColorFilter.mode(ColorManager.white, BlendMode.srcIn),
         height: 35,
       ),
     );
@@ -433,10 +459,12 @@ class _VerticalButtonsState extends State<_VerticalButtons> {
         onTap: () {
           setState(() {
             if (isLiked) {
-              likeCubit.removeTheLikeOnThisPost(postId: videoInfo.postUid, userId: myPersonalId);
+              likeCubit.removeTheLikeOnThisPost(
+                  postId: videoInfo.postUid, userId: myPersonalId);
               videoInfo.likes.remove(myPersonalId);
             } else {
-              likeCubit.putLikeOnThisPost(postId: videoInfo.postUid, userId: myPersonalId);
+              likeCubit.putLikeOnThisPost(
+                  postId: videoInfo.postUid, userId: myPersonalId);
               videoInfo.likes.add(myPersonalId);
             }
           });

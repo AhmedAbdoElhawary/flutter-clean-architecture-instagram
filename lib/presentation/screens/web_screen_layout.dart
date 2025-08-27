@@ -211,7 +211,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
     );
   }
 
-  onSelectedProfileMenu(int item) {
+  void onSelectedProfileMenu(int item) {
     if (item == 0) navigationTapped(5);
     if (item == 2) {
       final SharedPreferences sharePrefs = injector<SharedPreferences>();
