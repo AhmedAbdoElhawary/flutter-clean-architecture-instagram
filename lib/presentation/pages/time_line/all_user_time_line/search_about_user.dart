@@ -12,7 +12,7 @@ import 'package:instagram/presentation/widgets/global/circle_avatar_image/circle
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
 
 class SearchAboutUserPage extends StatefulWidget {
-  const SearchAboutUserPage({Key? key}) : super(key: key);
+  const SearchAboutUserPage({super.key});
 
   @override
   State<SearchAboutUserPage> createState() => _SearchAboutUserPageState();
