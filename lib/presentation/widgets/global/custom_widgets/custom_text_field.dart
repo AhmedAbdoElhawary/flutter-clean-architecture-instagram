@@ -18,8 +18,7 @@ class CustomTextField extends StatefulWidget {
       required this.isThatLogin,
       this.isThatEmail,
       this.validate,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -80,7 +79,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               decoration: InputDecoration(
                 hintText: widget.hint,
                 hintStyle: isThatMobile
-                    ? getNormalStyle(color: Theme.of(context).indicatorColor)
+                    ? getNormalStyle(color: Theme.of(context).tabBarTheme.indicatorColor!)
                     : getNormalStyle(color: ColorManager.black54, fontSize: 12),
                 fillColor: const Color.fromARGB(48, 232, 232, 232),
                 filled: true,

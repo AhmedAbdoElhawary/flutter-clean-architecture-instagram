@@ -10,8 +10,7 @@ class CustomVideosGridView extends StatefulWidget {
   final String userId;
 
   const CustomVideosGridView(
-      {required this.userId, required this.postsInfo, Key? key})
-      : super(key: key);
+      {required this.userId, required this.postsInfo, super.key});
 
   @override
   State<CustomVideosGridView> createState() => _CustomVideosGridViewState();

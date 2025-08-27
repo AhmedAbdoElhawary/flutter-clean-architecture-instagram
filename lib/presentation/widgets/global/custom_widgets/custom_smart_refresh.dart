@@ -7,8 +7,7 @@ class CustomSmartRefresh extends StatefulWidget {
   final AsyncValueSetter<int> onRefreshData;
   final Widget child;
   const CustomSmartRefresh(
-      {Key? key, required this.onRefreshData, required this.child})
-      : super(key: key);
+      {super.key, required this.onRefreshData, required this.child});
 
   @override
   State<CustomSmartRefresh> createState() => _CustomSmartRefreshState();
