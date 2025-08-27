@@ -27,8 +27,8 @@ class SocialMediaRecorder extends StatefulWidget {
     required this.showIcons,
     this.slideToCancelText = " Slide to Cancel >",
     this.cancelText = "Cancel",
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   SocialMediaRecorderS createState() => SocialMediaRecorderS();
