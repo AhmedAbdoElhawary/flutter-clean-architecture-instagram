@@ -277,7 +277,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  updateUserInfo() {
+  void updateUserInfo() {
     reBuild.value = true;
   }
 
@@ -419,7 +419,7 @@ List<Widget> _tabBarsWidgets(List<Post> postsInfo, String userId) {
 }
 
 class _TabBarIcons extends StatelessWidget {
-  const _TabBarIcons({ required this.tapBarIndex});
+  const _TabBarIcons({required this.tapBarIndex});
   final ValueNotifier<int> tapBarIndex;
   @override
   Widget build(BuildContext context) {
