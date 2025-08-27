@@ -15,12 +15,12 @@ class UsersWhoLikes extends StatelessWidget {
   final bool isThatMyPersonalId;
 
   const UsersWhoLikes({
-    Key? key,
+    super.key,
     required this.showSearchBar,
     required this.usersIds,
     required this.isThatMyPersonalId,
     this.showColorfulCircle = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
