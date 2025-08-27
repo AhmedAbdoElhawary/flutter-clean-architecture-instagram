@@ -29,5 +29,5 @@ class Go {
     }
   }
 
-  back() => Navigator.maybePop(context);
+  Future<bool> back() => Navigator.maybePop(context);
 }

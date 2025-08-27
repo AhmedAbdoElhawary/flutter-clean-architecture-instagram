@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
           themeMode: ThemeOfApp.theme,
-
           home: AnimatedSplashScreen.withScreenFunction(
             screenFunction: screenFunction,
             centered: true,
@@ -60,7 +59,7 @@ Future<Widget> screenFunction() async {
       : GetMyPersonalInfo(myPersonalId: myId);
 }
 
-_defineThePlatform(BuildContext context) {
+void _defineThePlatform(BuildContext context) {
   TargetPlatform platform = Theme.of(context).platform;
   isThatMobile =
       platform == TargetPlatform.iOS || platform == TargetPlatform.android;
