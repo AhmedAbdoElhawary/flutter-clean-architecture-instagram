@@ -33,8 +33,7 @@ class ProfilePage extends StatefulWidget {
       required this.isThatMyPersonalId,
       required this.userInfo,
       required this.userId,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -338,7 +337,7 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 class _LoadingGridView extends StatelessWidget {
-  const _LoadingGridView({Key? key}) : super(key: key);
+  const _LoadingGridView();
   @override
   Widget build(BuildContext context) {
     bool isWidthAboveMinimum = MediaQuery.of(context).size.width > 800;
@@ -376,11 +375,10 @@ class _LoadingGridView extends StatelessWidget {
 
 class _TabBarsViews extends StatelessWidget {
   const _TabBarsViews({
-    Key? key,
     required this.postsInfo,
     required this.userId,
     required this.tapBarIndex,
-  }) : super(key: key);
+  });
   final List<Post> postsInfo;
   final ValueNotifier<int> tapBarIndex;
 
@@ -421,7 +419,7 @@ List<Widget> _tabBarsWidgets(List<Post> postsInfo, String userId) {
 }
 
 class _TabBarIcons extends StatelessWidget {
-  const _TabBarIcons({Key? key, required this.tapBarIndex}) : super(key: key);
+  const _TabBarIcons({ required this.tapBarIndex});
   final ValueNotifier<int> tapBarIndex;
   @override
   Widget build(BuildContext context) {
