@@ -5,7 +5,7 @@ import 'package:instagram/core/utility/constant.dart';
 class CustomCircularProgress extends StatelessWidget {
   final Color color;
 
-  const CustomCircularProgress(this.color, {Key? key}) : super(key: key);
+  const CustomCircularProgress(this.color, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +33,11 @@ class ThineCircularProgress extends StatelessWidget {
   final Animation<Color?>? valueColor;
 
   const ThineCircularProgress(
-      {Key? key,
+      {super.key,
       this.strokeWidth = 1.0,
       this.backgroundColor,
       this.color,
-      this.valueColor})
-      : super(key: key);
+      this.valueColor});
 
   @override
   Widget build(BuildContext context) {
