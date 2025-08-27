@@ -9,12 +9,14 @@ part 'calling_status_state.dart';
 class CallingStatusBloc extends Bloc<CallingStatusEvent, CallingStatusState> {
   final GetCallingStatusUseCase _getCallingStatusUseCase;
 
-  CallingStatusBloc(this._getCallingStatusUseCase) : super(CallingStatusInitial()) {
+  CallingStatusBloc(this._getCallingStatusUseCase)
+      : super(CallingStatusInitial()) {
     on<LoadCallingStatus>(_onLoadCallingStatus);
     on<UpdateCallingStatus>(_onUpdateCallingStatus);
   }
 
-  static CallingStatusBloc get(BuildContext context) => BlocProvider.of(context);
+  static CallingStatusBloc get(BuildContext context) =>
+      BlocProvider.of(context);
 
   Future<void> _onLoadCallingStatus(
     LoadCallingStatus event,

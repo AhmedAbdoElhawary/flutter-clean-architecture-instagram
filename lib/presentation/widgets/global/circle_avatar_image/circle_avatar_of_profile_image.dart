@@ -94,7 +94,7 @@ class _CircleAvatarOfProfileImageState extends State<CircleAvatarOfProfileImage>
     );
   }
 
-  onPressedImage(BuildContext context) async {
+  Future<void> onPressedImage(BuildContext context) async {
     if (!widget.showColorfulCircle) {
       await Go(context)
           .push(page: WhichProfilePage(userId: widget.userInfo?.userId));
