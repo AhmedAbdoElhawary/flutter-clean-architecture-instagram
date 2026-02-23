@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
-import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:instagram/core/resources/color_manager.dart';
 import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
@@ -21,7 +19,7 @@ class CallPage extends StatefulWidget {
 
   final List<UserPersonalInfo>? usersInfo;
   final UserCallingType userCallingType;
-  final ClientRole role;
+  final ClientRoleType role;
 
   const CallPage({
     super.key,
@@ -53,7 +51,7 @@ class CallPageState extends State<CallPage> {
 
   Future<void> _dispose() async {
     await _engine.leaveChannel();
-    await _engine.destroy();
+    await _engine.release();
   }
 
   @override
@@ -76,7 +74,8 @@ class CallPageState extends State<CallPage> {
     await _handleCameraAndMic(Permission.microphone);
   }
 
-  Future<void> _handleCameraAndMic(Permission permission) async => await permission.request();
+  Future<void> _handleCameraAndMic(Permission permission) async =>
+      await permission.request();
 
   /// Create your own app id with agora with "testing mode"
   /// it's very simple, just go to https://www.agora.io/en/ and create your own project and get your own app id in [agoraAppId]
@@ -95,65 +94,98 @@ class CallPageState extends State<CallPage> {
 
     await _initAgoraRtcEngine();
     _addAgoraEventHandlers();
-    VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
-    configuration.dimensions = const VideoDimensions(width: 1920, height: 1080);
+    const VideoEncoderConfiguration configuration = VideoEncoderConfiguration(
+      dimensions: VideoDimensions(width: 1920, height: 1080),
+    );
     await _engine.setVideoEncoderConfiguration(configuration);
-    await _engine.joinChannel(null, widget.channelName, null, 0);
+    await _engine.startPreview();
+    await _engine.joinChannel(
+      token: agoraToken,
+      channelId: widget.channelName,
+      uid: 0,
+      options: ChannelMediaOptions(
+        clientRoleType: widget.role,
+        channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
+      ),
+    );
   }
 
   /// Create agora sdk instance and initialize
   Future<void> _initAgoraRtcEngine() async {
-    _engine = await RtcEngine.create(agoraAppId);
+    _engine = createAgoraRtcEngine();
+    await _engine.initialize(
+      const RtcEngineContext(
+        appId: agoraAppId,
+        channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
+      ),
+    );
     await _engine.enableVideo();
-    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    await _engine.setClientRole(widget.role);
+    await _engine.setClientRole(role: widget.role);
   }
 
   /// Add agora event handlers
   void _addAgoraEventHandlers() {
-    _engine.setEventHandler(RtcEngineEventHandler(error: (code) {
-      setState(() {
-        final info = 'onError: $code';
-        _infoStrings.add(info);
-      });
-    }, joinChannelSuccess: (channel, uid, elapsed) {
-      setState(() {
-        final info = 'onJoinChannel: $channel, uid: $uid';
-        _infoStrings.add(info);
-      });
-    }, leaveChannel: (stats) {
-      setState(() {
-        _infoStrings.add('onLeaveChannel');
-        _users.clear();
-      });
-    }, userJoined: (uid, elapsed) {
-      setState(() {
-        final info = 'userJoined: $uid';
-        _infoStrings.add(info);
-        _users.add(uid);
-      });
-    }, userOffline: (uid, elapsed) {
-      setState(() {
-        final info = 'userOffline: $uid';
-        _infoStrings.add(info);
-        _users.remove(uid);
-      });
-    }, firstRemoteVideoFrame: (uid, width, height, elapsed) {
-      setState(() {
-        final info = 'firstRemoteVideo: $uid ${width}x $height';
-        _infoStrings.add(info);
-      });
-    }));
+    _engine.registerEventHandler(
+      RtcEngineEventHandler(
+        onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+          setState(() {
+            final info =
+                'onJoinChannel: ${connection.channelId}, uid: ${connection.localUid}';
+            _infoStrings.add(info);
+          });
+        },
+        onLeaveChannel: (RtcConnection connection, RtcStats stats) {
+          setState(() {
+            _infoStrings.add('onLeaveChannel');
+            _users.clear();
+          });
+        },
+        onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
+          setState(() {
+            final info = 'userJoined: $remoteUid';
+            _infoStrings.add(info);
+            _users.add(remoteUid);
+          });
+        },
+        onUserOffline: (RtcConnection connection, int remoteUid,
+            UserOfflineReasonType reason) {
+          setState(() {
+            final info = 'userOffline: $remoteUid';
+            _infoStrings.add(info);
+            _users.remove(remoteUid);
+          });
+        },
+        // onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
+        //   debugPrint(
+        //       '[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
+        // },
+      ),
+    );
   }
 
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
-    final List<StatefulWidget> list = [];
-    if (widget.role == ClientRole.Broadcaster) {
-      list.add(const rtc_local_view.SurfaceView());
+    final List<Widget> list = [];
+    if (widget.role == ClientRoleType.clientRoleBroadcaster) {
+      list.add(
+        AgoraVideoView(
+          controller: VideoViewController(
+            rtcEngine: _engine,
+            canvas: const VideoCanvas(uid: 0),
+          ),
+        ),
+      );
     }
     for (var uid in _users) {
-      list.add(rtc_remote_view.SurfaceView(channelId: widget.channelName, uid: uid));
+      list.add(
+        AgoraVideoView(
+          controller: VideoViewController.remote(
+            rtcEngine: _engine,
+            canvas: VideoCanvas(uid: uid),
+            connection: RtcConnection(channelId: widget.channelName),
+          ),
+        ),
+      );
     }
     return list;
   }
@@ -175,11 +207,15 @@ class CallPageState extends State<CallPage> {
   Widget _viewRows() {
     final views = _getRenderViews();
     if (views.length > 1) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => moreThanOne = true));
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => setState(() => moreThanOne = true));
     }
-    if (widget.userCallingType == UserCallingType.receiver && views.length == 1 && moreThanOne) {
+    if (widget.userCallingType == UserCallingType.receiver &&
+        views.length == 1 &&
+        moreThanOne) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await CallingRoomsCubit.get(context).deleteTheRoom(channelId: widget.channelName);
+        await CallingRoomsCubit.get(context)
+            .deleteTheRoom(channelId: widget.channelName);
         setState(() => amICalling = false);
       });
       Navigator.of(context).maybePop();
@@ -199,11 +235,17 @@ class CallPageState extends State<CallPage> {
         );
       case 3:
         return Column(
-          children: <Widget>[_expandedVideoRow(views.sublist(0, 2)), _expandedVideoRow(views.sublist(2, 3))],
+          children: <Widget>[
+            _expandedVideoRow(views.sublist(0, 2)),
+            _expandedVideoRow(views.sublist(2, 3))
+          ],
         );
       case 4:
         return Column(
-          children: <Widget>[_expandedVideoRow(views.sublist(0, 2)), _expandedVideoRow(views.sublist(2, 4))],
+          children: <Widget>[
+            _expandedVideoRow(views.sublist(0, 2)),
+            _expandedVideoRow(views.sublist(2, 4))
+          ],
         );
       default:
     }
@@ -212,7 +254,9 @@ class CallPageState extends State<CallPage> {
 
   /// Toolbar layout
   Widget _toolbar() {
-    if (widget.role == ClientRole.Audience) return Container();
+    if (widget.role == ClientRoleType.clientRoleAudience) {
+      return Container();
+    }
     return Container(
       alignment: Alignment.bottomCenter,
       padding: const EdgeInsets.symmetric(vertical: 48),
@@ -300,22 +344,27 @@ class CallPageState extends State<CallPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       const SizedBox(width: 10),
-                      const Icon(Icons.video_camera_back_rounded, color: ColorManager.white, size: 33),
+                      const Icon(Icons.video_camera_back_rounded,
+                          color: ColorManager.white, size: 33),
                       const SizedBox(width: 10),
                       GestureDetector(
                         onTap: _onToggleMute,
                         child: Icon(
-                          muted ? Icons.mic_off_rounded : Icons.mic_none_rounded,
+                          muted
+                              ? Icons.mic_off_rounded
+                              : Icons.mic_none_rounded,
                           color: Colors.white,
                           size: 33.0,
                         ),
                       ),
                       const SizedBox(width: 10),
-                      const Icon(Icons.volume_up_rounded, color: ColorManager.white, size: 33),
+                      const Icon(Icons.volume_up_rounded,
+                          color: ColorManager.white, size: 33),
                       const SizedBox(width: 10),
                       GestureDetector(
                         onTap: () => _onCallEnd(context),
-                        child: const Icon(Icons.close_rounded, color: ColorManager.white, size: 33),
+                        child: const Icon(Icons.close_rounded,
+                            color: ColorManager.white, size: 33),
                       ),
                     ],
                   ),
@@ -335,16 +384,22 @@ class CallPageState extends State<CallPage> {
                           alignment: Alignment.bottomRight,
                           child: buildCircleAvatar(0, 700),
                         ),
-                        Positioned(height: -15, left: -10, child: buildCircleAvatar(1, 700)),
+                        Positioned(
+                            height: -15,
+                            left: -10,
+                            child: buildCircleAvatar(1, 700)),
                       ],
                       const SizedBox(height: 30),
                       ...List.generate(numOfUsers!, (index) {
                         return Text(widget.usersInfo![index].name,
-                            style: getNormalStyle(color: ColorManager.white, fontSize: 25));
+                            style: getNormalStyle(
+                                color: ColorManager.white, fontSize: 25));
                       }),
                     ],
                     const SizedBox(height: 10),
-                    Text('Connecting...', style: getNormalStyle(color: ColorManager.white, fontSize: 16.5)),
+                    Text('Connecting...',
+                        style: getNormalStyle(
+                            color: ColorManager.white, fontSize: 16.5)),
                   ],
                 ),
               ),
