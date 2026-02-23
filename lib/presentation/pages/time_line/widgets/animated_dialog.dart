@@ -9,7 +9,8 @@ class AnimatedDialog extends StatefulWidget {
   State<StatefulWidget> createState() => AnimatedDialogState();
 }
 
-class AnimatedDialogState extends State<AnimatedDialog> with SingleTickerProviderStateMixin {
+class AnimatedDialogState extends State<AnimatedDialog>
+    with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> opacityAnimation;
   late Animation<double> scaleAnimation;
@@ -18,10 +19,12 @@ class AnimatedDialogState extends State<AnimatedDialog> with SingleTickerProvide
   void initState() {
     super.initState();
 
-    controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
-    scaleAnimation = CurvedAnimation(parent: controller, curve: Curves.easeOutExpo);
-    opacityAnimation =
-        Tween<double>(begin: 0.0, end: 0.6).animate(CurvedAnimation(parent: controller, curve: Curves.easeOutExpo));
+    controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 400));
+    scaleAnimation =
+        CurvedAnimation(parent: controller, curve: Curves.easeOutExpo);
+    opacityAnimation = Tween<double>(begin: 0.0, end: 0.6).animate(
+        CurvedAnimation(parent: controller, curve: Curves.easeOutExpo));
 
     controller.addListener(() => setState(() {}));
     controller.forward();

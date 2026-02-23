@@ -54,12 +54,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Future<void> _getData(int index) async {
     storiesOwnersInfo = null;
     reLoadData.value = false;
-    UserInfoCubit userCubit = BlocProvider.of<UserInfoCubit>(context, listen: false);
+    UserInfoCubit userCubit =
+        BlocProvider.of<UserInfoCubit>(context, listen: false);
     await userCubit.getUserInfo(widget.userId);
     if (!mounted) return;
     personalInfo = userCubit.myPersonalInfo;
     List usersIds = personalInfo.followedPeople;
-    SpecificUsersPostsCubit usersPostsCubit = BlocProvider.of<SpecificUsersPostsCubit>(context, listen: false);
+    SpecificUsersPostsCubit usersPostsCubit =
+        BlocProvider.of<SpecificUsersPostsCubit>(context, listen: false);
 
     await usersPostsCubit.getSpecificUsersPostsInfo(usersIds: usersIds);
 
@@ -68,7 +70,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     postsIds = personalInfo.posts + usersPostsIds;
     if (!mounted) return;
     PostCubit postCubit = PostCubit.get(context);
-    await postCubit.getPostsInfo(postsIds: postsIds, isThatMyPosts: true, lengthOfCurrentList: index).then((value) {
+    await postCubit
+        .getPostsInfo(
+            postsIds: postsIds, isThatMyPosts: true, lengthOfCurrentList: index)
+        .then((value) {
       reLoadData.value = true;
     });
   }
@@ -79,7 +84,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     /// It's prefer to the here not in data_sources to avoid bugs when push notification.
     if (isThatMobile) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async => await notificationPermissions(context));
+      WidgetsBinding.instance.addPostFrameCallback(
+          (_) async => await notificationPermissions(context));
     }
     super.initState();
   }
@@ -108,7 +114,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   ValueListenableBuilder<bool> blocBuilder() {
     return ValueListenableBuilder(
       valueListenable: reLoadData,
-      builder: (context, bool value, child) => BlocBuilder<PostCubit, PostState>(
+      builder: (context, bool value, child) =>
+          BlocBuilder<PostCubit, PostState>(
         buildWhen: (previous, current) {
           if (value && current is CubitMyPersonalPostsLoaded) {
             reLoadData.value = false;
@@ -130,7 +137,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         builder: (BuildContext context, PostState state) {
           if (state is CubitMyPersonalPostsLoaded) {
             postsInfo.value = state.postsInfo;
-            return postsInfo.value.isNotEmpty ? inViewNotifier() : WelcomeCards(onRefreshData: _getData);
+            return postsInfo.value.isNotEmpty
+                ? inViewNotifier()
+                : WelcomeCards(onRefreshData: _getData);
           } else if (state is CubitPostFailed) {
             ToastShow.toastStateError(state);
             return Center(
@@ -149,13 +158,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget inViewNotifier() {
     return ValueListenableBuilder(
       valueListenable: postsInfo,
-      builder: (context, List<Post> postsInfoValue, child) => InViewNotifierList(
+      builder: (context, List<Post> postsInfoValue, child) =>
+          InViewNotifierList(
         onRefreshData: _getData,
         postsIds: postsIds,
         physics: const BouncingScrollPhysics(),
         isThatEndOfList: isThatEndOfList,
         initialInViewIds: const ['0'],
-        isInViewPortCondition: (double deltaTop, double deltaBottom, double vpHeight) {
+        isInViewPortCondition:
+            (double deltaTop, double deltaBottom, double vpHeight) {
           return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
         },
         itemCount: postsInfoValue.length,
@@ -169,7 +180,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   return InViewNotifierWidget(
                     id: '$index',
                     builder: (_, bool isInView, __) {
-                      bool checkForPlatform = isThatMobile ? isInView && widget.playVideo : isInView;
+                      bool checkForPlatform = isThatMobile
+                          ? isInView && widget.playVideo
+                          : isInView;
                       return columnOfWidgets(index, checkForPlatform, isInView);
                     },
                   );
@@ -188,7 +201,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (index == 0) ...[
-          storiesOwnersInfo != null ? buildUsersStories(context) : storiesLines(storiesHeight),
+          storiesOwnersInfo != null
+              ? buildUsersStories(context)
+              : storiesLines(storiesHeight),
           if (isThatMobile) customDivider(),
         ] else ...[
           if (isThatMobile) divider(),
@@ -249,15 +264,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         reLoadData: reLoadData,
         storiesOwnersInfo: storiesOwnersInfo,
         scrollController: ScrollController());
-    return isThatMobile ? stories : _RoundedContainer(isThatStory: true, child: stories);
+    return isThatMobile
+        ? stories
+        : _RoundedContainer(isThatStory: true, child: stories);
   }
 
   Widget storiesLines(double bodyHeight) {
-    List<dynamic> usersStoriesIds = personalInfo.followedPeople + personalInfo.followerPeople;
+    List<dynamic> usersStoriesIds =
+        personalInfo.followedPeople + personalInfo.followerPeople;
     return ValueListenableBuilder(
       valueListenable: reLoadData,
-      builder: (context, bool value, child) => BlocBuilder<StoryCubit, StoryState>(
-        bloc: StoryCubit.get(context)..getStoriesInfo(usersIds: usersStoriesIds, myPersonalInfo: personalInfo),
+      builder: (context, bool value, child) =>
+          BlocBuilder<StoryCubit, StoryState>(
+        bloc: StoryCubit.get(context)
+          ..getStoriesInfo(
+              usersIds: usersStoriesIds, myPersonalInfo: personalInfo),
         buildWhen: (previous, current) {
           if (value && current is CubitStoriesInfoLoaded) {
             reLoadData.value = false;
@@ -311,7 +332,9 @@ class _RoundedContainer extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 15.0),
       child: Container(
-        padding: internalPadding || verticalPadding ? const EdgeInsets.symmetric(vertical: 15) : null,
+        padding: internalPadding || verticalPadding
+            ? const EdgeInsets.symmetric(vertical: 15)
+            : null,
         decoration: BoxDecoration(
           color: ColorManager.white,
           borderRadius: BorderRadius.circular(10),
@@ -339,7 +362,9 @@ class _BuildStoriesLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final bodyHeight = mediaQuery.size.height - AppBar().preferredSize.height - mediaQuery.padding.top;
+    final bodyHeight = mediaQuery.size.height -
+        AppBar().preferredSize.height -
+        mediaQuery.padding.top;
     final storiesLength = storiesOwnersInfo?.length ?? 0;
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 10),
@@ -355,7 +380,10 @@ class _BuildStoriesLine extends StatelessWidget {
                 if (personalInfo.stories.isEmpty) ...[
                   SliverPadding(
                     padding: const EdgeInsetsDirectional.only(end: 12),
-                    sliver: SliverToBoxAdapter(child: _MyOwnStory(reLoadData: reLoadData, personalInfo: personalInfo)),
+                    sliver: SliverToBoxAdapter(
+                        child: _MyOwnStory(
+                            reLoadData: reLoadData,
+                            personalInfo: personalInfo)),
                   ),
                 ],
                 SliverList(
@@ -367,24 +395,32 @@ class _BuildStoriesLine extends StatelessWidget {
                   return Hero(
                     tag: hashTag,
                     child: Padding(
-                      padding: EdgeInsetsDirectional.only(end: index != storiesLength - 1 ? 12 : 0),
+                      padding: EdgeInsetsDirectional.only(
+                          end: index != storiesLength - 1 ? 12 : 0),
                       child: GestureDetector(
                         onTap: () {
                           if (isThatMobile) {
                             Widget page = StoryPageForMobile(
-                                user: publisherInfo, hashTag: hashTag, storiesOwnersInfo: storiesOwnersInfo!);
-                            Go(context).push(page: page, withoutPageTransition: true);
+                                user: publisherInfo,
+                                hashTag: hashTag,
+                                storiesOwnersInfo: storiesOwnersInfo!);
+                            Go(context)
+                                .push(page: page, withoutPageTransition: true);
                           } else {
                             Widget page = StoryPageForWeb(
-                                user: publisherInfo, hashTag: hashTag, storiesOwnersInfo: storiesOwnersInfo!);
+                                user: publisherInfo,
+                                hashTag: hashTag,
+                                storiesOwnersInfo: storiesOwnersInfo!);
                             Get.to(page);
                           }
                         },
                         child: CircleAvatarOfProfileImage(
                           userInfo: publisherInfo,
-                          bodyHeight: isThatMobile ? bodyHeight : bodyHeight * 0.69,
+                          bodyHeight:
+                              isThatMobile ? bodyHeight : bodyHeight * 0.69,
                           thisForStoriesLine: true,
-                          nameOfCircle: index == 0 && publisherInfo.userId == personalInfo.userId
+                          nameOfCircle: index == 0 &&
+                                  publisherInfo.userId == personalInfo.userId
                               ? StringsManager.yourStory.tr
                               : "",
                         ),
@@ -402,7 +438,8 @@ class _BuildStoriesLine extends StatelessWidget {
                       double pos = scrollController.offset - 500;
                       pos = pos < 0 ? 0 : pos;
                       scrollController.animateTo(pos,
-                          duration: const Duration(milliseconds: 500), curve: Curves.easeInOutQuart);
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOutQuart);
                     },
                     child: const ArrowJump()),
               ),
@@ -413,7 +450,8 @@ class _BuildStoriesLine extends StatelessWidget {
                     double pos = scrollController.offset + 500;
 
                     scrollController.animateTo(pos,
-                        duration: const Duration(milliseconds: 500), curve: Curves.easeInOutQuart);
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOutQuart);
                   },
                   child: const ArrowJump(isThatBack: false),
                 ),
@@ -483,7 +521,8 @@ class _MyOwnStoryChild extends StatelessWidget {
           left: 650 * .058,
           right: 650 * .012,
           child: Container(
-            decoration: BoxDecoration(color: Theme.of(context).primaryColor, shape: BoxShape.circle),
+            decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor, shape: BoxShape.circle),
             padding: const EdgeInsets.all(2),
             child: CircleAvatar(
               radius: 15,

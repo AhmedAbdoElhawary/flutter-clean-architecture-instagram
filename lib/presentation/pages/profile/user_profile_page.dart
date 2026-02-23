@@ -64,10 +64,13 @@ class _ProfilePageState extends State<UserProfilePage> {
   Widget scaffold() {
     return ValueListenableBuilder(
       valueListenable: rebuildUserInfo,
-      builder: (context, bool rebuildUserInfoValue, child) => BlocBuilder<UserInfoCubit, UserInfoState>(
+      builder: (context, bool rebuildUserInfoValue, child) =>
+          BlocBuilder<UserInfoCubit, UserInfoState>(
         bloc: widget.userName.isNotEmpty
-            ? (BlocProvider.of<UserInfoCubit>(context)..getUserFromUserName(widget.userName))
-            : (BlocProvider.of<UserInfoCubit>(context)..getUserInfo(widget.userId, isThatMyPersonalId: false)),
+            ? (BlocProvider.of<UserInfoCubit>(context)
+              ..getUserFromUserName(widget.userName))
+            : (BlocProvider.of<UserInfoCubit>(context)
+              ..getUserInfo(widget.userId, isThatMyPersonalId: false)),
         buildWhen: (previous, current) {
           if (previous != current && current is CubitUserLoaded) {
             return true;
@@ -83,14 +86,16 @@ class _ProfilePageState extends State<UserProfilePage> {
             userInfo = ValueNotifier(state.userPersonalInfo);
             return Scaffold(
               appBar: isThatMobile
-                  ? CustomAppBar.menuOfUserAppBar(context, state.userPersonalInfo.userName, bottomSheet)
+                  ? CustomAppBar.menuOfUserAppBar(
+                      context, state.userPersonalInfo.userName, bottomSheet)
                   : null,
               body: ProfilePage(
                 isThatMyPersonalId: false,
                 userId: widget.userId,
                 userInfo: userInfo,
-                widgetsAboveTapBars:
-                    isThatMobile ? widgetsAboveTapBarsForMobile(state) : widgetsAboveTapBarsForWeb(state),
+                widgetsAboveTapBars: isThatMobile
+                    ? widgetsAboveTapBarsForMobile(state)
+                    : widgetsAboveTapBarsForWeb(state),
               ),
             );
           } else if (state is CubitGetUserInfoFailed) {
@@ -146,7 +151,9 @@ class _ProfilePageState extends State<UserProfilePage> {
   }
 
   Text textOfBottomSheet(String text) {
-    return Text(text, style: getNormalStyle(fontSize: 15, color: Theme.of(context).focusColor));
+    return Text(text,
+        style:
+            getNormalStyle(fontSize: 15, color: Theme.of(context).focusColor));
   }
 
   List<Widget> widgetsAboveTapBarsForMobile(UserInfoState userInfoState) {
@@ -175,7 +182,8 @@ class _ProfilePageState extends State<UserProfilePage> {
         setState(() => pageOfController = 1);
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => WebScreenLayout(userInfoForMessagePage: userInfo.value),
+            builder: (context) =>
+                WebScreenLayout(userInfoForMessagePage: userInfo.value),
           ),
         );
       },
@@ -200,7 +208,8 @@ class _ProfilePageState extends State<UserProfilePage> {
   Widget followButtonForWeb() {
     return BlocBuilder<FollowCubit, FollowState>(
       builder: (context, stateOfFollow) {
-        bool isThatFollowing = myPersonalInfo.followedPeople.contains(userInfo.value.userId);
+        bool isThatFollowing =
+            myPersonalInfo.followedPeople.contains(userInfo.value.userId);
         bool isFollowLoading = stateOfFollow is CubitFollowThisUserLoading;
         Widget child = isFollowLoading
             ? const CupertinoActivityIndicator(color: ColorManager.black)
@@ -219,9 +228,12 @@ class _ProfilePageState extends State<UserProfilePage> {
           builder: (__, UserPersonalInfo userInfoValue, _) => GestureDetector(
             onTap: () async => onTapFollowButton(userInfoValue),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 9, vertical: isThatFollowing ? 4 : 6),
+              padding: EdgeInsets.symmetric(
+                  horizontal: 9, vertical: isThatFollowing ? 4 : 6),
               decoration: BoxDecoration(
-                color: isThatFollowing ? ColorManager.transparent : ColorManager.blue,
+                color: isThatFollowing
+                    ? ColorManager.transparent
+                    : ColorManager.blue,
                 border: isThatFollowing
                     ? Border.all(
                         color: ColorManager.lowOpacityGrey,
@@ -253,14 +265,18 @@ class _ProfilePageState extends State<UserProfilePage> {
     );
   }
 
-  Widget whichContainerOfText(FollowState stateOfFollow, UserPersonalInfo userInfoValue) {
+  Widget whichContainerOfText(
+      FollowState stateOfFollow, UserPersonalInfo userInfoValue) {
     if (stateOfFollow is CubitFollowThisUserFailed) {
       ToastShow.toastStateError(stateOfFollow);
     }
-    bool isThatFollower = myPersonalInfo.followerPeople.contains(userInfoValue.userId);
+    bool isThatFollower =
+        myPersonalInfo.followerPeople.contains(userInfoValue.userId);
     return !myPersonalInfo.followedPeople.contains(userInfoValue.userId)
         ? containerOfFollowText(
-            text: isThatFollower ? StringsManager.followBack.tr : StringsManager.follow.tr,
+            text: isThatFollower
+                ? StringsManager.followBack.tr
+                : StringsManager.follow.tr,
             isThatFollowers: false,
           )
         : containerOfFollowText(
@@ -271,21 +287,21 @@ class _ProfilePageState extends State<UserProfilePage> {
 
   void onTapFollowButton(UserPersonalInfo userInfoValue) {
     if (myPersonalInfo.followedPeople.contains(userInfoValue.userId)) {
-      BlocProvider.of<FollowCubit>(context)
-          .unFollowThisUser(followingUserId: userInfoValue.userId, myPersonalId: myPersonalId);
+      BlocProvider.of<FollowCubit>(context).unFollowThisUser(
+          followingUserId: userInfoValue.userId, myPersonalId: myPersonalId);
       myPersonalInfo.followedPeople.remove(userInfoValue.userId);
       userInfo.value.followerPeople.remove(myPersonalId);
       //for notification
-      BlocProvider.of<NotificationCubit>(context)
-          .deleteNotification(notificationCheck: createNotificationCheck(userInfoValue));
+      BlocProvider.of<NotificationCubit>(context).deleteNotification(
+          notificationCheck: createNotificationCheck(userInfoValue));
     } else {
-      BlocProvider.of<FollowCubit>(context)
-          .followThisUser(followingUserId: userInfoValue.userId, myPersonalId: myPersonalId);
+      BlocProvider.of<FollowCubit>(context).followThisUser(
+          followingUserId: userInfoValue.userId, myPersonalId: myPersonalId);
       myPersonalInfo.followedPeople.add(userInfoValue.userId);
       userInfo.value.followerPeople.add(myPersonalId);
       //for notification
-      BlocProvider.of<NotificationCubit>(context)
-          .createNotification(newNotification: createNotification(userInfoValue));
+      BlocProvider.of<NotificationCubit>(context).createNotification(
+          newNotification: createNotification(userInfoValue));
     }
     setState(() {});
   }
@@ -320,7 +336,8 @@ class _ProfilePageState extends State<UserProfilePage> {
           Go(context).push(
               page: BlocProvider<MessageBloc>(
             create: (context) => injector<MessageBloc>(),
-            child: ChattingPage(messageDetails: SenderInfo(receiversInfo: [userInfo.value])),
+            child: ChattingPage(
+                messageDetails: SenderInfo(receiversInfo: [userInfo.value])),
           ));
         },
         child: containerOfFollowText(
@@ -338,8 +355,12 @@ class _ProfilePageState extends State<UserProfilePage> {
     return Container(
       height: 35.0,
       decoration: BoxDecoration(
-        color: isThatFollowers ? Theme.of(context).primaryColor : ColorManager.blue,
-        border: Border.all(color: Theme.of(context).bottomAppBarTheme.color!, width: isThatFollowers ? 1.0 : 0),
+        color: isThatFollowers
+            ? Theme.of(context).primaryColor
+            : ColorManager.blue,
+        border: Border.all(
+            color: Theme.of(context).bottomAppBarTheme.color!,
+            width: isThatFollowers ? 1.0 : 0),
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: Center(
@@ -347,7 +368,9 @@ class _ProfilePageState extends State<UserProfilePage> {
           text,
           style: TextStyle(
               fontSize: 17.0,
-              color: isThatFollowers ? Theme.of(context).focusColor : ColorManager.white,
+              color: isThatFollowers
+                  ? Theme.of(context).focusColor
+                  : ColorManager.white,
               fontWeight: FontWeight.w500),
         ),
       ),

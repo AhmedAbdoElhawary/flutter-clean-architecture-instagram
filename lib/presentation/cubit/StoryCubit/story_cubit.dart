@@ -18,15 +18,17 @@ class StoryCubit extends Cubit<StoryState> {
   final DeleteStoryUseCase _deleteStoryUseCase;
   String storyId = '';
 
-  StoryCubit(this._createStoryUseCase, this._getStoriesInfoUseCase, this._deleteStoryUseCase,
-      this._getSpecificStoriesInfoUseCase)
+  StoryCubit(this._createStoryUseCase, this._getStoriesInfoUseCase,
+      this._deleteStoryUseCase, this._getSpecificStoriesInfoUseCase)
       : super(StoryInitial());
 
   static StoryCubit get(BuildContext context) => BlocProvider.of(context);
 
   Future<void> createStory(Story storyInfo, Uint8List file) async {
     emit(CubitStoryLoading());
-    await _createStoryUseCase.call(paramsOne: storyInfo, paramsTwo: file).then((storyId) {
+    await _createStoryUseCase
+        .call(paramsOne: storyInfo, paramsTwo: file)
+        .then((storyId) {
       this.storyId = storyId;
       emit(CubitStoryLoaded(storyId));
       return storyId;
@@ -36,21 +38,28 @@ class StoryCubit extends Cubit<StoryState> {
     });
   }
 
-  Future<void> getStoriesInfo({required List<dynamic> usersIds, required UserPersonalInfo myPersonalInfo}) async {
+  Future<void> getStoriesInfo(
+      {required List<dynamic> usersIds,
+      required UserPersonalInfo myPersonalInfo}) async {
     if (!usersIds.contains(myPersonalInfo.userId)) {
       usersIds = [myPersonalInfo.userId] + usersIds;
     }
     emit(CubitStoryLoading());
-    await _getStoriesInfoUseCase.call(params: usersIds).then((updatedUsersInfo) {
+    await _getStoriesInfoUseCase
+        .call(params: usersIds)
+        .then((updatedUsersInfo) {
       emit(CubitStoriesInfoLoaded(updatedUsersInfo));
     }).catchError((e) {
       emit(CubitStoryFailed(e));
     });
   }
 
-  Future<void> getSpecificStoriesInfo({required UserPersonalInfo userInfo}) async {
+  Future<void> getSpecificStoriesInfo(
+      {required UserPersonalInfo userInfo}) async {
     emit(CubitStoryLoading());
-    await _getSpecificStoriesInfoUseCase.call(params: userInfo).then((updatedUserInfo) {
+    await _getSpecificStoriesInfoUseCase
+        .call(params: userInfo)
+        .then((updatedUserInfo) {
       emit(SpecificStoriesInfoLoaded(updatedUserInfo));
     }).catchError((e) {
       emit(CubitStoryFailed(e));

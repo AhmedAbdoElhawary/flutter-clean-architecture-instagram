@@ -40,7 +40,8 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
 
   @override
   void initState() {
-    lengthOfGrid = widget.postsImagesInfo.length + widget.postsVideosInfo.length;
+    lengthOfGrid =
+        widget.postsImagesInfo.length + widget.postsVideosInfo.length;
     super.initState();
   }
 
@@ -74,8 +75,10 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
         postsIds: widget.allPostsInfo,
         isThatEndOfList: widget.isThatEndOfList,
         initialInViewIds: const ['0'],
-        isInViewPortCondition: (double deltaTop, double deltaBottom, double viewPortDimension) {
-          return deltaTop < (0.6 * viewPortDimension) && deltaBottom > (0.1 * viewPortDimension);
+        isInViewPortCondition:
+            (double deltaTop, double deltaBottom, double viewPortDimension) {
+          return deltaTop < (0.6 * viewPortDimension) &&
+              deltaBottom > (0.1 * viewPortDimension);
         },
       );
     } else {
@@ -109,7 +112,8 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
 
   /// Determines whether to show image or video at a given index
   void _structurePostDisplay(int index) {
-    if (indexOfPostsVideo >= widget.postsVideosInfo.length && indexOfPostsImage < widget.postsImagesInfo.length) {
+    if (indexOfPostsVideo >= widget.postsVideosInfo.length &&
+        indexOfPostsImage < widget.postsImagesInfo.length) {
       postInfo = widget.postsImagesInfo[indexOfPostsImage];
       indexOfPostsImage++;
     } else if (indexOfPostsVideo < widget.postsVideosInfo.length &&
@@ -117,12 +121,14 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
       postInfo = widget.postsVideosInfo[indexOfPostsVideo];
       indexOfPostsVideo++;
     } else {
-      if (indexOfPostsVideo >= widget.postsVideosInfo.length && indexOfPostsImage >= widget.postsImagesInfo.length) {
+      if (indexOfPostsVideo >= widget.postsVideosInfo.length &&
+          indexOfPostsImage >= widget.postsImagesInfo.length) {
         indexOfPostsVideo = 0;
         indexOfPostsImage = 0;
       }
 
-      if ((index == (isThatMobile ? 2 : 1) || (index % 11 == 0 && index != 0)) &&
+      if ((index == (isThatMobile ? 2 : 1) ||
+              (index % 11 == 0 && index != 0)) &&
           indexOfPostsVideo < widget.postsVideosInfo.length) {
         postInfo = widget.postsVideosInfo[indexOfPostsVideo];
         indexOfPostsVideo++;

@@ -120,9 +120,13 @@ class SoundRecordNotifier extends ChangeNotifier {
     String sdPath = "";
     if (Platform.isIOS) {
       Directory tempDir = await getTemporaryDirectory();
-      sdPath = initialStorePathRecord.isEmpty ? tempDir.path : initialStorePathRecord;
+      sdPath = initialStorePathRecord.isEmpty
+          ? tempDir.path
+          : initialStorePathRecord;
     } else {
-      sdPath = initialStorePathRecord.isEmpty ? "/storage/emulated/0/new_record_sound" : initialStorePathRecord;
+      sdPath = initialStorePathRecord.isEmpty
+          ? "/storage/emulated/0/new_record_sound"
+          : initialStorePathRecord;
     }
     var d = Directory(sdPath);
     if (!d.existsSync()) {
@@ -143,7 +147,8 @@ class SoundRecordNotifier extends ChangeNotifier {
   /// used to change the draggable to top value
   /// or To The X vertical
   /// and update this value in screen
-  Future<void> updateScrollValue(Offset currentValue, BuildContext context) async {
+  Future<void> updateScrollValue(
+      Offset currentValue, BuildContext context) async {
     if (buttonPressed == true) {
       final x = currentValue;
 

@@ -47,7 +47,8 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
           physics: const NeverScrollableScrollPhysics(),
           addAutomaticKeepAlives: false,
           itemBuilder: (context, index) {
-            return containerOfUserInfo(widget.usersInfo[index], widget.isThatFollower);
+            return containerOfUserInfo(
+                widget.usersInfo[index], widget.isThatFollower);
           },
           separatorBuilder: (context, index) => const SizedBox(height: 10),
           itemCount: widget.usersInfo.length,
@@ -69,7 +70,9 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
     return InkWell(
       onTap: () async {
         Navigator.of(context).maybePop();
-        await Go(context).push(page: WhichProfilePage(userId: userInfo.userId), withoutRoot: false);
+        await Go(context).push(
+            page: WhichProfilePage(userId: userInfo.userId),
+            withoutRoot: false);
       },
       child: Padding(
         padding: const EdgeInsetsDirectional.only(start: 15, top: 15),
@@ -117,8 +120,10 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
       builder: (followContext, stateOfFollow) {
         return Builder(
           builder: (userContext) {
-            UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-            UserPersonalInfo? info = UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
+            UserPersonalInfo myPersonalInfo =
+                UserInfoCubit.getMyPersonalInfo(context);
+            UserPersonalInfo? info =
+                UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
             if (isMyInfoInReelTimeReady && info != null) myPersonalInfo = info;
 
             if (myPersonalId == userInfo.userId) {
@@ -126,21 +131,29 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
             } else {
               return GestureDetector(
                   onTap: () async {
-                    if (myPersonalInfo.followedPeople.contains(userInfo.userId)) {
+                    if (myPersonalInfo.followedPeople
+                        .contains(userInfo.userId)) {
                       await BlocProvider.of<FollowCubit>(followContext)
-                          .unFollowThisUser(followingUserId: userInfo.userId, myPersonalId: myPersonalId);
+                          .unFollowThisUser(
+                              followingUserId: userInfo.userId,
+                              myPersonalId: myPersonalId);
                       if (!mounted) return;
                       BlocProvider.of<UserInfoCubit>(context)
-                          .updateMyFollowings(userId: userInfo.userId, addThisUser: false);
+                          .updateMyFollowings(
+                              userId: userInfo.userId, addThisUser: false);
                     } else {
                       await BlocProvider.of<FollowCubit>(followContext)
-                          .followThisUser(followingUserId: userInfo.userId, myPersonalId: myPersonalId);
+                          .followThisUser(
+                              followingUserId: userInfo.userId,
+                              myPersonalId: myPersonalId);
                       if (!mounted) return;
 
-                      BlocProvider.of<UserInfoCubit>(context).updateMyFollowings(userId: userInfo.userId);
+                      BlocProvider.of<UserInfoCubit>(context)
+                          .updateMyFollowings(userId: userInfo.userId);
                     }
                   },
-                  child: whichContainerOfText(stateOfFollow, userInfo, myPersonalInfo));
+                  child: whichContainerOfText(
+                      stateOfFollow, userInfo, myPersonalInfo));
             }
           },
         );
@@ -148,7 +161,8 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
     );
   }
 
-  Widget whichContainerOfText(FollowState stateOfFollow, UserPersonalInfo userInfo, UserPersonalInfo myPersonalInfo) {
+  Widget whichContainerOfText(FollowState stateOfFollow,
+      UserPersonalInfo userInfo, UserPersonalInfo myPersonalInfo) {
     if (stateOfFollow is CubitFollowThisUserFailed) {
       ToastShow.toastStateError(stateOfFollow);
     }
@@ -164,24 +178,33 @@ class _ShowMeTheUsersState extends State<ShowMeTheUsers> {
           );
   }
 
-  Widget containerOfFollowText({required String text, required bool isThatFollower}) {
+  Widget containerOfFollowText(
+      {required String text, required bool isThatFollower}) {
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 45, end: 15),
       child: Container(
         height: 32.0,
         decoration: BoxDecoration(
-          color: isThatFollower ? Theme.of(context).primaryColor : ColorManager.blue,
-          border: isThatFollower ? Border.all(color: Theme.of(context).bottomAppBarTheme.color!, width: 1.0) : null,
+          color: isThatFollower
+              ? Theme.of(context).primaryColor
+              : ColorManager.blue,
+          border: isThatFollower
+              ? Border.all(
+                  color: Theme.of(context).bottomAppBarTheme.color!, width: 1.0)
+              : null,
           borderRadius: BorderRadius.circular(isThatMobile ? 15 : 5),
         ),
         child: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: isThatFollower ? 10.0 : 22),
+            padding:
+                EdgeInsets.symmetric(horizontal: isThatFollower ? 10.0 : 22),
             child: Text(
               text,
               style: TextStyle(
                   fontSize: 17.0,
-                  color: isThatFollower ? Theme.of(context).focusColor : ColorManager.white,
+                  color: isThatFollower
+                      ? Theme.of(context).focusColor
+                      : ColorManager.white,
                   fontWeight: FontWeight.w500),
             ),
           ),

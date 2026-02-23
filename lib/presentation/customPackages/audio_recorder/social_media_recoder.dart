@@ -59,7 +59,8 @@ class SocialMediaRecorderS extends State<SocialMediaRecorder> {
       ],
       child: Consumer<SoundRecordNotifier>(
         builder: (context, value, _) {
-          return Directionality(textDirection: TextDirection.rtl, child: makeBody(value));
+          return Directionality(
+              textDirection: TextDirection.rtl, child: makeBody(value));
         },
       ),
     );
@@ -107,7 +108,8 @@ class SocialMediaRecorderS extends State<SocialMediaRecorder> {
             if (state.second > 1 || state.minute > 0) {
               String path = state.mPath;
 
-              widget.sendRequestFunction(File.fromUri(Uri(path: path)), state.second);
+              widget.sendRequestFunction(
+                  File.fromUri(Uri(path: path)), state.second);
             }
             widget.showIcons(true);
           }
@@ -115,16 +117,21 @@ class SocialMediaRecorderS extends State<SocialMediaRecorder> {
         }
       },
       child: AnimatedContainer(
-          duration: Duration(milliseconds: soundRecordNotifier.isShow ? 0 : 300),
+          duration:
+              Duration(milliseconds: soundRecordNotifier.isShow ? 0 : 300),
           height: 50,
-          width: (soundRecordNotifier.isShow) ? MediaQuery.of(context).size.width * .8 : 40,
+          width: (soundRecordNotifier.isShow)
+              ? MediaQuery.of(context).size.width * .8
+              : 40,
           child: Stack(
             children: [
               Padding(
                 padding: EdgeInsetsDirectional.only(start: state.edge),
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: soundRecordNotifier.isShow ? BorderRadius.circular(12) : BorderRadius.circular(0),
+                    borderRadius: soundRecordNotifier.isShow
+                        ? BorderRadius.circular(12)
+                        : BorderRadius.circular(0),
                     color: ColorManager.transparent,
                   ),
                   child: Stack(
@@ -134,7 +141,8 @@ class SocialMediaRecorderS extends State<SocialMediaRecorder> {
                         soundRecorderState: state,
                         slideToCancelText: widget.slideToCancelText,
                       ),
-                      if (soundRecordNotifier.isShow) ShowCounter(soundRecorderState: state),
+                      if (soundRecordNotifier.isShow)
+                        ShowCounter(soundRecorderState: state),
                     ],
                   ),
                 ),

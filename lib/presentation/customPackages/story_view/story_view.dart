@@ -84,7 +84,8 @@ class StoryItem {
             bottom: Radius.circular(roundedBottom ? 8 : 0),
           ),
         ),
-        padding: const EdgeInsetsDirectional.only(start: 24, end: 24, top: 16, bottom: 16),
+        padding: const EdgeInsetsDirectional.only(
+            start: 24, end: 24, top: 16, bottom: 16),
         child: Center(
           child: Text(
             title,
@@ -128,9 +129,14 @@ class StoryItem {
             if (isThatMobile) ...[
               Align(
                   alignment: Alignment.center,
-                  child: NetworkDisplay(url: url, isThatImage: isThatImage, blurHash: blurHash)),
+                  child: NetworkDisplay(
+                      url: url, isThatImage: isThatImage, blurHash: blurHash)),
             ] else ...[
-              StoryImageForWeb(url, controller: controller, isThatImage: isThatImage, fit: imageFit, key: key)
+              StoryImageForWeb(url,
+                  controller: controller,
+                  isThatImage: isThatImage,
+                  fit: imageFit,
+                  key: key)
             ],
             SafeArea(
               child: Align(
@@ -140,8 +146,11 @@ class StoryItem {
                   margin: const EdgeInsetsDirectional.only(
                     bottom: 24,
                   ),
-                  padding: const EdgeInsetsDirectional.only(start: 24, end: 24, bottom: 8, top: 8),
-                  color: caption != null ? ColorManager.black54 : ColorManager.transparent,
+                  padding: const EdgeInsetsDirectional.only(
+                      start: 24, end: 24, bottom: 8, top: 8),
+                  color: caption != null
+                      ? ColorManager.black54
+                      : ColorManager.transparent,
                   child: caption != null
                       ? Text(
                           caption,
@@ -206,14 +215,22 @@ class StoryItem {
                           videoUrl: url,
                           blurHash: blurHash,
                         )
-                      : NetworkDisplay(url: url, isThatImage: isThatImage, blurHash: blurHash),
+                      : NetworkDisplay(
+                          url: url,
+                          isThatImage: isThatImage,
+                          blurHash: blurHash),
                 ), // StoryImage.url(
               ] else ...[
-                StoryImageForWeb(url, controller: controller, isThatImage: isThatImage, fit: imageFit, key: key)
+                StoryImageForWeb(url,
+                    controller: controller,
+                    isThatImage: isThatImage,
+                    fit: imageFit,
+                    key: key)
               ],
               Container(
                 margin: const EdgeInsetsDirectional.only(bottom: 16),
-                padding: const EdgeInsetsDirectional.only(start: 24, end: 24, top: 8, bottom: 8),
+                padding: const EdgeInsetsDirectional.only(
+                    start: 24, end: 24, top: 8, bottom: 8),
                 child: Align(
                   alignment: Alignment.bottomLeft,
                   child: SizedBox(
@@ -262,12 +279,16 @@ class StoryItem {
                   child: Container(
                     width: double.infinity,
                     margin: const EdgeInsetsDirectional.only(bottom: 24),
-                    padding: const EdgeInsetsDirectional.only(start: 24, end: 24, bottom: 8, top: 8),
-                    color: caption != null ? ColorManager.black54 : ColorManager.transparent,
+                    padding: const EdgeInsetsDirectional.only(
+                        start: 24, end: 24, bottom: 8, top: 8),
+                    color: caption != null
+                        ? ColorManager.black54
+                        : ColorManager.transparent,
                     child: caption != null
                         ? Text(
                             caption,
-                            style: const TextStyle(fontSize: 15, color: ColorManager.white),
+                            style: const TextStyle(
+                                fontSize: 15, color: ColorManager.white),
                             textAlign: TextAlign.center,
                           )
                         : const SizedBox(),
@@ -313,8 +334,10 @@ class StoryItem {
                   child: Container(
                     width: double.infinity,
                     margin: const EdgeInsetsDirectional.only(bottom: 24),
-                    padding: const EdgeInsetsDirectional.only(start: 24, end: 24, bottom: 8, top: 8),
-                    color: caption != null ? Colors.black54 : Colors.transparent,
+                    padding: const EdgeInsetsDirectional.only(
+                        start: 24, end: 24, bottom: 8, top: 8),
+                    color:
+                        caption != null ? Colors.black54 : Colors.transparent,
                     child: caption != null
                         ? Text(
                             caption,
@@ -359,7 +382,8 @@ class StoryItem {
             image: DecorationImage(image: image, fit: BoxFit.cover)),
         child: Container(
           margin: const EdgeInsetsDirectional.only(bottom: 16),
-          padding: const EdgeInsetsDirectional.only(start: 24, end: 24, bottom: 8, top: 8),
+          padding: const EdgeInsetsDirectional.only(
+              start: 24, end: 24, bottom: 8, top: 8),
           child: Align(
             alignment: Alignment.bottomLeft,
             child: SizedBox(
@@ -465,7 +489,8 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
       });
     }
 
-    _playbackSubscription = widget.controller.playbackNotifier.listen((playbackStatus) {
+    _playbackSubscription =
+        widget.controller.playbackNotifier.listen((playbackStatus) {
       switch (playbackStatus) {
         case PlaybackState.play:
           _removeNextHold();
@@ -519,7 +544,8 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
       widget.onStoryShow!(storyItem);
     }
 
-    _animationController = AnimationController(duration: storyItem.duration, vsync: this);
+    _animationController =
+        AnimationController(duration: storyItem.duration, vsync: this);
 
     _animationController!.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -533,7 +559,8 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
       }
     });
 
-    _currentAnimation = Tween(begin: 0.0, end: 1.0).animate(_animationController!);
+    _currentAnimation =
+        Tween(begin: 0.0, end: 1.0).animate(_animationController!);
 
     widget.controller.play();
   }
@@ -593,7 +620,8 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
       }
     } else {
       // this is the last page, progress animation should skip to end
-      _animationController!.animateTo(1.0, duration: const Duration(milliseconds: 10));
+      _animationController!
+          .animateTo(1.0, duration: const Duration(milliseconds: 10));
     }
   }
 
@@ -623,17 +651,24 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
             opacity: widget.opacityLevel,
             duration: const Duration(milliseconds: 250),
             child: Align(
-              alignment: widget.progressPosition == ProgressPosition.top ? Alignment.topCenter : Alignment.bottomCenter,
+              alignment: widget.progressPosition == ProgressPosition.top
+                  ? Alignment.topCenter
+                  : Alignment.bottomCenter,
               child: SafeArea(
                 bottom: widget.inline ? false : true,
                 // we use SafeArea here for notched and bezeles phones
                 child: Container(
-                  padding: const EdgeInsetsDirectional.only(start: 16, end: 16, bottom: 8, top: 8),
+                  padding: const EdgeInsetsDirectional.only(
+                      start: 16, end: 16, bottom: 8, top: 8),
                   child: PageBar(
-                    widget.storyItems.map((it) => PageData(it!.duration, it.shown)).toList(),
+                    widget.storyItems
+                        .map((it) => PageData(it!.duration, it.shown))
+                        .toList(),
                     _currentAnimation,
                     key: UniqueKey(),
-                    indicatorHeight: widget.inline ? IndicatorHeight.small : IndicatorHeight.large,
+                    indicatorHeight: widget.inline
+                        ? IndicatorHeight.small
+                        : IndicatorHeight.large,
                   ),
                 ),
               ),
@@ -681,8 +716,10 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                     : (details) {
                         widget.controller.play();
                         // finish up drag cycle
-                        if (!verticalDragInfo!.cancel && widget.onVerticalSwipeComplete != null) {
-                          widget.onVerticalSwipeComplete!(verticalDragInfo!.direction);
+                        if (!verticalDragInfo!.cancel &&
+                            widget.onVerticalSwipeComplete != null) {
+                          widget.onVerticalSwipeComplete!(
+                              verticalDragInfo!.direction);
                         }
 
                         verticalDragInfo = null;
@@ -768,10 +805,12 @@ class PageBarState extends State<PageBar> {
       children: widget.pages.map((it) {
         return Expanded(
           child: Container(
-            padding: EdgeInsetsDirectional.only(end: widget.pages.last == it ? 0 : spacing),
+            padding: EdgeInsetsDirectional.only(
+                end: widget.pages.last == it ? 0 : spacing),
             child: StoryProgressIndicator(
               isPlaying(it) ? widget.animation!.value : (it.shown ? 1 : 0),
-              indicatorHeight: widget.indicatorHeight == IndicatorHeight.large ? 3 : 1.3,
+              indicatorHeight:
+                  widget.indicatorHeight == IndicatorHeight.large ? 3 : 1.3,
             ),
           ),
         );
@@ -821,7 +860,9 @@ class IndicatorOval extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..color = color;
     canvas.drawRRect(
-        RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width * widthFactor, size.height), const Radius.circular(3)),
+        RRect.fromRectAndRadius(
+            Rect.fromLTWH(0, 0, size.width * widthFactor, size.height),
+            const Radius.circular(3)),
         paint);
   }
 
@@ -836,13 +877,16 @@ class ContrastHelper {
   static double luminance(int? r, int? g, int? b) {
     final a = [r, g, b].map((it) {
       double value = it!.toDouble() / 255.0;
-      return value <= 0.03928 ? value / 12.92 : pow((value + 0.055) / 1.055, 2.4);
+      return value <= 0.03928
+          ? value / 12.92
+          : pow((value + 0.055) / 1.055, 2.4);
     }).toList();
 
     return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
   }
 
   static double contrast(List<int> rgb1, List<int> rgb2) {
-    return luminance(rgb2[0], rgb2[1], rgb2[2]) / luminance(rgb1[0], rgb1[1], rgb1[2]);
+    return luminance(rgb2[0], rgb2[1], rgb2[2]) /
+        luminance(rgb1[0], rgb1[1], rgb1[2]);
   }
 }

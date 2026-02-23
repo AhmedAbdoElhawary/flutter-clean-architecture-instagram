@@ -38,8 +38,9 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
         );
 
   static InViewState? of(BuildContext context) {
-    final InheritedInViewWidget widget =
-        context.getElementForInheritedWidgetOfExactType<InheritedInViewWidget>()!.widget as InheritedInViewWidget;
+    final InheritedInViewWidget widget = context
+        .getElementForInheritedWidgetOfExactType<InheritedInViewWidget>()!
+        .widget as InheritedInViewWidget;
     return widget.inViewState;
   }
 }

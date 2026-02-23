@@ -51,8 +51,10 @@ class _SendToUsersState extends State<SendToUsers> {
     return BlocBuilder<UsersInfoCubit, UsersInfoState>(
       bloc: BlocProvider.of<UsersInfoCubit>(context)
         ..getFollowersAndFollowingsInfo(
-            followersIds: myPersonalInfo.followerPeople, followingsIds: myPersonalInfo.followedPeople),
-      buildWhen: (previous, current) => previous != current && (current is CubitFollowersAndFollowingsLoaded),
+            followersIds: myPersonalInfo.followerPeople,
+            followingsIds: myPersonalInfo.followedPeople),
+      buildWhen: (previous, current) =>
+          previous != current && (current is CubitFollowersAndFollowingsLoaded),
       builder: (context, state) {
         if (state is CubitFollowersAndFollowingsLoaded) {
           return buildBodyOfSheet(state);
@@ -77,7 +79,8 @@ class _SendToUsersState extends State<SendToUsers> {
   }
 
   Widget buildBodyOfSheet(CubitFollowersAndFollowingsLoaded state) {
-    List<UserPersonalInfo> usersInfo = state.followersAndFollowingsInfo.followersInfo;
+    List<UserPersonalInfo> usersInfo =
+        state.followersAndFollowingsInfo.followersInfo;
     for (final i in state.followersAndFollowingsInfo.followingsInfo) {
       if (!usersInfo.contains(i)) usersInfo.add(i);
     }
@@ -107,29 +110,36 @@ class _SendToUsersState extends State<SendToUsers> {
     );
   }
 
-  Padding buildUsers(List<UserPersonalInfo> usersInfo, List<UserPersonalInfo> selectedUsersValue) {
+  Padding buildUsers(List<UserPersonalInfo> usersInfo,
+      List<UserPersonalInfo> selectedUsersValue) {
     return Padding(
-      padding: EdgeInsetsDirectional.only(start: 20, bottom: isThatMobile ? 60 : 5),
+      padding:
+          EdgeInsetsDirectional.only(start: 20, bottom: isThatMobile ? 60 : 5),
       child: ListView.separated(
         shrinkWrap: widget.freezeListScroll,
         primary: !widget.freezeListScroll,
-        physics: widget.freezeListScroll ? const NeverScrollableScrollPhysics() : null,
+        physics: widget.freezeListScroll
+            ? const NeverScrollableScrollPhysics()
+            : null,
         addAutomaticKeepAlives: false,
         addRepaintBoundaries: false,
-        itemBuilder: (context, index) => buildUserInfo(context, usersInfo[index], selectedUsersValue),
+        itemBuilder: (context, index) =>
+            buildUserInfo(context, usersInfo[index], selectedUsersValue),
         itemCount: usersInfo.length,
         separatorBuilder: (context, _) => const SizedBox(height: 15),
       ),
     );
   }
 
-  Row buildUserInfo(BuildContext context, UserPersonalInfo userInfo, List<UserPersonalInfo> selectedUsersValue) {
+  Row buildUserInfo(BuildContext context, UserPersonalInfo userInfo,
+      List<UserPersonalInfo> selectedUsersValue) {
     return Row(
       children: [
         CircleAvatar(
           backgroundColor: ColorManager.customGrey,
           backgroundImage: userInfo.profileImageUrl.isNotEmpty
-              ? CachedNetworkImageProvider(userInfo.profileImageUrl, maxWidth: 92, maxHeight: 92)
+              ? CachedNetworkImageProvider(userInfo.profileImageUrl,
+                  maxWidth: 92, maxHeight: 92)
               : null,
           radius: 23,
           child: userInfo.profileImageUrl.isEmpty
@@ -161,7 +171,8 @@ class _SendToUsersState extends State<SendToUsers> {
           padding: const EdgeInsetsDirectional.only(end: 20),
           child: GestureDetector(
             onTap: () async {
-              List<UserPersonalInfo> selectedUsers = widget.selectedUsersInfo.value;
+              List<UserPersonalInfo> selectedUsers =
+                  widget.selectedUsersInfo.value;
               setState(() {
                 if (!selectedUsersValue.contains(userInfo)) {
                   selectedUsers.add(userInfo);
@@ -169,7 +180,8 @@ class _SendToUsersState extends State<SendToUsers> {
                   selectedUsers.remove(userInfo);
                 }
 
-                if (widget.maxExtentUsersList != null && selectedUsers.length > 5) {
+                if (widget.maxExtentUsersList != null &&
+                    selectedUsers.length > 5) {
                   widget.maxExtentUsersList!();
                 }
 
@@ -184,15 +196,23 @@ class _SendToUsersState extends State<SendToUsers> {
   }
 
   Widget whichChild(BuildContext context, bool selectedUserValue) {
-    return widget.checkBox ? checkBox(context, selectedUserValue) : whichContainerOfText(context, selectedUserValue);
+    return widget.checkBox
+        ? checkBox(context, selectedUserValue)
+        : whichContainerOfText(context, selectedUserValue);
   }
 
   Widget checkBox(BuildContext context, bool selectedUserValue) {
     return Container(
       padding: const EdgeInsetsDirectional.all(2),
       decoration: BoxDecoration(
-        color: !selectedUserValue ? Theme.of(context).primaryColor : ColorManager.blue,
-        border: Border.all(color: !selectedUserValue ? ColorManager.darkGray : ColorManager.transparent, width: 2),
+        color: !selectedUserValue
+            ? Theme.of(context).primaryColor
+            : ColorManager.blue,
+        border: Border.all(
+            color: !selectedUserValue
+                ? ColorManager.darkGray
+                : ColorManager.transparent,
+            width: 2),
         borderRadius: BorderRadius.circular(50.0),
       ),
       child: const Center(
@@ -203,18 +223,24 @@ class _SendToUsersState extends State<SendToUsers> {
 
   Widget whichContainerOfText(BuildContext context, bool selectedUserValue) {
     return !selectedUserValue
-        ? containerOfFollowText(context, StringsManager.send.tr, selectedUserValue)
-        : containerOfFollowText(context, StringsManager.undo.tr, selectedUserValue);
+        ? containerOfFollowText(
+            context, StringsManager.send.tr, selectedUserValue)
+        : containerOfFollowText(
+            context, StringsManager.undo.tr, selectedUserValue);
   }
 
-  Widget containerOfFollowText(BuildContext context, String text, bool selectedUserValue) {
+  Widget containerOfFollowText(
+      BuildContext context, String text, bool selectedUserValue) {
     return Container(
       height: 30.0,
       padding: const EdgeInsetsDirectional.only(start: 17, end: 17),
       decoration: BoxDecoration(
-        color: selectedUserValue ? Theme.of(context).primaryColor : ColorManager.blue,
+        color: selectedUserValue
+            ? Theme.of(context).primaryColor
+            : ColorManager.blue,
         border: Border.all(
-          color: selectedUserValue ? ColorManager.grey : ColorManager.transparent,
+          color:
+              selectedUserValue ? ColorManager.grey : ColorManager.transparent,
         ),
         borderRadius: BorderRadius.circular(6.0),
       ),
@@ -223,7 +249,9 @@ class _SendToUsersState extends State<SendToUsers> {
           text,
           style: TextStyle(
               fontSize: 15.0,
-              color: selectedUserValue ? Theme.of(context).focusColor : ColorManager.white,
+              color: selectedUserValue
+                  ? Theme.of(context).focusColor
+                  : ColorManager.white,
               fontWeight: FontWeight.w500),
         ),
       ),

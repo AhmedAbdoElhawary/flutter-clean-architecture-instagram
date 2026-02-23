@@ -11,22 +11,33 @@ import '../../../../core/utility/constant.dart';
 import 'package:instagram/data/models/parent_classes/without_sub_classes/push_notification.dart';
 
 class FireStoreUser {
-  static final _fireStoreUserCollection = FirebaseFirestore.instance.collection('users');
+  static final _fireStoreUserCollection =
+      FirebaseFirestore.instance.collection('users');
 
   static Future<void> createUser(UserPersonalInfo newUserInfo) async {
-    await _fireStoreUserCollection.doc(newUserInfo.userId).set(newUserInfo.toMap());
+    await _fireStoreUserCollection
+        .doc(newUserInfo.userId)
+        .set(newUserInfo.toMap());
   }
 
   static Future<List<bool>> updateChannelId(
-      {required List<UserPersonalInfo> callThoseUsers, required String myPersonalId, required String channelId}) async {
-    await _fireStoreUserCollection.doc(myPersonalId).update({"channelId": channelId});
+      {required List<UserPersonalInfo> callThoseUsers,
+      required String myPersonalId,
+      required String channelId}) async {
+    await _fireStoreUserCollection
+        .doc(myPersonalId)
+        .update({"channelId": channelId});
     List<bool> isUsersAvailable = [];
     for (final user in callThoseUsers) {
-      DocumentSnapshot<Map<String, dynamic>> collection = await _fireStoreUserCollection.doc(user.userId).get();
-      UserPersonalInfo userInfo = UserPersonalInfo.fromDocSnap(collection.data());
+      DocumentSnapshot<Map<String, dynamic>> collection =
+          await _fireStoreUserCollection.doc(user.userId).get();
+      UserPersonalInfo userInfo =
+          UserPersonalInfo.fromDocSnap(collection.data());
       if (userInfo.channelId.isEmpty) {
         isUsersAvailable.add(true);
-        await _fireStoreUserCollection.doc(user.userId).update({"channelId": channelId});
+        await _fireStoreUserCollection
+            .doc(user.userId)
+            .update({"channelId": channelId});
       } else {
         isUsersAvailable.add(false);
       }
@@ -34,21 +45,25 @@ class FireStoreUser {
     return isUsersAvailable;
   }
 
-  static Future<void> updateChatsOfGroups({required Message messageInfo}) async {
+  static Future<void> updateChatsOfGroups(
+      {required Message messageInfo}) async {
     for (final userId in messageInfo.receiversIds) {
       await _fireStoreUserCollection.doc(userId).update({
         "chatsOfGroups": FieldValue.arrayUnion([messageInfo.chatOfGroupId])
       });
 
-      await FireStoreUser.sendNotification(userId: userId, message: messageInfo);
+      await FireStoreUser.sendNotification(
+          userId: userId, message: messageInfo);
     }
     await _fireStoreUserCollection.doc(messageInfo.senderId).update({
       "chatsOfGroups": FieldValue.arrayUnion([messageInfo.chatOfGroupId])
     });
   }
 
-  static Future<void> sendNotification({required String userId, required Message message}) async {
-    DocumentReference<Map<String, dynamic>> userCollection = _fireStoreUserCollection.doc(userId);
+  static Future<void> sendNotification(
+      {required String userId, required Message message}) async {
+    DocumentReference<Map<String, dynamic>> userCollection =
+        _fireStoreUserCollection.doc(userId);
     if (userId != myPersonalId) {
       userCollection.update({"numberOfNewMessages": FieldValue.increment(1)});
       UserPersonalInfo receiverInfo = await getUserInfo(userId);
@@ -56,21 +71,28 @@ class FireStoreUser {
       if (token.isNotEmpty) {
         String body = message.message.isNotEmpty
             ? message.message
-            : (message.isThatImage ? "Send image" : (message.isThatPost ? "Share with you a post" : "Send message"));
+            : (message.isThatImage
+                ? "Send image"
+                : (message.isThatPost
+                    ? "Share with you a post"
+                    : "Send message"));
         PushNotification detail = PushNotification(
           title: message.senderInfo?.name ?? "A user",
           body: body,
           deviceToken: token,
           isThatGroupChat: message.isThatGroup,
           notificationRoute: "message",
-          routeParameterId: message.isThatGroup ? message.chatOfGroupId : message.senderId,
+          routeParameterId:
+              message.isThatGroup ? message.chatOfGroupId : message.senderId,
         );
-        await DeviceNotification.sendPopupNotification(pushNotification: detail);
+        await DeviceNotification.sendPopupNotification(
+            pushNotification: detail);
       }
     }
   }
 
-  static Future<void> clearChannelsIds({required List<dynamic> usersIds, required String myPersonalId}) async {
+  static Future<void> clearChannelsIds(
+      {required List<dynamic> usersIds, required String myPersonalId}) async {
     await _fireStoreUserCollection.doc(myPersonalId).update({"channelId": ""});
     for (final userId in usersIds) {
       await _fireStoreUserCollection.doc(userId).update({"channelId": ""});
@@ -82,7 +104,8 @@ class FireStoreUser {
   }
 
   static Future<UserPersonalInfo> getUserInfo(dynamic userId) async {
-    DocumentSnapshot<Map<String, dynamic>> snap = await _fireStoreUserCollection.doc(userId).get();
+    DocumentSnapshot<Map<String, dynamic>> snap =
+        await _fireStoreUserCollection.doc(userId).get();
     if (snap.exists) {
       return UserPersonalInfo.fromDocSnap(snap.data());
     } else {
@@ -104,13 +127,16 @@ class FireStoreUser {
     }
   }
 
-  static Future<List<UserPersonalInfo>> getAllUnFollowersUsers(UserPersonalInfo myPersonalInfo) async {
-    QuerySnapshot<Map<String, dynamic>> snap = await _fireStoreUserCollection.get();
+  static Future<List<UserPersonalInfo>> getAllUnFollowersUsers(
+      UserPersonalInfo myPersonalInfo) async {
+    QuerySnapshot<Map<String, dynamic>> snap =
+        await _fireStoreUserCollection.get();
     List<UserPersonalInfo> usersInfo = [];
     for (final doc in snap.docs) {
       UserPersonalInfo formatUser = UserPersonalInfo.fromDocSnap(doc.data());
       bool isThatMe = formatUser.userId == myPersonalInfo.userId;
-      bool isThatUserFollowedByMe = !myPersonalInfo.followedPeople.contains(formatUser.userId);
+      bool isThatUserFollowedByMe =
+          !myPersonalInfo.followedPeople.contains(formatUser.userId);
       if (!isThatMe && isThatUserFollowedByMe) {
         usersInfo.add(formatUser);
       }
@@ -119,7 +145,8 @@ class FireStoreUser {
   }
 
   static Stream<List<UserPersonalInfo>> getAllUsers() {
-    Stream<QuerySnapshot<Map<String, dynamic>>> snapshots = _fireStoreUserCollection.snapshots();
+    Stream<QuerySnapshot<Map<String, dynamic>>> snapshots =
+        _fireStoreUserCollection.snapshots();
     return snapshots.map((snapshot) {
       List<UserPersonalInfo> usersInfo = [];
       for (final doc in snapshot.docs) {
@@ -141,13 +168,16 @@ class FireStoreUser {
     List<dynamic> ids = [];
     for (final userid in usersIds) {
       if (!ids.contains(userid)) {
-        DocumentSnapshot<Map<String, dynamic>> snap = await _fireStoreUserCollection.doc(userid).get();
+        DocumentSnapshot<Map<String, dynamic>> snap =
+            await _fireStoreUserCollection.doc(userid).get();
         if (snap.exists) {
-          UserPersonalInfo postReformat = UserPersonalInfo.fromDocSnap(snap.data());
+          UserPersonalInfo postReformat =
+              UserPersonalInfo.fromDocSnap(snap.data());
           usersInfo.add(postReformat);
         } else {
           if (fieldName.isNotEmpty && userUid.isNotEmpty) {
-            await arrayRemoveOfField(removeThisId: userid, userUid: userUid, fieldName: fieldName);
+            await arrayRemoveOfField(
+                removeThisId: userid, userUid: userUid, fieldName: fieldName);
           }
         }
         ids.add(userid);
@@ -156,18 +186,22 @@ class FireStoreUser {
     return usersInfo;
   }
 
-  static Future<List<SenderInfo>> extractUsersChatInfo({required List<SenderInfo> messagesDetails}) async {
+  static Future<List<SenderInfo>> extractUsersChatInfo(
+      {required List<SenderInfo> messagesDetails}) async {
     for (int i = 0; i < messagesDetails.length; i++) {
       if (messagesDetails[i].lastMessage!.isThatGroup) {
-        messagesDetails[i] = await extractUsersForGroupChatInfo(messagesDetails[i]);
+        messagesDetails[i] =
+            await extractUsersForGroupChatInfo(messagesDetails[i]);
       } else {
-        messagesDetails[i] = await extractUsersForSingleChatInfo(messagesDetails[i]);
+        messagesDetails[i] =
+            await extractUsersForSingleChatInfo(messagesDetails[i]);
       }
     }
     return messagesDetails;
   }
 
-  static Future<SenderInfo> extractUsersForSingleChatInfo(SenderInfo usersInfo) async {
+  static Future<SenderInfo> extractUsersForSingleChatInfo(
+      SenderInfo usersInfo) async {
     if (usersInfo.lastMessage != null) {
       String userId;
       if (usersInfo.lastMessage?.senderId != myPersonalId) {
@@ -183,7 +217,8 @@ class FireStoreUser {
     return usersInfo;
   }
 
-  static Future<SenderInfo> extractUsersForGroupChatInfo(SenderInfo usersInfo) async {
+  static Future<SenderInfo> extractUsersForGroupChatInfo(
+      SenderInfo usersInfo) async {
     if (usersInfo.lastMessage != null) {
       for (final receiverId in usersInfo.lastMessage!.receiversIds) {
         UserPersonalInfo userInfo = await getUserInfo(receiverId);
@@ -204,12 +239,15 @@ class FireStoreUser {
     return usersInfo;
   }
 
-  static Future<List<SenderInfo>> getMessagesOfChat({required String userId}) async {
+  static Future<List<SenderInfo>> getMessagesOfChat(
+      {required String userId}) async {
     List<SenderInfo> allUsers = [];
 
-    DocumentReference<Map<String, dynamic>> userCollection = _fireStoreUserCollection.doc(userId);
+    DocumentReference<Map<String, dynamic>> userCollection =
+        _fireStoreUserCollection.doc(userId);
     userCollection.update({'numberOfNewMessages': 0});
-    QuerySnapshot<Map<String, dynamic>> snap = await userCollection.collection("chats").get();
+    QuerySnapshot<Map<String, dynamic>> snap =
+        await userCollection.collection("chats").get();
 
     for (final chatInfo in snap.docs) {
       QueryDocumentSnapshot<Map<String, dynamic>> query = chatInfo;
@@ -220,26 +258,35 @@ class FireStoreUser {
   }
 
   static Future<SenderInfo> getChatOfUser({required String chatUid}) async {
-    DocumentReference<Map<String, dynamic>> userCollection = _fireStoreUserCollection.doc(myPersonalId);
+    DocumentReference<Map<String, dynamic>> userCollection =
+        _fireStoreUserCollection.doc(myPersonalId);
     userCollection.update({'numberOfNewMessages': 0});
-    DocumentSnapshot<Map<String, dynamic>> doc = await userCollection.collection("chats").doc(chatUid).get();
+    DocumentSnapshot<Map<String, dynamic>> doc =
+        await userCollection.collection("chats").doc(chatUid).get();
     Message messageInfo = Message.fromJson(doc: doc);
     return SenderInfo(lastMessage: messageInfo);
   }
 
-  static Future<void> updateProfileImage({required String imageUrl, required String userId}) async {
+  static Future<void> updateProfileImage(
+      {required String imageUrl, required String userId}) async {
     await _fireStoreUserCollection.doc(userId).update({
       "profileImageUrl": imageUrl,
     });
   }
 
   static Future<void> updateUserInfo(UserPersonalInfo userInfo) async {
-    await _fireStoreUserCollection.doc(userInfo.userId).update(userInfo.toMap());
+    await _fireStoreUserCollection
+        .doc(userInfo.userId)
+        .update(userInfo.toMap());
   }
 
-  static Future<UserPersonalInfo?> getUserFromUserName({required String userName}) async {
+  static Future<UserPersonalInfo?> getUserFromUserName(
+      {required String userName}) async {
     UserPersonalInfo? userPersonalInfo;
-    await _fireStoreUserCollection.where('userName', isEqualTo: userName).get().then((snapshot) {
+    await _fireStoreUserCollection
+        .where('userName', isEqualTo: userName)
+        .get()
+        .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         QueryDocumentSnapshot<Map<String, dynamic>> snap = snapshot.docs[0];
         userPersonalInfo = UserPersonalInfo.fromDocSnap(snap.data());
@@ -248,16 +295,20 @@ class FireStoreUser {
     return userPersonalInfo;
   }
 
-  static Future<void> updateUserPosts({required String userId, required Post postInfo}) async {
-    DocumentReference<Map<String, dynamic>> collection = _fireStoreUserCollection.doc(userId);
+  static Future<void> updateUserPosts(
+      {required String userId, required Post postInfo}) async {
+    DocumentReference<Map<String, dynamic>> collection =
+        _fireStoreUserCollection.doc(userId);
     await collection.update({
       'posts': FieldValue.arrayUnion([postInfo.postUid]),
     });
     return await _updateThreeLastPostUrl(userId, postInfo);
   }
 
-  static Future<void> _updateThreeLastPostUrl(String userId, Post postInfo) async {
-    DocumentReference<Map<String, dynamic>> collection = _fireStoreUserCollection.doc(userId);
+  static Future<void> _updateThreeLastPostUrl(
+      String userId, Post postInfo) async {
+    DocumentReference<Map<String, dynamic>> collection =
+        _fireStoreUserCollection.doc(userId);
     Map<String, dynamic>? snap = (await collection.get()).data();
     List<dynamic> lastPosts = snap?["lastThreePostUrls"] ??= [];
     if (lastPosts.length >= 3) lastPosts = lastPosts.sublist(0, 3);
@@ -269,12 +320,15 @@ class FireStoreUser {
       if (postInfo.coverOfVideoUrl.isEmpty) return;
       lastPosts.add(postInfo.coverOfVideoUrl);
     }
-    return await collection.update({'lastThreePostUrls': FieldValue.arrayUnion(lastPosts)});
+    return await collection
+        .update({'lastThreePostUrls': FieldValue.arrayUnion(lastPosts)});
   }
 
   static Future<void> removeUserPost({required String postId}) async {
     QuerySnapshot<Map<String, dynamic>> document =
-        await _fireStoreUserCollection.where("posts", arrayContains: postId).get();
+        await _fireStoreUserCollection
+            .where("posts", arrayContains: postId)
+            .get();
     for (var element in document.docs) {
       _fireStoreUserCollection.doc(element.id).update({
         'posts': FieldValue.arrayRemove([postId])
@@ -282,13 +336,15 @@ class FireStoreUser {
     }
   }
 
-  static Future<void> updateUserStories({required String userId, required String storyId}) async {
+  static Future<void> updateUserStories(
+      {required String userId, required String storyId}) async {
     await _fireStoreUserCollection.doc(userId).update({
       'stories': FieldValue.arrayUnion([storyId])
     });
   }
 
-  static Future<void> followThisUser(String followingUserId, String myPersonalId) async {
+  static Future<void> followThisUser(
+      String followingUserId, String myPersonalId) async {
     await _fireStoreUserCollection.doc(followingUserId).update({
       'followers': FieldValue.arrayUnion([myPersonalId])
     });
@@ -298,7 +354,8 @@ class FireStoreUser {
     });
   }
 
-  static Future<void> unFollowThisUser(String followingUserId, String myPersonalId) async {
+  static Future<void> unFollowThisUser(
+      String followingUserId, String myPersonalId) async {
     await _fireStoreUserCollection.doc(followingUserId).update({
       'followers': FieldValue.arrayRemove([myPersonalId])
     });
@@ -329,7 +386,8 @@ class FireStoreUser {
     List<dynamic> usersIdsUnique = [];
     for (int i = 0; i < usersIds.length; i++) {
       if (!usersIdsUnique.contains(usersIds[i])) {
-        DocumentSnapshot<Map<String, dynamic>> snap = await _fireStoreUserCollection.doc(usersIds[i]).get();
+        DocumentSnapshot<Map<String, dynamic>> snap =
+            await _fireStoreUserCollection.doc(usersIds[i]).get();
         if (snap.exists) {
           postsInfo += snap.get('posts');
         }
@@ -339,13 +397,18 @@ class FireStoreUser {
     return postsInfo;
   }
 
-  static Stream<List<UserPersonalInfo>> searchAboutUser({required String name, required bool searchForSingleLetter}) {
+  static Stream<List<UserPersonalInfo>> searchAboutUser(
+      {required String name, required bool searchForSingleLetter}) {
     name = name.toLowerCase();
     Stream<QuerySnapshot<Map<String, dynamic>>> snapSearch;
     if (searchForSingleLetter) {
-      snapSearch = _fireStoreUserCollection.where("userName", isEqualTo: name).snapshots();
+      snapSearch = _fireStoreUserCollection
+          .where("userName", isEqualTo: name)
+          .snapshots();
     } else {
-      snapSearch = _fireStoreUserCollection.where("charactersOfName", arrayContains: name).snapshots();
+      snapSearch = _fireStoreUserCollection
+          .where("charactersOfName", arrayContains: name)
+          .snapshots();
     }
     return snapSearch.map((snapshot) => snapshot.docs.map((doc) {
           UserPersonalInfo userInfo = UserPersonalInfo.fromDocSnap(doc.data());

@@ -24,7 +24,8 @@ class AllCatchUpIcon extends StatelessWidget {
             child: SvgPicture.asset(
               IconsAssets.noMoreData,
               height: size,
-              colorFilter: const ColorFilter.mode(ColorManager.white, BlendMode.srcIn),
+              colorFilter:
+                  const ColorFilter.mode(ColorManager.white, BlendMode.srcIn),
             ),
           ),
           shaderCallback: (Rect bounds) {
@@ -41,9 +42,11 @@ class AllCatchUpIcon extends StatelessWidget {
           },
         ),
         const SizedBox(height: 5),
-        Text(StringsManager.allCaughtUp.tr, style: Theme.of(context).textTheme.displaySmall),
+        Text(StringsManager.allCaughtUp.tr,
+            style: Theme.of(context).textTheme.displaySmall),
         const SizedBox(height: 15),
-        Text(StringsManager.noMorePostToday.tr, style: Theme.of(context).textTheme.displayLarge),
+        Text(StringsManager.noMorePostToday.tr,
+            style: Theme.of(context).textTheme.displayLarge),
       ],
     );
   }

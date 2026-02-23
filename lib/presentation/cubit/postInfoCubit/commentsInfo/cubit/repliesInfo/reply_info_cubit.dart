@@ -12,13 +12,17 @@ class ReplyInfoCubit extends Cubit<ReplyInfoState> {
   final GetRepliesOfThisCommentUseCase _getRepliesOfThisCommentUseCase;
   List<Comment> repliesOnComment = [];
 
-  ReplyInfoCubit(this._getRepliesOfThisCommentUseCase, this._replyOnThisCommentUseCase) : super(ReplyInfoInitial());
+  ReplyInfoCubit(
+      this._getRepliesOfThisCommentUseCase, this._replyOnThisCommentUseCase)
+      : super(ReplyInfoInitial());
 
   static ReplyInfoCubit get(BuildContext context) => BlocProvider.of(context);
 
   Future<void> getRepliesOfThisComment({required String commentId}) async {
     emit(CubitReplyInfoLoading());
-    await _getRepliesOfThisCommentUseCase.call(params: commentId).then((repliesInfo) {
+    await _getRepliesOfThisCommentUseCase
+        .call(params: commentId)
+        .then((repliesInfo) {
       repliesOnComment = repliesInfo;
       emit(CubitReplyInfoLoaded(repliesInfo));
     }).catchError((e) {
@@ -28,7 +32,9 @@ class ReplyInfoCubit extends Cubit<ReplyInfoState> {
 
   Future<void> replyOnThisComment({required Comment replyInfo}) async {
     emit(CubitReplyInfoLoading());
-    await _replyOnThisCommentUseCase.call(params: replyInfo).then((updatedReplyInfo) {
+    await _replyOnThisCommentUseCase
+        .call(params: replyInfo)
+        .then((updatedReplyInfo) {
       repliesOnComment = [updatedReplyInfo] + repliesOnComment;
       emit(CubitReplyInfoLoaded(repliesOnComment));
     }).catchError((e) {

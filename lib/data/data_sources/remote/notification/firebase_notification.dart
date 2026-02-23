@@ -9,9 +9,11 @@ import 'package:instagram/domain/entities/notification_check.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FireStoreNotification {
-  static final _fireStoreUserCollection = FirebaseFirestore.instance.collection('users');
+  static final _fireStoreUserCollection =
+      FirebaseFirestore.instance.collection('users');
   static Future<UserPersonalInfo> createNewDeviceToken(
-      {required String userId, required UserPersonalInfo myPersonalInfo}) async {
+      {required String userId,
+      required UserPersonalInfo myPersonalInfo}) async {
     final SharedPreferences sharePrefs = injector<SharedPreferences>();
 
     String? token = await FirebaseMessaging.instance.getToken();
@@ -28,33 +30,46 @@ class FireStoreNotification {
     await _fireStoreUserCollection.doc(userId).update({'deviceToken': ""});
   }
 
-  static Future<String> createNotification(CustomNotification newNotification) async {
-    DocumentReference<Map<String, dynamic>> userCollection = _fireStoreUserCollection.doc(newNotification.receiverId);
-    userCollection.update({"numberOfNewNotifications": FieldValue.increment(1)});
-    UserPersonalInfo receiverInfo = await FireStoreUser.getUserInfo(newNotification.receiverId);
+  static Future<String> createNotification(
+      CustomNotification newNotification) async {
+    DocumentReference<Map<String, dynamic>> userCollection =
+        _fireStoreUserCollection.doc(newNotification.receiverId);
+    userCollection
+        .update({"numberOfNewNotifications": FieldValue.increment(1)});
+    UserPersonalInfo receiverInfo =
+        await FireStoreUser.getUserInfo(newNotification.receiverId);
     String token = receiverInfo.deviceToken;
     if (token.isNotEmpty) {
-      await DeviceNotification.pushNotification(customNotification: newNotification, token: token);
+      await DeviceNotification.pushNotification(
+          customNotification: newNotification, token: token);
     }
     return await _createNotification(newNotification);
   }
 
-  static Future<String> _createNotification(CustomNotification newNotification) async {
-    DocumentReference<Map<String, dynamic>> userCollection = _fireStoreUserCollection.doc(newNotification.receiverId);
+  static Future<String> _createNotification(
+      CustomNotification newNotification) async {
+    DocumentReference<Map<String, dynamic>> userCollection =
+        _fireStoreUserCollection.doc(newNotification.receiverId);
 
-    CollectionReference<Map<String, dynamic>> collection = userCollection.collection("notifications");
-    DocumentReference<Map<String, dynamic>> addingCollection = await collection.add(newNotification.toMap());
+    CollectionReference<Map<String, dynamic>> collection =
+        userCollection.collection("notifications");
+    DocumentReference<Map<String, dynamic>> addingCollection =
+        await collection.add(newNotification.toMap());
 
     newNotification.notificationUid = addingCollection.id;
-    await addingCollection.update({"notificationUid": newNotification.notificationUid});
+    await addingCollection
+        .update({"notificationUid": newNotification.notificationUid});
 
     return newNotification.notificationUid;
   }
 
-  static Future<List<CustomNotification>> getNotifications({required String userId}) async {
-    DocumentReference<Map<String, dynamic>> userCollection = _fireStoreUserCollection.doc(userId);
+  static Future<List<CustomNotification>> getNotifications(
+      {required String userId}) async {
+    DocumentReference<Map<String, dynamic>> userCollection =
+        _fireStoreUserCollection.doc(userId);
     userCollection.update({"numberOfNewNotifications": 0});
-    QuerySnapshot<Map<String, dynamic>> snap = await userCollection.collection("notifications").get();
+    QuerySnapshot<Map<String, dynamic>> snap =
+        await userCollection.collection("notifications").get();
     List<CustomNotification> notifications = [];
     for (final doc in snap.docs) {
       final notification = CustomNotification.fromJson(doc.data());
@@ -64,9 +79,12 @@ class FireStoreNotification {
   }
 
   // delete notification
-  static Future<void> deleteNotification({required NotificationCheck notificationCheck}) async {
+  static Future<void> deleteNotification(
+      {required NotificationCheck notificationCheck}) async {
     CollectionReference<Map<String, dynamic>> collection =
-        _fireStoreUserCollection.doc(notificationCheck.receiverId).collection("notifications");
+        _fireStoreUserCollection
+            .doc(notificationCheck.receiverId)
+            .collection("notifications");
     QuerySnapshot<Map<String, dynamic>> getDoc;
     if (notificationCheck.isThatPost) {
       getDoc = await collection

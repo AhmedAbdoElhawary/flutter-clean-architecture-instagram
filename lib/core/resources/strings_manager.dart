@@ -66,7 +66,8 @@ class StringsManager {
   static const String pronouns = "pronouns";
   static const String website = "website";
   static const String bio = "bio";
-  static const String personalInformationSettings = "personalInformationSettings";
+  static const String personalInformationSettings =
+      "personalInformationSettings";
   static const String noRecordsYet = "noRecordsYet";
   static const String recordedSent = "recordedSent";
   static const String photoSent = "photoSent";

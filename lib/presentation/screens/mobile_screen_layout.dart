@@ -33,7 +33,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       builder: (BuildContext context, bool value, __) {
         return CupertinoTabScaffold(
             tabBar: CupertinoTabBar(
-                backgroundColor: value ? ColorManager.black : Theme.of(context).primaryColor,
+                backgroundColor:
+                    value ? ColorManager.black : Theme.of(context).primaryColor,
                 height: 45,
                 border: Border.all(color: ColorManager.transparent),
                 items: [
@@ -68,7 +69,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   }
 
   CupertinoTabView allUsersTimLinePage() => CupertinoTabView(
-        builder: (context) => CupertinoPageScaffold(child: AllUsersTimeLinePage()),
+        builder: (context) =>
+            CupertinoPageScaffold(child: AllUsersTimeLinePage()),
       );
 
   CupertinoTabView shopPage() => CupertinoTabView(
@@ -108,14 +110,18 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
         )),
       );
 
-  BottomNavigationBarItem personalImageItem() => const BottomNavigationBarItem(icon: PersonalImageIcon());
+  BottomNavigationBarItem personalImageItem() =>
+      const BottomNavigationBarItem(icon: PersonalImageIcon());
 
-  BottomNavigationBarItem navigationBarItem(String icon, bool value, {bool smallIcon = false}) {
+  BottomNavigationBarItem navigationBarItem(String icon, bool value,
+      {bool smallIcon = false}) {
     return BottomNavigationBarItem(
       icon: SvgPicture.asset(
         icon,
         height: smallIcon ? 23 : 25,
-        colorFilter: ColorFilter.mode(value ? ColorManager.white : Theme.of(context).focusColor, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(
+            value ? ColorManager.white : Theme.of(context).focusColor,
+            BlendMode.srcIn),
       ),
     );
   }

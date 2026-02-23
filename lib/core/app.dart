@@ -54,11 +54,14 @@ class MyApp extends StatelessWidget {
 Future<Widget> screenFunction() async {
   String? myId = await initializeDefaultValues();
 
-  return myId == null ? const LoginPage() : GetMyPersonalInfo(myPersonalId: myId);
+  return myId == null
+      ? const LoginPage()
+      : GetMyPersonalInfo(myPersonalId: myId);
 }
 
 void _defineThePlatform(BuildContext context) {
   TargetPlatform platform = Theme.of(context).platform;
-  isThatMobile = platform == TargetPlatform.iOS || platform == TargetPlatform.android;
+  isThatMobile =
+      platform == TargetPlatform.iOS || platform == TargetPlatform.android;
   isThatAndroid = platform == TargetPlatform.android;
 }

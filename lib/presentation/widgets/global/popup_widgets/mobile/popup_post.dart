@@ -67,8 +67,10 @@ class _PopupPostCardState extends State<PopupPostCard> {
   GlobalKey shareKey = GlobalKey();
   GlobalKey menuKey = GlobalKey();
 
-  final TextEditingController _bottomSheetMessageTextController = TextEditingController();
-  final TextEditingController _bottomSheetSearchTextController = TextEditingController();
+  final TextEditingController _bottomSheetMessageTextController =
+      TextEditingController();
+  final TextEditingController _bottomSheetSearchTextController =
+      TextEditingController();
 
   ValueNotifier<bool> messageVisibility = ValueNotifier(false);
   ValueNotifier<bool> loveVisibility = ValueNotifier(false);
@@ -76,7 +78,8 @@ class _PopupPostCardState extends State<PopupPostCard> {
   ValueNotifier<bool> shareVisibility = ValueNotifier(false);
   ValueNotifier<bool> menuVisibility = ValueNotifier(false);
 
-  final ValueNotifier<Widget> loveStatusAnimation = ValueNotifier(const SizedBox());
+  final ValueNotifier<Widget> loveStatusAnimation =
+      ValueNotifier(const SizedBox());
 
   bool isLiked = false;
   ValueNotifier<bool> isHeartAnimation = ValueNotifier(false);
@@ -115,12 +118,16 @@ class _PopupPostCardState extends State<PopupPostCard> {
 
   void onTapPost() {
     List<Post> customPostsInfo = widget.postsInfo;
-    customPostsInfo.removeWhere((value) => value.postUid == widget.postClickedInfo.postUid);
+    customPostsInfo.removeWhere(
+        (value) => value.postUid == widget.postClickedInfo.postUid);
     customPostsInfo.insert(0, widget.postClickedInfo);
     Scaffold page = Scaffold(
       appBar: isThatMobile
           ? CustomAppBar.oneTitleAppBar(
-              context, widget.isThatProfile ? StringsManager.posts.tr : StringsManager.explore.tr)
+              context,
+              widget.isThatProfile
+                  ? StringsManager.posts.tr
+                  : StringsManager.explore.tr)
           : null,
       body: CustomPostsDisplay(postsInfo: widget.postsInfo),
     );
@@ -138,16 +145,22 @@ class _PopupPostCardState extends State<PopupPostCard> {
           details.globalPosition.dy < lovePosition.positionBottom &&
           details.globalPosition.dx > lovePosition.positionLeft &&
           details.globalPosition.dx < lovePosition.positionRight) {
-        messageText = isLiked ? StringsManager.unLike.tr : StringsManager.like.tr;
-        widgetPositionLeft = lovePosition.positionLeft - lovePosition.positionCenter - (isLiked ? 15 : 7);
+        messageText =
+            isLiked ? StringsManager.unLike.tr : StringsManager.like.tr;
+        widgetPositionLeft = lovePosition.positionLeft -
+            lovePosition.positionCenter -
+            (isLiked ? 15 : 7);
         loveVisibility.value = true;
         messageVisibility.value = true;
       } else if (details.globalPosition.dy > commentPosition.positionTop &&
           details.globalPosition.dy < commentPosition.positionBottom &&
           details.globalPosition.dx > commentPosition.positionLeft &&
           details.globalPosition.dx < commentPosition.positionRight) {
-        messageText = widget.isThatProfile ? StringsManager.comment.tr : StringsManager.viewProfile.tr;
-        widgetPositionLeft = commentPosition.positionLeft - commentPosition.positionCenter - 30;
+        messageText = widget.isThatProfile
+            ? StringsManager.comment.tr
+            : StringsManager.viewProfile.tr;
+        widgetPositionLeft =
+            commentPosition.positionLeft - commentPosition.positionCenter - 30;
         viewProfileVisibility.value = true;
         messageVisibility.value = true;
       } else if (details.globalPosition.dy > sharePosition.positionTop &&
@@ -155,7 +168,8 @@ class _PopupPostCardState extends State<PopupPostCard> {
           details.globalPosition.dx > sharePosition.positionLeft &&
           details.globalPosition.dx < sharePosition.positionRight) {
         messageText = StringsManager.share.tr;
-        widgetPositionLeft = sharePosition.positionLeft - sharePosition.positionCenter - 12;
+        widgetPositionLeft =
+            sharePosition.positionLeft - sharePosition.positionCenter - 12;
         shareVisibility.value = true;
         messageVisibility.value = true;
       } else if (details.globalPosition.dy > menuPosition.positionTop &&
@@ -163,7 +177,8 @@ class _PopupPostCardState extends State<PopupPostCard> {
           details.globalPosition.dx > menuPosition.positionLeft &&
           details.globalPosition.dx < menuPosition.positionRight) {
         messageText = StringsManager.menu.tr;
-        widgetPositionLeft = menuPosition.positionLeft - menuPosition.positionCenter - 15;
+        widgetPositionLeft =
+            menuPosition.positionLeft - menuPosition.positionCenter - 15;
         menuVisibility.value = true;
         messageVisibility.value = true;
       } else {
@@ -193,18 +208,19 @@ class _PopupPostCardState extends State<PopupPostCard> {
     if (loveVisibility.value) {
       if (isLiked) {
         setState(() {
-          BlocProvider.of<PostLikesCubit>(context)
-              .removeTheLikeOnThisPost(postId: widget.postClickedInfo.postUid, userId: myPersonalId);
+          BlocProvider.of<PostLikesCubit>(context).removeTheLikeOnThisPost(
+              postId: widget.postClickedInfo.postUid, userId: myPersonalId);
           widget.postClickedInfo.likes.remove(myPersonalId);
           isLiked = false;
         });
       } else {
         setState(() {
-          loveStatusAnimation.value =
-              const FadeAnimation(child: Icon(Icons.favorite, color: ColorManager.white, size: 100));
+          loveStatusAnimation.value = const FadeAnimation(
+              child:
+                  Icon(Icons.favorite, color: ColorManager.white, size: 100));
 
-          BlocProvider.of<PostLikesCubit>(context)
-              .putLikeOnThisPost(postId: widget.postClickedInfo.postUid, userId: myPersonalId);
+          BlocProvider.of<PostLikesCubit>(context).putLikeOnThisPost(
+              postId: widget.postClickedInfo.postUid, userId: myPersonalId);
           widget.postClickedInfo.likes.add(myPersonalId);
           isHeartAnimation.value = true;
         });
@@ -215,7 +231,8 @@ class _PopupPostCardState extends State<PopupPostCard> {
     if (viewProfileVisibility.value) {
       Widget page;
       if (widget.isThatProfile) {
-        page = CommentsPageForMobile(postInfo: ValueNotifier(widget.postClickedInfo));
+        page = CommentsPageForMobile(
+            postInfo: ValueNotifier(widget.postClickedInfo));
       } else {
         page = WhichProfilePage(
           userId: widget.postClickedInfo.publisherId,
@@ -281,7 +298,8 @@ class _PopupPostCardState extends State<PopupPostCard> {
                   color: ColorManager.grey,
                   borderRadius: BorderRadius.circular(5),
                   image: DecorationImage(
-                    image: CachedNetworkImageProvider(postImageUrl, maxWidth: 100, maxHeight: 90),
+                    image: CachedNetworkImageProvider(postImageUrl,
+                        maxWidth: 100, maxHeight: 90),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -308,11 +326,14 @@ class _PopupPostCardState extends State<PopupPostCard> {
           ],
         ),
         Padding(
-          padding: const EdgeInsetsDirectional.only(top: 30.0, end: 20, start: 20),
+          padding:
+              const EdgeInsetsDirectional.only(top: 30.0, end: 20, start: 20),
           child: Container(
             width: double.infinity,
             height: 35,
-            decoration: BoxDecoration(color: Theme.of(context).shadowColor, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(
+                color: Theme.of(context).shadowColor,
+                borderRadius: BorderRadius.circular(10)),
             child: TextFormField(
               cursorColor: ColorManager.teal,
               style: Theme.of(context).textTheme.bodyLarge,
@@ -414,9 +435,12 @@ class _PopupPostCardState extends State<PopupPostCard> {
                           width: double.infinity,
                           child: NetworkDisplay(
                             cachingWidth: 680,
-                            cachingHeight: postInfo.aspectRatio == 1 ? 906 : 680,
+                            cachingHeight:
+                                postInfo.aspectRatio == 1 ? 906 : 680,
                             blurHash: postInfo.blurHash,
-                            url: postInfo.postUrl.isNotEmpty ? postInfo.postUrl : postInfo.imagesUrls[0],
+                            url: postInfo.postUrl.isNotEmpty
+                                ? postInfo.postUrl
+                                : postInfo.imagesUrls[0],
                             isThatImage: postInfo.isThatImage,
                             aspectRatio: postInfo.aspectRatio,
                           ),
@@ -446,7 +470,8 @@ class _PopupPostCardState extends State<PopupPostCard> {
   Widget loveAnimation() {
     return ValueListenableBuilder(
       valueListenable: loveStatusAnimation,
-      builder: (context, value, child) => Center(child: loveStatusAnimation.value),
+      builder: (context, value, child) =>
+          Center(child: loveStatusAnimation.value),
     );
   }
 
@@ -459,7 +484,8 @@ class _PopupPostCardState extends State<PopupPostCard> {
   }
 
   Widget _createPhotoTitle(Post postInfo) => Container(
-        padding: const EdgeInsetsDirectional.only(bottom: 5, top: 5, end: 10, start: 10),
+        padding: const EdgeInsetsDirectional.only(
+            bottom: 5, top: 5, end: 10, start: 10),
         height: 55,
         width: double.infinity,
         color: Theme.of(context).splashColor,
@@ -470,7 +496,8 @@ class _PopupPostCardState extends State<PopupPostCard> {
               bodyHeight: 370,
             ),
             const SizedBox(width: 7),
-            Text(postInfo.publisherInfo!.name, style: Theme.of(context).textTheme.bodyLarge),
+            Text(postInfo.publisherInfo!.name,
+                style: Theme.of(context).textTheme.bodyLarge),
           ],
         ),
       );
@@ -501,9 +528,12 @@ class _PopupPostCardState extends State<PopupPostCard> {
           SizedBox(
             key: viewProfileKey,
             child: SvgPicture.asset(
-              widget.isThatProfile ? IconsAssets.commentIcon : IconsAssets.profileIcon,
+              widget.isThatProfile
+                  ? IconsAssets.commentIcon
+                  : IconsAssets.profileIcon,
               height: 28,
-              colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(
+                  Theme.of(context).focusColor, BlendMode.srcIn),
             ),
           ),
           SizedBox(
@@ -511,14 +541,16 @@ class _PopupPostCardState extends State<PopupPostCard> {
             child: SvgPicture.asset(
               IconsAssets.send1Icon,
               height: 23,
-              colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(
+                  Theme.of(context).focusColor, BlendMode.srcIn),
             ),
           ),
           SizedBox(
             key: menuKey,
             child: SvgPicture.asset(
               IconsAssets.menuHorizontalIcon,
-              colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(
+                  Theme.of(context).focusColor, BlendMode.srcIn),
             ),
           ),
         ],
@@ -549,7 +581,8 @@ class _PopupMessageDialog extends StatelessWidget {
             color: ColorManager.black87,
             borderRadius: BorderRadius.circular(2),
           ),
-          padding: const EdgeInsetsDirectional.only(end: 10, start: 10, top: 5, bottom: 5),
+          padding: const EdgeInsetsDirectional.only(
+              end: 10, start: 10, top: 5, bottom: 5),
           child: Text(
             message,
             style: const TextStyle(

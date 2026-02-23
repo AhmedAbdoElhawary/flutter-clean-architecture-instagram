@@ -27,12 +27,16 @@ class CallingRoomsCubit extends Cubit<CallingRoomsState> {
     this._getUsersInfoInRoomUseCase,
   ) : super(CallingRoomsInitial());
 
-  static CallingRoomsCubit get(BuildContext context) => BlocProvider.of(context);
+  static CallingRoomsCubit get(BuildContext context) =>
+      BlocProvider.of(context);
 
   Future<void> createCallingRoom(
-      {required UserPersonalInfo myPersonalInfo, required List<UserPersonalInfo> callThoseUsersInfo}) async {
+      {required UserPersonalInfo myPersonalInfo,
+      required List<UserPersonalInfo> callThoseUsersInfo}) async {
     emit(CallingRoomsLoading());
-    await _createCallingRoomUseCase.call(paramsOne: myPersonalInfo, paramsTwo: callThoseUsersInfo).then((channelId) {
+    await _createCallingRoomUseCase
+        .call(paramsOne: myPersonalInfo, paramsTwo: callThoseUsersInfo)
+        .then((channelId) {
       emit(CallingRoomsLoaded(channelId: channelId));
     }).catchError((e) {
       emit(CallingRoomsFailed(e.toString()));
@@ -48,18 +52,25 @@ class CallingRoomsCubit extends Cubit<CallingRoomsState> {
     });
   }
 
-  Future<void> joinToRoom({required String channelId, required UserPersonalInfo myPersonalInfo}) async {
+  Future<void> joinToRoom(
+      {required String channelId,
+      required UserPersonalInfo myPersonalInfo}) async {
     emit(CallingRoomsLoading());
-    await _joinToRoomUseCase.call(paramsOne: channelId, paramsTwo: myPersonalInfo).then((_) {
+    await _joinToRoomUseCase
+        .call(paramsOne: channelId, paramsTwo: myPersonalInfo)
+        .then((_) {
       emit(CallingRoomsLoaded(channelId: channelId));
     }).catchError((e) {
       emit(CallingRoomsFailed(e.toString()));
     });
   }
 
-  Future<void> deleteTheRoom({required String channelId, List<dynamic> usersIds = const []}) async {
+  Future<void> deleteTheRoom(
+      {required String channelId, List<dynamic> usersIds = const []}) async {
     emit(CallingRoomsLoading());
-    await _deleteTheRoomUseCase.call(paramsOne: channelId, paramsTwo: usersIds).then((_) {
+    await _deleteTheRoomUseCase
+        .call(paramsOne: channelId, paramsTwo: usersIds)
+        .then((_) {
       emit(const CallingRoomsLoaded(channelId: ""));
     }).catchError((e) {
       emit(CallingRoomsFailed(e.toString()));
@@ -73,7 +84,10 @@ class CallingRoomsCubit extends Cubit<CallingRoomsState> {
   }) async {
     emit(CallingRoomsLoading());
     await _cancelJoiningToRoomUseCase
-        .call(paramsOne: userId, paramsTwo: channelId, paramsThree: isThatAfterJoining)
+        .call(
+            paramsOne: userId,
+            paramsTwo: channelId,
+            paramsThree: isThatAfterJoining)
         .then((_) {
       emit(const CallingRoomsLoaded(channelId: ""));
     }).catchError((e) {

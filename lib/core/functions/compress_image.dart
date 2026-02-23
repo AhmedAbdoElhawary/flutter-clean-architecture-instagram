@@ -23,7 +23,7 @@ class CompressImage {
     final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
     final split = filePath.substring(0, (lastIndex));
     final outPath = "${split}_out${filePath.substring(lastIndex)}";
-    XFile? result = await FlutterImageCompress.compressAndGetFile(
+    final result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
       outPath,
       quality: 5,

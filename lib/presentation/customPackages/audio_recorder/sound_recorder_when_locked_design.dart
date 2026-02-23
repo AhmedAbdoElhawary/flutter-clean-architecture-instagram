@@ -36,10 +36,12 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
             InkWell(
               onTap: () async {
                 soundRecordNotifier.isShow = false;
-                if (soundRecordNotifier.second > 1 || soundRecordNotifier.minute > 0) {
+                if (soundRecordNotifier.second > 1 ||
+                    soundRecordNotifier.minute > 0) {
                   String path = soundRecordNotifier.mPath;
                   await Future.delayed(const Duration(milliseconds: 500));
-                  sendRequestFunction(File.fromUri(Uri(path: path)), soundRecordNotifier.second);
+                  sendRequestFunction(File.fromUri(Uri(path: path)),
+                      soundRecordNotifier.second);
                 }
                 soundRecordNotifier.resetEdgePadding();
                 showIcons(true);

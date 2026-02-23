@@ -50,10 +50,12 @@ class _CustomShareButtonState extends State<CustomShareButton> {
             isThatLoading.value = true;
             for (final selectedUser in widget.selectedUsersInfo) {
               await messageCubit.sendMessage(
-                messageInfo: createSharedMessage(widget.postInfo.blurHash, selectedUser),
+                messageInfo:
+                    createSharedMessage(widget.postInfo.blurHash, selectedUser),
               );
               if (widget.messageTextController.text.isNotEmpty) {
-                await messageCubit.sendMessage(messageInfo: createCaptionMessage(selectedUser));
+                await messageCubit.sendMessage(
+                    messageInfo: createCaptionMessage(selectedUser));
               }
             }
             // ignore: use_build_context_synchronously
@@ -78,7 +80,8 @@ class _CustomShareButtonState extends State<CustomShareButton> {
     );
   }
 
-  Message createSharedMessage(String blurHash, UserPersonalInfo userInfoWhoIShared) {
+  Message createSharedMessage(
+      String blurHash, UserPersonalInfo userInfoWhoIShared) {
     bool isThatImage = widget.postInfo.isThatImage;
     String imageUrl = isThatImage
         ? widget.postInfo.imagesUrls.length > 1
@@ -111,14 +114,18 @@ class _CustomShareButtonState extends State<CustomShareButton> {
         width: double.infinity,
         padding: const EdgeInsetsDirectional.only(start: 17, end: 17),
         decoration: BoxDecoration(
-          color: isThatLoadingValue ? ColorManager.lightBlue : ColorManager.blue,
+          color:
+              isThatLoadingValue ? ColorManager.lightBlue : ColorManager.blue,
           borderRadius: BorderRadius.circular(5.0),
         ),
         child: Center(
           child: !isThatLoadingValue
               ? Text(
                   widget.textOfButton,
-                  style: const TextStyle(fontSize: 15.0, color: ColorManager.white, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 15.0,
+                      color: ColorManager.white,
+                      fontWeight: FontWeight.w500),
                 )
               : circularProgress(),
         ),
@@ -128,7 +135,11 @@ class _CustomShareButtonState extends State<CustomShareButton> {
 
   Widget circularProgress() {
     return const Center(
-      child: SizedBox(height: 20, width: 20, child: ThineCircularProgress(color: ColorManager.white, strokeWidth: 2)),
+      child: SizedBox(
+          height: 20,
+          width: 20,
+          child:
+              ThineCircularProgress(color: ColorManager.white, strokeWidth: 2)),
     );
   }
 }

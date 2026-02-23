@@ -90,7 +90,9 @@ class InViewNotifierState extends State<InViewNotifier> {
   void _startListening() {
     _streamController = StreamController<ScrollNotification>();
 
-    _streamController!.stream.audit(widget.throttleDuration).listen(_inViewState!.onScroll);
+    _streamController!.stream
+        .audit(widget.throttleDuration)
+        .listen(_inViewState!.onScroll);
   }
 
   void _initializeInViewState() {
@@ -113,27 +115,33 @@ class InViewNotifierState extends State<InViewNotifier> {
         ),
         onNotification: (ScrollNotification notification) {
           late bool isScrollDirection;
-          final AxisDirection scrollDirection = notification.metrics.axisDirection;
+          final AxisDirection scrollDirection =
+              notification.metrics.axisDirection;
 
           switch (widget.scrollDirection) {
             case Axis.vertical:
-              isScrollDirection = scrollDirection == AxisDirection.down || scrollDirection == AxisDirection.up;
+              isScrollDirection = scrollDirection == AxisDirection.down ||
+                  scrollDirection == AxisDirection.up;
               break;
             case Axis.horizontal:
-              isScrollDirection = scrollDirection == AxisDirection.left || scrollDirection == AxisDirection.right;
+              isScrollDirection = scrollDirection == AxisDirection.left ||
+                  scrollDirection == AxisDirection.right;
               break;
           }
           final double maxScroll = notification.metrics.maxScrollExtent;
 
           //end of the listview reached
-          if (isScrollDirection && maxScroll - notification.metrics.pixels <= widget.endNotificationOffset) {
+          if (isScrollDirection &&
+              maxScroll - notification.metrics.pixels <=
+                  widget.endNotificationOffset) {
             if (widget.onListEndReached != null) {
               widget.onListEndReached!();
             }
           }
 
           //when user is not scrolling
-          if (notification is UserScrollNotification && notification.direction == ScrollDirection.idle) {
+          if (notification is UserScrollNotification &&
+              notification.direction == ScrollDirection.idle) {
             if (!_streamController!.isClosed && isScrollDirection) {
               _streamController!.add(notification);
             }

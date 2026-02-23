@@ -9,7 +9,9 @@ import 'package:instagram/data/models/parent_classes/without_sub_classes/push_no
 import 'package:instagram/core/utility/private_keys.dart';
 
 class DeviceNotification {
-  static Future<void> pushNotification({required CustomNotification customNotification, required String token}) async {
+  static Future<void> pushNotification(
+      {required CustomNotification customNotification,
+      required String token}) async {
     String notificationRoute;
     String routeParameterId;
     if (customNotification.isThatPost) {
@@ -33,7 +35,8 @@ class DeviceNotification {
     return await sendPopupNotification(pushNotification: detail);
   }
 
-  static Future<void> sendPopupNotification({required PushNotification pushNotification}) async {
+  static Future<void> sendPopupNotification(
+      {required PushNotification pushNotification}) async {
     try {
       try {
         await http.post(

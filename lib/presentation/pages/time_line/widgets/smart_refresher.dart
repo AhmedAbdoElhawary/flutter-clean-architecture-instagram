@@ -21,10 +21,12 @@ class SmarterRefresh extends StatefulWidget {
   State<SmarterRefresh> createState() => _SmarterRefreshState();
 }
 
-class _SmarterRefreshState extends State<SmarterRefresh> with TickerProviderStateMixin {
+class _SmarterRefreshState extends State<SmarterRefresh>
+    with TickerProviderStateMixin {
   late AnimationController _aniController, _scaleController;
   late AnimationController _footerController;
-  final ValueNotifier<RefreshController> _refreshController = ValueNotifier(RefreshController());
+  final ValueNotifier<RefreshController> _refreshController =
+      ValueNotifier(RefreshController());
   ValueNotifier<int> lengthOfPosts = ValueNotifier(5);
   @override
   void initState() {
@@ -33,14 +35,18 @@ class _SmarterRefreshState extends State<SmarterRefresh> with TickerProviderStat
   }
 
   void init() {
-    _aniController = AnimationController(vsync: this, duration: const Duration(milliseconds: 2000));
-    _scaleController = AnimationController(value: 0.0, vsync: this, upperBound: 1.0);
-    _footerController = AnimationController(vsync: this, duration: const Duration(milliseconds: 2000));
+    _aniController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 2000));
+    _scaleController =
+        AnimationController(value: 0.0, vsync: this, upperBound: 1.0);
+    _footerController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 2000));
     _refreshController.value.headerMode?.addListener(() {
       if (_refreshController.value.headerStatus == RefreshStatus.idle) {
         _scaleController.value = 0.0;
         _aniController.reset();
-      } else if (_refreshController.value.headerStatus == RefreshStatus.refreshing) {
+      } else if (_refreshController.value.headerStatus ==
+          RefreshStatus.refreshing) {
         _aniController.repeat();
       }
     });
@@ -122,7 +128,8 @@ class _SmarterRefreshState extends State<SmarterRefresh> with TickerProviderStat
         Widget child;
         switch (mode) {
           case LoadStatus.failed:
-            child = Text(StringsManager.clickRetry.tr, style: Theme.of(context).textTheme.bodyLarge);
+            child = Text(StringsManager.clickRetry.tr,
+                style: Theme.of(context).textTheme.bodyLarge);
             break;
           case LoadStatus.noMore:
             child = Container();
@@ -145,7 +152,8 @@ class _SmarterRefreshState extends State<SmarterRefresh> with TickerProviderStat
     return CustomHeader(
       refreshStyle: RefreshStyle.Behind,
       onOffsetChange: (offset) {
-        if (_refreshController.value.headerMode?.value != RefreshStatus.refreshing) {
+        if (_refreshController.value.headerMode?.value !=
+            RefreshStatus.refreshing) {
           _scaleController.value = offset / 150.0;
         }
       },

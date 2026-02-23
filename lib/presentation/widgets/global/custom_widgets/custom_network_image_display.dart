@@ -92,7 +92,8 @@ class _NetworkDisplayState extends State<NetworkDisplay> {
     return SizedBox(
       width: double.infinity,
       height: widget.aspectRatio,
-      child: Icon(Icons.warning_amber_rounded, size: 30, color: Theme.of(context).focusColor),
+      child: Icon(Icons.warning_amber_rounded,
+          size: 30, color: Theme.of(context).focusColor),
     );
   }
 

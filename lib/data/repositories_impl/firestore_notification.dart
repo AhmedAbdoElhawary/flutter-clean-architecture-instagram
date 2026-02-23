@@ -5,7 +5,8 @@ import 'package:instagram/domain/repositories/firestore_notification.dart';
 
 class FireStoreNotificationRepoImpl implements FireStoreNotificationRepository {
   @override
-  Future<String> createNotification({required CustomNotification newNotification}) async {
+  Future<String> createNotification(
+      {required CustomNotification newNotification}) async {
     try {
       return await FireStoreNotification.createNotification(newNotification);
     } catch (e) {
@@ -23,9 +24,11 @@ class FireStoreNotificationRepoImpl implements FireStoreNotificationRepository {
   }
 
   @override
-  Future<void> deleteNotification({required NotificationCheck notificationCheck}) {
+  Future<void> deleteNotification(
+      {required NotificationCheck notificationCheck}) {
     try {
-      return FireStoreNotification.deleteNotification(notificationCheck: notificationCheck);
+      return FireStoreNotification.deleteNotification(
+          notificationCheck: notificationCheck);
     } catch (e) {
       return Future.error(e.toString());
     }

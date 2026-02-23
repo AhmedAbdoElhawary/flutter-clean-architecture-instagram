@@ -1,4 +1,4 @@
-import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -24,9 +24,11 @@ class VideoCallPage extends StatelessWidget {
       // backgroundColor: ColorManager.lowOpacityGrey,
       body: SafeArea(
         child: BlocBuilder<CallingRoomsCubit, CallingRoomsState>(
-          buildWhen: (previous, current) => previous != current && current is CallingRoomsLoaded,
+          buildWhen: (previous, current) =>
+              previous != current && current is CallingRoomsLoaded,
           bloc: CallingRoomsCubit.get(context)
-            ..createCallingRoom(myPersonalInfo: myPersonalInfo, callThoseUsersInfo: usersInfo),
+            ..createCallingRoom(
+                myPersonalInfo: myPersonalInfo, callThoseUsersInfo: usersInfo),
           builder: (callingRoomContext, callingRoomState) {
             if (callingRoomState is CallingRoomsLoaded) {
               return callingRoomsLoaded(callingRoomState, callingRoomContext);
@@ -41,12 +43,14 @@ class VideoCallPage extends StatelessWidget {
     );
   }
 
-  Widget callingRoomsLoaded(CallingRoomsLoaded roomsState, BuildContext context) {
+  Widget callingRoomsLoaded(
+      CallingRoomsLoaded roomsState, BuildContext context) {
     return BlocBuilder<CallingStatusBloc, CallingStatusState>(
-      bloc: CallingStatusBloc.get(context)..add(LoadCallingStatus(roomsState.channelId)),
+      bloc: CallingStatusBloc.get(context)
+        ..add(LoadCallingStatus(roomsState.channelId)),
       builder: (context, callingStatusState) {
-        bool isAllUsersCanceled =
-            callingStatusState is CallingStatusLoaded && callingStatusState.callingStatus == false;
+        bool isAllUsersCanceled = callingStatusState is CallingStatusLoaded &&
+            callingStatusState.callingStatus == false;
 
         bool isThereAnyProblem = callingStatusState is CallingStatusFailed;
 
@@ -62,7 +66,7 @@ class VideoCallPage extends StatelessWidget {
   Widget callPage(CallingRoomsLoaded roomsState) {
     return CallPage(
       channelName: roomsState.channelId,
-      role: ClientRole.Broadcaster,
+      role: ClientRoleType.clientRoleBroadcaster,
       userCallingType: UserCallingType.sender,
       usersInfo: usersInfo,
     );
@@ -74,13 +78,16 @@ class VideoCallPage extends StatelessWidget {
       usersIds.add(element.userId);
       return true;
     }).toList();
-    CallingRoomsCubit.get(context).deleteTheRoom(channelId: roomsState.channelId, usersIds: usersIds);
+    CallingRoomsCubit.get(context)
+        .deleteTheRoom(channelId: roomsState.channelId, usersIds: usersIds);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(seconds: 2)).then((value) {
         if (context.mounted) Navigator.of(context).maybePop();
       });
     });
-    return const Center(child: Text("Canceled...", style: TextStyle(fontSize: 20, color: Colors.black87)));
+    return const Center(
+        child: Text("Canceled...",
+            style: TextStyle(fontSize: 20, color: Colors.black87)));
   }
 
   Widget whichFailedText(CallingRoomsFailed state, BuildContext context) {
@@ -90,7 +97,9 @@ class VideoCallPage extends StatelessWidget {
       });
     });
     if (state.error == "Busy") {
-      String message = usersInfo.length > 1 ? "They are all busy..." : '${usersInfo[0].name} is Busy...';
+      String message = usersInfo.length > 1
+          ? "They are all busy..."
+          : '${usersInfo[0].name} is Busy...';
       return Center(child: Text(message));
     } else {
       return const Center(child: Text("Call ended..."));
@@ -99,7 +108,8 @@ class VideoCallPage extends StatelessWidget {
 
   Widget callingLoadingPage() {
     return Center(
-      child: Text("Connecting...", style: getNormalStyle(color: ColorManager.black, fontSize: 25)),
+      child: Text("Connecting...",
+          style: getNormalStyle(color: ColorManager.black, fontSize: 25)),
     );
   }
 }

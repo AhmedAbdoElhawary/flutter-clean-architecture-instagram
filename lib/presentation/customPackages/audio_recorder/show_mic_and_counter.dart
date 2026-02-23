@@ -25,7 +25,8 @@ class ShowMicWithText extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isButtonPressed = soundRecorderState.buttonPressed;
     return Row(
-      mainAxisAlignment: !isButtonPressed ? MainAxisAlignment.start : MainAxisAlignment.end,
+      mainAxisAlignment:
+          !isButtonPressed ? MainAxisAlignment.start : MainAxisAlignment.end,
       children: [
         Center(
           child: Transform.scale(
@@ -39,13 +40,19 @@ class ShowMicWithText extends StatelessWidget {
                 width: isButtonPressed ? 40 : 24,
                 height: isButtonPressed ? 40 : 24,
                 child: Container(
-                  color: (isButtonPressed) ? ColorManager.blue : ColorManager.transparent,
+                  color: (isButtonPressed)
+                      ? ColorManager.blue
+                      : ColorManager.transparent,
                   child: Padding(
-                    padding: EdgeInsetsDirectional.all(isButtonPressed ? 8.0 : 0),
+                    padding:
+                        EdgeInsetsDirectional.all(isButtonPressed ? 8.0 : 0),
                     child: SvgPicture.asset(
                       "assets/icons/microphone.svg",
                       colorFilter: ColorFilter.mode(
-                          (isButtonPressed) ? ColorManager.white : Theme.of(context).focusColor, BlendMode.srcIn),
+                          (isButtonPressed)
+                              ? ColorManager.white
+                              : Theme.of(context).focusColor,
+                          BlendMode.srcIn),
                     ),
                   ),
                 ),

@@ -25,7 +25,8 @@ class Comment {
     this.replies,
   });
 
-  static Comment fromSnapComment(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  static Comment fromSnapComment(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return Comment(
       datePublished: snapshot.data()?["datePublished"] ?? "",
       theComment: snapshot.data()?["theComment"] ?? "",
@@ -48,7 +49,8 @@ class Comment {
         "replies": replies,
       };
 
-  static Comment fromSnapReply(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  static Comment fromSnapReply(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return Comment(
       datePublished: snapshot.data()?["datePublished"] ?? "",
       theComment: snapshot.data()?["theReply"] ?? "",

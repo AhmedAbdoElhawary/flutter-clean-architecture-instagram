@@ -9,13 +9,18 @@ class SpecificUsersPostsCubit extends Cubit<SpecificUsersPostsState> {
   GetSpecificUsersPostsUseCase getSpecificUsersPostsUseCase;
   List usersPostsInfo = [];
 
-  SpecificUsersPostsCubit(this.getSpecificUsersPostsUseCase) : super(SpecificUsersPostsInitial());
+  SpecificUsersPostsCubit(this.getSpecificUsersPostsUseCase)
+      : super(SpecificUsersPostsInitial());
 
-  static SpecificUsersPostsCubit get(BuildContext context) => BlocProvider.of(context);
+  static SpecificUsersPostsCubit get(BuildContext context) =>
+      BlocProvider.of(context);
 
-  Future<void> getSpecificUsersPostsInfo({required List<dynamic> usersIds}) async {
+  Future<void> getSpecificUsersPostsInfo(
+      {required List<dynamic> usersIds}) async {
     emit(SpecificUsersPostsLoading());
-    await getSpecificUsersPostsUseCase.call(params: usersIds).then((specificPostsInfo) {
+    await getSpecificUsersPostsUseCase
+        .call(params: usersIds)
+        .then((specificPostsInfo) {
       usersPostsInfo = specificPostsInfo;
       emit(SpecificUsersPostsLoaded(specificPostsInfo));
     }).catchError((e) {

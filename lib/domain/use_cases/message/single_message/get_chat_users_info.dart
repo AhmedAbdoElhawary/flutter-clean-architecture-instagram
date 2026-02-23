@@ -3,7 +3,8 @@ import 'package:instagram/data/models/parent_classes/without_sub_classes/user_pe
 import 'package:instagram/domain/entities/sender_info.dart';
 import 'package:instagram/domain/repositories/user_repository.dart';
 
-class GetChatUsersInfoAddMessageUseCase implements UseCase<List<SenderInfo>, UserPersonalInfo> {
+class GetChatUsersInfoAddMessageUseCase
+    implements UseCase<List<SenderInfo>, UserPersonalInfo> {
   final FirestoreUserRepository _addPostToUserRepository;
 
   GetChatUsersInfoAddMessageUseCase(this._addPostToUserRepository);

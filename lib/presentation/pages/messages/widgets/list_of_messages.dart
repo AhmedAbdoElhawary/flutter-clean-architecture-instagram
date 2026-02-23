@@ -43,36 +43,47 @@ class _ListOfMessagesState extends State<ListOfMessages> {
 
   @override
   void initState() {
-    myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context) ?? UserInfoCubit.getMyPersonalInfo(context);
+    myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context) ??
+        UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
   }
 
   Future<void> onRefreshData(int index) async {
-    myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context) ?? UserInfoCubit.getMyPersonalInfo(context);
-    await UsersInfoCubit.get(context).getChatUsersInfo(myPersonalInfo: myPersonalInfo);
+    myPersonalInfo = UsersInfoReelTimeBloc.getMyInfoInReelTime(context) ??
+        UserInfoCubit.getMyPersonalInfo(context);
+    await UsersInfoCubit.get(context)
+        .getChatUsersInfo(myPersonalInfo: myPersonalInfo);
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: double.maxFinite,
-      child: CustomSmartRefresh(onRefreshData: onRefreshData, child: buildBlocBuilder()),
+      child: CustomSmartRefresh(
+          onRefreshData: onRefreshData, child: buildBlocBuilder()),
     );
   }
 
   BlocBuilder<UsersInfoCubit, UsersInfoState> buildBlocBuilder() {
     final mediaQuery = MediaQuery.of(context);
-    final bodyHeight =
-        isThatMobile ? mediaQuery.size.height - AppBar().preferredSize.height - mediaQuery.padding.top : 500;
+    final bodyHeight = isThatMobile
+        ? mediaQuery.size.height -
+            AppBar().preferredSize.height -
+            mediaQuery.padding.top
+        : 500;
     return BlocBuilder<UsersInfoCubit, UsersInfoState>(
-      bloc: UsersInfoCubit.get(context)..getChatUsersInfo(myPersonalInfo: myPersonalInfo),
-      buildWhen: (previous, current) => previous != current && current is CubitGettingChatUsersInfoLoaded,
+      bloc: UsersInfoCubit.get(context)
+        ..getChatUsersInfo(myPersonalInfo: myPersonalInfo),
+      buildWhen: (previous, current) =>
+          previous != current && current is CubitGettingChatUsersInfoLoaded,
       builder: (context, state) {
         if (state is CubitGettingChatUsersInfoLoaded) {
           bool isThatUserExist = false;
           if (widget.additionalUser != null) {
             state.usersInfo.where((element) {
-              bool isUserExist = ((element.receiversIds?.contains(widget.additionalUser?.userId)) ?? false) &&
+              bool isUserExist = ((element.receiversIds
+                          ?.contains(widget.additionalUser?.userId)) ??
+                      false) &&
                   !(element.lastMessage?.isThatGroup ?? true);
               if (!isUserExist) isThatUserExist = true;
               return true;
@@ -80,12 +91,14 @@ class _ListOfMessagesState extends State<ListOfMessages> {
           }
           List<SenderInfo> usersInfo = state.usersInfo;
           if (!isThatUserExist && widget.additionalUser != null) {
-            SenderInfo senderInfo = SenderInfo(receiversInfo: [widget.additionalUser!]);
+            SenderInfo senderInfo =
+                SenderInfo(receiversInfo: [widget.additionalUser!]);
             usersInfo.add(senderInfo);
           }
           if (usersInfo.isEmpty) {
             return Center(
-              child: Text(StringsManager.noUsers.tr, style: getNormalStyle(color: Theme.of(context).focusColor)),
+              child: Text(StringsManager.noUsers.tr,
+                  style: getNormalStyle(color: Theme.of(context).focusColor)),
             );
           } else {
             return buildListView(usersInfo, bodyHeight);
@@ -97,7 +110,9 @@ class _ListOfMessagesState extends State<ListOfMessages> {
             style: getNormalStyle(color: Theme.of(context).focusColor),
           );
         } else {
-          return isThatMobile ? const ThineCircularProgress() : const ThineLinearProgress();
+          return isThatMobile
+              ? const ThineCircularProgress()
+              : const ThineLinearProgress();
         }
       },
     );
@@ -106,7 +121,9 @@ class _ListOfMessagesState extends State<ListOfMessages> {
   ListView buildListView(List<SenderInfo> usersInfo, num bodyHeight) {
     bool isThatEnglish = AppLanguage.getInstance().isLangEnglish;
     return ListView.separated(
-        physics: widget.freezeListView ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+        physics: widget.freezeListView
+            ? const NeverScrollableScrollPhysics()
+            : const BouncingScrollPhysics(),
         primary: !widget.freezeListView,
         shrinkWrap: widget.freezeListView,
         itemCount: usersInfo.length,
@@ -132,7 +149,9 @@ class _ListOfMessagesState extends State<ListOfMessages> {
                   if (isThatGroup) ...[
                     Padding(
                       padding: EdgeInsetsDirectional.only(
-                          top: 15, end: isThatEnglish ? 12 : 3, start: isThatEnglish ? (isThatMobile ? 5 : 0) : 15),
+                          top: 15,
+                          end: isThatEnglish ? 12 : 3,
+                          start: isThatEnglish ? (isThatMobile ? 5 : 0) : 15),
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [
@@ -178,11 +197,15 @@ class _ListOfMessagesState extends State<ListOfMessages> {
                                         : theLastMessage.message,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
-                                    style: getNormalStyle(color: ColorManager.grey)),
+                                    style: getNormalStyle(
+                                        color: ColorManager.grey)),
                               ),
                               const SizedBox(width: 5),
-                              Text(DateReformat.oneDigitFormat(theLastMessage.datePublished),
-                                  style: getNormalStyle(color: ColorManager.grey)),
+                              Text(
+                                  DateReformat.oneDigitFormat(
+                                      theLastMessage.datePublished),
+                                  style:
+                                      getNormalStyle(color: ColorManager.grey)),
                             ],
                           ),
                         ],
@@ -194,7 +217,8 @@ class _ListOfMessagesState extends State<ListOfMessages> {
             ),
           );
         },
-        separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 20));
+        separatorBuilder: (BuildContext context, int index) =>
+            const SizedBox(height: 20));
   }
 
   Text buildText(List<SenderInfo> usersInfo, int index, BuildContext context) {

@@ -50,7 +50,8 @@ class Message extends Equatable {
   });
 
   static Message fromJson(
-      {DocumentSnapshot<Map<String, dynamic>>? doc, QueryDocumentSnapshot<Map<String, dynamic>>? query}) {
+      {DocumentSnapshot<Map<String, dynamic>>? doc,
+      QueryDocumentSnapshot<Map<String, dynamic>>? query}) {
     dynamic snap = doc ?? query;
     return Message(
       datePublished: snap.data()["datePublished"] ?? "",
