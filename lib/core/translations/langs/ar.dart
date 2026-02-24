@@ -1,5 +1,4 @@
 const Map<String, String> ar = {
-  "or": "أو",
   "less": "أقل",
   "reel": "ريل",
   "like": "إعجاب",
@@ -120,7 +119,6 @@ const Map<String, String> ar = {
   "clickRetry": "فشل في اعاده التحميل",
   "underWork": "إنه تحت العمل !",
   "phoneOrEmailOrUserName": "رقم الموبيل, البريد الإلكتروني, إسم المستخدم",
-  "loginWithFacebook": "تسجيل الدخول بإستخدام Facebook",
   "comments": "التعليقات",
   "somethingWrong": "يوجد شيئا خطأ",
   "noComments": "لا يوجد تعليقات !",

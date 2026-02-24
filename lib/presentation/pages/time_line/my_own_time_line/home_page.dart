@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 builder: (BuildContext context, BoxConstraints constraints) {
                   return InViewNotifierWidget(
                     id: '$index',
-                    builder: (_, bool isInView, __) {
+                    builder: (_, bool isInView, _) {
                       bool checkForPlatform = isThatMobile
                           ? isInView && widget.playVideo
                           : isInView;

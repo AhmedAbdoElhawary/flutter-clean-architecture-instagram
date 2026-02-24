@@ -1,5 +1,4 @@
 const Map<String, String> en = {
-  "or": "OR",
   "less": "less",
   "reel": "Reel",
   "like": "Like",
@@ -118,7 +117,6 @@ const Map<String, String> en = {
   "clickRetry": "failed,click retry",
   "underWork": "It's under work !",
   "phoneOrEmailOrUserName": "Phone number, email or username",
-  "loginWithFacebook": "Login with Facebook",
   "comments": "Comments",
   "somethingWrong": "There is something wrong",
   "noComments": "There is no comments!",

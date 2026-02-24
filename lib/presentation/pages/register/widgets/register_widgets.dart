@@ -9,7 +9,6 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instagram/presentation/pages/register/sign_up_page.dart';
-import 'package:instagram/presentation/pages/register/widgets/or_text.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_text_field.dart';
 
 class RegisterWidgets extends StatefulWidget {
@@ -187,17 +186,7 @@ class _SignUpPageState extends State<RegisterWidgets> {
               ),
             ] else ...[
               haveAccountRow(context),
-              const OrText(),
             ],
-          ],
-          if (widget.isThatLogIn) ...[
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                StringsManager.loginWithFacebook.tr,
-                style: getNormalStyle(color: ColorManager.blue),
-              ),
-            ),
           ],
         ],
       ),

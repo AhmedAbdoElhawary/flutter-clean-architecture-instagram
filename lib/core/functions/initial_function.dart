@@ -9,8 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 
 Future<String?> initializeDefaultValues() async {
+  // Firebase must be initialized before any Firebase services (e.g. Crashlytics)
+  await Firebase.initializeApp();
   await Future.wait([
-    Firebase.initializeApp(),
     initializeDependencies(),
     GetStorage.init("AppLang"),
     if (!kIsWeb) _crashlytics(),

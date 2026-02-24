@@ -67,7 +67,7 @@ class _SmarterRefreshState extends State<SmarterRefresh>
       height: double.maxFinite,
       child: ValueListenableBuilder(
         valueListenable: _refreshController,
-        builder: (_, RefreshController value, __) {
+        builder: (_, RefreshController value, _) {
           return smartRefresher(value);
         },
       ),

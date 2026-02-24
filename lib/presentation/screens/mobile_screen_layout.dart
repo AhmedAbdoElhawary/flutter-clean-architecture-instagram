@@ -30,7 +30,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: playMainReelVideos,
-      builder: (BuildContext context, bool value, __) {
+      builder: (BuildContext context, bool value, _) {
         return CupertinoTabScaffold(
             tabBar: CupertinoTabBar(
                 backgroundColor:

@@ -76,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
             valueListenable: widget.userInfo,
             builder: (context, UserPersonalInfo userInfoValue, child) =>
                 NestedScrollView(
-              headerSliverBuilder: (_, __) {
+              headerSliverBuilder: (_, _) {
                 return [
                   SliverList(
                     delegate: SliverChildListDelegate(
@@ -360,7 +360,7 @@ class _LoadingGridView extends StatelessWidget {
                 crossAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
                 mainAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
               ),
-              itemBuilder: (_, __) {
+              itemBuilder: (_, _) {
                 return Container(
                     color: ColorManager.lightDarkGray, width: double.infinity);
               },

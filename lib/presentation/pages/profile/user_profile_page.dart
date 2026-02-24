@@ -225,7 +225,7 @@ class _ProfilePageState extends State<UserProfilePage> {
                   ));
         return ValueListenableBuilder(
           valueListenable: userInfo,
-          builder: (__, UserPersonalInfo userInfoValue, _) => GestureDetector(
+          builder: (_, UserPersonalInfo userInfoValue, _) => GestureDetector(
             onTap: () async => onTapFollowButton(userInfoValue),
             child: Container(
               padding: EdgeInsets.symmetric(

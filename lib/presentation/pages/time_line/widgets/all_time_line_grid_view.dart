@@ -152,7 +152,7 @@ class _CustomGridViewState extends State<AllTimeLineGridView> {
         builder: (BuildContext context, BoxConstraints constraints) {
           return InViewNotifierWidget(
             id: '$index',
-            builder: (_, bool isInView, __) {
+            builder: (_, bool isInView, _) {
               return CustomGridViewDisplay(
                 postClickedInfo: postInfo,
                 postsInfo: widget.allPostsInfo,

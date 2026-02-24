@@ -54,7 +54,7 @@ class _CustomSmartRefreshState extends State<CustomSmartRefresh>
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: _refreshController,
-      builder: (_, RefreshController value, __) {
+      builder: (_, RefreshController value, _) {
         return SmartRefresher(
           enablePullUp: false,
           enablePullDown: true,

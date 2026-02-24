@@ -91,7 +91,7 @@ class _HomeScreenState extends State<CustomPostsDisplay> {
         builder: (BuildContext context, BoxConstraints constraints) {
           return InViewNotifierWidget(
             id: '$index',
-            builder: (_, bool isInView, __) {
+            builder: (_, bool isInView, _) {
               return columnOfWidgets(
                   bodyHeight, postsValue[index], index, isInView);
             },

@@ -97,6 +97,7 @@ class CallPageState extends State<CallPage> {
     const VideoEncoderConfiguration configuration = VideoEncoderConfiguration(
       dimensions: VideoDimensions(width: 1920, height: 1080),
     );
+
     await _engine.setVideoEncoderConfiguration(configuration);
     await _engine.startPreview();
     await _engine.joinChannel(

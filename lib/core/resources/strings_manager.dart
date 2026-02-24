@@ -1,6 +1,4 @@
 class StringsManager {
-  static const String or = "or";
-
   static const String less = "less";
   static const String reel = "reel";
   static const String reels = "reels";
@@ -157,7 +155,6 @@ class StringsManager {
   static const String phoneOrEmailOrUserName = "phoneOrEmailOrUserName";
   static const String email = "email";
 
-  static const String loginWithFacebook = "loginWithFacebook";
   static const String comments = "comments";
   static const String comment = "comment";
   static const String activity = "activity";

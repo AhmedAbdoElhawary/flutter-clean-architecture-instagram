@@ -205,7 +205,7 @@ class _ShareButtonState extends State<ShareButton> {
     });
   }
 
-  Widget buildSheet(BuildContext _, SheetState __) => Material(
+  Widget buildSheet(BuildContext _, SheetState _) => Material(
         child: SendToUsers(
           publisherInfo: widget.postInfo.value.publisherInfo!,
           messageTextController: _bottomSheetMessageTextController,

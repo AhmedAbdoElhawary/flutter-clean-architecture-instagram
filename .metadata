@@ -1,11 +1,11 @@
 # This file tracks properties of this Flutter project.
 # Used by Flutter tool to assess capabilities and perform upgrades etc.
 #
-# This file should be version controlled.
+# This file should be version controlled and should not be manually edited.
 
 version:
-  revision: c6870ee9696ba14730017f06058a6b77a72facd5
-  channel: master
+  revision: "90673a4eef275d1a6692c26ac80d6d746d41a73a"
+  channel: "stable"
 
 project_type: app
 
@@ -13,26 +13,26 @@ project_type: app
 migration:
   platforms:
     - platform: root
-      create_revision: c6870ee9696ba14730017f06058a6b77a72facd5
-      base_revision: c6870ee9696ba14730017f06058a6b77a72facd5
+      create_revision: 90673a4eef275d1a6692c26ac80d6d746d41a73a
+      base_revision: 90673a4eef275d1a6692c26ac80d6d746d41a73a
     - platform: android
-      create_revision: c6870ee9696ba14730017f06058a6b77a72facd5
-      base_revision: c6870ee9696ba14730017f06058a6b77a72facd5
+      create_revision: 90673a4eef275d1a6692c26ac80d6d746d41a73a
+      base_revision: 90673a4eef275d1a6692c26ac80d6d746d41a73a
     - platform: ios
-      create_revision: c6870ee9696ba14730017f06058a6b77a72facd5
-      base_revision: c6870ee9696ba14730017f06058a6b77a72facd5
+      create_revision: 90673a4eef275d1a6692c26ac80d6d746d41a73a
+      base_revision: 90673a4eef275d1a6692c26ac80d6d746d41a73a
     - platform: linux
-      create_revision: c6870ee9696ba14730017f06058a6b77a72facd5
-      base_revision: c6870ee9696ba14730017f06058a6b77a72facd5
+      create_revision: 90673a4eef275d1a6692c26ac80d6d746d41a73a
+      base_revision: 90673a4eef275d1a6692c26ac80d6d746d41a73a
     - platform: macos
-      create_revision: c6870ee9696ba14730017f06058a6b77a72facd5
-      base_revision: c6870ee9696ba14730017f06058a6b77a72facd5
+      create_revision: 90673a4eef275d1a6692c26ac80d6d746d41a73a
+      base_revision: 90673a4eef275d1a6692c26ac80d6d746d41a73a
     - platform: web
-      create_revision: c6870ee9696ba14730017f06058a6b77a72facd5
-      base_revision: c6870ee9696ba14730017f06058a6b77a72facd5
+      create_revision: 90673a4eef275d1a6692c26ac80d6d746d41a73a
+      base_revision: 90673a4eef275d1a6692c26ac80d6d746d41a73a
     - platform: windows
-      create_revision: c6870ee9696ba14730017f06058a6b77a72facd5
-      base_revision: c6870ee9696ba14730017f06058a6b77a72facd5
+      create_revision: 90673a4eef275d1a6692c26ac80d6d746d41a73a
+      base_revision: 90673a4eef275d1a6692c26ac80d6d746d41a73a
 
   # User provided section
 

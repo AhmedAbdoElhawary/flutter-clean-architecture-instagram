@@ -6,60 +6,60 @@ Instagram clean architecture using Flutter and Firebase ( frontend & backend ) w
 
 - <a href="https://www.linkedin.com/in/ahmedabdoelhawary"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" width="40"></a>
 
-### Notes 
+### Notes
 * I didn't publish the keys such as messaging, agora, firebase web, or even google-services.json. So follow the steps (3. Setup the app) to add them.
 * Right now, I am working on cleaning up the code and web version
 
 ## Features
 
 * Support
-  * Arabic & English language
-  * Dark & Light theme 
+    * Arabic & English language
+    * Dark & Light theme
 
 * Custom gallery & camera & video display like Instagram "my package" [image picker plus ](https://github.com/AhmedAbdoElhawary/image_picker_plus.git)
- <a href="https://pub.dev/packages/image_picker_plus"><img src="https://img.shields.io/pub/v/image_picker_plus.svg" width="80"></a>
+  <a href="https://pub.dev/packages/image_picker_plus"><img src="https://img.shields.io/pub/v/image_picker_plus.svg" width="80"></a>
 
 
 * Post features
-  * Support images & videos 
-  * Support multi images in one post or mixin with them
-  * Like on a post and view all like with their profiles
-  * Comment on a post and replay on a (comment & replay)
-    * Like on a comment & replay and view all like with their profiles
-  * Edit post
-  * Delete post
-  * Unfollow the user of the post
+    * Support images & videos
+    * Support multi images in one post or mixin with them
+    * Like on a post and view all like with their profiles
+    * Comment on a post and replay on a (comment & replay)
+        * Like on a comment & replay and view all like with their profiles
+    * Edit post
+    * Delete post
+    * Unfollow the user of the post
 
 * My Timelines Screen
-  * Custom posts & stories feed based on followers & followings
-  * Refresh the posts info
-  * Loading more posts (it displays five-by-five posts)
+    * Custom posts & stories feed based on followers & followings
+    * Refresh the posts info
+    * Loading more posts (it displays five-by-five posts)
 
 * All Timelines Screen
-  * View all user's posts (images & videos)
-  * Change the screen from a grid layout to a timeline layout
+    * View all user's posts (images & videos)
+    * Change the screen from a grid layout to a timeline layout
 
 * Search for a user based on username
 
-* Video Screen 
-  * It displays all user's videos with almost post features
-  * Control of sound & play
-  
+* Video Screen
+    * It displays all user's videos with almost post features
+    * Control of sound & play
+
 * Profile Screen
-  * Follow / Unfollow Users
-  * Display images & videos in a separate view
-  * Change the screen from a grid layout to a timeline layout
-  * Edit profile info
-  
+    * Follow / Unfollow Users
+    * Display images & videos in a separate view
+    * Change the screen from a grid layout to a timeline layout
+    * Edit profile info
+
 * Chat Screen
-  * Chat with any user
-  * Group chat
-  * Support
-    * Text
-    * Image (gallery & camera)
-    * Voice
-    * One-to-one video call
-    * Group video call
+    * Chat with any user
+    * Group chat
+    * Support
+        * Text
+        * Image (gallery & camera)
+        * Voice
+        * One-to-one video call
+        * Group video call
 
 * Push Notifications
 * Send posts to chats
@@ -336,19 +336,19 @@ $ cd flutter-clean-architecture-instagram/
 
 
 ## What's Next?
- - [x] Notifications for likes, comments, follows, etc
- - [x] Caching of Profiles, Images, Etc.
- - [x] Calling video and voice in chat
- - [x] Create a group chat
- - [x] Calling video and voice in group chat
- - [x] Send posts to chats
- - [x] control in the dimension of selected images & video from the gallery
- - [x] Custom gallery display
- - [x] Improve display loading of posts when opening the app
- - [x] share post
- - [x] Make like, comment, and share of animation container post touchy when long pressed on post
- - [x] Make it stable for the web
- - [ ] Clean up more code
+- [x] Notifications for likes, comments, follows, etc
+- [x] Caching of Profiles, Images, Etc.
+- [x] Calling video and voice in chat
+- [x] Create a group chat
+- [x] Calling video and voice in group chat
+- [x] Send posts to chats
+- [x] control in the dimension of selected images & video from the gallery
+- [x] Custom gallery display
+- [x] Improve display loading of posts when opening the app
+- [x] share post
+- [x] Make like, comment, and share of animation container post touchy when long pressed on post
+- [x] Make it stable for the web
+- [ ] Clean up more code
 
 
 
