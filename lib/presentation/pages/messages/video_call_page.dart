@@ -101,7 +101,7 @@ class CallPageState extends State<CallPage> {
     await _engine.setVideoEncoderConfiguration(configuration);
     await _engine.startPreview();
     await _engine.joinChannel(
-      token: agoraToken,
+      token: '',
       channelId: widget.channelName,
       uid: 0,
       options: ChannelMediaOptions(
