@@ -13,10 +13,13 @@ class WhichProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (userId.isNotEmpty) {
-      return userId == myPersonalId ? PersonalProfilePage(personalId: userId) : UserProfilePage(userId: userId);
+      return userId == myPersonalId
+          ? PersonalProfilePage(personalId: userId)
+          : UserProfilePage(userId: userId);
     } else {
       return Builder(builder: (context) {
-        UserPersonalInfo? myPersonalInfo = UserInfoCubit.get(context).myPersonalInfo;
+        UserPersonalInfo? myPersonalInfo =
+            UserInfoCubit.get(context).myPersonalInfo;
 
         return userName == myPersonalInfo.userName
             ? PersonalProfilePage(

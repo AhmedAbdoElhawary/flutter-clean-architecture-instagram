@@ -5,6 +5,7 @@ class ThineLinearProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LinearProgressIndicator(minHeight: 1, color: Theme.of(context).focusColor);
+    return LinearProgressIndicator(
+        minHeight: 1, color: Theme.of(context).focusColor);
   }
 }

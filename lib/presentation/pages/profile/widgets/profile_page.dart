@@ -57,7 +57,8 @@ class _ProfilePageState extends State<ProfilePage> {
             length: 3,
             child: ValueListenableBuilder(
               valueListenable: widget.userInfo,
-              builder: (context, UserPersonalInfo userInfoValue, child) => widgetsAboveTapBarsForWeb(userInfoValue),
+              builder: (context, UserPersonalInfo userInfoValue, child) =>
+                  widgetsAboveTapBarsForWeb(userInfoValue),
             ),
           ),
         ),
@@ -73,8 +74,9 @@ class _ProfilePageState extends State<ProfilePage> {
           length: 3,
           child: ValueListenableBuilder(
             valueListenable: widget.userInfo,
-            builder: (context, UserPersonalInfo userInfoValue, child) => NestedScrollView(
-              headerSliverBuilder: (_, __) {
+            builder: (context, UserPersonalInfo userInfoValue, child) =>
+                NestedScrollView(
+              headerSliverBuilder: (_, _) {
                 return [
                   SliverList(
                     delegate: SliverChildListDelegate(
@@ -94,7 +96,9 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget tapBar() {
     return BlocBuilder<PostCubit, PostState>(
       bloc: PostCubit.get(context)
-        ..getPostsInfo(postsIds: widget.userInfo.value.posts, isThatMyPosts: widget.isThatMyPersonalId),
+        ..getPostsInfo(
+            postsIds: widget.userInfo.value.posts,
+            isThatMyPosts: widget.isThatMyPersonalId),
       buildWhen: (previous, current) {
         if (reBuild.value) {
           reBuild.value = false;
@@ -104,16 +108,21 @@ class _ProfilePageState extends State<ProfilePage> {
           return true;
         }
         return previous != current &&
-            ((current is CubitMyPersonalPostsLoaded && widget.isThatMyPersonalId) ||
-                (current is CubitPostsInfoLoaded && !widget.isThatMyPersonalId));
+            ((current is CubitMyPersonalPostsLoaded &&
+                    widget.isThatMyPersonalId) ||
+                (current is CubitPostsInfoLoaded &&
+                    !widget.isThatMyPersonalId));
       },
       builder: (BuildContext context, PostState state) {
         if (state is CubitMyPersonalPostsLoaded && widget.isThatMyPersonalId) {
           return columnOfWidgets(state.postsInfo);
-        } else if (state is CubitPostsInfoLoaded && !widget.isThatMyPersonalId) {
+        } else if (state is CubitPostsInfoLoaded &&
+            !widget.isThatMyPersonalId) {
           return columnOfWidgets(state.postsInfo);
         } else {
-          return isThatMobile ? const SingleChildScrollView(child: _LoadingGridView()) : const _LoadingGridView();
+          return isThatMobile
+              ? const SingleChildScrollView(child: _LoadingGridView())
+              : const _LoadingGridView();
         }
       },
     );
@@ -124,7 +133,10 @@ class _ProfilePageState extends State<ProfilePage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _TabBarIcons(tapBarIndex: tabBarIndex),
-        _TabBarsViews(postsInfo: postsInfo, userId: widget.userId, tapBarIndex: tabBarIndex),
+        _TabBarsViews(
+            postsInfo: postsInfo,
+            userId: widget.userId,
+            tapBarIndex: tabBarIndex),
       ],
     );
   }
@@ -137,7 +149,8 @@ class _ProfilePageState extends State<ProfilePage> {
         Row(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: isWidthAboveMinimum ? 60 : 40, vertical: 30),
+              padding: EdgeInsets.symmetric(
+                  horizontal: isWidthAboveMinimum ? 60 : 40, vertical: 30),
               child: CircleAvatarOfProfileImage(
                 bodyHeight: isWidthAboveMinimum ? 1500 : 900,
                 userInfo: userInfo,
@@ -166,17 +179,23 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        personalNumbersInfo(userInfo.posts, userInfo, isThatFollowers: null),
+                        personalNumbersInfo(userInfo.posts, userInfo,
+                            isThatFollowers: null),
                         const SizedBox(width: 20),
-                        personalNumbersInfo(userInfo.followerPeople, userInfo, isThatFollowers: true),
+                        personalNumbersInfo(userInfo.followerPeople, userInfo,
+                            isThatFollowers: true),
                         const SizedBox(width: 20),
-                        personalNumbersInfo(userInfo.followedPeople, userInfo, isThatFollowers: false),
+                        personalNumbersInfo(userInfo.followedPeople, userInfo,
+                            isThatFollowers: false),
                       ],
                     ),
                   ),
-                  Text(userInfo.name, style: Theme.of(context).textTheme.displayMedium),
+                  Text(userInfo.name,
+                      style: Theme.of(context).textTheme.displayMedium),
                   const SizedBox(height: 5),
-                  Text(userInfo.bio, style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15)),
+                  Text(userInfo.bio,
+                      style: getNormalStyle(
+                          color: Theme.of(context).focusColor, fontSize: 15)),
                   const SizedBox(height: 10),
                 ],
               ),
@@ -190,7 +209,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   List<Widget> widgetsAboveTapBarsForMobile(UserPersonalInfo userInfo) {
     final mediaQuery = MediaQuery.of(context);
-    final bodyHeight = mediaQuery.size.height - AppBar().preferredSize.height - mediaQuery.padding.top;
+    final bodyHeight = mediaQuery.size.height -
+        AppBar().preferredSize.height -
+        mediaQuery.padding.top;
     return [
       Column(
         children: [
@@ -201,7 +222,8 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(userInfo.name, style: Theme.of(context).textTheme.displayMedium),
+                Text(userInfo.name,
+                    style: Theme.of(context).textTheme.displayMedium),
                 ReadMore(userInfo.bio, 4),
                 const SizedBox(height: 10),
                 Row(
@@ -240,9 +262,12 @@ class _ProfilePageState extends State<ProfilePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  personalNumbersInfo(userInfo.posts, userInfo, isThatFollowers: null),
-                  personalNumbersInfo(userInfo.followerPeople, userInfo, isThatFollowers: true),
-                  personalNumbersInfo(userInfo.followedPeople, userInfo, isThatFollowers: false),
+                  personalNumbersInfo(userInfo.posts, userInfo,
+                      isThatFollowers: null),
+                  personalNumbersInfo(userInfo.followerPeople, userInfo,
+                      isThatFollowers: true),
+                  personalNumbersInfo(userInfo.followedPeople, userInfo,
+                      isThatFollowers: false),
                 ],
               ),
             ],
@@ -256,7 +281,8 @@ class _ProfilePageState extends State<ProfilePage> {
     reBuild.value = true;
   }
 
-  Widget personalNumbersInfo(List<dynamic> usersIds, UserPersonalInfo userInfo, {bool? isThatFollowers}) {
+  Widget personalNumbersInfo(List<dynamic> usersIds, UserPersonalInfo userInfo,
+      {bool? isThatFollowers}) {
     String text = isThatFollowers == null
         ? StringsManager.posts.tr
         : isThatFollowers
@@ -266,14 +292,19 @@ class _ProfilePageState extends State<ProfilePage> {
       List<Widget> userInfoWidgets = [
         Text(
           "${usersIds.length}",
-          style: getBoldStyle(color: Theme.of(context).focusColor, fontSize: isThatMobile ? 20 : 15),
+          style: getBoldStyle(
+              color: Theme.of(context).focusColor,
+              fontSize: isThatMobile ? 20 : 15),
         ),
         if (!isThatMobile) const SizedBox(width: 5),
-        Text(text, style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15)),
+        Text(text,
+            style: getNormalStyle(
+                color: Theme.of(context).focusColor, fontSize: 15)),
       ];
       return ValueListenableBuilder(
         valueListenable: widget.userInfo,
-        builder: (context, UserPersonalInfo userInfoValue, child) => GestureDetector(
+        builder: (context, UserPersonalInfo userInfoValue, child) =>
+            GestureDetector(
           onTap: () async {
             if (isThatFollowers != null) {
               if (isThatMobile) {
@@ -296,7 +327,9 @@ class _ProfilePageState extends State<ProfilePage> {
               }
             }
           },
-          child: isThatMobile ? Column(children: userInfoWidgets) : Row(children: userInfoWidgets),
+          child: isThatMobile
+              ? Column(children: userInfoWidgets)
+              : Row(children: userInfoWidgets),
         ),
       );
     });
@@ -327,8 +360,9 @@ class _LoadingGridView extends StatelessWidget {
                 crossAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
                 mainAxisSpacing: isWidthAboveMinimum ? 30 : 1.5,
               ),
-              itemBuilder: (_, __) {
-                return Container(color: ColorManager.lightDarkGray, width: double.infinity);
+              itemBuilder: (_, _) {
+                return Container(
+                    color: ColorManager.lightDarkGray, width: double.infinity);
               },
               itemCount: 15,
             ),
@@ -361,7 +395,8 @@ class _TabBarsViews extends StatelessWidget {
         width: 920,
         child: ValueListenableBuilder(
           valueListenable: tapBarIndex,
-          builder: (context, int index, child) => _tabBarsWidgets(postsInfo, userId)[index],
+          builder: (context, int index, child) =>
+              _tabBarsWidgets(postsInfo, userId)[index],
         ),
       );
     }
@@ -369,9 +404,13 @@ class _TabBarsViews extends StatelessWidget {
 }
 
 List<Widget> _tabBarsWidgets(List<Post> postsInfo, String userId) {
-  List<Post> videosPostsInfo = postsInfo.where((element) => !(element.isThatMix || element.isThatImage)).toList();
+  List<Post> videosPostsInfo = postsInfo
+      .where((element) => !(element.isThatMix || element.isThatImage))
+      .toList();
 
-  List<Post> imagesPostsInfo = postsInfo.where((element) => (element.isThatMix || element.isThatImage)).toList();
+  List<Post> imagesPostsInfo = postsInfo
+      .where((element) => (element.isThatMix || element.isThatImage))
+      .toList();
   return [
     ProfileGridView(postsInfo: imagesPostsInfo, userId: userId),
     CustomVideosGridView(postsInfo: videosPostsInfo, userId: userId),
@@ -391,20 +430,26 @@ class _TabBarIcons extends StatelessWidget {
         tapBarIndex.value = value;
       },
       unselectedLabelColor: ColorManager.grey,
-      labelColor:
-          isWidthAboveMinimum ? ColorManager.black : (isThatMobile ? Theme.of(context).focusColor : ColorManager.blue),
+      labelColor: isWidthAboveMinimum
+          ? ColorManager.black
+          : (isThatMobile ? Theme.of(context).focusColor : ColorManager.blue),
       labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w100),
       indicatorSize: isThatMobile ? null : TabBarIndicatorSize.label,
       isScrollable: isWidthAboveMinimum ? true : false,
-      labelPadding:
-          isWidthAboveMinimum ? const EdgeInsetsDirectional.only(start: 50, end: 50, top: 5, bottom: 3) : null,
+      labelPadding: isWidthAboveMinimum
+          ? const EdgeInsetsDirectional.only(
+              start: 50, end: 50, top: 5, bottom: 3)
+          : null,
       indicatorWeight: isWidthAboveMinimum ? 2 : (isThatMobile ? 2 : 0),
       indicator: isThatMobile
           ? null
           : BoxDecoration(
               border: Border(
                 top: BorderSide(
-                    color: isWidthAboveMinimum ? Theme.of(context).focusColor : ColorManager.transparent, width: 1),
+                    color: isWidthAboveMinimum
+                        ? Theme.of(context).focusColor
+                        : ColorManager.transparent,
+                    width: 1),
               ),
             ),
       tabs: [
@@ -433,7 +478,8 @@ class _TabBarIcons extends StatelessWidget {
             children: [
               ValueListenableBuilder(
                 valueListenable: tapBarIndex,
-                builder: (context, int tapBarIndexValue, child) => SvgPicture.asset(
+                builder: (context, int tapBarIndexValue, child) =>
+                    SvgPicture.asset(
                   IconsAssets.videoIcon,
                   colorFilter: ColorFilter.mode(
                       tapBarIndexValue == 1

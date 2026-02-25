@@ -18,7 +18,11 @@ class ShareButton extends StatefulWidget {
   final ValueNotifier<Post> postInfo;
   final Widget? shareWidget;
   final bool isThatForVideoPage;
-  const ShareButton({super.key, required this.postInfo, this.shareWidget, this.isThatForVideoPage = false});
+  const ShareButton(
+      {super.key,
+      required this.postInfo,
+      this.shareWidget,
+      this.isThatForVideoPage = false});
 
   @override
   State<ShareButton> createState() => _ShareButtonState();
@@ -45,7 +49,8 @@ class _ShareButtonState extends State<ShareButton> {
       },
       child: widget.shareWidget ??
           Padding(
-            padding: EdgeInsetsDirectional.only(start: widget.isThatForVideoPage ? 0 : 15.0),
+            padding: EdgeInsetsDirectional.only(
+                start: widget.isThatForVideoPage ? 0 : 15.0),
             child: iconsOfImagePost(IconsAssets.send1Icon),
           ),
     );
@@ -64,7 +69,10 @@ class _ShareButtonState extends State<ShareButton> {
     return SvgPicture.asset(
       path,
       colorFilter: ColorFilter.mode(
-          widget.isThatForVideoPage ? ColorManager.white : Theme.of(context).focusColor, BlendMode.srcIn),
+          widget.isThatForVideoPage
+              ? ColorManager.white
+              : Theme.of(context).focusColor,
+          BlendMode.srcIn),
       height: !widget.isThatForVideoPage ? 22 : 25,
     );
   }
@@ -78,7 +86,8 @@ class _ShareButtonState extends State<ShareButton> {
         color: Theme.of(context).splashColor,
         snapSpec: const SnapSpec(initialSnap: 1, snappings: [.4, 1, .7]),
         builder: buildSheet,
-        headerBuilder: (context, state) => Material(child: upperWidgets(context)),
+        headerBuilder: (context, state) =>
+            Material(child: upperWidgets(context)),
       ),
     );
   }
@@ -102,12 +111,14 @@ class _ShareButtonState extends State<ShareButton> {
 
   Padding searchBar(BuildContext context) {
     return Padding(
-      padding: const EdgeInsetsDirectional.only(top: 30.0, end: 20, start: 20, bottom: 10),
+      padding: const EdgeInsetsDirectional.only(
+          top: 30.0, end: 20, start: 20, bottom: 10),
       child: Container(
         width: double.infinity,
         height: 35,
-        decoration:
-            BoxDecoration(color: Theme.of(context).chipTheme.backgroundColor, borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(
+            color: Theme.of(context).chipTheme.backgroundColor,
+            borderRadius: BorderRadius.circular(10)),
         child: TextFormField(
           cursorColor: ColorManager.teal,
           style: Theme.of(context).textTheme.bodyLarge,
@@ -150,7 +161,9 @@ class _ShareButtonState extends State<ShareButton> {
 
   Padding postImage() {
     Post postInfo = widget.postInfo.value;
-    String postImageUrl = postInfo.imagesUrls.length > 1 ? postInfo.imagesUrls[0] : postInfo.postUrl;
+    String postImageUrl = postInfo.imagesUrls.length > 1
+        ? postInfo.imagesUrls[0]
+        : postInfo.postUrl;
     return Padding(
       padding: const EdgeInsets.only(left: 20),
       child: Container(
@@ -160,7 +173,8 @@ class _ShareButtonState extends State<ShareButton> {
           color: ColorManager.grey,
           borderRadius: BorderRadius.circular(5),
           image: DecorationImage(
-            image: NetworkImage(postInfo.isThatImage ? postImageUrl : postInfo.coverOfVideoUrl),
+            image: NetworkImage(
+                postInfo.isThatImage ? postImageUrl : postInfo.coverOfVideoUrl),
             fit: BoxFit.cover,
           ),
         ),
@@ -191,7 +205,7 @@ class _ShareButtonState extends State<ShareButton> {
     });
   }
 
-  Widget buildSheet(BuildContext _, SheetState __) => Material(
+  Widget buildSheet(BuildContext _, SheetState _) => Material(
         child: SendToUsers(
           publisherInfo: widget.postInfo.value.publisherInfo!,
           messageTextController: _bottomSheetMessageTextController,

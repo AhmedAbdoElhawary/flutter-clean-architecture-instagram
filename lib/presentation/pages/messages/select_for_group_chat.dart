@@ -49,7 +49,8 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
               children: [
                 Text(
                   "To",
-                  style: getMediumStyle(color: Theme.of(context).focusColor, fontSize: 17),
+                  style: getMediumStyle(
+                      color: Theme.of(context).focusColor, fontSize: 17),
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -58,7 +59,8 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
                   physics: const BouncingScrollPhysics(),
                   child: ValueListenableBuilder(
                     valueListenable: selectedUsersInfo,
-                    builder: (context, List<UserPersonalInfo> selectedUsersInfoValue, child) {
+                    builder: (context,
+                        List<UserPersonalInfo> selectedUsersInfoValue, child) {
                       return Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -68,7 +70,8 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
                             ...List.generate(
                               selectedUsersInfoValue.length,
                               (index) {
-                                return buildSelectedUser(selectedUsersInfoValue, index);
+                                return buildSelectedUser(
+                                    selectedUsersInfoValue, index);
                               },
                             ),
                           ],
@@ -96,7 +99,8 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
     );
   }
 
-  Padding buildSelectedUser(List<UserPersonalInfo> selectedUsersInfoValue, int index) {
+  Padding buildSelectedUser(
+      List<UserPersonalInfo> selectedUsersInfoValue, int index) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 5),
       child: Container(
@@ -120,29 +124,39 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Text("New message", style: getMediumStyle(color: Theme.of(context).focusColor, fontSize: 18)),
+      title: Text("New message",
+          style: getMediumStyle(
+              color: Theme.of(context).focusColor, fontSize: 18)),
       actions: [
         ValueListenableBuilder(
           valueListenable: selectedUsersInfo,
-          builder: (context, List<UserPersonalInfo> selectedUsersInfoValue, child) => Padding(
+          builder:
+              (context, List<UserPersonalInfo> selectedUsersInfoValue, child) =>
+                  Padding(
             padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 18),
             child: GestureDetector(
               onTap: () {
                 if (selectedUsersInfoValue.isEmpty) return;
 
                 if (selectedUsersInfoValue.length > 1) {
-                  Go(context).push(page: GroupMessages(selectedUsersInfoValue: selectedUsersInfoValue));
+                  Go(context).push(
+                      page: GroupMessages(
+                          selectedUsersInfoValue: selectedUsersInfoValue));
                 } else {
                   Go(context).push(
                       page: BlocProvider<MessageBloc>(
                     create: (context) => injector<MessageBloc>(),
-                    child: ChattingPage(messageDetails: SenderInfo(receiversInfo: selectedUsersInfoValue)),
+                    child: ChattingPage(
+                        messageDetails:
+                            SenderInfo(receiversInfo: selectedUsersInfoValue)),
                   ));
                 }
               },
               child: Text("Chat",
                   style: getMediumStyle(
-                      color: selectedUsersInfoValue.isNotEmpty ? ColorManager.blue : ColorManager.lightBlue,
+                      color: selectedUsersInfoValue.isNotEmpty
+                          ? ColorManager.blue
+                          : ColorManager.lightBlue,
                       fontSize: 18)),
             ),
           ),
@@ -151,10 +165,12 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
     );
   }
 
-  BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState> buildBlocBuilder() {
+  BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState>
+      buildBlocBuilder() {
     return BlocBuilder<UsersInfoReelTimeBloc, UsersInfoReelTimeState>(
       bloc: UsersInfoReelTimeBloc.get(context)..add(LoadAllUsersInfoInfo()),
-      buildWhen: (previous, current) => previous != current && current is AllUsersInfoLoaded,
+      buildWhen: (previous, current) =>
+          previous != current && current is AllUsersInfoLoaded,
       builder: (context, state) {
         if (state is AllUsersInfoLoaded) {
           List<UserPersonalInfo> usersInfo = state.allUsersInfoInReelTime;
@@ -182,7 +198,9 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
         addAutomaticKeepAlives: false,
         itemBuilder: (context, index) {
           if (index == 0) {
-            return Text("Suggestions", style: getMediumStyle(color: Theme.of(context).focusColor, fontSize: 18));
+            return Text("Suggestions",
+                style: getMediumStyle(
+                    color: Theme.of(context).focusColor, fontSize: 18));
           } else {
             return buildUserInfo(context, usersInfo[index]);
           }
@@ -208,7 +226,9 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
                 selectedUsersInfo.value.remove(userInfo);
               }
             });
-            scrollController.animateTo(0.0, duration: const Duration(milliseconds: 500), curve: Curves.easeInOutQuart);
+            scrollController.animateTo(0.0,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOutQuart);
           },
           child: Container(
             color: ColorManager.transparent,
@@ -217,7 +237,8 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
                 CircleAvatar(
                   backgroundColor: ColorManager.customGrey,
                   backgroundImage: userInfo.profileImageUrl.isNotEmpty
-                      ? CachedNetworkImageProvider(userInfo.profileImageUrl, maxWidth: 120, maxHeight: 120)
+                      ? CachedNetworkImageProvider(userInfo.profileImageUrl,
+                          maxWidth: 120, maxHeight: 120)
                       : null,
                   radius: 30,
                   child: userInfo.profileImageUrl.isEmpty
@@ -260,12 +281,21 @@ class _SelectForGroupChatState extends State<SelectForGroupChat> {
       width: 25,
       padding: const EdgeInsetsDirectional.all(2),
       decoration: BoxDecoration(
-        color: !isUserSelected ? Theme.of(context).primaryColor : ColorManager.blue,
-        border: Border.all(color: !isUserSelected ? ColorManager.darkGray : ColorManager.transparent, width: 2),
+        color: !isUserSelected
+            ? Theme.of(context).primaryColor
+            : ColorManager.blue,
+        border: Border.all(
+            color: !isUserSelected
+                ? ColorManager.darkGray
+                : ColorManager.transparent,
+            width: 2),
         borderRadius: BorderRadius.circular(50.0),
       ),
-      child:
-          isUserSelected ? const Center(child: Icon(Icons.check_rounded, color: ColorManager.white, size: 17)) : null,
+      child: isUserSelected
+          ? const Center(
+              child: Icon(Icons.check_rounded,
+                  color: ColorManager.white, size: 17))
+          : null,
     );
   }
 }
@@ -307,7 +337,8 @@ class _GroupMessagesState extends State<GroupMessages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar.chattingAppBar(widget.selectedUsersInfoValue, context),
+      appBar:
+          CustomAppBar.chattingAppBar(widget.selectedUsersInfoValue, context),
       body: BlocProvider<MessageBloc>(
         create: (context) => injector<MessageBloc>(),
         child: ChatMessages(messageDetails: messageDetails),

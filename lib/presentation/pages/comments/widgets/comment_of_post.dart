@@ -78,8 +78,8 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
     );
   }
 
-  CommentsInfoCubit blocAction() =>
-      BlocProvider.of<CommentsInfoCubit>(context)..getSpecificComments(postId: widget.postInfo.value.postUid);
+  CommentsInfoCubit blocAction() => BlocProvider.of<CommentsInfoCubit>(context)
+    ..getSpecificComments(postId: widget.postInfo.value.postUid);
 
   bool buildBlocWhen(CommentsInfoState previous, CommentsInfoState current) =>
       previous != current && current is CubitCommentsInfoLoaded;
@@ -95,14 +95,16 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
   }
 
   Widget blocLoaded(BuildContext context, CubitCommentsInfoLoaded state) {
-    state.commentsOfThePost.sort((a, b) => b.datePublished.compareTo(a.datePublished));
+    state.commentsOfThePost
+        .sort((a, b) => b.datePublished.compareTo(a.datePublished));
     allComments = state.commentsOfThePost;
     return commentsListView(allComments);
   }
 
   Widget whenBuildFailed(BuildContext context, state) {
     ToastShow.toastStateError(state);
-    return Text(StringsManager.somethingWrong.tr, style: getNormalStyle(color: Theme.of(context).focusColor));
+    return Text(StringsManager.somethingWrong.tr,
+        style: getNormalStyle(color: Theme.of(context).focusColor));
   }
 
   void selectedComment(Comment commentInfo) {
@@ -129,16 +131,21 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
                       selectedCommentInfo: widget.selectedCommentInfo,
                     ),
                     Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 11.5, top: 5.0),
+                      padding: const EdgeInsetsDirectional.only(
+                          start: 11.5, top: 5.0),
                       child: Text(
                         DateReformat.fullDigitsFormat(
-                            widget.postInfo.value.datePublished, widget.postInfo.value.datePublished),
-                        style: getNormalStyle(color: Theme.of(context).bottomAppBarTheme.color!),
+                            widget.postInfo.value.datePublished,
+                            widget.postInfo.value.datePublished),
+                        style: getNormalStyle(
+                            color: Theme.of(context).bottomAppBarTheme.color!),
                       ),
                     ),
                     const Divider(color: ColorManager.black26),
                   ],
-                  allComments.isNotEmpty ? buildComments(commentsOfThePost) : const SizedBox(),
+                  allComments.isNotEmpty
+                      ? buildComments(commentsOfThePost)
+                      : const SizedBox(),
                 ],
               ),
             ),
@@ -174,7 +181,8 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
         );
       },
       itemCount: commentsOfThePost.length,
-      separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
+      separatorBuilder: (BuildContext context, int index) =>
+          const SizedBox(height: 10),
     );
   }
 
@@ -182,7 +190,10 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
     return Center(
       child: Text(
         StringsManager.noComments.tr,
-        style: getBoldStyle(fontSize: 20, color: Theme.of(context).focusColor, fontStyle: FontStyle.italic),
+        style: getBoldStyle(
+            fontSize: 20,
+            color: Theme.of(context).focusColor,
+            fontStyle: FontStyle.italic),
       ),
     );
   }
@@ -214,7 +225,8 @@ class _CommentsOfPostState extends State<CommentsOfPost> {
                 Expanded(
                   child: Text(
                       "${StringsManager.replyingTo.tr} ${widget.selectedCommentInfo.value!.whoCommentInfo!.userName}",
-                      style: getNormalStyle(color: Theme.of(context).disabledColor)),
+                      style: getNormalStyle(
+                          color: Theme.of(context).disabledColor)),
                 ),
                 GestureDetector(
                     onTap: () {

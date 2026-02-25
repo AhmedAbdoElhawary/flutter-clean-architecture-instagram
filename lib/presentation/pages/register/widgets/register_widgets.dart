@@ -9,7 +9,6 @@ import 'package:instagram/core/resources/styles_manager.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/cubit/firebaseAuthCubit/firebase_auth_cubit.dart';
 import 'package:instagram/presentation/pages/register/sign_up_page.dart';
-import 'package:instagram/presentation/pages/register/widgets/or_text.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_text_field.dart';
 
 class RegisterWidgets extends StatefulWidget {
@@ -51,7 +50,9 @@ class _SignUpPageState extends State<RegisterWidgets> {
         child: Center(
             child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: isThatMobile ? buildColumn(context, height: height) : buildForWeb(context),
+          child: isThatMobile
+              ? buildColumn(context, height: height)
+              : buildForWeb(context),
         )),
       ),
     );
@@ -98,7 +99,8 @@ class _SignUpPageState extends State<RegisterWidgets> {
           if (!widget.isThatLogIn) const Spacer(),
           SvgPicture.asset(
             IconsAssets.instagramLogo,
-            colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+            colorFilter:
+                ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
             height: 50,
           ),
           const SizedBox(height: 30),
@@ -128,28 +130,38 @@ class _SignUpPageState extends State<RegisterWidgets> {
             if (!isThatMobile) const SizedBox(height: 10),
             Flexible(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: isThatMobile ? 4 : 0, vertical: isThatMobile ? 15 : 0),
+                padding: EdgeInsets.symmetric(
+                    horizontal: isThatMobile ? 4 : 0,
+                    vertical: isThatMobile ? 15 : 0),
                 child: Row(
                   children: [
                     const SizedBox(width: 13),
                     ValueListenableBuilder(
                       valueListenable: widget.rememberPassword!,
-                      builder: (context, bool rememberPasswordValue, child) => Checkbox(
-                          value: rememberPasswordValue,
-                          activeColor: isThatMobile ? ColorManager.white : ColorManager.blue,
-                          fillColor: isThatMobile
-                              ? WidgetStateProperty.resolveWith((Set states) {
-                                  if (states.contains(WidgetState.disabled)) {
-                                    return Colors.blue.withValues(alpha: .32);
-                                  }
-                                  return Colors.blue;
-                                })
-                              : null,
-                          onChanged: (value) => widget.rememberPassword!.value = !rememberPasswordValue),
+                      builder: (context, bool rememberPasswordValue, child) =>
+                          Checkbox(
+                              value: rememberPasswordValue,
+                              activeColor: isThatMobile
+                                  ? ColorManager.white
+                                  : ColorManager.blue,
+                              fillColor: isThatMobile
+                                  ? WidgetStateProperty.resolveWith(
+                                      (Set states) {
+                                      if (states
+                                          .contains(WidgetState.disabled)) {
+                                        return Colors.blue
+                                            .withValues(alpha: .32);
+                                      }
+                                      return Colors.blue;
+                                    })
+                                  : null,
+                              onChanged: (value) => widget.rememberPassword!
+                                  .value = !rememberPasswordValue),
                     ),
                     Text(
                       StringsManager.rememberPassword.tr,
-                      style: getNormalStyle(color: Theme.of(context).focusColor),
+                      style:
+                          getNormalStyle(color: Theme.of(context).focusColor),
                     )
                   ],
                 ),
@@ -168,22 +180,13 @@ class _SignUpPageState extends State<RegisterWidgets> {
             if (!widget.isThatLogIn) ...[
               const Divider(color: ColorManager.lightGrey, height: 1),
               Padding(
-                padding: const EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0, bottom: 6.5),
+                padding: const EdgeInsets.only(
+                    top: 15.0, left: 15.0, right: 15.0, bottom: 6.5),
                 child: haveAccountRow(context),
               ),
             ] else ...[
               haveAccountRow(context),
-              const OrText(),
             ],
-          ],
-          if (widget.isThatLogIn) ...[
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                StringsManager.loginWithFacebook.tr,
-                style: getNormalStyle(color: ColorManager.blue),
-              ),
-            ),
           ],
         ],
       ),
@@ -195,8 +198,11 @@ class _SignUpPageState extends State<RegisterWidgets> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          widget.isThatLogIn ? StringsManager.noAccount.tr : StringsManager.haveAccount.tr,
-          style: getNormalStyle(fontSize: 13, color: Theme.of(context).focusColor),
+          widget.isThatLogIn
+              ? StringsManager.noAccount.tr
+              : StringsManager.haveAccount.tr,
+          style:
+              getNormalStyle(fontSize: 13, color: Theme.of(context).focusColor),
         ),
         const SizedBox(width: 4),
         register(context),
@@ -208,7 +214,9 @@ class _SignUpPageState extends State<RegisterWidgets> {
     return InkWell(
         onTap: () {
           if (widget.isThatLogIn) {
-            Get.to(const SignUpPage(), preventDuplicates: true, duration: const Duration(milliseconds: 0));
+            Get.to(const SignUpPage(),
+                preventDuplicates: true,
+                duration: const Duration(milliseconds: 0));
           } else {
             Get.back();
           }
@@ -263,11 +271,14 @@ class _EmailTextFieldsState extends State<_EmailTextFields> {
         height: isThatMobile ? null : 37,
         width: double.infinity,
         child: BlocConsumer<FirebaseAuthCubit, FirebaseAuthCubitState>(
-          bloc: FirebaseAuthCubit.get(context)..isThisEmailToken(email: widget.controller.text),
-          listenWhen: (previous, current) => previous != current && current is CubitEmailVerificationLoaded,
+          bloc: FirebaseAuthCubit.get(context)
+            ..isThisEmailToken(email: widget.controller.text),
+          listenWhen: (previous, current) =>
+              previous != current && current is CubitEmailVerificationLoaded,
           listener: (context, state) {
             if (!widget.isThatLogin) {
-              if (state is CubitEmailVerificationLoaded && state.isThisEmailToken) {
+              if (state is CubitEmailVerificationLoaded &&
+                  state.isThisEmailToken) {
                 errorMassage = "This email already exists.";
                 widget.validate?.value = false;
               } else {
@@ -276,16 +287,19 @@ class _EmailTextFieldsState extends State<_EmailTextFields> {
               }
             }
           },
-          buildWhen: (previous, current) => previous != current && current is CubitEmailVerificationLoaded,
+          buildWhen: (previous, current) =>
+              previous != current && current is CubitEmailVerificationLoaded,
           builder: (context, state) {
             return TextFormField(
               controller: widget.controller,
               cursorColor: ColorManager.teal,
-              style: getNormalStyle(color: Theme.of(context).focusColor, fontSize: 15),
+              style: getNormalStyle(
+                  color: Theme.of(context).focusColor, fontSize: 15),
               decoration: InputDecoration(
                 hintText: widget.hint,
                 hintStyle: isThatMobile
-                    ? getNormalStyle(color: Theme.of(context).tabBarTheme.indicatorColor!)
+                    ? getNormalStyle(
+                        color: Theme.of(context).tabBarTheme.indicatorColor!)
                     : getNormalStyle(color: ColorManager.black54, fontSize: 12),
                 fillColor: const Color.fromARGB(48, 232, 232, 232),
                 filled: true,
@@ -293,7 +307,8 @@ class _EmailTextFieldsState extends State<_EmailTextFields> {
                 enabledBorder: outlineInputBorder(),
                 errorStyle: getNormalStyle(color: ColorManager.red),
                 errorText: isThatMobile ? errorMassage : null,
-                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: isThatMobile ? 15 : 5),
+                contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10, vertical: isThatMobile ? 15 : 5),
               ),
             );
           },
@@ -315,7 +330,8 @@ class _EmailTextFieldsState extends State<_EmailTextFields> {
   OutlineInputBorder outlineInputBorder() {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(isThatMobile ? 5.0 : 1.0),
-      borderSide: BorderSide(color: ColorManager.lightGrey, width: isThatMobile ? 1.0 : 0.8),
+      borderSide: BorderSide(
+          color: ColorManager.lightGrey, width: isThatMobile ? 1.0 : 0.8),
     );
   }
 }

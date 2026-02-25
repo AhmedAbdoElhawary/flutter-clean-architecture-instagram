@@ -46,7 +46,9 @@ class RecordViewState extends State<RecordView> {
     return Row(
       children: [
         GestureDetector(
-          child: _isPlaying ? buildIcon(Icons.pause_sharp, theColor) : buildIcon(Icons.play_arrow_rounded, theColor),
+          child: _isPlaying
+              ? buildIcon(Icons.pause_sharp, theColor)
+              : buildIcon(Icons.play_arrow_rounded, theColor),
           onTap: () => _onPlay(urlRecord: widget.urlRecord),
         ),
         const SizedBox(width: 10),
@@ -58,7 +60,9 @@ class RecordViewState extends State<RecordView> {
             barHeight: 3,
             thumbRadius: 6.0,
             baseBarColor: widget.isThatMe
-                ? (isThatMobile ? ColorManager.darkWhite : ColorManager.veryLowOpacityGrey)
+                ? (isThatMobile
+                    ? ColorManager.darkWhite
+                    : ColorManager.veryLowOpacityGrey)
                 : ColorManager.veryLowOpacityGrey,
             progressBarColor: theColor,
             progress: Duration(microseconds: _currentDuration ?? 0),
@@ -75,7 +79,8 @@ class RecordViewState extends State<RecordView> {
     List<String> datesSeparated;
     if (_completedPercentage < 0.9) {
       double i = ((_reverseDuration * 0.000001) / 60) - 0.02;
-      datesSeparated = ((i < 0 ? 0 : i).toStringAsFixed(2)).toString().split(".");
+      datesSeparated =
+          ((i < 0 ? 0 : i).toStringAsFixed(2)).toString().split(".");
     } else {
       double i = ((_totalDuration * 0.000001) / 60) - 0.02;
       datesSeparated = (i < 0 ? 0 : i).toStringAsFixed(2).toString().split(".");
@@ -83,11 +88,14 @@ class RecordViewState extends State<RecordView> {
     return "${datesSeparated[0]}:${datesSeparated[1]}";
   }
 
-  Icon buildIcon(IconData icon, Color theColor) => Icon(icon, color: theColor, size: 30);
+  Icon buildIcon(IconData icon, Color theColor) =>
+      Icon(icon, color: theColor, size: 30);
 
   Future<void> _onPlay({required String urlRecord}) async {
     if (!_isPlaying) {
-      Source url = widget.isThatLocalRecorded ? DeviceFileSource(urlRecord) : UrlSource(urlRecord);
+      Source url = widget.isThatLocalRecorded
+          ? DeviceFileSource(urlRecord)
+          : UrlSource(urlRecord);
       audioPlayer.play(url);
       setState(() {
         _isPlaying = true;
@@ -109,7 +117,8 @@ class RecordViewState extends State<RecordView> {
       audioPlayer.onPositionChanged.listen((duration) {
         setState(() {
           _currentDuration = duration.inMicroseconds;
-          _completedPercentage = _currentDuration!.toDouble() / _totalDuration.toDouble();
+          _completedPercentage =
+              _currentDuration!.toDouble() / _totalDuration.toDouble();
           _reverseDuration = _totalDuration - _currentDuration!;
         });
       });

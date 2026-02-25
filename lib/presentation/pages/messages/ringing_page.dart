@@ -1,4 +1,4 @@
-import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram/config/routes/app_routes.dart';
@@ -13,7 +13,8 @@ import 'package:instagram/presentation/pages/messages/video_call_page.dart';
 class CallingRingingPage extends StatefulWidget {
   final String channelId;
   final VoidCallback clearMoving;
-  const CallingRingingPage({super.key, required this.channelId, required this.clearMoving});
+  const CallingRingingPage(
+      {super.key, required this.channelId, required this.clearMoving});
 
   @override
   State<CallingRingingPage> createState() => _CallingRingingPageState();
@@ -33,7 +34,8 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
       backgroundColor: ColorManager.grey,
       body: SafeArea(
         child: BlocBuilder<CallingRoomsCubit, CallingRoomsState>(
-          bloc: CallingRoomsCubit.get(context)..getUsersInfoInThisRoom(channelId: widget.channelId),
+          bloc: CallingRoomsCubit.get(context)
+            ..getUsersInfoInThisRoom(channelId: widget.channelId),
           builder: (context, state) {
             if (pop) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -54,18 +56,20 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
 
   Future<void> onTapAcceptButton() async {
     UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-    await CallingRoomsCubit.get(context).joinToRoom(channelId: widget.channelId, myPersonalInfo: myPersonalInfo);
+    await CallingRoomsCubit.get(context).joinToRoom(
+        channelId: widget.channelId, myPersonalInfo: myPersonalInfo);
     if (!mounted) return;
 
     await Go(context).push(
       page: CallPage(
         channelName: widget.channelId,
-        role: ClientRole.Broadcaster,
+        role: ClientRoleType.clientRoleBroadcaster,
         userCallingType: UserCallingType.receiver,
       ),
       withoutRoot: false,
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => pop = true));
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => setState(() => pop = true));
   }
 
   Future<void> onTapCancelButton() async {
@@ -115,9 +119,12 @@ class _CallingRingingPageState extends State<CallingRingingPage> {
               backgroundImage: NetworkImage(userInfo[0].profileImageUrl!),
             ),
             const SizedBox(height: 30),
-            Text(userInfo[0].name!, style: getNormalStyle(color: ColorManager.white, fontSize: 25)),
+            Text(userInfo[0].name!,
+                style: getNormalStyle(color: ColorManager.white, fontSize: 25)),
             const SizedBox(height: 10),
-            Text('Calling...', style: getNormalStyle(color: ColorManager.white, fontSize: 16.5)),
+            Text('Calling...',
+                style:
+                    getNormalStyle(color: ColorManager.white, fontSize: 16.5)),
           ],
         ),
         const Spacer(),

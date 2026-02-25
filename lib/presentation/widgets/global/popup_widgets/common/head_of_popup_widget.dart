@@ -5,7 +5,8 @@ import 'package:instagram/core/resources/styles_manager.dart';
 class TheHeadWidgets extends StatelessWidget {
   final String text;
   final bool makeIconsBigger;
-  const TheHeadWidgets({super.key, required this.text, this.makeIconsBigger = false});
+  const TheHeadWidgets(
+      {super.key, required this.text, this.makeIconsBigger = false});
 
   @override
   Widget build(BuildContext context) {

@@ -27,7 +27,8 @@ class ImageLoader {
       onComplete();
     }
 
-    final fileStream = DefaultCacheManager().getFileStream(url, headers: requestHeaders as Map<String, String>?);
+    final fileStream = DefaultCacheManager()
+        .getFileStream(url, headers: requestHeaders as Map<String, String>?);
 
     fileStream.listen(
       (fileResponse) async {
@@ -43,8 +44,10 @@ class ImageLoader {
 
         state = LoadState.success;
 
-        ui.ImmutableBuffer immutable = await ui.ImmutableBuffer.fromUint8List(imageBytes);
-        PaintingBinding.instance.instantiateImageCodecWithSize(immutable).then((codec) {
+        ui.ImmutableBuffer immutable =
+            await ui.ImmutableBuffer.fromUint8List(imageBytes);
+        PaintingBinding.instance.instantiateImageCodecWithSize(immutable).then(
+            (codec) {
           frames = codec;
           onComplete();
         }, onError: (error) {
@@ -83,7 +86,8 @@ class StoryImage extends StatefulWidget {
     BoxFit fit = BoxFit.fitWidth,
     Key? key,
   }) {
-    return StoryImage(ImageLoader(url, requestHeaders: requestHeaders), controller: controller, fit: fit, key: key);
+    return StoryImage(ImageLoader(url, requestHeaders: requestHeaders),
+        controller: controller, fit: fit, key: key);
   }
 
   @override
@@ -102,7 +106,8 @@ class StoryImageState extends State<StoryImage> {
     super.initState();
 
     if (widget.controller != null) {
-      _streamSubscription = widget.controller!.playbackNotifier.listen((playbackState) {
+      _streamSubscription =
+          widget.controller!.playbackNotifier.listen((playbackState) {
         // for the case of gifs we need to pause/play
         if (widget.imageLoader.frames == null) {
           return;
@@ -149,7 +154,9 @@ class StoryImageState extends State<StoryImage> {
   void forward() async {
     _timer?.cancel();
 
-    if (widget.controller != null && widget.controller!.playbackNotifier.stream.value == PlaybackState.pause) {
+    if (widget.controller != null &&
+        widget.controller!.playbackNotifier.stream.value ==
+            PlaybackState.pause) {
       return;
     }
 

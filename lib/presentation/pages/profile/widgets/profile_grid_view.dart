@@ -40,7 +40,8 @@ class _CustomGridViewState extends State<ProfileGridView> {
 
               // To replicate StaggeredTile.count(1, num),
               // adjust tile height proportionally.
-              final double tileHeight = condition ? 200 : 400; // tweak values to fit your design
+              final double tileHeight =
+                  condition ? 200 : 400; // tweak values to fit your design
 
               return SizedBox(
                 height: tileHeight,

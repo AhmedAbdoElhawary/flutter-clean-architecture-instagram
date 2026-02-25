@@ -12,7 +12,8 @@ class FirebaseGroupMessageRepoImpl implements FireStoreGroupMessageRepository {
   @override
   Future<Message> createChatForGroups(Message messageInfo) async {
     try {
-      Message messageDetails = await FireStoreGroupChat.createChatForGroups(messageInfo);
+      Message messageDetails =
+          await FireStoreGroupChat.createChatForGroups(messageInfo);
       await FireStoreUser.updateChatsOfGroups(messageInfo: messageDetails);
       return messageDetails;
     } catch (e) {
@@ -21,14 +22,19 @@ class FirebaseGroupMessageRepoImpl implements FireStoreGroupMessageRepository {
   }
 
   @override
-  Future<Message> sendMessage({required Message messageInfo, Uint8List? pathOfPhoto, required File? recordFile}) async {
+  Future<Message> sendMessage(
+      {required Message messageInfo,
+      Uint8List? pathOfPhoto,
+      required File? recordFile}) async {
     try {
       if (pathOfPhoto != null) {
-        String imageUrl = await FirebaseStoragePost.uploadData(data: pathOfPhoto, folderName: "messagesFiles");
+        String imageUrl = await FirebaseStoragePost.uploadData(
+            data: pathOfPhoto, folderName: "messagesFiles");
         messageInfo.imageUrl = imageUrl;
       }
       if (recordFile != null) {
-        String recordedUrl = await FirebaseStoragePost.uploadFile(folderName: "messagesFiles", postFile: recordFile);
+        String recordedUrl = await FirebaseStoragePost.uploadFile(
+            folderName: "messagesFiles", postFile: recordFile);
         messageInfo.recordedUrl = recordedUrl;
       }
       bool updateLastMessage = true;
@@ -37,11 +43,12 @@ class FirebaseGroupMessageRepoImpl implements FireStoreGroupMessageRepository {
         messageInfo = newMessageInfo;
         updateLastMessage = false;
       }
-      Message myMessageInfo =
-          await FireStoreGroupChat.sendMessage(updateLastMessage: updateLastMessage, message: messageInfo);
+      Message myMessageInfo = await FireStoreGroupChat.sendMessage(
+          updateLastMessage: updateLastMessage, message: messageInfo);
 
       for (final userId in messageInfo.receiversIds) {
-        await FireStoreUser.sendNotification(userId: userId, message: messageInfo);
+        await FireStoreUser.sendNotification(
+            userId: userId, message: messageInfo);
       }
 
       return myMessageInfo;
@@ -61,9 +68,11 @@ class FirebaseGroupMessageRepoImpl implements FireStoreGroupMessageRepository {
     Message? replacedMessage,
   }) async {
     try {
-      await FireStoreGroupChat.deleteMessage(chatOfGroupUid: chatOfGroupUid, messageId: messageInfo.messageUid);
+      await FireStoreGroupChat.deleteMessage(
+          chatOfGroupUid: chatOfGroupUid, messageId: messageInfo.messageUid);
       if (replacedMessage != null) {
-        await FireStoreGroupChat.updateLastMessage(chatOfGroupUid: chatOfGroupUid, message: replacedMessage);
+        await FireStoreGroupChat.updateLastMessage(
+            chatOfGroupUid: chatOfGroupUid, message: replacedMessage);
       }
     } catch (e) {
       return Future.error(e.toString());

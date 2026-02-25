@@ -32,7 +32,8 @@ class CustomPostDisplay extends StatefulWidget {
   State<CustomPostDisplay> createState() => _CustomPostDisplayState();
 }
 
-class _CustomPostDisplayState extends State<CustomPostDisplay> with TickerProviderStateMixin {
+class _CustomPostDisplayState extends State<CustomPostDisplay>
+    with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
@@ -41,7 +42,9 @@ class _CustomPostDisplayState extends State<CustomPostDisplay> with TickerProvid
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final bodyHeight = mediaQuery.size.height - AppBar().preferredSize.height - mediaQuery.padding.top;
+    final bodyHeight = mediaQuery.size.height -
+        AppBar().preferredSize.height -
+        mediaQuery.padding.top;
     return thePostsOfHomePage(bodyHeight: bodyHeight);
   }
 
@@ -72,19 +75,25 @@ class _CustomPostDisplayState extends State<CustomPostDisplay> with TickerProvid
     );
   }
 
-  Padding imageCaption(Post postInfoValue, double bodyHeight, BuildContext context) {
+  Padding imageCaption(
+      Post postInfoValue, double bodyHeight, BuildContext context) {
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 11.5),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (postInfoValue.likes.isNotEmpty) CountOfLikes(postInfo: postInfoValue),
+          if (postInfoValue.likes.isNotEmpty)
+            CountOfLikes(postInfo: postInfoValue),
           const SizedBox(height: 5),
           if (AppLanguage.getInstance().isLangEnglish) ...[
-            ReadMore("${postInfoValue.publisherInfo!.name} ${postInfoValue.caption}", 2),
+            ReadMore(
+                "${postInfoValue.publisherInfo!.name} ${postInfoValue.caption}",
+                2),
           ] else ...[
-            ReadMore("${postInfoValue.caption} ${postInfoValue.publisherInfo!.name}", 2),
+            ReadMore(
+                "${postInfoValue.caption} ${postInfoValue.publisherInfo!.name}",
+                2),
           ],
         ],
       ),

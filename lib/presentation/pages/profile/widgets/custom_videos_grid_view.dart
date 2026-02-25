@@ -41,7 +41,8 @@ class _CustomVideosGridViewState extends State<CustomVideosGridView> {
               // In the new MasonryGridView, the item height is defined by its content.
               // To replicate the "taller tile" effect, we can wrap the child with SizedBox.
               return SizedBox(
-                height: condition ? 200 : 400, // adjust to match your old layout
+                height:
+                    condition ? 200 : 400, // adjust to match your old layout
                 child: CustomGridViewDisplay(
                   postClickedInfo: post,
                   postsInfo: widget.postsInfo,

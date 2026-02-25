@@ -13,13 +13,15 @@ class _ReelVideoPlay extends StatefulWidget {
 class _ReelVideoPlayState extends State<_ReelVideoPlay> {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
-  final ValueNotifier<Widget> videoStatusAnimation = ValueNotifier(const SizedBox());
+  final ValueNotifier<Widget> videoStatusAnimation =
+      ValueNotifier(const SizedBox());
 
   @override
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoInfo.value.postUrl))
+    _controller = VideoPlayerController.networkUrl(
+        Uri.parse(widget.videoInfo.value.postUrl))
       ..setLooping(true)
       ..initialize().then((_) => _controller.play());
     _initializeVideoPlayerFuture = _controller.initialize();
@@ -50,7 +52,8 @@ class _ReelVideoPlayState extends State<_ReelVideoPlay> {
         video(),
         ValueListenableBuilder(
           valueListenable: videoStatusAnimation,
-          builder: (context, value, child) => Center(child: videoStatusAnimation.value),
+          builder: (context, value, child) =>
+              Center(child: videoStatusAnimation.value),
         ),
       ],
     );
@@ -77,10 +80,12 @@ class _ReelVideoPlayState extends State<_ReelVideoPlay> {
               return;
             }
             if (_controller.value.volume == 0) {
-              videoStatusAnimation.value = FadeAnimation(child: volumeContainer(Icons.volume_up));
+              videoStatusAnimation.value =
+                  FadeAnimation(child: volumeContainer(Icons.volume_up));
               _controller.setVolume(1);
             } else {
-              videoStatusAnimation.value = FadeAnimation(child: volumeContainer(Icons.volume_off));
+              videoStatusAnimation.value =
+                  FadeAnimation(child: volumeContainer(Icons.volume_off));
               _controller.setVolume(0);
             }
           },
@@ -101,7 +106,9 @@ class _ReelVideoPlayState extends State<_ReelVideoPlay> {
 
   Container volumeContainer(IconData icon) {
     return Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: ColorManager.black87),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(40),
+            color: ColorManager.black87),
         padding: const EdgeInsetsDirectional.all(25),
         child: popIcon(icon));
   }

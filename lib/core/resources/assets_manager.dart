@@ -36,6 +36,8 @@ class IconsAssets {
   static const String gallery = "$iconPath/gallery.svg";
   static const String galleryBold = "$iconPath/gallery_blod.svg";
 
-  static const String addInstagramStoryIcon = "$iconPath/add-instagram-story.svg";
-  static const String instagramHighlightStoryIcon = "$iconPath/instagram-highlight-story.svg";
+  static const String addInstagramStoryIcon =
+      "$iconPath/add-instagram-story.svg";
+  static const String instagramHighlightStoryIcon =
+      "$iconPath/instagram-highlight-story.svg";
 }

@@ -51,7 +51,8 @@ class _NetworkImageDisplayState extends State<MemoryDisplay> {
 
   SizedBox buildError() {
     return SizedBox(
-      child: Icon(Icons.warning_amber_rounded, size: 30, color: Theme.of(context).focusColor),
+      child: Icon(Icons.warning_amber_rounded,
+          size: 30, color: Theme.of(context).focusColor),
     );
   }
 

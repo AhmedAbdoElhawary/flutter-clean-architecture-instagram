@@ -15,13 +15,16 @@ class AppTheme {
       focusColor: ColorManager.black,
       disabledColor: ColorManager.black54,
       dialogTheme: DialogThemeData(backgroundColor: ColorManager.black87),
-      hoverColor: isThatMobile ? ColorManager.black45 : ColorManager.transparent,
+      hoverColor:
+          isThatMobile ? ColorManager.black45 : ColorManager.transparent,
       tabBarTheme: TabBarThemeData(indicatorColor: ColorManager.black38),
       dividerColor: ColorManager.black12,
       cardColor: ColorManager.lightBlack,
-      scaffoldBackgroundColor: isThatMobile ? ColorManager.white : ColorManager.customGreyForWeb,
+      scaffoldBackgroundColor:
+          isThatMobile ? ColorManager.white : ColorManager.customGreyForWeb,
       iconTheme: const IconThemeData(color: ColorManager.black38),
-      chipTheme: const ChipThemeData(backgroundColor: ColorManager.veryLowOpacityGrey),
+      chipTheme:
+          const ChipThemeData(backgroundColor: ColorManager.veryLowOpacityGrey),
       highlightColor: ColorManager.lowOpacityGrey,
       canvasColor: ColorManager.transparent,
       splashColor: ColorManager.white,
@@ -30,7 +33,8 @@ class AppTheme {
         backgroundColor: ColorManager.white,
         shadowColor: ColorManager.lowOpacityGrey,
         iconTheme: const IconThemeData(color: ColorManager.black),
-        titleTextStyle: getNormalStyle(fontSize: FontSize.s16, color: ColorManager.black),
+        titleTextStyle:
+            getNormalStyle(fontSize: FontSize.s16, color: ColorManager.black),
       ),
       textTheme: TextTheme(
         bodyLarge: getNormalStyle(color: ColorManager.black),
@@ -44,7 +48,8 @@ class AppTheme {
         titleSmall: getNormalStyle(color: ColorManager.darkWhite),
         titleMedium: getNormalStyle(color: ColorManager.lightGrey),
       ),
-      bottomAppBarTheme: const BottomAppBarThemeData(color: ColorManager.black26),
+      bottomAppBarTheme:
+          const BottomAppBarThemeData(color: ColorManager.black26),
     );
   }
 
@@ -62,7 +67,8 @@ class AppTheme {
       tabBarTheme: TabBarThemeData(indicatorColor: ColorManager.grey),
       dividerColor: ColorManager.grey,
       iconTheme: const IconThemeData(color: ColorManager.white),
-      chipTheme: const ChipThemeData(backgroundColor: ColorManager.lightDarkGray),
+      chipTheme:
+          const ChipThemeData(backgroundColor: ColorManager.lightDarkGray),
       cardColor: ColorManager.darkGray,
       disabledColor: ColorManager.white,
       scaffoldBackgroundColor: ColorManager.black,
@@ -73,7 +79,8 @@ class AppTheme {
         iconTheme: const IconThemeData(color: ColorManager.white),
         backgroundColor: ColorManager.black,
         shadowColor: ColorManager.lowOpacityGrey,
-        titleTextStyle: getNormalStyle(fontSize: FontSize.s16, color: ColorManager.white),
+        titleTextStyle:
+            getNormalStyle(fontSize: FontSize.s16, color: ColorManager.white),
       ),
       textTheme: TextTheme(
         bodyLarge: getNormalStyle(color: ColorManager.white),

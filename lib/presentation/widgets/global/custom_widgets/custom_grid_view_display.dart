@@ -50,7 +50,8 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
       return GestureDetector(
         onTap: onTapPostForWeb,
         onLongPressEnd: (_) => onTapPostForWeb,
-        child: isThatImage ? buildCardImage() : buildCardVideo(playVideo: false),
+        child:
+            isThatImage ? buildCardImage() : buildCardVideo(playVideo: false),
       );
     }
   }
@@ -93,7 +94,8 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
               alignment: Alignment.topRight,
               child: Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.slow_motion_video, color: ColorManager.white, size: 20),
+                child: Icon(Icons.slow_motion_video,
+                    color: ColorManager.white, size: 20),
               )),
         ],
       );
@@ -112,7 +114,9 @@ class _CustomGridViewDisplayState extends State<CustomGridViewDisplay> {
           height: isThatMobile ? 150 : 300,
           isThatImage: widget.postClickedInfo.isThatImage,
           blurHash: widget.postClickedInfo.blurHash,
-          url: isThatMultiImages ? widget.postClickedInfo.imagesUrls[0] : widget.postClickedInfo.postUrl,
+          url: isThatMultiImages
+              ? widget.postClickedInfo.imagesUrls[0]
+              : widget.postClickedInfo.postUrl,
         ),
         if (isThatMultiImages)
           const Padding(

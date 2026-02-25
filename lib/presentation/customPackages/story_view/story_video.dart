@@ -27,7 +27,8 @@ class VideoLoader {
       onComplete();
     }
 
-    final fileStream = DefaultCacheManager().getFileStream(url, headers: requestHeaders as Map<String, String>?);
+    final fileStream = DefaultCacheManager()
+        .getFileStream(url, headers: requestHeaders as Map<String, String>?);
 
     fileStream.listen((fileResponse) {
       if (fileResponse is FileInfo) {
@@ -47,9 +48,13 @@ class StoryVideo extends StatefulWidget {
   final StoryController? storyController;
   final VideoLoader videoLoader;
 
-  StoryVideo(this.videoLoader, {this.storyController, Key? key}) : super(key: key ?? UniqueKey());
+  StoryVideo(this.videoLoader, {this.storyController, Key? key})
+      : super(key: key ?? UniqueKey());
 
-  static StoryVideo url(String url, {StoryController? controller, Map<String, dynamic>? requestHeaders, Key? key}) {
+  static StoryVideo url(String url,
+      {StoryController? controller,
+      Map<String, dynamic>? requestHeaders,
+      Key? key}) {
     return StoryVideo(
       VideoLoader(url, requestHeaders: requestHeaders),
       storyController: controller,
@@ -87,7 +92,8 @@ class StoryVideoState extends State<StoryVideo> {
         });
 
         if (widget.storyController != null) {
-          _streamSubscription = widget.storyController!.playbackNotifier.listen((playbackState) {
+          _streamSubscription =
+              widget.storyController!.playbackNotifier.listen((playbackState) {
             if (playbackState == PlaybackState.pause) {
               playerController!.pause();
             } else {
@@ -115,7 +121,8 @@ class StoryVideoState extends State<StoryVideo> {
           width: 70,
           height: 70,
           child: ThineCircularProgress(
-            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+            valueColor:
+                AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
             strokeWidth: 3,
           ),
         ),

@@ -70,10 +70,12 @@ class WebCustomCrop extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => WebCustomCropState();
 
-  static WebCustomCropState? of(BuildContext context) => context.findAncestorStateOfType<WebCustomCropState>();
+  static WebCustomCropState? of(BuildContext context) =>
+      context.findAncestorStateOfType<WebCustomCropState>();
 }
 
-class WebCustomCropState extends State<WebCustomCrop> with TickerProviderStateMixin {
+class WebCustomCropState extends State<WebCustomCrop>
+    with TickerProviderStateMixin {
   final _surfaceKey = GlobalKey();
 
   late final AnimationController _activeController;
@@ -121,7 +123,8 @@ class WebCustomCropState extends State<WebCustomCrop> with TickerProviderStateMi
       vsync: this,
       value: widget.alwaysShowGrid ? 1.0 : 0.0,
     )..addListener(() => setState(() {}));
-    _settleController = AnimationController(vsync: this)..addListener(_settleAnimationChanged);
+    _settleController = AnimationController(vsync: this)
+      ..addListener(_settleAnimationChanged);
   }
 
   @override
@@ -167,14 +170,16 @@ class WebCustomCropState extends State<WebCustomCrop> with TickerProviderStateMi
 
   void _getImage({bool force = false}) {
     final oldImageStream = _imageStream;
-    final newImageStream = widget.image.resolve(createLocalImageConfiguration(context));
+    final newImageStream =
+        widget.image.resolve(createLocalImageConfiguration(context));
     _imageStream = newImageStream;
     if (newImageStream.key != oldImageStream?.key || force) {
       final oldImageListener = _imageListener;
       if (oldImageListener != null) {
         oldImageStream?.removeListener(oldImageListener);
       }
-      final newImageListener = ImageStreamListener(_updateImage, onError: widget.onImageError);
+      final newImageListener =
+          ImageStreamListener(_updateImage, onError: widget.onImageError);
       _imageListener = newImageListener;
       newImageStream.addListener(newImageListener);
     }
@@ -276,17 +281,25 @@ class WebCustomCropState extends State<WebCustomCrop> with TickerProviderStateMi
     double width;
     if ((widget.aspectRatio ?? 1.0) < 1) {
       height = 1.0;
-      width = ((widget.aspectRatio ?? 1.0) * imageHeight * viewHeight * height) / imageWidth / viewWidth;
+      width =
+          ((widget.aspectRatio ?? 1.0) * imageHeight * viewHeight * height) /
+              imageWidth /
+              viewWidth;
       if (width > 1.0) {
         width = 1.0;
-        height = (imageWidth * viewWidth * width) / (imageHeight * viewHeight * (widget.aspectRatio ?? 1.0));
+        height = (imageWidth * viewWidth * width) /
+            (imageHeight * viewHeight * (widget.aspectRatio ?? 1.0));
       }
     } else {
       width = 1.0;
-      height = (imageWidth * viewWidth * width) / (imageHeight * viewHeight * (widget.aspectRatio ?? 1.0));
+      height = (imageWidth * viewWidth * width) /
+          (imageHeight * viewHeight * (widget.aspectRatio ?? 1.0));
       if (height > 1.0) {
         height = 1.0;
-        width = ((widget.aspectRatio ?? 1.0) * imageHeight * viewHeight * height) / imageWidth / viewWidth;
+        width =
+            ((widget.aspectRatio ?? 1.0) * imageHeight * viewHeight * height) /
+                imageWidth /
+                viewWidth;
       }
     }
     final aspectRatio = _maxAreaWidthMap[widget.aspectRatio];
@@ -503,8 +516,12 @@ class WebCustomCropState extends State<WebCustomCrop> with TickerProviderStateMi
       setState(() {
         _scale = _startScale * details.scale;
 
-        final dx = boundaries.width * (1.0 - details.scale) / (image.width * _scale * _ratio);
-        final dy = boundaries.height * (1.0 - details.scale) / (image.height * _scale * _ratio);
+        final dx = boundaries.width *
+            (1.0 - details.scale) /
+            (image.width * _scale * _ratio);
+        final dy = boundaries.height *
+            (1.0 - details.scale) /
+            (image.height * _scale * _ratio);
 
         _view = Rect.fromLTWH(
           _startView.left + dx / 2,
@@ -587,9 +604,15 @@ class _CropPainter extends CustomPainter {
       rect.height * area.height,
     );
     canvas.drawRect(Rect.fromLTRB(0.0, 0.0, rect.width, boundaries.top), paint);
-    canvas.drawRect(Rect.fromLTRB(0.0, boundaries.bottom, rect.width, rect.height), paint);
-    canvas.drawRect(Rect.fromLTRB(0.0, boundaries.top, boundaries.left, boundaries.bottom), paint);
-    canvas.drawRect(Rect.fromLTRB(boundaries.right, boundaries.top, rect.width, boundaries.bottom), paint);
+    canvas.drawRect(
+        Rect.fromLTRB(0.0, boundaries.bottom, rect.width, rect.height), paint);
+    canvas.drawRect(
+        Rect.fromLTRB(0.0, boundaries.top, boundaries.left, boundaries.bottom),
+        paint);
+    canvas.drawRect(
+        Rect.fromLTRB(
+            boundaries.right, boundaries.top, rect.width, boundaries.bottom),
+        paint);
 
     if (boundaries.isEmpty == false) {
       _drawGrid(canvas, boundaries);
@@ -616,14 +639,20 @@ class _CropPainter extends CustomPainter {
 
     for (var column = 1; column < _kCropGridColumnCount; column++) {
       path
-        ..moveTo(boundaries.left + column * boundaries.width / _kCropGridColumnCount, boundaries.top)
-        ..lineTo(boundaries.left + column * boundaries.width / _kCropGridColumnCount, boundaries.bottom);
+        ..moveTo(
+            boundaries.left + column * boundaries.width / _kCropGridColumnCount,
+            boundaries.top)
+        ..lineTo(
+            boundaries.left + column * boundaries.width / _kCropGridColumnCount,
+            boundaries.bottom);
     }
 
     for (var row = 1; row < _kCropGridRowCount; row++) {
       path
-        ..moveTo(boundaries.left, boundaries.top + row * boundaries.height / _kCropGridRowCount)
-        ..lineTo(boundaries.right, boundaries.top + row * boundaries.height / _kCropGridRowCount);
+        ..moveTo(boundaries.left,
+            boundaries.top + row * boundaries.height / _kCropGridRowCount)
+        ..lineTo(boundaries.right,
+            boundaries.top + row * boundaries.height / _kCropGridRowCount);
     }
 
     canvas.drawPath(path, paint);

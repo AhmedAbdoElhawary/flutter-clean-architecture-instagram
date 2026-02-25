@@ -168,7 +168,9 @@ class StoryWidgetState extends State<StoryWidget> {
                       type: MaterialType.transparency,
                       child: ValueListenableBuilder(
                         valueListenable: controller,
-                        builder: (context, StoryController storyControllerValue, child) => StoryView(
+                        builder: (context, StoryController storyControllerValue,
+                                child) =>
+                            StoryView(
                           inline: true,
                           opacityLevel: opacityLevelValue,
                           progressPosition: ProgressPosition.top,
@@ -176,7 +178,8 @@ class StoryWidgetState extends State<StoryWidget> {
                           controller: storyControllerValue,
                           onComplete: handleCompleted,
                           onVerticalSwipeComplete: (direction) {
-                            if (direction == Direction.down || direction == Direction.up) {
+                            if (direction == Direction.down ||
+                                direction == Direction.up) {
                               Navigator.of(context).maybePop();
                             }
                           },
@@ -198,7 +201,8 @@ class StoryWidgetState extends State<StoryWidget> {
                       duration: const Duration(milliseconds: 250),
                       child: ValueListenableBuilder(
                         valueListenable: date,
-                        builder: (context, Story? value, child) => ProfileWidget(
+                        builder: (context, Story? value, child) =>
+                            ProfileWidget(
                           user: widget.user,
                           storyInfo: value!,
                           hashTag: widget.hashTag,
@@ -223,30 +227,41 @@ class StoryWidgetState extends State<StoryWidget> {
                                     Expanded(
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(35),
+                                          borderRadius:
+                                              BorderRadius.circular(35),
                                           border: Border.all(
-                                            color: Colors.white, //                   <--- border color
+                                            color: Colors
+                                                .white, //                   <--- border color
                                             width: 0.5,
                                           ),
                                         ),
-                                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
                                         height: 40,
                                         child: Padding(
-                                          padding: const EdgeInsetsDirectional.only(start: 8.0, end: 20),
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  start: 8.0, end: 20),
                                           child: Center(
                                             child: TextFormField(
-                                              keyboardType: TextInputType.multiline,
+                                              keyboardType:
+                                                  TextInputType.multiline,
                                               cursorColor: Colors.teal,
-                                              style: Theme.of(context).textTheme.bodyLarge,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge,
                                               onTap: () {
                                                 controller.value.pause();
                                               },
                                               showCursor: true,
                                               maxLines: null,
-                                              decoration: const InputDecoration.collapsed(
-                                                hintText: StringsManager.sendMessage,
+                                              decoration: const InputDecoration
+                                                  .collapsed(
+                                                hintText:
+                                                    StringsManager.sendMessage,
                                                 border: InputBorder.none,
-                                                hintStyle: TextStyle(color: Colors.grey),
+                                                hintStyle: TextStyle(
+                                                    color: Colors.grey),
                                               ),
                                               autofocus: false,
                                               cursorWidth: 1.5,
@@ -259,13 +274,15 @@ class StoryWidgetState extends State<StoryWidget> {
                                     SvgPicture.asset(
                                       IconsAssets.loveIcon,
                                       width: .5,
-                                      colorFilter: const ColorFilter.mode(ColorManager.white, BlendMode.srcIn),
+                                      colorFilter: const ColorFilter.mode(
+                                          ColorManager.white, BlendMode.srcIn),
                                       height: 25,
                                     ),
                                     const SizedBox(width: 25),
                                     SvgPicture.asset(
                                       IconsAssets.send2Icon,
-                                      colorFilter: const ColorFilter.mode(ColorManager.white, BlendMode.srcIn),
+                                      colorFilter: const ColorFilter.mode(
+                                          ColorManager.white, BlendMode.srcIn),
                                       height: 23,
                                     ),
                                   ],
@@ -300,7 +317,8 @@ class ProfileWidget extends StatelessWidget {
   Widget build(BuildContext context) => Material(
         type: MaterialType.transparency,
         child: Container(
-          margin: const EdgeInsetsDirectional.only(start: 16, end: 16, top: 20, bottom: 20),
+          margin: const EdgeInsetsDirectional.only(
+              start: 16, end: 16, top: 20, bottom: 20),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

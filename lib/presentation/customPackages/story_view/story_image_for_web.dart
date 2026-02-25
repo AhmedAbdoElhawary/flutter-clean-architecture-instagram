@@ -29,7 +29,8 @@ class StoryImageForWeb extends StatefulWidget {
     BoxFit fit = BoxFit.fitWidth,
     Key? key,
   }) {
-    return StoryImageForWeb(url, isThatImage: isThatImage, controller: controller, fit: fit, key: key);
+    return StoryImageForWeb(url,
+        isThatImage: isThatImage, controller: controller, fit: fit, key: key);
   }
 
   @override
@@ -48,7 +49,8 @@ class StoryImageForWebState extends State<StoryImageForWeb> {
     super.initState();
 
     if (widget.controller != null) {
-      _streamSubscription = widget.controller!.playbackNotifier.listen((playbackState) {
+      _streamSubscription =
+          widget.controller!.playbackNotifier.listen((playbackState) {
         if (playbackState == PlaybackState.pause) {
           _timer?.cancel();
         } else {
@@ -83,12 +85,14 @@ class StoryImageForWebState extends State<StoryImageForWeb> {
       return Image.network(
         widget.imageUrl,
         fit: widget.fit,
-        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+        loadingBuilder: (BuildContext context, Widget child,
+            ImageChunkEvent? loadingProgress) {
           if (loadingProgress == null) return child;
           return Center(
             child: CircularProgressIndicator(
               value: loadingProgress.expectedTotalBytes != null
-                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                  ? loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes!
                   : null,
             ),
           );

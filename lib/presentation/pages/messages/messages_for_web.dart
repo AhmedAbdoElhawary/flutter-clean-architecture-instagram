@@ -31,7 +31,9 @@ class _MessagesForWebState extends State<MessagesForWeb> {
   initState() {
     selectedTextingUser = widget.selectedTextingUser;
     if (selectedTextingUser != null) {
-      senderInfo = SenderInfo(receiversInfo: [selectedTextingUser!], receiversIds: [selectedTextingUser!.userId]);
+      senderInfo = SenderInfo(
+          receiversInfo: [selectedTextingUser!],
+          receiversIds: [selectedTextingUser!.userId]);
     }
     myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
     super.initState();
@@ -121,7 +123,8 @@ class _MessagesForWebState extends State<MessagesForWeb> {
                     const SizedBox(width: 25),
                     if (isThatGroup) ...[
                       Padding(
-                        padding: const EdgeInsetsDirectional.only(top: 15, end: 12),
+                        padding:
+                            const EdgeInsetsDirectional.only(top: 15, end: 12),
                         child: Stack(
                           clipBehavior: Clip.none,
                           children: [
@@ -158,13 +161,15 @@ class _MessagesForWebState extends State<MessagesForWeb> {
                     SvgPicture.asset(
                       IconsAssets.phone,
                       height: 27,
-                      colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+                      colorFilter: ColorFilter.mode(
+                          Theme.of(context).focusColor, BlendMode.srcIn),
                     ),
                     const SizedBox(width: 20),
                     SvgPicture.asset(
                       IconsAssets.videoPoint,
                       height: 25,
-                      colorFilter: ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+                      colorFilter: ColorFilter.mode(
+                          Theme.of(context).focusColor, BlendMode.srcIn),
                     ),
                     const SizedBox(width: 25),
                   ],
@@ -236,7 +241,8 @@ class _MessagesForWebState extends State<MessagesForWeb> {
         ),
       ),
       child: Center(
-        child: Text(myPersonalInfo.userName, style: getMediumStyle(color: ColorManager.black, fontSize: 17)),
+        child: Text(myPersonalInfo.userName,
+            style: getMediumStyle(color: ColorManager.black, fontSize: 17)),
       ),
     );
   }

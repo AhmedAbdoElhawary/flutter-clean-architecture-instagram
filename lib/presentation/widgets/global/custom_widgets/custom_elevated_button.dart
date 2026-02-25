@@ -31,7 +31,8 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
         return await widget.onPressed();
       },
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: widget.isThatSignIn ? 0 : 20),
+        padding: EdgeInsets.symmetric(
+            horizontal: 20, vertical: widget.isThatSignIn ? 0 : 20),
         child: Container(
             margin: const EdgeInsetsDirectional.all(3.0),
             padding: EdgeInsetsDirectional.all(isThatMobile ? 15.0 : 10),
@@ -56,14 +57,19 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
 
   Widget circularProgress() {
     return const Center(
-      child: SizedBox(height: 20, width: 20, child: ThineCircularProgress(color: ColorManager.white, strokeWidth: 2)),
+      child: SizedBox(
+          height: 20,
+          width: 20,
+          child:
+              ThineCircularProgress(color: ColorManager.white, strokeWidth: 2)),
     );
   }
 
   BoxDecoration containerStyle() {
     return BoxDecoration(
-      color:
-          !widget.blueColor ? ColorManager.lightBlue : (widget.isItDone ? ColorManager.blue : ColorManager.lightBlue),
+      color: !widget.blueColor
+          ? ColorManager.lightBlue
+          : (widget.isItDone ? ColorManager.blue : ColorManager.lightBlue),
       borderRadius: BorderRadius.circular(isThatMobile ? 10.0 : 5),
       boxShadow: !isThatMobile
           ? null
