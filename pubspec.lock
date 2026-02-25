@@ -849,10 +849,10 @@ packages:
     dependency: "direct main"
     description:
       name: image_picker_plus
-      sha256: "6ef9decb9b1ef3e2a95156fdb0db13c9cb7ced9ec0b7b811615310a8fa0c3e64"
+      sha256: fd390128681894287b05aa33c7add2ce063c78db86a3f07d4a16cad9e20a85c0
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.10"
+    version: "0.5.10+1"
   image_picker_windows:
     dependency: transitive
     description:
