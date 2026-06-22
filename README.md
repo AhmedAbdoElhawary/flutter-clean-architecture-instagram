@@ -349,6 +349,7 @@ $ cd flutter-clean-architecture-instagram/
 - [x] Make like, comment, and share of animation container post touchy when long pressed on post
 - [x] Make it stable for the web
 - [ ] Clean up more code
+- [ ] Create a story feature where we can upload story to only a selected group apart from close friends. this helps in uploading stories for emergency or lost itens when we need to let others know only from a specific location or a group instead of creating group chat and posting it there.
 
 
 
