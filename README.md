@@ -2,13 +2,15 @@
 
 Instagram clean architecture using Flutter and Firebase ( frontend & backend ) with almost all functionalities
 
+## 🚀 My Next Big Project 
+[Algorithm Visualizer](https://github.com/AhmedAbdoElhawary/flutter-algorithm-visualizer)
+
 ## If you want to work with me, you can find me here:
 
 - <a href="https://www.linkedin.com/in/ahmedabdoelhawary"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" width="40"></a>
 
 ### Notes
 * I didn't publish the keys such as messaging, agora, firebase web, or even google-services.json. So follow the steps (3. Setup the app) to add them.
-* Right now, I am working on cleaning up the code and web version
 
 ## Features
 
