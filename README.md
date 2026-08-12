@@ -98,7 +98,7 @@ Instagram clean architecture using Flutter and Firebase ( frontend & backend ) w
 ### |--------- Share post --------- |--------- Videos page ---------|---- personal profile page ---|
 <p>
 <img src="https://user-images.githubusercontent.com/88978546/193093277-b499a2ea-9834-4a0d-9558-1f6a8566c424.gif"   width="32%" height="50%">
-<img src="https://user-images.githubusercontent.com/88978546/173257900-43ff2295-06bd-4193-b6cc-a8dd34fb66ff.gif"   width="32%" height="50%">
+<img src="https://github.com/user-attachments/assets/44f259f9-bc8f-4e18-a9c6-4740793b283e"   width="32%" height="50%">
 <img src="https://user-images.githubusercontent.com/88978546/173257186-613a59c8-d5cc-40a1-b3aa-82c4545eb3a9.gif"   width="32%" height="50%">
 
 </p>
