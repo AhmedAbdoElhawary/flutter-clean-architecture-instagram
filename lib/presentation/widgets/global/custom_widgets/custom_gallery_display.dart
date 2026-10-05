@@ -44,9 +44,10 @@ class CustomImagePickerPlus {
         maxSelection: multiImages || isThatStory ? _maxSelection : 1,
         gridColumns: isThatStory ? 3 : 4,
         gridCellAspectRatio: isThatStory ? .5 : 1,
-        theme: appTheme(context),
         texts: tapsNames(),
         showPreview: showPreview,
+        useRootNavigator: true,
+        alwaysDarkTheme: false,
       ),
     );
 
