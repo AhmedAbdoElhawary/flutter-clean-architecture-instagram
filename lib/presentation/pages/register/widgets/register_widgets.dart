@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -44,16 +45,17 @@ class _SignUpPageState extends State<RegisterWidgets> {
   }
 
   Scaffold buildScaffold(BuildContext context) {
-    double height = MediaQuery.of(context).size.height - 50;
+    double height = MediaQuery.of(context).size.height - 70;
     return Scaffold(
       body: SafeArea(
         child: Center(
-            child: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: isThatMobile
-              ? buildColumn(context, height: height)
-              : buildForWeb(context),
-        )),
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: isThatMobile
+                ? buildColumn(context, height: height)
+                : buildForWeb(context),
+          ),
+        ),
       ),
     );
   }
@@ -99,8 +101,10 @@ class _SignUpPageState extends State<RegisterWidgets> {
           if (!widget.isThatLogIn) const Spacer(),
           SvgPicture.asset(
             IconsAssets.instagramLogo,
-            colorFilter:
-                ColorFilter.mode(Theme.of(context).focusColor, BlendMode.srcIn),
+            colorFilter: ColorFilter.mode(
+              Theme.of(context).focusColor,
+              BlendMode.srcIn,
+            ),
             height: 50,
           ),
           const SizedBox(height: 30),
@@ -131,8 +135,9 @@ class _SignUpPageState extends State<RegisterWidgets> {
             Flexible(
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: isThatMobile ? 4 : 0,
-                    vertical: isThatMobile ? 15 : 0),
+                  horizontal: isThatMobile ? 4 : 0,
+                  vertical: isThatMobile ? 15 : 0,
+                ),
                 child: Row(
                   children: [
                     const SizedBox(width: 13),
@@ -140,29 +145,29 @@ class _SignUpPageState extends State<RegisterWidgets> {
                       valueListenable: widget.rememberPassword!,
                       builder: (context, bool rememberPasswordValue, child) =>
                           Checkbox(
-                              value: rememberPasswordValue,
-                              activeColor: isThatMobile
-                                  ? ColorManager.white
-                                  : ColorManager.blue,
-                              fillColor: isThatMobile
-                                  ? WidgetStateProperty.resolveWith(
-                                      (Set states) {
-                                      if (states
-                                          .contains(WidgetState.disabled)) {
-                                        return Colors.blue
-                                            .withValues(alpha: .32);
-                                      }
-                                      return Colors.blue;
-                                    })
-                                  : null,
-                              onChanged: (value) => widget.rememberPassword!
-                                  .value = !rememberPasswordValue),
+                            value: rememberPasswordValue,
+                            activeColor: isThatMobile
+                                ? ColorManager.white
+                                : ColorManager.blue,
+                            fillColor: isThatMobile
+                                ? WidgetStateProperty.resolveWith((Set states) {
+                                    if (states.contains(WidgetState.disabled)) {
+                                      return Colors.blue.withValues(alpha: .32);
+                                    }
+                                    return Colors.blue;
+                                  })
+                                : null,
+                            onChanged: (value) =>
+                                widget.rememberPassword!.value =
+                                    !rememberPasswordValue,
+                          ),
                     ),
                     Text(
                       StringsManager.rememberPassword.tr,
-                      style:
-                          getNormalStyle(color: Theme.of(context).focusColor),
-                    )
+                      style: getNormalStyle(
+                        color: Theme.of(context).focusColor,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -171,17 +176,18 @@ class _SignUpPageState extends State<RegisterWidgets> {
           ],
           widget.customTextButton,
           const SizedBox(height: 15),
-          if (!widget.isThatLogIn) ...[
-            const Spacer(),
-            const Spacer(),
-          ],
+          if (!widget.isThatLogIn) ...[const Spacer(), const Spacer()],
           if (isThatMobile) ...[
             const SizedBox(height: 8),
             if (!widget.isThatLogIn) ...[
               const Divider(color: ColorManager.lightGrey, height: 1),
               Padding(
                 padding: const EdgeInsets.only(
-                    top: 15.0, left: 15.0, right: 15.0, bottom: 6.5),
+                  top: 15.0,
+                  left: 15.0,
+                  right: 15.0,
+                  bottom: 6.5,
+                ),
                 child: haveAccountRow(context),
               ),
             ] else ...[
@@ -201,8 +207,10 @@ class _SignUpPageState extends State<RegisterWidgets> {
           widget.isThatLogIn
               ? StringsManager.noAccount.tr
               : StringsManager.haveAccount.tr,
-          style:
-              getNormalStyle(fontSize: 13, color: Theme.of(context).focusColor),
+          style: getNormalStyle(
+            fontSize: 13,
+            color: Theme.of(context).focusColor,
+          ),
         ),
         const SizedBox(width: 4),
         register(context),
@@ -212,16 +220,19 @@ class _SignUpPageState extends State<RegisterWidgets> {
 
   InkWell register(BuildContext context) {
     return InkWell(
-        onTap: () {
-          if (widget.isThatLogIn) {
-            Get.to(const SignUpPage(),
-                preventDuplicates: true,
-                duration: const Duration(milliseconds: 0));
-          } else {
-            Get.back();
-          }
-        },
-        child: registerText());
+      onTap: () {
+        if (widget.isThatLogIn) {
+          Get.to(
+            const SignUpPage(),
+            preventDuplicates: true,
+            duration: const Duration(milliseconds: 0),
+          );
+        } else {
+          Get.back();
+        }
+      },
+      child: registerText(),
+    );
   }
 
   Text registerText() {
@@ -250,6 +261,8 @@ class _EmailTextFields extends StatefulWidget {
 
 class _EmailTextFieldsState extends State<_EmailTextFields> {
   String? errorMassage;
+  Timer? _emailDebounce;
+
   @override
   void initState() {
     widget.controller.addListener(() {
@@ -258,9 +271,27 @@ class _EmailTextFieldsState extends State<_EmailTextFields> {
       } else {
         errorMassage = null;
       }
+      if (!widget.isThatLogin) _checkEmailExisting();
     });
 
     super.initState();
+  }
+
+  /// the listener fires on every character, one query per keystroke is too much
+  void _checkEmailExisting() {
+    _emailDebounce?.cancel();
+    _emailDebounce = Timer(const Duration(milliseconds: 500), () {
+      if (!mounted) return;
+      FirebaseAuthCubit.get(
+        context,
+      ).isThisEmailToken(email: widget.controller.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailDebounce?.cancel();
+    super.dispose();
   }
 
   @override
@@ -271,8 +302,6 @@ class _EmailTextFieldsState extends State<_EmailTextFields> {
         height: isThatMobile ? null : 37,
         width: double.infinity,
         child: BlocConsumer<FirebaseAuthCubit, FirebaseAuthCubitState>(
-          bloc: FirebaseAuthCubit.get(context)
-            ..isThisEmailToken(email: widget.controller.text),
           listenWhen: (previous, current) =>
               previous != current && current is CubitEmailVerificationLoaded,
           listener: (context, state) {
@@ -294,12 +323,15 @@ class _EmailTextFieldsState extends State<_EmailTextFields> {
               controller: widget.controller,
               cursorColor: ColorManager.teal,
               style: getNormalStyle(
-                  color: Theme.of(context).focusColor, fontSize: 15),
+                color: Theme.of(context).focusColor,
+                fontSize: 15,
+              ),
               decoration: InputDecoration(
                 hintText: widget.hint,
                 hintStyle: isThatMobile
                     ? getNormalStyle(
-                        color: Theme.of(context).tabBarTheme.indicatorColor!)
+                        color: Theme.of(context).tabBarTheme.indicatorColor!,
+                      )
                     : getNormalStyle(color: ColorManager.black54, fontSize: 12),
                 fillColor: const Color.fromARGB(48, 232, 232, 232),
                 filled: true,
@@ -308,7 +340,9 @@ class _EmailTextFieldsState extends State<_EmailTextFields> {
                 errorStyle: getNormalStyle(color: ColorManager.red),
                 errorText: isThatMobile ? errorMassage : null,
                 contentPadding: EdgeInsets.symmetric(
-                    horizontal: 10, vertical: isThatMobile ? 15 : 5),
+                  horizontal: 10,
+                  vertical: isThatMobile ? 15 : 5,
+                ),
               ),
             );
           },
@@ -331,7 +365,9 @@ class _EmailTextFieldsState extends State<_EmailTextFields> {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(isThatMobile ? 5.0 : 1.0),
       borderSide: BorderSide(
-          color: ColorManager.lightGrey, width: isThatMobile ? 1.0 : 0.8),
+        color: ColorManager.lightGrey,
+        width: isThatMobile ? 1.0 : 0.8,
+      ),
     );
   }
 }

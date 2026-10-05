@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker_plus/image_picker_plus.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/selected_byte.dart';
 import 'package:instagram/core/functions/blur_hash.dart';
 import 'package:instagram/core/functions/date_of_now.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -17,7 +17,7 @@ import 'package:instagram/presentation/cubit/firestoreUserInfoCubit/user_info_cu
 import 'package:instagram/presentation/cubit/postInfoCubit/post_cubit.dart';
 import 'package:instagram/presentation/pages/register/widgets/popup_calling.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_circulars_progress.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:flutter_video_thumbnail_plus/flutter_video_thumbnail_plus.dart';
 
 class CreatePostPage extends StatefulWidget {
   final SelectedImagesDetails selectedFilesDetails;
@@ -62,7 +62,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
           children: [
             Padding(
               padding: const EdgeInsetsDirectional.only(
-                  start: 10.0, end: 10, top: 10),
+                start: 10.0,
+                end: 10,
+                top: 10,
+              ),
               child: Row(
                 children: [
                   SizedBox(
@@ -104,12 +107,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       controller: captionController,
                       cursorColor: ColorManager.teal,
                       style: getNormalStyle(
-                          color: Theme.of(context).focusColor, fontSize: 15),
+                        color: Theme.of(context).focusColor,
+                        fontSize: 15,
+                      ),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: StringsManager.writeACaption.tr,
                         hintStyle: TextStyle(
-                            color: Theme.of(context).bottomAppBarTheme.color!),
+                          color: Theme.of(context).bottomAppBarTheme.color!,
+                        ),
                       ),
                     ),
                   ),
@@ -144,25 +150,32 @@ class _CreatePostPageState extends State<CreatePostPage> {
   Padding buildText(String text) {
     return Padding(
       padding: const EdgeInsetsDirectional.only(
-          start: 7, end: 7, bottom: 10, top: 10),
+        start: 7,
+        end: 7,
+        bottom: 10,
+        top: 10,
+      ),
       child: Text(
         text,
-        style:
-            getNormalStyle(fontSize: 16.5, color: Theme.of(context).focusColor),
+        style: getNormalStyle(
+          fontSize: 16.5,
+          color: Theme.of(context).focusColor,
+        ),
       ),
     );
   }
 
   AppBar appBar(BuildContext context) {
     return AppBar(
-        elevation: 0,
-        iconTheme: IconThemeData(color: Theme.of(context).focusColor),
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text(
-          StringsManager.newPost.tr,
-          style: getNormalStyle(color: Theme.of(context).focusColor),
-        ),
-        actions: actionsWidgets(context));
+      elevation: 0,
+      iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+      backgroundColor: Theme.of(context).primaryColor,
+      title: Text(
+        StringsManager.newPost.tr,
+        style: getNormalStyle(color: Theme.of(context).focusColor),
+      ),
+      actions: actionsWidgets(context),
+    );
   }
 
   List<Widget> actionsWidgets(BuildContext context) {
@@ -186,8 +199,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
   }
 
   Future<void> createPost(BuildContext context) async {
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => setState(() => isItDone.value = false));
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => setState(() => isItDone.value = false),
+    );
     Post postInfo;
     File selectedFile = firstSelectedByte.selectedFile;
     Uint8List? convertedBytes;
@@ -205,33 +219,41 @@ class _CreatePostPageState extends State<CreatePostPage> {
     if (!context.mounted) return;
 
     PostCubit postCubit = BlocProvider.of<PostCubit>(context, listen: false);
-    await postCubit.createPost(postInfo, selectedByte,
-        coverOfVideo: convertedBytes);
+    await postCubit.createPost(
+      postInfo,
+      selectedByte,
+      coverOfVideo: convertedBytes,
+    );
 
     if (postCubit.newPostInfo != null) {
       if (!context.mounted) return;
 
       await UserInfoCubit.get(context).updateUserPostsInfo(
-          userId: myPersonalId, postInfo: postCubit.newPostInfo!);
+        userId: myPersonalId,
+        postInfo: postCubit.newPostInfo!,
+      );
       await postCubit.getPostsInfo(
-          postsIds: myPersonalInfo.posts, isThatMyPosts: true);
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => setState(() => isItDone.value = true));
+        postsIds: myPersonalInfo.posts,
+        isThatMyPosts: true,
+      );
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => setState(() => isItDone.value = true),
+      );
     }
     if (!context.mounted) return;
 
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => PopupCalling(myPersonalId),
-        ),
-        (route) => false);
+      MaterialPageRoute(builder: (context) => PopupCalling(myPersonalId)),
+      (route) => false,
+    );
   }
 
   Future<Uint8List?> createThumbnail(File selectedFile) async {
-    final Uint8List? convertImage = await VideoThumbnail.thumbnailData(
-      video: selectedFile.path,
-      imageFormat: ImageFormat.PNG,
-    );
+    final Uint8List? convertImage =
+        await FlutterVideoThumbnailPlus.thumbnailData(
+          video: selectedFile.path,
+          imageFormat: ImageFormat.png,
+        );
 
     return convertImage;
   }

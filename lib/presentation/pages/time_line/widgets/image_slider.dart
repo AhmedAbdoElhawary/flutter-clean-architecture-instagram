@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart' hide CarouselController;
-import 'package:image_picker_plus/image_picker_plus.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/selected_byte.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/presentation/pages/time_line/widgets/points_scroll_bar.dart';
 import 'package:instagram/presentation/widgets/global/custom_widgets/custom_memory_image_display.dart';
@@ -55,73 +55,80 @@ class _ImagesSliderState extends State<ImagesSlider> {
           builder:
               (BuildContext context, int initPositionValue, Widget? child) =>
                   Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              CarouselSlider.builder(
-                itemCount: widget.imagesUrls.length,
-                carouselController: _controller,
-                itemBuilder: (context, index, realIndex) {
-                  if (widget.isImageFromNetwork) {
-                    dynamic imageUrl = widget.imagesUrls[index];
-                    bool isThatVideo = imageUrl.toString().contains("mp4");
-                    return NetworkDisplay(
-                      aspectRatio: widget.aspectRatio,
-                      blurHash: index == 0 ? widget.blurHash : "",
-                      url: imageUrl,
-                      isThatImage: !isThatVideo,
-                    );
-                  } else {
-                    return MemoryDisplay(
-                      imagePath: selectedImages[index].selectedByte,
-                      isThatImage: selectedImages[index].isThatImage,
-                    );
-                  }
-                },
-                options: CarouselOptions(
-                  viewportFraction: 1.0,
-                  enableInfiniteScroll: false,
-                  aspectRatio: widget.aspectRatio,
-                  onPageChanged: (index, reason) {
-                    countOpacity.value = 1;
-                    initPosition.value = index;
-                    widget.updateImageIndex(index, reason);
-                  },
-                ),
-              ),
-              if (widget.showPointsScrollBar && minimumWidth)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5.0),
-                  child: Align(
                     alignment: Alignment.bottomCenter,
-                    child: PointsScrollBar(
-                      photoCount: widget.imagesUrls.length,
-                      activePhotoIndex: initPositionValue,
-                      makePointsWhite: true,
-                    ),
+                    children: [
+                      CarouselSlider.builder(
+                        itemCount: widget.imagesUrls.length,
+                        carouselController: _controller,
+                        itemBuilder: (context, index, realIndex) {
+                          if (widget.isImageFromNetwork) {
+                            dynamic imageUrl = widget.imagesUrls[index];
+                            bool isThatVideo = imageUrl.toString().contains(
+                              "mp4",
+                            );
+                            return NetworkDisplay(
+                              aspectRatio: widget.aspectRatio,
+                              blurHash: index == 0 ? widget.blurHash : "",
+                              url: imageUrl,
+                              isThatImage: !isThatVideo,
+                            );
+                          } else {
+                            return MemoryDisplay(
+                              imagePath: selectedImages[index].selectedByte,
+                              isThatImage: selectedImages[index].isThatImage,
+                            );
+                          }
+                        },
+                        options: CarouselOptions(
+                          viewportFraction: 1.0,
+                          enableInfiniteScroll: false,
+                          aspectRatio: widget.aspectRatio,
+                          onPageChanged: (index, reason) {
+                            countOpacity.value = 1;
+                            initPosition.value = index;
+                            widget.updateImageIndex(index, reason);
+                          },
+                        ),
+                      ),
+                      if (widget.showPointsScrollBar && minimumWidth)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5.0),
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: PointsScrollBar(
+                              photoCount: widget.imagesUrls.length,
+                              activePhotoIndex: initPositionValue,
+                              makePointsWhite: true,
+                            ),
+                          ),
+                        ),
+                      if (!isThatMobile) ...[
+                        if (initPositionValue != 0)
+                          GestureDetector(
+                            onTap: () {
+                              initPosition.value--;
+                              _controller.animateToPage(
+                                initPosition.value,
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                            child: const ArrowJump(),
+                          ),
+                        if (initPositionValue < widget.imagesUrls.length - 1)
+                          GestureDetector(
+                            onTap: () {
+                              initPosition.value++;
+                              _controller.animateToPage(
+                                initPosition.value,
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                            child: const ArrowJump(isThatBack: false),
+                          ),
+                      ],
+                      slideCount(),
+                    ],
                   ),
-                ),
-              if (!isThatMobile) ...[
-                if (initPositionValue != 0)
-                  GestureDetector(
-                      onTap: () {
-                        initPosition.value--;
-                        _controller.animateToPage(initPosition.value,
-                            curve: Curves.easeInOut);
-                      },
-                      child: const ArrowJump()),
-                if (initPositionValue < widget.imagesUrls.length - 1)
-                  GestureDetector(
-                    onTap: () {
-                      initPosition.value++;
-                      _controller.animateToPage(initPosition.value,
-                          curve: Curves.easeInOut);
-                    },
-                    child: const ArrowJump(isThatBack: false),
-                  ),
-              ],
-              slideCount(),
-            ],
-          ),
         ),
       ),
     );

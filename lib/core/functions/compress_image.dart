@@ -20,9 +20,13 @@ class CompressImage {
     if (file == null) return null;
     final filePath = file.absolute.path;
 
-    final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
-    final split = filePath.substring(0, (lastIndex));
-    final outPath = "${split}_out${filePath.substring(lastIndex)}";
+    final dotIndex = filePath.lastIndexOf('.');
+    final nameOnly = dotIndex == -1
+        ? filePath
+        : filePath.substring(0, dotIndex);
+
+    /// png and heic picks crash the compressor, it only writes the jpeg it defaults to
+    final outPath = "${nameOnly}_out.jpg";
     final result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
       outPath,

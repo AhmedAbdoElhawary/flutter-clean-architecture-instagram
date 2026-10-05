@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:image_picker_plus/image_picker_plus.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/selected_byte.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
 import 'package:instagram/core/resources/color_manager.dart';
@@ -32,10 +32,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
   ValueNotifier<bool> isImageUpload = ValueNotifier(true);
   TextEditingController nameController = TextEditingController(text: "");
   TextEditingController userNameController = TextEditingController(text: "");
-  final TextEditingController pronounsController =
-      TextEditingController(text: "");
-  final TextEditingController websiteController =
-      TextEditingController(text: "");
+  final TextEditingController pronounsController = TextEditingController(
+    text: "",
+  );
+  final TextEditingController websiteController = TextEditingController(
+    text: "",
+  );
   TextEditingController bioController = TextEditingController(text: "");
   late UserPersonalInfo userInfo;
 
@@ -94,125 +96,144 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Scaffold buildScaffold(BuildContext context, UserInfoState getUserState,
-      UserInfoCubit updateUserCubit) {
+  Scaffold buildScaffold(
+    BuildContext context,
+    UserInfoState getUserState,
+    UserInfoCubit updateUserCubit,
+  ) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: isThatMobile
           ? buildAppBar(context, getUserState, updateUserCubit)
           : null,
       body: Column(
-        children: [
-          circleAvatarAndTextFields(context, updateUserCubit),
-        ],
+        children: [circleAvatarAndTextFields(context, updateUserCubit)],
       ),
     );
   }
 
-  AppBar buildAppBar(BuildContext context, UserInfoState getUserState,
-      UserInfoCubit updateUserCubit) {
+  AppBar buildAppBar(
+    BuildContext context,
+    UserInfoState getUserState,
+    UserInfoCubit updateUserCubit,
+  ) {
     return AppBar(
-        iconTheme: IconThemeData(color: Theme.of(context).focusColor),
-        elevation: 0,
-        backgroundColor: Theme.of(context).primaryColor,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset(
-              IconsAssets.cancelIcon,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).focusColor, BlendMode.srcIn),
-              height: 27,
-            )),
-        title: Text(
-          StringsManager.editProfile.tr,
-          style:
-              getMediumStyle(color: Theme.of(context).focusColor, fontSize: 20),
+      iconTheme: IconThemeData(color: Theme.of(context).focusColor),
+      elevation: 0,
+      backgroundColor: Theme.of(context).primaryColor,
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: SvgPicture.asset(
+          IconsAssets.cancelIcon,
+          colorFilter: ColorFilter.mode(
+            Theme.of(context).focusColor,
+            BlendMode.srcIn,
+          ),
+          height: 27,
         ),
-        actions: actionsWidgets(getUserState, updateUserCubit));
+      ),
+      title: Text(
+        StringsManager.editProfile.tr,
+        style: getMediumStyle(
+          color: Theme.of(context).focusColor,
+          fontSize: 20,
+        ),
+      ),
+      actions: actionsWidgets(getUserState, updateUserCubit),
+    );
   }
 
   List<Widget> actionsWidgets(
-      dynamic getUserState, UserInfoCubit updateUserCubit) {
+    dynamic getUserState,
+    UserInfoCubit updateUserCubit,
+  ) {
     return [
       if (validateEdits) ...[
         getUserState is! CubitMyPersonalInfoLoaded
             ? Transform.scale(
                 scaleY: 1,
                 scaleX: 1.2,
-                child: const CustomCircularProgress(ColorManager.blue))
+                child: const CustomCircularProgress(ColorManager.blue),
+              )
             : ValueListenableBuilder(
                 valueListenable: isImageUpload,
                 builder: (context, bool isImageUploadValue, child) =>
                     IconButton(
-                  onPressed: () async {
-                    bool isNameChanged = nameController.text == userInfo.name;
-                    bool isUserNameChanged =
-                        userNameController.text == userInfo.userName;
-                    bool isBioChanged = bioController.text == userInfo.bio;
+                      onPressed: () async {
+                        bool isNameChanged =
+                            nameController.text == userInfo.name;
+                        bool isUserNameChanged =
+                            userNameController.text == userInfo.userName;
+                        bool isBioChanged = bioController.text == userInfo.bio;
 
-                    if (isBioChanged &&
-                        isUserNameChanged &&
-                        isNameChanged &&
-                        !isImageChanged) {
-                      Go(context).back();
-                    }
+                        if (isBioChanged &&
+                            isUserNameChanged &&
+                            isNameChanged &&
+                            !isImageChanged) {
+                          Go(context).back();
+                        }
 
-                    if (isImageUploadValue) {
-                      reBuild = true;
-                      List<dynamic> charactersOfName = [];
-                      String name = nameController.text.toLowerCase();
-                      for (int i = 0; i < name.length; i++) {
-                        charactersOfName =
-                            charactersOfName + [name.substring(0, i + 1)];
-                      }
-                      UserPersonalInfo updatedUserInfo = UserPersonalInfo(
-                        followerPeople: userInfo.followerPeople,
-                        followedPeople: userInfo.followedPeople,
-                        posts: userInfo.posts,
-                        userName: userNameController.text,
-                        name: nameController.text,
-                        bio: bioController.text,
-                        profileImageUrl: userInfo.profileImageUrl,
-                        email: userInfo.email,
-                        charactersOfName: charactersOfName,
-                        stories: userInfo.stories,
-                        userId: userInfo.userId,
-                        deviceToken: userInfo.deviceToken,
-                        lastThreePostUrls: userInfo.lastThreePostUrls,
-                        chatsOfGroups: userInfo.chatsOfGroups,
-                      );
-                      await updateUserCubit
-                          .updateUserInfo(updatedUserInfo)
-                          .whenComplete(() {
-                        Future.delayed(Duration.zero, () {
-                          reBuild = false;
+                        if (isImageUploadValue) {
+                          reBuild = true;
+                          List<dynamic> charactersOfName = [];
+                          String name = nameController.text.toLowerCase();
+                          for (int i = 0; i < name.length; i++) {
+                            charactersOfName =
+                                charactersOfName + [name.substring(0, i + 1)];
+                          }
+                          UserPersonalInfo updatedUserInfo = UserPersonalInfo(
+                            followerPeople: userInfo.followerPeople,
+                            followedPeople: userInfo.followedPeople,
+                            posts: userInfo.posts,
+                            userName: userNameController.text,
+                            name: nameController.text,
+                            bio: bioController.text,
+                            profileImageUrl: userInfo.profileImageUrl,
+                            email: userInfo.email,
+                            charactersOfName: charactersOfName,
+                            stories: userInfo.stories,
+                            userId: userInfo.userId,
+                            deviceToken: userInfo.deviceToken,
+                            lastThreePostUrls: userInfo.lastThreePostUrls,
+                            chatsOfGroups: userInfo.chatsOfGroups,
+                          );
+                          await updateUserCubit
+                              .updateUserInfo(updatedUserInfo)
+                              .whenComplete(() {
+                                Future.delayed(Duration.zero, () {
+                                  reBuild = false;
 
-                          if (context.mounted) Go(context).back();
-                        });
-                      });
-                    }
-                  },
-                  icon: checkIcon(false),
-                ),
-              )
+                                  if (context.mounted) Go(context).back();
+                                });
+                              });
+                        }
+                      },
+                      icon: checkIcon(false),
+                    ),
+              ),
       ] else ...[
         Padding(
           padding: const EdgeInsetsDirectional.only(end: 8.5),
           child: checkIcon(true),
-        )
+        ),
       ],
     ];
   }
 
   Icon checkIcon(bool light) {
-    return Icon(Icons.check_rounded,
-        size: 30, color: light ? ColorManager.lightBlue : ColorManager.blue);
+    return Icon(
+      Icons.check_rounded,
+      size: 30,
+      color: light ? ColorManager.lightBlue : ColorManager.blue,
+    );
   }
 
   Expanded circleAvatarAndTextFields(
-      BuildContext context, UserInfoCubit updateUserCubit) {
+    BuildContext context,
+    UserInfoCubit updateUserCubit,
+  ) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsetsDirectional.all(10),
@@ -270,67 +291,65 @@ class _EditProfilePageState extends State<EditProfilePage> {
     SelectedImagesDetails? details = await pushToCustomGallery(context);
     if (details == null) return;
     isImageUpload.value = false;
-    Uint8List pickImage =
-        await (details.selectedFiles[0].selectedFile).readAsBytes();
+    Uint8List pickImage = details.selectedFiles[0].selectedByte;
 
     await updateUserCubit.uploadProfileImage(
-        photo: pickImage,
-        userId: userInfo.userId,
-        previousImageUrl: userInfo.profileImageUrl);
+      photo: pickImage,
+      userId: userInfo.userId,
+      previousImageUrl: userInfo.profileImageUrl,
+    );
     isImageUpload.value = true;
     isImageChanged = true;
   }
 
   static Future<SelectedImagesDetails?> pushToCustomGallery(
-      BuildContext context) async {
-    ImagePickerPlus picker = ImagePickerPlus(context);
-    SelectedImagesDetails? details = await picker.pickImage(
-      source: ImageSource.both,
-      galleryDisplaySettings: GalleryDisplaySettings(
-        showImagePreview: true,
-        cropImage: true,
-        tabsTexts: CustomImagePickerPlus.tapsNames(),
-        appTheme: CustomImagePickerPlus.appTheme(context),
-      ),
-    );
-    return details;
-  }
+    BuildContext context,
+  ) => CustomImagePickerPlus.pickImage(context, source: PickerSource.both);
 
   Widget userNameTextField(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: isImageUpload,
       builder: (context, bool isImageUploadValue, child) =>
           BlocBuilder<SearchAboutUserBloc, SearchAboutUserState>(
-        bloc: BlocProvider.of<SearchAboutUserBloc>(context)
-          ..add(FindSpecificUser(userNameController.text,
-              searchForSingleLetter: true)),
-        buildWhen: (previous, current) =>
-            previous != current &&
-            (current is SearchAboutUserBlocLoaded) &&
-            isImageUploadValue,
-        builder: (context, state) {
-          List<UserPersonalInfo> usersWithSameUserName = [];
-          if (state is SearchAboutUserBlocLoaded) {
-            usersWithSameUserName = state.users;
-          }
-          bool isIExist = usersWithSameUserName.contains(userInfo);
-          WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-                validateEdits = isIExist || usersWithSameUserName.isEmpty;
-                userNameChanging = userNameController.text != userInfo.userName;
-              }));
-          return userNameTextFormField(
-            userNameController,
-            StringsManager.username.tr,
-            uniqueUserName: validateEdits,
-          );
-        },
-      ),
+            bloc: BlocProvider.of<SearchAboutUserBloc>(context)
+              ..add(
+                FindSpecificUser(
+                  userNameController.text,
+                  searchForSingleLetter: true,
+                ),
+              ),
+            buildWhen: (previous, current) =>
+                previous != current &&
+                (current is SearchAboutUserBlocLoaded) &&
+                isImageUploadValue,
+            builder: (context, state) {
+              List<UserPersonalInfo> usersWithSameUserName = [];
+              if (state is SearchAboutUserBlocLoaded) {
+                usersWithSameUserName = state.users;
+              }
+              bool isIExist = usersWithSameUserName.contains(userInfo);
+              WidgetsBinding.instance.addPostFrameCallback(
+                (_) => setState(() {
+                  validateEdits = isIExist || usersWithSameUserName.isEmpty;
+                  userNameChanging =
+                      userNameController.text != userInfo.userName;
+                }),
+              );
+              return userNameTextFormField(
+                userNameController,
+                StringsManager.username.tr,
+                uniqueUserName: validateEdits,
+              );
+            },
+          ),
     );
   }
 
   TextFormField userNameTextFormField(
-      TextEditingController controller, String text,
-      {required bool uniqueUserName}) {
+    TextEditingController controller,
+    String text, {
+    required bool uniqueUserName,
+  }) {
     return TextFormField(
       cursorColor: ColorManager.teal,
       controller: controller,
@@ -341,7 +360,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ? null
             : (uniqueUserName && validateEdits ? rightIcon() : wrongIcon()),
         labelStyle: getNormalStyle(
-            color: !uniqueUserName ? ColorManager.red : ColorManager.grey),
+          color: !uniqueUserName ? ColorManager.red : ColorManager.grey,
+        ),
         errorText: uniqueUserName && validateEdits
             ? null
             : StringsManager.thisUserNameExist.tr,
@@ -370,12 +390,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Center imageCircleAvatar(BuildContext context) {
     return Center(
-        child: Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        userCircleAvatarImage(),
-      ],
-    ));
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        children: [userCircleAvatarImage()],
+      ),
+    );
   }
 
   Widget userCircleAvatarImage() {
@@ -394,8 +413,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
             child: !isImageUploadValue
                 ? const ThineCircularProgress(color: ColorManager.white)
                 : (!hasUserPhoto
-                    ? Icon(Icons.person, color: Theme.of(context).primaryColor)
-                    : null),
+                      ? Icon(
+                          Icons.person,
+                          color: Theme.of(context).primaryColor,
+                        )
+                      : null),
           ),
         ),
       ),

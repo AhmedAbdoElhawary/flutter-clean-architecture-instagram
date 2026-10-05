@@ -26,6 +26,13 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<!-- TODO(ahmed): reword these three, apple shows them in the permission dialog and reviews them -->
+	<key>NSCameraUsageDescription</key>
+	<string>Instagram needs the camera to take the photos and videos you post.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Instagram needs the microphone to record sound with your videos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Instagram needs your photo library to pick the photos and videos you post.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
