@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:image_picker_plus/image_picker_plus.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/selected_byte.dart';
 import 'package:instagram/data/models/child_classes/post/post.dart';
 import 'package:instagram/core/use_case/use_case.dart';
 import '../../repositories/post/post_repository.dart';
@@ -11,11 +11,15 @@ class CreatePostUseCase
   CreatePostUseCase(this._createPostRepository);
 
   @override
-  Future<Post> call(
-      {required Post paramsOne,
-      required List<SelectedByte> paramsTwo,
-      required Uint8List? paramsThree}) {
+  Future<Post> call({
+    required Post paramsOne,
+    required List<SelectedByte> paramsTwo,
+    required Uint8List? paramsThree,
+  }) {
     return _createPostRepository.createPost(
-        postInfo: paramsOne, files: paramsTwo, coverOfVideo: paramsThree);
+      postInfo: paramsOne,
+      files: paramsTwo,
+      coverOfVideo: paramsThree,
+    );
   }
 }

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:image_picker_plus/image_picker_plus.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/selected_byte.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/core/functions/notifications_permissions.dart';
 import 'package:instagram/core/functions/toast_show.dart';
@@ -54,8 +54,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Future<void> _getData(int index) async {
     storiesOwnersInfo = null;
     reLoadData.value = false;
-    UserInfoCubit userCubit =
-        BlocProvider.of<UserInfoCubit>(context, listen: false);
+    UserInfoCubit userCubit = BlocProvider.of<UserInfoCubit>(
+      context,
+      listen: false,
+    );
     await userCubit.getUserInfo(widget.userId);
     if (!mounted) return;
     personalInfo = userCubit.myPersonalInfo;
@@ -72,10 +74,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     PostCubit postCubit = PostCubit.get(context);
     await postCubit
         .getPostsInfo(
-            postsIds: postsIds, isThatMyPosts: true, lengthOfCurrentList: index)
+          postsIds: postsIds,
+          isThatMyPosts: true,
+          lengthOfCurrentList: index,
+        )
         .then((value) {
-      reLoadData.value = true;
-    });
+          reLoadData.value = true;
+        });
   }
 
   @override
@@ -85,7 +90,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     /// It's prefer to the here not in data_sources to avoid bugs when push notification.
     if (isThatMobile) {
       WidgetsBinding.instance.addPostFrameCallback(
-          (_) async => await notificationPermissions(context));
+        (_) async => await notificationPermissions(context),
+      );
     }
     super.initState();
   }
@@ -104,9 +110,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return SafeArea(
       child: Scaffold(
         appBar: isThatMobile ? CustomAppBar.basicAppBar(context) : null,
-        body: Center(
-          child: blocBuilder(),
-        ),
+        body: Center(child: blocBuilder()),
       ),
     );
   }
@@ -116,42 +120,44 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       valueListenable: reLoadData,
       builder: (context, bool value, child) =>
           BlocBuilder<PostCubit, PostState>(
-        buildWhen: (previous, current) {
-          if (value && current is CubitMyPersonalPostsLoaded) {
-            reLoadData.value = false;
-            return true;
-          }
-          if (value) {
-            reLoadData.value = false;
-            return true;
-          }
+            buildWhen: (previous, current) {
+              if (value && current is CubitMyPersonalPostsLoaded) {
+                reLoadData.value = false;
+                return true;
+              }
+              if (value) {
+                reLoadData.value = false;
+                return true;
+              }
 
-          if (previous != current && current is CubitMyPersonalPostsLoaded) {
-            return true;
-          }
-          if (previous != current && current is CubitPostFailed) {
-            return true;
-          }
-          return false;
-        },
-        builder: (BuildContext context, PostState state) {
-          if (state is CubitMyPersonalPostsLoaded) {
-            postsInfo.value = state.postsInfo;
-            return postsInfo.value.isNotEmpty
-                ? inViewNotifier()
-                : WelcomeCards(onRefreshData: _getData);
-          } else if (state is CubitPostFailed) {
-            ToastShow.toastStateError(state);
-            return Center(
-                child: Text(
-              StringsManager.somethingWrong.tr,
-              style: getNormalStyle(color: Theme.of(context).focusColor),
-            ));
-          } else {
-            return const ThineCircularProgress();
-          }
-        },
-      ),
+              if (previous != current &&
+                  current is CubitMyPersonalPostsLoaded) {
+                return true;
+              }
+              if (previous != current && current is CubitPostFailed) {
+                return true;
+              }
+              return false;
+            },
+            builder: (BuildContext context, PostState state) {
+              if (state is CubitMyPersonalPostsLoaded) {
+                postsInfo.value = state.postsInfo;
+                return postsInfo.value.isNotEmpty
+                    ? inViewNotifier()
+                    : WelcomeCards(onRefreshData: _getData);
+              } else if (state is CubitPostFailed) {
+                ToastShow.toastStateError(state);
+                return Center(
+                  child: Text(
+                    StringsManager.somethingWrong.tr,
+                    style: getNormalStyle(color: Theme.of(context).focusColor),
+                  ),
+                );
+              } else {
+                return const ThineCircularProgress();
+              }
+            },
+          ),
     );
   }
 
@@ -160,38 +166,44 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       valueListenable: postsInfo,
       builder: (context, List<Post> postsInfoValue, child) =>
           InViewNotifierList(
-        onRefreshData: _getData,
-        postsIds: postsIds,
-        physics: const BouncingScrollPhysics(),
-        isThatEndOfList: isThatEndOfList,
-        initialInViewIds: const ['0'],
-        isInViewPortCondition:
-            (double deltaTop, double deltaBottom, double vpHeight) {
-          return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
-        },
-        itemCount: postsInfoValue.length,
-        builder: (BuildContext context, int index) {
-          return Center(
-            child: Container(
-              width: isThatMobile ? double.infinity : 450,
-              margin: const EdgeInsetsDirectional.only(bottom: .5, top: .5),
-              child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  return InViewNotifierWidget(
-                    id: '$index',
-                    builder: (_, bool isInView, _) {
-                      bool checkForPlatform = isThatMobile
-                          ? isInView && widget.playVideo
-                          : isInView;
-                      return columnOfWidgets(index, checkForPlatform, isInView);
-                    },
-                  );
+            onRefreshData: _getData,
+            postsIds: postsIds,
+            physics: const BouncingScrollPhysics(),
+            isThatEndOfList: isThatEndOfList,
+            initialInViewIds: const ['0'],
+            isInViewPortCondition:
+                (double deltaTop, double deltaBottom, double vpHeight) {
+                  return deltaTop < (0.5 * vpHeight) &&
+                      deltaBottom > (0.5 * vpHeight);
                 },
-              ),
-            ),
-          );
-        },
-      ),
+            itemCount: postsInfoValue.length,
+            builder: (BuildContext context, int index) {
+              return Center(
+                child: Container(
+                  width: isThatMobile ? double.infinity : 450,
+                  margin: const EdgeInsetsDirectional.only(bottom: .5, top: .5),
+                  child: LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                          return InViewNotifierWidget(
+                            id: '$index',
+                            builder: (_, bool isInView, _) {
+                              bool checkForPlatform = isThatMobile
+                                  ? isInView && widget.playVideo
+                                  : isInView;
+                              return columnOfWidgets(
+                                index,
+                                checkForPlatform,
+                                isInView,
+                              );
+                            },
+                          );
+                        },
+                  ),
+                ),
+              );
+            },
+          ),
     );
   }
 
@@ -212,7 +224,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         if (isThatEndOfList.value && index == postsIds.length - 1) ...[
           if (isThatMobile) divider(),
           const AllCatchUpIcon(),
-        ]
+        ],
       ],
     );
   }
@@ -222,10 +234,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Container customDivider() => Container(
-      margin: const EdgeInsetsDirectional.only(bottom: 8, top: 5),
-      color: ColorManager.grey,
-      width: double.infinity,
-      height: 0.3);
+    margin: const EdgeInsetsDirectional.only(bottom: 8, top: 5),
+    color: ColorManager.grey,
+    width: double.infinity,
+    height: 0.3,
+  );
 
   Widget posts(int index, bool playTheVideo) {
     Widget buildPost = ValueListenableBuilder(
@@ -260,10 +273,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Widget buildUsersStories(BuildContext context) {
     Widget stories = _BuildStoriesLine(
-        personalInfo: personalInfo,
-        reLoadData: reLoadData,
-        storiesOwnersInfo: storiesOwnersInfo,
-        scrollController: ScrollController());
+      personalInfo: personalInfo,
+      reLoadData: reLoadData,
+      storiesOwnersInfo: storiesOwnersInfo,
+      scrollController: ScrollController(),
+    );
     return isThatMobile
         ? stories
         : _RoundedContainer(isThatStory: true, child: stories);
@@ -276,42 +290,45 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       valueListenable: reLoadData,
       builder: (context, bool value, child) =>
           BlocBuilder<StoryCubit, StoryState>(
-        bloc: StoryCubit.get(context)
-          ..getStoriesInfo(
-              usersIds: usersStoriesIds, myPersonalInfo: personalInfo),
-        buildWhen: (previous, current) {
-          if (value && current is CubitStoriesInfoLoaded) {
-            reLoadData.value = false;
-            return true;
-          }
-          if (value) {
-            reLoadData.value = false;
-            return true;
-          }
-          if (previous != current && current is CubitStoriesInfoLoaded) {
-            return true;
-          }
-          if (previous != current && current is CubitStoryFailed) {
-            return true;
-          }
-          return false;
-        },
-        builder: (context, state) {
-          if (state is CubitStoriesInfoLoaded) {
-            storiesOwnersInfo = state.storiesOwnersInfo;
-            return buildUsersStories(context);
-          } else if (state is CubitStoryFailed) {
-            ToastShow.toastStateError(state);
-            return Center(
-                child: Text(
-              StringsManager.somethingWrong.tr,
-              style: getNormalStyle(color: Theme.of(context).focusColor),
-            ));
-          } else {
-            return const SizedBox();
-          }
-        },
-      ),
+            bloc: StoryCubit.get(context)
+              ..getStoriesInfo(
+                usersIds: usersStoriesIds,
+                myPersonalInfo: personalInfo,
+              ),
+            buildWhen: (previous, current) {
+              if (value && current is CubitStoriesInfoLoaded) {
+                reLoadData.value = false;
+                return true;
+              }
+              if (value) {
+                reLoadData.value = false;
+                return true;
+              }
+              if (previous != current && current is CubitStoriesInfoLoaded) {
+                return true;
+              }
+              if (previous != current && current is CubitStoryFailed) {
+                return true;
+              }
+              return false;
+            },
+            builder: (context, state) {
+              if (state is CubitStoriesInfoLoaded) {
+                storiesOwnersInfo = state.storiesOwnersInfo;
+                return buildUsersStories(context);
+              } else if (state is CubitStoryFailed) {
+                ToastShow.toastStateError(state);
+                return Center(
+                  child: Text(
+                    StringsManager.somethingWrong.tr,
+                    style: getNormalStyle(color: Theme.of(context).focusColor),
+                  ),
+                );
+              } else {
+                return const SizedBox();
+              }
+            },
+          ),
     );
   }
 }
@@ -362,7 +379,8 @@ class _BuildStoriesLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final bodyHeight = mediaQuery.size.height -
+    final bodyHeight =
+        mediaQuery.size.height -
         AppBar().preferredSize.height -
         mediaQuery.padding.top;
     final storiesLength = storiesOwnersInfo?.length ?? 0;
@@ -381,67 +399,79 @@ class _BuildStoriesLine extends StatelessWidget {
                   SliverPadding(
                     padding: const EdgeInsetsDirectional.only(end: 12),
                     sliver: SliverToBoxAdapter(
-                        child: _MyOwnStory(
-                            reLoadData: reLoadData,
-                            personalInfo: personalInfo)),
+                      child: _MyOwnStory(
+                        reLoadData: reLoadData,
+                        personalInfo: personalInfo,
+                      ),
+                    ),
                   ),
                 ],
                 SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                  UserPersonalInfo publisherInfo = storiesOwnersInfo![index];
-                  String hashTag = isThatMobile
-                      ? "${publisherInfo.userId.hashCode} for mobile"
-                      : "${publisherInfo.userId.hashCode} for web";
-                  return Hero(
-                    tag: hashTag,
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.only(
-                          end: index != storiesLength - 1 ? 12 : 0),
-                      child: GestureDetector(
-                        onTap: () {
-                          if (isThatMobile) {
-                            Widget page = StoryPageForMobile(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    UserPersonalInfo publisherInfo = storiesOwnersInfo![index];
+                    String hashTag = isThatMobile
+                        ? "${publisherInfo.userId.hashCode} for mobile"
+                        : "${publisherInfo.userId.hashCode} for web";
+                    return Hero(
+                      tag: hashTag,
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.only(
+                          end: index != storiesLength - 1 ? 12 : 0,
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            if (isThatMobile) {
+                              Widget page = StoryPageForMobile(
                                 user: publisherInfo,
                                 hashTag: hashTag,
-                                storiesOwnersInfo: storiesOwnersInfo!);
-                            Go(context)
-                                .push(page: page, withoutPageTransition: true);
-                          } else {
-                            Widget page = StoryPageForWeb(
+                                storiesOwnersInfo: storiesOwnersInfo!,
+                              );
+                              Go(
+                                context,
+                              ).push(page: page, withoutPageTransition: true);
+                            } else {
+                              Widget page = StoryPageForWeb(
                                 user: publisherInfo,
                                 hashTag: hashTag,
-                                storiesOwnersInfo: storiesOwnersInfo!);
-                            Get.to(page);
-                          }
-                        },
-                        child: CircleAvatarOfProfileImage(
-                          userInfo: publisherInfo,
-                          bodyHeight:
-                              isThatMobile ? bodyHeight : bodyHeight * 0.69,
-                          thisForStoriesLine: true,
-                          nameOfCircle: index == 0 &&
-                                  publisherInfo.userId == personalInfo.userId
-                              ? StringsManager.yourStory.tr
-                              : "",
+                                storiesOwnersInfo: storiesOwnersInfo!,
+                              );
+                              Get.to(page);
+                            }
+                          },
+                          child: CircleAvatarOfProfileImage(
+                            userInfo: publisherInfo,
+                            bodyHeight: isThatMobile
+                                ? bodyHeight
+                                : bodyHeight * 0.69,
+                            thisForStoriesLine: true,
+                            nameOfCircle:
+                                index == 0 &&
+                                    publisherInfo.userId == personalInfo.userId
+                                ? StringsManager.yourStory.tr
+                                : "",
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }, childCount: storiesLength))
+                    );
+                  }, childCount: storiesLength),
+                ),
               ],
             ),
             if (!isThatMobile && (storiesOwnersInfo?.length ?? 0) > 5) ...[
               Padding(
                 padding: const EdgeInsets.only(bottom: 15),
                 child: GestureDetector(
-                    onTap: () {
-                      double pos = scrollController.offset - 500;
-                      pos = pos < 0 ? 0 : pos;
-                      scrollController.animateTo(pos,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOutQuart);
-                    },
-                    child: const ArrowJump()),
+                  onTap: () {
+                    double pos = scrollController.offset - 500;
+                    pos = pos < 0 ? 0 : pos;
+                    scrollController.animateTo(
+                      pos,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOutQuart,
+                    );
+                  },
+                  child: const ArrowJump(),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 15),
@@ -449,9 +479,11 @@ class _BuildStoriesLine extends StatelessWidget {
                   onTap: () {
                     double pos = scrollController.offset + 500;
 
-                    scrollController.animateTo(pos,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOutQuart);
+                    scrollController.animateTo(
+                      pos,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOutQuart,
+                    );
                   },
                   child: const ArrowJump(isThatBack: false),
                 ),
@@ -465,10 +497,7 @@ class _BuildStoriesLine extends StatelessWidget {
 }
 
 class _MyOwnStory extends StatefulWidget {
-  const _MyOwnStory({
-    required this.reLoadData,
-    required this.personalInfo,
-  });
+  const _MyOwnStory({required this.reLoadData, required this.personalInfo});
 
   final ValueNotifier<bool> reLoadData;
   final UserPersonalInfo personalInfo;
@@ -489,9 +518,7 @@ class _MyOwnStoryState extends State<_MyOwnStory> {
         if (!context.mounted) return;
         if (details == null) return;
 
-        await Go(context).push(
-          page: CreateStoryPage(storiesDetails: details),
-        );
+        await Go(context).push(page: CreateStoryPage(storiesDetails: details));
         widget.reLoadData.value = true;
       },
       child: _MyOwnStoryChild(personalInfo: widget.personalInfo),
@@ -522,7 +549,9 @@ class _MyOwnStoryChild extends StatelessWidget {
           right: 650 * .012,
           child: Container(
             decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor, shape: BoxShape.circle),
+              color: Theme.of(context).primaryColor,
+              shape: BoxShape.circle,
+            ),
             padding: const EdgeInsets.all(2),
             child: CircleAvatar(
               radius: 15,
@@ -530,10 +559,7 @@ class _MyOwnStoryChild extends StatelessWidget {
               child: const CircleAvatar(
                 radius: 10,
                 backgroundColor: ColorManager.blue,
-                child: Icon(
-                  Icons.add,
-                  size: 14,
-                ),
+                child: Icon(Icons.add, size: 14),
               ),
             ),
           ),

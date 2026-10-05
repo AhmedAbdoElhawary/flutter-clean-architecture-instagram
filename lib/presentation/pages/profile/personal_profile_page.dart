@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:image_picker_plus/image_picker_plus.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/selected_byte.dart';
 import 'package:instagram/config/routes/app_routes.dart';
 import 'package:instagram/config/themes/theme_service.dart';
 import 'package:instagram/core/resources/assets_manager.dart';
@@ -36,8 +36,11 @@ class PersonalProfilePage extends StatefulWidget {
   final String personalId;
   final String userName;
 
-  const PersonalProfilePage(
-      {super.key, required this.personalId, this.userName = ''});
+  const PersonalProfilePage({
+    super.key,
+    required this.personalId,
+    this.userName = '',
+  });
 
   @override
   State<PersonalProfilePage> createState() => _ProfilePageState();
@@ -67,78 +70,90 @@ class _ProfilePageState extends State<PersonalProfilePage> {
       valueListenable: rebuildUserInfo,
       builder: (context, bool rebuildValue, child) =>
           BlocBuilder<UserInfoCubit, UserInfoState>(
-        bloc: widget.userName.isNotEmpty
-            ? (BlocProvider.of<UserInfoCubit>(context)
-              ..getUserFromUserName(widget.userName))
-            : (BlocProvider.of<UserInfoCubit>(context)
-              ..getUserInfo(widget.personalId, getDeviceToken: true)),
-        buildWhen: (previous, current) {
-          if (previous != current && current is CubitMyPersonalInfoLoaded) {
-            return true;
-          }
-          if (previous != current && current is CubitGetUserInfoFailed) {
-            return true;
-          }
-          if (rebuildValue) {
-            rebuildUserInfo.value = false;
-            return true;
-          }
-          return false;
-        },
-        builder: (context, state) {
-          if (state is CubitMyPersonalInfoLoaded) {
-            return Scaffold(
-              appBar:
-                  isThatMobile ? appBar(state.userPersonalInfo.userName) : null,
-              body: ProfilePage(
-                isThatMyPersonalId: true,
-                userId: state.userPersonalInfo.userId,
-                userInfo: ValueNotifier(state.userPersonalInfo),
-                widgetsAboveTapBars: isThatMobile
-                    ? widgetsAboveTapBarsForMobile(state.userPersonalInfo)
-                    : widgetsAboveTapBarsForWeb(state.userPersonalInfo),
-              ),
-            );
-          } else if (state is CubitGetUserInfoFailed) {
-            ToastShow.toastStateError(state);
-            return Text(StringsManager.noPosts.tr,
-                style: Theme.of(context).textTheme.bodyLarge);
-          } else {
-            return const ThineCircularProgress();
-          }
-        },
-      ),
+            bloc: widget.userName.isNotEmpty
+                ? (BlocProvider.of<UserInfoCubit>(context)
+                    ..getUserFromUserName(widget.userName))
+                : (BlocProvider.of<UserInfoCubit>(context)
+                    ..getUserInfo(widget.personalId, getDeviceToken: true)),
+            buildWhen: (previous, current) {
+              if (previous != current && current is CubitMyPersonalInfoLoaded) {
+                return true;
+              }
+              if (previous != current && current is CubitGetUserInfoFailed) {
+                return true;
+              }
+              if (rebuildValue) {
+                rebuildUserInfo.value = false;
+                return true;
+              }
+              return false;
+            },
+            builder: (context, state) {
+              if (state is CubitMyPersonalInfoLoaded) {
+                return Scaffold(
+                  appBar: isThatMobile
+                      ? appBar(state.userPersonalInfo.userName)
+                      : null,
+                  body: ProfilePage(
+                    isThatMyPersonalId: true,
+                    userId: state.userPersonalInfo.userId,
+                    userInfo: ValueNotifier(state.userPersonalInfo),
+                    widgetsAboveTapBars: isThatMobile
+                        ? widgetsAboveTapBarsForMobile(state.userPersonalInfo)
+                        : widgetsAboveTapBarsForWeb(state.userPersonalInfo),
+                  ),
+                );
+              } else if (state is CubitGetUserInfoFailed) {
+                ToastShow.toastStateError(state);
+                return Text(
+                  StringsManager.noPosts.tr,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                );
+              } else {
+                return const ThineCircularProgress();
+              }
+            },
+          ),
     );
   }
 
   AppBar appBar(String userName) {
     return AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text(userName,
-            style: getMediumStyle(
-                color: Theme.of(context).focusColor, fontSize: 20)),
-        actions: [
-          IconButton(
-            icon: SvgPicture.asset(
-              IconsAssets.addIcon,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).focusColor, BlendMode.srcIn),
-              height: 22.5,
+      elevation: 0,
+      backgroundColor: Theme.of(context).primaryColor,
+      title: Text(
+        userName,
+        style: getMediumStyle(
+          color: Theme.of(context).focusColor,
+          fontSize: 20,
+        ),
+      ),
+      actions: [
+        IconButton(
+          icon: SvgPicture.asset(
+            IconsAssets.addIcon,
+            colorFilter: ColorFilter.mode(
+              Theme.of(context).focusColor,
+              BlendMode.srcIn,
             ),
-            onPressed: () => bottomSheet(),
+            height: 22.5,
           ),
-          IconButton(
-            icon: SvgPicture.asset(
-              IconsAssets.menuIcon,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).focusColor, BlendMode.srcIn),
-              height: 30,
+          onPressed: () => bottomSheet(),
+        ),
+        IconButton(
+          icon: SvgPicture.asset(
+            IconsAssets.menuIcon,
+            colorFilter: ColorFilter.mode(
+              Theme.of(context).focusColor,
+              BlendMode.srcIn,
             ),
-            onPressed: () async => bottomSheet(createNewData: false),
+            height: 30,
           ),
-          const SizedBox(width: 5)
-        ]);
+          onPressed: () async => bottomSheet(createNewData: false),
+        ),
+        const SizedBox(width: 5),
+      ],
+    );
   }
 
   Future<void> bottomSheet({bool createNewData = true}) {
@@ -153,13 +168,15 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   ValueListenableBuilder<bool> bottomSheetHeadIcon() {
     return ValueListenableBuilder(
-        valueListenable: darkTheme,
-        builder: (context, bool themeValue, child) {
-          Color themeOfApp =
-              themeValue ? ColorManager.white : ColorManager.black;
-          return Text(StringsManager.create.tr,
-              style: getBoldStyle(color: themeOfApp, fontSize: 17));
-        });
+      valueListenable: darkTheme,
+      builder: (context, bool themeValue, child) {
+        Color themeOfApp = themeValue ? ColorManager.white : ColorManager.black;
+        return Text(
+          StringsManager.create.tr,
+          style: getBoldStyle(color: themeOfApp, fontSize: 17),
+        );
+      },
+    );
   }
 
   Padding bodyTextOfBottomSheet(bool createNewData) {
@@ -180,9 +197,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         customDivider(),
         createNewLive(),
         customDivider(),
-        Container(
-          height: 50,
-        )
+        Container(height: 50),
       ],
     );
   }
@@ -199,9 +214,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         customDivider(),
         logOut(),
         customDivider(),
-        Container(
-          height: 50,
-        )
+        Container(height: 50),
       ],
     );
   }
@@ -212,8 +225,10 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         AppLanguage.getInstance().changeLanguage();
         Phoenix.rebirth(context);
       },
-      child: createSizedBox(StringsManager.changeLanguage.tr,
-          icon: Icons.language_rounded),
+      child: createSizedBox(
+        StringsManager.changeLanguage.tr,
+        icon: Icons.language_rounded,
+      ),
     );
   }
 
@@ -223,37 +238,44 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         await ThemeOfApp.switchTheme();
         darkTheme.value = ThemeOfApp.isThemeDark();
       },
-      child: createSizedBox(StringsManager.changeTheme.tr,
-          icon: Icons.brightness_4_outlined),
+      child: createSizedBox(
+        StringsManager.changeTheme.tr,
+        icon: Icons.brightness_4_outlined,
+      ),
     );
   }
 
   Widget logOut() {
     return BlocBuilder<FirebaseAuthCubit, FirebaseAuthCubitState>(
-        builder: (context, state) {
-      FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
-      if (state is CubitAuthSignOut) {
-        WidgetsBinding.instance.addPostFrameCallback((_) async {
-          sharePrefs.clear();
-          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-            CupertinoPageRoute(
-                builder: (_) => const LoginPage(), maintainState: false),
-            (route) => false,
-          );
-        });
-      } else if (state is CubitAuthConfirming) {
-        ToastShow.toast(StringsManager.loading.tr);
-      } else if (state is CubitAuthFailed) {
-        ToastShow.toastStateError(state);
-      }
-      return GestureDetector(
-        child: createSizedBox(StringsManager.logOut.tr,
-            icon: Icons.logout_rounded),
-        onTap: () async {
-          await authCubit.signOut(userId: widget.personalId);
-        },
-      );
-    });
+      builder: (context, state) {
+        FirebaseAuthCubit authCubit = FirebaseAuthCubit.get(context);
+        if (state is CubitAuthSignOut) {
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            sharePrefs.clear();
+            Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+              CupertinoPageRoute(
+                builder: (_) => const LoginPage(),
+                maintainState: false,
+              ),
+              (route) => false,
+            );
+          });
+        } else if (state is CubitAuthConfirming) {
+          ToastShow.toast(StringsManager.loading.tr);
+        } else if (state is CubitAuthFailed) {
+          ToastShow.toastStateError(state);
+        }
+        return GestureDetector(
+          child: createSizedBox(
+            StringsManager.logOut.tr,
+            icon: Icons.logout_rounded,
+          ),
+          onTap: () async {
+            await authCubit.signOut(userId: widget.personalId);
+          },
+        );
+      },
+    );
   }
 
   List<Widget> widgetsAboveTapBarsForMobile(UserPersonalInfo userInfo) {
@@ -267,44 +289,50 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   Expanded editProfileButtonForMobile(UserPersonalInfo userInfo) {
     return Expanded(
-      child: Builder(builder: (buildContext) {
-        UserPersonalInfo myPersonalInfo =
-            UserInfoCubit.getMyPersonalInfo(context);
-        UserPersonalInfo? info =
-            UsersInfoReelTimeBloc.getMyInfoInReelTime(context);
-        if (isMyInfoInReelTimeReady && info != null) myPersonalInfo = info;
-        return InkWell(
-          onTap: () async {
-            Navigator.maybePop(context);
-            Future.delayed(Duration.zero, () async {
-              if (mounted) {
-                await Go(context).push(page: EditProfilePage(userInfo));
-              }
-              rebuildUserInfo.value = true;
-              userInfo = myPersonalInfo;
-            });
-          },
-          child: Container(
-            height: 35.0,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              border: Border.all(
+      child: Builder(
+        builder: (buildContext) {
+          UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(
+            context,
+          );
+          UserPersonalInfo? info = UsersInfoReelTimeBloc.getMyInfoInReelTime(
+            context,
+          );
+          if (isMyInfoInReelTimeReady && info != null) myPersonalInfo = info;
+          return InkWell(
+            onTap: () async {
+              Navigator.maybePop(context);
+              Future.delayed(Duration.zero, () async {
+                if (mounted) {
+                  await Go(context).push(page: EditProfilePage(userInfo));
+                }
+                rebuildUserInfo.value = true;
+                userInfo = myPersonalInfo;
+              });
+            },
+            child: Container(
+              height: 35.0,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                border: Border.all(
                   color: Theme.of(context).bottomAppBarTheme.color!,
-                  width: 1.0),
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            child: Center(
-              child: Text(
-                StringsManager.editProfile.tr,
-                style: TextStyle(
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Center(
+                child: Text(
+                  StringsManager.editProfile.tr,
+                  style: TextStyle(
                     fontSize: 17.0,
                     color: Theme.of(context).focusColor,
-                    fontWeight: FontWeight.w500),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
             ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 
@@ -325,10 +353,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
         decoration: BoxDecoration(
           color: ColorManager.transparent,
-          border: Border.all(
-            color: ColorManager.lowOpacityGrey,
-            width: 1,
-          ),
+          border: Border.all(color: ColorManager.lowOpacityGrey, width: 1),
           borderRadius: BorderRadius.circular(3),
         ),
         child: Text(
@@ -342,30 +367,38 @@ class _ProfilePageState extends State<PersonalProfilePage> {
   Widget createNewLive() {
     return InkWell(
       onTap: () {},
-      child: createSizedBox(StringsManager.live.tr,
-          nameOfPath: IconsAssets.instagramHighlightStoryIcon),
+      child: createSizedBox(
+        StringsManager.live.tr,
+        nameOfPath: IconsAssets.instagramHighlightStoryIcon,
+      ),
     );
   }
 
   Widget createStory() {
     return InkWell(
-        onTap: () async => createNewStory(true),
-        child: createSizedBox(StringsManager.story.tr,
-            nameOfPath: IconsAssets.addInstagramStoryIcon));
+      onTap: () async => createNewStory(true),
+      child: createSizedBox(
+        StringsManager.story.tr,
+        nameOfPath: IconsAssets.addInstagramStoryIcon,
+      ),
+    );
   }
 
   /// TODO: handle the video selection (aspect ratio especially)
   Widget createVideo() {
     return InkWell(
-        onTap: () async {
-          Navigator.maybePop(context);
+      onTap: () async {
+        Navigator.maybePop(context);
 
-          await CustomImagePickerPlus.pickVideo(context);
+        await CustomImagePickerPlus.pickVideo(context);
 
-          rebuildUserInfo.value = true;
-        },
-        child: createSizedBox(StringsManager.reel.tr,
-            nameOfPath: IconsAssets.videoIcon));
+        rebuildUserInfo.value = true;
+      },
+      child: createSizedBox(
+        StringsManager.reel.tr,
+        nameOfPath: IconsAssets.videoIcon,
+      ),
+    );
   }
 
   Future<void> createNewStory(bool isThatStory) async {
@@ -374,6 +407,7 @@ class _ProfilePageState extends State<PersonalProfilePage> {
     SelectedImagesDetails? details = await CustomImagePickerPlus.pickImage(
       context,
       isThatStory: true,
+      showPreview: false,
     );
     if (!mounted) return;
     if (details == null) return;
@@ -391,35 +425,44 @@ class _ProfilePageState extends State<PersonalProfilePage> {
 
   Widget createPost() {
     return InkWell(
-        onTap: createNewPost, child: createSizedBox(StringsManager.post.tr));
+      onTap: createNewPost,
+      child: createSizedBox(StringsManager.post.tr),
+    );
   }
 
-  Widget createSizedBox(String text,
-      {String nameOfPath = '', IconData icon = Icons.grid_on_rounded}) {
+  Widget createSizedBox(
+    String text, {
+    String nameOfPath = '',
+    IconData icon = Icons.grid_on_rounded,
+  }) {
     return SizedBox(
       height: 40,
       child: ValueListenableBuilder(
         valueListenable: darkTheme,
         builder: (context, bool themeValue, child) {
-          Color themeOfApp =
-              themeValue ? ColorManager.white : ColorManager.black;
+          Color themeOfApp = themeValue
+              ? ColorManager.white
+              : ColorManager.black;
 
-          return Row(children: [
-            nameOfPath.isNotEmpty
-                ? SvgPicture.asset(
-                    nameOfPath,
-                    colorFilter: ColorFilter.mode(
+          return Row(
+            children: [
+              nameOfPath.isNotEmpty
+                  ? SvgPicture.asset(
+                      nameOfPath,
+                      colorFilter: ColorFilter.mode(
                         Theme.of(context).dialogTheme.backgroundColor!,
-                        BlendMode.srcIn),
-                    height: 25,
-                  )
-                : Icon(icon, color: themeOfApp),
-            const SizedBox(width: 15),
-            Text(
-              text,
-              style: getNormalStyle(color: themeOfApp, fontSize: 15),
-            )
-          ]);
+                        BlendMode.srcIn,
+                      ),
+                      height: 25,
+                    )
+                  : Icon(icon, color: themeOfApp),
+              const SizedBox(width: 15),
+              Text(
+                text,
+                style: getNormalStyle(color: themeOfApp, fontSize: 15),
+              ),
+            ],
+          );
         },
       ),
     );

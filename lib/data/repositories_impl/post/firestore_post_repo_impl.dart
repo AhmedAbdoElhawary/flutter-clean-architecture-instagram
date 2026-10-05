@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:image_picker_plus/image_picker_plus.dart';
+import 'package:instagram/data/models/parent_classes/without_sub_classes/selected_byte.dart';
 import 'package:instagram/core/utility/constant.dart';
 import 'package:instagram/data/data_sources/remote/firebase_storage.dart';
 import 'package:instagram/data/data_sources/remote/post/firestore_post.dart';
@@ -26,10 +26,14 @@ class FireStorePostRepositoryImpl implements FireStorePostRepository {
         String postUrl;
         if (isThatMobile) {
           postUrl = await FirebaseStoragePost.uploadFile(
-              postFile: files[i].selectedFile, folderName: fileName);
+            postFile: files[i].selectedFile,
+            folderName: fileName,
+          );
         } else {
           postUrl = await FirebaseStoragePost.uploadData(
-              data: files[i].selectedByte, folderName: fileName);
+            data: files[i].selectedByte,
+            folderName: fileName,
+          );
         }
 
         if (i == 0) postInfo.postUrl = postUrl;
@@ -37,7 +41,9 @@ class FireStorePostRepositoryImpl implements FireStorePostRepository {
       }
       if (coverOfVideo != null) {
         String coverOfVideoUrl = await FirebaseStoragePost.uploadData(
-            data: coverOfVideo, folderName: 'postsVideo');
+          data: coverOfVideo,
+          folderName: 'postsVideo',
+        );
         postInfo.coverOfVideoUrl = coverOfVideoUrl;
       }
 
@@ -50,25 +56,30 @@ class FireStorePostRepositoryImpl implements FireStorePostRepository {
   }
 
   @override
-  Future<List<Post>> getPostsInfo(
-      {required List<dynamic> postsIds,
-      required int lengthOfCurrentList}) async {
+  Future<List<Post>> getPostsInfo({
+    required List<dynamic> postsIds,
+    required int lengthOfCurrentList,
+  }) async {
     try {
       return await FireStorePost.getPostsInfo(
-          postsIds: postsIds, lengthOfCurrentList: lengthOfCurrentList);
+        postsIds: postsIds,
+        lengthOfCurrentList: lengthOfCurrentList,
+      );
     } catch (e) {
       return Future.error(e.toString());
     }
   }
 
   @override
-  Future<List<Post>> getAllPostsInfo(
-      {required bool isVideosWantedOnly,
-      required String skippedVideoUid}) async {
+  Future<List<Post>> getAllPostsInfo({
+    required bool isVideosWantedOnly,
+    required String skippedVideoUid,
+  }) async {
     try {
       return await FireStorePost.getAllPostsInfo(
-          isVideosWantedOnly: isVideosWantedOnly,
-          skippedVideoUid: skippedVideoUid);
+        isVideosWantedOnly: isVideosWantedOnly,
+        skippedVideoUid: skippedVideoUid,
+      );
     } catch (e) {
       return Future.error(e.toString());
     }
@@ -84,22 +95,30 @@ class FireStorePostRepositoryImpl implements FireStorePostRepository {
   }
 
   @override
-  Future<void> putLikeOnThisPost(
-      {required String postId, required String userId}) async {
+  Future<void> putLikeOnThisPost({
+    required String postId,
+    required String userId,
+  }) async {
     try {
       return await FireStorePost.putLikeOnThisPost(
-          postId: postId, userId: userId);
+        postId: postId,
+        userId: userId,
+      );
     } catch (e) {
       return Future.error(e.toString());
     }
   }
 
   @override
-  Future<void> removeTheLikeOnThisPost(
-      {required String postId, required String userId}) async {
+  Future<void> removeTheLikeOnThisPost({
+    required String postId,
+    required String userId,
+  }) async {
     try {
       return await FireStorePost.removeTheLikeOnThisPost(
-          postId: postId, userId: userId);
+        postId: postId,
+        userId: userId,
+      );
     } catch (e) {
       return Future.error(e.toString());
     }
