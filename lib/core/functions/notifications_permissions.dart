@@ -59,8 +59,11 @@ Future<void> _listenFCM(BuildContext context) async {
           body: notification.body,
           payload: "$route,$routeParameterId,$userCallingId,$isThatGroupChat",
           notificationDetails: NotificationDetails(
-              android: _videoCallAndroidNotificationDetails(
-                  channel: _videoCallChannel, isThatCalling: true)),
+            android: _videoCallAndroidNotificationDetails(
+              channel: _videoCallChannel,
+              isThatCalling: true,
+            ),
+          ),
         );
       } else {
         _normalLocalNotifications.show(
@@ -69,8 +72,10 @@ Future<void> _listenFCM(BuildContext context) async {
           body: notification.body,
           payload: "$route,$routeParameterId",
           notificationDetails: NotificationDetails(
-              android: _videoCallAndroidNotificationDetails(
-                  channel: _normalChannel)),
+            android: _videoCallAndroidNotificationDetails(
+              channel: _normalChannel,
+            ),
+          ),
         );
       }
     }
@@ -83,11 +88,13 @@ Future<void> _listenFCM(BuildContext context) async {
 }
 
 Future<void> _handleMessage(BuildContext context, RemoteMessage message) async {
-  await _pushToPage(context,
-      route: message.data["route"] ?? "",
-      routeParameterId: message.data["routeParameterId"] ?? "",
-      userCallingId: message.data["userCallingId"] ?? "",
-      isThatGroupChat: message.data["isThatGroupChat"] ?? false);
+  await _pushToPage(
+    context,
+    route: message.data["route"] ?? "",
+    routeParameterId: message.data["routeParameterId"] ?? "",
+    userCallingId: message.data["userCallingId"] ?? "",
+    isThatGroupChat: message.data["isThatGroupChat"] ?? false,
+  );
 }
 
 Future<void> _pushToPage(
@@ -107,8 +114,9 @@ Future<void> _pushToPage(
     page = WhichProfilePage(userId: routeParameterId);
   } else if (route == "call") {
     UserPersonalInfo myPersonalInfo = UserInfoCubit.getMyPersonalInfo(context);
-    await CallingRoomsCubit.get(context).joinToRoom(
-        channelId: routeParameterId, myPersonalInfo: myPersonalInfo);
+    await CallingRoomsCubit.get(
+      context,
+    ).joinToRoom(channelId: routeParameterId, myPersonalInfo: myPersonalInfo);
     page = CallPage(
       channelName: routeParameterId,
       role: ClientRoleType.clientRoleBroadcaster,
@@ -118,8 +126,10 @@ Future<void> _pushToPage(
   } else {
     page = BlocProvider<MessageBloc>(
       create: (context) => injector<MessageBloc>(),
-      child:
-          ChattingPage(chatUid: routeParameterId, isThatGroup: isThatGroupChat),
+      child: ChattingPage(
+        chatUid: routeParameterId,
+        isThatGroup: isThatGroupChat,
+      ),
     );
   }
 
@@ -127,8 +137,10 @@ Future<void> _pushToPage(
   await Go(context).push(page: page);
 }
 
-AndroidNotificationDetails _videoCallAndroidNotificationDetails(
-    {required AndroidNotificationChannel channel, bool isThatCalling = false}) {
+AndroidNotificationDetails _videoCallAndroidNotificationDetails({
+  required AndroidNotificationChannel channel,
+  bool isThatCalling = false,
+}) {
   return AndroidNotificationDetails(
     channel.id,
     channel.name,
@@ -156,12 +168,14 @@ Future<void> _loadFCM(BuildContext context) async {
 
   await _normalLocalNotifications
       .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
+        AndroidFlutterLocalNotificationsPlugin
+      >()
       ?.createNotificationChannel(_normalChannel);
 
   await _videoCallLocalNotifications
       .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
+        AndroidFlutterLocalNotificationsPlugin
+      >()
       ?.createNotificationChannel(_videoCallChannel);
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -170,7 +184,15 @@ Future<void> _loadFCM(BuildContext context) async {
     sound: true,
   );
   const InitializationSettings initializationSettings = InitializationSettings(
-      android: AndroidInitializationSettings("launch_background"));
+    android: AndroidInitializationSettings("launch_background"),
+
+    /// fcm already asked for permission in _requestPermission, don't ask twice
+    iOS: DarwinInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    ),
+  );
 
   /// when app opened and select the message
   await _normalLocalNotifications.initialize(
@@ -193,8 +215,8 @@ Future<void> _loadFCM(BuildContext context) async {
 }
 
 Future<void> _detailsWhenAppClose(BuildContext context) async {
-  final normalDetails =
-      await _normalLocalNotifications.getNotificationAppLaunchDetails();
+  final normalDetails = await _normalLocalNotifications
+      .getNotificationAppLaunchDetails();
 
   if (normalDetails != null && normalDetails.didNotificationLaunchApp) {
     String? payload = normalDetails.notificationResponse?.payload;
@@ -209,7 +231,9 @@ Future<void> _detailsWhenAppClose(BuildContext context) async {
         if (videoDetails != null && videoDetails.didNotificationLaunchApp) {
           if (context.mounted) {
             await _onSelectNotification(
-                context, videoDetails.notificationResponse?.payload);
+              context,
+              videoDetails.notificationResponse?.payload,
+            );
           }
         }
       } else {
@@ -221,7 +245,9 @@ Future<void> _detailsWhenAppClose(BuildContext context) async {
 }
 
 Future<void> _onSelectNotification(
-    BuildContext context, String? payload) async {
+  BuildContext context,
+  String? payload,
+) async {
   if (payload != null) {
     List<String> data = payload.split(",");
     int length = data.length;
@@ -245,8 +271,9 @@ Future<void> _onSelectNotification(
   }
 }
 
-AndroidNotificationChannel _androidNotificationChannel(
-    {bool isThatCalling = false}) {
+AndroidNotificationChannel _androidNotificationChannel({
+  bool isThatCalling = false,
+}) {
   final int id = DateTime.now().microsecondsSinceEpoch ~/ 1000;
 
   return AndroidNotificationChannel(
