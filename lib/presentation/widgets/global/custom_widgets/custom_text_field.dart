@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -12,13 +13,14 @@ class CustomTextField extends StatefulWidget {
   final bool? isThatEmail;
   final ValueNotifier<bool>? validate;
   final bool isThatLogin;
-  const CustomTextField(
-      {required this.controller,
-      required this.hint,
-      required this.isThatLogin,
-      this.isThatEmail,
-      this.validate,
-      super.key});
+  const CustomTextField({
+    required this.controller,
+    required this.hint,
+    required this.isThatLogin,
+    this.isThatEmail,
+    this.validate,
+    super.key,
+  });
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -26,21 +28,43 @@ class CustomTextField extends StatefulWidget {
 
 class _CustomTextFieldState extends State<CustomTextField> {
   String? errorMassage;
+  Timer? _emailDebounce;
+
   @override
   void initState() {
     widget.controller.addListener(() {
       if (widget.controller.text.isNotEmpty) {
         errorMassage = widget.isThatEmail != null
             ? (widget.isThatEmail == true
-                ? _validateEmail()
-                : _validatePassword())
+                  ? _validateEmail()
+                  : _validatePassword())
             : null;
       } else {
         errorMassage = null;
       }
+      if (widget.isThatEmail == true && !widget.isThatLogin) {
+        _checkEmailExisting();
+      }
     });
 
     super.initState();
+  }
+
+  /// the listener fires on every character, one query per keystroke is too much
+  void _checkEmailExisting() {
+    _emailDebounce?.cancel();
+    _emailDebounce = Timer(const Duration(milliseconds: 500), () {
+      if (!mounted) return;
+      FirebaseAuthCubit.get(
+        context,
+      ).isThisEmailToken(email: widget.controller.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailDebounce?.cancel();
+    super.dispose();
   }
 
   @override
@@ -51,8 +75,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
         height: isThatMobile ? null : 37,
         width: double.infinity,
         child: BlocConsumer<FirebaseAuthCubit, FirebaseAuthCubitState>(
-          bloc: FirebaseAuthCubit.get(context)
-            ..isThisEmailToken(email: widget.controller.text),
           listenWhen: (previous, current) =>
               previous != current && current is CubitEmailVerificationLoaded,
           listener: (context, state) {
@@ -75,12 +97,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
               controller: widget.controller,
               cursorColor: ColorManager.teal,
               style: getNormalStyle(
-                  color: Theme.of(context).focusColor, fontSize: 15),
+                color: Theme.of(context).focusColor,
+                fontSize: 15,
+              ),
               decoration: InputDecoration(
                 hintText: widget.hint,
                 hintStyle: isThatMobile
                     ? getNormalStyle(
-                        color: Theme.of(context).tabBarTheme.indicatorColor!)
+                        color: Theme.of(context).tabBarTheme.indicatorColor!,
+                      )
                     : getNormalStyle(color: ColorManager.black54, fontSize: 12),
                 fillColor: const Color.fromARGB(48, 232, 232, 232),
                 filled: true,
@@ -89,7 +114,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 errorStyle: getNormalStyle(color: ColorManager.red),
                 errorText: isThatMobile ? errorMassage : null,
                 contentPadding: EdgeInsets.symmetric(
-                    horizontal: 10, vertical: isThatMobile ? 15 : 5),
+                  horizontal: 10,
+                  vertical: isThatMobile ? 15 : 5,
+                ),
               ),
             );
           },
@@ -122,7 +149,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(isThatMobile ? 5.0 : 1.0),
       borderSide: BorderSide(
-          color: ColorManager.lightGrey, width: isThatMobile ? 1.0 : 0.8),
+        color: ColorManager.lightGrey,
+        width: isThatMobile ? 1.0 : 0.8,
+      ),
     );
   }
 }
